@@ -99,10 +99,7 @@ export default function MethodologyPage() {
             <StatusDefinitionTable
               minN={WIN_RATE_MIN_N}
               alpha={FDR_ALPHA}
-              pickFloor={EFFECT_SIZE_FLOORS.pickRate.value}
-              banFloor={EFFECT_SIZE_FLOORS.banRate.value}
-              winFloor={EFFECT_SIZE_FLOORS.winRate.value}
-              itemRelFloor={EFFECT_SIZE_FLOORS.adoptionRate.value}
+              floors={EFFECT_SIZE_FLOORS}
             />
           </SectionCard>
 

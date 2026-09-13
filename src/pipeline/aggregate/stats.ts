@@ -181,24 +181,51 @@ export interface EffectFloor {
   /** "absolute" = |delta| >= value(비율 단위) · "relative" = |delta|/|before| >= value */
   kind: "absolute" | "relative";
   value: number;
+  /**
+   * 기저 게이트(선택) — `max(|before|, |after|)`가 이 값 미만이면 상대변화율이 아무리 커도
+   * 미달 처리한다. 상대 바닥만 쓰는 지표에서 **저기저 잡음**을 막기 위한 장치다(2026-09-13 추가).
+   *
+   * 왜 필요한가(실측): 아이템 채택률의 분모는 `totalParticipants`(경기수×10, 168챔피언 전체)라
+   * 절대 %p가 구조적으로 희석된다 — 그래서 절대 바닥이 아니라 상대 25%를 쓴다. 그런데 상대
+   * 기준만 두면 기저가 0.2%인 아이템이 0.08%p만 움직여도 "상대 33%"로 통과한다(26.17→26.18
+   * 모렐로노미콘 0.237%→0.316%). 그 구간은 표본 잡음과 구분되지 않고, 화면에는 "0.1%p"로 찍혀
+   * 발견처럼 보이지도 않는다. 절대 co-floor를 얹으면 방금 부정한 %p 축을 다시 들이는 셈이므로,
+   * **"애초에 쓰이던 아이템인가"** 라는 다른 축으로 건다.
+   *
+   * `before`가 아니라 `max(before, after)`인 이유: before=0/극소에서 급등한 경우(0% → 1.5%)는
+   * 저기저 잡음이 아니라 실제 채택 전환이라 살려야 한다.
+   */
+  minBase?: number;
 }
 
 /**
  * `DeltaMetric` 8종 전수 — 새 metric이 추가되면 tsc가 이 Record 누락을 컴파일 타임에 잡는다
- * (types.ts METRIC_KIND/METRIC_LABELS와 동일한 SSOT 관례). 연속 지표(goldAt10/goldAt14/firstSec/
- * avgDurationSec)는 이번 스코프에서 임계값을 조정하지 않는다 — `value: 0`은 "바닥 없음"을 하드
- * 코딩 스킵이 아니라 "임계값=0"이라는 값으로 표현해 기존 동작을 그대로 보존한다(delta===0만
- * 걸러짐 = 원래도 변화가 없던 케이스).
+ * (types.ts METRIC_KIND/METRIC_LABELS와 동일한 SSOT 관례).
+ *
+ * **연속 지표에도 바닥을 건다**(2026-09-13 2차, 최초 도입 때의 `value: 0`을 실값으로 교체).
+ * 근거는 두 가지다:
+ *   ① 구조적 — 이 지표들을 갖는 엔티티(lane/objective/summary)는 `match/entity-match.ts`가
+ *      매칭 루프에서 `entityType !== "champion" && !== "item"`을 `continue`로 건너뛴다. 즉
+ *      **패치노트와 짝지어질 수 있는 경로가 아예 없다.** 실측으로도 두 패치쌍 15행 전부
+ *      matchedNoteIds=0이다. "짝이 없다"가 관측이 아니라 전제인 행을 "미공지 변화"로 부르면
+ *      제품의 차별 지표가 항상 참인 명제로 오염된다.
+ *   ② 규모 — 실측 라인 골드 변화는 최대 75골드(상대 1.36%)다. 14분 시점 75골드는 아이템 한
+ *      칸을 못 바꾸는 차이이고, 라인 평균 골드는 어느 챔피언이 그 라인에 섰는지(메타 구성)에
+ *      따라 그만큼은 늘 흔들린다.
+ * 바닥을 상대(골드)로 둔 이유: 라인별 베이스가 서포터 4.2k~바텀 6.2k로 달라 절대 골드 바닥은
+ * 라인마다 다른 엄격도가 된다. firstSec/avgDurationSec은 절대 초가 직관적이라 절대 기준.
+ * 이 바닥은 "선언 대상이 아니니 영구히 숨긴다"가 아니다 — 라인 골드가 3%(바텀 기준 186골드)
+ * 움직이면 그건 노트 없이 일어난 진짜 이상 신호이므로 다시 미공지로 올라온다.
  */
 export const EFFECT_SIZE_FLOORS: Record<DeltaMetric, EffectFloor> = {
   pickRate: { kind: "absolute", value: 0.02 },
   banRate: { kind: "absolute", value: 0.03 },
   winRate: { kind: "absolute", value: 0.02 },
-  adoptionRate: { kind: "relative", value: 0.25 },
-  goldAt10: { kind: "absolute", value: 0 },
-  goldAt14: { kind: "absolute", value: 0 },
-  firstSec: { kind: "absolute", value: 0 },
-  avgDurationSec: { kind: "absolute", value: 0 },
+  adoptionRate: { kind: "relative", value: 0.25, minBase: 0.01 },
+  goldAt10: { kind: "relative", value: 0.03 },
+  goldAt14: { kind: "relative", value: 0.03 },
+  firstSec: { kind: "absolute", value: 30 },
+  avgDurationSec: { kind: "absolute", value: 60 },
 };
 
 /**
@@ -215,6 +242,14 @@ export function meetsEffectFloor(
 ): boolean {
   if (delta === null) return false;
   const floor = EFFECT_SIZE_FLOORS[metric];
+
+  // 기저 게이트(설정된 지표만) — 상대 바닥의 저기저 잡음 차단. EffectFloor.minBase 주석 참고.
+  if (floor.minBase !== undefined) {
+    if (before === null) return false;
+    const base = Math.max(Math.abs(before), Math.abs(before + delta));
+    if (base < floor.minBase) return false;
+  }
+
   if (floor.kind === "absolute") {
     return Math.abs(delta) >= floor.value && delta !== 0;
   }

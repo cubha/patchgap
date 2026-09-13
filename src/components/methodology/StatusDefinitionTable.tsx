@@ -1,10 +1,13 @@
 // src/components/methodology/StatusDefinitionTable.tsx
 // 방법론 페이지 "상태 정의" 표(ST-12 ②) — 프로토타입 04 `.definition-table` 5행 + "임계 미달"
 // (below-threshold) + "간접 영향"(indirect-effect) 2행 = 7행(둘 다 2026-09-13 신규).
+// 임계값은 EFFECT_SIZE_FLOORS 전수를 주입받아 표시한다 — 화면이 코드보다 오래된 숫자를 말하는
+// 드리프트를 구조적으로 차단한다(props 주석 참고).
 // 뱃지는 공용 StatusBadge를 재사용해 색 문법이 한 곳(StatusBadge)에서만 정의되도록 한다.
 
 import StatusBadge from "@/components/StatusBadge";
-import type { MatchStatus } from "@/pipeline/types";
+import type { EffectFloor } from "@/pipeline/aggregate/stats";
+import type { DeltaMetric, MatchStatus } from "@/pipeline/types";
 
 interface DefinitionRow {
   status: MatchStatus;
@@ -15,27 +18,26 @@ interface DefinitionRow {
 export interface StatusDefinitionTableProps {
   minN: number;
   alpha: number;
-  /** 효과크기 바닥(비율, 0~1) — `aggregate/stats.ts` EFFECT_SIZE_FLOORS와 값이 어긋나지
-   * 않도록 호출부(methodology/page.tsx)가 그 상수에서 직접 주입한다(하드코딩 금지). */
-  pickFloor: number;
-  banFloor: number;
-  winFloor: number;
-  /** 아이템 채택률 바닥은 상대변화 기준(예: 0.25 = 상대 25%) — 절대 %p가 아니다. */
-  itemRelFloor: number;
+  /**
+   * 효과크기 바닥 전수 — 호출부(methodology/page.tsx)가 `aggregate/stats.ts`의
+   * `EFFECT_SIZE_FLOORS`를 **통째로** 주입한다. 지표별 숫자를 낱개 prop으로 받던 방식은
+   * 바닥이 늘어날 때마다 prop을 추가해야 했고(연속 지표 4종 추가·기저 게이트 도입,
+   * 2026-09-13 2차), 빠뜨려도 화면이 조용히 옛 값을 말하게 된다 — 전수 Record를 받으면
+   * 그 드리프트 경로 자체가 없어진다.
+   */
+  floors: Record<DeltaMetric, EffectFloor>;
 }
 
 function pct(ratio: number): string {
   return `${(ratio * 100).toFixed(0)}%`;
 }
 
-function buildRows(
-  minN: number,
-  alpha: number,
-  pickFloor: number,
-  banFloor: number,
-  winFloor: number,
-  itemRelFloor: number
-): DefinitionRow[] {
+/** 절대 바닥을 사람이 읽는 단위로 — 비율 지표는 %p, 시간 지표는 초. */
+function abs(value: number, unit: "pp" | "sec"): string {
+  return unit === "pp" ? `${pct(value)}p` : `${value}초`;
+}
+
+function buildRows(minN: number, alpha: number, floors: Record<DeltaMetric, EffectFloor>): DefinitionRow[] {
   return [
     {
       status: "announced-consistent",
@@ -59,10 +61,19 @@ function buildRows(
     },
     {
       status: "below-threshold",
-      definition: "통계적으로는 유의하나 실무상 무시 가능한 규모(효과크기 바닥 미달)",
-      condition: `짝 없음 · q<${alpha} · |Δ|<바닥(픽 ${pct(pickFloor)}p/밴 ${pct(banFloor)}p/승 ${pct(
-        winFloor
-      )}p, 채택률 상대 ${pct(itemRelFloor)})`,
+      definition:
+        "통계적으로는 유의하나 실무상 무시 가능한 규모(효과크기 바닥 미달). 라인 골드·오브젝트 시각·평균 경기 시간은 패치노트에 대응 항목이 존재할 수 없는 집계 지표라 바닥이 특히 높다",
+      condition: `짝 없음 · q<${alpha} · |Δ|<바닥(픽 ${abs(floors.pickRate.value, "pp")}/밴 ${abs(
+        floors.banRate.value,
+        "pp"
+      )}/승 ${abs(floors.winRate.value, "pp")} · 채택률 상대 ${pct(
+        floors.adoptionRate.value
+      )} 또는 채택률 ${pct(floors.adoptionRate.minBase ?? 0)} 미만 · 라인 골드 상대 ${pct(
+        floors.goldAt14.value
+      )} · 오브젝트 ${abs(floors.firstSec.value, "sec")} · 경기 시간 ${abs(
+        floors.avgDurationSec.value,
+        "sec"
+      )})`,
     },
     {
       status: "insufficient-sample",
@@ -77,15 +88,8 @@ function buildRows(
   ];
 }
 
-export default function StatusDefinitionTable({
-  minN,
-  alpha,
-  pickFloor,
-  banFloor,
-  winFloor,
-  itemRelFloor,
-}: StatusDefinitionTableProps) {
-  const rows = buildRows(minN, alpha, pickFloor, banFloor, winFloor, itemRelFloor);
+export default function StatusDefinitionTable({ minN, alpha, floors }: StatusDefinitionTableProps) {
+  const rows = buildRows(minN, alpha, floors);
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse text-sm">

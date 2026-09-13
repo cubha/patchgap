@@ -112,9 +112,22 @@ describe("assignStatus — 효과크기 바닥 (2026-09-13 신규)", () => {
     expect(assignStatus(d, null)).toBe("unannounced");
   });
 
-  it("연속 지표(goldAt14)는 이번 스코프 바닥=0 — 유의 + 짝 없음이면 여전히 unannounced", () => {
+  // 명세 변경(2026-09-13 2차): 연속 지표 바닥이 0 → 상대 3%(골드)로 바뀌었다. 라인 골드 행은
+  // entity-match가 구조적으로 노트와 짝지어 주지 않으므로("짝 없음"이 관측이 아니라 전제),
+  // 규모 바닥을 넘지 못하면 미공지로 올리지 않는다.
+  it("연속 지표(goldAt14) 상대 1.2% 변화는 바닥 미달 → below-threshold", () => {
     const d = delta({ metric: "goldAt14", before: 6000, delta: 72, ci: [16, 128] });
+    expect(assignStatus(d, null)).toBe("below-threshold");
+  });
+
+  it("연속 지표(goldAt14) 상대 3% 이상 변화는 여전히 unannounced로 올라온다", () => {
+    const d = delta({ metric: "goldAt14", before: 6000, delta: 200, ci: [140, 260] });
     expect(assignStatus(d, null)).toBe("unannounced");
+  });
+
+  it("adoptionRate 기저 게이트 — 상대 33%여도 채택률이 1% 미만이면 below-threshold", () => {
+    const d = delta({ metric: "adoptionRate", before: 0.00237, delta: 0.00079, ci: [0.0002, 0.0014] });
+    expect(assignStatus(d, null)).toBe("below-threshold");
   });
 
   it("insufficient-sample(n 게이트)이 효과크기 바닥보다 우선한다", () => {

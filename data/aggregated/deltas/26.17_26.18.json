@@ -2,133 +2,31 @@
   "meta": {
     "from": "26.17",
     "to": "26.18",
-    "generatedAt": "2026-09-13T04:21:10.018Z",
+    "generatedAt": "2026-09-13T11:43:53.960Z",
     "n": 1927,
     "counts": {
-      "unannounced": 76,
-      "indirect-effect": 5,
+      "unannounced": 65,
+      "indirect-effect": 6,
       "announced-inconsistent": 56,
       "announced-consistent": 36,
-      "below-threshold": 309,
+      "below-threshold": 319,
       "insufficient-sample": 649,
       "no-change": 796
     },
     "qAlpha": 0.1,
     "llm": {
-      "calls": 0,
-      "cacheHits": 50,
+      "calls": 4,
+      "cacheHits": 46,
       "skipped": 0,
       "usage": {
-        "inputTokens": 0,
-        "cacheReadInputTokens": 0,
-        "cacheCreationInputTokens": 0,
-        "outputTokens": 0
+        "inputTokens": 508,
+        "cacheReadInputTokens": 50115,
+        "cacheCreationInputTokens": 16705,
+        "outputTokens": 3084
       }
     }
   },
   "rows": [
-    {
-      "id": "lane:BOTTOM:goldAt14",
-      "entityType": "lane",
-      "entityKey": "BOTTOM",
-      "entityName": "바텀",
-      "metric": "goldAt14",
-      "before": 6210.95611073599,
-      "after": 6148.337927514038,
-      "delta": -62.61818322195177,
-      "ci": [
-        -115.66102982018074,
-        -9.575336623722784
-      ],
-      "n": {
-        "before": 2962,
-        "after": 3918
-      },
-      "q": 0.09223530478364833,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [],
-      "evidence": {
-        "matchIds": [],
-        "aggregatePath": "data/aggregated/26.18/lanes.json#rows[position=BOTTOM]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "바텀 라인의 14분 골드 감소(-62.6, 95% CI [-115.7, -9.6])를 직접적으로 설명할 만한 바텀 챔피언 대상 변경 노트가 후보 목록에 없어 원인을 특정하기 어렵습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "lane:UTILITY:goldAt14",
-      "entityType": "lane",
-      "entityKey": "UTILITY",
-      "entityName": "서포터",
-      "metric": "goldAt14",
-      "before": 4215.801147873059,
-      "after": 4175.2868810617665,
-      "delta": -40.514266811292146,
-      "ci": [
-        -69.55823710886698,
-        -11.470296513717315
-      ],
-      "n": {
-        "before": 2962,
-        "after": 3918
-      },
-      "q": 0.034541672437412026,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [],
-      "evidence": {
-        "matchIds": [],
-        "aggregatePath": "data/aggregated/26.18/lanes.json#rows[position=UTILITY]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "서포터 라인의 14분 골드(-40.5, 95% CI [-69.6, -11.5])는 후보 목록에서 서포터 포지션 챔피언(예: 노틸러스, 세라핀, 바드 등)의 방어력·피해량 소폭 조정이 존재하지만 해당 변경들은 개별 챔피언 대상이며 서포터 전체 지표에 직접적인 간접 영향을 설명할 만큼 체계적이지 않아 뚜렷한 간접 인과 후보를 찾기 어렵습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "lane:MIDDLE:goldAt10",
-      "entityType": "lane",
-      "entityKey": "MIDDLE",
-      "entityName": "미드",
-      "metric": "goldAt10",
-      "before": 3849.395144976399,
-      "after": 3812.7985226693836,
-      "delta": -36.59662230701542,
-      "ci": [
-        -63.23553679086205,
-        -9.957707823168796
-      ],
-      "n": {
-        "before": 2966,
-        "after": 3926
-      },
-      "q": 0.03880594219198583,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [],
-      "evidence": {
-        "matchIds": [],
-        "aggregatePath": "data/aggregated/26.18/lanes.json#rows[position=MIDDLE]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "미드 라인 10분 골드(goldAt10)의 소폭 하락(-36.6, 95% CI [-63.2, -10.0])을 직접 설명할 만한 미드 챔피언 대상 패치노트 항목이 후보 목록에 없어, 특정 원인으로 지목하기 어렵습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
-    },
     {
       "id": "champion:Neeko:winRate",
       "entityType": "champion",
@@ -2199,7 +2097,26 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [],
+      "causes": [
+        {
+          "text": "노틸러스 Q 피해량 너프로 인해 동일한 탱커/이니시에이터 역할군인 쓰레쉬로 서포터 픽이 이동했을 가능성이 있습니다.",
+          "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "노틸러스 기본 공격력 너프가 경쟁 서포터 챔피언인 쓰레쉬의 상대적 매력도를 높였을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "세라핀 E 재사용 대기시간 너프로 경쟁 서포터 픽인 세라핀의 매력이 줄어들며 쓰레쉬 픽률이 반사적으로 상승했을 가능성이 있습니다.",
+          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8375337921",
@@ -2215,6 +2132,15 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=412,scope=all]",
         "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "쓰레쉬 자체에 대한 직접 변경 노트는 없으나, 경쟁 서포터 챔피언인 노틸러스(공격력·Q 피해량 너프)와 세라핀(E 재사용 대기시간 너프)의 하향으로 인해 서포터 포지션 내 픽 점유율이 쓰레쉬로 이동했을 가능성이 있어 픽률이 0.1053에서 0.1322로 상승(95% CI [0.0159, 0.0382])한 것으로 추정됩니다.",
+        "summaryCites": [
+          "note:26.18:champion:nautilus:b6aff2b2",
+          "note:26.18:champion:seraphine:4519a08c"
+        ],
+        "summaryVerified": true
       }
     },
     {
@@ -2238,7 +2164,20 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [],
+      "causes": [
+        {
+          "text": "경쟁 서포터인 노틸러스의 Q 피해량이 너프되면서 상대적으로 매력도가 높아진 쓰레쉬의 픽률이 반사이익으로 상승했을 가능성이 있습니다.",
+          "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "노틸러스의 기본 공격력 감소로 인한 성능 저하가 서포터 포지션에서 쓰레쉬 선택 비중을 늘렸을 가능성이 있습니다.",
+          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8375337921",
@@ -2254,84 +2193,15 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=412,scope=position,position=UTILITY]",
         "noteAnchor": null
-      }
-    },
-    {
-      "id": "champion:Jinx:pickRate",
-      "entityType": "champion",
-      "entityKey": "Jinx",
-      "entityName": "징크스",
-      "metric": "pickRate",
-      "before": 0.0625,
-      "after": 0.0888,
-      "delta": 0.026300000000000004,
-      "ci": [
-        0.0172727305728922,
-        0.03569481277779698
-      ],
-      "n": {
-        "before": 10000,
-        "after": 5000
       },
-      "q": 0,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375357041",
-          "KR_8375337869",
-          "KR_8375330743",
-          "KR_8375327145",
-          "KR_8375357590",
-          "KR_8375324089",
-          "KR_8375385218",
-          "KR_8375355344",
-          "KR_8375342091",
-          "KR_8375345570"
+      "llm": {
+        "skipped": false,
+        "summary": "쓰레쉬에 대한 직접적인 패치 변경 사항은 없으나(픽률 0.1053→0.1322, 95% CI [0.0159, 0.0382], n=10000/5000), 경쟁 서포터인 노틸러스의 Q 피해량 및 기본 공격력 너프(note:26.18:champion:nautilus:878378b8, note:26.18:champion:nautilus:b6aff2b2)로 인해 서포터 메타에서 반사이익을 얻었을 가능성이 있는 간접 영향으로 추정됩니다.",
+        "summaryCites": [
+          "note:26.18:champion:nautilus:878378b8",
+          "note:26.18:champion:nautilus:b6aff2b2"
         ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=222,scope=all]",
-        "noteAnchor": null
-      }
-    },
-    {
-      "id": "champion:Jinx:BOTTOM:pickRate",
-      "entityType": "champion",
-      "entityKey": "Jinx",
-      "entityName": "징크스",
-      "metric": "pickRate",
-      "before": 0.0625,
-      "after": 0.0888,
-      "delta": 0.026300000000000004,
-      "ci": [
-        0.0172727305728922,
-        0.03569481277779698
-      ],
-      "n": {
-        "before": 10000,
-        "after": 5000
-      },
-      "q": 0,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375357041",
-          "KR_8375337869",
-          "KR_8375330743",
-          "KR_8375327145",
-          "KR_8375357590",
-          "KR_8375324089",
-          "KR_8375385218",
-          "KR_8375355344",
-          "KR_8375342091",
-          "KR_8375345570"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=222,scope=position,position=BOTTOM]",
-        "noteAnchor": null
+        "summaryVerified": true
       }
     },
     {
@@ -3154,302 +3024,6 @@
       }
     },
     {
-      "id": "item:6696:adoptionRate",
-      "entityType": "item",
-      "entityKey": "6696",
-      "entityName": "원칙의 원형낫",
-      "metric": "adoptionRate",
-      "before": 0.00592,
-      "after": 0.00826,
-      "delta": 0.00234,
-      "ci": [
-        0.001436097709574921,
-        0.0032891731297533568
-      ],
-      "n": {
-        "before": 100000,
-        "after": 50000
-      },
-      "q": 0.000002996211160257088,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375359041",
-          "KR_8375354625",
-          "KR_8375359197",
-          "KR_8375320949",
-          "KR_8375332605",
-          "KR_8375322355",
-          "KR_8375360646",
-          "KR_8375331549",
-          "KR_8375344654",
-          "KR_8375360955"
-        ],
-        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=6696]",
-        "noteAnchor": null
-      }
-    },
-    {
-      "id": "item:2512:adoptionRate",
-      "entityType": "item",
-      "entityKey": "2512",
-      "entityName": "악마사냥꾼의 화살",
-      "metric": "adoptionRate",
-      "before": 0.00629,
-      "after": 0.00444,
-      "delta": -0.0018499999999999992,
-      "ci": [
-        -0.0025966274656868925,
-        -0.0010694964134521077
-      ],
-      "n": {
-        "before": 100000,
-        "after": 50000
-      },
-      "q": 0.00009449706701381011,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375362373",
-          "KR_8375372629",
-          "KR_8375333168",
-          "KR_8375376030",
-          "KR_8375345867",
-          "KR_8375381460",
-          "KR_8375383451",
-          "KR_8375380892",
-          "KR_8375393272",
-          "KR_8375345261"
-        ],
-        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=2512]",
-        "noteAnchor": null
-      }
-    },
-    {
-      "id": "item:8020:adoptionRate",
-      "entityType": "item",
-      "entityKey": "8020",
-      "entityName": "심연의 가면",
-      "metric": "adoptionRate",
-      "before": 0.00577,
-      "after": 0.004,
-      "delta": -0.0017699999999999999,
-      "ci": [
-        -0.002481090432054493,
-        -0.0010253547868250192
-      ],
-      "n": {
-        "before": 100000,
-        "after": 50000
-      },
-      "q": 0.00009346022621411624,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375327276",
-          "KR_8375347389",
-          "KR_8375321892",
-          "KR_8375353973",
-          "KR_8375340134",
-          "KR_8375321804",
-          "KR_8375378120",
-          "KR_8375380494",
-          "KR_8375390761",
-          "KR_8375363202"
-        ],
-        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=8020]",
-        "noteAnchor": null
-      }
-    },
-    {
-      "id": "item:3068:adoptionRate",
-      "entityType": "item",
-      "entityKey": "3068",
-      "entityName": "태양불꽃 방패",
-      "metric": "adoptionRate",
-      "before": 0.00581,
-      "after": 0.00738,
-      "delta": 0.0015700000000000002,
-      "ci": [
-        0.0007043713836635354,
-        0.002479519611634477
-      ],
-      "n": {
-        "before": 100000,
-        "after": 50000
-      },
-      "q": 0.0026101734514777535,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375357041",
-          "KR_8375318369",
-          "KR_8375316705",
-          "KR_8375353973",
-          "KR_8375354658",
-          "KR_8375345752",
-          "KR_8375368085",
-          "KR_8375340134",
-          "KR_8375378378",
-          "KR_8375381141"
-        ],
-        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=3068]",
-        "noteAnchor": null
-      }
-    },
-    {
-      "id": "item:3107:adoptionRate",
-      "entityType": "item",
-      "entityKey": "3107",
-      "entityName": "구원",
-      "metric": "adoptionRate",
-      "before": 0.00365,
-      "after": 0.00484,
-      "delta": 0.0011899999999999997,
-      "ci": [
-        0.0004962701956098006,
-        0.0019285535876481233
-      ],
-      "n": {
-        "before": 100000,
-        "after": 50000
-      },
-      "q": 0.004655817793008129,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375323215",
-          "KR_8375365713",
-          "KR_8375378378",
-          "KR_8375350651",
-          "KR_8375385659",
-          "KR_8375358734",
-          "KR_8375354098",
-          "KR_8375396110",
-          "KR_8375370875",
-          "KR_8375368261"
-        ],
-        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=3107]",
-        "noteAnchor": null
-      }
-    },
-    {
-      "id": "item:3165:adoptionRate",
-      "entityType": "item",
-      "entityKey": "3165",
-      "entityName": "모렐로노미콘",
-      "metric": "adoptionRate",
-      "before": 0.00237,
-      "after": 0.00316,
-      "delta": 0.0007899999999999999,
-      "ci": [
-        0.0002329071147330877,
-        0.001392160316415261
-      ],
-      "n": {
-        "before": 100000,
-        "after": 50000
-      },
-      "q": 0.027696705721739885,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375345676",
-          "KR_8375365713",
-          "KR_8375345570",
-          "KR_8375390155",
-          "KR_8375358828",
-          "KR_8375358771",
-          "KR_8375387630",
-          "KR_8375355403",
-          "KR_8375376805",
-          "KR_8375316243"
-        ],
-        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=3165]",
-        "noteAnchor": null
-      }
-    },
-    {
-      "id": "lane:MIDDLE:goldAt14",
-      "entityType": "lane",
-      "entityKey": "MIDDLE",
-      "entityName": "미드",
-      "metric": "goldAt14",
-      "before": 5564.860567184335,
-      "after": 5489.331546707504,
-      "delta": -75.52902047683165,
-      "ci": [
-        -117.30074697270601,
-        -33.757293980957286
-      ],
-      "n": {
-        "before": 2962,
-        "after": 3918
-      },
-      "q": 0.003246097918855262,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "카시오페아 E/Q/R 등 다수 스킬에 걸친 전반적 피해량 및 자원 소모 너프가 미드 카시오페아의 초반 성장력을 낮춰 미드 라인 평균 골드에 부정적 영향을 줄 수 있음",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:23105cb4",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "신드라 W 재사용 대기시간 증가 및 초월 마나 상한 감소로 미드 신드라의 라인 파워가 약화되어 골드 획득이 줄었을 가능성",
-          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "세라핀 E 재사용 대기시간 단축 효과 삭제로 미드 세라핀의 라인 클리어/견제력이 약화되어 골드 성장이 둔화됐을 가능성",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "제리 W 피해량 계수 너프로 미드에서 픽되는 제리의 라인전 성능이 낮아져 골드 획득이 줄었을 가능성",
-          "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [],
-        "aggregatePath": "data/aggregated/26.18/lanes.json#rows[position=MIDDLE]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "미드 라인 goldAt14가 소폭 감소(-75.5, 95% CI [-117.3, -33.8])했는데, 이는 카시오페아, 신드라 등 주요 미드 챔피언들에 대한 다중 너프(피해량·마나·쿨다운 조정)가 누적되어 미드 라인 전체의 초반 자원 획득력을 약화시켰을 가능성을 시사한다.",
-        "summaryCites": [
-          "note:26.18:champion:cassiopeia:23105cb4",
-          "note:26.18:champion:syndra:cb99a266"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
       "id": "champion:Sylas:banRate",
       "entityType": "champion",
       "entityKey": "Sylas",
@@ -3711,6 +3285,128 @@
       "llm": {
         "skipped": false,
         "summary": "루시안 픽률이 0.0784→0.106(+0.0276, 95% CI [0.0177, 0.0378])으로 유의미하게 증가했으나 직접 변경 노트가 없어, 구인수의 격노검 버프와 경쟁 원거리 딜러 제리의 너프가 간접적으로 픽률 상승에 기여했을 가능성이 있습니다.",
+        "summaryCites": [
+          "note:26.18:item:guinsoos-rageblade:f624219b",
+          "note:26.18:champion:zeri:d0cacf0b"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Jinx:pickRate",
+      "entityType": "champion",
+      "entityKey": "Jinx",
+      "entityName": "징크스",
+      "metric": "pickRate",
+      "before": 0.0625,
+      "after": 0.0888,
+      "delta": 0.026300000000000004,
+      "ci": [
+        0.0172727305728922,
+        0.03569481277779698
+      ],
+      "n": {
+        "before": 10000,
+        "after": 5000
+      },
+      "q": 0,
+      "status": "indirect-effect",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "구인수의 격노검의 들끓는 일격 중첩 지속시간이 3초에서 4초로 늘어나 온히트/공격속도 의존형 원거리 딜러인 징크스의 아이템 빌드 효율이 간접적으로 상승했을 수 있습니다.",
+          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "경쟁 원거리 딜러인 제리의 W 피해량이 하향되면서 상대적으로 징크스의 픽률이 반사이익을 얻었을 가능성이 있습니다.",
+          "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8375357041",
+          "KR_8375337869",
+          "KR_8375330743",
+          "KR_8375327145",
+          "KR_8375357590",
+          "KR_8375324089",
+          "KR_8375385218",
+          "KR_8375355344",
+          "KR_8375342091",
+          "KR_8375345570"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=222,scope=all]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-Guinsoos-Rageblade"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "징크스에 대한 직접 패치 변경은 없지만, 구인수의 격노검 지속시간 버프로 온히트 딜러인 징크스의 아이템 시너지가 강화되고 경쟁 원거리 딜러 제리의 하향으로 상대적 매력이 상승해 픽률이 6.25%에서 8.88%로 증가(델타 +2.63%p, 95% CI 상단까지 포함)했을 가능성이 있습니다.",
+        "summaryCites": [
+          "note:26.18:item:guinsoos-rageblade:f624219b",
+          "note:26.18:champion:zeri:d0cacf0b"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Jinx:BOTTOM:pickRate",
+      "entityType": "champion",
+      "entityKey": "Jinx",
+      "entityName": "징크스",
+      "metric": "pickRate",
+      "before": 0.0625,
+      "after": 0.0888,
+      "delta": 0.026300000000000004,
+      "ci": [
+        0.0172727305728922,
+        0.03569481277779698
+      ],
+      "n": {
+        "before": 10000,
+        "after": 5000
+      },
+      "q": 0,
+      "status": "indirect-effect",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "구인수의 격노검의 들끓는 일격 중첩 지속시간이 3초에서 4초로 증가하여, 공격 속도 스택형 아이템에 의존하는 징크스와 같은 원거리 딜러의 지속 화력이 강화되었을 가능성이 있습니다.",
+          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "제리의 W 피해량이 총공격력 계수 기준 120%→100%로 너프되면서 경쟁 원거리 딜러였던 제리의 픽률이 감소, 그 대체픽으로 징크스가 반사이익을 얻어 픽률이 상승했을 가능성이 있습니다.",
+          "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8375357041",
+          "KR_8375337869",
+          "KR_8375330743",
+          "KR_8375327145",
+          "KR_8375357590",
+          "KR_8375324089",
+          "KR_8375385218",
+          "KR_8375355344",
+          "KR_8375342091",
+          "KR_8375345570"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=222,scope=position,position=BOTTOM]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-Guinsoos-Rageblade"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "징크스의 픽률이 6.25%에서 8.88%로 크게 상승(델타 +2.63%p, 95% CI [1.73%p, 3.57%p])했는데, 직접적인 징크스 변경 노트가 없어 구인수의 격노검 버프로 인한 공격 속도 스택 챔피언 강세 및 경쟁 원거리 딜러인 제리의 너프에 따른 반사이익이 간접 원인으로 추정됩니다.",
         "summaryCites": [
           "note:26.18:item:guinsoos-rageblade:f624219b",
           "note:26.18:champion:zeri:d0cacf0b"
@@ -8205,6 +7901,118 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=234,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
+      }
+    },
+    {
+      "id": "lane:MIDDLE:goldAt14",
+      "entityType": "lane",
+      "entityKey": "MIDDLE",
+      "entityName": "미드",
+      "metric": "goldAt14",
+      "before": 5564.860567184335,
+      "after": 5489.331546707504,
+      "delta": -75.52902047683165,
+      "ci": [
+        -117.30074697270601,
+        -33.757293980957286
+      ],
+      "n": {
+        "before": 2962,
+        "after": 3918
+      },
+      "q": 0.003246097918855262,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [],
+        "aggregatePath": "data/aggregated/26.18/lanes.json#rows[position=MIDDLE]",
+        "noteAnchor": null
+      }
+    },
+    {
+      "id": "lane:BOTTOM:goldAt14",
+      "entityType": "lane",
+      "entityKey": "BOTTOM",
+      "entityName": "바텀",
+      "metric": "goldAt14",
+      "before": 6210.95611073599,
+      "after": 6148.337927514038,
+      "delta": -62.61818322195177,
+      "ci": [
+        -115.66102982018074,
+        -9.575336623722784
+      ],
+      "n": {
+        "before": 2962,
+        "after": 3918
+      },
+      "q": 0.09223530478364833,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [],
+        "aggregatePath": "data/aggregated/26.18/lanes.json#rows[position=BOTTOM]",
+        "noteAnchor": null
+      }
+    },
+    {
+      "id": "lane:UTILITY:goldAt14",
+      "entityType": "lane",
+      "entityKey": "UTILITY",
+      "entityName": "서포터",
+      "metric": "goldAt14",
+      "before": 4215.801147873059,
+      "after": 4175.2868810617665,
+      "delta": -40.514266811292146,
+      "ci": [
+        -69.55823710886698,
+        -11.470296513717315
+      ],
+      "n": {
+        "before": 2962,
+        "after": 3918
+      },
+      "q": 0.034541672437412026,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [],
+        "aggregatePath": "data/aggregated/26.18/lanes.json#rows[position=UTILITY]",
+        "noteAnchor": null
+      }
+    },
+    {
+      "id": "lane:MIDDLE:goldAt10",
+      "entityType": "lane",
+      "entityKey": "MIDDLE",
+      "entityName": "미드",
+      "metric": "goldAt10",
+      "before": 3849.395144976399,
+      "after": 3812.7985226693836,
+      "delta": -36.59662230701542,
+      "ci": [
+        -63.23553679086205,
+        -9.957707823168796
+      ],
+      "n": {
+        "before": 2966,
+        "after": 3926
+      },
+      "q": 0.03880594219198583,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [],
+        "aggregatePath": "data/aggregated/26.18/lanes.json#rows[position=MIDDLE]",
+        "noteAnchor": null
       }
     },
     {
@@ -18387,6 +18195,45 @@
       }
     },
     {
+      "id": "item:6696:adoptionRate",
+      "entityType": "item",
+      "entityKey": "6696",
+      "entityName": "원칙의 원형낫",
+      "metric": "adoptionRate",
+      "before": 0.00592,
+      "after": 0.00826,
+      "delta": 0.00234,
+      "ci": [
+        0.001436097709574921,
+        0.0032891731297533568
+      ],
+      "n": {
+        "before": 100000,
+        "after": 50000
+      },
+      "q": 0.000002996211160257088,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8375359041",
+          "KR_8375354625",
+          "KR_8375359197",
+          "KR_8375320949",
+          "KR_8375332605",
+          "KR_8375322355",
+          "KR_8375360646",
+          "KR_8375331549",
+          "KR_8375344654",
+          "KR_8375360955"
+        ],
+        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=6696]",
+        "noteAnchor": null
+      }
+    },
+    {
       "id": "champion:Kaisa:TOP:pickRate",
       "entityType": "champion",
       "entityKey": "Kaisa",
@@ -19245,6 +19092,45 @@
       }
     },
     {
+      "id": "item:2512:adoptionRate",
+      "entityType": "item",
+      "entityKey": "2512",
+      "entityName": "악마사냥꾼의 화살",
+      "metric": "adoptionRate",
+      "before": 0.00629,
+      "after": 0.00444,
+      "delta": -0.0018499999999999992,
+      "ci": [
+        -0.0025966274656868925,
+        -0.0010694964134521077
+      ],
+      "n": {
+        "before": 100000,
+        "after": 50000
+      },
+      "q": 0.00009449706701381011,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8375362373",
+          "KR_8375372629",
+          "KR_8375333168",
+          "KR_8375376030",
+          "KR_8375345867",
+          "KR_8375381460",
+          "KR_8375383451",
+          "KR_8375380892",
+          "KR_8375393272",
+          "KR_8375345261"
+        ],
+        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=2512]",
+        "noteAnchor": null
+      }
+    },
+    {
       "id": "champion:Draven:JUNGLE:pickRate",
       "entityType": "champion",
       "entityKey": "Draven",
@@ -19362,6 +19248,45 @@
       }
     },
     {
+      "id": "item:8020:adoptionRate",
+      "entityType": "item",
+      "entityKey": "8020",
+      "entityName": "심연의 가면",
+      "metric": "adoptionRate",
+      "before": 0.00577,
+      "after": 0.004,
+      "delta": -0.0017699999999999999,
+      "ci": [
+        -0.002481090432054493,
+        -0.0010253547868250192
+      ],
+      "n": {
+        "before": 100000,
+        "after": 50000
+      },
+      "q": 0.00009346022621411624,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8375327276",
+          "KR_8375347389",
+          "KR_8375321892",
+          "KR_8375353973",
+          "KR_8375340134",
+          "KR_8375321804",
+          "KR_8375378120",
+          "KR_8375380494",
+          "KR_8375390761",
+          "KR_8375363202"
+        ],
+        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=8020]",
+        "noteAnchor": null
+      }
+    },
+    {
       "id": "champion:Chogath:UTILITY:pickRate",
       "entityType": "champion",
       "entityKey": "Chogath",
@@ -19475,6 +19400,45 @@
           "KR_8375401560"
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=19,scope=position,position=JUNGLE]",
+        "noteAnchor": null
+      }
+    },
+    {
+      "id": "item:3068:adoptionRate",
+      "entityType": "item",
+      "entityKey": "3068",
+      "entityName": "태양불꽃 방패",
+      "metric": "adoptionRate",
+      "before": 0.00581,
+      "after": 0.00738,
+      "delta": 0.0015700000000000002,
+      "ci": [
+        0.0007043713836635354,
+        0.002479519611634477
+      ],
+      "n": {
+        "before": 100000,
+        "after": 50000
+      },
+      "q": 0.0026101734514777535,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8375357041",
+          "KR_8375318369",
+          "KR_8375316705",
+          "KR_8375353973",
+          "KR_8375354658",
+          "KR_8375345752",
+          "KR_8375368085",
+          "KR_8375340134",
+          "KR_8375378378",
+          "KR_8375381141"
+        ],
+        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=3068]",
         "noteAnchor": null
       }
     },
@@ -19869,6 +19833,45 @@
       }
     },
     {
+      "id": "item:3107:adoptionRate",
+      "entityType": "item",
+      "entityKey": "3107",
+      "entityName": "구원",
+      "metric": "adoptionRate",
+      "before": 0.00365,
+      "after": 0.00484,
+      "delta": 0.0011899999999999997,
+      "ci": [
+        0.0004962701956098006,
+        0.0019285535876481233
+      ],
+      "n": {
+        "before": 100000,
+        "after": 50000
+      },
+      "q": 0.004655817793008129,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8375323215",
+          "KR_8375365713",
+          "KR_8375378378",
+          "KR_8375350651",
+          "KR_8375385659",
+          "KR_8375358734",
+          "KR_8375354098",
+          "KR_8375396110",
+          "KR_8375370875",
+          "KR_8375368261"
+        ],
+        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=3107]",
+        "noteAnchor": null
+      }
+    },
+    {
       "id": "champion:Smolder:TOP:pickRate",
       "entityType": "champion",
       "entityKey": "Smolder",
@@ -20060,6 +20063,45 @@
           "KR_8375368218"
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=29,scope=position,position=MIDDLE]",
+        "noteAnchor": null
+      }
+    },
+    {
+      "id": "item:3165:adoptionRate",
+      "entityType": "item",
+      "entityKey": "3165",
+      "entityName": "모렐로노미콘",
+      "metric": "adoptionRate",
+      "before": 0.00237,
+      "after": 0.00316,
+      "delta": 0.0007899999999999999,
+      "ci": [
+        0.0002329071147330877,
+        0.001392160316415261
+      ],
+      "n": {
+        "before": 100000,
+        "after": 50000
+      },
+      "q": 0.027696705721739885,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8375345676",
+          "KR_8375365713",
+          "KR_8375345570",
+          "KR_8375390155",
+          "KR_8375358828",
+          "KR_8375358771",
+          "KR_8375387630",
+          "KR_8375355403",
+          "KR_8375376805",
+          "KR_8375316243"
+        ],
+        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=3165]",
         "noteAnchor": null
       }
     },

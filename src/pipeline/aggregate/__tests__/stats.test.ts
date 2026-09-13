@@ -272,12 +272,32 @@ describe("meetsEffectFloor — 단위는 비율(0~1)이지 %p(1~100)가 아니�
     expect(meetsEffectFloor("adoptionRate", 0.011, 0.04)).toBe(true);
   });
 
-  it("adoptionRate: before=0, delta!==0 → 상대변화 무한대이므로 통과", () => {
-    expect(meetsEffectFloor("adoptionRate", 0.002, 0)).toBe(true);
+  it("adoptionRate: before=0이어도 기저 게이트(after<1%)에 걸려 미달", () => {
+    // 상대변화는 무한대지만, 최종 채택률이 0.2%에 불과한 아이템은 미공지로 올리지 않는다.
+    expect(meetsEffectFloor("adoptionRate", 0.002, 0)).toBe(false);
+  });
+
+  it("adoptionRate: before=0 → after가 기저(1%) 이상이면 통과(신규 급등)", () => {
+    expect(meetsEffectFloor("adoptionRate", 0.015, 0)).toBe(true);
   });
 
   it("adoptionRate: before=0, delta=0 → 변화 없음이므로 미달", () => {
     expect(meetsEffectFloor("adoptionRate", 0, 0)).toBe(false);
+  });
+
+  it("adoptionRate 기저 게이트: 상대 33%여도 before/after 모두 1% 미만이면 미달", () => {
+    // 실측(26.17→26.18 모렐로노미콘): 0.237% → 0.316%. 상대 33%지만 분모가 전체 참가자라
+    // 절대 폭이 0.08%p에 불과하고, 저기저 구간은 표본 잡음에 그대로 노출된다.
+    expect(meetsEffectFloor("adoptionRate", 0.00079, 0.00237)).toBe(false);
+  });
+
+  it("adoptionRate 기저 게이트: before가 1% 미만이어도 after가 1% 이상이면 통과", () => {
+    // 실측(26.16→26.17 망자의 갑옷): 0.649% → 1.000%. 상대 +54%이고 결과적으로 1%대 채택률.
+    expect(meetsEffectFloor("adoptionRate", 0.00351, 0.00649)).toBe(true);
+  });
+
+  it("adoptionRate 기저 게이트: 기저를 넘어도 상대 25% 미만이면 여전히 미달", () => {
+    expect(meetsEffectFloor("adoptionRate", 0.004, 0.04)).toBe(false);
   });
 
   it("adoptionRate: before가 null이면 근거 없음 → 미달(무근거 통과 금지)", () => {
@@ -288,11 +308,13 @@ describe("meetsEffectFloor — 단위는 비율(0~1)이지 %p(1~100)가 아니�
     expect(meetsEffectFloor("pickRate", null, 0.1)).toBe(false);
   });
 
-  it("goldAt10/goldAt14/firstSec/avgDurationSec: 이번 스코프 바닥=0 → 어떤 0 아닌 delta도 통과", () => {
-    expect(meetsEffectFloor("goldAt10", 0.5, 6000)).toBe(true);
-    expect(meetsEffectFloor("goldAt14", -0.5, 6000)).toBe(true);
-    expect(meetsEffectFloor("firstSec", 1, 480)).toBe(true);
-    expect(meetsEffectFloor("avgDurationSec", 0.1, 1800)).toBe(true);
+  // 명세 변경(2026-09-13 2차): 연속 지표의 바닥이 0 → 실값으로 바뀌었다. 옛 계약("0 아닌 delta는
+  // 전부 통과")을 그대로 두면 라인 골드 0.5골드 변화가 계속 미공지로 올라온다.
+  it("goldAt10/goldAt14/firstSec/avgDurationSec: 미세 변화는 바닥 미달", () => {
+    expect(meetsEffectFloor("goldAt10", 0.5, 6000)).toBe(false);
+    expect(meetsEffectFloor("goldAt14", -0.5, 6000)).toBe(false);
+    expect(meetsEffectFloor("firstSec", 1, 480)).toBe(false);
+    expect(meetsEffectFloor("avgDurationSec", 0.1, 1800)).toBe(false);
   });
 
   it("연속지표도 delta===0이면 미달(변화 자체가 없음)", () => {
@@ -330,5 +352,31 @@ describe("proportionNumerator — 비율×분모 역산(반올림)", () => {
 
   it("반올림 경계 — 0.00005*10000=0.5 → banker's round 아닌 Math.round(0.5)=1", () => {
     expect(proportionNumerator(0.00005, 10000)).toBe(1);
+  });
+});
+
+describe("meetsEffectFloor — 연속 지표(라인 골드·오브젝트 시각·경기 시간) 바닥", () => {
+  it("goldAt14: 라인 평균 골드 상대 1.2% 변화(실측 최대치)는 미달", () => {
+    // 26.16→26.17 바텀 goldAt14 +71.87 / 6210.96 = 1.17%.
+    expect(meetsEffectFloor("goldAt14", 71.87, 6210.96)).toBe(false);
+  });
+
+  it("goldAt14: 상대 3% 이상이면 통과", () => {
+    expect(meetsEffectFloor("goldAt14", 200, 6210.96)).toBe(true);
+  });
+
+  it("goldAt10: 서포터처럼 베이스가 낮은 라인도 같은 상대 기준을 쓴다(스케일 무관)", () => {
+    expect(meetsEffectFloor("goldAt10", 100, 3000)).toBe(true); // 3.33%
+    expect(meetsEffectFloor("goldAt10", 100, 4000)).toBe(false); // 2.50%
+  });
+
+  it("firstSec: 30초 미만 변화는 미달, 30초 이상은 통과", () => {
+    expect(meetsEffectFloor("firstSec", 6.67, 1375)).toBe(false);
+    expect(meetsEffectFloor("firstSec", -31, 1375)).toBe(true);
+  });
+
+  it("avgDurationSec: 60초 미만 변화는 미달, 60초 이상은 통과", () => {
+    expect(meetsEffectFloor("avgDurationSec", 12.95, 1470)).toBe(false);
+    expect(meetsEffectFloor("avgDurationSec", 61, 1470)).toBe(true);
   });
 });
