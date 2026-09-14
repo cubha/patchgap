@@ -1,13 +1,22 @@
 // src/app/methodology/page.tsx
-// 방법론/About(ST-12) — 파이프라인 4단·상태 정의·통계 게이트(id="gates")·디스코드 미리보기
-// (id="discord")·라이엇 고지(UX-BRIEF §3 "04 방법론/About",
-// 프로토타입 `docs/design/prototype/04-methodology.html`).
+// 방법론/About(ST-12) — 파이프라인 4단·상태 정의·통계 게이트(id="gates")·라이엇 고지
+// (UX-BRIEF §3 "04 방법론/About", 프로토타입 `docs/design/prototype/04-methodology.html`).
 // 헤더는 ST-10부터 src/app/layout.tsx가 전역 렌더한다(여기서 다시 렌더하면 중복).
 //
 // 편차: 프로토타입 04는 id="gates"를 "데이터 파이프라인" 패널(가장 위)에 붙였지만, ST-12 지시
 // 원문은 "③ 통계 게이트 카드 ... id="gates""로 명시한다 — "판정 규칙 보기 →"(항목 상세)가
 // 실제로 원하는 앵커는 게이트 설명 쪽이 자연스러워 프로토타입의 배치를 오타/템플릿 잔재로 보고
 // 지시 원문을 따랐다(ST-12.md 기록).
+//
+// "디스코드 미리보기"(id="discord") 섹션은 2026-09-14 사용자 지시로 제거했다 — 이 페이지의
+// 유일한 소비처였던 `DiscordEmbedPreview.tsx`/`discordPreview.ts`(+각 테스트)도 죽은 코드로
+// 남기지 않고 함께 삭제(실제 디스코드 발송 파이프라인 `pipeline/discord/webhook.ts`는 이
+// 미리보기 UI와 무관한 별도 모듈이라 영향 없음). 제거 후 "통계 게이트"(좌)와 "고지"(우)만
+// 남은 2컬럼 그리드에서 `items-start`(양쪽 카드가 각자 콘텐츠 높이만큼만 차지)를 제거해
+// 두 카드 높이를 맞췄다 — 기본 grid는 `align-items: stretch`라 행 높이가 더 긴 카드에 맞춰
+// 짧은 카드도 늘어난다. `SectionCard`에 `h-full flex flex-col`을 얹고, 늘어난 여백을 받을
+// 본문 래퍼에 `flex-1`을 줘 "고지" 카드의 짧은 텍스트가 카드 하단에 눌리지 않고 자연스럽게
+// 채워지도록 했다(children 자체는 SectionCard가 감싸지 않으므로 각 소비처가 이 규약을 따름).
 
 import fs from "node:fs";
 import path from "node:path";
@@ -18,11 +27,9 @@ import { fmtKst } from "@/lib/format";
 import { EFFECT_SIZE_FLOORS, FDR_ALPHA, WIN_RATE_MIN_N } from "@/pipeline/aggregate/stats";
 import { countRelevantNoteEntities } from "@/pipeline/shared/notes-count";
 import AdapterMatrix from "@/components/methodology/AdapterMatrix";
-import DiscordEmbedPreview from "@/components/methodology/DiscordEmbedPreview";
 import GateGrid from "@/components/methodology/GateGrid";
 import PipelineDiagram from "@/components/methodology/PipelineDiagram";
 import StatusDefinitionTable from "@/components/methodology/StatusDefinitionTable";
-import { buildDiscordPreview } from "@/components/methodology/discordPreview";
 import { buildPipelineSteps } from "@/components/methodology/pipelineSteps";
 
 /** data/ddragon/{version}/ 디렉토리 이름(내림차순 최신)에서 Data Dragon 버전을 읽는다.
@@ -70,14 +77,6 @@ export default function MethodologyPage() {
     judgedAt: deltas?.meta.generatedAt ?? null,
   });
 
-  const discordPreview = buildDiscordPreview({
-    from: pair?.from ?? null,
-    to: pair?.to ?? null,
-    rows: deltas?.rows ?? null,
-    nBefore: summaryFrom?.data.matches ?? null,
-    nAfter: summaryTo?.data.matches ?? null,
-  });
-
   // 전 패널 유리화(2026-09-12·5차, R6 사용자 재지적 — "방법론 메뉴에 모든 섹션 전부 불투명
   // 판넬 그대로") — 이 페이지도 layout.tsx의 전역 앰비언트 배경을 받지만 첫 패널이 top≈89px
   // (헤더 바로 아래)부터 카메라 노출 밴드 전체를 불투명으로 덮고 있었다. 홈·`/compare/`와
@@ -109,24 +108,18 @@ export default function MethodologyPage() {
             <AdapterMatrix />
           </SectionCard>
 
-          <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[2fr_1fr]">
-            <div className="flex flex-col gap-6">
-              <div id="gates">
-                <SectionCard eyebrow="우선 2 · 투명성" title="통계 게이트" variant="glass">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
+            <div id="gates">
+              <SectionCard eyebrow="우선 2 · 투명성" title="통계 게이트" variant="glass" className="flex h-full flex-col">
+                <div className="flex flex-1 flex-col">
                   <GateGrid minN={WIN_RATE_MIN_N} alpha={FDR_ALPHA} />
-                </SectionCard>
-              </div>
-
-              <div id="discord">
-                <SectionCard title="디스코드 미리보기" variant="glass">
-                  <DiscordEmbedPreview preview={discordPreview} />
-                </SectionCard>
-              </div>
+                </div>
+              </SectionCard>
             </div>
 
-            <aside className="flex flex-col gap-6">
-              <SectionCard title="고지" variant="glass">
-                <div className="flex flex-col gap-3 p-5">
+            <aside>
+              <SectionCard title="고지" variant="glass" className="flex h-full flex-col">
+                <div className="flex flex-1 flex-col gap-3 p-5">
                   <p className="text-xs leading-relaxed text-muted">
                     patchgap isn&apos;t endorsed by Riot Games and doesn&apos;t reflect the views
                     or opinions of Riot Games or anyone officially involved in producing or
