@@ -3,7 +3,7 @@
 // jest-dom 매처 없이 render()의 container를 직접 querying한다(src/__tests__/components.test.tsx
 // 참고 — setupFiles는 RTL cleanup 등록에만 쓰고 매처는 붙이지 않는다, vitest.setup.ts).
 import { describe, expect, it } from "vitest";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import type { ReactNode } from "react";
 import type { DeltaRecord } from "@/pipeline/types";
 import { AmbientProvider } from "@/components/AmbientContext";
@@ -34,11 +34,81 @@ describe("ReleaseNoteStream — 빈 상태", () => {
   // 2026-09-12(4차, R2): 라인 필터가 StreamLaneFilter.tsx로 분리되면서 이 컴포넌트는 더 이상
   // 필터를 렌더하지 않는다(StreamColumnLayout의 별도 그리드 행이 필터를 담당) — 명세 변경.
   // 필터 렌더 단언은 아래 "StreamLaneFilter" 케이스로 옮겼다.
-  it("그룹이 없으면 빈 상태 문구만 렌더한다", () => {
+  it("그룹이 없으면 기본(패치 내용) 탭에서 빈 상태 문구를 렌더하고, 탭 행은 여전히 존재한다", () => {
     const { container } = render(
-      withAmbient(<ReleaseNoteStream entries={[]} spellIcons={null} noteDeltas={{}} patch={null} />)
+      withAmbient(
+        <ReleaseNoteStream
+          entries={[]}
+          spellIcons={null}
+          noteDeltas={{}}
+          patch={null}
+          contentCount={0}
+          gapCount={0}
+        />
+      )
     );
     expect(container.textContent).toContain("이 라인에서는 관측된 변화가 없습니다");
+    // 빈 상태에서도 탭 바가 사라지면 안 된다(2026-09-14 — early-return 구조의 결함이었다).
+    expect(container.querySelectorAll('button[role="tab"]')).toHaveLength(2);
+  });
+
+  it("미공지 Gap 탭으로 전환하면 신규 빈 상태 문구를 렌더한다", () => {
+    const { container } = render(
+      withAmbient(
+        <ReleaseNoteStream
+          entries={[]}
+          spellIcons={null}
+          noteDeltas={{}}
+          patch={null}
+          contentCount={0}
+          gapCount={0}
+        />
+      )
+    );
+    const gapTab = Array.from(container.querySelectorAll('button[role="tab"]')).find((b) =>
+      b.textContent?.startsWith("미공지 Gap")
+    );
+    expect(gapTab).not.toBeUndefined();
+    fireEvent.click(gapTab!);
+    expect(container.textContent).toContain("이 라인에서는 미공지 변화가 없습니다");
+    expect(container.querySelectorAll('button[role="tab"]')).toHaveLength(2);
+  });
+
+  it("기본 진입은 패치 내용 탭 — matched 엔트리만 렌더하고 unannounced는 숨긴다", () => {
+    const matchedEntry: ReleaseStreamEntry = {
+      group: { kind: "matched", entity: "아우렐리온 솔", notes: [] },
+      icon: { entityType: "champion", entityKey: "AurelionSol" },
+      lanes: [],
+    };
+    const unannouncedEntry: ReleaseStreamEntry = {
+      group: { kind: "unannounced", entity: "로크", deltas: [] },
+      icon: { entityType: "champion", entityKey: "Locke" },
+      lanes: [],
+    };
+    const { container } = render(
+      withAmbient(
+        <ReleaseNoteStream
+          entries={[matchedEntry, unannouncedEntry]}
+          spellIcons={null}
+          noteDeltas={{}}
+          patch="26.17"
+          contentCount={1}
+          gapCount={1}
+        />
+      )
+    );
+    expect(container.textContent).toContain("아우렐리온 솔");
+    expect(container.textContent).not.toContain("로크");
+  });
+
+  it("탭 배지 숫자는 props로 받은 값을 그대로 표시한다(라인 필터·렌더 카드 수와 무관)", () => {
+    const { container } = render(
+      withAmbient(
+        <ReleaseNoteStream entries={[]} spellIcons={null} noteDeltas={{}} patch={null} contentCount={181} gapCount={65} />
+      )
+    );
+    expect(container.textContent).toContain("패치 내용 181");
+    expect(container.textContent).toContain("미공지 Gap 65");
   });
 });
 
@@ -125,8 +195,23 @@ describe("ReleaseNoteStream — 라인 엔티티(entityType='lane') 카드 아�
       },
     ];
     const { container } = render(
-      withAmbient(<ReleaseNoteStream entries={entries} spellIcons={null} noteDeltas={{}} patch="26.17" />)
+      withAmbient(
+        <ReleaseNoteStream
+          entries={entries}
+          spellIcons={null}
+          noteDeltas={{}}
+          patch="26.17"
+          contentCount={0}
+          gapCount={1}
+        />
+      )
     );
+    // 이 엔트리는 unannounced(미공지 Gap) — 기본 탭은 "패치 내용"이라 먼저 Gap 탭으로
+    // 전환해야 카드가 렌더된다(2026-09-14 탭 분리로 기본 탭 필터링이 추가됨).
+    const gapTab = Array.from(container.querySelectorAll('button[role="tab"]')).find((b) =>
+      b.textContent?.startsWith("미공지 Gap")
+    );
+    fireEvent.click(gapTab!);
     const glyph = container.querySelector("svg");
     expect(glyph).not.toBeNull();
     expect(glyph?.getAttribute("aria-hidden")).toBe("true");

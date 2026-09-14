@@ -93,6 +93,8 @@ export default function Home() {
                 noteDeltas={noteDeltas}
                 patch={pair?.to ?? null}
                 qAlpha={deltas?.meta.qAlpha}
+                contentCount={headline.noteItemCount}
+                gapCount={headline.unannouncedCount}
               />
             }
             right={

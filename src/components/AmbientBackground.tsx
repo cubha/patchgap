@@ -3,8 +3,11 @@
 // 확정 시안(아티팩트 "협곡 앰비언트 배경" v5)의 4개 레이어 중 이 프로젝트가 채택한 것만 구현한다:
 //   LAYER 1(전역 배경·상단 앵커) — 모든 페이지 공통, 색 번짐+선명 플레이트+글로우+스크림+그레인.
 //   LAYER 2(라인 카메라) — 홈(pathname === "/")에서만 useAmbient().selectedLane을 따라간다.
-//   LAYER 3(인트로 리빌) — 사이트 최초 진입 1회, 홈에서만 재생(영상 실패해도 정지 이미지가
-//     항상 그 아래 깔려 있어 배경이 비지 않는다).
+//   LAYER 3(인트로 리빌) — 홈 마운트마다 최대 1회 재생(영상 실패해도 정지 이미지가 항상 그
+//     아래 깔려 있어 배경이 비지 않는다). 2026-09-14 이전엔 localStorage로 "사이트 최초 진입
+//     1회"만 영구 재생했으나, 도그푸딩 중 이미 한 번이라도 본 브라우저는 새로고침해도 다시는
+//     재생되지 않는 것을 사용자가 결함으로 지적했다(원래 의도한 "최초 1회"가 아니라 "F5해도
+//     재생"이 실제로 필요한 동작이었다) — 아래 useIntroReveal 참고.
 //   LAYER 4(상세 스플래시) — /item/[id] 경로 + useAmbient().detailSplashUrl이 있을 때만.
 "use client";
 
@@ -12,8 +15,6 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { laneCameraTransform } from "@/lib/laneCamera";
 import { useAmbient } from "./AmbientContext";
-
-const INTRO_SEEN_KEY = "patchgap:ambient-intro-seen";
 
 function useReducedMotion(): boolean {
   // 초기값은 lazy initializer로 즉시 계산(StreamColumnLayout.tsx와 동일 패턴) — 빌드
@@ -32,22 +33,33 @@ function useReducedMotion(): boolean {
 }
 
 /**
- * 최초 진입 1회 재생 여부. SSR/최초 클라이언트 렌더는 항상 false(정지 상태)로 시작하고,
- * mount 이후 effect에서 localStorage를 확인해 갱신한다 — lazy initializer로 즉시 읽으면
- * 서버 렌더(항상 false)와 클라이언트 첫 렌더가 갈라져 hydration mismatch가 난다. 이 setState는
- * "마운트 후 브라우저 전용 값(localStorage)으로 한 번만 동기화"하는 CompareExplorer.tsx와
- * 동일한 외부 시스템 구독 케이스라 set-state-in-effect를 의도적으로 허용한다.
+ * 인트로 재생 여부 — 마운트당 최대 1회(2026-09-14 정정, 이전엔 localStorage로 "브라우저당
+ * 영구 1회"였다). SSR/최초 클라이언트 렌더는 항상 false(정지 상태)로 시작하고, mount 이후
+ * effect에서 즉시 true로 바꾼다 — lazy initializer로 즉시 켜면 서버 렌더(항상 false)와
+ * 클라이언트 첫 렌더가 갈라져 hydration mismatch가 난다. 이 setState는 "마운트 후 한 번만
+ * 상태를 동기화"하는 CompareExplorer.tsx와 동일한 패턴이라 set-state-in-effect를 의도적으로
+ * 허용한다.
+ *
+ * **localStorage 삭제 이유**: 예전엔 `patchgap:ambient-intro-seen` 플래그로 "사이트 최초
+ * 진입 1회"만 영구 재생했다. 그런데 이 플래그는 한 번 세팅되면 브라우저를 초기화하기 전까진
+ * 절대 지워지지 않아 — 도그푸딩 중 이미 한 번이라도 본 사람은 "아무리 새로고침해도 인트로가
+ * 재생되지 않는다"는 결과를 얻었다(사용자 실측 지적, 2026-09-14). 영상 재생 자체(mount→종료)는
+ * 로컬·프로덕션 둘 다 Playwright로 정상 확인됐으므로 메커니즘 결함이 아니라 영구 기억 설계가
+ * 실제 요구("새로고침하면 재생")와 반대 방향이었던 것 — 그래서 기억 자체를 없앤다.
+ *
+ * **새 의미론이 "마운트당 최대 1회"인 이유**: 이 훅을 부르는 `AmbientBackground`의
+ * `introEnded`(아래 컴포넌트 본문)는 한 번 true가 되면 리셋되지 않는다 — 재생이 끝나면
+ * 정지 이미지로 영구 전환되는 기존 동작은 그대로 유지해야 하므로, localStorage만 걷어내면
+ * 새 분기 없이 자동으로 이 의미론이 된다: F5(하드 리로드, 컴포넌트 재마운트)마다 재생 ✅,
+ * `/compare/` 등 딥링크 후 클라이언트 네비로 홈에 처음 들어와도 재생 ✅, 그 상태에서 홈↔다른
+ * 페이지를 왕복해도(같은 마운트 생명주기 안이므로) 재생 안 함 ✅(1.7초 영상이 왕복마다
+ * 반복되면 오히려 거슬린다). "매 홈 진입마다"까지 가려면 `introEnded`도 같이 리셋해야 하는데,
+ * 그건 재생 종료 후 정지 이미지 유지라는 기존 동작과 충돌해 채택하지 않는다.
  */
 function useIntroReveal(enabled: boolean): boolean {
   const [playing, setPlaying] = useState(false);
   useEffect(() => {
     if (!enabled) return;
-    try {
-      if (window.localStorage.getItem(INTRO_SEEN_KEY)) return;
-      window.localStorage.setItem(INTRO_SEEN_KEY, "1");
-    } catch {
-      // localStorage 접근 불가(프라이빗 모드 등) — 매번 재생되는 정도는 허용 가능한 폴백.
-    }
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setPlaying(true);
   }, [enabled]);
@@ -123,7 +135,11 @@ export default function AmbientBackground() {
         </div>
       ) : null}
 
-      {introPlaying && !introEnded ? (
+      {/* isHome 가드(2026-09-14) — introPlaying은 enabled(isHome&&!reducedMotion)가 true였던
+          순간 켜진 뒤 리셋되지 않으므로, 재생 도중 다른 라우트로 이동해도(예: /compare/) 이
+          레이어가 그대로 남아 배경 위에 얹힌다. isHome을 여기서도 확인해 홈을 벗어나면 즉시
+          사라지게 한다(재생 중단 자체는 <video> 언마운트가 처리). */}
+      {isHome && introPlaying && !introEnded ? (
         <div className="ambient-reveal">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/bg/intro-still.jpg" alt="" />
