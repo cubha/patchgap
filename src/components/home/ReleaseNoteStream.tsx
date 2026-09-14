@@ -20,15 +20,39 @@
 // 것. 그래서 카메라 밴드 여부와 무관하게 홈의 모든 `.panel-surface`를 유리화하는 쪽으로
 // 방향을 바꿨다(LaneGapPanel.tsx·DiscordPanel.tsx도 동일 라운드에 함께 수정 — 전부 같은
 // 커밋 단위로 취급). 상세 근거·트레이드오프는 PLAN-deployed-ui-fix-2026-09-12.md R6 절 참고.
+//
+// 2026-09-14(탭 분리) — "패치 내용"/"미공지 Gap" 탭 2개 추가(PLAN-home-tab-split-intro-fix-
+// 2026-09-14.md). `releaseStream.buildReleaseStream()`이 더 이상 두 그룹을 섞어 배치하지
+// 않으므로(단순 concat) 여기서 `group.kind`로 걸러 탭별 목록을 만든다. 탭 DOM/스타일은
+// `/compare/`의 `NoteNavigator.tsx`(패치노트 섹션 탭)를 그대로 재사용 — 사이트 안에 이미
+// 있는 탭 패턴과 다른 시맨틱을 새로 만들지 않는다(role="tablist"/role="tab"/aria-selected,
+// `aria-controls`·`role="tabpanel"`은 그 전례도 안 쓰므로 여기서도 생략).
+// `panelSurfaceClass("glass")`를 스크롤 `<ul>`에서 비스크롤 `<section>` 래퍼로 옮겼다 — 골드
+// 레일이 이제 탭 행 위에 걸리고, `<ul>`은 그 안의 스크롤 전용 자식이 된다. "프레임 vignette"
+// 부수효과(아래 주석)는 스크롤 컨테이너가 `<ul>`인 한 그대로 유지된다.
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { DeltaRecord, LanePosition } from "@/pipeline/types";
 import { useAmbient } from "@/components/AmbientContext";
 import { panelSurfaceClass } from "@/lib/panelSurface";
 import ReleaseNoteRow from "./ReleaseNoteRow";
 import type { ReleaseStreamGroup } from "./releaseStream";
 import type { StreamEntityIcon } from "./releaseStreamEntity";
+
+type StreamTab = "content" | "gap";
+
+const STREAM_TABS: { key: StreamTab; label: string }[] = [
+  { key: "content", label: "패치 내용" },
+  { key: "gap", label: "미공지 Gap" },
+];
+
+/** ReleaseStreamGroup.kind → 탭 키. buildReleaseStream이 두 그룹을 이미 concat해 두므로
+ * 여기서 kind로 되나눈다(단일 소스: releaseStream.ts의 kind 판별을 재사용, 새 분류 로직
+ * 만들지 않음). */
+function tabForGroup(group: ReleaseStreamGroup): StreamTab {
+  return group.kind === "matched" ? "content" : "gap";
+}
 
 export interface ReleaseStreamEntry {
   group: ReleaseStreamGroup;
@@ -46,46 +70,98 @@ export interface ReleaseNoteStreamProps {
   patch: string | null;
   /** deltas.meta.qAlpha — 판정 문장(streamVerdict)의 유의 임계. */
   qAlpha?: number;
+  /** 탭 배지 숫자 — page.tsx의 기존 `computeHeadline()` 결과를 그대로 받는다(라인 필터와
+   * 무관한 전체 건수: 공지된 변화=항목 수, 미공지=행 수). 화면에 실제로 렌더되는 카드는
+   * 엔티티 그룹 단위라 이 숫자와 다를 수 있지만, HeroSummary·확정 시안과 정합을 맞추기 위해
+   * 의도적으로 그대로 쓴다(PLAN-home-tab-split-intro-fix-2026-09-14.md "카운트 배지 소스"
+   * 절 참고) — 새 집계를 만들지 않는다. */
+  contentCount: number;
+  gapCount: number;
 }
 
 function groupKey(group: ReleaseStreamGroup): string {
   return `${group.kind}:${group.entity}`;
 }
 
-export default function ReleaseNoteStream({ entries, spellIcons, noteDeltas, patch, qAlpha }: ReleaseNoteStreamProps) {
-  const { selectedLane } = useAmbient();
+const EMPTY_MESSAGE: Record<StreamTab, string> = {
+  content: "이 라인에서는 관측된 변화가 없습니다",
+  gap: "이 라인에서는 미공지 변화가 없습니다",
+};
 
-  const filtered = useMemo(() => {
+export default function ReleaseNoteStream({
+  entries,
+  spellIcons,
+  noteDeltas,
+  patch,
+  qAlpha,
+  contentCount,
+  gapCount,
+}: ReleaseNoteStreamProps) {
+  const { selectedLane } = useAmbient();
+  const [tab, setTab] = useState<StreamTab>("content");
+
+  const laneFiltered = useMemo(() => {
     if (selectedLane === "all") return entries;
     return entries.filter((entry) => entry.lanes.includes(selectedLane));
   }, [entries, selectedLane]);
 
-  if (filtered.length === 0) {
-    // 고정 높이 셀(StreamColumnLayout row2) 안에서 문구가 위에 붙지 않도록 중앙 배치한다.
-    return (
-      <div className={`${panelSurfaceClass("glass")} flex h-full min-h-0 flex-1 items-center justify-center rounded-lg`}>
-        <p className="p-5 text-sm text-muted">이 라인에서는 관측된 변화가 없습니다</p>
-      </div>
-    );
-  }
+  const filtered = useMemo(
+    () => laneFiltered.filter((entry) => tabForGroup(entry.group) === tab),
+    [laneFiltered, tab]
+  );
 
-  // panel-surface(2026-09-12·3차)의 background는 border box 기준 고정(기본
-  // background-attachment:scroll)이라 이 <ul> 자체가 스크롤 컨테이너여도 레일·채움이
-  // 콘텐츠와 함께 스크롤해 사라지지 않는다 — 대신 채움이 스크롤 전체 높이가 아니라 보이는
-  // 프레임 높이에 맞춰져 프레임 vignette처럼 읽힌다(의도된 부수효과, panel.css 주석 참고).
   return (
-    <ul className={`${panelSurfaceClass("glass")} min-h-0 flex-1 overflow-y-auto rounded-lg`}>
-      {filtered.map((entry) => (
-        <ReleaseNoteRow
-          key={groupKey(entry.group)}
-          group={entry.group}
-          icon={entry.icon}
-          spellIcons={spellIcons}
-          noteDeltas={noteDeltas}
-          patch={patch}
-          qAlpha={qAlpha}
-        />
-      ))}
-    </ul>
+    // NoteNavigator.tsx(/compare/)와 동일 골격 — <section>이 panel-surface-glass(레일+채움)를
+    // 소유하고, 탭 행 아래 <ul>은 순수 스크롤 컨테이너(자체 표면 없음). 탭 행은 목록이 비어도
+    // 항상 렌더되므로 빈 탭에서도 다른 탭으로 되돌아올 수 있다(2026-09-14 — 이전 early-return
+    // 구조는 filtered.length===0일 때 패널 전체를 문구로 바꿔치기해 탭 자체가 사라졌다).
+    <section className={`${panelSurfaceClass("glass")} flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg`}>
+      <div className="flex gap-2 border-b border-border-soft px-5 pt-4" role="tablist" aria-label="스트림 보기">
+        {STREAM_TABS.map(({ key, label }) => {
+          const count = key === "content" ? contentCount : gapCount;
+          const isActive = key === tab;
+          return (
+            <button
+              key={key}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              onClick={() => setTab(key)}
+              className={`border-b-2 px-1 py-2 text-xs font-bold ${
+                isActive ? "border-accent text-fg" : "border-transparent text-muted hover:text-fg-2"
+              }`}
+            >
+              {label} {count}
+            </button>
+          );
+        })}
+      </div>
+
+      {filtered.length === 0 ? (
+        <div className="flex min-h-0 flex-1 items-center justify-center">
+          <p className="p-5 text-sm text-muted">{EMPTY_MESSAGE[tab]}</p>
+        </div>
+      ) : (
+        // panel-surface(2026-09-12·3차)의 background는 border box 기준 고정(기본
+        // background-attachment:scroll)이라 이 <ul>의 부모(<section>)가 스크롤 컨테이너가
+        // 아니어도(<ul> 자신이 스크롤) 레일·채움이 콘텐츠와 함께 스크롤해 사라지지 않는다 —
+        // 채움이 스크롤 전체 높이가 아니라 보이는 프레임 높이에 맞춰져 프레임 vignette처럼
+        // 읽힌다(의도된 부수효과, panel.css 주석 참고). 2026-09-14부터 이 표면 클래스는
+        // <ul>이 아니라 부모 <section>에 있다 — 탭 행도 같은 레일 아래 들어오게 하려는 것.
+        <ul className="min-h-0 flex-1 overflow-y-auto">
+          {filtered.map((entry) => (
+            <ReleaseNoteRow
+              key={groupKey(entry.group)}
+              group={entry.group}
+              icon={entry.icon}
+              spellIcons={spellIcons}
+              noteDeltas={noteDeltas}
+              patch={patch}
+              qAlpha={qAlpha}
+            />
+          ))}
+        </ul>
+      )}
+    </section>
   );
 }
