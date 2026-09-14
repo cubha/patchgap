@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
 import StatusDefinitionTable from "../StatusDefinitionTable";
+import { EFFECT_SIZE_FLOORS } from "@/pipeline/aggregate/stats";
 
 describe("StatusDefinitionTable", () => {
   it("7개 상태(no-change·below-threshold·indirect-effect 포함)를 모두 렌더하고 게이트 값을 조건 열에 반영한다", () => {
@@ -8,10 +9,7 @@ describe("StatusDefinitionTable", () => {
       <StatusDefinitionTable
         minN={200}
         alpha={0.1}
-        pickFloor={0.02}
-        banFloor={0.03}
-        winFloor={0.02}
-        itemRelFloor={0.25}
+        floors={EFFECT_SIZE_FLOORS}
       />
     );
     expect(container.textContent).toContain("공지-일치");
@@ -27,5 +25,9 @@ describe("StatusDefinitionTable", () => {
     expect(container.textContent).toContain("픽 2%p");
     expect(container.textContent).toContain("밴 3%p");
     expect(container.textContent).toContain("채택률 상대 25%");
+    expect(container.textContent).toContain("채택률 1% 미만");
+    expect(container.textContent).toContain("라인 골드 상대 3%");
+    expect(container.textContent).toContain("오브젝트 30초");
+    expect(container.textContent).toContain("경기 시간 60초");
   });
 });

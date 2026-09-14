@@ -2,27 +2,27 @@
   "meta": {
     "from": "26.16",
     "to": "26.17",
-    "generatedAt": "2026-09-13T04:21:03.834Z",
+    "generatedAt": "2026-09-13T11:42:59.617Z",
     "n": 1966,
     "counts": {
-      "unannounced": 32,
-      "indirect-effect": 9,
+      "unannounced": 29,
+      "indirect-effect": 7,
       "announced-inconsistent": 208,
       "announced-consistent": 34,
-      "below-threshold": 236,
+      "below-threshold": 241,
       "insufficient-sample": 585,
       "no-change": 862
     },
     "qAlpha": 0.1,
     "llm": {
-      "calls": 0,
-      "cacheHits": 50,
+      "calls": 5,
+      "cacheHits": 45,
       "skipped": 0,
       "usage": {
-        "inputTokens": 0,
-        "cacheReadInputTokens": 0,
-        "cacheCreationInputTokens": 0,
-        "outputTokens": 0
+        "inputTokens": 668,
+        "cacheReadInputTokens": 82672,
+        "cacheCreationInputTokens": 20668,
+        "outputTokens": 4618
       }
     }
   },
@@ -1544,317 +1544,6 @@
       }
     },
     {
-      "id": "item:3181:adoptionRate",
-      "entityType": "item",
-      "entityKey": "3181",
-      "entityName": "선체파괴자",
-      "metric": "adoptionRate",
-      "before": 0.00436,
-      "after": 0.00579,
-      "delta": 0.0014299999999999998,
-      "ci": [
-        0.0008078805725086652,
-        0.002055809791703245
-      ],
-      "n": {
-        "before": 100000,
-        "after": 100000
-      },
-      "q": 0.00010605310806459797,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "가렌의 공격력이 55.5→60으로 상향되고 W 방어력/마법저항력 증가율도 20%→30%로 강화되어, 선체파괴자를 자주 사용하는 가렌의 픽률과 채용이 늘면서 아이템 채택률도 간접적으로 상승했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:가렌:a83e2425",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "가렌 W(용기)의 추가 방어력/마법저항력 증가량 상향은 가렌의 전반적 성능을 강화해 선체파괴자 같은 브루저형 아이템의 선호도를 높였을 가능성이 있습니다.",
-          "candidateNoteId": "note:26.17:champion:가렌:f3562bca",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "트런들 W(얼음 왕국)의 공격 속도 상향은 온진형·정글러 트런들의 선체파괴자 채택 매력도를 높였을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8360218585",
-          "KR_8358704159",
-          "KR_8357359474",
-          "KR_8367767010",
-          "KR_8368656697",
-          "KR_8367330974",
-          "KR_8364827630",
-          "KR_8362579482",
-          "KR_8359167724",
-          "KR_8362455356"
-        ],
-        "aggregatePath": "data/aggregated/26.17/items.json#rows[itemId=3181]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "선체파괴자(3181)의 채택률이 0.436%→0.579%로 유의미하게 상승(95% CI가 0을 포함하지 않음)했는데, 이는 패치노트에 직접 언급되지 않은 변화로, 가렌·트런들 등 해당 아이템을 즐겨 쓰는 브루저 챔피언들의 간접적 버프(공격력, 방어 스탯, 공격 속도 상향)로 인해 채택률이 늘었을 가능성이 있습니다.",
-        "summaryCites": [
-          "note:26.17:champion:가렌:a83e2425",
-          "note:26.17:champion:trundle:85be03ea"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "item:3083:adoptionRate",
-      "entityType": "item",
-      "entityKey": "3083",
-      "entityName": "워모그의 갑옷",
-      "metric": "adoptionRate",
-      "before": 0.00356,
-      "after": 0.00233,
-      "delta": -0.0012299999999999998,
-      "ci": [
-        -0.0017092428749728448,
-        -0.0007563173466406036
-      ],
-      "n": {
-        "before": 100000,
-        "after": 100000
-      },
-      "q": 0.000007670619894166888,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "경쟁 탱커/브루저 아이템인 갈라진 하늘의 체력이 450에서 400으로 감소하는 등 전반적인 체력형 아이템 밸런스 조정이 있었으나, 이는 워모그의 갑옷과 직접 경쟁 관계라기보다는 간접적으로 탱커 빌드 선호도에 영향을 줄 수 있음",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "시스템 아이템인 체력 재생 정수의 재생량이 1.5에서 3.0으로 두 배 상향되어, 워모그의 갑옷이 제공하는 체력 재생 효과의 상대적 가치가 낮아지면서 채택률 감소로 이어졌을 가능성이 있음",
-          "candidateNoteId": "note:26.17:system:체력-재생-정수:394e3a0d",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8364526977",
-          "KR_8361798893",
-          "KR_8366649654",
-          "KR_8365180548",
-          "KR_8368937418",
-          "KR_8358521430",
-          "KR_8365911710",
-          "KR_8357232506",
-          "KR_8365404808",
-          "KR_8362908720"
-        ],
-        "aggregatePath": "data/aggregated/26.17/items.json#rows[itemId=3083]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "워모그의 갑옷 채택률이 0.356%에서 0.233%로 유의미하게 감소했으나(95% CI [-0.171%, -0.076%]), 이를 직접 설명하는 패치노트 항목은 없으며, 체력 재생 정수 상향(note:26.17:system:체력-재생-정수:394e3a0d)이나 경쟁 탱커 아이템인 갈라진 하늘의 체력 감소(note:26.17:item:sundered-sky:4c4f025e) 등이 간접적으로 영향을 미쳤을 가능성이 낮은 확신으로 제기된다.",
-        "summaryCites": [
-          "note:26.17:system:체력-재생-정수:394e3a0d",
-          "note:26.17:item:sundered-sky:4c4f025e"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "item:4401:adoptionRate",
-      "entityType": "item",
-      "entityKey": "4401",
-      "entityName": "대자연의 힘",
-      "metric": "adoptionRate",
-      "before": 0.00264,
-      "after": 0.00376,
-      "delta": 0.00112,
-      "ci": [
-        0.0006258412176818577,
-        0.0016188036297301936
-      ],
-      "n": {
-        "before": 100000,
-        "after": 100000
-      },
-      "q": 0.00013970172912191304,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8367044760",
-          "KR_8368752078",
-          "KR_8368565160",
-          "KR_8367713940",
-          "KR_8368397115",
-          "KR_8364876904",
-          "KR_8364526977",
-          "KR_8362614001",
-          "KR_8360753785",
-          "KR_8366198939"
-        ],
-        "aggregatePath": "data/aggregated/26.17/items.json#rows[itemId=4401]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "후보 목록에 대자연의 힘(4401) 또는 이와 연관된 정글 아이템·시스템 변경 항목이 없어 채택률 상승(0.00264→0.00376)을 설명할 간접 요인을 찾을 수 없습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "lane:BOTTOM:goldAt14",
-      "entityType": "lane",
-      "entityKey": "BOTTOM",
-      "entityName": "바텀",
-      "metric": "goldAt14",
-      "before": 6139.090631364562,
-      "after": 6210.95611073599,
-      "delta": 71.86547937142768,
-      "ci": [
-        15.798799433942072,
-        127.9321593089133
-      ],
-      "n": {
-        "before": 2946,
-        "after": 2962
-      },
-      "q": 0.07486213085077933,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "미스 포츈 Q 피해량 상승으로 라인전 파워가 강화되어 바텀 라인의 골드 획득이 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:미스-포츈:6d438477",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "미스 포츈 E 총피해량 증가가 바텀 라인 전투력을 높여 골드 우위로 이어졌을 가능성이 있습니다.",
-          "candidateNoteId": "note:26.17:champion:미스-포츈:8267908f",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "애쉬 W 피해량 및 사거리 증가로 바텀 라인전 성능이 강화되어 골드 획득에 기여했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 강화(20%→25%)가 원거리 딜러 아이템 파워를 높여 바텀 라인 골드 성장에 영향을 줬을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "활력증진의 펜던트 계열 아이템(리글의 랜턴 등)의 공격 속도 강화가 원거리 딜러의 초반 성장에 영향을 줬을 가능성이 있습니다.",
-          "candidateNoteId": "note:26.17:item:활력증진의-펜던트:8f360fb2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "이즈리얼 R 주문력 계수 상승이 하이브리드 빌드를 강화해 바텀 라인 골드에 영향을 줬을 가능성이 있습니다.",
-          "candidateNoteId": "note:26.17:champion:이즈리얼:9152ff5a",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [],
-        "aggregatePath": "data/aggregated/26.17/lanes.json#rows[position=BOTTOM]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-classic"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "바텀 라인의 14분 골드가 소폭 상승(약 +71.9, 95% CI가 0을 포함하지 않아 유의미)한 것은 미스 포츈의 Q/E 피해량 상승과 애쉬 W 강화 등 원거리 딜러 챔피언 버프가 라인전 파워를 높여 간접적으로 골드 성장에 기여했을 가능성이 있습니다.",
-        "summaryCites": [
-          "note:26.17:champion:미스-포츈:6d438477",
-          "note:26.17:champion:미스-포츈:8267908f",
-          "note:26.17:champion:애쉬:7d7ed661"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "lane:BOTTOM:goldAt10",
-      "entityType": "lane",
-      "entityKey": "BOTTOM",
-      "entityName": "바텀",
-      "metric": "goldAt10",
-      "before": 3959.3331076506433,
-      "after": 4002.326365475388,
-      "delta": 42.99325782474443,
-      "ci": [
-        9.179043231470565,
-        76.8074724180183
-      ],
-      "n": {
-        "before": 2954,
-        "after": 2966
-      },
-      "q": 0.07803016939767633,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "미스 포츈 Q 피해량 증가 및 마나 소모량 감소, E 총피해량/둔화 지속시간 증가 등 다수의 버프로 바텀 라인 챔피언의 초반 전투력과 성장 속도가 상승했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:미스-포츈:6d438477",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "애쉬 W 피해량 및 사거리 버프로 라인전 스킬 견제력이 강화되어 바텀 라인의 골드 획득이 증가했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 증가(20%→25%)로 원거리 딜러의 웨이브 클리어 및 CS 수급이 개선되어 바텀 라인 골드 획득에 간접적으로 기여했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "트런들 W 공격 속도 버프가 바텀 라인(서포터 포함) 조합에서 라인전 강화로 이어졌을 가능성이 있습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [],
-        "aggregatePath": "data/aggregated/26.17/lanes.json#rows[position=BOTTOM]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-classic"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "바텀 라인 goldAt10이 소폭 상승(+43, 95% CI가 0을 넘지 않음)한 것은 미스 포츈와 애쉬 등 원거리 딜러 챔피언의 다수 버프, 그리고 폭풍갈퀴 공격 속도 상향이 복합적으로 라인전 및 웨이브 클리어 효율을 높여 간접적으로 초반 골드 수급을 개선했을 가능성이 있습니다.",
-        "summaryCites": [
-          "note:26.17:champion:미스-포츈:6d438477",
-          "note:26.17:champion:애쉬:7d7ed661",
-          "note:26.17:item:stormrazor:0a1d6b43"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
       "id": "champion:Zeri:winRate",
       "entityType": "champion",
       "entityKey": "Zeri",
@@ -2959,7 +2648,14 @@
       "matchedNoteIds": [
         "note:26.17:champion:yasuo:66635940"
       ],
-      "causes": [],
+      "causes": [
+        {
+          "text": "야스오가 주로 사용하는 폭풍갈퀴의 공격 속도가 20%→25%로 상향되어, 야스오 개인 스킬 너프(치명타 피해량 감소 완화 축소)에도 불구하고 아이템 시너지를 통한 실전 성능이 강화되면서 밴율이 오히려 상승했을 가능성이 있습니다.",
+          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+          "verified": true,
+          "confidence": "medium"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8363498717",
@@ -2975,6 +2671,14 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=157,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yasuo"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "야스오의 밴율은 10.88%에서 16.11%로 5.23%p 상승(95% CI [4.29%p, 6.17%p])했는데, 직접 노트인 낭인의 길 치명타 피해량 감소 완화 축소(-10%→-5%)는 오히려 약화(너프)이므로 이 상승을 설명하지 못하며, 대신 야스오가 자주 사용하는 폭풍갈퀴의 공격 속도 상향(note:26.17:item:stormrazor:0a1d6b43)이 실전 체감 성능을 끌어올려 밴율 상승에 간접적으로 기여했을 가능성이 있습니다.",
+        "summaryCites": [
+          "note:26.17:item:stormrazor:0a1d6b43"
+        ],
+        "summaryVerified": true
       }
     },
     {
@@ -3003,7 +2707,26 @@
         "note:26.17:champion:leblanc:887dc51f",
         "note:26.17:champion:leblanc:76a8a16c"
       ],
-      "causes": [],
+      "causes": [
+        {
+          "text": "키아나 Q 피해량이 상향되어 미드 라인에서 르블랑과 자주 마주치는 암살자 챔피언의 전투력이 강화되면서 상대적으로 르블랑의 라인전 및 스노우볼링이 어려워졌을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "문도 박사의 체력이 크게 상향되어 탱커형 챔피언의 생존력이 늘어나면서, 순간 폭딜에 의존하는 르블랑의 킬 확정력이 감소했을 가능성이 있습니다.",
+          "candidateNoteId": "note:26.17:champion:문도-박사:f54272dc",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "가렌의 W 저항력 증가 및 방어력 성장 상향 등 브루저/탱커 계열 챔피언들의 전반적인 생존력 강화가 르블랑 같은 버스트 암살자의 킬 확정력을 간접적으로 낮췄을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:가렌:f3562bca",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8363755873",
@@ -3019,6 +2742,16 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=7,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-leblanc"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "르블랑은 이번 패치에서 W·RW 피해량 및 공격 속도, R 재사용 대기시간 등 다수의 직접 버프를 받았음에도 승률이 52.3%에서 47.2%로 하락했는데, 이는 자체 변경으로 설명되지 않는 불일치이며 키아나 강화 및 문도 박사·가렌 등 탱커/브루저 챔피언들의 생존력 상향이 르블랑의 순간 폭딜 킬 확정력을 간접적으로 약화시켰을 가능성이 있습니다.",
+        "summaryCites": [
+          "note:26.17:champion:qiyana:5a6d587d",
+          "note:26.17:champion:문도-박사:f54272dc",
+          "note:26.17:champion:가렌:f3562bca"
+        ],
+        "summaryVerified": true
       }
     },
     {
@@ -3044,7 +2777,26 @@
       "matchedNoteIds": [
         "note:26.17:champion:yone:c6a149c7"
       ],
-      "causes": [],
+      "causes": [
+        {
+          "text": "이렐리아 Q 피해량 계수 강화(70%→80%)로 이렐리아가 상대 라인(탑/미드)에서 요네를 상대로 더 강해져 요네의 라인전 승률이 간접적으로 하락했을 가능성이 있습니다.",
+          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "이렐리아 W 피해 감소 계수 강화(7%→8%)도 요네와의 교전에서 이렐리아 생존력을 높여 요네의 상대 전적에 부정적 영향을 줄 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:irelia:4b925bed",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "르블랑 W 피해량 계수 강화(80%→90%)로 미드 라인 경쟁자인 르블랑이 강해져 요네의 미드 매치업 승률이 간접적으로 낮아졌을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8366970663",
@@ -3060,6 +2812,15 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=777,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yone"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "요네 자체의 직접 변경(치명타 피해 감소량 축소, 사실상 자기 자신에는 버프)만으로는 승률 하락(51.7%→47.0%, 델타 -4.7%p, CI가 0을 포함해 통계적으로는 불확실)을 설명하기 어려워, 이렐리아·르블랑 등 주요 상대 챔피언들의 버프가 간접적으로 요네의 라인전 승률을 낮췄을 가능성을 낮은 신뢰도로 제시합니다.",
+        "summaryCites": [
+          "note:26.17:champion:irelia:9035ffdc",
+          "note:26.17:champion:leblanc:887dc51f"
+        ],
+        "summaryVerified": true
       }
     },
     {
@@ -3086,7 +2847,14 @@
         "note:26.17:champion:aurelionsol:7b32ba55",
         "note:26.17:champion:aurelionsol:30712737"
       ],
-      "causes": [],
+      "causes": [
+        {
+          "text": "제라스 Q 피해량 및 체력 너프로 인해 미드 라인에서 아우렐리온 솔의 상대적 경쟁력이 개선되었을 가능성이 있습니다(간접 영향, 근거 약함).",
+          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8364955312",
@@ -3102,6 +2870,14 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=136,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-aurelionsol"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "아우렐리온 솔의 승률 상승(51.1%→55.8%, 95% CI[-4.2%,13.5%], n=227/251)은 신뢰구간이 0을 포함할 정도로 넓어 통계적 유의성이 낮고, 직접 버프(Q 마나 소모 감소, W 재사용 대기시간 감소)만으로는 설명 강도가 부족하지만 제라스 등 경쟁 미드 챔피언의 너프가 간접적으로 기여했을 가능성이 낮은 확신도로 존재합니다.",
+        "summaryCites": [
+          "note:26.17:champion:xerath:43a6f4aa"
+        ],
+        "summaryVerified": true
       }
     },
     {
@@ -3128,7 +2904,20 @@
         "note:26.17:champion:qiyana:5a6d587d",
         "note:26.17:champion:qiyana:9d50d4d6"
       ],
-      "causes": [],
+      "causes": [
+        {
+          "text": "키아나 Q 피해량 자체 버프가 있지만 이는 이미 직접 변경으로 처리되었어야 하며, pickRate 급등(+4.35%p)은 단순 수치 버프만으로 설명하기엔 크므로 다른 간접 요인 가능성을 검토해야 함.",
+          "candidateNoteId": null,
+          "verified": false,
+          "confidence": "low"
+        },
+        {
+          "text": "갈라진 하늘의 공격력·체력 너프로 키아나가 선호하던 전투 아이템의 상대적 매력이 줄어 다른 빌드/픽으로의 쏠림 변화가 발생했을 가능성이 있으나 직접적 연관성은 약함.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8367245341",
@@ -3144,6 +2933,14 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=246,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-qiyana"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "키아나의 픽률이 16.08%에서 20.43%로 크게 상승했으며 CI가 0을 포함하지 않아 유의미한 변화이나, Q 스킬 자체 버프(note:26.17:champion:qiyana:5a6d587d, 9d50d4d6)만으로는 이 정도의 상승폭을 설명하기 어려워 announced-inconsistent 상태이며 추가 메타 요인(아이템 변경 등)의 간접 영향 가능성이 낮은 신뢰도로 존재함.",
+        "summaryCites": [
+          "note:26.17:champion:qiyana:5a6d587d"
+        ],
+        "summaryVerified": true
       }
     },
     {
@@ -12967,6 +12764,62 @@
       }
     },
     {
+      "id": "lane:BOTTOM:goldAt14",
+      "entityType": "lane",
+      "entityKey": "BOTTOM",
+      "entityName": "바텀",
+      "metric": "goldAt14",
+      "before": 6139.090631364562,
+      "after": 6210.95611073599,
+      "delta": 71.86547937142768,
+      "ci": [
+        15.798799433942072,
+        127.9321593089133
+      ],
+      "n": {
+        "before": 2946,
+        "after": 2962
+      },
+      "q": 0.07486213085077933,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [],
+        "aggregatePath": "data/aggregated/26.17/lanes.json#rows[position=BOTTOM]",
+        "noteAnchor": null
+      }
+    },
+    {
+      "id": "lane:BOTTOM:goldAt10",
+      "entityType": "lane",
+      "entityKey": "BOTTOM",
+      "entityName": "바텀",
+      "metric": "goldAt10",
+      "before": 3959.3331076506433,
+      "after": 4002.326365475388,
+      "delta": 42.99325782474443,
+      "ci": [
+        9.179043231470565,
+        76.8074724180183
+      ],
+      "n": {
+        "before": 2954,
+        "after": 2966
+      },
+      "q": 0.07803016939767633,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [],
+        "aggregatePath": "data/aggregated/26.17/lanes.json#rows[position=BOTTOM]",
+        "noteAnchor": null
+      }
+    },
+    {
       "id": "champion:Mel:banRate",
       "entityType": "champion",
       "entityKey": "Mel",
@@ -21625,6 +21478,45 @@
       }
     },
     {
+      "id": "item:3181:adoptionRate",
+      "entityType": "item",
+      "entityKey": "3181",
+      "entityName": "선체파괴자",
+      "metric": "adoptionRate",
+      "before": 0.00436,
+      "after": 0.00579,
+      "delta": 0.0014299999999999998,
+      "ci": [
+        0.0008078805725086652,
+        0.002055809791703245
+      ],
+      "n": {
+        "before": 100000,
+        "after": 100000
+      },
+      "q": 0.00010605310806459797,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8360218585",
+          "KR_8358704159",
+          "KR_8357359474",
+          "KR_8367767010",
+          "KR_8368656697",
+          "KR_8367330974",
+          "KR_8364827630",
+          "KR_8362579482",
+          "KR_8359167724",
+          "KR_8362455356"
+        ],
+        "aggregatePath": "data/aggregated/26.17/items.json#rows[itemId=3181]",
+        "noteAnchor": null
+      }
+    },
+    {
       "id": "item:2504:adoptionRate",
       "entityType": "item",
       "entityKey": "2504",
@@ -21820,6 +21712,45 @@
       }
     },
     {
+      "id": "item:3083:adoptionRate",
+      "entityType": "item",
+      "entityKey": "3083",
+      "entityName": "워모그의 갑옷",
+      "metric": "adoptionRate",
+      "before": 0.00356,
+      "after": 0.00233,
+      "delta": -0.0012299999999999998,
+      "ci": [
+        -0.0017092428749728448,
+        -0.0007563173466406036
+      ],
+      "n": {
+        "before": 100000,
+        "after": 100000
+      },
+      "q": 0.000007670619894166888,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8364526977",
+          "KR_8361798893",
+          "KR_8366649654",
+          "KR_8365180548",
+          "KR_8368937418",
+          "KR_8358521430",
+          "KR_8365911710",
+          "KR_8357232506",
+          "KR_8365404808",
+          "KR_8362908720"
+        ],
+        "aggregatePath": "data/aggregated/26.17/items.json#rows[itemId=3083]",
+        "noteAnchor": null
+      }
+    },
+    {
       "id": "champion:Rumble:JUNGLE:pickRate",
       "entityType": "champion",
       "entityKey": "Rumble",
@@ -21894,6 +21825,45 @@
           "KR_8361473148"
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=267,scope=all]",
+        "noteAnchor": null
+      }
+    },
+    {
+      "id": "item:4401:adoptionRate",
+      "entityType": "item",
+      "entityKey": "4401",
+      "entityName": "대자연의 힘",
+      "metric": "adoptionRate",
+      "before": 0.00264,
+      "after": 0.00376,
+      "delta": 0.00112,
+      "ci": [
+        0.0006258412176818577,
+        0.0016188036297301936
+      ],
+      "n": {
+        "before": 100000,
+        "after": 100000
+      },
+      "q": 0.00013970172912191304,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8367044760",
+          "KR_8368752078",
+          "KR_8368565160",
+          "KR_8367713940",
+          "KR_8368397115",
+          "KR_8364876904",
+          "KR_8364526977",
+          "KR_8362614001",
+          "KR_8360753785",
+          "KR_8366198939"
+        ],
+        "aggregatePath": "data/aggregated/26.17/items.json#rows[itemId=4401]",
         "noteAnchor": null
       }
     },

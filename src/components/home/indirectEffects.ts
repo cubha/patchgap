@@ -39,6 +39,12 @@ export interface IndirectEffectEntry {
  *
  * 실측 함정도 함께 막는다: |delta|만으로 정렬하면 골드(수십~수백)가 비율(0.0x)을 수천 배
  * 압도해 라인 골드가 섹션 상위를 독점한다(재생성 후 실제로 상위 2칸을 먹었다).
+ *
+ * 2026-09-13 2차 이후 이 순위는 **드문 경로**가 됐다 — 연속 지표에 효과크기 바닥이 생겨
+ * (`aggregate/stats.ts` EFFECT_SIZE_FLOORS, 골드 상대 3%) 집계 엔티티 행은 애초에
+ * `unannounced`가 되지 못하고, `indirect-effect` 재분류는 `unannounced`만 대상으로 한다.
+ * 그래도 남겨 둔다: 바닥을 넘는 대형 라인 골드 변화(3% 이상)는 여전히 여기로 올 수 있고,
+ * 그때도 행위자 지표가 먼저 보여야 한다는 판단은 그대로다.
  */
 const ENTITY_TYPE_RANK: Record<DeltaRecord["entityType"], number> = {
   champion: 0,
