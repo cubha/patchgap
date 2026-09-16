@@ -31,7 +31,19 @@ export interface PubgReducedMatch {
   region: string | null;
   nBots: number;
   nHumans: number;
+  /** 획득 — `Item_Weapon_RPD_C` 네임스페이스. **현재 유일한 출하 축**이다. */
   weaponPickup: Record<string, number>;
+  /**
+   * 아래 3개는 수집만 해 둔 필드다(재수집 불가 자산이라 버리지 않는다). **집계·판정 어디서도
+   * 소비하지 않는다** — PLAN §8이 명중률로 반동·ADS 변경을 분리하려다 실패했기 때문이다.
+   *
+   * ⚠️ **네임스페이스가 갈라져 있고 정규화 함수가 이 저장소에 없다**(PLAN §6-6 미이행):
+   * `weaponAttacks`·`weaponPickup` = `Item_Weapon_RPD_C` / `weaponKills`·`weaponDamageHits`
+   * = `WeapRPD_C`. 두 집합은 키가 **하나도 교차하지 않는다**. 따라서 PLAN §8의 명중률 표는
+   * 커밋된 코드로 재현되지 않는다(그 계산은 보존되지 않은 임시 스크립트가 했다).
+   * 명중률·반동 축을 되살리려면 **정규화부터** 구현해야 한다 — 그 전에 이 필드들을 나누면
+   * 분자·분모가 서로 다른 무기를 가리키고, 그 사실이 조용히 숨는다.
+   */
   weaponKills: Record<string, number>;
   weaponDamageHits: Record<string, number>;
   weaponAttacks: Record<string, number>;

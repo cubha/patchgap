@@ -7,6 +7,7 @@
 // 배제해 오탐으로 찍혔다). 그 회귀를 막는 것이 이 파일의 주 목적이다.
 import { describe, expect, it } from "vitest";
 import {
+  conservativeEffect,
   ANNOUNCED_RATIO_BAND,
   classify,
   deriveEffectFloor,
@@ -145,5 +146,22 @@ describe("classify", () => {
     const outside = classify(-0.3 * hi * 1.01, [-1, -0.01], BIG_N, NOTE_SPAWN, 0.1);
     expect(inside).toBe("announced-consistent");
     expect(outside).toBe("announced-inconsistent");
+  });
+});
+
+// 2026-09-16 verify-impl B-4 — 목록 첫 줄이 "가장 흔들리는 발견"이 되던 정렬을 바꿨다.
+describe("conservativeEffect", () => {
+  it("구간이 0을 가로지르면 주장할 하한이 없다", () => {
+    expect(conservativeEffect([-0.05, 0.12])).toBe(0);
+  });
+
+  it("양쪽이 같은 부호면 0에 가까운 끝을 쓴다", () => {
+    expect(conservativeEffect([0.139, 0.174])).toBeCloseTo(0.139, 6);
+    expect(conservativeEffect([-0.176, -0.093])).toBeCloseTo(0.093, 6);
+  });
+
+  it("점추정이 큰 넓은 구간보다 점추정이 작은 좁은 구간을 위로 올린다", () => {
+    // 실측: L6 +20.2% [+10.6, +30.6] vs Beryl M762 +15.7% [+13.9, +17.4]
+    expect(conservativeEffect([0.139, 0.174])).toBeGreaterThan(conservativeEffect([0.106, 0.306]));
   });
 });

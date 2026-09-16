@@ -129,6 +129,23 @@ function significant(ci: Interval): boolean {
  * 이것이 이 제품의 핵심 판정이다("공지는 -30%인데 실제는 -16%"). 기대값이 없는 공지 항목
  * (반동·ADS처럼 관측 축이 설계되지 않은 것)은 판정하지 않고 회색으로 남긴다.
  */
+/**
+ * 95% 신뢰구간에서 **0에 가장 가까운 끝** — "최소한 이만큼은 움직였다"고 말할 수 있는 크기다.
+ * 구간이 0을 가로지르면 0(주장할 수 있는 하한이 없다).
+ *
+ * 정렬 키를 점추정 |relChange|에서 이 값으로 바꾼 이유(2026-09-16 verify-impl B-4): 점추정으로
+ * 줄을 세우면 **표본이 작아 구간이 넓은 항목이 위로 올라온다**. 실측에서 Groza(+26.3%,
+ * n=879, CI 반폭 ±12%p)와 L6(+20.2%, ±10%p)가 Beryl M762(+15.7%, n=32,835, ±1.8%p)보다
+ * 앞섰다 — 목록 첫 줄이 가장 흔들리는 발견이 되는 구조다. 하한으로 세우면 L6가 4번째로
+ * 내려가고 Beryl이 2번째로 올라온다. "효과가 크다"가 아니라 **"작다고 말하기 어렵다"** 순서다.
+ */
+export function conservativeEffect(relCi: readonly [number, number]): number {
+  const [lo, hi] = relCi;
+  if (lo > 0) return lo;
+  if (hi < 0) return Math.abs(hi);
+  return 0;
+}
+
 export function classify(
   relChange: number | null,
   relCi: Interval,
@@ -237,6 +254,9 @@ export function buildPubgDeltas(
     };
   });
 
-  rows.sort((a, z) => Math.abs(z.relChange ?? 0) - Math.abs(a.relChange ?? 0));
+  rows.sort((a, z) => {
+    const d = conservativeEffect(z.relCi) - conservativeEffect(a.relCi);
+    return d !== 0 ? d : Math.abs(z.relChange ?? 0) - Math.abs(a.relChange ?? 0);
+  });
   return { rows, effectFloor, counts };
 }
