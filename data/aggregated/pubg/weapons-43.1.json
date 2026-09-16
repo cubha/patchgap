@@ -1,0 +1,572 @@
+{
+  "patch": "43.1",
+  "label": "43.1 (9/11~9/15)",
+  "nMatches": 1614,
+  "nBots": 44027,
+  "nHumans": 107824,
+  "totalPickups": 689896,
+  "pickupsPerMatch": 427.4448574969021,
+  "botShare": 0.28993552890662555,
+  "weapons": [
+    {
+      "weaponKey": "Item_Weapon_AK47_C",
+      "weaponName": "AK47",
+      "pickups": 46478,
+      "share": 0.06736957454456903,
+      "shareCi": [
+        0.0667804854950445,
+        0.06796348166460817
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_ACE32_C",
+      "weaponName": "ACE32",
+      "pickups": 34839,
+      "share": 0.05049891577861011,
+      "shareCi": [
+        0.04998469681401089,
+        0.05101814069700441
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_HK416_C",
+      "weaponName": "M416",
+      "pickups": 33398,
+      "share": 0.04841019515985018,
+      "shareCi": [
+        0.047906230457957805,
+        0.04891918907696964
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Kar98k_C",
+      "weaponName": "Kar98k",
+      "pickups": 33142,
+      "share": 0.04803912473764162,
+      "shareCi": [
+        0.0475370085334499,
+        0.048546274289556324
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_BerylM762_C",
+      "weaponName": "Beryl M762",
+      "pickups": 31207,
+      "share": 0.0452343541635261,
+      "shareCi": [
+        0.044746485364191395,
+        0.04572728754644149
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_AUG_C",
+      "weaponName": "AUG",
+      "pickups": 30600,
+      "share": 0.044354511404617505,
+      "shareCi": [
+        0.043871216415557766,
+        0.04484288077579313
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_M24_C",
+      "weaponName": "M24",
+      "pickups": 28610,
+      "share": 0.041470018669480614,
+      "shareCi": [
+        0.04100209382474293,
+        0.04194305002003279
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Mini14_C",
+      "weaponName": "Mini14",
+      "pickups": 27473,
+      "share": 0.03982194417709336,
+      "shareCi": [
+        0.03936307550614913,
+        0.04028593770794522
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_UMP_C",
+      "weaponName": "UMP",
+      "pickups": 24424,
+      "share": 0.03540243746883588,
+      "shareCi": [
+        0.03496895034730544,
+        0.03584109866894584
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_SKS_C",
+      "weaponName": "SKS",
+      "pickups": 24065,
+      "share": 0.03488206918144184,
+      "shareCi": [
+        0.034451684806713255,
+        0.03531763342992974
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_MP5K_C",
+      "weaponName": "MP5K",
+      "pickups": 23755,
+      "share": 0.03443272609204866,
+      "shareCi": [
+        0.03400504175649339,
+        0.03486559530555749
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_M16A4_C",
+      "weaponName": "M16A4",
+      "pickups": 23274,
+      "share": 0.033735519556570844,
+      "shareCi": [
+        0.03331206366824471,
+        0.034164168087422925
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Mk12_C",
+      "weaponName": "Mk12",
+      "pickups": 22859,
+      "share": 0.03313397961431868,
+      "shareCi": [
+        0.032714211073873886,
+        0.033558947496452704
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Winchester_C",
+      "weaponName": "Winchester",
+      "pickups": 21979,
+      "share": 0.031858425037976736,
+      "shareCi": [
+        0.031446599864317595,
+        0.032275463758779765
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_RPD_C",
+      "weaponName": "RPD",
+      "pickups": 19624,
+      "share": 0.028444867052425292,
+      "shareCi": [
+        0.02805520173225265,
+        0.028839783935475614
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_M9_C",
+      "weaponName": "M9",
+      "pickups": 18933,
+      "share": 0.02744326681122952,
+      "shareCi": [
+        0.027060376724477454,
+        0.027831419615369682
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_UZI_C",
+      "weaponName": "UZI",
+      "pickups": 18757,
+      "share": 0.02718815589596113,
+      "shareCi": [
+        0.026807012889968597,
+        0.027574564460432695
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Dragunov_C",
+      "weaponName": "Dragunov",
+      "pickups": 16722,
+      "share": 0.02423843593817039,
+      "shareCi": [
+        0.023878175280607834,
+        0.024603995004325887
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Berreta686_C",
+      "weaponName": "Berreta686",
+      "pickups": 16686,
+      "share": 0.024186254160047313,
+      "shareCi": [
+        0.023826374933523162,
+        0.024551432376296634
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Vector_C",
+      "weaponName": "Vector",
+      "pickups": 16230,
+      "share": 0.023525284970488305,
+      "shareCi": [
+        0.023170276026386386,
+        0.023885600265323718
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_M79_C",
+      "weaponName": "M79",
+      "pickups": 16157,
+      "share": 0.023419471920405395,
+      "shareCi": [
+        0.02306524944406245,
+        0.023779001925888874
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_K2_C",
+      "weaponName": "K2",
+      "pickups": 15903,
+      "share": 0.023051300485870334,
+      "shareCi": [
+        0.02269982944925426,
+        0.023408083151837716
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_M249_C",
+      "weaponName": "M249",
+      "pickups": 15133,
+      "share": 0.021935190231571134,
+      "shareCi": [
+        0.021592207126101475,
+        0.02228349739616493
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_SCAR-L_C",
+      "weaponName": "SCAR-L",
+      "pickups": 14946,
+      "share": 0.021664134884098473,
+      "shareCi": [
+        0.021323247781015103,
+        0.022010349064965094
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_FNFal_C",
+      "weaponName": "SLR",
+      "pickups": 13674,
+      "share": 0.019820378723749667,
+      "shareCi": [
+        0.019494135614751055,
+        0.020151969443870547
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Saiga12_C",
+      "weaponName": "S12K",
+      "pickups": 13379,
+      "share": 0.019392778041907765,
+      "shareCi": [
+        0.019070033440699352,
+        0.01972087501629427
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Thompson_C",
+      "weaponName": "Thompson",
+      "pickups": 12996,
+      "share": 0.01883762190243167,
+      "shareCi": [
+        0.01851948100218265,
+        0.019161121358460067
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_IntegratedRepair_C",
+      "weaponName": "IntegratedRepair",
+      "pickups": 11381,
+      "share": 0.016496689356076857,
+      "shareCi": [
+        0.01619879703082067,
+        0.01679996630735024
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Mk47Mutant_C",
+      "weaponName": "Mk47 Mutant",
+      "pickups": 11359,
+      "share": 0.01646480049166831,
+      "shareCi": [
+        0.01616719411370653,
+        0.016767791850783653
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_VSS_C",
+      "weaponName": "VSS",
+      "pickups": 9221,
+      "share": 0.013365782668692093,
+      "shareCi": [
+        0.013097498184715034,
+        0.013639486646620513
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Sawnoff_C",
+      "weaponName": "Sawnoff",
+      "pickups": 6728,
+      "share": 0.009752194533668842,
+      "shareCi": [
+        0.009523016118593935,
+        0.009986832686102468
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_TraumaBag_C",
+      "weaponName": "TraumaBag",
+      "pickups": 5177,
+      "share": 0.007504029592866171,
+      "shareCi": [
+        0.007303108073918877,
+        0.007710435886286025
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_TacPack_C",
+      "weaponName": "TacPack",
+      "pickups": 4593,
+      "share": 0.006657525192202883,
+      "shareCi": [
+        0.006468355288289907,
+        0.006852189297844696
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Mortar_C",
+      "weaponName": "Mortar",
+      "pickups": 2826,
+      "share": 0.0040962695826617344,
+      "shareCi": [
+        0.003948287349338821,
+        0.0042497745416207435
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_StunGun_C",
+      "weaponName": "StunGun",
+      "pickups": 2684,
+      "share": 0.0038904414578429213,
+      "shareCi": [
+        0.0037462799389901113,
+        0.004040127994575646
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Ziplinegun_C",
+      "weaponName": "Ziplinegun",
+      "pickups": 2639,
+      "share": 0.003825214235189072,
+      "shareCi": [
+        0.0036822847372987625,
+        0.003973669477374592
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_NagantM1895_C",
+      "weaponName": "NagantM1895",
+      "pickups": 2540,
+      "share": 0.0036817143453506036,
+      "shareCi": [
+        0.00354153322741922,
+        0.003827422805690847
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_QBZ95_C",
+      "weaponName": "QBZ95",
+      "pickups": 2301,
+      "share": 0.0033352853183668263,
+      "shareCi": [
+        0.003201971077041476,
+        0.0034741307601733815
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_G18_C",
+      "weaponName": "P18C",
+      "pickups": 2028,
+      "share": 0.002939573500933474,
+      "shareCi": [
+        0.0028145598421942665,
+        0.0030701227670733443
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_FlareGun_C",
+      "weaponName": "FlareGun",
+      "pickups": 1558,
+      "share": 0.0022583113976599374,
+      "shareCi": [
+        0.002149036847016819,
+        0.0023731291427079126
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_AWM_C",
+      "weaponName": "AWM",
+      "pickups": 1153,
+      "share": 0.0016712663937752936,
+      "shareCi": [
+        0.0015776133913455838,
+        0.0017704691283475177
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_L6_C",
+      "weaponName": "L6",
+      "pickups": 1099,
+      "share": 0.0015929937265906746,
+      "shareCi": [
+        0.001501620689223347,
+        0.0016899173677988706
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Crossbow_C",
+      "weaponName": "Crossbow",
+      "pickups": 1023,
+      "share": 0.001482832194997507,
+      "shareCi": [
+        0.001394765484875204,
+        0.0015764507357953993
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_P90_C",
+      "weaponName": "P90",
+      "pickups": 936,
+      "share": 0.0013567262312000649,
+      "shareCi": [
+        0.0012725995749833484,
+        0.0014464061224952747
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Groza_C",
+      "weaponName": "Groza",
+      "pickups": 912,
+      "share": 0.001321938379118012,
+      "shareCi": [
+        0.0012389306451049181,
+        0.00141049973563109
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_MG3_C",
+      "weaponName": "MG3",
+      "pickups": 817,
+      "share": 0.0011842364646265525,
+      "shareCi": [
+        0.001105809717465401,
+        0.0012682183678310891
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Mk14_C",
+      "weaponName": "Mk14",
+      "pickups": 723,
+      "share": 0.0010479840439718451,
+      "shareCi": [
+        0.0009743612039302362,
+        0.001127163557457678
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_JS9_C",
+      "weaponName": "JS9",
+      "pickups": 599,
+      "share": 0.0008682468082145715,
+      "shareCi": [
+        0.0008014687999352974,
+        0.0009405834916157721
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_FAMASG2_C",
+      "weaponName": "FAMASG2",
+      "pickups": 594,
+      "share": 0.0008609993390308105,
+      "shareCi": [
+        0.000794511567695899,
+        0.0009330458662004591
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_vz61Skorpion_C",
+      "weaponName": "Skorpion",
+      "pickups": 516,
+      "share": 0.0007479388197641384,
+      "shareCi": [
+        0.000686147978819095,
+        0.0008152896756637639
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_DesertEagle_C",
+      "weaponName": "DesertEagle",
+      "pickups": 446,
+      "share": 0.0006464742511914839,
+      "shareCi": [
+        0.000589211541248236,
+        0.0007092981060686622
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Win1894_C",
+      "weaponName": "Win1894",
+      "pickups": 404,
+      "share": 0.0005855955100478912,
+      "shareCi": [
+        0.0005312220559055821,
+        0.0006455307871117396
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_DP12_C",
+      "weaponName": "DP12",
+      "pickups": 239,
+      "share": 0.0003464290269837773,
+      "shareCi": [
+        0.00030521003413202505,
+        0.0003932125062798178
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Julies_Kar98k_C",
+      "weaponName": "Julies_Kar98k",
+      "pickups": 76,
+      "share": 0.00011016153159316767,
+      "shareCi": [
+        0.00008802325291728062,
+        0.0001378669279509679
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Duncans_M416_C",
+      "weaponName": "Duncans_M416",
+      "pickups": 44,
+      "share": 0.00006377772881709707,
+      "shareCi": [
+        0.000047512573407185424,
+        0.0000856105184709096
+      ]
+    },
+    {
+      "weaponKey": "Item_Weapon_Lunchmeats_AK47_C",
+      "weaponName": "Lunchmeats_AK47",
+      "pickups": 37,
+      "share": 0.000053631271959831623,
+      "shareCi": [
+        0.0000389116792048768,
+        0.00007391861195662213
+      ]
+    }
+  ]
+}

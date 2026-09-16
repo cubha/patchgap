@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "patch": "43.1",
+    "game": "pubg",
+    "releasedAt": "2026-09-09",
+    "source": "https://www.pubg.com/en/news/11057",
+    "secondarySource": "https://pubgstatistics.com/weapons/patch-notes",
+    "authoring": "수기 입력. PUBG 패치노트 파서는 구현하지 않았다(LoL 파서는 leagueoflegends.com 마크업 전용) — 43.1 Gunplay 절의 밸런스 항목 전수를 손으로 옮겼다. 두 출처가 일치한 항목만 expectedRelChange를 채운다.",
+    "count": 5
+  },
+  "items": [
+    {
+      "id": "note:pubg-43.1:spawn:lmg",
+      "patch": "43.1",
+      "weaponKeys": ["Item_Weapon_RPD_C", "Item_Weapon_M249_C"],
+      "stat": "스폰율",
+      "before": "100%",
+      "after": "70%",
+      "direction": "nerf",
+      "expectedRelChange": -0.3,
+      "summary": "RPD·M249 스폰율 30% 감소",
+      "anchorUrl": "https://www.pubg.com/en/news/11057"
+    },
+    {
+      "id": "note:pubg-43.1:ads:lmg",
+      "patch": "43.1",
+      "weaponKeys": ["Item_Weapon_RPD_C", "Item_Weapon_M249_C", "Item_Weapon_MG3_C"],
+      "stat": "조준 전환 시간",
+      "before": "0.30초",
+      "after": "0.37초",
+      "direction": "nerf",
+      "expectedRelChange": null,
+      "summary": "경기관총 조준(ADS) 전환 시간 0.30초 → 0.37초",
+      "anchorUrl": "https://www.pubg.com/en/news/11057"
+    },
+    {
+      "id": "note:pubg-43.1:recoil:rpd-m249",
+      "patch": "43.1",
+      "weaponKeys": ["Item_Weapon_RPD_C", "Item_Weapon_M249_C"],
+      "stat": "반동 제어",
+      "before": null,
+      "after": null,
+      "direction": "nerf",
+      "expectedRelChange": null,
+      "summary": "RPD·M249 반동 제어 감소 (서서 10% · 앉아 17% · 엎드려 27%)",
+      "anchorUrl": "https://www.pubg.com/en/news/11057"
+    },
+    {
+      "id": "note:pubg-43.1:recoil:mg3",
+      "patch": "43.1",
+      "weaponKeys": ["Item_Weapon_MG3_C"],
+      "stat": "반동 제어",
+      "before": null,
+      "after": null,
+      "direction": "nerf",
+      "expectedRelChange": null,
+      "summary": "MG3 반동 제어 감소 (서서 15% · 앉아 17%)",
+      "anchorUrl": "https://www.pubg.com/en/news/11057"
+    },
+    {
+      "id": "note:pubg-43.1:vehicledmg:lmg",
+      "patch": "43.1",
+      "weaponKeys": ["Item_Weapon_RPD_C", "Item_Weapon_M249_C", "Item_Weapon_MG3_C"],
+      "stat": "차량 피해 배수",
+      "before": "1.1x / 1.25x",
+      "after": "1.0x / 1.1x",
+      "direction": "nerf",
+      "expectedRelChange": null,
+      "summary": "경기관총 차량 피해 배수 하향 (M249·RPD 1.1x → 1.0x · MG3 1.25x → 1.1x) — 1차 출처 단독, 2차 출처는 해당 항목 없음",
+      "anchorUrl": "https://www.pubg.com/en/news/11057"
+    }
+  ]
+}
