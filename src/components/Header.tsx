@@ -46,6 +46,11 @@ const NAV_ITEMS = [
   { href: "/methodology/", label: "방법론" },
 ] as const;
 
+/** PUBG 탭은 **집계 산출물이 있을 때만** 네비에 붙는다(SCOPE 2026-09-16 출하 게이트).
+ * 빈 껍데기 탭이 배포되면 LoL 본편 신뢰도까지 깎이므로 "데이터가 없으면 링크도 없다"가
+ * 기본값이다 — 판정 여부는 서버(layout.tsx)에서 loadPubg()로 확인해 prop으로 내려온다. */
+const PUBG_NAV_ITEM = { href: "/pubg/", label: "PUBG" } as const;
+
 /** 패치 쌍을 소유하는 라우트 — 이 목록에 있을 때만 패치 쌍 select·고정 표본 칩·n/집계 캡션을
  * 렌더한다(그 외 라우트는 특정 패치 쌍에 묶여 있지 않거나, 항목상세처럼 다른 쌍을 보여줄 수
  * 있어 이 헤더의 전역 기본 쌍 캡션을 그대로 붙이면 틀린 숫자를 주장하게 된다). */
@@ -70,6 +75,8 @@ export interface HeaderProps {
   nAfter?: number | null;
   /** ISO 8601 — 집계 시각(요약 파일 meta.generatedAt). */
   aggregatedAt?: string | null;
+  /** PUBG 집계 산출물이 존재하고 근거 딸린 판정이 1건 이상인가(출하 게이트). */
+  hasPubg?: boolean;
 }
 
 function isActive(pathname: string, href: string): boolean {
@@ -88,6 +95,7 @@ export default function Header({
   nBefore = null,
   nAfter = null,
   aggregatedAt = null,
+  hasPubg = false,
 }: HeaderProps) {
   const pathname = usePathname();
   const isPairScoped = (PAIR_SCOPED_ROUTES as readonly string[]).includes(pathname);
@@ -113,7 +121,7 @@ export default function Header({
           <span className="font-display text-lg font-bold tracking-tight text-fg">patchgap</span>
         </Link>
         <nav className="flex min-h-8 items-center gap-5" aria-label="주요 내비게이션">
-          {NAV_ITEMS.map((item) => {
+          {(hasPubg ? [...NAV_ITEMS, PUBG_NAV_ITEM] : NAV_ITEMS).map((item) => {
             const active = isActive(pathname, item.href);
             return (
               <Link

@@ -1,0 +1,2066 @@
+{
+  "meta": {
+    "game": "pubg",
+    "from": "42.3",
+    "to": "43.1",
+    "generatedAt": "2026-09-16T14:01:44.294Z",
+    "n": 56,
+    "counts": {
+      "below-threshold": 24,
+      "unannounced": 5,
+      "no-change": 20,
+      "announced-consistent": 2,
+      "insufficient-sample": 5
+    },
+    "effectFloor": 0.13542144748212304,
+    "sampleScope": "steam 플랫폼 전역 · /samples 무작위 표본 · official 매치만 · 요일 정렬(목~월 5일) · 봇 포함(비율 병기)",
+    "window": {
+      "before": [
+        "2026-09-04",
+        "2026-09-05",
+        "2026-09-06",
+        "2026-09-07",
+        "2026-09-08"
+      ],
+      "after": [
+        "2026-09-11",
+        "2026-09-12",
+        "2026-09-13",
+        "2026-09-14",
+        "2026-09-15"
+      ]
+    }
+  },
+  "rows": [
+    {
+      "id": "pubg:weapon:Item_Weapon_JS9_C:pickupShare",
+      "weaponKey": "Item_Weapon_JS9_C",
+      "weaponName": "JS9",
+      "metric": "pickupShare",
+      "before": 0.00011195594176385395,
+      "after": 0.0008682468082145715,
+      "relChange": 6.755254384317932,
+      "relCi": [
+        5.2398176894216775,
+        8.638738431003231
+      ],
+      "n": {
+        "before": 94,
+        "after": 599
+      },
+      "status": "insufficient-sample",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_JS9_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0733033d-a39c-40e8-85e3-e0090343138d",
+          "08e05b88-038f-43f6-8c35-7bc1787bea17",
+          "0f00f3a8-9725-46d2-96c2-c2cfb4b0f881",
+          "11badf97-93ee-49d9-8696-dfe026f9339e",
+          "12f03053-817e-4aa8-a1bf-11c97bbd8c5c",
+          "1a11f891-e004-4ca2-9621-5b2e757e278d",
+          "1bd617fa-fb21-4483-a9b0-e0d2d8e21261",
+          "1c3dbea1-04da-4f3e-86b2-25bbd416a420",
+          "1d80984e-850d-4ed6-9587-476a9b15c8ee",
+          "1f907758-b678-4651-b0bd-ecb9f73d8e8e"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_RPD_C:pickupShare",
+      "weaponKey": "Item_Weapon_RPD_C",
+      "weaponName": "RPD",
+      "metric": "pickupShare",
+      "before": 0.03846163007851208,
+      "after": 0.028444867052425292,
+      "relChange": -0.26043521831080685,
+      "relCi": [
+        -0.2732302329000327,
+        -0.24741494339052494
+      ],
+      "n": {
+        "before": 32293,
+        "after": 19624
+      },
+      "status": "announced-consistent",
+      "matchedNoteId": "note:pubg-43.1:spawn:lmg",
+      "matchedNoteIds": [
+        "note:pubg-43.1:spawn:lmg",
+        "note:pubg-43.1:ads:lmg",
+        "note:pubg-43.1:recoil:rpd-m249",
+        "note:pubg-43.1:vehicledmg:lmg"
+      ],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_RPD_C]",
+        "noteAnchor": "https://www.pubg.com/en/news/11057",
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_M249_C:pickupShare",
+      "weaponKey": "Item_Weapon_M249_C",
+      "weaponName": "M249",
+      "metric": "pickupShare",
+      "before": 0.02933007470081561,
+      "after": 0.021935190231571134,
+      "relChange": -0.2521263428299022,
+      "relCi": [
+        -0.26692991292220125,
+        -0.23702383039724506
+      ],
+      "n": {
+        "before": 24626,
+        "after": 15133
+      },
+      "status": "announced-consistent",
+      "matchedNoteId": "note:pubg-43.1:spawn:lmg",
+      "matchedNoteIds": [
+        "note:pubg-43.1:spawn:lmg",
+        "note:pubg-43.1:ads:lmg",
+        "note:pubg-43.1:recoil:rpd-m249",
+        "note:pubg-43.1:vehicledmg:lmg"
+      ],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_M249_C]",
+        "noteAnchor": "https://www.pubg.com/en/news/11057",
+        "matchIds": [
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Groza_C:pickupShare",
+      "weaponKey": "Item_Weapon_Groza_C",
+      "weaponName": "Groza",
+      "metric": "pickupShare",
+      "before": 0.0010469071575577406,
+      "after": 0.001321938379118012,
+      "relChange": 0.2627083209573935,
+      "relCi": [
+        0.1510456231168491,
+        0.3852033940214896
+      ],
+      "n": {
+        "before": 879,
+        "after": 912
+      },
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Groza_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "02d313a0-bac4-436b-8bbb-060b9ec01313",
+          "037875c9-cfd7-4b22-a264-d0109ea7dc18",
+          "0450ded7-b3b6-45bd-93f9-b593fbba75ce",
+          "045d16ad-f5dc-472b-8c0a-0463dc8c010c",
+          "04da760d-cb7a-457d-ae49-7b204deaeb04"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_BerylM762_C:pickupShare",
+      "weaponKey": "Item_Weapon_BerylM762_C",
+      "weaponName": "Beryl M762",
+      "metric": "pickupShare",
+      "before": 0.03910716327463983,
+      "after": 0.0452343541635261,
+      "relChange": 0.15667694549606015,
+      "relCi": [
+        0.13926915093861592,
+        0.1743507275166989
+      ],
+      "n": {
+        "before": 32835,
+        "after": 31207
+      },
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_BerylM762_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_M9_C:pickupShare",
+      "weaponKey": "Item_Weapon_M9_C",
+      "weaponName": "M9",
+      "metric": "pickupShare",
+      "before": 0.03186813972101532,
+      "after": 0.02744326681122952,
+      "relChange": -0.13884942605758177,
+      "relCi": [
+        -0.15449850360461848,
+        -0.12291070546542071
+      ],
+      "n": {
+        "before": 26757,
+        "after": 18933
+      },
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_M9_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a",
+          "01f57e86-a168-4736-98bb-d9d83e4f3c0a"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_L6_C:pickupShare",
+      "weaponKey": "Item_Weapon_L6_C",
+      "weaponName": "L6",
+      "metric": "pickupShare",
+      "before": 0.0013256059913103132,
+      "after": 0.0015929937265906746,
+      "relChange": 0.20170981199025695,
+      "relCi": [
+        0.1056759991261158,
+        0.30608466980835747
+      ],
+      "n": {
+        "before": 1113,
+        "after": 1099
+      },
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_L6_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a",
+          "02d313a0-bac4-436b-8bbb-060b9ec01313",
+          "03532eb4-d51c-421d-bfe2-cbce996accb9",
+          "037875c9-cfd7-4b22-a264-d0109ea7dc18",
+          "03da43bd-a6b6-4e29-bc98-8f11f6264de0",
+          "03de7db2-c126-44e4-b1af-7ac3c3a94487",
+          "0446b32a-a20c-40ec-afb1-fa010b8b89ab"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Mortar_C:pickupShare",
+      "weaponKey": "Item_Weapon_Mortar_C",
+      "weaponName": "Mortar",
+      "metric": "pickupShare",
+      "before": 0.0047378801737937345,
+      "after": 0.0040962695826617344,
+      "relChange": -0.13542144748212304,
+      "relCi": [
+        -0.1760348031621377,
+        -0.09280625402313247
+      ],
+      "n": {
+        "before": 3978,
+        "after": 2826
+      },
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Mortar_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "02138dfb-8db7-42d3-897e-ad3fe515ba9f",
+          "02cd89a4-7578-41d9-a6d5-3ddf024c897a",
+          "037875c9-cfd7-4b22-a264-d0109ea7dc18",
+          "0385d348-594f-452e-b5de-141869d2b1bf",
+          "03de7db2-c126-44e4-b1af-7ac3c3a94487",
+          "0412a211-150e-4737-b56b-1d0a0b6b6a02",
+          "042e68ff-3aab-4a63-ba2b-09f1c530587f"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Kar98k_C:pickupShare",
+      "weaponKey": "Item_Weapon_Kar98k_C",
+      "weaponName": "Kar98k",
+      "metric": "pickupShare",
+      "before": 0.04415589983992682,
+      "after": 0.04803912473764162,
+      "relChange": 0.08794351177967585,
+      "relCi": [
+        0.07231400673960153,
+        0.10380082455728079
+      ],
+      "n": {
+        "before": 37074,
+        "after": 33142
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Kar98k_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_SCAR-L_C:pickupShare",
+      "weaponKey": "Item_Weapon_SCAR-L_C",
+      "weaponName": "SCAR-L",
+      "metric": "pickupShare",
+      "before": 0.019807864547602715,
+      "after": 0.021664134884098473,
+      "relChange": 0.09371380403146068,
+      "relCi": [
+        0.07006418470370512,
+        0.11788610648639963
+      ],
+      "n": {
+        "before": 16631,
+        "after": 14946
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_SCAR-L_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a",
+          "01f57e86-a168-4736-98bb-d9d83e4f3c0a",
+          "02138dfb-8db7-42d3-897e-ad3fe515ba9f"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_HK416_C:pickupShare",
+      "weaponKey": "Item_Weapon_HK416_C",
+      "weaponName": "M416",
+      "metric": "pickupShare",
+      "before": 0.044846691821022945,
+      "after": 0.04841019515985018,
+      "relChange": 0.07945967013684507,
+      "relCi": [
+        0.06404366308727516,
+        0.09509902636051071
+      ],
+      "n": {
+        "before": 37654,
+        "after": 33398
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_HK416_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Crossbow_C:pickupShare",
+      "weaponKey": "Item_Weapon_Crossbow_C",
+      "weaponName": "Crossbow",
+      "metric": "pickupShare",
+      "before": 0.0017091146428843663,
+      "after": 0.001482832194997507,
+      "relChange": -0.13239746603830893,
+      "relCi": [
+        -0.19921273503407622,
+        -0.060007332947810244
+      ],
+      "n": {
+        "before": 1435,
+        "after": 1023
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Crossbow_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a",
+          "02d313a0-bac4-436b-8bbb-060b9ec01313",
+          "0385d348-594f-452e-b5de-141869d2b1bf",
+          "045d16ad-f5dc-472b-8c0a-0463dc8c010c",
+          "05837c0b-52f3-41e0-ab6b-9084a539f22e",
+          "073f9f69-b4e7-442b-b189-e3211dddf97a",
+          "076041ce-9b3d-4fc0-8aec-0660983edc62",
+          "07c2e5c2-c443-41a2-9dc3-5c66117a9b8f",
+          "09b74b5d-0087-4767-b9b5-1e5135c2a717"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_ACE32_C:pickupShare",
+      "weaponKey": "Item_Weapon_ACE32_C",
+      "weaponName": "ACE32",
+      "metric": "pickupShare",
+      "before": 0.047102484945498894,
+      "after": 0.05049891577861011,
+      "relChange": 0.07210725372644666,
+      "relCi": [
+        0.05715479245513344,
+        0.08727120351360051
+      ],
+      "n": {
+        "before": 39548,
+        "after": 34839
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_ACE32_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_AUG_C:pickupShare",
+      "weaponKey": "Item_Weapon_AUG_C",
+      "weaponName": "AUG",
+      "metric": "pickupShare",
+      "before": 0.04135461925451635,
+      "after": 0.044354511404617505,
+      "relChange": 0.0725406787483247,
+      "relCi": [
+        0.05653613220688403,
+        0.08878766423926177
+      ],
+      "n": {
+        "before": 34722,
+        "after": 30600
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_AUG_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_IntegratedRepair_C:pickupShare",
+      "weaponKey": "Item_Weapon_IntegratedRepair_C",
+      "weaponName": "IntegratedRepair",
+      "metric": "pickupShare",
+      "before": 0.015299851360621999,
+      "after": 0.016496689356076857,
+      "relChange": 0.07822546554505894,
+      "relCi": [
+        0.05157347363676479,
+        0.10555294869622656
+      ],
+      "n": {
+        "before": 12846,
+        "after": 11381
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_IntegratedRepair_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Mk47Mutant_C:pickupShare",
+      "weaponKey": "Item_Weapon_Mk47Mutant_C",
+      "weaponName": "Mk47 Mutant",
+      "metric": "pickupShare",
+      "before": 0.017778365347968596,
+      "after": 0.01646480049166831,
+      "relChange": -0.0738855811876078,
+      "relCi": [
+        -0.09602432071927414,
+        -0.051204654737327715
+      ],
+      "n": {
+        "before": 14927,
+        "after": 11359
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Mk47Mutant_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a",
+          "01f57e86-a168-4736-98bb-d9d83e4f3c0a"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_NagantM1895_C:pickupShare",
+      "weaponKey": "Item_Weapon_NagantM1895_C",
+      "weaponName": "NagantM1895",
+      "metric": "pickupShare",
+      "before": 0.004047088192697614,
+      "after": 0.0036817143453506036,
+      "relChange": -0.09028067340026702,
+      "relCi": [
+        -0.13578215868207022,
+        -0.042383513019124464
+      ],
+      "n": {
+        "before": 3398,
+        "after": 2540
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_NagantM1895_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "01f57e86-a168-4736-98bb-d9d83e4f3c0a",
+          "02138dfb-8db7-42d3-897e-ad3fe515ba9f",
+          "03532eb4-d51c-421d-bfe2-cbce996accb9",
+          "037875c9-cfd7-4b22-a264-d0109ea7dc18",
+          "0385d348-594f-452e-b5de-141869d2b1bf"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_DP12_C:pickupShare",
+      "weaponKey": "Item_Weapon_DP12_C",
+      "weaponName": "DP12",
+      "metric": "pickupShare",
+      "before": 0.00042400335391417027,
+      "after": 0.0003464290269837773,
+      "relChange": -0.1829568710112046,
+      "relCi": [
+        -0.30645339994426546,
+        -0.03746990530390437
+      ],
+      "n": {
+        "before": 356,
+        "after": 239
+      },
+      "status": "insufficient-sample",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_DP12_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "03205135-53cd-4da8-9a64-6ca6f12e4f8f",
+          "0385d348-594f-452e-b5de-141869d2b1bf",
+          "042e68ff-3aab-4a63-ba2b-09f1c530587f",
+          "06e2b322-504f-4c27-9175-057eac75b60d",
+          "0783882a-3d66-423f-b054-0604fa37c3f9",
+          "080513ad-82a7-4534-83c7-41d6d88b46fe",
+          "08fe797a-dbcd-41b7-8db8-6f99002983c2",
+          "09137dee-8aad-4f22-875e-bf792f7a2b62",
+          "097a04a4-ba32-4d13-a925-908165bd5c31",
+          "0a63a1b8-790b-4f1a-b110-1082b973e079"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_AK47_C:pickupShare",
+      "weaponKey": "Item_Weapon_AK47_C",
+      "weaponName": "AK47",
+      "metric": "pickupShare",
+      "before": 0.06447113918743806,
+      "after": 0.06736957454456903,
+      "relChange": 0.04495709853527319,
+      "relCi": [
+        0.032514987277404206,
+        0.05754914091710717
+      ],
+      "n": {
+        "before": 54131,
+        "after": 46478
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_AK47_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_G18_C:pickupShare",
+      "weaponKey": "Item_Weapon_G18_C",
+      "weaponName": "P18C",
+      "metric": "pickupShare",
+      "before": 0.00321813781538227,
+      "after": 0.002939573500933474,
+      "relChange": -0.08656071629912676,
+      "relCi": [
+        -0.13759933648033007,
+        -0.03250152707131615
+      ],
+      "n": {
+        "before": 2702,
+        "after": 2028
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_G18_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "02cd89a4-7578-41d9-a6d5-3ddf024c897a",
+          "042fb149-244f-402a-9b48-a1df68a5d716",
+          "05837c0b-52f3-41e0-ab6b-9084a539f22e",
+          "062bd476-34f8-428e-8690-ad77d56bfee9",
+          "07313bbd-08a9-4a79-b41a-fd720919bbd3",
+          "076041ce-9b3d-4fc0-8aec-0660983edc62",
+          "0783882a-3d66-423f-b054-0604fa37c3f9"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_TacPack_C:pickupShare",
+      "weaponKey": "Item_Weapon_TacPack_C",
+      "weaponName": "TacPack",
+      "metric": "pickupShare",
+      "before": 0.0071342137358030334,
+      "after": 0.006657525192202883,
+      "relChange": -0.06681725012076523,
+      "relCi": [
+        -0.10189063089674066,
+        -0.030374167522967288
+      ],
+      "n": {
+        "before": 5990,
+        "after": 4593
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_TacPack_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "03b1144e-831b-4603-8024-7c8ff8f78105",
+          "03de7db2-c126-44e4-b1af-7ac3c3a94487",
+          "0450ded7-b3b6-45bd-93f9-b593fbba75ce",
+          "04da760d-cb7a-457d-ae49-7b204deaeb04",
+          "0545e357-bdbb-4855-addb-29bae8a10e3a",
+          "05837c0b-52f3-41e0-ab6b-9084a539f22e",
+          "05f722c6-9f6f-4d5f-a62b-edce8442abf5",
+          "06d7dc9f-4464-42bc-9a18-d0fb5b19997c"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_AWM_C:pickupShare",
+      "weaponKey": "Item_Weapon_AWM_C",
+      "weaponName": "AWM",
+      "metric": "pickupShare",
+      "before": 0.0015090231724979037,
+      "after": 0.0016712663937752936,
+      "relChange": 0.10751539421944512,
+      "relCi": [
+        0.022661796232686715,
+        0.19940957308819462
+      ],
+      "n": {
+        "before": 1267,
+        "after": 1153
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_AWM_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a",
+          "02d313a0-bac4-436b-8bbb-060b9ec01313",
+          "03205135-53cd-4da8-9a64-6ca6f12e4f8f",
+          "03532eb4-d51c-421d-bfe2-cbce996accb9",
+          "03b1144e-831b-4603-8024-7c8ff8f78105",
+          "0450ded7-b3b6-45bd-93f9-b593fbba75ce",
+          "04da760d-cb7a-457d-ae49-7b204deaeb04"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Mini14_C:pickupShare",
+      "weaponKey": "Item_Weapon_Mini14_C",
+      "weaponName": "Mini14",
+      "metric": "pickupShare",
+      "before": 0.04114976370150164,
+      "after": 0.03982194417709336,
+      "relChange": -0.03226797446615293,
+      "relCi": [
+        -0.047171448584538256,
+        -0.017131390686572545
+      ],
+      "n": {
+        "before": 34550,
+        "after": 27473
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Mini14_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_M16A4_C:pickupShare",
+      "weaponKey": "Item_Weapon_M16A4_C",
+      "weaponName": "M16A4",
+      "metric": "pickupShare",
+      "before": 0.03275306806921259,
+      "after": 0.033735519556570844,
+      "relChange": 0.02999570865490142,
+      "relCi": [
+        0.012467494508383137,
+        0.047827377769438684
+      ],
+      "n": {
+        "before": 27500,
+        "after": 23274
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_M16A4_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_UZI_C:pickupShare",
+      "weaponKey": "Item_Weapon_UZI_C",
+      "weaponName": "UZI",
+      "metric": "pickupShare",
+      "before": 0.02798422135833524,
+      "after": 0.02718815589596113,
+      "relChange": -0.028446939873029486,
+      "relCi": [
+        -0.0466609325149141,
+        -0.009884960308890856
+      ],
+      "n": {
+        "before": 23496,
+        "after": 18757
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_UZI_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_K2_C:pickupShare",
+      "weaponKey": "Item_Weapon_K2_C",
+      "weaponName": "K2",
+      "metric": "pickupShare",
+      "before": 0.02376324414970653,
+      "after": 0.023051300485870334,
+      "relChange": -0.02995986824656638,
+      "relCi": [
+        -0.04972911412523462,
+        -0.009779346921685361
+      ],
+      "n": {
+        "before": 19952,
+        "after": 15903
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_K2_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a",
+          "0446b32a-a20c-40ec-afb1-fa010b8b89ab",
+          "04b68687-5e78-4a17-a1e2-7cced5518a91",
+          "04f5db93-39db-49a6-8729-9c1b40c84a2a",
+          "0545e357-bdbb-4855-addb-29bae8a10e3a"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Dragunov_C:pickupShare",
+      "weaponKey": "Item_Weapon_Dragunov_C",
+      "weaponName": "Dragunov",
+      "metric": "pickupShare",
+      "before": 0.024948309703483496,
+      "after": 0.02423843593817039,
+      "relChange": -0.028453781989646654,
+      "relCi": [
+        -0.04776263334494424,
+        -0.008753398277274504
+      ],
+      "n": {
+        "before": 20947,
+        "after": 16722
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Dragunov_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_VSS_C:pickupShare",
+      "weaponKey": "Item_Weapon_VSS_C",
+      "weaponName": "VSS",
+      "metric": "pickupShare",
+      "before": 0.012892798612699138,
+      "after": 0.013365782668692093,
+      "relChange": 0.036685910499453245,
+      "relCi": [
+        0.008472067291370067,
+        0.0656890873682181
+      ],
+      "n": {
+        "before": 10825,
+        "after": 9221
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_VSS_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Thompson_C:pickupShare",
+      "weaponKey": "Item_Weapon_Thompson_C",
+      "weaponName": "Thompson",
+      "metric": "pickupShare",
+      "before": 0.01825239156947938,
+      "after": 0.01883762190243167,
+      "relChange": 0.032063213783495526,
+      "relCi": [
+        0.008440857893913689,
+        0.05623891466441333
+      ],
+      "n": {
+        "before": 15325,
+        "after": 12996
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Thompson_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_M24_C:pickupShare",
+      "weaponKey": "Item_Weapon_M24_C",
+      "weaponName": "M24",
+      "metric": "pickupShare",
+      "before": 0.040634051756993673,
+      "after": 0.041470018669480614,
+      "relChange": 0.020573063141385184,
+      "relCi": [
+        0.004990620629117926,
+        0.03639711240068477
+      ],
+      "n": {
+        "before": 34117,
+        "after": 28610
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_M24_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_MP5K_C:pickupShare",
+      "weaponKey": "Item_Weapon_MP5K_C",
+      "weaponName": "MP5K",
+      "metric": "pickupShare",
+      "before": 0.03374637929720253,
+      "after": 0.03443272609204866,
+      "relChange": 0.020338383232213042,
+      "relCi": [
+        0.003193719184869659,
+        0.037776051013207246
+      ],
+      "n": {
+        "before": 28334,
+        "after": 23755
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_MP5K_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Berreta686_C:pickupShare",
+      "weaponKey": "Item_Weapon_Berreta686_C",
+      "weaponName": "Berreta686",
+      "metric": "pickupShare",
+      "before": 0.024752982315725282,
+      "after": 0.024186254160047313,
+      "relChange": -0.022895348465462817,
+      "relCi": [
+        -0.042360956346466416,
+        -0.0030340696970949654
+      ],
+      "n": {
+        "before": 20783,
+        "after": 16686
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Berreta686_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Mk12_C:pickupShare",
+      "weaponKey": "Item_Weapon_Mk12_C",
+      "weaponName": "Mk12",
+      "metric": "pickupShare",
+      "before": 0.033723749904718346,
+      "after": 0.03313397961431868,
+      "relChange": -0.01748827731393987,
+      "relCi": [
+        -0.034179578955939816,
+        -0.0005085167157676818
+      ],
+      "n": {
+        "before": 28315,
+        "after": 22859
+      },
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Mk12_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Duncans_M416_C:pickupShare",
+      "weaponKey": "Item_Weapon_Duncans_M416_C",
+      "weaponName": "Duncans_M416",
+      "metric": "pickupShare",
+      "before": 0.00007860736336611022,
+      "after": 0.00006377772881709707,
+      "relChange": -0.1886545218409731,
+      "relCi": [
+        -0.44595674174233,
+        0.18814095310758505
+      ],
+      "n": {
+        "before": 66,
+        "after": 44
+      },
+      "status": "insufficient-sample",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Duncans_M416_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0cad7d0e-4263-40a3-97f4-268b60a27932",
+          "0d987003-c5ce-408a-8287-a8d93ea964bd",
+          "0d9c5adb-c715-41ab-823e-726cdaad836d",
+          "0da1476c-2262-4c2a-a6cc-722c26fbeba8",
+          "10799eb2-24e6-4d25-bba7-69c4f7a901a5",
+          "14520d45-937a-4e9a-89d8-67e150fafe66",
+          "14f7815c-2d4c-4240-9d67-7fab3356f5e4",
+          "1ede1a46-e69b-4d4e-9a2d-5e0aaa9f8e50",
+          "31066baf-4c11-4bc4-bf08-344f4bf122e5",
+          "324bd3d0-b9c9-40af-a901-475d1d025c15"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Julies_Kar98k_C:pickupShare",
+      "weaponKey": "Item_Weapon_Julies_Kar98k_C",
+      "weaponName": "Julies_Kar98k",
+      "metric": "pickupShare",
+      "before": 0.00013339431359097491,
+      "after": 0.00011016153159316767,
+      "relChange": -0.1741662097309904,
+      "relCi": [
+        -0.3828419022267068,
+        0.1050676505918664
+      ],
+      "n": {
+        "before": 112,
+        "after": 76
+      },
+      "status": "insufficient-sample",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Julies_Kar98k_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "02d313a0-bac4-436b-8bbb-060b9ec01313",
+          "0469a5e3-62e4-4ac3-88e6-c2e625540136",
+          "085ca308-d3e4-4a9b-b7e3-b84ec54664d9",
+          "08c736cb-bf80-4ae7-9706-cc5d92fc2c5d",
+          "0b01971b-b9d8-401d-9a7b-61adf2d2a04c",
+          "0d9c5adb-c715-41ab-823e-726cdaad836d",
+          "0da1476c-2262-4c2a-a6cc-722c26fbeba8",
+          "11ba86cc-a4f6-4881-be17-ae822b29d4e1",
+          "14f7815c-2d4c-4240-9d67-7fab3356f5e4"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_FAMASG2_C:pickupShare",
+      "weaponKey": "Item_Weapon_FAMASG2_C",
+      "weaponName": "FAMASG2",
+      "metric": "pickupShare",
+      "before": 0.0007753544477475418,
+      "after": 0.0008609993390308105,
+      "relChange": 0.11045901849415207,
+      "relCi": [
+        -0.0063739029535845315,
+        0.24102943292298873
+      ],
+      "n": {
+        "before": 651,
+        "after": 594
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_FAMASG2_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a",
+          "02138dfb-8db7-42d3-897e-ad3fe515ba9f",
+          "03205135-53cd-4da8-9a64-6ca6f12e4f8f",
+          "037875c9-cfd7-4b22-a264-d0109ea7dc18",
+          "03b1144e-831b-4603-8024-7c8ff8f78105",
+          "03da43bd-a6b6-4e29-bc98-8f11f6264de0",
+          "03de7db2-c126-44e4-b1af-7ac3c3a94487"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Win1894_C:pickupShare",
+      "weaponKey": "Item_Weapon_Win1894_C",
+      "weaponName": "Win1894",
+      "metric": "pickupShare",
+      "before": 0.0005323862337068374,
+      "after": 0.0005855955100478912,
+      "relChange": 0.09994487643035854,
+      "relCi": [
+        -0.038489672113412476,
+        0.2583106973429252
+      ],
+      "n": {
+        "before": 447,
+        "after": 404
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Win1894_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "02c8ab2e-8009-462c-9bfa-04f9d6b4d255",
+          "0a316286-5561-4fc8-9ca4-bcb9948accba",
+          "0b57c3b0-b70f-46cc-aa59-b47a44a8cdb4",
+          "1037d7b0-5fc0-4d18-adf6-f70e57101b29",
+          "12213410-c0d8-4976-8cf6-18887fdad668",
+          "145e2668-1966-4394-90c3-431ff2f467e4",
+          "17234789-c52a-4796-a54b-a54f71d6f464",
+          "1a36a4ab-93bd-480b-a3e9-e06e28776a22",
+          "1b4ccff9-3f4c-4693-8e27-74c17dcedd0b",
+          "1c9ba6bf-9454-46a1-8dc4-a8abf0b5cf0e"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Mk14_C:pickupShare",
+      "weaponKey": "Item_Weapon_Mk14_C",
+      "weaponName": "Mk14",
+      "metric": "pickupShare",
+      "before": 0.0009873561247046268,
+      "after": 0.0010479840439718451,
+      "relChange": 0.0614043076760733,
+      "relCi": [
+        -0.03930001005030914,
+        0.1726648445289567
+      ],
+      "n": {
+        "before": 829,
+        "after": 723
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Mk14_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "02cd89a4-7578-41d9-a6d5-3ddf024c897a",
+          "03532eb4-d51c-421d-bfe2-cbce996accb9",
+          "037875c9-cfd7-4b22-a264-d0109ea7dc18",
+          "03de7db2-c126-44e4-b1af-7ac3c3a94487",
+          "042e68ff-3aab-4a63-ba2b-09f1c530587f",
+          "042fb149-244f-402a-9b48-a1df68a5d716",
+          "0446b32a-a20c-40ec-afb1-fa010b8b89ab",
+          "0450ded7-b3b6-45bd-93f9-b593fbba75ce",
+          "045d16ad-f5dc-472b-8c0a-0463dc8c010c",
+          "0469a5e3-62e4-4ac3-88e6-c2e625540136"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_P90_C:pickupShare",
+      "weaponKey": "Item_Weapon_P90_C",
+      "weaponName": "P90",
+      "metric": "pickupShare",
+      "before": 0.001294639454226694,
+      "after": 0.0013567262312000649,
+      "relChange": 0.047956808956093555,
+      "relCi": [
+        -0.03968847351943605,
+        0.14360126183455257
+      ],
+      "n": {
+        "before": 1087,
+        "after": 936
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_P90_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a",
+          "01f57e86-a168-4736-98bb-d9d83e4f3c0a",
+          "03205135-53cd-4da8-9a64-6ca6f12e4f8f",
+          "03da43bd-a6b6-4e29-bc98-8f11f6264de0",
+          "03de7db2-c126-44e4-b1af-7ac3c3a94487",
+          "0446b32a-a20c-40ec-afb1-fa010b8b89ab",
+          "04da760d-cb7a-457d-ae49-7b204deaeb04"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_MG3_C:pickupShare",
+      "weaponKey": "Item_Weapon_MG3_C",
+      "weaponName": "MG3",
+      "metric": "pickupShare",
+      "before": 0.0011302786035521,
+      "after": 0.0011842364646265525,
+      "relChange": 0.04773854950883827,
+      "relCi": [
+        -0.04577312515609444,
+        0.15041411750895994
+      ],
+      "n": {
+        "before": 949,
+        "after": 817
+      },
+      "status": "no-change",
+      "matchedNoteId": "note:pubg-43.1:ads:lmg",
+      "matchedNoteIds": [
+        "note:pubg-43.1:ads:lmg",
+        "note:pubg-43.1:recoil:mg3",
+        "note:pubg-43.1:vehicledmg:lmg"
+      ],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_MG3_C]",
+        "noteAnchor": "https://www.pubg.com/en/news/11057",
+        "matchIds": [
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "02c8ab2e-8009-462c-9bfa-04f9d6b4d255",
+          "03532eb4-d51c-421d-bfe2-cbce996accb9",
+          "037875c9-cfd7-4b22-a264-d0109ea7dc18",
+          "03b1144e-831b-4603-8024-7c8ff8f78105",
+          "03de7db2-c126-44e4-b1af-7ac3c3a94487",
+          "042fb149-244f-402a-9b48-a1df68a5d716",
+          "0450ded7-b3b6-45bd-93f9-b593fbba75ce",
+          "045d16ad-f5dc-472b-8c0a-0463dc8c010c",
+          "04da760d-cb7a-457d-ae49-7b204deaeb04"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_DesertEagle_C:pickupShare",
+      "weaponKey": "Item_Weapon_DesertEagle_C",
+      "weaponName": "DesertEagle",
+      "metric": "pickupShare",
+      "before": 0.0006181397210153213,
+      "after": 0.0006464742511914839,
+      "relChange": 0.04583839092175124,
+      "relCi": [
+        -0.07844512103285117,
+        0.1868831307709764
+      ],
+      "n": {
+        "before": 519,
+        "after": 446
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_DesertEagle_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "02d313a0-bac4-436b-8bbb-060b9ec01313",
+          "0385d348-594f-452e-b5de-141869d2b1bf",
+          "03de7db2-c126-44e4-b1af-7ac3c3a94487",
+          "0412a211-150e-4737-b56b-1d0a0b6b6a02",
+          "045d16ad-f5dc-472b-8c0a-0463dc8c010c",
+          "0469a5e3-62e4-4ac3-88e6-c2e625540136",
+          "04da760d-cb7a-457d-ae49-7b204deaeb04",
+          "062123ff-45a7-4913-ab81-ebc3aa0ee97c",
+          "07869d02-5ca2-4a47-a74f-3ec754a00ea8"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_StunGun_C:pickupShare",
+      "weaponKey": "Item_Weapon_StunGun_C",
+      "weaponName": "StunGun",
+      "metric": "pickupShare",
+      "before": 0.004068526564524735,
+      "after": 0.0038904414578429213,
+      "relChange": -0.04377140074114694,
+      "relCi": [
+        -0.09082131395828352,
+        0.005713341149083284
+      ],
+      "n": {
+        "before": 3416,
+        "after": 2684
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_StunGun_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a",
+          "01f57e86-a168-4736-98bb-d9d83e4f3c0a",
+          "02138dfb-8db7-42d3-897e-ad3fe515ba9f"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Sawnoff_C:pickupShare",
+      "weaponKey": "Item_Weapon_Sawnoff_C",
+      "weaponName": "Sawnoff",
+      "metric": "pickupShare",
+      "before": 0.009457895037731534,
+      "after": 0.009752194533668842,
+      "relChange": 0.03111680715034626,
+      "relCi": [
+        -0.0016765404238822113,
+        0.06498736435518948
+      ],
+      "n": {
+        "before": 7941,
+        "after": 6728
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Sawnoff_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_FlareGun_C:pickupShare",
+      "weaponKey": "Item_Weapon_FlareGun_C",
+      "weaponName": "FlareGun",
+      "metric": "pickupShare",
+      "before": 0.002329636405213812,
+      "after": 0.0022583113976599374,
+      "relChange": -0.030616368886684064,
+      "relCi": [
+        -0.0929655396299387,
+        0.03601865786559744
+      ],
+      "n": {
+        "before": 1956,
+        "after": 1558
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_FlareGun_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "03da43bd-a6b6-4e29-bc98-8f11f6264de0",
+          "03de7db2-c126-44e4-b1af-7ac3c3a94487",
+          "042e68ff-3aab-4a63-ba2b-09f1c530587f",
+          "0446b32a-a20c-40ec-afb1-fa010b8b89ab",
+          "0450ded7-b3b6-45bd-93f9-b593fbba75ce",
+          "04da760d-cb7a-457d-ae49-7b204deaeb04",
+          "05ec6786-fc64-4106-b87c-e9a5706fd566",
+          "05f722c6-9f6f-4d5f-a62b-edce8442abf5"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_TraumaBag_C:pickupShare",
+      "weaponKey": "Item_Weapon_TraumaBag_C",
+      "weaponName": "TraumaBag",
+      "metric": "pickupShare",
+      "before": 0.007329541123561247,
+      "after": 0.007504029592866171,
+      "relChange": 0.023806192824816774,
+      "relCi": [
+        -0.013210687519053077,
+        0.0622116668766457
+      ],
+      "n": {
+        "before": 6154,
+        "after": 5177
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_TraumaBag_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a",
+          "01f57e86-a168-4736-98bb-d9d83e4f3c0a",
+          "02cd89a4-7578-41d9-a6d5-3ddf024c897a",
+          "03532eb4-d51c-421d-bfe2-cbce996accb9",
+          "037875c9-cfd7-4b22-a264-d0109ea7dc18"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Lunchmeats_AK47_C:pickupShare",
+      "weaponKey": "Item_Weapon_Lunchmeats_AK47_C",
+      "weaponName": "Lunchmeats_AK47",
+      "metric": "pickupShare",
+      "before": 0.0000547869502248647,
+      "after": 0.000053631271959831623,
+      "relChange": -0.021094042655956824,
+      "relCi": [
+        -0.36500361599976794,
+        0.5090745356485487
+      ],
+      "n": {
+        "before": 46,
+        "after": 37
+      },
+      "status": "insufficient-sample",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Lunchmeats_AK47_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0469a5e3-62e4-4ac3-88e6-c2e625540136",
+          "085ca308-d3e4-4a9b-b7e3-b84ec54664d9",
+          "0d9c5adb-c715-41ab-823e-726cdaad836d",
+          "0da1476c-2262-4c2a-a6cc-722c26fbeba8",
+          "14520d45-937a-4e9a-89d8-67e150fafe66",
+          "14f7815c-2d4c-4240-9d67-7fab3356f5e4",
+          "19a0112e-b572-435f-a847-d7c4cf2b039e",
+          "1a8628b1-4b9e-4ad6-a2f9-87ceb28324ce",
+          "222471d6-f22a-4787-aadc-65a6f8e3d02f",
+          "25b90457-4c8d-439c-9648-62db2a5cd294"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_M79_C:pickupShare",
+      "weaponKey": "Item_Weapon_M79_C",
+      "weaponName": "M79",
+      "metric": "pickupShare",
+      "before": 0.023084362375181036,
+      "after": 0.023419471920405395,
+      "relChange": 0.01451673387282515,
+      "relCi": [
+        -0.0062038924214068425,
+        0.03566938475515036
+      ],
+      "n": {
+        "before": 19382,
+        "after": 16157
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_M79_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Ziplinegun_C:pickupShare",
+      "weaponKey": "Item_Weapon_Ziplinegun_C",
+      "weaponName": "Ziplinegun",
+      "metric": "pickupShare",
+      "before": 0.00377791752420154,
+      "after": 0.003825214235189072,
+      "relChange": 0.012519254505834798,
+      "relCi": [
+        -0.03834663860242504,
+        0.06607565875413868
+      ],
+      "n": {
+        "before": 3172,
+        "after": 2639
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Ziplinegun_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a",
+          "01f57e86-a168-4736-98bb-d9d83e4f3c0a",
+          "02c8ab2e-8009-462c-9bfa-04f9d6b4d255",
+          "02cd89a4-7578-41d9-a6d5-3ddf024c897a",
+          "02d313a0-bac4-436b-8bbb-060b9ec01313",
+          "03205135-53cd-4da8-9a64-6ca6f12e4f8f"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_SKS_C:pickupShare",
+      "weaponKey": "Item_Weapon_SKS_C",
+      "weaponName": "SKS",
+      "metric": "pickupShare",
+      "before": 0.03528517798612699,
+      "after": 0.03488206918144184,
+      "relChange": -0.011424309800665888,
+      "relCi": [
+        -0.027804305134167318,
+        0.005231663145719878
+      ],
+      "n": {
+        "before": 29626,
+        "after": 24065
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_SKS_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_QBZ95_C:pickupShare",
+      "weaponKey": "Item_Weapon_QBZ95_C",
+      "weaponName": "QBZ95",
+      "metric": "pickupShare",
+      "before": 0.0033027002820336915,
+      "after": 0.0033352853183668263,
+      "relChange": 0.009866180261767443,
+      "relCi": [
+        -0.044347978152877277,
+        0.06715590897335688
+      ],
+      "n": {
+        "before": 2773,
+        "after": 2301
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_QBZ95_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "02d313a0-bac4-436b-8bbb-060b9ec01313",
+          "0412a211-150e-4737-b56b-1d0a0b6b6a02",
+          "0469a5e3-62e4-4ac3-88e6-c2e625540136",
+          "062123ff-45a7-4913-ab81-ebc3aa0ee97c",
+          "0733033d-a39c-40e8-85e3-e0090343138d",
+          "0859ebb7-4f17-4f08-9691-09434aa33597",
+          "085ca308-d3e4-4a9b-b7e3-b84ec54664d9",
+          "08c736cb-bf80-4ae7-9706-cc5d92fc2c5d"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_FNFal_C:pickupShare",
+      "weaponKey": "Item_Weapon_FNFal_C",
+      "weaponName": "SLR",
+      "metric": "pickupShare",
+      "before": 0.01963873961429987,
+      "after": 0.019820378723749667,
+      "relChange": 0.009249020711977751,
+      "relCi": [
+        -0.013151238924680841,
+        0.03215773883952311
+      ],
+      "n": {
+        "before": 16489,
+        "after": 13674
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_FNFal_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_vz61Skorpion_C:pickupShare",
+      "weaponKey": "Item_Weapon_vz61Skorpion_C",
+      "weaponName": "Skorpion",
+      "metric": "pickupShare",
+      "before": 0.0007539160759204208,
+      "after": 0.0007479388197641384,
+      "relChange": -0.007928277890858149,
+      "relCi": [
+        -0.11676614966348164,
+        0.1143213107532155
+      ],
+      "n": {
+        "before": 633,
+        "after": 516
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_vz61Skorpion_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "01f57e86-a168-4736-98bb-d9d83e4f3c0a",
+          "02cd89a4-7578-41d9-a6d5-3ddf024c897a",
+          "03205135-53cd-4da8-9a64-6ca6f12e4f8f",
+          "03b1144e-831b-4603-8024-7c8ff8f78105",
+          "042e68ff-3aab-4a63-ba2b-09f1c530587f",
+          "0450ded7-b3b6-45bd-93f9-b593fbba75ce",
+          "045d16ad-f5dc-472b-8c0a-0463dc8c010c",
+          "048240cb-a297-4a2e-bde9-6a2621bb857a"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Saiga12_C:pickupShare",
+      "weaponKey": "Item_Weapon_Saiga12_C",
+      "weaponName": "S12K",
+      "metric": "pickupShare",
+      "before": 0.019501772238737707,
+      "after": 0.019392778041907765,
+      "relChange": -0.00558893804602234,
+      "relCi": [
+        -0.02782882240509499,
+        0.01715971726584553
+      ],
+      "n": {
+        "before": 16374,
+        "after": 13379
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Saiga12_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_UMP_C:pickupShare",
+      "weaponKey": "Item_Weapon_UMP_C",
+      "weaponName": "UMP",
+      "metric": "pickupShare",
+      "before": 0.03523277307721625,
+      "after": 0.03540243746883588,
+      "relChange": 0.0048155276125383395,
+      "relCi": [
+        -0.011769741513568133,
+        0.021679143965541714
+      ],
+      "n": {
+        "before": 29582,
+        "after": 24424
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_UMP_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Winchester_C:pickupShare",
+      "weaponKey": "Item_Weapon_Winchester_C",
+      "weaponName": "Winchester",
+      "metric": "pickupShare",
+      "before": 0.031986050766064485,
+      "after": 0.031858425037976736,
+      "relChange": -0.003990043316730807,
+      "relCi": [
+        -0.021308686508848984,
+        0.013635065660749124
+      ],
+      "n": {
+        "before": 26856,
+        "after": 21979
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Winchester_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e",
+          "0189825b-8569-4e74-86aa-b1b09fbecd01",
+          "019bfae0-d4d5-4b6e-9be8-c1053194596a"
+        ]
+      }
+    },
+    {
+      "id": "pubg:weapon:Item_Weapon_Vector_C:pickupShare",
+      "weaponKey": "Item_Weapon_Vector_C",
+      "weaponName": "Vector",
+      "metric": "pickupShare",
+      "before": 0.023486927357268084,
+      "after": 0.023525284970488305,
+      "relChange": 0.0016331473520034834,
+      "relCi": [
+        -0.018717867439467795,
+        0.02240622608339593
+      ],
+      "n": {
+        "before": 19720,
+        "after": 16230
+      },
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "evidence": {
+        "aggregatePath": "data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=Item_Weapon_Vector_C]",
+        "noteAnchor": null,
+        "matchIds": [
+          "00235c8c-fed9-44f4-addb-e123a04dc391",
+          "0040601b-ec81-4991-8ef7-da8a6944246c",
+          "00408bc1-fd16-4943-b9b5-ba46b6ec0431",
+          "005e5b14-fb62-45b7-b161-c8a0a56d5711",
+          "006f4fbe-06fe-4b69-b992-6203f5771065",
+          "00883b03-678e-48b1-8a0a-fa4925977933",
+          "0094e433-48d6-4f80-bf00-8317a22a6511",
+          "00f6ae11-676c-4c1c-9095-9348996cb361",
+          "012741f9-a14b-4dda-ad27-97a267a452b5",
+          "0149ee14-30d8-48d0-bae3-ad90031e320e"
+        ]
+      }
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import { Inter, Roboto_Mono } from "next/font/google";
 import AmbientBackground from "@/components/AmbientBackground";
 import { AmbientProvider } from "@/components/AmbientContext";
 import Header from "@/components/Header";
+import { loadPubg } from "@/lib/pubgData";
 import { getDefaultPair, listPatchPairs, listPatches, loadSummary } from "@/lib/data";
 import { fmtKst } from "@/lib/format";
 import "./globals.css";
@@ -61,6 +62,9 @@ function getPairChromeData() {
 export default function RootLayout({ children }: { children: ReactNode }) {
   const snapshotCaption = getSnapshotCaption();
   const pairChrome = getPairChromeData();
+  // 출하 게이트(SCOPE 2026-09-16) — PUBG 집계가 없거나 근거 딸린 판정이 0건이면 네비에
+  // 링크 자체를 만들지 않는다. loadPubg()는 빌드 타임 파일 읽기라 런타임 호출이 아니다.
+  const hasPubg = loadPubg() !== null;
   return (
     <html
       lang="ko"
@@ -70,7 +74,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <AmbientProvider>
           <AmbientBackground />
           <div className="relative z-[1] flex min-h-full flex-1 flex-col">
-            <Header snapshotCaption={snapshotCaption} {...pairChrome} />
+            <Header snapshotCaption={snapshotCaption} hasPubg={hasPubg} {...pairChrome} />
             {children}
           </div>
         </AmbientProvider>

@@ -124,6 +124,14 @@
   /* seed 경계 밖 신규 비-색 토큰(2026-09-12·3차) — 항목상세 전용 좁은 폭. seed 파일
      (docs/design/seed/catalog-tokens.css)은 건드리지 않는다. */
   --container-narrow: 1040px;
+  /* 본문 가독 폭(2026-09-16) — PUBG 페이지가 산문 문단을 많이 싣는 첫 화면이라 신설했다.
+     기존 화면은 표·카드 위주라 measure 토큰이 필요 없었다. `max-w-[65ch]` 같은 arbitrary
+     bracket은 verify.sh Spec 검사가 "토큰 우회"로 잡으므로 토큰으로 승격하고 var()로 참조한다
+     (Container.tsx의 --container-* 소비 방식과 동일 선례). */
+  --measure: 65ch;
+  --measure-wide: 80ch;
+  /* 대조표 최소 폭 — 이보다 좁아지면 열이 겹치므로 가로 스크롤로 넘긴다. */
+  --table-min: 640px;
   --scrollbar-size: 10px;
 }
 

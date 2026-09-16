@@ -4,6 +4,7 @@
 // 2026-09-10 verify-impl 축B: 4열을 "PUBG 상태" → "어댑터 인터페이스"로 교체하고 상태는
 // PUBG 머리글로, 판정 엔진은 표 밖 문단 → 마지막 행으로 옮겼다(시안 구조 그대로).
 
+import Link from "next/link";
 import {
   ADAPTER_MATRIX,
   JUDGMENT_ENGINE_NOTE,
@@ -49,8 +50,10 @@ export default function AdapterMatrix() {
       </div>
       <p className="px-5 text-xs text-muted">{JUDGMENT_ENGINE_NOTE}</p>
       <p className="px-5 pb-5 text-xs text-muted">
-        PUBG 수집 수치: 0건 — 이번 릴리즈는 매핑 설계까지만 확정하고 실연결은 범위 밖이다(도그푸딩
-        일정 확보 우선, HANDOFF-redesign-2026-09-10.md §6·§8).
+        PUBG 실연결 완료(2026-09-16) — 42.3 ⇒ 43.1 구간을 실제 수집·집계·판정했다.{" "}
+        <Link className="text-accent underline-offset-2 hover:underline" href="/pubg/">
+          결과 보기 →
+        </Link>
       </p>
     </div>
   );
