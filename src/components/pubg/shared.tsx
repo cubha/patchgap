@@ -15,15 +15,24 @@ export function signedPct(value: number, digits = 1): string {
   return `${sign}${(value * 100).toFixed(digits)}%`;
 }
 
-/** 화면 상단 제목 블록 — 세 라우트가 같은 위계로 시작하게 한다. */
+/**
+ * 화면 상단 제목 블록 — 세 라우트가 같은 위계로 시작하게 한다.
+ *
+ * `ambient-hero-*` 그림자는 LoL 히어로(`HeroSummary.tsx`)와 같은 처리다 — 이 제목은 패널
+ * 안이 아니라 **배경 사진 위에 직접** 앉으므로, 키아트의 밝은 지점(연기·역광 하이라이트)에서
+ * 글자가 묻히지 않게 시안 `.hero-body h2`의 text-shadow를 승계한다. 사진이 깔리지 않는
+ * 라우트(대조표·방법론)에서도 그림자는 무해하다(배경이 단색이면 보이지 않는다).
+ */
 export function PubgPageHeader({ title, lead }: { title: string; lead: ReactNode }) {
   return (
     <header className="flex flex-col gap-3">
-      <p className="font-mono text-xs font-bold tracking-wide text-accent uppercase">
+      <p className="ambient-hero-sub font-mono text-xs font-bold tracking-wide text-accent uppercase">
         PUBG: BATTLEGROUNDS · 어댑터 실연결
       </p>
-      <h1 className="font-display text-3xl leading-tight font-bold text-balance text-fg">{title}</h1>
-      <p className="text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure)" }}>
+      <h1 className="ambient-hero-headline font-display text-3xl leading-tight font-bold text-balance text-fg">
+        {title}
+      </h1>
+      <p className="ambient-hero-sub text-sm leading-relaxed text-fg" style={{ maxWidth: "var(--measure)" }}>
         {lead}
       </p>
     </header>

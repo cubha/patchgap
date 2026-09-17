@@ -49,7 +49,11 @@ export default function PubgPage() {
 
   return (
     <Container>
-      <div className="flex flex-col gap-6 py-8">
+      {/* pt-40(160px) — 승인 시안의 `.hero-body`가 히어로 스테이지 **하단**에 붙어 있는 배치를
+          옮긴 것이다. 키아트가 가장 밝은 상단 구간(잔해·낙하산)을 글자로 덮지 않고 그대로
+          보여주고, 제목은 스크림이 충분히 내려앉은 아래쪽에서 읽히게 한다. LoL 홈이 같은
+          이유로 pt-44를 쓴다(src/app/page.tsx:85) — 아트 밴드 높이에 맞춰 한 단계 작은 값. */}
+      <div className="flex flex-col gap-6 pt-40 pb-8">
         <PubgPageHeader
           title="42.3 ⇒ 43.1 · 무기 획득 점유율"
           lead={
