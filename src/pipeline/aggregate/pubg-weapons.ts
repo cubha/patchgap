@@ -131,7 +131,8 @@ export function selectMatches(
   );
 }
 
-function wilson(successes: number, n: number, z = 1.96): Interval {
+/** Wilson 신뢰구간 — `pubg-accuracy.ts`도 재사용한다(비율 CI는 이 프로젝트 전역에서 한 구현). */
+export function wilson(successes: number, n: number, z = 1.96): Interval {
   if (n <= 0) return [0, 0];
   const p = successes / n;
   const z2 = z * z;
