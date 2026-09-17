@@ -181,4 +181,7 @@ provenance 파이썬은 불변.
       아님이 코드 주석·`/pubg/` 화면(details 접이식)·PLAN §2-1 3곳에 명시.
 - [x] 변동된 판정 숫자(56→47건)는 화면이 정적 JSON을 동적으로 렌더하므로 자동 반영 —
       하드코딩 문구 없음을 grep으로 확인.
-- [ ] `verify.sh --full` PASS · 배포본 내용 재검증 PASS — Phase 3 배치 검증에서 확정
+- [x] `verify.sh --full` PASS (2026-09-17, 로컬) — Spec·tsc·ESLint·vitest 733건·build·design-lint 전부 초록.
+      **배포본 내용 재검증은 아직 해당 없음** — 이 브랜치(`feature/silver_sh`)가 아직
+      push·PR·merge 전이라 배포되지 않았다. §5 일정대로 9/19~9/20 전반에 PR→merge→배포
+      후 재검증한다.
