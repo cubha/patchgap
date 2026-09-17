@@ -97,6 +97,45 @@ attacks ∩ damageHits = 0   ← 네임스페이스 완전 분리 확인
 `kills` 139키 중 **77키(27,598건)가 비무기** — `ProjGrenade_C` · `BP_CoupeRB_C`(차량) ·
 `PlayerFemale_A_C` · `Bluezonebomb_EffectActor_C`. 미해결 ③의 실체.
 
+### 3-1. 재현 스크립트 (acceptance-critic 지적 반영, 9/17 — 이전엔 숫자만 있고 스크립트가 없었다)
+
+`data/raw/pubg/telemetry-reduced/*.json`은 gitignore라 이 스크립트는 **로컬에 원본이 있을
+때만** 돈다(CI 재현 불가 — §6-1이 이미 명시한 한계). `pubg-weapon-key.ts`의 실제 export를
+그대로 가져다 쓰므로, 이 파일이 바뀌면 스크립트도 같이 맞춰야 한다.
+
+```ts
+// scratchpad에 저장 후 `npx tsx <파일>`로 실행
+import fs from "node:fs";
+import { canonicalWeaponKey, weaponKind } from "/mnt/d/workspace/patchgap/src/pipeline/aggregate/pubg-weapon-key";
+
+const DIR = "/mnt/d/workspace/patchgap/data/raw/pubg/telemetry-reduced";
+let total = 0, fail = 0;
+const canon = new Map<string, Set<string>>();
+
+for (const f of fs.readdirSync(DIR)) {
+  const j = JSON.parse(fs.readFileSync(`${DIR}/${f}`, "utf8"));
+  for (const rec of [j.weaponPickup, j.weaponAttacks, j.weaponDamageHits, j.weaponKills]) {
+    for (const k of Object.keys(rec ?? {})) {
+      total++;
+      try {
+        const c = canonicalWeaponKey(k);
+        weaponKind(k);
+        if (!canon.has(c)) canon.set(c, new Set());
+        canon.get(c)!.add(k);
+      } catch {
+        fail++; // kills의 비-Weap* 액터(플레이어·차량·이펙트)만 여기 떨어져야 정상
+      }
+    }
+  }
+}
+console.log("전체 키 인스턴스", total, "| throw", fail, "| 정준키 수", canon.size);
+```
+
+기대 출력(2026-09-17 실측, 7,217건): `전체 691,942 | throw 13,645 | 정준키 79`. `throw`가
+전부 `kills` 필드에서만 나오는지는 필드별로 나눠 다시 돌리면 확인된다(본문에 준 두 번째
+스크립트와 같은 패턴 — 각 `Object.entries({pickup:...,attacks:...,damageHits:...,kills:...})`로
+바꿔 필드명을 실패 로그에 같이 찍으면 된다).
+
 ---
 
 ## 4. SubTask
@@ -111,6 +150,13 @@ attacks ∩ damageHits = 0   ← 네임스페이스 완전 분리 확인
 - 분류자 `weaponKind(key): "firearm" | "throwable" | "melee" | "equipment" | "vehicle" | "other"` —
   N-2의 장비류를 `equipment`로 분리(정규식 부정 나열 대신 양성 분류).
 - **미매핑 키 커버리지 테스트**: 7,217건 전량의 모든 키가 분류되는지 CI에서 강제.
+  → **범위 축소, 실제 이행(9/17)**: 7,217건은 `data/raw`(gitignore)에만 존재해 CI가
+  재현할 방법이 없다 — "CI에서 강제"는 애초에 이 저장소 구조와 맞지 않는 요구였다.
+  실제로는 대표 케이스 단위 테스트 13건(`__tests__/pubg-weapon-key.test.ts` — 예외 5종·
+  스킨 3종·근접변종 5종·throw 경로)을 CI가 강제하고, 전량 0-throw는 §3-1 스크립트로
+  **로컬 1회 재현**한다(다음 세션이 재확인하려면 다시 돌려야 한다). §6-1도 이 축소를
+  기록한다 — 여기 적힌 원안 문구를 재작업 계획으로 오독하지 않도록 둘을 맞춘다
+  (acceptance-critic 9/17 2차 재검증 지적 반영).
 
 ### ST-2. 비무기 제외 + 스킨 접기를 집계에 반영 (N-1·N-2·N-3 수정)
 
@@ -182,7 +228,9 @@ provenance 파이썬은 불변.
       다중 `expect`로 예외 5종·스킨 3종·근접변종 5종·throw 경로를 커버)는 CI에서
       미분류 throw를 검증한다.
       **7,217건 전량 0-throw 검증은 gitignore된 data/raw를 쓴 로컬 1회 스캔**(재현 스크립트는
-      §3에 남겨뒀다) — CI 회귀 대상이 아니다, 다음 세션이 재검증하려면 다시 돌려야 한다.
+      §3-1에 실제로 있다 — 9/17 acceptance-critic 2차 재검증 전까지는 숫자만 있고 스크립트가
+      없었다, 지적 받고 추가 후 재실행해 기대 출력과 일치함을 재확인했다) — CI 회귀 대상이
+      아니다, 다음 세션이 재검증하려면 다시 돌려야 한다.
 - [x] 스킨 변종 3종(`Duncans_M416`·`Lunchmeats_AK47`·`Julies_Kar98k`)이 베이스에 합산됨을
       단위 테스트로 확인. 실집계 재실행으로 델타 행 56→47건 감소도 확인.
 - [x] 판정 목록에 `firearm`이 아닌 항목 0건 — `Mortar` 미공지 판정 소멸 확인.
