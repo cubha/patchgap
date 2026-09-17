@@ -95,6 +95,10 @@ PUBG Update 43.1 공식 패치노트(pubg.com/en/news/11057, 릴리스 2026-09-0
    폰(`PlayerFemale_A_C`·`UltAIPawn_Base_*`)이 섞인다. 리듀서가 `Weap*` 접두만 세도록 고쳤다.
 6. **무기 식별자 네임스페이스가 2종이다.** `LogItemPickup`/`LogPlayerAttack`은 `Item_Weapon_RPD_C`,
    `LogPlayerKillV2`/`LogPlayerTakeDamage`는 `WeapRPD_C`. 집계에서 정규화가 필요하다.
+   → **이행 완료(2026-09-17)**: `src/pipeline/aggregate/pubg-weapon-key.ts`
+   (`docs/plan/PLAN-pubg-normalization-2026-09-17.md` ST-1~ST-5). §8 명중률 반증표도
+   `pubg-accuracy.ts`로 재현됐으나 **출하 축은 아니다** — 정규화는 §8의 결론(방향 반전·
+   교란 원인 불명)을 바꾸지 못한다.
 7. **`aggregated/pubg-*`를 커밋하는 순간 `"PUBG 수집 수치: 0건"`이 거짓이 된다.**
    `AdapterMatrix.tsx`의 해당 문자열과 `__tests__/AdapterMatrix.test.tsx`의 어서션을 **동반 갱신**해야
    한다 — 이번에 고친 "무제한"과 정확히 같은 종류의 결함이다.
