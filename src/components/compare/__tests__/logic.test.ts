@@ -84,6 +84,23 @@ describe("filterByStatus", () => {
   it("특정 상태만 남긴다", () => {
     expect(filterByStatus(rows, "unannounced").map((r) => r.id)).toEqual(["1"]);
   });
+
+  // 2026-09-17(B2): 홈 히어로 타일이 세는 집합(미공지 + 간접 영향)을 대조표에서도 표현할 수
+  // 있어야 한다. 그 전엔 타일이 49를 말하면서 47만 보이는 화면(`#unannounced`)으로 링크했다.
+  it("gap은 미공지와 간접 영향을 함께 남긴다 — 홈 타일이 세는 집합과 같아야 한다", () => {
+    const gapRows = [
+      delta({ id: "u", status: "unannounced" }),
+      delta({ id: "i", status: "indirect-effect" }),
+      delta({ id: "a", status: "announced-consistent" }),
+      delta({ id: "b", status: "below-threshold" }),
+    ];
+    expect(filterByStatus(gapRows, "gap").map((r) => r.id)).toEqual(["u", "i"]);
+  });
+
+  it("개별 상태 칩도 그대로 동작한다 — 통합은 '같은 질문'이라는 뜻이지 구분 불가라는 뜻이 아니다", () => {
+    const gapRows = [delta({ id: "u", status: "unannounced" }), delta({ id: "i", status: "indirect-effect" })];
+    expect(filterByStatus(gapRows, "indirect-effect").map((r) => r.id)).toEqual(["i"]);
+  });
 });
 
 describe("sortRows", () => {

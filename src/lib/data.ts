@@ -5,6 +5,7 @@
 // 경로 상수는 shared/paths.ts 헬퍼(dataRoot를 마지막 선택 인자로 받는다, 2026-09-05 리팩토링)를
 // 그대로 재사용한다 — 이전엔 이 파일이 같은 레이아웃을 dataRoot-first 인자 순서로 로컬 재구현했다.
 
+import type { SkinIndexFile } from "@/pipeline/shared/cosmetic-skin";
 import "server-only";
 import fs from "node:fs";
 import path from "node:path";
@@ -27,6 +28,7 @@ import {
   aggregatedDir,
   deltasFile,
   notesFile,
+  skinIndexFile,
   spellIconsFile,
 } from "@/pipeline/shared/paths";
 
@@ -167,4 +169,27 @@ export function loadDeltas(from: PatchId, to: PatchId, dataRoot: string = DATA_R
  * 없으면 null — 렌더러는 아이콘 없이 텍스트만 표시하는 것으로 폴백한다(크래시 없음). */
 export function loadSpellIcons(dataRoot: string = DATA_ROOT): SpellIconIndexFile | null {
   return readJsonFile(spellIconsFile(dataRoot));
+}
+
+/** data/aggregated/skin-index.json — 치장 노트 ↔ 스킨 매칭용 ko_KR 인덱스(ST-B6).
+ * 없으면 null이고, 그 경우 치장 행은 지금까지처럼 텍스트만 나온다(크래시 없음). */
+export function loadSkinIndex(dataRoot: string = DATA_ROOT): SkinIndexFile | null {
+  return readJsonFile(skinIndexFile(dataRoot));
+}
+
+/**
+ * `public/dd/splash/`에 **실제로 존재하는** 스플래시 파일 집합.
+ *
+ * **왜 인덱스만 믿으면 안 되는가**(2026-09-18 실측): Data Dragon은 스킨 목록에 크로마 항목
+ * ("떠오른 전설 오리아나 (질서)" 등)을 넣어 두지만 **그 스플래시 파일은 배포하지 않는다** —
+ * 26.18 크로마 줄이 매칭한 5건이 전부 404였다. 인덱스에 있다고 이미지를 걸면 그 줄은
+ * 깨진 `<img>`가 된다.
+ *
+ * 정적 export라 **빌드 타임에 파일 유무를 미리 판정**할 수 있다 — 클라이언트 `onError`
+ * 핸들러가 필요 없고, 서버 컴포넌트 경계도 그대로 유지된다(PUBG 자산 매니페스트와 같은 판단).
+ */
+export function listAvailableSplashes(publicRoot: string = path.resolve(process.cwd(), "public")): Set<string> {
+  const dir = path.join(publicRoot, "dd", "splash");
+  if (!fs.existsSync(dir)) return new Set();
+  return new Set(fs.readdirSync(dir).filter((f) => f.endsWith(".jpg")));
 }

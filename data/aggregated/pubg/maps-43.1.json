@@ -1,0 +1,315 @@
+{
+  "patch": "43.1",
+  "label": "43.1 (9/11~9/15)",
+  "nMatches": 1614,
+  "maps": [
+    {
+      "mapKey": "Tiger_Main",
+      "nMatches": 509,
+      "matchShare": 0.315365551425031,
+      "matchShareCi": [
+        0.29315721566617825,
+        0.3384507241964141
+      ],
+      "avgDurationSec": 1734.7072691552062,
+      "botShare": 0.23695216951773077,
+      "pickupsPerMatch": 784.3045186640471,
+      "topWeapons": [
+        {
+          "weaponKey": "Item_Weapon_AK47_C",
+          "weaponName": "AK47",
+          "pickups": 30403,
+          "share": 0.07615772110487938
+        },
+        {
+          "weaponKey": "Item_Weapon_Mini14_C",
+          "weaponName": "Mini14",
+          "pickups": 17817,
+          "share": 0.04463053372777804
+        },
+        {
+          "weaponKey": "Item_Weapon_AUG_C",
+          "weaponName": "AUG",
+          "pickups": 17804,
+          "share": 0.04459796949482855
+        },
+        {
+          "weaponKey": "Item_Weapon_BerylM762_C",
+          "weaponName": "Beryl M762",
+          "pickups": 17678,
+          "share": 0.04428234692931808
+        },
+        {
+          "weaponKey": "Item_Weapon_ACE32_C",
+          "weaponName": "ACE32",
+          "pickups": 17387,
+          "share": 0.043553409099448666
+        }
+      ]
+    },
+    {
+      "mapKey": "Baltic_Main",
+      "nMatches": 446,
+      "matchShare": 0.27633209417596033,
+      "matchShareCi": [
+        0.25506591623940994,
+        0.298660480708227
+      ],
+      "avgDurationSec": 1831.3004484304934,
+      "botShare": 0.26818881942556855,
+      "pickupsPerMatch": 290.1793721973094,
+      "topWeapons": [
+        {
+          "weaponKey": "Item_Weapon_ACE32_C",
+          "weaponName": "ACE32",
+          "pickups": 8697,
+          "share": 0.06719981455725545
+        },
+        {
+          "weaponKey": "Item_Weapon_HK416_C",
+          "weaponName": "M416",
+          "pickups": 8390,
+          "share": 0.06482769278318652
+        },
+        {
+          "weaponKey": "Item_Weapon_AK47_C",
+          "weaponName": "AK47",
+          "pickups": 8350,
+          "share": 0.0645186215422655
+        },
+        {
+          "weaponKey": "Item_Weapon_Kar98k_C",
+          "weaponName": "Kar98k",
+          "pickups": 8150,
+          "share": 0.06297326533766033
+        },
+        {
+          "weaponKey": "Item_Weapon_M24_C",
+          "weaponName": "M24",
+          "pickups": 7946,
+          "share": 0.061397002008963066
+        }
+      ]
+    },
+    {
+      "mapKey": "Savage_Main",
+      "nMatches": 185,
+      "matchShare": 0.11462205700123916,
+      "matchShareCi": [
+        0.09998680863379766,
+        0.13108748195188144
+      ],
+      "avgDurationSec": 1862.4378378378378,
+      "botShare": 0.27694741435740783,
+      "pickupsPerMatch": 254.63783783783785,
+      "topWeapons": [
+        {
+          "weaponKey": "Item_Weapon_ACE32_C",
+          "weaponName": "ACE32",
+          "pickups": 3255,
+          "share": 0.06909654411140358
+        },
+        {
+          "weaponKey": "Item_Weapon_HK416_C",
+          "weaponName": "M416",
+          "pickups": 2911,
+          "share": 0.061794175087034046
+        },
+        {
+          "weaponKey": "Item_Weapon_BerylM762_C",
+          "weaponName": "Beryl M762",
+          "pickups": 2873,
+          "share": 0.06098751804364439
+        },
+        {
+          "weaponKey": "Item_Weapon_M24_C",
+          "weaponName": "M24",
+          "pickups": 2627,
+          "share": 0.055765475078542924
+        },
+        {
+          "weaponKey": "Item_Weapon_M79_C",
+          "weaponName": "M79",
+          "pickups": 2457,
+          "share": 0.05215674620022077
+        }
+      ]
+    },
+    {
+      "mapKey": "Desert_Main",
+      "nMatches": 176,
+      "matchShare": 0.1090458488228005,
+      "matchShareCi": [
+        0.09475714474406342,
+        0.1251912111394792
+      ],
+      "avgDurationSec": 2230.8295454545455,
+      "botShare": 0.3356458918639986,
+      "pickupsPerMatch": 272.8636363636364,
+      "topWeapons": [
+        {
+          "weaponKey": "Item_Weapon_Kar98k_C",
+          "weaponName": "Kar98k",
+          "pickups": 4273,
+          "share": 0.08897634516075295
+        },
+        {
+          "weaponKey": "Item_Weapon_AK47_C",
+          "weaponName": "AK47",
+          "pickups": 3513,
+          "share": 0.07315092453773113
+        },
+        {
+          "weaponKey": "Item_Weapon_ACE32_C",
+          "weaponName": "ACE32",
+          "pickups": 3197,
+          "share": 0.06657088122605365
+        },
+        {
+          "weaponKey": "Item_Weapon_HK416_C",
+          "weaponName": "M416",
+          "pickups": 2955,
+          "share": 0.06153173413293353
+        },
+        {
+          "weaponKey": "Item_Weapon_BerylM762_C",
+          "weaponName": "Beryl M762",
+          "pickups": 2579,
+          "share": 0.05370231550891221
+        }
+      ]
+    },
+    {
+      "mapKey": "Chimera_Main",
+      "nMatches": 119,
+      "matchShare": 0.07372986369268897,
+      "matchShareCi": [
+        0.061967484251074144,
+        0.08751661851893744
+      ],
+      "avgDurationSec": 2203.235294117647,
+      "botShare": 0.367695773154896,
+      "pickupsPerMatch": 144.78991596638656,
+      "topWeapons": [
+        {
+          "weaponKey": "Item_Weapon_RPD_C",
+          "weaponName": "RPD",
+          "pickups": 1310,
+          "share": 0.07603017991874637
+        },
+        {
+          "weaponKey": "Item_Weapon_BerylM762_C",
+          "weaponName": "Beryl M762",
+          "pickups": 940,
+          "share": 0.054556006964596636
+        },
+        {
+          "weaponKey": "Item_Weapon_M249_C",
+          "weaponName": "M249",
+          "pickups": 931,
+          "share": 0.05403366221706326
+        },
+        {
+          "weaponKey": "Item_Weapon_ACE32_C",
+          "weaponName": "ACE32",
+          "pickups": 926,
+          "share": 0.05374347069065583
+        },
+        {
+          "weaponKey": "Item_Weapon_AUG_C",
+          "weaponName": "AUG",
+          "pickups": 891,
+          "share": 0.05171213000580383
+        }
+      ]
+    },
+    {
+      "mapKey": "Summerland_Main",
+      "nMatches": 104,
+      "matchShare": 0.0644361833952912,
+      "matchShareCi": [
+        0.05346145351915975,
+        0.07747942474729104
+      ],
+      "avgDurationSec": 1271.9423076923076,
+      "botShare": 0.3956548347613219,
+      "pickupsPerMatch": 125.61538461538461,
+      "topWeapons": [
+        {
+          "weaponKey": "Item_Weapon_MP5K_C",
+          "weaponName": "MP5K",
+          "pickups": 1059,
+          "share": 0.08106246172688304
+        },
+        {
+          "weaponKey": "Item_Weapon_HK416_C",
+          "weaponName": "M416",
+          "pickups": 1024,
+          "share": 0.07838334353949786
+        },
+        {
+          "weaponKey": "Item_Weapon_UMP_C",
+          "weaponName": "UMP",
+          "pickups": 886,
+          "share": 0.06781996325780772
+        },
+        {
+          "weaponKey": "Item_Weapon_AK47_C",
+          "weaponName": "AK47",
+          "pickups": 817,
+          "share": 0.06253827311696264
+        },
+        {
+          "weaponKey": "Item_Weapon_AUG_C",
+          "weaponName": "AUG",
+          "pickups": 659,
+          "share": 0.05044396815676669
+        }
+      ]
+    },
+    {
+      "mapKey": "Neon_Main",
+      "nMatches": 75,
+      "matchShare": 0.046468401486988845,
+      "matchShareCi": [
+        0.037231610264178025,
+        0.057859033962055245
+      ],
+      "avgDurationSec": 1991.7333333333333,
+      "botShare": 0.5327115436604488,
+      "pickupsPerMatch": 177.88,
+      "topWeapons": [
+        {
+          "weaponKey": "Item_Weapon_Kar98k_C",
+          "weaponName": "Kar98k",
+          "pickups": 931,
+          "share": 0.06978487369762387
+        },
+        {
+          "weaponKey": "Item_Weapon_M24_C",
+          "weaponName": "M24",
+          "pickups": 909,
+          "share": 0.06813582190240612
+        },
+        {
+          "weaponKey": "Item_Weapon_HK416_C",
+          "weaponName": "M416",
+          "pickups": 794,
+          "share": 0.05951577842740424
+        },
+        {
+          "weaponKey": "Item_Weapon_ACE32_C",
+          "weaponName": "ACE32",
+          "pickups": 722,
+          "share": 0.05411888164305524
+        },
+        {
+          "weaponKey": "Item_Weapon_BerylM762_C",
+          "weaponName": "Beryl M762",
+          "pickups": 615,
+          "share": 0.04609849336631437
+        }
+      ]
+    }
+  ]
+}

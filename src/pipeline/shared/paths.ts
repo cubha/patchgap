@@ -59,3 +59,10 @@ export function llmCacheDir(dataRoot: string = DATA_ROOT): string {
 export function spellIconsFile(dataRoot: string = DATA_ROOT): string {
   return path.join(dataRoot, "aggregated", "spell-icons.json");
 }
+
+/** data/aggregated/skin-index.json — `run-ddragon.ts`가 만드는 ko_KR 스킨 인덱스(치장 노트
+ * 매칭용 slim 인덱스). 패치별 디렉토리가 아니라 단일 파일이라는 점에서 `spellIconsFile`과 같은
+ * 성격이다 — 스킨 목록은 패치가 아니라 **Data Dragon 버전**에 매인다. */
+export function skinIndexFile(dataRoot: string = DATA_ROOT): string {
+  return path.join(dataRoot, "aggregated", "skin-index.json");
+}

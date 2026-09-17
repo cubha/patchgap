@@ -7,7 +7,7 @@
 // 50/77만 맞고, 남은 12개(damageHits 쪽 orphan 전량)가 진짜 예외다. 재조사 시
 // `node -e` 스캔 스크립트는 PLAN §3에 남겨져 있다.
 import { describe, expect, it } from "vitest";
-import { canonicalWeaponKey, weaponKind } from "../pubg-weapon-key";
+import { canonicalWeaponKey, weaponCategoryLabel, weaponKind } from "../pubg-weapon-key";
 
 describe("canonicalWeaponKey", () => {
   it("Item_Weapon_ 네임스페이스는 그대로 정준키다", () => {
@@ -94,5 +94,41 @@ describe("weaponKind", () => {
 
   it("정준화할 수 없는 키는 weaponKind도 throw한다", () => {
     expect(() => weaponKind("PlayerFemale_A_C")).toThrow();
+  });
+});
+
+// ── weaponCategoryLabel (2026-09-18) ──────────────────────────────────────────────
+// 승인 아티팩트 §4의 `.detail-eyebrow`가 "무기 · 돌격소총"처럼 세부 분류를 쓴다. 이 표는
+// **텔레메트리에 없는 수기 데이터**라, 지키는 불변식은 "모르면 지어내지 않는다"다.
+describe("weaponCategoryLabel", () => {
+  it("총기는 세부 카테고리로 표기한다", () => {
+    expect(weaponCategoryLabel("Item_Weapon_AK47_C")).toBe("돌격소총");
+    expect(weaponCategoryLabel("Item_Weapon_Kar98k_C")).toBe("저격총");
+    expect(weaponCategoryLabel("Item_Weapon_RPD_C")).toBe("경기관총");
+    expect(weaponCategoryLabel("Item_Weapon_UMP_C")).toBe("기관단총");
+  });
+
+  it("스킨 변종도 베이스 기준으로 분류된다", () => {
+    expect(weaponCategoryLabel("Item_Weapon_Lunchmeats_AK47_C")).toBe("돌격소총");
+  });
+
+  it("표에 없는 총기는 '총기'로 폴백한다 — 분류를 지어내지 않는다", () => {
+    // M1911은 FIREARM_BASES에는 있으나 카테고리 표에 없는 유일한 베이스(2026-09-18 실측).
+    // 이 테스트가 깨지면 표를 채웠거나 베이스가 늘어난 것이니, 폴백 대상을 다시 고른다.
+    expect(weaponCategoryLabel("Item_Weapon_M1911_C")).toBe("총기");
+  });
+
+  it("실제 표본 47종은 전부 분류된다(수기 표 커버리지 고정)", () => {
+    // QBU88·Mosin 등은 이 저장소의 FIREARM_BASES에 없어 weaponKind 자체가 throw한다 —
+    // 카테고리 표에는 있지만 그건 **미래 대비**이지 현재 커버리지가 아니다. 여기서 고정하는
+    // 것은 "실제 표본에 등장하는 키"의 커버리지다.
+    expect(weaponCategoryLabel("Item_Weapon_G18_C")).toBe("권총");
+    expect(weaponCategoryLabel("Item_Weapon_DP12_C")).toBe("산탄총");
+    expect(weaponCategoryLabel("Item_Weapon_L6_C")).toBe("경기관총");
+  });
+
+  it("총기가 아니면 상위 분류를 쓴다", () => {
+    expect(weaponCategoryLabel("Item_Weapon_Pan_C")).toBe("근접");
+    expect(weaponCategoryLabel("Item_Weapon_Grenade_C")).toBe("투척");
   });
 });

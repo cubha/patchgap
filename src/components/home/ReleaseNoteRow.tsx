@@ -10,9 +10,20 @@
 //  2. `.verdict .m` 신설: 스킬 행마다 "노트=상향 · 관측=밴률 상승" 판정 근거 1줄.
 //  3. `.gap-why`(추정 원인)를 metric 행 루프 **밖**으로 올렸다 — 시안은 엔티티당 1회이고,
 //     행마다 반복하면 같은 문장이 카드 안에서 3~4번 되풀이된다.
+//
+// ── 2026-09-17 라운드(사용자 지적 4건을 이 파일이 함께 받는다) ──────────────────────────
+// **B1 스킬 인라인**: 같은 스킬의 변경 줄을 한 행으로 접고 스탯을 인라인 나열한다. 이전엔
+//   카시오페아 `E - 쌍독니` 5줄이 같은 아이콘·같은 뱃지로 다섯 번 반복됐다. 묶기는
+//   `noteSkillGroups.ts`가 하고(특히 `skill === null`을 절대 병합하지 않는다) 여기선 그린다.
+// **B2 Gap 통합**: `indirect-effect` 행이 이 카드로 들어온다 — 원인이 규명된 Gap이다. 홈 하단
+//   전용 섹션이 그리던 인과 체인(`관측 ← [섹션] 원인`)을 여기로 옮겼다.
+// **B3 미비한 변화 억제**: 공지 카드의 대표 관측에 유의성·효과크기 바닥 게이트를 건다
+//   (`selectReportableObservation`). 미공지 카드는 이미 판정 단계에서 게이트돼 있어 그대로 둔다.
+// **B4 치장 항목**: 스킨·크로마처럼 관측할 지표가 원리적으로 없는 줄에는 뱃지를 붙이지 않는다.
+//   "관측 보류"는 "아직 관측 못 했다"는 뜻이라 스킨에 붙으면 거짓말에 가깝다.
 
 import Link from "next/link";
-import type { DeltaRecord, LanePosition } from "@/pipeline/types";
+import type { DeltaRecord, LanePosition, PatchNoteItem } from "@/pipeline/types";
 import EntityIcon from "@/components/EntityIcon";
 import IconBox from "@/components/IconBox";
 import LaneGlyph from "@/components/LaneGlyph";
@@ -20,9 +31,24 @@ import SpellIcon from "@/components/SpellIcon";
 import StatusBadge from "@/components/StatusBadge";
 import DeltaValue from "@/components/DeltaValue";
 import { itemHref, metricLabel } from "@/lib/format";
+import { isCosmeticGroup, isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
+import CosmeticSkinPreview, { type CosmeticSkinItem } from "./CosmeticSkinPreview";
 import { spellIconKey } from "@/pipeline/match/spell-icon";
-import { excludeObservation, formatMetricValue, metricKind, resolveCause } from "./logic";
-import { buildNoteVerdict, formatQ, selectEntityObservation } from "./streamVerdict";
+import {
+  excludeObservation,
+  formatMetricValue,
+  metricKind,
+  resolveGapCause,
+  type GapCauseMode,
+} from "./logic";
+import { groupNotesBySkill, representativeRecord } from "./noteSkillGroups";
+import {
+  buildNoteVerdict,
+  formatQ,
+  selectEntityObservation,
+  selectReportableObservation,
+} from "./streamVerdict";
+import type { IndirectEffectEntry } from "./indirectEffects";
 import type { ReleaseStreamGroup } from "./releaseStream";
 import type { StreamEntityIcon } from "./releaseStreamEntity";
 
@@ -39,7 +65,29 @@ export interface ReleaseNoteRowProps {
   patch: string | null;
   /** deltas.meta.qAlpha — 유의 판정 임계. 없으면 FDR_ALPHA 기본값(isSignificantDelta). */
   qAlpha?: number;
+  /** deltaId → 인과 체인(B2). `indirect-effect` 행만 키를 갖는다. */
+  causes?: Record<string, IndirectEffectEntry>;
+  /**
+   * note.id → 그 줄이 지목한 스킨 미리보기(ST-B6). **자산이 실제로 존재하는 것만** 들어온다 —
+   * 유무 판정은 page.tsx가 빌드 타임에 끝낸다. 키가 없으면 그 줄은 이미지 없이 텍스트만.
+   */
+  skinPreviews?: Record<string, CosmeticSkinItem[]>;
 }
+
+const SECTION_LABELS: Record<string, string> = {
+  champion: "챔피언",
+  item: "아이템",
+  system: "시스템",
+  other: "기타",
+};
+
+/** 원인 표시 모드별 글자색 — 규명된 것만 본문색, 나머지는 회색(무근거 문장은 회색). */
+const CAUSE_TONE: Record<GapCauseMode, string> = {
+  verified: "text-fg-2",
+  candidate: "text-muted",
+  none: "text-muted",
+  unreviewed: "text-muted",
+};
 
 /** 카드 엔티티 아이콘(56px) — 라인 엔티티(entityType="lane", 챔피언 자산 없음)는
  * DeltaTable.tsx의 RowIcon과 동형으로 LaneGlyph 박스를 쓴다(2026-09-10 verify-impl 축B 후속:
@@ -97,6 +145,57 @@ function matchedRecords(
   return out;
 }
 
+/** 스킬 행 1개의 스탯 줄 — B1의 실체. 한 줄에 `스탯: 이전 ⇒ 이후`를 쌓고, 스탯이 없는 줄은
+ * 요약문 그대로 쓴다(수치가 파싱되지 않은 항목을 수치인 척 꾸미지 않는다). */
+function StatLine({ note }: { note: PatchNoteItem }) {
+  if (!note.stat) return <div className="text-sm text-fg-2">{note.summary}</div>;
+  return (
+    <div className="text-sm text-fg-2">
+      {note.stat}:{" "}
+      <span className="font-mono tabular-nums text-fg">
+        {note.before ?? "—"} ⇒ {note.after ?? "—"}
+      </span>
+    </div>
+  );
+}
+
+/** 인과 체인 1줄(B2) — `IndirectEffectPanel`이 그리던 `관측 ← [섹션] 원인`을 그대로 옮겼다. */
+function CauseChain({ entry }: { entry: IndirectEffectEntry }) {
+  const { causeEntity, causeSection, causeAnchor, causeText } = entry;
+  return (
+    <>
+      <p className="mt-2 flex flex-wrap items-center gap-1.5 text-sm text-fg-2">
+        <span aria-hidden="true" className="text-muted">
+          ←
+        </span>
+        {causeEntity ? (
+          <>
+            <span className="text-xs text-muted">
+              [{causeSection ? (SECTION_LABELS[causeSection] ?? causeSection) : "노트"}]
+            </span>
+            {causeAnchor ? (
+              <a
+                href={causeAnchor}
+                target="_blank"
+                rel="noreferrer"
+                className="font-bold text-accent hover:underline"
+              >
+                {causeEntity}
+              </a>
+            ) : (
+              <span className="font-bold text-fg">{causeEntity}</span>
+            )}
+            <span className="text-muted">변경의 파급</span>
+          </>
+        ) : (
+          <span className="text-muted">원인 노트 확인 불가</span>
+        )}
+      </p>
+      <p className="mt-1 text-xs leading-relaxed text-muted">{causeText}</p>
+    </>
+  );
+}
+
 export default function ReleaseNoteRow({
   group,
   icon,
@@ -104,16 +203,29 @@ export default function ReleaseNoteRow({
   noteDeltas,
   patch,
   qAlpha,
+  causes,
+  skinPreviews,
 }: ReleaseNoteRowProps) {
   const isUnannounced = group.kind === "unannounced";
+
+  // B4 — 그룹 전체가 치장이면 이 카드엔 뱃지가 하나도 붙지 않는다.
+  const cosmeticGroup = !isUnannounced && isCosmeticGroup(group.notes);
+
+  // B3 — 공지 카드만 게이트를 건다. 미공지 행은 판정 단계에서 이미 바닥을 넘은 것들이다.
   const observation = isUnannounced
     ? selectEntityObservation(group.deltas)
-    : selectEntityObservation(matchedRecords(group.notes.map((n) => n.id), noteDeltas));
-  // 미공지 카드의 추정 원인 — 대표 관측 1건 기준으로 엔티티당 한 번만 렌더한다(시안 .gap-why).
-  const gapCause = isUnannounced && observation ? resolveCause(observation) : null;
+    : selectReportableObservation(matchedRecords(group.notes.map((n) => n.id), noteDeltas), qAlpha);
+
+  // B2 — 이 카드의 대표 행에 규명된 원인이 있는가(indirect-effect).
+  const gapRepresentative = isUnannounced ? selectEntityObservation(group.deltas) : null;
+  const causeEntry = gapRepresentative ? (causes?.[gapRepresentative.id] ?? null) : null;
+  const gapCause = isUnannounced && gapRepresentative && !causeEntry ? resolveGapCause(gapRepresentative) : null;
+
   // 헤더(ObservationLine)가 이미 보여준 대표 관측을 하단 리스트에서 제외 — 안 그러면 같은
   // 델타 행이 카드 안에서 두 번 렌더된다(2026-09-11 결함).
   const remainingDeltas = isUnannounced ? excludeObservation(group.deltas, observation) : [];
+
+  const skillGroups = isUnannounced ? [] : groupNotesBySkill(group.notes);
 
   // 미공지 행 강조(2026-09-13·6차 연속) — 채움 없이 왼쪽 골드 보더 하나로만 표시한다.
   // 이력: 원래 불투명 `bg-surface-warm`이었고(미공지는 스트림 최상단 정렬이라 스크롤 없이 보이는
@@ -136,7 +248,15 @@ export default function ReleaseNoteRow({
           <CardIcon icon={icon} entity={group.entity} />
           <div className="min-w-0 flex-1">
             <div className="font-display text-base font-bold text-fg">{group.entity}</div>
-            {observation ? <ObservationLine record={observation} /> : null}
+            {observation ? (
+              <ObservationLine record={observation} />
+            ) : cosmeticGroup ? (
+              // B4 — 스킨·크로마엔 측정할 지표가 없다. "관측 보류"가 아니라 관측 대상이 아니다.
+              <div className="mt-1 text-xs text-muted">치장 항목 · 관측 대상 아님</div>
+            ) : (
+              // B3 — 바닥·유의 미달을 발견처럼 쓰지 않는다. 수치는 항목 상세가 그대로 보여준다.
+              <div className="mt-1 text-xs text-muted">효과크기 바닥을 넘는 관측 변화 없음</div>
+            )}
           </div>
           <span
             aria-hidden="true"
@@ -153,10 +273,17 @@ export default function ReleaseNoteRow({
                 ✕ {patch} 패치노트에 {group.entity} 항목 없음 — 짝지을 선언이 존재하지 않습니다
               </div>
             ) : null}
-            {gapCause && observation ? (
-              <p className={`mt-2 text-xs ${gapCause.mode === "verified" ? "text-fg-2" : "text-muted"}`}>
-                추정 원인: {gapCause.text}{" "}
-                <Link href={itemHref(observation.id)} className="font-bold text-accent hover:underline">
+            {/* B2 — 원인이 규명된 Gap은 인과 체인을, 아닌 Gap은 네 상태를 구분한 문구를 쓴다. */}
+            {causeEntry ? (
+              <CauseChain entry={causeEntry} />
+            ) : gapCause ? (
+              <p className={`mt-2 text-xs ${CAUSE_TONE[gapCause.mode]}`}>
+                {gapCause.mode === "verified" ? "추정 원인: " : null}
+                {gapCause.text}{" "}
+                <Link
+                  href={itemHref(gapRepresentative!.id)}
+                  className="font-bold text-accent hover:underline"
+                >
                   관측 근거 보기 →
                 </Link>
               </p>
@@ -182,49 +309,61 @@ export default function ReleaseNoteRow({
             ) : null}
           </>
         ) : (
+          // B1 — 스킬 단위 행. 같은 스킬의 스탯 변경이 여러 줄이면 한 행 안에 인라인으로 쌓인다.
           <ul className="mt-3 flex flex-col gap-3">
-            {group.notes.map((note) => {
-            const filename = note.skill ? (spellIcons?.[spellIconKey(note.entity, note.skill)] ?? null) : null;
-            const record = noteDeltas[note.id];
-            const verdict = buildNoteVerdict(note, record, qAlpha);
-            return (
-              <li key={note.id} className="flex items-center gap-3">
-                {note.skill ? <SpellIcon filename={filename} name={note.skill} size={40} /> : null}
-                <div className="min-w-0 flex-1">
-                  {note.skill ? <div className="text-xs font-bold text-fg-2">{note.skill}</div> : null}
-                  <div className="text-sm text-fg-2">
-                    {note.stat ? (
-                      <>
-                        {note.stat}:{" "}
-                        <span className="font-mono tabular-nums text-fg">
-                          {note.before ?? "—"} ⇒ {note.after ?? "—"}
-                        </span>
-                      </>
-                    ) : (
-                      note.summary
-                    )}
-                  </div>
-                  {verdict ? (
-                    <div className="mt-0.5 text-xs text-muted">
-                      {verdict.noteLabel} · 관측=
-                      <span
-                        className={
-                          verdict.kind === "up"
-                            ? "font-bold text-success"
-                            : verdict.kind === "down"
-                              ? "font-bold text-danger"
-                              : "font-bold text-muted"
-                        }
-                      >
-                        {verdict.observedLabel}
-                      </span>
-                    </div>
+            {skillGroups.map((skillGroup) => {
+              const filename = skillGroup.skill
+                ? (spellIcons?.[spellIconKey(group.entity, skillGroup.skill)] ?? null)
+                : null;
+              const record = representativeRecord(skillGroup.notes, noteDeltas);
+              // 뱃지는 행당 1개다(이전엔 노트 줄마다 1개라 같은 뱃지가 5번 반복됐다).
+              // 치장 줄에는 아예 붙이지 않는다(B4) — 관측 대상이 아니기 때문이다.
+              const cosmeticRow = skillGroup.notes.every(isCosmeticNote);
+              // 판정 문장은 여전히 **노트 줄 단위**다 — 스탯마다 노트 방향이 다를 수 있다
+              // (같은 스킬에서 계수는 상향인데 마나는 하향인 경우가 실제로 있다).
+              return (
+                <li key={skillGroup.key} className="flex items-start gap-3">
+                  {skillGroup.skill ? (
+                    <SpellIcon filename={filename} name={skillGroup.skill} size={40} />
                   ) : null}
-                </div>
-                <StatusBadge status={record?.status ?? "관측 보류"} />
-              </li>
-            );
-          })}
+                  <div className="min-w-0 flex-1">
+                    {skillGroup.skill ? (
+                      <div className="text-xs font-bold text-fg-2">{skillGroup.skill}</div>
+                    ) : null}
+                    <div className="flex flex-col gap-0.5">
+                      {skillGroup.notes.map((note) => {
+                        const verdict = buildNoteVerdict(note, noteDeltas[note.id], qAlpha);
+                        return (
+                          <div key={note.id}>
+                            <StatLine note={note} />
+                            {/* ST-B6 — 치장 줄이 지목한 스킨의 스플래시. 못 잡은 줄(크로마·
+                                아이콘·와드·휘장·칭호·정수)엔 아무것도 렌더하지 않는다. */}
+                            <CosmeticSkinPreview skins={skinPreviews?.[note.id] ?? []} />
+                            {verdict ? (
+                              <div className="text-xs text-muted">
+                                {verdict.noteLabel} · 관측=
+                                <span
+                                  className={
+                                    verdict.kind === "up"
+                                      ? "font-bold text-success"
+                                      : verdict.kind === "down"
+                                        ? "font-bold text-danger"
+                                        : "font-bold text-muted"
+                                  }
+                                >
+                                  {verdict.observedLabel}
+                                </span>
+                              </div>
+                            ) : null}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  {cosmeticRow ? null : <StatusBadge status={record?.status ?? "관측 보류"} />}
+                </li>
+              );
+            })}
           </ul>
         )}
       </details>

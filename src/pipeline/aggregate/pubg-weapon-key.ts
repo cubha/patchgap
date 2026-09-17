@@ -184,3 +184,53 @@ export function weaponKind(key: string): WeaponKind {
       `MELEE_BASES/THROWABLE_BASES/EQUIPMENT_BASES/FIREARM_BASES 중 하나에 추가한다.`
   );
 }
+
+/**
+ * 총기 세부 분류 — 승인 아티팩트 §4의 `.detail-eyebrow`가 "무기 · **돌격소총**"처럼 세부
+ * 카테고리를 쓰기 때문에 필요하다. `weaponKind`의 4종(firearm/melee/throwable/equipment)은
+ * 판정 파이프라인용 구분이라 이 자리에 쓰면 전부 "총기"가 된다.
+ *
+ * **텔레메트리에 없는 정보다** — PUBG API는 무기 카테고리를 주지 않으므로 이 표는 수기다.
+ * 그래서 두 가지를 지킨다: ① 모르는 베이스는 표에 넣지 않는다(빈칸으로 두고 상위 분류로
+ * 폴백) ② 여기 없는 무기가 생겨도 화면이 죽지 않는다. 지어낸 분류를 넣느니 "총기"가 낫다.
+ * (맵 한국어명 `PUBG_MAPS`와 같은 성격의 수기 표다.)
+ */
+const FIREARM_CATEGORY: Readonly<Record<string, string>> = {
+  // 돌격소총
+  AK47: "돌격소총", ACE32: "돌격소총", HK416: "돌격소총", BerylM762: "돌격소총",
+  AUG: "돌격소총", M16A4: "돌격소총", "SCAR-L": "돌격소총", G36C: "돌격소총",
+  QBZ95: "돌격소총", Groza: "돌격소총", K2: "돌격소총", FAMASG2: "돌격소총",
+  Mk47Mutant: "돌격소총",
+  // 지정사수소총
+  SKS: "지정사수소총", Mini14: "지정사수소총", Mk12: "지정사수소총", SLR: "지정사수소총",
+  QBU88: "지정사수소총", VSS: "지정사수소총", Mk14: "지정사수소총", Dragunov: "지정사수소총",
+  FNFal: "지정사수소총",
+  // 저격총
+  Kar98k: "저격총", M24: "저격총", AWM: "저격총", Mosin: "저격총", Win1894: "저격총",
+  // 기관단총
+  UMP: "기관단총", UZI: "기관단총", Vector: "기관단총", MP5K: "기관단총", Thompson: "기관단총",
+  BizonPP19: "기관단총", P90: "기관단총", JS9: "기관단총", vz61Skorpion: "기관단총",
+  MP9: "기관단총",
+  // 경기관총
+  RPD: "경기관총", M249: "경기관총", MG3: "경기관총", DP28: "경기관총", L6: "경기관총",
+  // 산탄총
+  S12K: "산탄총", Saiga12: "산탄총", DP12: "산탄총", Berreta686: "산탄총",
+  Sawnoff: "산탄총", OriginS12: "산탄총", Winchester: "산탄총",
+  // 권총
+  P18C: "권총", G18: "권총", M9: "권총", DesertEagle: "권총", NagantM1895: "권총", P1911: "권총",
+  R1895: "권총", R45: "권총", Skorpion: "권총",
+  // 특수
+  Crossbow: "석궁", PanzerFaust100M: "발사기", M79: "발사기", Mortar: "발사기",
+};
+
+/**
+ * 화면 표기용 무기 분류 — 총기는 세부 카테고리, 나머지는 상위 분류.
+ * 표에 없는 총기는 "총기"로 폴백한다(분류를 지어내지 않는다).
+ */
+export function weaponCategoryLabel(key: string): string {
+  const kind = weaponKind(key);
+  if (kind !== "firearm") {
+    return kind === "melee" ? "근접" : kind === "throwable" ? "투척" : "장비";
+  }
+  return FIREARM_CATEGORY[extractBase(key)] ?? "총기";
+}
