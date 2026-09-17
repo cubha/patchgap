@@ -13,9 +13,11 @@ import fs from "node:fs";
 import path from "node:path";
 import {
   aggregatePubgWeapons,
+  isFirearm,
   selectMatches,
   type PubgReducedMatch,
 } from "../src/pipeline/aggregate/pubg-weapons";
+import { canonicalWeaponKey } from "../src/pipeline/aggregate/pubg-weapon-key";
 import { buildPubgDeltas, type PubgNoteItem } from "../src/pipeline/match/pubg-delta";
 
 const ROOT = process.cwd();
@@ -45,15 +47,21 @@ function readReduced(): PubgReducedMatch[] {
   return rows;
 }
 
-/** 무기별 원천 매치 ID 표본 — 모든 판정문은 원천 링크를 가져야 한다. */
+/**
+ * 무기별 원천 매치 ID 표본 — 모든 판정문은 원천 링크를 가져야 한다. 정준키로 모아야
+ * `aggregatePubgWeapons`가 만든 `weaponKey`(정준키)와 조회가 맞는다 — 안 그러면 스킨
+ * 변종이 섞인 무기(AK47·Kar98k 등)의 표본이 raw 키로 흩어져 evidence.matchIds가 빈다.
+ */
 function sampleMatchIds(matches: readonly PubgReducedMatch[], limit = 10): Map<string, string[]> {
   const byWeapon = new Map<string, string[]>();
   for (const m of matches) {
     for (const key of Object.keys(m.weaponPickup)) {
-      const list = byWeapon.get(key) ?? [];
+      if (!isFirearm(key)) continue;
+      const canonical = canonicalWeaponKey(key);
+      const list = byWeapon.get(canonical) ?? [];
       if (list.length < limit) {
         list.push(m.matchId);
-        byWeapon.set(key, list);
+        byWeapon.set(canonical, list);
       }
     }
   }

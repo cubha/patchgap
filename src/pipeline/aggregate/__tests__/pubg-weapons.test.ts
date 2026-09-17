@@ -75,6 +75,20 @@ describe("isFirearm", () => {
     }
   });
 
+  it("장비류도 분모에서 뺀다 — N-2 결함 회귀(정규식은 이 7종을 놓쳐 4.47%가 섞였었다)", () => {
+    for (const key of [
+      "Item_Weapon_IntegratedRepair_C",
+      "Item_Weapon_TraumaBag_C",
+      "Item_Weapon_TacPack_C",
+      "Item_Weapon_Mortar_C",
+      "Item_Weapon_StunGun_C",
+      "Item_Weapon_Ziplinegun_C",
+      "Item_Weapon_FlareGun_C",
+    ]) {
+      expect(isFirearm(key), key).toBe(false);
+    }
+  });
+
   it("총기는 남긴다", () => {
     for (const key of ["Item_Weapon_AK47_C", "Item_Weapon_RPD_C", "Item_Weapon_M249_C"]) {
       expect(isFirearm(key), key).toBe(true);
@@ -132,5 +146,40 @@ describe("aggregatePubgWeapons", () => {
     expect(agg.pickupsPerMatch).toBe(0);
     expect(agg.botShare).toBe(0);
     expect(agg.weapons).toEqual([]);
+  });
+
+  it("스킨 변종 픽업은 베이스 무기로 합산된다 — N-1 결함 회귀", () => {
+    const agg = aggregatePubgWeapons(
+      [
+        match({
+          weaponPickup: {
+            Item_Weapon_AK47_C: 10,
+            Item_Weapon_Lunchmeats_AK47_C: 3,
+            Item_Weapon_Julies_Kar98k_C: 2,
+          },
+        }),
+      ],
+      "42.3",
+      "42.3"
+    );
+    const ak = agg.weapons.find((w) => w.weaponKey === "Item_Weapon_AK47_C");
+    expect(ak?.pickups).toBe(13);
+    expect(agg.weapons.map((w) => w.weaponKey)).not.toContain("Item_Weapon_Lunchmeats_AK47_C");
+    expect(agg.weapons.map((w) => w.weaponKey)).not.toContain("Item_Weapon_Julies_Kar98k_C");
+    expect(agg.totalPickups).toBe(15);
+  });
+
+  it("장비류는 총 픽업(totalPickups)에도 들어가지 않는다 — N-2 결함 회귀", () => {
+    const agg = aggregatePubgWeapons(
+      [
+        match({
+          weaponPickup: { Item_Weapon_AK47_C: 10, Item_Weapon_Mortar_C: 90, Item_Weapon_TraumaBag_C: 50 },
+        }),
+      ],
+      "42.3",
+      "42.3"
+    );
+    expect(agg.totalPickups).toBe(10);
+    expect(agg.weapons.map((w) => w.weaponKey)).toEqual(["Item_Weapon_AK47_C"]);
   });
 });

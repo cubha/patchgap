@@ -12,6 +12,7 @@
 // (평균 인원 98.9→94.9 · 봇 31.6%→27.5% · 매치 길이 1,832→1,761초). 기저 이동을 빼지 않으면
 // 모든 무기가 너프된 것처럼 보인다 — 총 픽업 대비 점유율로 정규화해 기저를 분리한다.
 import type { Interval } from "../types";
+import { canonicalWeaponKey, weaponKind } from "./pubg-weapon-key";
 
 /** 텔레메트리 리듀서(docs/plan/provenance/2026-09-16-pubg-harvest/telemetry.py) 산출 1건. */
 export interface PubgReducedMatch {
@@ -90,18 +91,22 @@ const WEAPON_NAME_OVERRIDES: Readonly<Record<string, string>> = {
   Item_Weapon_FNFal_C: "SLR",
 };
 
+/** 정준키(`canonicalWeaponKey` 통과 후)만 받는다 — 스킨 변종은 호출부에서 이미 베이스로 접혀 있다. */
 export function weaponDisplayName(weaponKey: string): string {
   const override = WEAPON_NAME_OVERRIDES[weaponKey];
   if (override) return override;
   return weaponKey.replace(/^Item_Weapon_/, "").replace(/_C$/, "");
 }
 
-/** 근접무기·투척물처럼 "스폰율 밸런스" 논의 대상이 아닌 항목은 점유율 분모에서 뺀다. */
-const NON_FIREARM =
-  /Pan|Machete|Crowbar|Cowbar|Sickle|Pickaxe|Grenade|Molotov|SmokeBomb|FlashBang|C4|Melee/i;
-
+/**
+ * 근접무기·투척물·장비는 "무기 밸런스" 논의 대상이 아니므로 점유율 분모에서 뺀다.
+ * `pubg-weapon-key.ts`의 `weaponKind` 화이트리스트를 그대로 쓴다 — 구 `NON_FIREARM`
+ * 블랙리스트 정규식은 장비류 7종(`IntegratedRepair`·`TraumaBag`·`Mortar` 등)을 놓쳐
+ * "무기 획득 점유율" 분모에 섞이게 했었다(N-2 결함, PLAN-pubg-normalization-2026-09-17
+ * §3). 그중 `Mortar`는 실제로 미공지 판정 화면에 올라가 있었다(N-3).
+ */
 export function isFirearm(weaponKey: string): boolean {
-  return !NON_FIREARM.test(weaponKey);
+  return weaponKind(weaponKey) === "firearm";
 }
 
 /**
@@ -152,7 +157,9 @@ export function aggregatePubgWeapons(
     nHumans += m.nHumans;
     for (const [key, count] of Object.entries(m.weaponPickup)) {
       if (!isFirearm(key)) continue;
-      pickups.set(key, (pickups.get(key) ?? 0) + count);
+      // 정준화 — 스킨 변종(`Duncans_M416` 등)을 베이스 무기 픽업에 합산한다(N-1 결함 수정).
+      const canonical = canonicalWeaponKey(key);
+      pickups.set(canonical, (pickups.get(canonical) ?? 0) + count);
       totalPickups += count;
     }
   }
