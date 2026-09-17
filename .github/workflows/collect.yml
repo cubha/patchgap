@@ -226,7 +226,13 @@ jobs:
         env:
           PATCH_TO: ${{ steps.determine.outputs.to }}
         run: |
-          N=$(node -e "console.log(JSON.parse(require('fs').readFileSync('data/aggregated/${PATCH_TO}/summary.json','utf8')).nMatches)")
+          # PATCH_TO를 JS 문자열 리터럴에 직접 꿰매지 않는다 — workflow_dispatch 수동 입력
+          # (patch/to)에서 유래할 수 있어 작은따옴표 포함 값이 들어오면 리터럴을 탈출해
+          # 이 잡의 시크릿(RIOT_API_KEY 등)·contents:write 권한 컨텍스트에서 임의 코드가
+          # 실행될 수 있다(security-auditor 2026-09-17 지적). process.env로 넘겨 값이
+          # 코드로 해석되지 않게 한다 — 이 파일의 다른 스텝들(Collect matches 등)과 같은
+          # "$VAR" 인자 전달 패턴으로 통일.
+          N=$(node -e "console.log(JSON.parse(require('fs').readFileSync(\`data/aggregated/\${process.env.PATCH_TO}/summary.json\`,'utf8')).nMatches)")
           echo "[sample_guard] patch=${PATCH_TO} nMatches=${N}"
           if [ "$N" -lt 5000 ]; then
             echo "sample_ok=false" >> "$GITHUB_OUTPUT"
@@ -252,9 +258,13 @@ jobs:
         env:
           PATCH_TO: ${{ steps.determine.outputs.to }}
         run: |
+          # PATCH_TO를 JSON 문자열에 수동 이스케이프로 꿰매지 않는다 — 값에 "가 섞이면
+          # 페이로드가 깨진다(security-auditor 2026-09-17 지적, Info). node -e가
+          # JSON.stringify로 만들게 해 이스케이프를 위임한다.
+          BODY=$(PATCH_TO="$PATCH_TO" node -e "console.log(JSON.stringify({content: \`⚠️ patchgap collect: \${process.env.PATCH_TO} 표본 부족(5,000 미만) — 집계 산출물 교체를 보류했습니다. \\\`gh workflow run collect.yml -f patch=\${process.env.PATCH_TO} -f force=true\\\`로 재수집하세요.\`}))")
           curl -sf -X POST "$DISCORD_WEBHOOK_URL" \
             -H "Content-Type: application/json" \
-            -d "{\"content\": \"⚠️ patchgap collect: ${PATCH_TO} 표본 부족(5,000 미만) — 집계 산출물 교체를 보류했습니다. \`gh workflow run collect.yml -f patch=${PATCH_TO} -f force=true\`로 재수집하세요.\"}"
+            -d "$BODY"
         continue-on-error: true
 
       - name: Discord briefing (F6, 웹훅 시크릿이 있을 때만)
