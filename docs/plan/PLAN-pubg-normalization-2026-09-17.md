@@ -124,6 +124,13 @@ attacks ∩ damageHits = 0   ← 네임스페이스 완전 분리 확인
 `weaponKills`·`weaponDamageHits` 소비 지점에서 `weaponKind`가 `firearm`이 아닌 키를 제외.
 provenance 파이썬은 불변.
 
+> **이행 결과(acceptance-critic 지적, 9/17)**: `weaponDamageHits`는 `pubg-accuracy.ts`의
+> `accumulateFirearms`에서 필터된다. `weaponKills`는 **현재 이 저장소 어디서도 소비되지
+> 않는다** — 필터를 적용할 소비 지점 자체가 없다. provenance README가 이미 "현재 아무도
+> 소비하지 않으므로 출하 숫자에는 영향이 없다. 재수집할 때 이식할 것"이라 정직하게
+> 기록해뒀고, 판정 결과에는 영향이 없다(§2-1과 일관 — 어차피 판정 축이 아니다). `weaponKills`를
+> 실제로 소비하는 기능이 생기는 시점에 같은 필터를 적용해야 한다는 뜻으로 남겨둔다.
+
 ### ST-4. §8 반증표를 커밋 코드로 재현 `src/pipeline/aggregate/pubg-accuracy.ts`
 
 - `accuracyByWeapon(matches, patch)` — `damageHits ÷ attacks`를 **정준키로 결합**해 산출.
@@ -171,7 +178,9 @@ provenance 파이썬은 불변.
 
 ## 6. 완료 기준
 
-- [x] 대표 케이스(단위 테스트 19건: 정규화 13 + 분류 6)는 CI에서 미분류 throw를 검증한다.
+- [x] 대표 케이스(단위 테스트 13건: `canonicalWeaponKey` 7 + `weaponKind` 6, 각 `it` 내부는
+      다중 `expect`로 예외 5종·스킨 3종·근접변종 5종·throw 경로를 커버)는 CI에서
+      미분류 throw를 검증한다.
       **7,217건 전량 0-throw 검증은 gitignore된 data/raw를 쓴 로컬 1회 스캔**(재현 스크립트는
       §3에 남겨뒀다) — CI 회귀 대상이 아니다, 다음 세션이 재검증하려면 다시 돌려야 한다.
 - [x] 스킨 변종 3종(`Duncans_M416`·`Lunchmeats_AK47`·`Julies_Kar98k`)이 베이스에 합산됨을
