@@ -116,12 +116,15 @@
   --container-narrow: 1040px;
 }
 
-/* [data-game] 오버라이드 계약 (2026-09-10 확정, 미출하 — 문서화만) —
+/* [data-game] 오버라이드 계약 (2026-09-10 확정 · 2026-09-17 출하) —
    중립 8종(--bg --surface --surface-warm --border --border-soft --fg --fg-2 --muted) +
    워시 2종(--game-wash --game-glow)만 덮어쓴다. 상태 4종(--accent --danger --warn --success)은
-   절대 재정의하지 않는다(HANDOFF §1-2 불변식). 같은 특정도(0,1,0)이므로 :root 뒤에 선언해
-   소스 순서로 승리시킨다. 이번 릴리스는 이 계약만 정의하고 [data-game="pubg"] 램프는
-   출하하지 않는다(HANDOFF §3 경고 — V4 확정 이전 값이라 재도출 전엔 미연결 유지). */
+   절대 재정의하지 않는다(HANDOFF §1-2 불변식 — 판정 색은 게임이 바뀌어도 같은 뜻이어야 한다).
+   선택자는 :root:has([data-game="pubg"]) — 특정도 (0,2,0)으로 [data-palette="v4"](0,1,0)를
+   이긴다(소스 순서에 의존하지 않는다). 실체는 src/styles/tokens.css.
+   PUBG 램프 값은 V4 기준으로 재도출했다: --border만 문서 원안(#3a2f20)에서 #8f6a22로 교체
+   (V4가 --border를 보이는 골드 레일로 승격시킨 뒤라 원안은 레일이 사라진다).
+   근거·실측: docs/plan/PLAN-game-switcher-2026-09-17.md §4-3. */
 ```
 <!-- /design-lint:tokens -->
 
@@ -145,7 +148,7 @@
 | `--warn` | #f59e0b | 표본 부족 | — | ✓ |
 | `--meta` | #c8a355 | (accent 중복값) 메타 라벨 | — | ○ |
 | `--game-wash` | #0a1626 | 히어로 앰비언트 그라디언트 시작색 | — | ✓ (신규) |
-| `--game-glow` | #c8a355 | 게임 테마 글로우 강조 | — | ○ (신규, [data-game] 확장용) |
+| `--game-glow` | #c8a355 | 게임 테마 글로우 강조 | — | ✓ ([data-game="pubg"]에서 #f2a900) |
 | `--glass-chrome` | derived (srgb, bg 35%) | 상단 크롬(헤더) 반투명 표면 — 확정 시안 `.topbar` `rgba(3,13,24,.35)` | — | ✓ (신규 2026-09-12) |
 | `--glass-chrome-2` | derived (srgb, surface-warm 55%) | 필터 바 반투명 표면(시안엔 없는 행 — 헤더와 같은 크롬 대역으로 묶는다) | — | ✓ (신규 2026-09-12) |
 | `--glass-border` | derived (srgb, border-soft 70%) | 반투명 크롬의 하단 hairline — 시안 `.topbar` `rgba(36,44,58,.7)` | — | ✓ (신규 2026-09-12) |
