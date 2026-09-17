@@ -77,21 +77,35 @@ V4는 **골드 프레임은 유지하고 미달분만 상향**했다.
 
 - **저장하지 않는다**(사용자 결정). 진입 시 항상 LoL. 다른 게임은 선택으로만 전환 → localStorage 불필요, **FOUC 문제도 자동 해소**.
 - `[data-theme]`과 직교하므로 나중에 라이트 축을 붙여도 간섭 없다.
-- ~~⚠️ PUBG 중립 램프는 **V4 확정 이전에 잡은 값**이다. 실제로 붙일 때 V4 기준으로 재도출할 것~~
-  → **2026-09-17 연결 + 재도출 완료**. 재측정 결과 텍스트 3종(`--fg --fg-2 --muted`)은 전부 V4(LoL)
-  기준선보다 대비가 높아 위 값 그대로 채택했고, **`--border`만 `#3a2f20` → `#8f6a22`로 바꿨다**:
-  문서값은 V4가 `--border`를 "보이는 골드 레일"(`#8c6b33`, `--panel-rail-from`이 소비)로 승격시키기
-  *전*의 어두운 갈색이라 그대로 쓰면 PUBG에서 패널 레일이 사라진다. PUBG 앰버 계열에서 V4와
-  **같은 비텍스트 대비**(surface-warm 대비 3.27)를 내는 값으로 재도출했다.
-  실측: fg 16.98 / fg-2 12.28 / muted 6.11 (본문 4.5:1 통과) · border 3.27 (비텍스트 3.0:1 통과).
+- 🔴 **위 램프 블록은 폐기값이다(2026-09-17). 되살리지 말 것.**
+  이 값들은 2026-09-10, 즉 PUBG 배경을 **에란겔 항공뷰**로 잡았던 1차안 시절에 나왔다. 그 방향은
+  사용자가 "배틀그라운드 하면 떠오르는 대표 이미지가 아니다"로 반려했고, 2026-09-15 승인 시안
+  (아티팩트 「PUBG 테마 시안」 2차 개정, https://claude.ai/artifact/CXqUtUXTXyfmDHH8gnUMys)이
+  **공식 대표 키아트**(비행기 잔해 앞 생존자 무리)로 배경을 교체하면서 램프도 그 사진에서
+  재추출했다. **출하된 값은 그 시안 §2의 튜닝값 열**이며 실체는 `src/styles/tokens.css`다:
+  `--bg:#0d0a08 --surface:#1a1512 --surface-warm:#2a221c --fg:#ede6df --fg-2:#c7beb4
+  --muted:#8f8478 --border:#57473b --border-soft:#241d19 --game-glow:#c9a06a`.
+  대비 실측(surface 대비): fg 14.64 · fg-2 9.87 · muted 4.95 (본문 4.5:1 통과).
+  ⚠️ **이 문서만 보고 구현하면 틀린다** — 2026-09-17 9차 구현이 정확히 그 실수를 했다(아티팩트를
+  찾지 않고 이 절의 폐기값을 그대로 넣었고, 배경 키아트와 강하 인트로를 통째로 빠뜨렸다).
 - 선택자는 `[data-game="pubg"]`가 아니라 **`:root:has([data-game="pubg"])`** 다 — 라우트별 `<html>`
   속성은 Next 16에서 route group 다중 root layout을 요구해 `<html>`/`<body>`와 공용 Header가 복제된다.
   클라이언트 래퍼(`GameRoot.tsx`)가 본문 최상단에 속성을 달고 `:has()`로 변수를 루트까지 끌어올린다
   (래퍼에만 걸면 `body`의 배경이 LoL로 남아 iOS 오버스크롤에서 색이 어긋난다).
-- `[data-game="pubg"] .art { display:none }`의 실제 대상은 `.art`(시안 클래스명, 구현에 없음)가 아니라
-  **협곡 래스터를 쓰는 레이어 전부**다: `.ambient-wash`·`.ambient-camera`·`.ambient-reveal`
-  (`src/styles/ambient.css` 말미). 남는 `.ambient-glow`는 `--game-glow`를 소비하므로 PUBG 앰버로
-  자동 전환된다.
+- ~~`[data-game="pubg"] .art { display:none }`~~ → **PUBG 아트는 "끄는" 게 아니라 "바꾸는" 것이다**
+  (2026-09-17 정정). 승인 시안이 전역 배경으로 **공식 대표 키아트**를 확정했다 —
+  `public/bg/pubg-key-art.webp`(1920×620, Steam CDN `library_hero.jpg`). 구현은
+  `AmbientBackground.tsx`가 게임별로 **다른 레이어 스택**을 렌더한다: LoL은
+  `.ambient-wash`+`.ambient-camera`+`.ambient-reveal`(협곡 래스터·인트로 영상), PUBG는
+  `.ambient-pubg-art` 한 장(+글로우·스크림·그레인). 같은 스택에 끼워 넣지 않는 이유는 자산 비율이
+  전혀 달라서다(협곡 16:9 vs 키아트 3.1:1).
+- **PUBG 인트로 = 영상 아님.** 시안 §3이 실측으로 확인했다 — `press.krafton.com`은 미디어 계정
+  필요(401) · `pubg.com/media`는 이미지뿐 · `api-assets`에 영상 없음 · 유튜브는 재배포 라이선스
+  불명확. 그래서 **키아트 줌인 CSS 애니메이션**(`@keyframes pubg-descend`, 3.4s, scale 1.55→1.08→1)로
+  대체한다. 새 그래픽을 합성하지 않고 사진 안의 낙하산·잔해가 서서히 드러나게만 한다.
+- 키아트는 개발자 자산이 아니라 **마케팅 자산**이라 `pubg.com/.../content_creation_guideline`이
+  적용된다(비영리 팬 프로젝트 허용, 판매·라이선싱·공식 사칭 금지). 시안 각주 권고대로
+  `permission@krafton.com` 사전 확인 대상이며 문의는 2026-09-16 발송됐다.
 - 컴포넌트는 이미 전부 토큰 참조라 **컴포넌트 코드 수정 없이** 램프 추가만으로 전환된다.
 
 ## 4. 화면별 구현 항목

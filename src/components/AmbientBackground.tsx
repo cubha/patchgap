@@ -13,6 +13,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { gameFromPathname } from "@/lib/game";
 import { laneCameraTransform } from "@/lib/laneCamera";
 import { useAmbient } from "./AmbientContext";
 
@@ -71,7 +72,11 @@ export default function AmbientBackground() {
   const { detailSplashUrl } = useAmbient();
   const reducedMotion = useReducedMotion();
 
+  const game = gameFromPathname(pathname ?? "/");
+  const isPubg = game === "pubg";
   const isHome = pathname === "/";
+  /** PUBG 브리핑 — LoL 홈(`/`)과 같은 자리이며 강하 인트로가 재생되는 유일한 라우트다. */
+  const isPubgHome = pathname === "/pubg/" || pathname === "/pubg";
   const isItemDetail = pathname?.startsWith("/item/") ?? false;
   const showDetailSplash = isItemDetail && detailSplashUrl !== null;
 
@@ -83,6 +88,12 @@ export default function AmbientBackground() {
 
   const introPlaying = useIntroReveal(isHome && !reducedMotion);
   const [introEnded, setIntroEnded] = useState(false);
+
+  // PUBG 강하 인트로 — LoL과 같은 훅을 쓰되 영상이 아니라 CSS 애니메이션이라 `onAnimationEnd`가
+  // 종료를 알린다(승인 시안 §3: 공식 재배포 가능 영상 자산이 없어 키아트 줌인으로 대체).
+  const pubgIntroPlaying = useIntroReveal(isPubgHome && !reducedMotion);
+  const [pubgIntroEnded, setPubgIntroEnded] = useState(false);
+  const pubgDescending = isPubgHome && pubgIntroPlaying && !pubgIntroEnded;
 
   // 마커(바론/드래곤 둥지)는 2026-09-12 /verify-impl 실측으로 **제거**했다.
   // 시안 v5에서 마커가 보였던 것은 그 데모의 리스트가 라인 필터로 짧아지면서 아래 지형이
@@ -96,6 +107,22 @@ export default function AmbientBackground() {
   // **라인 카메라의 어포던스 자체는 마커 없이도 전달된다**: 라인 전환 시 상단 배너 밴드의
   // 픽셀이 22~28% 바뀌는 것을 실측했다(전체↔탑 22.8% / 전체↔원딜 27.2% / 탑↔원딜 28.2%).
   // 자산 public/bg/{baron,drake}.png는 되살릴 때를 위해 남겨둔다(합계 96KB).
+
+  // PUBG는 협곡 스택(워시·카메라·인트로 영상) 대신 키아트 한 장으로 간다 — 자산도 구도도
+  // 다른 사진이라 같은 레이어 구조에 끼워 넣으면 둘 다 망가진다(승인 시안 .hero-map 참고).
+  if (isPubg) {
+    return (
+      <div className="ambient-root" aria-hidden="true">
+        <div
+          className={`ambient-pubg-art${pubgDescending ? " is-descending" : ""}`}
+          onAnimationEnd={() => setPubgIntroEnded(true)}
+        />
+        <div className="ambient-glow" />
+        <div className="ambient-scrim" />
+        <div className="ambient-grain" />
+      </div>
+    );
+  }
 
   return (
     <div className="ambient-root" aria-hidden="true">
