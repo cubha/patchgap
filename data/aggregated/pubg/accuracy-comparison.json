@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "generatedAt": "2026-09-17T06:21:19.883Z",
+    "note": "출하 축 아님 — 반동·ADS 변경을 명중률로 분리하려던 시도의 반증 기록(PLAN-pubg-gate-2026-09-16.md §8). 판정(MatchStatus)에 연결되지 않는다."
+  },
+  "rows": [
+    {
+      "weaponKey": "Item_Weapon_RPD_C",
+      "weaponName": "RPD",
+      "nerfed": true,
+      "before": {
+        "accuracy": 0.10123073808310724,
+        "attacks": 1195299
+      },
+      "after": {
+        "accuracy": 0.09962235381151288,
+        "attacks": 619098
+      },
+      "relChangePct": -1.5888299364901695
+    },
+    {
+      "weaponKey": "Item_Weapon_M249_C",
+      "weaponName": "M249",
+      "nerfed": true,
+      "before": {
+        "accuracy": 0.1074340583603953,
+        "attacks": 684848
+      },
+      "after": {
+        "accuracy": 0.10696532366582354,
+        "attacks": 432514
+      },
+      "relChangePct": -0.4362999050071769
+    },
+    {
+      "weaponKey": "Item_Weapon_MG3_C",
+      "weaponName": "MG3",
+      "nerfed": true,
+      "before": {
+        "accuracy": 0.09281968645873163,
+        "attacks": 73228
+      },
+      "after": {
+        "accuracy": 0.09417596034696406,
+        "attacks": 57297
+      },
+      "relChangePct": 1.4611920595480932
+    },
+    {
+      "weaponKey": "Item_Weapon_AK47_C",
+      "weaponName": "AK47",
+      "nerfed": false,
+      "before": {
+        "accuracy": 0.2510553262022973,
+        "attacks": 258214
+      },
+      "after": {
+        "accuracy": 0.24109461787075923,
+        "attacks": 258355
+      },
+      "relChangePct": -3.967535157374781
+    },
+    {
+      "weaponKey": "Item_Weapon_HK416_C",
+      "weaponName": "M416",
+      "nerfed": false,
+      "before": {
+        "accuracy": 0.22479377841502038,
+        "attacks": 550985
+      },
+      "after": {
+        "accuracy": 0.21468677998521932,
+        "attacks": 575075
+      },
+      "relChangePct": -4.496120177819711
+    }
+  ]
+}

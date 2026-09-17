@@ -9,6 +9,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { MatchStatus } from "@/pipeline/types";
 import type { PubgPatchAggregate } from "@/pipeline/aggregate/pubg-weapons";
+import type { PubgAccuracyStat } from "@/pipeline/aggregate/pubg-accuracy";
 import type { PubgDeltaRow, PubgNoteItem } from "@/pipeline/match/pubg-delta";
 
 const PUBG_DIR = path.resolve(process.cwd(), "data", "aggregated", "pubg");
@@ -28,11 +29,30 @@ export interface PubgDeltasFile {
   rows: PubgDeltaRow[];
 }
 
+export interface PubgAccuracyComparisonRow {
+  weaponKey: string;
+  weaponName: string;
+  nerfed: boolean;
+  before: Pick<PubgAccuracyStat, "accuracy" | "attacks">;
+  after: Pick<PubgAccuracyStat, "accuracy" | "attacks">;
+  relChangePct: number | null;
+}
+
+export interface PubgAccuracyComparisonFile {
+  meta: { generatedAt: string; note: string };
+  rows: PubgAccuracyComparisonRow[];
+}
+
 export interface PubgBundle {
   deltas: PubgDeltasFile;
   before: PubgPatchAggregate;
   after: PubgPatchAggregate;
   notes: PubgNoteItem[];
+  /**
+   * §8 반증표 재현(ST-4) — **출하 축이 아니다**, 없어도 `loadPubg`는 정상 반환한다
+   * (출하 게이트는 무기 획득 점유율 판정 건수만 본다). "버린 축" 섹션에서만 쓰인다.
+   */
+  accuracyComparison: PubgAccuracyComparisonRow[] | null;
 }
 
 function readJson<T>(file: string): T | null {
@@ -55,7 +75,15 @@ export function loadPubg(): PubgBundle | null {
   const verdicts = deltas.rows.filter((row) => isReportable(row.status)).length;
   if (verdicts === 0) return null;
 
-  return { deltas, before, after, notes: notesFile.items };
+  const accuracyFile = readJson<PubgAccuracyComparisonFile>("accuracy-comparison.json");
+
+  return {
+    deltas,
+    before,
+    after,
+    notes: notesFile.items,
+    accuracyComparison: accuracyFile?.rows ?? null,
+  };
 }
 
 /** 화면 상단 "발견" 영역에 올릴 자격이 있는 판정 — 근거가 실제로 선 것만. */

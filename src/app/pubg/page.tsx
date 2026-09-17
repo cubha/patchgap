@@ -45,7 +45,7 @@ export default function PubgPage() {
     );
   }
 
-  const { deltas, before, after, notes } = bundle;
+  const { deltas, before, after, notes, accuracyComparison } = bundle;
   const reportable = deltas.rows.filter((row) => isReportable(row.status));
   const unannounced = reportable.filter((row) => row.status === "unannounced");
   const announced = reportable.filter((row) => row.status !== "unannounced");
@@ -256,6 +256,50 @@ export default function PubgPage() {
               변화가 패치 효과를 압도합니다. 차량 피해 배수는 피해량 합을 수집했으나 1차 출처
               단독이라 판정 축에서 제외했습니다.
             </p>
+
+            {accuracyComparison && accuracyComparison.length > 0 ? (
+              <details className="mt-4 rounded-md border border-border-soft">
+                <summary className="cursor-pointer px-4 py-3 font-mono text-xs font-bold text-muted">
+                  버린 축 재현 — 명중률(hits ÷ attacks), 너프 3종 vs 대조군 2종
+                </summary>
+                <div className="overflow-x-auto border-t border-border-soft">
+                  <table className="w-full border-collapse text-sm" style={{ minWidth: "var(--table-min)" }}>
+                    <thead>
+                      <tr className="border-b border-border text-left">
+                        <th className="py-2 pl-4 pr-3 font-mono text-xs font-bold text-muted">무기</th>
+                        <th className="py-2 pr-3 font-mono text-xs font-bold text-muted">분류</th>
+                        <th className="py-2 pr-3 text-right font-mono text-xs font-bold text-muted">42.3</th>
+                        <th className="py-2 pr-3 text-right font-mono text-xs font-bold text-muted">43.1</th>
+                        <th className="py-2 pr-4 text-right font-mono text-xs font-bold text-muted">변화</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {accuracyComparison.map((row) => (
+                        <tr key={row.weaponKey} className="border-b border-border-soft">
+                          <td className="py-2 pl-4 pr-3 font-display font-bold text-fg">{row.weaponName}</td>
+                          <td className="py-2 pr-3 text-xs text-muted">
+                            {row.nerfed ? "반동 너프" : "대조군(무변경)"}
+                          </td>
+                          <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">
+                            {pct(row.before.accuracy, 2)}
+                          </td>
+                          <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">
+                            {pct(row.after.accuracy, 2)}
+                          </td>
+                          <td className="py-2 pr-4 text-right font-mono text-xs font-bold tabular-nums text-fg">
+                            {row.relChangePct === null ? "—" : signedPct(row.relChangePct / 100)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="px-4 py-3 text-xs leading-relaxed text-muted" style={{ maxWidth: "var(--measure-wide)" }}>
+                  너프당한 쪽이 대조군보다 <strong className="text-fg-2">덜</strong> 움직여야
+                  정상인데 실제로는 방향이 반대입니다 — 이 표가 판정에 쓰이지 않는 이유입니다.
+                </p>
+              </details>
+            ) : null}
           </div>
         </SectionCard>
 
