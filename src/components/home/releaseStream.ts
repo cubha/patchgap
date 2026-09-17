@@ -20,6 +20,7 @@
 
 import type { DeltaRecord, DeltasFile, PatchNoteItem } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
+import { isGapStatus } from "./logic";
 
 export interface MatchedStreamGroup {
   kind: "matched";
@@ -30,6 +31,7 @@ export interface MatchedStreamGroup {
 export interface UnannouncedStreamGroup {
   kind: "unannounced";
   entity: string;
+  /** `unannounced` **와** `indirect-effect` 행이 함께 들어온다(2026-09-17 B2 통합). */
   deltas: DeltaRecord[];
 }
 
@@ -65,15 +67,21 @@ function maxAbsDelta(records: DeltaRecord[]): number {
 }
 
 /**
- * `status==='unannounced'` 델타 행을 `entityType:entityName`으로 묶는다. 파이프라인의
- * `status`가 이미 "짝 없음+유의"를 보장하므로(MatchStatus 주석 참고) 여기서 노트와의 재매칭은
- * 하지 않는다 — `matchedNoteIds`가 비어 있다는 전제를 그대로 신뢰한다.
+ * Gap 상태(`unannounced` + `indirect-effect`) 델타 행을 `entityType:entityName`으로 묶는다.
+ * 파이프라인의 `status`가 이미 "짝 없음+유의"를 보장하므로(MatchStatus 주석 참고) 여기서
+ * 노트와의 재매칭은 하지 않는다 — `matchedNoteIds`가 비어 있다는 전제를 그대로 신뢰한다.
+ *
+ * **2026-09-17(B2) 계약 변경**: 이전엔 `unannounced`만 받았고 `indirect-effect`는 홈 하단
+ * 전용 섹션(`IndirectEffectPanel`)이 따로 그렸다. 사용자가 "동일한 목적으로 보이는데 다른
+ * 영역에 별도로 표기되니 혼돈됨"을 지적해 한 곳으로 합쳤다 — 두 상태는 배타적이지만
+ * `indirect-effect`가 `unannounced`의 부분집합(재분류 결과)이라 원래 같은 질문의 답이다.
+ * 소속 판정은 `logic.isGapStatus` 한 곳만 본다(타일·배지·목록 정합).
  */
 function groupUnannouncedDeltas(rows: DeltaRecord[]): UnannouncedStreamGroup[] {
   const order: string[] = [];
   const byEntity = new Map<string, DeltaRecord[]>();
   for (const row of rows) {
-    if (row.status !== "unannounced") continue;
+    if (!isGapStatus(row.status)) continue;
     const key = `${row.entityType}:${row.entityName}`;
     const group = byEntity.get(key);
     if (group) {

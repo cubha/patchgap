@@ -70,7 +70,10 @@ describe("ReleaseNoteStream — 빈 상태", () => {
     );
     expect(gapTab).not.toBeUndefined();
     fireEvent.click(gapTab!);
-    expect(container.textContent).toContain("이 라인에서는 미공지 변화가 없습니다");
+    // 문구 변경(2026-09-17, B2 통합): Gap 탭이 `unannounced`뿐 아니라 `indirect-effect`까지
+    // 담게 되어 "미공지 변화" → "노트에 없는 변화"로 넓혔다. 테스트를 통과시키려고 고친 게
+    // 아니라 **명세가 바뀌어서** 고친 것이다(PLAN-gap-display-unify §3 판별 결과).
+    expect(container.textContent).toContain("이 라인에서는 노트에 없는 변화가 없습니다");
     expect(container.querySelectorAll('button[role="tab"]')).toHaveLength(2);
   });
 

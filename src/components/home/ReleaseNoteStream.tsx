@@ -37,6 +37,8 @@ import type { DeltaRecord, LanePosition } from "@/pipeline/types";
 import { useAmbient } from "@/components/AmbientContext";
 import { panelSurfaceClass } from "@/lib/panelSurface";
 import ReleaseNoteRow from "./ReleaseNoteRow";
+import type { CosmeticSkinItem } from "./CosmeticSkinPreview";
+import type { IndirectEffectEntry } from "./indirectEffects";
 import type { ReleaseStreamGroup } from "./releaseStream";
 import type { StreamEntityIcon } from "./releaseStreamEntity";
 
@@ -77,6 +79,10 @@ export interface ReleaseNoteStreamProps {
    * 절 참고) — 새 집계를 만들지 않는다. */
   contentCount: number;
   gapCount: number;
+  /** deltaId → 인과 체인(B2, 2026-09-17) — `indirect-effect` Gap 행이 원인을 그릴 때 쓴다. */
+  causes?: Record<string, IndirectEffectEntry>;
+  /** note.id → 치장 스킨 미리보기(ST-B6, 2026-09-18). 자산 존재가 확인된 것만. */
+  skinPreviews?: Record<string, CosmeticSkinItem[]>;
 }
 
 function groupKey(group: ReleaseStreamGroup): string {
@@ -85,7 +91,7 @@ function groupKey(group: ReleaseStreamGroup): string {
 
 const EMPTY_MESSAGE: Record<StreamTab, string> = {
   content: "이 라인에서는 관측된 변화가 없습니다",
-  gap: "이 라인에서는 미공지 변화가 없습니다",
+  gap: "이 라인에서는 노트에 없는 변화가 없습니다",
 };
 
 export default function ReleaseNoteStream({
@@ -96,6 +102,8 @@ export default function ReleaseNoteStream({
   qAlpha,
   contentCount,
   gapCount,
+  causes,
+  skinPreviews,
 }: ReleaseNoteStreamProps) {
   const { selectedLane } = useAmbient();
   const [tab, setTab] = useState<StreamTab>("content");
@@ -158,6 +166,8 @@ export default function ReleaseNoteStream({
               noteDeltas={noteDeltas}
               patch={patch}
               qAlpha={qAlpha}
+              causes={causes}
+              skinPreviews={skinPreviews}
             />
           ))}
         </ul>

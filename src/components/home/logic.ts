@@ -10,6 +10,7 @@ import { METRIC_KIND, fmtDeltaInt, fmtDeltaSec, fmtInt, fmtPct, fmtPp, fmtSec, m
 import { countRelevantNoteEntities as countRelevantNoteEntitiesInFile } from "@/pipeline/shared/notes-count";
 import { isSignificantDelta } from "@/pipeline/shared/significance";
 import { FDR_ALPHA } from "@/pipeline/aggregate/stats";
+import { isGapStatus } from "@/pipeline/shared/status-order";
 
 /** 패치노트 항목(section champion|item)을 "entity" 단위로 묶어 몇 개의 서로 다른 엔티티가
  * 언급됐는지 센다 — ST-08 `matchedNoteIds`가 같은 엔티티의 노트 여러 줄을 한 묶음으로 취급하는
@@ -39,6 +40,13 @@ export function countRelevantNoteEntities(notes: NotesFile | null): number {
  */
 export { isSignificantDelta };
 
+/**
+ * Gap 소속 판정 — 실제 정의는 `pipeline/shared/status-order.ts`에 있다(서버·클라이언트가
+ * 공유하는 단일 소스). 여기서는 기존 호출부(`page.tsx`·`releaseStream.ts`)의 import 경로를
+ * 보존하기 위해 재export만 한다 — `isSignificantDelta`를 이 파일이 재export하는 것과 같은 관례다.
+ */
+export { isGapStatus };
+
 /** 요약 카드 헤드라인 수치(+스탯 타일이 그대로 이 수치를 쓴다 — 코디네이터 정정, 2026-09-05:
  * 타일 "공지된 변화"는 별도 델타 집계가 아니라 `noteEntityCount`(N)를 그대로 재사용한다).
  *
@@ -56,7 +64,21 @@ export interface HeadlineStats {
   noteItemCount: number;
   /** "통계는 M개 변화를 말합니다" + 스탯 타일 "유의 변화" — `isSignificantDelta` 통과 건수. */
   statCount: number;
-  /** 스탯 타일 "미공지" — `status==="unannounced"` 건수. */
+  /**
+   * 스탯 타일·Gap 탭 배지 "미공지 Gap" — **`unannounced` + `indirect-effect`** 건수.
+   *
+   * 2026-09-17 계약 변경(사용자 지적 B2: "미공지 Gap 탭의 데이터와 노트에 없는 파급효과/간접
+   * 영향 섹션의 데이터가 동일한 목적으로 보이는데 다른영역에 별도로 표기되니 혼돈됨"):
+   * 두 상태는 **배타적이지만 같은 뿌리**다 — `verdict.assignStatus`가 "짝 없음 + 유의 +
+   * 효과크기 바닥 통과"를 `unannounced`로 확정한 뒤, `reclassifyIndirectEffects`가 **그
+   * `unannounced`만 대상으로** 원인이 신뢰도 게이트를 넘으면 `indirect-effect`로 재분류한다.
+   * 즉 `indirect-effect` ⊂ (원래 `unannounced`)이고, 차이는 **원인이 규명됐는가** 하나뿐이다.
+   * 그래서 화면에서도 한 곳(Gap 탭)에 모으고 그 안에서 규명 여부로 나눈다.
+   *
+   * ⚠️ 이 값은 **히어로 타일 · Gap 탭 배지 · 그리고 그 탭이 거르는 목록**이 공유한다.
+   * 셋이 어긋나면 화면이 스스로를 반박한다(PLAN-home-tab-split-intro-fix-2026-09-14.md
+   * "카운트 배지 소스").
+   */
   unannouncedCount: number;
 }
 
@@ -76,7 +98,7 @@ export function computeHeadline(
   let unannouncedCount = 0;
   for (const row of rows) {
     if (isSignificantDelta(row, qAlpha)) statCount++;
-    if (row.status === "unannounced") unannouncedCount++;
+    if (isGapStatus(row.status)) unannouncedCount++;
   }
   return { noteEntityCount, noteItemCount, statCount, unannouncedCount };
 }
@@ -218,21 +240,60 @@ export function indexNotesById(notes: NotesFile | null): Record<string, PatchNot
   return map;
 }
 
-/** 추정 원인 1줄 표시 모드. "verified"는 accent 링크(`/item/{delta.id}/`), "unverified"는
- * muted 텍스트(있으면 후보 텍스트 + " — 근거 미확인", 없으면 "근거 미확인" 단독) — 프로토타입
- * `01-briefing-home.html`의 `.delta-cause` 5개 행 표기를 그대로 따른다(candidateNoteId 자체는
- * 검증 전까지 링크로 노출하지 않는다는 CLAUDE.md 원칙과 별개로, 여기 "링크"는 candidateNoteId가
- * 아니라 이 델타 자신의 항목 상세로 가는 "근거 보기" 성격의 링크다). */
-export interface CauseDisplay {
-  mode: "verified" | "unverified";
+// **`resolveCause`/`CauseDisplay` 삭제(2026-09-17)** — `resolveGapCause`가 그 자리를 대신한다.
+// 프로덕션 소비자는 `ReleaseNoteRow` 하나였고, 그 문구가 "근거 미확인" 한 마디로 **세 가지 다른
+// 상태**(호출 안 됨 / 검토했으나 후보 없음 / 후보 미검증)를 덮고 있던 것이 이번 지적의 핵심이라
+// 함수를 고치는 대신 계약을 바꿨다. 남겨 두면 다음 사람이 "둘 중 뭘 써야 하지"를 묻게 된다 —
+// 이 세션에서 `selectIndirectEffects`를 지운 것과 같은 기준이다.
+// (프로토타입 `01-briefing-home.html`의 `.delta-cause` 표기 계보는 `resolveGapCause` 주석이 승계.)
+
+/**
+ * Gap 행의 원인 표시 — **네 상태를 구분한다**(사용자 지적 B5, 2026-09-17: "미공지 Gap의
+ * 데이터가 대부분 근거 미확인으로 표시됨").
+ *
+ * 왜 네 갈래인가(실측, 26.17→26.18 미공지 47건):
+ *
+ * | 실제 상태 | 건수 | 이전 표기 | 지금 표기 |
+ * |---|---|---|---|
+ * | LLM 호출 자체가 안 됨(세션 상한 밖) | 14 | "근거 미확인" | **원인 미검토** |
+ * | LLM이 검토했고 후보가 없음 | 22 | "근거 미확인" | **설명 후보 없음(검토 완료)** |
+ * | 후보 있으나 미검증 | 0 | "… — 근거 미확인" | **후보 미검증** |
+ * | 검증된 후보 있음 | 5~11 | 원인 문장 | **추정 원인** |
+ *
+ * **이전 표기의 결함**: 위 1·2행이 같은 문구였다. 둘은 전혀 다르다 — 앞은 우리 파이프라인이
+ * 덜 돈 것이고, 뒤는 **정직한 관측 결과**다(미공지 상위는 대부분 밴률인데, 밴률 이동은
+ * 메타·인기도 기인이라 패치노트 원인이 없는 것이 정상이다). 둘을 같은 말로 부르면 시스템이
+ * 고장난 것처럼 보이고, 실제로 사용자가 그렇게 읽었다.
+ *
+ * 판별 근거는 `DeltaRecord.llm`이다: 필드 자체가 없으면 대상이 아니었고(미검토),
+ * `skipped:true`면 예산 초과, `skipped:false`인데 causes가 비면 검토 후 후보 없음.
+ *
+ * 표기 계보: 프로토타입 `01-briefing-home.html`의 `.delta-cause` 5개 행. 검증된 것만 본문색,
+ * 나머지는 회색이라는 규칙은 그대로 승계한다(무근거 문장은 회색).
+ */
+export type GapCauseMode = "verified" | "candidate" | "none" | "unreviewed";
+
+export interface GapCauseDisplay {
+  mode: GapCauseMode;
   text: string;
 }
 
-export function resolveCause(record: DeltaRecord): CauseDisplay {
+export function resolveGapCause(record: DeltaRecord): GapCauseDisplay {
   const cause: LlmCause | undefined = record.causes[0];
-  if (!cause) return { mode: "unverified", text: "근거 미확인" };
-  if (cause.verified) return { mode: "verified", text: cause.text };
-  return { mode: "unverified", text: `${cause.text} — 근거 미확인` };
+  if (cause) {
+    if (cause.verified) return { mode: "verified", text: cause.text };
+    return { mode: "candidate", text: `${cause.text} — 후보 미검증` };
+  }
+  if (!record.llm) {
+    return { mode: "unreviewed", text: "원인 미검토 — 이번 실행의 분석 상한에 들지 않았습니다" };
+  }
+  if (record.llm.skipped) {
+    return {
+      mode: "unreviewed",
+      text: `원인 미검토 — ${record.llm.reason === "call-budget-exceeded" ? "호출 예산 소진" : "분석 건너뜀"}`,
+    };
+  }
+  return { mode: "none", text: "설명 후보 없음 — 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다" };
 }
 
 /** entityType이 champion/item이 아닌 행(objective·lane·summary)의 EntityIcon 폴백 글자 —

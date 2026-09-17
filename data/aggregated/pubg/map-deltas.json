@@ -1,0 +1,140 @@
+{
+  "meta": {
+    "game": "pubg",
+    "from": "42.3",
+    "to": "43.1",
+    "generatedAt": "2026-09-17T12:53:51.726Z",
+    "n": 5,
+    "note": "기술 통계 전용 — 43.1 패치노트에 맵 항목이 없어 판정(MatchStatus)을 만들지 않는다.",
+    "onlyBefore": [
+      "DihorOtok_Main",
+      "Kiki_Main"
+    ],
+    "onlyAfter": [
+      "Desert_Main",
+      "Chimera_Main"
+    ]
+  },
+  "rows": [
+    {
+      "mapKey": "Tiger_Main",
+      "matchShare": {
+        "before": 0.34110787172011664,
+        "after": 0.315365551425031
+      },
+      "matchShareDelta": -0.025742320295085663,
+      "avgDurationSec": {
+        "before": 1735.7111111111112,
+        "after": 1734.7072691552062
+      },
+      "botShare": {
+        "before": 0.2692188841201717,
+        "after": 0.23695216951773077
+      },
+      "pickupsPerMatch": {
+        "before": 903.2615384615384,
+        "after": 784.3045186640471
+      },
+      "n": {
+        "before": 585,
+        "after": 509
+      }
+    },
+    {
+      "mapKey": "Baltic_Main",
+      "matchShare": {
+        "before": 0.3032069970845481,
+        "after": 0.27633209417596033
+      },
+      "matchShareDelta": -0.026874902908587794,
+      "avgDurationSec": {
+        "before": 1768.5634615384615,
+        "after": 1831.3004484304934
+      },
+      "botShare": {
+        "before": 0.2703506333024405,
+        "after": 0.26818881942556855
+      },
+      "pickupsPerMatch": {
+        "before": 291.1942307692308,
+        "after": 290.1793721973094
+      },
+      "n": {
+        "before": 520,
+        "after": 446
+      }
+    },
+    {
+      "mapKey": "Savage_Main",
+      "matchShare": {
+        "before": 0.1673469387755102,
+        "after": 0.11462205700123916
+      },
+      "matchShareDelta": -0.05272488177427105,
+      "avgDurationSec": {
+        "before": 1899.547038327526,
+        "after": 1862.4378378378378
+      },
+      "botShare": {
+        "before": 0.3567782982591065,
+        "after": 0.27694741435740783
+      },
+      "pickupsPerMatch": {
+        "before": 231.38675958188153,
+        "after": 254.63783783783785
+      },
+      "n": {
+        "before": 287,
+        "after": 185
+      }
+    },
+    {
+      "mapKey": "Summerland_Main",
+      "matchShare": {
+        "before": 0.0629737609329446,
+        "after": 0.0644361833952912
+      },
+      "matchShareDelta": 0.0014624224623465965,
+      "avgDurationSec": {
+        "before": 1677,
+        "after": 1271.9423076923076
+      },
+      "botShare": {
+        "before": 0.3015411456818843,
+        "after": 0.3956548347613219
+      },
+      "pickupsPerMatch": {
+        "before": 155.6851851851852,
+        "after": 125.61538461538461
+      },
+      "n": {
+        "before": 108,
+        "after": 104
+      }
+    },
+    {
+      "mapKey": "Neon_Main",
+      "matchShare": {
+        "before": 0.013994169096209912,
+        "after": 0.046468401486988845
+      },
+      "matchShareDelta": 0.03247423239077893,
+      "avgDurationSec": {
+        "before": 2391.4583333333335,
+        "after": 1991.7333333333333
+      },
+      "botShare": {
+        "before": 0.6282963583089158,
+        "after": 0.5327115436604488
+      },
+      "pickupsPerMatch": {
+        "before": 152.20833333333334,
+        "after": 177.88
+      },
+      "n": {
+        "before": 24,
+        "after": 75
+      }
+    }
+  ]
+}

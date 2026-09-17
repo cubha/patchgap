@@ -50,9 +50,15 @@ on:
         required: false
         type: string
       llm_max:
+        # 50 → 120 (2026-09-17): 실측 후보가 113건(미공지 47 + 간접 2 + 공지-불일치 64)인데
+        # 상한이 50이라 **미공지 14건이 LLM을 아예 거치지 못했다**. 그 행들은 화면에서
+        # "근거 미확인"으로 보였지만 실제로는 "검토하지 않음"이었다 — 사용자가 "미공지 Gap의
+        # 데이터가 대부분 근거 미확인"이라고 읽은 원인의 한 축이다(나머지 축은 문구였다).
+        # 캐시 보존과 함께 가야 의미가 있다: 캐시가 살아 있으면 다음 실행의 실제 호출은
+        # 새 델타에만 든다.
         description: "LLM 2단 매칭 세션 상한(run-match --llm-max)"
         required: false
-        default: "50"
+        default: "120"
         type: string
       force:
         description: "true면 data/aggregated/{patch}/summary.json이 이미 있어도 재실행한다(재수집·재집계 강제)"
@@ -181,6 +187,22 @@ jobs:
           restore-keys: |
             patchgap-raw-${{ steps.determine.outputs.patch }}-
 
+      - name: Restore data/cache/llm (LLM 2단 파일 캐시)
+        # **없으면 CI가 매 실행 콜드캐시로 돈다**(2026-09-17 실측): 26.17→26.18 델타의
+        # `meta.llm`이 `calls:50, cacheHits:0`인데 그 실행이 남긴 캐시 파일은 0건이었다 —
+        # 즉 매 실행이 같은 델타에 예산을 다시 쓰고, 그 결과를 커밋 없이 버렸다. 실제 피해는
+        # 예산 낭비만이 아니다: 같은 입력에 대해 low-confidence 후보가 재현되지 않아
+        # (실측 6건) 같은 델타의 "추정 원인"이 실행마다 나타났다 사라졌다 한다.
+        # `data/cache/`는 gitignore라 저장소로는 보존되지 않으므로 여기서 보존해야 한다.
+        if: steps.determine.outputs.should_run == 'true'
+        uses: actions/cache@v4
+        with:
+          path: data/cache/llm
+          key: patchgap-llm-${{ steps.determine.outputs.to }}-${{ github.run_id }}
+          restore-keys: |
+            patchgap-llm-${{ steps.determine.outputs.to }}-
+            patchgap-llm-
+
       - name: Collect matches (F1)
         if: steps.determine.outputs.should_run == 'true'
         env:
@@ -246,7 +268,7 @@ jobs:
         env:
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
-          LLM_MAX: ${{ github.event.inputs.llm_max || '50' }}
+          LLM_MAX: ${{ github.event.inputs.llm_max || '120' }}
         run: |
           npx tsx scripts/run-match.ts \
             --from "$PATCH_FROM" \

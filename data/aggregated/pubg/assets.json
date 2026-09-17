@@ -1,0 +1,102 @@
+{
+  "generatedAt": "2026-09-17T12:54:37.247Z",
+  "source": "https://github.com/pubg/api-assets (developer.pubg.com/tos — 개발자 자산)",
+  "weapons": [
+    "Item_Weapon_ACE32_C",
+    "Item_Weapon_AK47_C",
+    "Item_Weapon_AUG_C",
+    "Item_Weapon_AWM_C",
+    "Item_Weapon_Berreta686_C",
+    "Item_Weapon_BerylM762_C",
+    "Item_Weapon_Crossbow_C",
+    "Item_Weapon_DP12_C",
+    "Item_Weapon_Dragunov_C",
+    "Item_Weapon_FAMASG2_C",
+    "Item_Weapon_FNFal_C",
+    "Item_Weapon_Groza_C",
+    "Item_Weapon_HK416_C",
+    "Item_Weapon_K2_C",
+    "Item_Weapon_Kar98k_C",
+    "Item_Weapon_L6_C",
+    "Item_Weapon_M16A4_C",
+    "Item_Weapon_M249_C",
+    "Item_Weapon_M24_C",
+    "Item_Weapon_MG3_C",
+    "Item_Weapon_MP5K_C",
+    "Item_Weapon_Mini14_C",
+    "Item_Weapon_Mk12_C",
+    "Item_Weapon_Mk14_C",
+    "Item_Weapon_Mk47Mutant_C",
+    "Item_Weapon_P90_C",
+    "Item_Weapon_PanzerFaust100M_C",
+    "Item_Weapon_QBZ95_C",
+    "Item_Weapon_SCAR-L_C",
+    "Item_Weapon_SKS_C",
+    "Item_Weapon_Saiga12_C",
+    "Item_Weapon_Thompson_C",
+    "Item_Weapon_UMP_C",
+    "Item_Weapon_UZI_C",
+    "Item_Weapon_VSS_C",
+    "Item_Weapon_Vector_C",
+    "Item_Weapon_Win1894_C",
+    "Item_Weapon_Winchester_C"
+  ],
+  "maps": [
+    "Erangel",
+    "Paramo",
+    "Miramar",
+    "Vikendi",
+    "Deston",
+    "Rondo",
+    "Sanhok",
+    "Karakin",
+    "Taego"
+  ],
+  "missing": [
+    {
+      "kind": "weapon",
+      "key": "Item_Weapon_DesertEagle_C",
+      "status": 404
+    },
+    {
+      "kind": "weapon",
+      "key": "Item_Weapon_G18_C",
+      "status": 404
+    },
+    {
+      "kind": "weapon",
+      "key": "Item_Weapon_JS9_C",
+      "status": 404
+    },
+    {
+      "kind": "weapon",
+      "key": "Item_Weapon_M79_C",
+      "status": 404
+    },
+    {
+      "kind": "weapon",
+      "key": "Item_Weapon_M9_C",
+      "status": 404
+    },
+    {
+      "kind": "weapon",
+      "key": "Item_Weapon_NagantM1895_C",
+      "status": 404
+    },
+    {
+      "kind": "weapon",
+      "key": "Item_Weapon_RPD_C",
+      "status": 404
+    },
+    {
+      "kind": "weapon",
+      "key": "Item_Weapon_Sawnoff_C",
+      "status": 404
+    },
+    {
+      "kind": "weapon",
+      "key": "Item_Weapon_vz61Skorpion_C",
+      "status": 404
+    }
+  ]
+}

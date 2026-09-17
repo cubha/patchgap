@@ -13,13 +13,13 @@ import {
   countRelevantNoteEntities,
   entityFallbackLabel,
   excludeObservation,
+  resolveGapCause,
   formatMetricValue,
   formatNotePreviewText,
   formatObservedSummary,
   indexNotesById,
   isSignificantDelta,
   metricKind,
-  resolveCause,
   selectAnnouncedPreview,
   selectTopUnannounced,
 } from "../logic";
@@ -336,29 +336,6 @@ describe("indexNotesById", () => {
   });
 });
 
-describe("resolveCause", () => {
-  function cause(overrides: Partial<LlmCause>): LlmCause {
-    return { text: "후보 원인", candidateNoteId: null, verified: false, confidence: "low", ...overrides };
-  }
-
-  it("causes가 비어있으면 '근거 미확인' 단독", () => {
-    expect(resolveCause(delta({ causes: [] }))).toEqual({ mode: "unverified", text: "근거 미확인" });
-  });
-
-  it("검증된 원인은 accent 링크 텍스트 그대로", () => {
-    expect(resolveCause(delta({ causes: [cause({ verified: true, text: "나서스 하향 → 대체 픽" })] }))).toEqual({
-      mode: "verified",
-      text: "나서스 하향 → 대체 픽",
-    });
-  });
-
-  it("미검증 원인은 텍스트 + ' — 근거 미확인' 접미", () => {
-    expect(resolveCause(delta({ causes: [cause({ verified: false, text: "폭풍갈퀴 변경" })] }))).toEqual({
-      mode: "unverified",
-      text: "폭풍갈퀴 변경 — 근거 미확인",
-    });
-  });
-});
 
 describe("entityFallbackLabel", () => {
   it("objective 4종은 한 글자 라벨", () => {
@@ -395,5 +372,57 @@ describe("excludeObservation", () => {
     const ban = delta({ id: "champion:Camille:banRate" });
     const other = delta({ id: "champion:Other:banRate" });
     expect(excludeObservation([ban], other)).toEqual([ban]);
+  });
+});
+
+// ── resolveGapCause (2026-09-17, B5) ─────────────────────────────────────────────
+// 이 함수의 존재 이유는 **네 상태를 한 문구로 뭉개지 않는 것**이다. 실측에서 미공지 47건 중
+// 14건이 "호출 자체가 없었음"인데 22건의 "검토했으나 후보 없음"과 같은 말로 표시됐고,
+// 사용자는 그것을 시스템 고장으로 읽었다. 그래서 테스트도 네 갈래를 각각 고정한다.
+function llmCause(over: Partial<LlmCause> = {}): LlmCause {
+  return { text: "폭풍갈퀴 변경의 파급", candidateNoteId: "note:x", verified: true, confidence: "medium", ...over };
+}
+
+describe("resolveGapCause", () => {
+  it("검증된 후보가 있으면 원인 문장 그대로(verified)", () => {
+    expect(resolveGapCause(delta({ causes: [llmCause()] }))).toEqual({
+      mode: "verified",
+      text: "폭풍갈퀴 변경의 파급",
+    });
+  });
+
+  it("후보가 검증에 실패하면 문장은 살리되 미검증임을 밝힌다", () => {
+    const result = resolveGapCause(delta({ causes: [llmCause({ verified: false })] }));
+    expect(result.mode).toBe("candidate");
+    expect(result.text).toContain("후보 미검증");
+  });
+
+  it("llm 필드 자체가 없으면 '미검토' — 후보가 없다고 말하지 않는다", () => {
+    const result = resolveGapCause(delta({ causes: [] }));
+    expect(result.mode).toBe("unreviewed");
+    expect(result.text).toContain("원인 미검토");
+  });
+
+  it("예산 소진으로 건너뛴 것도 '미검토'이며 사유를 말한다", () => {
+    const result = resolveGapCause(
+      delta({ causes: [], llm: { skipped: true, reason: "call-budget-exceeded" } })
+    );
+    expect(result.mode).toBe("unreviewed");
+    expect(result.text).toContain("호출 예산 소진");
+  });
+
+  it("검토했고 후보가 없으면 '설명 후보 없음' — 이것이 미검토와 구분되는 핵심", () => {
+    const result = resolveGapCause(
+      delta({ causes: [], llm: { skipped: false, summary: "설명할 조항을 찾지 못했습니다" } })
+    );
+    expect(result.mode).toBe("none");
+    expect(result.text).toContain("설명 후보 없음");
+  });
+
+  it("미검토와 후보없음은 절대 같은 문구가 아니다(회귀 고정)", () => {
+    const unreviewed = resolveGapCause(delta({ causes: [] }));
+    const none = resolveGapCause(delta({ causes: [], llm: { skipped: false } }));
+    expect(unreviewed.text).not.toBe(none.text);
+    expect(unreviewed.mode).not.toBe(none.mode);
   });
 });

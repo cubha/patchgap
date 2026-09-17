@@ -10,6 +10,8 @@ import path from "node:path";
 import type { MatchStatus } from "@/pipeline/types";
 import type { PubgPatchAggregate } from "@/pipeline/aggregate/pubg-weapons";
 import type { PubgAccuracyStat } from "@/pipeline/aggregate/pubg-accuracy";
+import type { PubgMapAggregate, PubgMapDeltaRow } from "@/pipeline/aggregate/pubg-maps";
+import type { PubgAssetManifest } from "@/pipeline/pubg/asset-path";
 import type { PubgDeltaRow, PubgNoteItem } from "@/pipeline/match/pubg-delta";
 
 const PUBG_DIR = path.resolve(process.cwd(), "data", "aggregated", "pubg");
@@ -84,6 +86,52 @@ export function loadPubg(): PubgBundle | null {
     notes: notesFile.items,
     accuracyComparison: accuracyFile?.rows ?? null,
   };
+}
+
+export interface PubgMapDeltasFile {
+  meta: {
+    game: "pubg";
+    from: string;
+    to: string;
+    generatedAt: string;
+    n: number;
+    note: string;
+    /** 한쪽 구간에만 표본이 잡힌 맵 — 비교행을 만들지 않은 사실을 숨기지 않는다. */
+    onlyBefore: string[];
+    onlyAfter: string[];
+  };
+  rows: PubgMapDeltaRow[];
+}
+
+export interface PubgMapBundle {
+  before: PubgMapAggregate;
+  after: PubgMapAggregate;
+  deltas: PubgMapDeltasFile;
+}
+
+/**
+ * 맵 축(2026-09-17, A4) — **무기 축과 독립적으로 없을 수 있다**. 맵 집계는 판정을 만들지
+ * 않으므로 출하 게이트(`loadPubg`의 판정 건수 검사)에 참여하지 않는다. 없으면 맵 상세 라우트가
+ * 0개 생성될 뿐이고 나머지 화면은 그대로 산다.
+ */
+export function loadPubgMaps(): PubgMapBundle | null {
+  const before = readJson<PubgMapAggregate>("maps-42.3.json");
+  const after = readJson<PubgMapAggregate>("maps-43.1.json");
+  const deltas = readJson<PubgMapDeltasFile>("map-deltas.json");
+  if (!before || !after || !deltas) return null;
+  return { before, after, deltas };
+}
+
+/**
+ * 자산 매니페스트 — `scripts/run-pubg-assets.ts` 산출물. 없으면 **자산이 하나도 없다고 본다**
+ * (있다고 가정하고 깨진 `<img>`를 내보내는 것보다 폴백이 정직하다).
+ *
+ * 실측(2026-09-17): 무기 47종 중 38종만 공식 렌더가 존재한다 — RPD·권총류·JS9·M79는
+ * `pubg/api-assets`에 아예 없다. 하필 RPD는 이 패치의 대표 판정 대상이라, 폴백은 예외 처리가
+ * 아니라 **정상 경로**다.
+ */
+export function loadPubgAssets(): PubgAssetManifest | null {
+  return readJson<PubgAssetManifest>("assets.json");
 }
 
 /** 화면 상단 "발견" 영역에 올릴 자격이 있는 판정 — 근거가 실제로 선 것만. */

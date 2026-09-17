@@ -30,3 +30,23 @@ export const STATUS_SORT_PRIORITY: Record<MatchStatus, number> = {
   "insufficient-sample": 5,
   "no-change": 6,
 };
+
+/**
+ * "노트에 없는데 움직였다"에 해당하는 상태 — **Gap 소속 판정의 단일 소스**.
+ *
+ * 왜 이 파일인가: 이 술어를 쓰는 곳이 서버(홈 집계·스트림 그룹핑)와 클라이언트(대조표 필터)
+ * 양쪽에 걸쳐 있다. `status-order.ts`는 이미 그 두 세계가 공유하는 유일한 상태 모듈이고
+ * (파일 헤더: "fs 등 Node 전용 의존 없음 — 클라이언트 번들에도 실린다"), 그래서 여기 둔다.
+ *
+ * 왜 한 곳이어야 하는가(2026-09-17 B2): 히어로 타일·Gap 탭 배지·스트림 목록·대조표 통합
+ * 필터가 **같은 집합**을 가리켜야 화면이 스스로를 반박하지 않는다. 조건을 두 곳에 적어 두면
+ * 한쪽만 고쳤을 때 조용히 갈라지고, 그 어긋남은 숫자가 다르게 보일 때까지 드러나지 않는다.
+ * (실제로 이번 라운드에서 타일만 49로 고치고 링크를 47짜리 화면에 두는 어긋남이 한 번 났다.)
+ *
+ * `indirect-effect`가 여기 포함되는 근거: 그것은 `unannounced`를 재분류한 결과라 두 상태는
+ * 배타적이면서 부분집합 관계이고, 차이는 "원인이 규명됐는가" 하나뿐이다
+ * (`docs/plan/PLAN-gap-display-unify-2026-09-17.md` §3 판별).
+ */
+export function isGapStatus(status: MatchStatus): boolean {
+  return status === "unannounced" || status === "indirect-effect";
+}

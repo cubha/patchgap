@@ -1,0 +1,315 @@
+{
+  "patch": "42.3",
+  "label": "42.3 (9/4~9/8)",
+  "nMatches": 1715,
+  "maps": [
+    {
+      "mapKey": "Tiger_Main",
+      "nMatches": 585,
+      "matchShare": 0.34110787172011664,
+      "matchShareCi": [
+        0.3190476364012899,
+        0.36387835282308073
+      ],
+      "avgDurationSec": 1735.7111111111112,
+      "botShare": 0.2692188841201717,
+      "pickupsPerMatch": 903.2615384615384,
+      "topWeapons": [
+        {
+          "weaponKey": "Item_Weapon_AK47_C",
+          "weaponName": "AK47",
+          "pickups": 38631,
+          "share": 0.07310827996548122
+        },
+        {
+          "weaponKey": "Item_Weapon_M9_C",
+          "weaponName": "M9",
+          "pickups": 24519,
+          "share": 0.04640164418403961
+        },
+        {
+          "weaponKey": "Item_Weapon_Mini14_C",
+          "weaponName": "Mini14",
+          "pickups": 24457,
+          "share": 0.046284310608469215
+        },
+        {
+          "weaponKey": "Item_Weapon_AUG_C",
+          "weaponName": "AUG",
+          "pickups": 21416,
+          "share": 0.04052928797444399
+        },
+        {
+          "weaponKey": "Item_Weapon_ACE32_C",
+          "weaponName": "ACE32",
+          "pickups": 21393,
+          "share": 0.04048576100286143
+        }
+      ]
+    },
+    {
+      "mapKey": "Baltic_Main",
+      "nMatches": 520,
+      "matchShare": 0.3032069970845481,
+      "matchShareCi": [
+        0.2819123815418214,
+        0.3253812748369863
+      ],
+      "avgDurationSec": 1768.5634615384615,
+      "botShare": 0.2703506333024405,
+      "pickupsPerMatch": 291.1942307692308,
+      "topWeapons": [
+        {
+          "weaponKey": "Item_Weapon_ACE32_C",
+          "weaponName": "ACE32",
+          "pickups": 9831,
+          "share": 0.06492494436042556
+        },
+        {
+          "weaponKey": "Item_Weapon_HK416_C",
+          "weaponName": "M416",
+          "pickups": 9470,
+          "share": 0.06254086289220122
+        },
+        {
+          "weaponKey": "Item_Weapon_Kar98k_C",
+          "weaponName": "Kar98k",
+          "pickups": 9435,
+          "share": 0.06230971925954788
+        },
+        {
+          "weaponKey": "Item_Weapon_AK47_C",
+          "weaponName": "AK47",
+          "pickups": 9242,
+          "share": 0.06103512722805952
+        },
+        {
+          "weaponKey": "Item_Weapon_M24_C",
+          "weaponName": "M24",
+          "pickups": 9171,
+          "share": 0.06056623585896276
+        }
+      ]
+    },
+    {
+      "mapKey": "Savage_Main",
+      "nMatches": 287,
+      "matchShare": 0.1673469387755102,
+      "matchShareCi": [
+        0.15042742932790804,
+        0.1857534031583432
+      ],
+      "avgDurationSec": 1899.547038327526,
+      "botShare": 0.3567782982591065,
+      "pickupsPerMatch": 231.38675958188153,
+      "topWeapons": [
+        {
+          "weaponKey": "Item_Weapon_ACE32_C",
+          "weaponName": "ACE32",
+          "pickups": 4176,
+          "share": 0.06288398988073726
+        },
+        {
+          "weaponKey": "Item_Weapon_RPD_C",
+          "weaponName": "RPD",
+          "pickups": 4104,
+          "share": 0.061799783158655586
+        },
+        {
+          "weaponKey": "Item_Weapon_HK416_C",
+          "weaponName": "M416",
+          "pickups": 3794,
+          "share": 0.05713167088302614
+        },
+        {
+          "weaponKey": "Item_Weapon_Kar98k_C",
+          "weaponName": "Kar98k",
+          "pickups": 3549,
+          "share": 0.053442356342609326
+        },
+        {
+          "weaponKey": "Item_Weapon_M24_C",
+          "weaponName": "M24",
+          "pickups": 3532,
+          "share": 0.05318636308878449
+        }
+      ]
+    },
+    {
+      "mapKey": "DihorOtok_Main",
+      "nMatches": 128,
+      "matchShare": 0.07463556851311953,
+      "matchShareCi": [
+        0.06312576318447277,
+        0.08804674741801671
+      ],
+      "avgDurationSec": 2391.890625,
+      "botShare": 0.2552922019178578,
+      "pickupsPerMatch": 272.4140625,
+      "topWeapons": [
+        {
+          "weaponKey": "Item_Weapon_M24_C",
+          "weaponName": "M24",
+          "pickups": 2768,
+          "share": 0.07938283288881241
+        },
+        {
+          "weaponKey": "Item_Weapon_M79_C",
+          "weaponName": "M79",
+          "pickups": 2551,
+          "share": 0.07315953999254352
+        },
+        {
+          "weaponKey": "Item_Weapon_ACE32_C",
+          "weaponName": "ACE32",
+          "pickups": 2506,
+          "share": 0.07186899538271817
+        },
+        {
+          "weaponKey": "Item_Weapon_BerylM762_C",
+          "weaponName": "Beryl M762",
+          "pickups": 2244,
+          "share": 0.06435515787662394
+        },
+        {
+          "weaponKey": "Item_Weapon_HK416_C",
+          "weaponName": "M416",
+          "pickups": 2157,
+          "share": 0.061860104964294935
+        }
+      ]
+    },
+    {
+      "mapKey": "Summerland_Main",
+      "nMatches": 108,
+      "matchShare": 0.0629737609329446,
+      "matchShareCi": [
+        0.05242503159036603,
+        0.07547599198271944
+      ],
+      "avgDurationSec": 1677,
+      "botShare": 0.3015411456818843,
+      "pickupsPerMatch": 155.6851851851852,
+      "topWeapons": [
+        {
+          "weaponKey": "Item_Weapon_MP5K_C",
+          "weaponName": "MP5K",
+          "pickups": 1579,
+          "share": 0.09390983704056144
+        },
+        {
+          "weaponKey": "Item_Weapon_HK416_C",
+          "weaponName": "M416",
+          "pickups": 1292,
+          "share": 0.07684072796479124
+        },
+        {
+          "weaponKey": "Item_Weapon_AK47_C",
+          "weaponName": "AK47",
+          "pickups": 1065,
+          "share": 0.06334007374806709
+        },
+        {
+          "weaponKey": "Item_Weapon_ACE32_C",
+          "weaponName": "ACE32",
+          "pickups": 972,
+          "share": 0.057808968716545735
+        },
+        {
+          "weaponKey": "Item_Weapon_UMP_C",
+          "weaponName": "UMP",
+          "pickups": 944,
+          "share": 0.05614368978232425
+        }
+      ]
+    },
+    {
+      "mapKey": "Kiki_Main",
+      "nMatches": 63,
+      "matchShare": 0.036734693877551024,
+      "matchShareCi": [
+        0.028816996433467485,
+        0.046723181323459054
+      ],
+      "avgDurationSec": 1953.2063492063492,
+      "botShare": 0.5657288189477031,
+      "pickupsPerMatch": 174.20634920634922,
+      "topWeapons": [
+        {
+          "weaponKey": "Item_Weapon_Kar98k_C",
+          "weaponName": "Kar98k",
+          "pickups": 929,
+          "share": 0.08464692482915717
+        },
+        {
+          "weaponKey": "Item_Weapon_M24_C",
+          "weaponName": "M24",
+          "pickups": 886,
+          "share": 0.08072892938496583
+        },
+        {
+          "weaponKey": "Item_Weapon_HK416_C",
+          "weaponName": "M416",
+          "pickups": 676,
+          "share": 0.06159453302961276
+        },
+        {
+          "weaponKey": "Item_Weapon_AK47_C",
+          "weaponName": "AK47",
+          "pickups": 604,
+          "share": 0.05503416856492027
+        },
+        {
+          "weaponKey": "Item_Weapon_AUG_C",
+          "weaponName": "AUG",
+          "pickups": 561,
+          "share": 0.05111617312072893
+        }
+      ]
+    },
+    {
+      "mapKey": "Neon_Main",
+      "nMatches": 24,
+      "matchShare": 0.013994169096209912,
+      "matchShareCi": [
+        0.009421850487919547,
+        0.020738927561669198
+      ],
+      "avgDurationSec": 2391.4583333333335,
+      "botShare": 0.6282963583089158,
+      "pickupsPerMatch": 152.20833333333334,
+      "topWeapons": [
+        {
+          "weaponKey": "Item_Weapon_HK416_C",
+          "weaponName": "M416",
+          "pickups": 257,
+          "share": 0.07035313441007392
+        },
+        {
+          "weaponKey": "Item_Weapon_AUG_C",
+          "weaponName": "AUG",
+          "pickups": 209,
+          "share": 0.05721324938406789
+        },
+        {
+          "weaponKey": "Item_Weapon_ACE32_C",
+          "weaponName": "ACE32",
+          "pickups": 202,
+          "share": 0.05529701615110868
+        },
+        {
+          "weaponKey": "Item_Weapon_M24_C",
+          "weaponName": "M24",
+          "pickups": 195,
+          "share": 0.05338078291814947
+        },
+        {
+          "weaponKey": "Item_Weapon_Kar98k_C",
+          "weaponName": "Kar98k",
+          "pickups": 190,
+          "share": 0.05201204489460717
+        }
+      ]
+    }
+  ]
+}

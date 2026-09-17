@@ -10,7 +10,6 @@ import PubgCompareTable from "@/components/pubg/PubgCompareTable";
 import {
   PubgFooter,
   PubgPageHeader,
-  PubgSampleNotice,
   PubgUnavailable,
   pct,
 } from "@/components/pubg/shared";
@@ -47,7 +46,6 @@ export default function PubgComparePage() {
           }
         />
 
-        <PubgSampleNotice sampleScope={deltas.meta.sampleScope} />
 
         <SectionCard
           eyebrow="판정"

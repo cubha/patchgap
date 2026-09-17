@@ -3,7 +3,12 @@
 
 import { describe, expect, it } from "vitest";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
-import { buildNoteVerdict, formatQ, selectEntityObservation } from "../streamVerdict";
+import {
+  buildNoteVerdict,
+  formatQ,
+  selectEntityObservation,
+  selectReportableObservation,
+} from "../streamVerdict";
 
 function delta(overrides: Partial<DeltaRecord>): DeltaRecord {
   return {
@@ -118,5 +123,48 @@ describe("formatQ", () => {
 
   it("null(계산 불가)이면 표기하지 않는다", () => {
     expect(formatQ(null)).toBeNull();
+  });
+});
+
+// ── 2026-09-17(B3) 효과크기 바닥 게이트 ───────────────────────────────────────────
+// 사용자가 "아직도 3% 미만의 미비한 변화내용 표기됨"을 지적했다. 결함은 "게이트가 없다"가
+// 아니라 **"미공지 경로엔 있고 공지 경로엔 없다"는 비대칭**이었다. 실측(26.17→26.18): 노트
+// 짝이 있는 135행 중 24행이 q<0.1을 통과하면서 바닥 아래다 — n≈10,000에서는 0.5%p 이동도
+// 유의해지므로 "유의하다"가 "의미 있다"를 뜻하지 못한다.
+describe("효과크기 바닥 게이트(B3)", () => {
+  // 픽률 바닥은 절대 2%p. 아래 행은 q=0.0001(유의)이지만 delta=0.005(0.5%p)로 바닥 미달.
+  const tiny = delta({ metric: "pickRate", before: 0.1, after: 0.105, delta: 0.005, ci: [0.003, 0.007] });
+  const big = delta({ metric: "pickRate", before: 0.1, after: 0.14, delta: 0.04, ci: [0.03, 0.05] });
+
+  it("selectReportableObservation은 바닥 미달 행을 대표로 뽑지 않는다", () => {
+    expect(selectReportableObservation([tiny])).toBeNull();
+    expect(selectReportableObservation([big])?.metric).toBe("pickRate");
+  });
+
+  it("바닥을 넘는 행이 섞여 있으면 그 행이 대표가 된다", () => {
+    expect(selectReportableObservation([tiny, big])?.delta).toBe(0.04);
+  });
+
+  it("selectEntityObservation(미공지 경로)은 그대로 — 판정 단계에서 이미 게이트돼 있다", () => {
+    expect(selectEntityObservation([tiny])?.delta).toBe(0.005);
+  });
+
+  it("buildNoteVerdict도 바닥 미달엔 방향어를 붙이지 않는다(한 단계 아래에서 되살아나던 결함)", () => {
+    const verdict = buildNoteVerdict(note(), tiny);
+    expect(verdict?.kind).toBe("none");
+    expect(verdict?.observedLabel).toBe("변화 규모 바닥 미달");
+  });
+
+  it("'유의차 없음'과 '규모 미달'은 다른 말이다 — 차이는 실재하므로 없다고 말하지 않는다", () => {
+    const notSignificant = buildNoteVerdict(note(), delta({ q: 1, ci: [-0.01, 0.2] }));
+    const belowFloor = buildNoteVerdict(note(), tiny);
+    expect(notSignificant?.observedLabel).toBe("유의차 없음");
+    expect(belowFloor?.observedLabel).not.toBe(notSignificant?.observedLabel);
+  });
+
+  it("바닥을 넘고 유의하면 방향어가 그대로 붙는다(과잉 억제 방지)", () => {
+    const verdict = buildNoteVerdict(note(), big);
+    expect(verdict?.kind).toBe("up");
+    expect(verdict?.observedLabel).toContain("상승");
   });
 });

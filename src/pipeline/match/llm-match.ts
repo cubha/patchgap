@@ -28,8 +28,14 @@ export const LLM_MODEL = "claude-sonnet-5";
 // 바뀌었으므로 promptVersion을 올려 v1 캐시 키와 절대 충돌하지 않게 한다(캐시 키에 promptVersion
 // 포함 — 옛 v1 캐시 파일이 있어도 자동으로 miss 처리되어 재호출된다).
 export const PROMPT_VERSION = "v2";
-export const DEFAULT_MAX_DELTAS = 50;
-export const DEFAULT_MAX_TOTAL_CALLS = 60;
+// 2026-09-17: 50 → 120. 실측 후보가 113건(미공지 47 + 간접 2 + 공지-불일치 64)인데 상한이
+// 50이라 미공지 14건이 LLM을 **아예 거치지 못했고**, 화면은 그것을 "근거 미확인"으로 표시해
+// "검토했으나 후보 없음"과 구분되지 않았다(사용자 지적 B5).
+export const DEFAULT_MAX_DELTAS = 120;
+// 호출 총 상한은 대상 수보다 **한 칸 위**에 둔다 — 아래에 두면 상한을 올려도 실제로는 이쪽이
+// 먼저 걸려서 "올렸는데 왜 그대로지"가 된다(이전 값 60은 maxDeltas 50보다 컸지만 지금 기준으론
+// 아니다). 이 값은 폭주 방지선이지 예산 정책이 아니다 — 예산 정책은 `--llm-max`가 소유한다.
+export const DEFAULT_MAX_TOTAL_CALLS = 130;
 
 const OutputSchema = z.object({
   causes: z.array(

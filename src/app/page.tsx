@@ -15,18 +15,22 @@ import SideMatchAverages from "@/components/home/SideMatchAverages";
 import DiscordPanel from "@/components/home/DiscordPanel";
 import LaneGapPanel from "@/components/home/LaneGapPanel";
 import StreamColumnLayout from "@/components/home/StreamColumnLayout";
-import IndirectEffectPanel from "@/components/home/IndirectEffectPanel";
-import { computeHeadline } from "@/components/home/logic";
-import { selectIndirectEffects } from "@/components/home/indirectEffects";
+import type { CosmeticSkinItem } from "@/components/home/CosmeticSkinPreview";
+import { computeHeadline, isGapStatus } from "@/components/home/logic";
+import { isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
+import { matchSkinsInSummary, skinSplashPath } from "@/pipeline/shared/cosmetic-skin";
+import { indexIndirectCauses } from "@/components/home/indirectEffects";
 import { computeLaneDistribution } from "@/components/home/laneDistribution";
 import { buildReleaseStream } from "@/components/home/releaseStream";
 import { resolveStreamEntityIcon } from "@/components/home/releaseStreamEntity";
 import { lanesForEntityKey } from "@/lib/lane";
 import {
   getDefaultPair,
+  listAvailableSplashes,
   loadDeltas,
   loadNotes,
   loadObjectives,
+  loadSkinIndex,
   loadSpellIcons,
   loadSummary,
 } from "@/lib/data";
@@ -59,12 +63,32 @@ export default function Home() {
     for (const noteId of row.matchedNoteIds) noteDeltas[noteId] = row;
   }
 
-  const unannouncedRows = (deltas?.rows ?? []).filter((row) => row.status === "unannounced");
+  // Gap 정의는 한 곳(`isGapStatus`)만 본다 — 라인 분포 패널이 히어로 타일·탭 배지와 다른
+  // 모수를 쓰면 화면이 스스로를 반박한다(2026-09-17 B2 통합).
+  const unannouncedRows = (deltas?.rows ?? []).filter((row) => isGapStatus(row.status));
   const laneDistribution = computeLaneDistribution(unannouncedRows);
 
-  // 간접 영향(ST-IE7) — 릴리즈 스트림에는 넣지 않고(옵션 B) 하단 전용 섹션에서 인과 체인으로
-  // 노출한다. 선택·해석은 indirectEffects.ts가 끝낸다.
-  const indirectEffects = selectIndirectEffects(deltas, notesTo);
+  // 간접 영향(2026-09-17, B2) — 하단 전용 섹션을 없애고 **Gap 탭 안**에서 인과 체인으로 그린다.
+  // 사용자 지적: "미공지 Gap 탭의 데이터와 노트에 없는 파급효과/간접 영향 섹션의 데이터가
+  // 동일한 목적으로 보이는데 다른영역에 별도로 표기되니 혼돈됨". 판별 결과 실제로 같은
+  // 뿌리였다(indirect-effect는 unannounced의 재분류) — 근거는 PLAN-gap-display-unify §3.
+  const indirectCauses = indexIndirectCauses(deltas, notesTo);
+
+  // 치장 스킨 미리보기(ST-B6, 2026-09-18) — note.id → 스플래시 목록.
+  // **자산이 실제로 존재하는 것만** 넣는다: Data Dragon은 크로마를 스킨 목록에 넣어 두면서도
+  // 스플래시 파일은 배포하지 않아(26.18 크로마 줄 5건 전부 404) 인덱스만 믿으면 깨진 이미지가
+  // 나간다. 정적 export라 파일 유무를 빌드 타임에 확정할 수 있고, 그래서 클라이언트 onError
+  // 핸들러 없이 서버 컴포넌트 경계를 유지한다.
+  const skinIndex = loadSkinIndex();
+  const availableSplashes = listAvailableSplashes();
+  const skinPreviews: Record<string, CosmeticSkinItem[]> = {};
+  for (const note of notesTo?.items ?? []) {
+    if (!isCosmeticNote(note)) continue;
+    const items = matchSkinsInSummary(note.summary, skinIndex?.skins ?? [])
+      .filter((skin) => availableSplashes.has(`${skin.championId}_${skin.num}.jpg`))
+      .map((skin) => ({ name: skin.name, src: skinSplashPath(skin) }));
+    if (items.length > 0) skinPreviews[note.id] = items;
+  }
 
   return (
     <div className="flex flex-1 flex-col">
@@ -96,6 +120,8 @@ export default function Home() {
                 qAlpha={deltas?.meta.qAlpha}
                 contentCount={headline.noteItemCount}
                 gapCount={headline.unannouncedCount}
+                causes={indirectCauses}
+                skinPreviews={skinPreviews}
               />
             }
             right={
@@ -111,7 +137,6 @@ export default function Home() {
               </>
             }
           />
-          <IndirectEffectPanel entries={indirectEffects} />
         </Container>
       </main>
     </div>

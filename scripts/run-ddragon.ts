@@ -8,6 +8,13 @@
 // 3) data/aggregated/{patch}/{champions,items}.json 전 패치를 스캔해 등장한 championId/itemId만
 //    cdn/{v}/img/{champion,item}/{...}.png → public/dd/{champion,item}/ 에 다운로드(이미 있으면 skip)
 //
+// 4) **스킨 인덱스 + 치장 스플래시**(2026-09-18, ST-B6): cdn/{v}/data/ko_KR/champion/{Id}.json을
+//    챔피언별로 받아 ko_KR 스킨 목록을 data/aggregated/skin-index.json으로 모으고, 커밋된
+//    notes/*.json의 **치장 항목에 글자 그대로 등장하는** 스킨의 스플래시만
+//    cdn/img/champion/splash/{Id}_{num}.jpg → public/dd/splash/ 로 받는다. 전 스킨을 받지
+//    않는 이유는 규모다 — 173챔프 × 평균 40스킨 ≈ 7,000장(장당 130~160KB)은 저장소에 담을
+//    물건이 아니다. 실제로 쓰이는 것은 패치당 수 장뿐이다.
+//
 // 룬 아이콘(cdn/img/perk-images/...)은 현재 파이프라인에 룬 단위 집계 엔티티가 없어(패치노트
 // subsection="rune" 분류는 있지만 통계 집계 대상은 챔피언/아이템뿐) 다운로드 대상이 없다 —
 // 향후 룬 통계가 추가되면 이 스크립트에 별도 단계로 추가한다(미확인 사항).
@@ -15,7 +22,13 @@
 import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";
-import { DATA_ROOT, spellIconsFile } from "../src/pipeline/shared/paths";
+import { DATA_ROOT, skinIndexFile, spellIconsFile } from "../src/pipeline/shared/paths";
+import { isCosmeticNote } from "../src/pipeline/shared/cosmetic-note";
+import {
+  matchSkinsInSummary,
+  type SkinIndexFile,
+  type SkinRef,
+} from "../src/pipeline/shared/cosmetic-skin";
 import { loadDdragon, type DdragonData } from "../src/pipeline/match/ddragon";
 import {
   parseSkillSlot,
@@ -23,7 +36,7 @@ import {
   spellIconKey,
   type SpellSlot,
 } from "../src/pipeline/match/spell-icon";
-import type { SpellIconIndexFile, SpellIconMap } from "../src/pipeline/types";
+import type { PatchNoteItem, SpellIconIndexFile, SpellIconMap } from "../src/pipeline/types";
 import { isMainModule } from "./shared/cli";
 
 const VERSIONS_URL = "https://ddragon.leagueoflegends.com/api/versions.json";
@@ -266,6 +279,132 @@ async function syncSpellIcons(
   }
 }
 
+/** 챔피언 상세 JSON의 필요한 부분만 — 전체 스키마를 타이핑하지 않는다(우리가 쓰는 건 skins뿐). */
+interface ChampionDetailResponse {
+  data: Record<string, { id: string; name: string; skins?: { num: number; name: string }[] }>;
+}
+
+/**
+ * ko_KR 스킨 인덱스를 만든다 — 챔피언 상세 JSON을 챔피언 수만큼 받는다.
+ *
+ * ⚠️ **번들 `champion.json`에는 skins가 없다**(2026-09-17 실측: keys에 `skins` 부재).
+ * 스킨 목록은 챔피언별 상세(`data/ko_KR/champion/{Id}.json`)에만 있어서 N회 요청이 불가피하다.
+ * 대신 결과를 slim 인덱스로 **커밋**하므로 빌드·런타임에는 요청이 0이다.
+ */
+async function buildSkinIndex(
+  version: string,
+  ddragon: DdragonData,
+  championIds: ReadonlySet<number>,
+  fetchImpl: typeof fetch
+): Promise<SkinRef[]> {
+  const ids = Array.from(championIds)
+    .map((key) => ddragon.champions.byKey(key))
+    .filter((c): c is NonNullable<typeof c> => Boolean(c));
+
+  const skins: SkinRef[] = [];
+  let failed = 0;
+  await mapWithConcurrency(ids, DOWNLOAD_CONCURRENCY, async (champion) => {
+    const url = `${cdnBase(version)}/data/ko_KR/champion/${champion.id}.json`;
+    try {
+      const res = await fetchImpl(url);
+      if (!res.ok) {
+        failed += 1;
+        return;
+      }
+      const parsed = (await res.json()) as ChampionDetailResponse;
+      const detail = parsed.data?.[champion.id];
+      for (const skin of detail?.skins ?? []) {
+        skins.push({
+          championId: champion.id,
+          num: skin.num,
+          name: skin.name,
+        });
+      }
+    } catch {
+      failed += 1; // 한 챔피언을 못 받아도 인덱스 전체를 버리지 않는다(부분 인덱스가 0보다 낫다)
+    }
+  });
+
+  skins.sort((a, b) => a.championId.localeCompare(b.championId) || a.num - b.num);
+  console.log(
+    `[run-ddragon] skin index: champions=${ids.length} skins=${skins.length} fetch-failed=${failed}`
+  );
+  return skins;
+}
+
+/** 커밋된 notes/*.json 전부에서 치장 항목만 모은다 — 스플래시 조달 대상의 유일한 출처. */
+function collectCosmeticNotes(dataRoot: string = DATA_ROOT): PatchNoteItem[] {
+  const notesDir = path.join(dataRoot, "aggregated", "notes");
+  if (!fs.existsSync(notesDir)) return [];
+  const out: PatchNoteItem[] = [];
+  for (const file of fs.readdirSync(notesDir)) {
+    if (!file.endsWith(".json")) continue;
+    const parsed = JSON.parse(fs.readFileSync(path.join(notesDir, file), "utf8")) as {
+      items?: PatchNoteItem[];
+    };
+    for (const item of parsed.items ?? []) {
+      if (isCosmeticNote(item)) out.push(item);
+    }
+  }
+  return out;
+}
+
+/**
+ * 치장 노트가 실제로 지목한 스킨의 스플래시만 받는다. 인덱스를 파일로 남기는 것과 자산을
+ * 받는 것을 한 함수에 둔 이유는 **둘의 대상이 다르기 때문**이다 — 인덱스는 전 챔피언,
+ * 자산은 노트가 지목한 소수. 이 비대칭이 이 단계의 전부다.
+ */
+async function syncSkinIndexAndSplashes(
+  version: string,
+  ddragon: DdragonData,
+  championIds: ReadonlySet<number>,
+  fetchImpl: typeof fetch
+): Promise<void> {
+  const skins = await buildSkinIndex(version, ddragon, championIds, fetchImpl);
+  if (skins.length === 0) {
+    console.log("[run-ddragon] skin index: 비어 있음 — 인덱스 파일을 덮어쓰지 않는다");
+    return;
+  }
+
+  const indexFile: SkinIndexFile = {
+    meta: { version, generatedAt: new Date().toISOString(), count: skins.length },
+    skins,
+  };
+  const dest = skinIndexFile();
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  // 들여쓰기 없이 쓴다 — 9,120행짜리 파일에서 pretty-print는 용량을 두 배로 만든다.
+  fs.writeFileSync(dest, `${JSON.stringify(indexFile)}\n`, "utf8");
+  console.log(`[run-ddragon] skin index → ${dest}`);
+
+  const cosmetic = collectCosmeticNotes();
+  const wanted = new Map<string, SkinRef>();
+  for (const note of cosmetic) {
+    for (const skin of matchSkinsInSummary(note.summary, skins)) {
+      wanted.set(`${skin.championId}_${skin.num}`, skin);
+    }
+  }
+
+  let downloaded = 0;
+  let skipped = 0;
+  let failed = 0;
+  await mapWithConcurrency(Array.from(wanted.values()), DOWNLOAD_CONCURRENCY, async (skin) => {
+    const name = `${skin.championId}_${skin.num}.jpg`;
+    const result = await downloadImageIfMissing(
+      `${SPLASH_BASE}/${name}`,
+      path.join(PUBLIC_DD_DIR, "splash", name),
+      fetchImpl
+    );
+    if (result === "downloaded") downloaded += 1;
+    else if (result === "skipped") skipped += 1;
+    else failed += 1;
+  });
+
+  console.log(
+    `[run-ddragon] cosmetic splash: notes=${cosmetic.length} matched-skins=${wanted.size} ` +
+      `downloaded=${downloaded} skipped=${skipped} failed=${failed}`
+  );
+}
+
 export async function main(): Promise<void> {
   const fetchImpl = fetch;
   const version = await fetchLatestVersion(fetchImpl);
@@ -373,6 +512,7 @@ export async function main(): Promise<void> {
   }
 
   await syncSpellIcons(version, ddragon, fetchImpl);
+  await syncSkinIndexAndSplashes(version, ddragon, championIds, fetchImpl);
 }
 
 if (isMainModule(import.meta.url)) {

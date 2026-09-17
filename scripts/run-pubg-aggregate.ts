@@ -19,6 +19,7 @@ import {
 } from "../src/pipeline/aggregate/pubg-weapons";
 import { canonicalWeaponKey } from "../src/pipeline/aggregate/pubg-weapon-key";
 import { accuracyByWeapon, type PubgAccuracyStat } from "../src/pipeline/aggregate/pubg-accuracy";
+import { aggregatePubgMaps, buildPubgMapDeltas } from "../src/pipeline/aggregate/pubg-maps";
 import { buildPubgDeltas, type PubgNoteItem } from "../src/pipeline/match/pubg-delta";
 
 const ROOT = process.cwd();
@@ -133,6 +134,12 @@ function main(): void {
 
   const accuracyComparison = buildAccuracyComparison(beforeMatches, afterMatches);
 
+  // 맵 축(2026-09-17, ST-A3) — 무기 축과 **같은 전처리 산출물**(selectMatches 결과)을 쓴다.
+  // 별도 수집·별도 필터가 없다는 뜻이고, 그래서 42.3 보존창(9/22 마감)과 무관하게 만들 수 있다.
+  const mapsBefore = aggregatePubgMaps(beforeMatches, "42.3", before.label);
+  const mapsAfter = aggregatePubgMaps(afterMatches, "43.1", after.label);
+  const mapDeltas = buildPubgMapDeltas(mapsBefore, mapsAfter);
+
   fs.mkdirSync(OUT_DIR, { recursive: true });
   fs.writeFileSync(path.join(OUT_DIR, "weapons-42.3.json"), JSON.stringify(before, null, 2));
   fs.writeFileSync(path.join(OUT_DIR, "weapons-43.1.json"), JSON.stringify(after, null, 2));
@@ -174,8 +181,39 @@ function main(): void {
     )
   );
 
+  fs.writeFileSync(path.join(OUT_DIR, "maps-42.3.json"), JSON.stringify(mapsBefore, null, 2));
+  fs.writeFileSync(path.join(OUT_DIR, "maps-43.1.json"), JSON.stringify(mapsAfter, null, 2));
+  fs.writeFileSync(
+    path.join(OUT_DIR, "map-deltas.json"),
+    JSON.stringify(
+      {
+        meta: {
+          game: "pubg",
+          from: "42.3",
+          to: "43.1",
+          generatedAt: new Date().toISOString(),
+          n: mapDeltas.rows.length,
+          // 판정(MatchStatus)이 없는 이유 — 43.1 패치노트에 맵 항목이 0건이다. 짝지을 선언이
+          // 없는 축에 판정 어휘를 붙이면 "노트에 없다"가 관측이 아니라 전제가 된다.
+          note: "기술 통계 전용 — 43.1 패치노트에 맵 항목이 없어 판정(MatchStatus)을 만들지 않는다.",
+          onlyBefore: mapDeltas.onlyBefore,
+          onlyAfter: mapDeltas.onlyAfter,
+        },
+        rows: mapDeltas.rows,
+      },
+      null,
+      2
+    )
+  );
+
   const pct = (x: number, digits = 1) => `${(x * 100).toFixed(digits)}%`;
   console.log(`[pubg] 42.3 ${before.nMatches}매치 / 43.1 ${after.nMatches}매치`);
+  console.log(
+    `[pubg] 맵 ${mapsBefore.maps.length} → ${mapsAfter.maps.length}종 · 비교행 ${mapDeltas.rows.length}` +
+      (mapDeltas.onlyBefore.length || mapDeltas.onlyAfter.length
+        ? ` · 한쪽만: before=${mapDeltas.onlyBefore.join(",") || "-"} after=${mapDeltas.onlyAfter.join(",") || "-"}`
+        : "")
+  );
   console.log(
     `[pubg] 기저: 픽업/매치 ${before.pickupsPerMatch.toFixed(1)} → ${after.pickupsPerMatch.toFixed(1)} · ` +
       `봇 ${pct(before.botShare)} → ${pct(after.botShare)}`
