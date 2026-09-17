@@ -132,13 +132,49 @@
   --measure-wide: 80ch;
   /* 대조표 최소 폭 — 이보다 좁아지면 열이 겹치므로 가로 스크롤로 넘긴다. */
   --table-min: 640px;
+  /* 상단 크롬(헤더) 높이 — 앰비언트 배경의 이미지 레이어가 이만큼 아래에서 시작한다
+     (src/styles/ambient.css). 런타임에는 Header.tsx의 ResizeObserver가 **실측값**으로
+     덮어쓴다(헤더가 flex-wrap이라 뷰포트 폭에 따라 1~3줄로 바뀐다). 여기 값은 스크립트
+     이전/실패 시의 폴백이다 — 데스크톱 1줄 실측이 57px. */
+  --chrome-h: 57px;
   --scrollbar-size: 10px;
 }
 
-/* [data-game] 오버라이드 계약 (2026-09-10 확정, 미출하) — 중립 8종
+/* [data-game] 오버라이드 계약 (2026-09-10 확정 · **2026-09-17 출하**) — 중립 8종
  * (--bg --surface --surface-warm --border --border-soft --fg --fg-2 --muted) +
  * 워시 2종(--game-wash --game-glow)만 덮어쓴다. 상태 4종(--accent --danger --warn --success)은
- * 절대 재정의하지 않는다. :root 블록 뒤에 선언해 동일 특정도(0,1,0)를 소스 순서로 이긴다.
- * PUBG 등 실제 [data-game="..."] 램프는 이번 릴리스에서 출하하지 않는다
- * (HANDOFF-redesign-2026-09-10.md §3·§6 — V4 확정 이전 값이라 재도출 전엔 미연결 유지).
+ * 절대 재정의하지 않는다(HANDOFF §1-2 불변식 — 판정 색은 게임이 바뀌어도 같은 뜻이어야
+ * 한다). --accent-on도 건드리지 않는다: 계약의 중립 8종 밖이고, LoL #030d18과 PUBG #0b0906은
+ * 둘 다 근사 흑색이라 뱃지 위 글자색으로는 구분되지 않는다(굳이 계약을 넓힐 이유가 없다).
+ *
+ * **선택자가 `:root:has()`인 이유** — Next 16에서 <html>에 라우트별 속성을 주려면 route group
+ * 다중 root layout이 필요하고(node_modules/next/dist/docs/01-app/01-getting-started/
+ * 02-project-structure.md:407), 그러려면 최상위 layout.tsx를 지우고 <html>/<body>를 그룹마다
+ * 복제해야 한다 — 공용 Header까지 갈라진다. 대신 클라이언트 래퍼(GameRoot.tsx)가 본문
+ * 최상단에 <div data-game="pubg">를 렌더하고, 여기서 :has()로 그 존재를 읽어 **변수를 루트까지
+ * 끌어올린다**. 래퍼 div에만 걸면 body의 bg-bg가 LoL 값으로 남아 iOS 오버스크롤 바운스에서
+ * 색이 어긋난다.
+ * 특정도는 (0,2,0)으로 [data-palette="v4"](0,1,0)를 이긴다 — HANDOFF가 말한 "동일 특정도 +
+ * 소스 순서"보다 강하지만 승패 결과는 같고, 소스 순서 의존이 사라져 더 안전하다.
+ *
+ * **값 재도출(2026-09-17)** — HANDOFF §3 램프는 스스로 "V4 확정 이전에 잡은 값이다. 실제로
+ * 붙일 때 V4 기준으로 재도출할 것"이라고 경고했다. 재측정 결과 텍스트 3종은 전부 V4(LoL)
+ * 기준선보다 대비가 높아 그대로 채택했고, --border만 바꿨다: 문서값 #3a2f20은 V4가 --border를
+ * "보이는 골드 레일"(#8c6b33, panel-rail-from이 소비)로 승격시키기 전의 어두운 갈색이라
+ * 패널 레일이 사라진다. PUBG 앰버 계열에서 V4와 **같은 비텍스트 대비**(surface-warm 대비
+ * 3.27)를 내는 #8f6a22로 재도출했다.
+ *   실측(대비비, 후보 vs LoL 기준선): fg 16.98 vs 14.67 · fg-2 12.28 vs 9.17 ·
+ *   muted 6.11 vs 5.00 (전부 본문 4.5:1 통과) · border 3.27 vs 3.27 (비텍스트 3.0:1 통과).
  */
+:root:has([data-game="pubg"]) {
+  --bg: #0b0906;
+  --surface: #1a150d;
+  --surface-warm: #262017;
+  --fg: #faf7f2;
+  --fg-2: #ded3c2;
+  --muted: #a2947e;
+  --border: #8f6a22;
+  --border-soft: #2a2218;
+  --game-wash: #241a0e;
+  --game-glow: #f2a900;
+}

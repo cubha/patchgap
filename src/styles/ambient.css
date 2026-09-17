@@ -8,6 +8,14 @@
  * 영역에만 머문다.
  */
 
+/* 좁은 화면 폴백(스크립트 이전) — 393px 실측에서 헤더가 2줄로 감겨 ≈110px였다. 런타임에는
+   Header.tsx의 ResizeObserver가 실측값으로 덮어쓰므로 이 값은 첫 페인트 한 프레임에만 쓰인다. */
+@media (max-width: 767px) {
+  :root {
+    --chrome-h: 110px;
+  }
+}
+
 .ambient-root {
   position: fixed;
   inset: 0;
@@ -60,16 +68,25 @@
    * 바닥이 잡히고(6차 이전 `@media (max-width:640px)` 오버라이드가 쓰던 것과 동일한, 이미
    * 실측 검증됐던 값), 그 이상은 기존 vw 비례 그대로 이어진다. 6차가 없앤 하드 브레이크포인트
    * (640px 경계에서 공식이 뚝 바뀌던 결함)를 되살리지 않는다 — `max()`는 977px 지점에서
-   * 두 곡선이 만나는 연속 함수라 끊김이 없다. */
+   * 두 곡선이 만나는 연속 함수라 끊김이 없다.
+   *
+   * 세로 원점 `var(--chrome-h)`(2026-09-17·9차, 사용자 모바일 지적 3회차 — 배경 이미지 위가
+   * 또 잘려 있다) — 6차·7차는 **반경**만 손봤고 원점은 계속 뷰포트 상단(y=0)이었다. 그런데
+   * 아트를 실제로 가리는 것은 마스크가 아니라 **그 위에 앉은 sticky 헤더**다. 헤더는 flex-wrap
+   * 이라 높이가 폭에 따라 1~3줄로 변하는데(393px 실측 2줄 ≈157px) 이미지 높이는 128vw에
+   * 비례해 같은 폭에서 283px까지 줄어든다 — 결과적으로 이미지 상단 55%가 크롬 뒤로 들어가
+   * "위가 다 잘린" 그림이 됐다(데스크톱 1440px은 57/1038=5%라 같은 결함이 안 보였다).
+   * 마스크 원점과 이미지 상단을 **둘 다 크롬 아래로** 옮겨, 어느 폭에서도 섬의 윗부분이
+   * 먼저 드러나게 한다. 값은 Header.tsx가 ResizeObserver로 실측해 발행한다. */
   -webkit-mask-image: radial-gradient(
-    ellipse 62% max(38.89vw, 380px) at 50% 0%,
+    ellipse 62% max(38.89vw, 380px) at 50% var(--chrome-h),
     #000 0%, /* design-lint-ignore: CSS mask 알파(표시 여부)일 뿐 시각 색상 아님 */
     #000 26%, /* design-lint-ignore: CSS mask 알파(표시 여부)일 뿐 시각 색상 아님 */
     rgba(0, 0, 0, 0.55) 58%,
     transparent 100%
   );
   mask-image: radial-gradient(
-    ellipse 62% max(38.89vw, 380px) at 50% 0%,
+    ellipse 62% max(38.89vw, 380px) at 50% var(--chrome-h),
     #000 0%, /* design-lint-ignore: CSS mask 알파(표시 여부)일 뿐 시각 색상 아님 */
     #000 26%, /* design-lint-ignore: CSS mask 알파(표시 여부)일 뿐 시각 색상 아님 */
     rgba(0, 0, 0, 0.55) 58%,
@@ -79,7 +96,8 @@
 .ambient-cam-inner {
   position: absolute;
   left: 50%;
-  top: 0;
+  /* 크롬 바로 아래에서 이미지가 시작한다(9차 — 위 .ambient-camera 주석 참고). */
+  top: var(--chrome-h);
   /* 폭 공식(2026-09-12·4차, R1) — 이전 min(1320px,128vw)는 뷰포트 1320px 초과 시 1320px로
      고정돼, .ambient-camera(overflow:hidden, 부모 기준 62% 가로 반경 마스크)의 페이드 완료
      지점(반경 100% 스톱 = 뷰포트폭×0.62, 즉 반폭 필요치)보다 래스터 경계가 먼저 노출됐다 —
@@ -217,15 +235,18 @@
   /* 세로 반경 vw 환산(2026-09-13·6차 연속) — .ambient-camera와 동일 근거(위 주석 참고).
      620px는 1440px 기준 렌더값이라 620/1440≈43.06vw로 환산.
      세로 반경 하한(2026-09-14·7차) — .ambient-camera와 같은 결함, 같은 처방. 두 레이어의
-     반경 비(43.06/38.89≈1.107)를 유지해 380px 하한도 같은 비로 환산: 380×1.107≈420px. */
-  -webkit-mask-image: radial-gradient(ellipse 60% max(43.06vw, 420px) at 50% 0%, #000 0%, #000 24%, rgba(0, 0, 0, 0.5) 55%, transparent 100%); /* design-lint-ignore: CSS mask 알파(표시 여부)일 뿐 시각 색상 아님 */
-  mask-image: radial-gradient(ellipse 60% max(43.06vw, 420px) at 50% 0%, #000 0%, #000 24%, rgba(0, 0, 0, 0.5) 55%, transparent 100%); /* design-lint-ignore: CSS mask 알파(표시 여부)일 뿐 시각 색상 아님 */
+     반경 비(43.06/38.89≈1.107)를 유지해 380px 하한도 같은 비로 환산: 380×1.107≈420px.
+     세로 원점 var(--chrome-h)(2026-09-17·9차) — .ambient-camera와 동일 근거. 두 레이어가 같은
+     원점을 써야 인트로 종료 시 지형이 튀지 않는다(8차에서 맞춘 프레이밍 정렬을 유지한다). */
+  -webkit-mask-image: radial-gradient(ellipse 60% max(43.06vw, 420px) at 50% var(--chrome-h), #000 0%, #000 24%, rgba(0, 0, 0, 0.5) 55%, transparent 100%); /* design-lint-ignore: CSS mask 알파(표시 여부)일 뿐 시각 색상 아님 */
+  mask-image: radial-gradient(ellipse 60% max(43.06vw, 420px) at 50% var(--chrome-h), #000 0%, #000 24%, rgba(0, 0, 0, 0.5) 55%, transparent 100%); /* design-lint-ignore: CSS mask 알파(표시 여부)일 뿐 시각 색상 아님 */
 }
 .ambient-reveal video,
 .ambient-reveal img {
   position: absolute;
   left: 50%;
-  top: 0;
+  /* .ambient-cam-inner와 동일 — 크롬 아래에서 시작(9차). */
+  top: var(--chrome-h);
   /* .ambient-cam-inner와 동일한 R1 폭 공식(위 주석 참고, 최종 128vw 단일값) — 이 레이어도
      overflow:hidden 컨테이너 + 반경 마스크(60% 620px) 조합이라 같은 하드 시임 결함을 갖고
      있었다. 반폭 64vw는 이 마스크의 60vw 반경도 여유(4vw)를 두고 넘는다. */
@@ -304,4 +325,23 @@
 }
 .ambient-detail-sub {
   text-shadow: 0 1px 12px rgba(3, 13, 24, 0.85);
+}
+
+/* ---------- 게임 스왑: PUBG는 협곡 아트를 끈다 (2026-09-17) ----------
+ * HANDOFF §3의 `[data-game="pubg"] .art { display:none }` 계약을 이 구현의 레이어 이름으로
+ * 옮긴 것이다(`.art`는 시안의 클래스명이고 이 구현엔 없다 — 실측 확인).
+ * 끄는 대상은 **소환사의 협곡 래스터를 쓰는 레이어 전부**다:
+ *   .ambient-wash(island-wash.jpg) · .ambient-camera(선명 플레이트 island.webp) ·
+ *   .ambient-reveal(인트로 intro.webm / intro-still.jpg)
+ * PUBG 화면에 협곡 섬이 깔려 있으면 "같은 사이트, 데이터와 테마만 바뀐다"가 아니라 그냥
+ * LoL 배경 위에 얹힌 PUBG 표가 된다(사용자 지적의 핵심).
+ *
+ * 남기는 것: .ambient-glow(--game-glow를 소비하므로 PUBG 앰버로 **자동** 전환된다) ·
+ * .ambient-scrim · .ambient-grain. 결과적으로 PUBG는 아트 없이 게임색 글로우만 있는 배경이
+ * 된다 — 크래프톤 자산 사용 문의 회신 전까지 PUBG 이미지를 쓰지 않는다는 기존 방침
+ * (HANDOFF §5 게임 로고 금지와 같은 뿌리)과도 방향이 같다. */
+[data-game="pubg"] .ambient-wash,
+[data-game="pubg"] .ambient-camera,
+[data-game="pubg"] .ambient-reveal {
+  display: none;
 }

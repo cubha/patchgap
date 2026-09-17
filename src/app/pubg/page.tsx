@@ -1,17 +1,30 @@
 // src/app/pubg/page.tsx
-// PUBG 확장 — 42.3 ⇒ 43.1 무기 획득 점유율 대조. 어댑터가 실제로 다른 게임에 붙는다는 증명이자,
-// LoL 본편과 **같은 판정 엔진**을 통과한 결과를 같은 어휘(MatchStatus)로 보여주는 화면이다.
+// PUBG 브리핑 — LoL의 `/`와 **같은 자리**에 있는 화면이다. 게임 드롭다운으로 전환하면 이 화면이
+// 뜨고, 내비(브리핑·대조표·방법론)는 그대로다(PLAN-game-switcher-2026-09-17 R1).
 //
-// 이 페이지는 축이 하나뿐이다(획득 점유율). 43.1 밸런스 11개 항목 중 텔레메트리로 실제 분리되는
+// 2026-09-17 재구성: 예전엔 이 한 장이 표본·발견·전체표·한계·버린축을 전부 이고 있었다
+// (`/pubg/`가 4번째 내비 탭이던 시절의 구조). 게임 스위처가 붙으면서 LoL과 같은 3분할로 나눈다 —
+// 브리핑은 **판정된 것**(발견 + 공지 대조), 전체 47행은 `/pubg/compare/`, 한계·버린 축은
+// `/pubg/methodology/`.
+//
+// 이 게임은 축이 하나뿐이다(획득 점유율). 43.1 밸런스 11개 항목 중 텔레메트리로 실제 분리되는
 // 축이 그것뿐이었고, 명중률로 반동 변경을 잡으려던 시도는 대조군이 더 크게 움직여 반증됐다
 // (docs/plan/PLAN-pubg-gate-2026-09-16.md §8). 검증 축이 없는 공지 항목은 숫자를 지어내지 않고
-// "관측 축 미설계"로 회색 처리한다 — 무근거 문장은 회색이라는 원칙 그대로다.
+// 방법론 화면에서 "관측 축 미설계"로 회색 처리한다 — 무근거 문장은 회색이라는 원칙 그대로다.
 import type { Metadata } from "next";
+import Link from "next/link";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
+import {
+  PubgFooter,
+  PubgPageHeader,
+  PubgSampleNotice,
+  PubgUnavailable,
+  pct,
+  signedPct,
+} from "@/components/pubg/shared";
 import { loadPubg, isReportable } from "@/lib/pubgData";
-import { fmtKst } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "PUBG 42.3 ⇒ 43.1 · patchgap",
@@ -19,64 +32,36 @@ export const metadata: Metadata = {
     "PUBG: BATTLEGROUNDS 43.1 패치노트의 공지와 실제 관측 데이터를 대조한다. 표본은 steam 플랫폼 전역 무작위 official 매치.",
 };
 
-function pct(value: number, digits = 1): string {
-  return `${(value * 100).toFixed(digits)}%`;
-}
-
-function signedPct(value: number, digits = 1): string {
-  const sign = value > 0 ? "+" : "";
-  return `${sign}${(value * 100).toFixed(digits)}%`;
-}
-
 export default function PubgPage() {
   const bundle = loadPubg();
-
-  // 출하 게이트 — 데이터가 없으면 빈 표 대신 "미연결"을 정직하게 말한다.
   if (!bundle) {
     return (
       <Container>
-        <div className="py-12">
-          <h1 className="font-display text-2xl font-bold text-fg">PUBG 어댑터 · 미연결</h1>
-          <p className="mt-3 text-sm leading-relaxed text-muted" style={{ maxWidth: "var(--measure)" }}>
-            집계 산출물이 아직 없습니다. 어댑터 매핑은 방법론 페이지에서 확인할 수 있습니다.
-          </p>
-        </div>
+        <PubgUnavailable />
       </Container>
     );
   }
 
-  const { deltas, before, after, notes, accuracyComparison } = bundle;
+  const { deltas, before, after, notes } = bundle;
   const reportable = deltas.rows.filter((row) => isReportable(row.status));
   const unannounced = reportable.filter((row) => row.status === "unannounced");
   const announced = reportable.filter((row) => row.status !== "unannounced");
-  const unverifiable = notes.filter((note) => note.expectedRelChange === null);
 
   return (
     <Container>
       <div className="flex flex-col gap-6 py-8">
-        <header className="flex flex-col gap-3">
-          <p className="font-mono text-xs font-bold tracking-wide text-accent uppercase">
-            PUBG: BATTLEGROUNDS · 어댑터 실연결
-          </p>
-          <h1 className="font-display text-3xl leading-tight font-bold text-balance text-fg">
-            42.3 ⇒ 43.1 · 무기 획득 점유율
-          </h1>
-          <p className="text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure)" }}>
-            LoL과 <strong className="text-fg">같은 판정 엔진</strong>에 PUBG 텔레메트리를 넣은
-            결과입니다. 바뀐 것은 어댑터(수집·엔티티·지표)뿐이고 통계·게이트·판정 어휘는 그대로입니다.
-          </p>
-        </header>
+        <PubgPageHeader
+          title="42.3 ⇒ 43.1 · 무기 획득 점유율"
+          lead={
+            <>
+              리그 오브 레전드와 <strong className="text-fg">같은 판정 엔진</strong>에 PUBG
+              텔레메트리를 넣은 결과입니다. 바뀐 것은 어댑터(수집·엔티티·지표)뿐이고 통계·게이트·
+              판정 어휘는 그대로입니다.
+            </>
+          }
+        />
 
-        {/* 표본 고지 — LoL(KR·Master+·솔로/듀오)과 성격이 다르므로 반드시 먼저 말한다. */}
-        <div className="rounded-md border border-warn/40 bg-surface-warm/40 p-4">
-          <p className="font-mono text-xs font-bold text-warn">표본 성격이 LoL과 다릅니다</p>
-          <p className="mt-2 text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
-            {deltas.meta.sampleScope}. PUBG API는 지역 샤드가 폐지돼 한국 한정 표본을 뽑을 수
-            없습니다 — LoL 탭의 <span className="font-mono text-xs">KR · Master+ · 솔로/듀오</span>와
-            달리 이 표본은 <strong className="text-fg">전 지역·전 티어 무작위</strong>이며 봇이
-            포함됩니다(비율은 아래 병기).
-          </p>
-        </div>
+        <PubgSampleNotice sampleScope={deltas.meta.sampleScope} />
 
         <div className="grid gap-4 md:grid-cols-3">
           <SectionCard eyebrow="표본" title="비교 구간" variant="glass">
@@ -118,7 +103,7 @@ export default function PubgPage() {
               </div>
               <p className="mt-3 text-xs leading-relaxed text-muted">
                 총량이 함께 내려갔습니다. 이 기저를 빼지 않으면 <em>모든</em> 무기가 하향된 것처럼
-                보입니다 — 아래 표는 전부 <strong className="text-fg-2">총 획득 대비 점유율</strong>로
+                보입니다 — 모든 수치는 <strong className="text-fg-2">총 획득 대비 점유율</strong>로
                 정규화한 값입니다.
               </p>
             </div>
@@ -130,9 +115,10 @@ export default function PubgPage() {
                 {pct(deltas.meta.effectFloor)}
               </div>
               <p className="mt-3 text-xs leading-relaxed text-muted">
-                LoL 바닥값을 가져오지 않고 <strong className="text-fg-2">이 데이터에서 유도</strong>
-                했습니다. 패치노트가 언급하지 않은 무기들의 변화 분포(귀무분포) 90번째 백분위수 —
-                즉 &ldquo;언급 없는 무기 10개 중 9개보다 크게 움직였다&rdquo;가 기준입니다.
+                리그 오브 레전드 바닥값을 가져오지 않고{" "}
+                <strong className="text-fg-2">이 데이터에서 유도</strong>했습니다. 패치노트가
+                언급하지 않은 무기들의 변화 분포(귀무분포) 90번째 백분위수 — 즉 &ldquo;언급 없는
+                무기 10개 중 9개보다 크게 움직였다&rdquo;가 기준입니다.
               </p>
             </div>
           </SectionCard>
@@ -232,87 +218,22 @@ export default function PubgPage() {
             획득 점유율은 스폰율의 <strong className="text-fg-2">대리 지표</strong>입니다 — 스폰이
             줄어도 플레이어가 남은 것을 더 적극적으로 줍거나(감쇠) 너프 소식에 회피하면(증폭) 관측
             배수가 달라집니다. 그래서 정확한 배수 일치가 아니라 <strong className="text-fg-2">
-            방향과 자릿수</strong>로 판정합니다(공지값의 50~150% 범위면 일치).
+            방향과 자릿수</strong>로 판정합니다(공지값의 50~150% 범위면 일치).{" "}
+            <Link href="/pubg/methodology/" className="text-accent underline-offset-2 hover:underline">
+              판정 규칙 전체 →
+            </Link>
           </p>
         </SectionCard>
 
-        <SectionCard eyebrow="한계" title="관측 축이 없는 공지 항목" variant="glass">
-          <div className="p-5">
-            <p className="text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
-              43.1 패치노트의 나머지 항목은 이 표본으로 검증하지 못했습니다. 숫자를 지어내지 않고
-              비워 둡니다.
-            </p>
-            <ul className="mt-3 flex flex-col gap-2">
-              {unverifiable.map((note) => (
-                <li key={note.id} className="flex flex-wrap items-baseline gap-2 text-sm text-muted">
-                  <span className="font-mono text-xs text-muted">{note.stat}</span>
-                  <span>{note.summary}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-3 text-xs leading-relaxed text-muted" style={{ maxWidth: "var(--measure-wide)" }}>
-              반동·조준 전환은 명중률로 분리하려 했으나 실패했습니다 — 반동이 나빠진 경기관총 3종이
-              대조군보다 <em>덜</em> 떨어져 방향이 반대로 나왔습니다. 교전 거리·상대 실력·봇 비율
-              변화가 패치 효과를 압도합니다. 차량 피해 배수는 피해량 합을 수집했으나 1차 출처
-              단독이라 판정 축에서 제외했습니다.
-            </p>
+        <p className="text-sm text-muted">
+          바닥 미달·무변화까지 포함한 전체 {deltas.meta.n}개 무기 판정은{" "}
+          <Link href="/pubg/compare/" className="text-accent underline-offset-2 hover:underline">
+            대조표
+          </Link>
+          에 있습니다.
+        </p>
 
-            {accuracyComparison && accuracyComparison.length > 0 ? (
-              <details className="mt-4 rounded-md border border-border-soft">
-                <summary className="cursor-pointer px-4 py-3 font-mono text-xs font-bold text-muted">
-                  버린 축 재현 — 명중률(hits ÷ attacks), 너프 3종 vs 대조군 2종
-                </summary>
-                <div className="overflow-x-auto border-t border-border-soft">
-                  <table className="w-full border-collapse text-sm" style={{ minWidth: "var(--table-min)" }}>
-                    <thead>
-                      <tr className="border-b border-border text-left">
-                        <th className="py-2 pl-4 pr-3 font-mono text-xs font-bold text-muted">무기</th>
-                        <th className="py-2 pr-3 font-mono text-xs font-bold text-muted">분류</th>
-                        <th className="py-2 pr-3 text-right font-mono text-xs font-bold text-muted">42.3</th>
-                        <th className="py-2 pr-3 text-right font-mono text-xs font-bold text-muted">43.1</th>
-                        <th className="py-2 pr-4 text-right font-mono text-xs font-bold text-muted">변화</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {accuracyComparison.map((row) => (
-                        <tr key={row.weaponKey} className="border-b border-border-soft">
-                          <td className="py-2 pl-4 pr-3 font-display font-bold text-fg">{row.weaponName}</td>
-                          <td className="py-2 pr-3 text-xs text-muted">
-                            {row.nerfed ? "반동 너프" : "대조군(무변경)"}
-                          </td>
-                          <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">
-                            {pct(row.before.accuracy, 2)}
-                          </td>
-                          <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">
-                            {pct(row.after.accuracy, 2)}
-                          </td>
-                          <td className="py-2 pr-4 text-right font-mono text-xs font-bold tabular-nums text-fg">
-                            {row.relChangePct === null ? "—" : signedPct(row.relChangePct / 100)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <p className="px-4 py-3 text-xs leading-relaxed text-muted" style={{ maxWidth: "var(--measure-wide)" }}>
-                  너프당한 쪽이 대조군보다 <strong className="text-fg-2">덜</strong> 움직여야
-                  정상인데 실제로는 방향이 반대입니다 — 이 표가 판정에 쓰이지 않는 이유입니다.
-                </p>
-              </details>
-            ) : null}
-          </div>
-        </SectionCard>
-
-        <footer className="flex flex-col gap-1 border-t border-border-soft pt-4">
-          <p className="font-mono text-xs text-muted">
-            집계 {fmtKst(deltas.meta.generatedAt)} · 판정 {deltas.meta.n}건 · 데이터 PUBG Developer API
-          </p>
-          <p className="text-xs leading-relaxed text-muted">
-            PUBG: BATTLEGROUNDS 및 관련 이미지·데이터의 권리는 KRAFTON, Inc.에 있습니다. 이 페이지는
-            비상업 개인 프로젝트이며 KRAFTON이 후원·제휴·승인한 서비스가 아닙니다. 자산 사용 문의
-            발송 2026-09-16.
-          </p>
-        </footer>
+        <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
       </div>
     </Container>
   );
