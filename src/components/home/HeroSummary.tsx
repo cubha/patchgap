@@ -39,13 +39,22 @@
 import Link from "next/link";
 import { fmtInt } from "@/lib/format";
 import { panelSurfaceClass } from "@/lib/panelSurface";
+import type { ReactNode } from "react";
 import type { HeadlineStats } from "./logic";
 
 export interface HeroSummaryProps {
   stats: HeadlineStats;
+  /**
+   * 히어로 문구 바로 아래에 놓일 조작 요소(인트로 재생 버튼). **주입받는 이유**: 이 컴포넌트는
+   * 순수 프레젠테이션이고 `__tests__/render.test.tsx`가 provider 없이 단독 렌더한다. 버튼을
+   * 여기서 직접 import하면 그 버튼이 쓰는 `useAmbient()`가 AmbientProvider 밖이라 throw하고,
+   * 테스트를 통과시키려고 provider를 끼워 넣는 일이 생긴다 — 의존을 호출부로 올려 그 압력을
+   * 구조적으로 없앤다. 넘기지 않으면 아무것도 렌더하지 않는다.
+   */
+  action?: ReactNode;
 }
 
-export default function HeroSummary({ stats }: HeroSummaryProps) {
+export default function HeroSummary({ stats, action }: HeroSummaryProps) {
   const { noteEntityCount, noteItemCount, statCount, unannouncedCount } = stats;
 
   return (
@@ -63,6 +72,10 @@ export default function HeroSummary({ stats }: HeroSummaryProps) {
           FDR q&lt;0.10 기준 · 1차축(픽·밴·아이템·골드·오브젝트) 유의 변화 집계 · 승률은 n≥200
           게이트 통과분만 제시
         </p>
+        {/* 인트로 재생 버튼(2026-09-17) — PUBG 브리핑과 같은 자리·같은 어포던스. 인트로 영상은
+            1.7초라 진입 순간을 놓치면 다시 볼 수 없었고, prefers-reduced-motion 환경에서는
+            아예 재생되지 않아 확인할 방법이 없었다(사용자 지적 "둘 다 안 된다"). */}
+        {action ? <div className="mt-4">{action}</div> : null}
       </div>
       <section className={`${panelSurfaceClass("glass")} grid grid-cols-3 overflow-hidden rounded-lg`}>
         <div className="border-r border-border-soft p-5">

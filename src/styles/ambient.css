@@ -426,8 +426,20 @@
   );
 }
 
+/* reduced-motion에서의 **수동 재생 예외** (2026-09-17, 실측으로 원인 특정)
+ *
+ * `src/app/globals.css`에 접근성 전역 리셋이 있다:
+ *   @media (prefers-reduced-motion: reduce) { *,::before,::after { animation-duration:.01ms !important } }
+ * 이 규칙 때문에 강하 애니메이션이 0.01ms 만에 끝나고 `animationend`가 즉시 발화해,
+ * 붙자마자 클래스가 벗겨졌다 — 재생 버튼을 눌러도 아무것도 안 보이던 실제 원인이다
+ * (클래스 부착 후 400ms 시점에 이미 사라진 것을 실측).
+ *
+ * **자동 재생은 AmbientBackground.tsx의 JS 게이트가 이미 막는다.** 따라서 reduced-motion 환경에서
+ * `.is-descending`이 붙어 있다면 그건 **사용자가 버튼을 눌렀다는 뜻**이고, 그때만 전역 리셋을
+ * 되돌린다. 움직임은 기본적으로 차단하되 명시적 요청은 존중한다는 원칙(WCAG 2.3.3의 취지)에
+ * 부합하며, 전역 리셋 자체는 그대로 둔다 — 여기 한 선택자만 예외다. */
 @media (prefers-reduced-motion: reduce) {
   .ambient-pubg-art.is-descending {
-    animation: none;
+    animation-duration: 3.4s !important;
   }
 }

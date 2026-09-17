@@ -24,6 +24,7 @@ import {
   pct,
   signedPct,
 } from "@/components/pubg/shared";
+import { panelSurfaceClass } from "@/lib/panelSurface";
 import { loadPubg, isReportable } from "@/lib/pubgData";
 
 export const metadata: Metadata = {
@@ -55,7 +56,12 @@ export default function PubgPage() {
           이유로 pt-44를 쓴다(src/app/page.tsx:85) — 아트 밴드 높이에 맞춰 한 단계 작은 값. */}
       <div className="flex flex-col gap-6 pt-40 pb-8">
         <PubgPageHeader
-          title="42.3 ⇒ 43.1 · 무기 획득 점유율"
+          showReplay
+          title={
+            <>
+              <span className="text-accent">42.3 ⇒ 43.1</span> · 무기 획득 점유율
+            </>
+          }
           lead={
             <>
               리그 오브 레전드와 <strong className="text-fg">같은 판정 엔진</strong>에 PUBG
@@ -64,6 +70,35 @@ export default function PubgPage() {
             </>
           }
         />
+
+        {/* 판정 요약 3타일 — 승인 시안 `.stat-row`/`.stat-tile`(공지된 변화 / 유의 변화 / 미공지).
+            /verify-impl 축B(2026-09-17)에서 **PUBG 브리핑에만 없다**는 것이 잡혔다: LoL 홈은
+            같은 자리에 같은 타일 3개를 갖고 있는데(14 / 403 / 47) PUBG는 표본·기저·게이트 카드로
+            바로 넘어가 "이 화면이 무엇을 발견했나"가 한눈에 안 들어왔다. 게임 스위처의 전제
+            (같은 사이트, 데이터와 테마만 다름)와도 어긋난다.
+            숫자 정의는 PUBG 데이터에 맞게 정직하게 잡는다 — LoL의 지표를 그대로 옮기지 않는다. */}
+        <section className={`${panelSurfaceClass("glass")} grid grid-cols-3 overflow-hidden rounded-lg`}>
+          <div className="border-r border-border-soft p-5">
+            <strong className="block font-display text-3xl font-bold tabular-nums text-fg">
+              {notes.length}
+            </strong>
+            <span className="mt-1 block text-xs text-muted">공지된 변화 (43.1 패치노트)</span>
+          </div>
+          <div className="border-r border-border-soft p-5">
+            <strong className="block font-display text-3xl font-bold tabular-nums text-fg">
+              {reportable.length}
+            </strong>
+            <span className="mt-1 block text-xs text-muted">
+              유의 변화 (효과크기 바닥 {pct(deltas.meta.effectFloor)} 초과)
+            </span>
+          </div>
+          <div className="p-5">
+            <strong className="block font-display text-3xl font-bold tabular-nums text-accent">
+              {unannounced.length}
+            </strong>
+            <span className="mt-1 block text-xs text-muted">미공지</span>
+          </div>
+        </section>
 
         <PubgSampleNotice sampleScope={deltas.meta.sampleScope} />
 

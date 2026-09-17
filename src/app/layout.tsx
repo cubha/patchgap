@@ -63,6 +63,7 @@ function getLolChrome(): GameChrome {
     nAfter: summaryTo?.data.matches ?? null,
     aggregatedAt: summaryTo?.meta.generatedAt ?? null,
     sampleChips: ["KR", "Master+", "솔로/듀오"],
+    snapshotCaption: getSnapshotCaption(),
   };
 }
 
@@ -89,11 +90,13 @@ function getPubgChrome(): GameChrome | null {
     nAfter: bundle.after.nMatches,
     aggregatedAt: bundle.deltas.meta.generatedAt,
     sampleChips: ["Steam", "전 지역·전 티어", "봇 포함"],
+    // PUBG의 스냅샷 시각은 PUBG 집계 산출물에서 온다 — LoL의 listPatches()를 쓰면
+    // `/pubg/methodology/`가 LoL 집계 시각을 자기 것처럼 표시한다(축A 지적).
+    snapshotCaption: fmtKst(bundle.deltas.meta.generatedAt),
   };
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  const snapshotCaption = getSnapshotCaption();
   const chrome: Record<GameId, GameChrome | null> = {
     lol: getLolChrome(),
     pubg: getPubgChrome(),
@@ -112,7 +115,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <AmbientProvider>
             <AmbientBackground />
             <div className="relative z-[1] flex min-h-full flex-1 flex-col">
-              <Header snapshotCaption={snapshotCaption} chrome={chrome} />
+              <Header chrome={chrome} />
               {children}
             </div>
           </AmbientProvider>

@@ -57,19 +57,52 @@ function useReducedMotion(): boolean {
  * 반복되면 오히려 거슬린다). "매 홈 진입마다"까지 가려면 `introEnded`도 같이 리셋해야 하는데,
  * 그건 재생 종료 후 정지 이미지 유지라는 기존 동작과 충돌해 채택하지 않는다.
  */
-function useIntroReveal(enabled: boolean): boolean {
-  const [playing, setPlaying] = useState(false);
+/**
+ * 인트로 1회 재생을 관리한다 — **어느 게임이든 같은 규칙**이다(LoL 영상 · PUBG 강하 애니메이션).
+ *
+ * `runToken`은 `"<게임>:<nonce>"` 형태이고, 이 토큰이 바뀔 때마다 새 재생이 시작된다.
+ * 종료(영상 `onEnded` / 애니메이션 `onAnimationEnd`)는 그 시점의 토큰을 `endedToken`에 적어
+ * 같은 토큰의 재재생을 막는다.
+ *
+ * **2026-09-17 개정 — 사용자 지적 "아직도 애니메이션은 안되는데? LOL, 배틀그라운드 둘다"**.
+ * 실측으로 재현한 결함 2건을 여기서 함께 고친다:
+ *
+ * 1. **`prefers-reduced-motion: reduce`면 양쪽 다 아예 재생되지 않았다.** 자동 재생을 막는 것
+ *    자체는 접근성상 옳지만, 그 설정을 켠 사용자에게는 인트로를 볼 수단이 **하나도 없었다**.
+ *    → 자동(nonce 0)만 막고, 재생 버튼을 통한 수동 재생(nonce ≥ 1)은 허용한다. 승인 시안
+ *    아티팩트도 히어로 우측에 `↻ 강하 인트로 재생` 버튼을 두고 있었다(미구현이던 항목).
+ * 2. **한 세션에서 한 번만 재생됐다.** 홈 → 대조표 → 홈으로 돌아와도 재생되지 않았다(실측).
+ *    브리핑 라우트를 벗어나면 `endedToken`을 비워, 재진입이 곧 새 재생이 되게 한다.
+ */
+function useIntroRun(game: "lol" | "pubg" | null, nonce: number, reducedMotion: boolean) {
+  const runToken = game === null ? null : `${game}:${nonce}`;
+  const [activeToken, setActiveToken] = useState<string | null>(null);
+
+  // **재생 시작은 반드시 effect에서 한다** — 서버 렌더에는 `window`가 없어 `reducedMotion`이
+  // 항상 false다. 이 값을 렌더 중에 바로 쓰면 정지 상태여야 할 HTML에 재생 클래스가 박혀
+  // 나가고, 하이드레이션이 그것을 되돌리지 못한다(2026-09-17 실측: reduced-motion을 켠
+  // 브라우저에서 `.is-descending`이 붙은 채 `animation-name: none`이라 아무 일도 안 일어나는
+  // 죽은 상태가 됐다). 첫 렌더는 항상 꺼진 상태 → mount 후 effect가 판단해 켠다.
   useEffect(() => {
-    if (!enabled) return;
+    // 브리핑을 벗어났거나(결함 2 — 리셋해서 재진입이 곧 새 재생이 되게 한다),
+    // 자동 재생이 reduced-motion에 걸리면(결함 1 — 버튼 재생 nonce≥1은 통과) 꺼둔다.
+    const blocked = reducedMotion && nonce === 0;
+    // 마운트 후에 판단해야만 하는 값(reducedMotion)에 반응하는 동기화라 effect에서 set한다 —
+    // 렌더 중에 계산하면 서버 HTML과 갈라진다(위 주석 참고).
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setPlaying(true);
-  }, [enabled]);
-  return playing;
+    setActiveToken(runToken === null || blocked ? null : runToken);
+  }, [runToken, reducedMotion, nonce]);
+
+  return {
+    runToken,
+    active: activeToken !== null && activeToken === runToken,
+    markEnded: () => setActiveToken(null),
+  };
 }
 
 export default function AmbientBackground() {
   const pathname = usePathname();
-  const { detailSplashUrl } = useAmbient();
+  const { detailSplashUrl, introNonce } = useAmbient();
   const reducedMotion = useReducedMotion();
 
   const game = gameFromPathname(pathname ?? "/");
@@ -86,14 +119,10 @@ export default function AmbientBackground() {
   // laneCamera.ts는 이제 "전체" 프레이밍(고정값)만 반환한다.
   const { tx, ty, scale } = laneCameraTransform();
 
-  const introPlaying = useIntroReveal(isHome && !reducedMotion);
-  const [introEnded, setIntroEnded] = useState(false);
-
-  // PUBG 강하 인트로 — LoL과 같은 훅을 쓰되 영상이 아니라 CSS 애니메이션이라 `onAnimationEnd`가
-  // 종료를 알린다(승인 시안 §3: 공식 재배포 가능 영상 자산이 없어 키아트 줌인으로 대체).
-  const pubgIntroPlaying = useIntroReveal(isPubgHome && !reducedMotion);
-  const [pubgIntroEnded, setPubgIntroEnded] = useState(false);
-  const pubgDescending = isPubgHome && pubgIntroPlaying && !pubgIntroEnded;
+  // 인트로를 소유하는 라우트는 두 게임의 **브리핑**뿐이다(LoL `/` · PUBG `/pubg/`).
+  const introGame = isHome ? "lol" : isPubgHome ? "pubg" : null;
+  const intro = useIntroRun(introGame, introNonce, reducedMotion);
+  const pubgDescending = isPubgHome && intro.active;
 
   // 마커(바론/드래곤 둥지)는 2026-09-12 /verify-impl 실측으로 **제거**했다.
   // 시안 v5에서 마커가 보였던 것은 그 데모의 리스트가 라인 필터로 짧아지면서 아래 지형이
@@ -113,9 +142,12 @@ export default function AmbientBackground() {
   if (isPubg) {
     return (
       <div className="ambient-root" aria-hidden="true">
+        {/* key에 runToken을 걸어 재생 버튼을 누를 때마다 요소가 새로 마운트되게 한다 —
+            같은 요소에 클래스만 다시 붙이면 브라우저가 애니메이션을 재시작하지 않는다. */}
         <div
+          key={intro.runToken ?? "static"}
           className={`ambient-pubg-art${pubgDescending ? " is-descending" : ""}`}
-          onAnimationEnd={() => setPubgIntroEnded(true)}
+          onAnimationEnd={intro.markEnded}
         />
         <div className="ambient-glow" />
         <div className="ambient-scrim" />
@@ -166,8 +198,8 @@ export default function AmbientBackground() {
           순간 켜진 뒤 리셋되지 않으므로, 재생 도중 다른 라우트로 이동해도(예: /compare/) 이
           레이어가 그대로 남아 배경 위에 얹힌다. isHome을 여기서도 확인해 홈을 벗어나면 즉시
           사라지게 한다(재생 중단 자체는 <video> 언마운트가 처리). */}
-      {isHome && introPlaying && !introEnded ? (
-        <div className="ambient-reveal">
+      {isHome && intro.active ? (
+        <div className="ambient-reveal" key={intro.runToken ?? "static"}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/bg/intro-still.jpg" alt="" />
           <video
@@ -176,7 +208,7 @@ export default function AmbientBackground() {
             autoPlay
             preload="auto"
             src="/bg/intro.webm"
-            onEnded={() => setIntroEnded(true)}
+            onEnded={intro.markEnded}
           />
         </div>
       ) : null}
