@@ -1,0 +1,244 @@
+# PLAN — PUBG 무기 키 정규화 + 9/20 마감 전 보완 (2026-09-17)
+
+> 기준선 문서. 이 파일보다 뒤에 쓰인 실측이 이 파일과 어긋나면 **실측이 이긴다** —
+> 그때는 이 파일을 함께 고친다(PLAN-vs-시안 충돌 교훈, `feedback_plan_vs_mock_conflict`).
+
+## 1. 사용자 요구사항 (원문)
+
+> PUBG 키 재발급 안함. 나머지 미해결 대상은 보완작업 진행해. 추가로 검토필요하면 advisor 권고대로 진행해.
+> 정규화도 바로넣어야해. 이외의 보완사항이나 기능들도 물리적으로 불가능한 항목 제외 9월20일이전에
+> 24시간 풀가동해서 할 수 있도록. 우선 구현계획먼저 수립해줘
+
+## 2. 이 계획이 **하지 않는** 것 (착수 전 확정 — 인식 정정)
+
+### 2-1. 명중률·반동 축 출하 ❌
+
+메모리(`project_hackathon_topic_2026` 잔여 F-①)는 "반동·명중률 축을 되살리려면 정규화부터"라고
+적어 **정규화가 그 축을 해금하는 것처럼** 읽힌다. `PLAN-pubg-gate-2026-09-16.md §8`이 그 축을
+이미 실측 반증했다:
+
+| 무기 | 반동 변경 | 42.3 명중률 | 43.1 명중률 | 변화 |
+|---|---|---|---|---|
+| RPD | 너프 | 10.04% | 9.86% | -1.8% |
+| M249 | 너프 | 10.66% | 10.50% | -1.4% |
+| AK47 | **대조군** | 25.31% | 23.51% | **-7.1%** |
+| HK416 | **대조군** | 23.07% | 20.32% | **-11.9%** |
+
+너프당한 LMG가 대조군보다 **덜** 떨어졌다 — 방향이 반대다. 교란원은 봇 비율 31.6%→27.5%
+(봇 상대 명중률이 사람 상대보다 높다). **정규화는 이 교란을 전혀 건드리지 못한다.**
+
+따라서 이 루프에서 명중률은 **출하 축이 아니라 "버린 축의 근거"로만** 코드에 들어간다(ST-4).
+축을 되살리려면 `LogPlayerAttack` 연사 간격·탄착군 같은 **새 신호 설계**가 필요하고, 그건
+9/20 창 밖이다.
+
+> ⚠️ 이 문단이 이 계획에서 가장 중요하다. 이걸 안 적으면 코드축 게이트(scope-critic·
+> acceptance-critic)는 *계획 대비*만 보므로 "명중률 지표 구현 ✅"를 그대로 통과시킨다.
+
+### 2-2. provenance 파이썬 수정 ❌
+
+`docs/plan/provenance/2026-09-16-pubg-harvest/{harvest,telemetry}.py`는 **실제로 돌아간 코드의
+기록**이다. 고치면 수집된 데이터와 어긋나 재현 가치가 사라진다. 미해결 ③(`LogPlayerKillV2`의
+`Weap*` 필터 누락)은 **파이썬이 아니라 src 정규화 계층에서** 해결한다 — 이미 리듀스된
+`data/raw/pubg/telemetry-reduced/*.json`(7,217건)을 소비하는 쪽에서 거른다.
+
+### 2-3. PUBG API 키 재발급 ❌ — 사용자 결정 (2026-09-17)
+
+`harvest.py:17`의 `get()`이 모든 요청에 Bearer를 병합하고 `:76`이 그걸로 텔레메트리 CDN을
+친다(`telemetry.py:27`은 무인증으로 같은 자산 수신 = 키 불필요의 반증). **사용자가 재발급
+안 함으로 확정.** 이 사실은 provenance README에 *알려진 속성*으로 남기고 미해결 목록에서 뺀다.
+
+### 2-4. 물리적으로 불가능 (사용자 요청에 따른 명시적 열거)
+
+| 항목 | 불가 사유 |
+|---|---|
+| 42.3 구간 재수집 | 패치 구간 종료 — PUBG는 과거 패치 텔레메트리를 소급 제공하지 않는다 |
+| PUBG rate-limit 증량 | 외부 승인 대기(크래프톤), 9/20까지 도착 보장 없음 |
+| 크래프톤 라이선스 사전확인 | 동일 — 외부 응답 의존 |
+| 26.19(9/24) 실데이터 반영 | 패치가 **9/24에 나온다** — 9/20 전에 존재하지 않는다 |
+
+---
+
+## 3. 착수 전 실측 (이 계획의 근거 — 재조사 금지)
+
+`data/raw/pubg/telemetry-reduced/*.json` 7,217건 전량 스캔:
+
+```
+attacks 77키 / damageHits 62키 / kills 139키 / pickup 66키
+attacks ∩ damageHits = 0   ← 네임스페이스 완전 분리 확인
+규칙 Item_Weapon_{X}_C → Weap{X}_C : 50/77 성공 · 시행수 커버리지 95.26%
+```
+
+**규칙이 못 잡는 실제 무기 5종** (나머지 22개는 투척물·근접 = 어차피 분모 밖):
+
+| attacks 키 | damageHits 키 | 시행수 | 성격 |
+|---|---|---|---|
+| `Item_Weapon_FAMASG2_C` | `WeapFamasG2_C` | 128,135 | 대소문자 |
+| `Item_Weapon_PanzerFaust100M_C` | `WeapPanzerFaust100M1_C` | 10,011 | 접미 숫자 |
+| `Item_Weapon_Win1894_C` | `WeapWin94_C` | 5,424 | 축약 |
+| `Item_Weapon_Duncans_M416_C` | `WeapDuncansHK416_C` | 2,939 | 스킨변종+내부명 |
+| `Item_Weapon_Crossbow_C` | `WeapCrossbow_1_C` | 2,425 | 접미 숫자 |
+
+**현재 출하 중인 화면에서 새로 발견한 결함 3건** (이번 루프의 실질 가치):
+
+- **N-1. 스킨 변종이 별도 무기 행으로 노출** — `Julies_Kar98k`(픽업 76) ·
+  `Duncans_M416`(44) · `Lunchmeats_AK47`(37). 베이스 무기로 접히지 않고, 표기명도
+  내부명 그대로(`Julies_Kar98k`) 화면에 나간다.
+- **N-2. 비무기가 "무기 획득 점유율" 분모에 포함** — `IntegratedRepair`(수리도구) ·
+  `TraumaBag` · `TacPack` · `Mortar` · `StunGun` · `Ziplinegun` · `FlareGun`.
+  분모의 **4.47%**. `NON_FIREARM` 정규식이 근접·투척만 잡고 장비류를 놓쳤다.
+- **N-3. 그중 `Mortar`가 미공지 판정 5건 중 1건으로 화면에 올라가 있다**(-13.5%).
+  박격포 설치물이 "무기 밸런스 미공지 변경"으로 판정된 상태.
+
+> **정정**: 분모 오염은 42.3·43.1 **양쪽 다 정확히 4.47%**로 대칭이라 상대변화(relChange)
+> 왜곡은 거의 상쇄된다. 실질 피해는 분모가 아니라 **N-3(비무기가 판정 행으로 화면에 오름)**과
+> **N-1(내부명 노출)**이다. 계획의 우선순위를 이 실측에 맞춘다 — "분모가 4.47% 틀렸다"는
+> 과장이고, "판정 목록에 무기가 아닌 게 있다"가 정확한 진술이다.
+
+`kills` 139키 중 **77키(27,598건)가 비무기** — `ProjGrenade_C` · `BP_CoupeRB_C`(차량) ·
+`PlayerFemale_A_C` · `Bluezonebomb_EffectActor_C`. 미해결 ③의 실체.
+
+### 3-1. 재현 스크립트 (acceptance-critic 지적 반영, 9/17 — 이전엔 숫자만 있고 스크립트가 없었다)
+
+`data/raw/pubg/telemetry-reduced/*.json`은 gitignore라 이 스크립트는 **로컬에 원본이 있을
+때만** 돈다(CI 재현 불가 — §6-1이 이미 명시한 한계). `pubg-weapon-key.ts`의 실제 export를
+그대로 가져다 쓰므로, 이 파일이 바뀌면 스크립트도 같이 맞춰야 한다.
+
+```ts
+// scratchpad에 저장 후 `npx tsx <파일>`로 실행
+import fs from "node:fs";
+import { canonicalWeaponKey, weaponKind } from "/mnt/d/workspace/patchgap/src/pipeline/aggregate/pubg-weapon-key";
+
+const DIR = "/mnt/d/workspace/patchgap/data/raw/pubg/telemetry-reduced";
+let total = 0, fail = 0;
+const canon = new Map<string, Set<string>>();
+
+for (const f of fs.readdirSync(DIR)) {
+  const j = JSON.parse(fs.readFileSync(`${DIR}/${f}`, "utf8"));
+  for (const rec of [j.weaponPickup, j.weaponAttacks, j.weaponDamageHits, j.weaponKills]) {
+    for (const k of Object.keys(rec ?? {})) {
+      total++;
+      try {
+        const c = canonicalWeaponKey(k);
+        weaponKind(k);
+        if (!canon.has(c)) canon.set(c, new Set());
+        canon.get(c)!.add(k);
+      } catch {
+        fail++; // kills의 비-Weap* 액터(플레이어·차량·이펙트)만 여기 떨어져야 정상
+      }
+    }
+  }
+}
+console.log("전체 키 인스턴스", total, "| throw", fail, "| 정준키 수", canon.size);
+```
+
+기대 출력(2026-09-17 실측, 7,217건): `전체 691,942 | throw 13,645 | 정준키 79`. `throw`가
+전부 `kills` 필드에서만 나오는지는 필드별로 나눠 다시 돌리면 확인된다(본문에 준 두 번째
+스크립트와 같은 패턴 — 각 `Object.entries({pickup:...,attacks:...,damageHits:...,kills:...})`로
+바꿔 필드명을 실패 로그에 같이 찍으면 된다).
+
+---
+
+## 4. SubTask
+
+### ST-1. 무기 키 정규화 모듈 신설 `src/pipeline/aggregate/pubg-weapon-key.ts` ⭐최우선
+
+- `toCanonical(key: string): string` — `Item_Weapon_*`·`Weap*` 양쪽을 **단일 정준키**로.
+- 스킨 변종 → 베이스 접기(`Duncans_M416`·`Lunchmeats_AK47`·`Julies_Kar98k` → `M416`·`AK47`·`Kar98k`).
+- 규칙 실패 5종은 명시 예외 테이블. **테이블에 없고 규칙도 실패하는 키는 `throw`** —
+  프로젝트 TS 규칙(미구현은 throw, 조용히 빈 값 금지) + 모듈 주석이 경고한
+  "분자·분모가 서로 다른 무기를 가리키고 그 사실이 조용히 숨는다"의 직접 방지.
+- 분류자 `weaponKind(key): "firearm" | "throwable" | "melee" | "equipment" | "vehicle" | "other"` —
+  N-2의 장비류를 `equipment`로 분리(정규식 부정 나열 대신 양성 분류).
+- **미매핑 키 커버리지 테스트**: 7,217건 전량의 모든 키가 분류되는지 CI에서 강제.
+  → **범위 축소, 실제 이행(9/17)**: 7,217건은 `data/raw`(gitignore)에만 존재해 CI가
+  재현할 방법이 없다 — "CI에서 강제"는 애초에 이 저장소 구조와 맞지 않는 요구였다.
+  실제로는 대표 케이스 단위 테스트 13건(`__tests__/pubg-weapon-key.test.ts` — 예외 5종·
+  스킨 3종·근접변종 5종·throw 경로)을 CI가 강제하고, 전량 0-throw는 §3-1 스크립트로
+  **로컬 1회 재현**한다(다음 세션이 재확인하려면 다시 돌려야 한다). §6-1도 이 축소를
+  기록한다 — 여기 적힌 원안 문구를 재작업 계획으로 오독하지 않도록 둘을 맞춘다
+  (acceptance-critic 9/17 2차 재검증 지적 반영).
+
+### ST-2. 비무기 제외 + 스킨 접기를 집계에 반영 (N-1·N-2·N-3 수정)
+
+- `pubg-weapons.ts`의 `isFirearm` → `weaponKind(k) === "firearm"`로 교체.
+- 픽업 누적 전 `toCanonical` 적용 → 스킨 변종이 베이스에 합산.
+- **재집계 후 판정 변동을 반드시 측정해 기록한다** — `Mortar` 미공지가 빠지면 미공지 5→4건.
+  숫자가 바뀌면 화면 문구·방법론 표기도 **동반 갱신**(§6-7 제약).
+
+### ST-3. `Weap*` 필터를 src 계층에 (미해결 ③)
+
+`weaponKills`·`weaponDamageHits` 소비 지점에서 `weaponKind`가 `firearm`이 아닌 키를 제외.
+provenance 파이썬은 불변.
+
+> **이행 결과(acceptance-critic 지적, 9/17)**: `weaponDamageHits`는 `pubg-accuracy.ts`의
+> `accumulateFirearms`에서 필터된다. `weaponKills`는 **현재 이 저장소 어디서도 소비되지
+> 않는다** — 필터를 적용할 소비 지점 자체가 없다. provenance README가 이미 "현재 아무도
+> 소비하지 않으므로 출하 숫자에는 영향이 없다. 재수집할 때 이식할 것"이라 정직하게
+> 기록해뒀고, 판정 결과에는 영향이 없다(§2-1과 일관 — 어차피 판정 축이 아니다). `weaponKills`를
+> 실제로 소비하는 기능이 생기는 시점에 같은 필터를 적용해야 한다는 뜻으로 남겨둔다.
+
+### ST-4. §8 반증표를 커밋 코드로 재현 `src/pipeline/aggregate/pubg-accuracy.ts`
+
+- `accuracyByWeapon(matches, patch)` — `damageHits ÷ attacks`를 **정준키로 결합**해 산출.
+- **출하 축이 아니다.** 방법론 페이지에 "시도했고 반증된 축"으로, 대조군 비교표 + 봇 비율
+  교란 설명과 함께 노출. 판정(`MatchStatus`)에는 절대 연결하지 않는다.
+- 이게 정규화의 진짜 산출물이다 — 심사 기준 '기술력'에서 "무엇을 버렸고 왜 버렸는가"를
+  근거 링크로 보여줄 수 있게 된다.
+
+### ST-5. 테스트 + `verify.sh` 게이트
+
+- 정규화 단위 테스트(예외 5종 · 스킨 3종 · throw 경로 · 분류자).
+- `verify.sh` Spec 규칙 추가: `pubg-weapons.ts`·`pubg-delta.ts`에서 **원시 키 직접 비교 금지**
+  (정준키 경유 강제) — 규칙만 적고 게이트가 없으면 반드시 드리프트한다.
+
+### ST-6. 26.19(9/24) 사전 스테이징 — 예선 창 안에서 터진다
+
+9/10 선례: cron 자동 발화 → 얇은 표본(n=737) → 수동 `force=true` 재수집 **2h44m**.
+9/24는 심사위원이 보고 있는 중에 같은 경로를 탄다.
+- 표본 임계 가드: 수집 후 `nMatches < 5000`이면 디스코드 경고 + 집계 산출물 교체 보류.
+- `force=true` 재수집 절차를 문서 1장으로 고정(실행은 사용자 확인 — 실 Riot API 3.3h).
+
+### ST-7. 문서·메모리 정합
+
+- 메모리 잔여 F: ①은 ST-1~2로 해소 · ②는 **사용자 결정으로 종결** · ③은 ST-3으로 해소.
+- `PLAN-pubg-gate-2026-09-16.md §6-6`(정규화 미이행)에 이행 포인터.
+- provenance README에 "키가 CDN에 전송됨 = 알려진 속성, 재발급 안 함(9/17 사용자 결정)".
+
+---
+
+## 5. 실행 순서 · 9/20 창 배치
+
+배포본은 **9/21~10/5 심사 자격요건**이고 지금 최신이다(홈 26.16/17/18 · `/pubg/` 42.3/43.1
+실측 확인, 9/17). 그래서 **위험한 것을 먼저, 마지막 창은 freeze**로 배치한다.
+
+| 창 | 내용 |
+|---|---|
+| **9/17 (오늘)** | ST-1 → ST-2 → ST-3. 판정 숫자가 바뀌는 구간이라 가장 먼저 끝내고 재측정 |
+| **9/18** | ST-4 · ST-5. 병행: **사용자 — 해커톤 신청서 제출(마감)** |
+| **9/19** | ST-6 · ST-7 + `/verify-impl` 축A·축B |
+| **9/20 전반** | `verify.sh --full` · PR · merge · 배포 |
+| **9/20 후반** | **FREEZE** — 신규 착지 금지. 배포본 내용 재검증(curl grep)만 |
+
+> 9/20 이후 ~ 10/5는 **예선 상시 작동이 자격요건**이므로 기능 착지를 하지 않는다.
+> 26.19(9/24) 데이터 갱신만 예외이고, 그래서 ST-6이 사전 스테이징이다.
+
+## 6. 완료 기준
+
+- [x] 대표 케이스(단위 테스트 13건: `canonicalWeaponKey` 7 + `weaponKind` 6, 각 `it` 내부는
+      다중 `expect`로 예외 5종·스킨 3종·근접변종 5종·throw 경로를 커버)는 CI에서
+      미분류 throw를 검증한다.
+      **7,217건 전량 0-throw 검증은 gitignore된 data/raw를 쓴 로컬 1회 스캔**(재현 스크립트는
+      §3-1에 실제로 있다 — 9/17 acceptance-critic 2차 재검증 전까지는 숫자만 있고 스크립트가
+      없었다, 지적 받고 추가 후 재실행해 기대 출력과 일치함을 재확인했다) — CI 회귀 대상이
+      아니다, 다음 세션이 재검증하려면 다시 돌려야 한다.
+- [x] 스킨 변종 3종(`Duncans_M416`·`Lunchmeats_AK47`·`Julies_Kar98k`)이 베이스에 합산됨을
+      단위 테스트로 확인. 실집계 재실행으로 델타 행 56→47건 감소도 확인.
+- [x] 판정 목록에 `firearm`이 아닌 항목 0건 — `Mortar` 미공지 판정 소멸 확인.
+- [x] §8 반증표가 `pubg-accuracy.ts`로 재현되고(전체표본 재계산, 방향 동일), 출하 축
+      아님이 코드 주석·`/pubg/` 화면(details 접이식)·PLAN §2-1 3곳에 명시.
+- [x] 변동된 판정 숫자(56→47건)는 화면이 정적 JSON을 동적으로 렌더하므로 자동 반영 —
+      하드코딩 문구 없음을 grep으로 확인.
+- [x] `verify.sh --full` PASS (2026-09-17, 로컬) — Spec·tsc·ESLint·vitest 733건·build·design-lint 전부 초록.
+      **배포본 내용 재검증은 아직 해당 없음** — 이 브랜치(`feature/silver_sh`)가 아직
+      push·PR·merge 전이라 배포되지 않았다. §5 일정대로 9/19~9/20 전반에 PR→merge→배포
+      후 재검증한다.

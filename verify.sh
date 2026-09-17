@@ -149,6 +149,22 @@ if [ -n "$TARGET_FILES" ]; then
         ;;
     esac
 
+    # 4b) PUBG 무기 키 정준화 우회 금지 — pubg-weapon-key.ts가 유일한 정규화 소유자다
+    # (PLAN-pubg-normalization-2026-09-17.md ST-5). attacks∩damageHits가 원래 0이었던
+    # 이유가 두 네임스페이스를 직접 문자열 비교로 결합하려던 시도였다 — 소비 계층에
+    # startsWith/정규식/등가비교/includes로 같은 짓을 다시 하면 재발한다. 등가·includes는
+    # 2026-09-17 acceptance-critic 2차 재검증이 지적한 우회 경로(원 규칙은 startsWith·정규식
+    # 리터럴만 잡았다) — 세 파일 다 이 시점엔 원시 리터럴 비교가 0건이라 안전하게 추가했다.
+    case "$file" in
+      */pubg-weapons.ts|*/pubg-delta.ts|*/pubg-accuracy.ts)
+        if grep -nE '\.startsWith\((\x27|")(Weap|Item_Weapon_)|/(\^Weap|Item_Weapon_)|(===|==)[[:space:]]*(\x27|")(Weap|Item_Weapon_)|\.includes\((\x27|")(Weap|Item_Weapon_)' "$file" 2>/dev/null \
+            | grep -v '^[0-9]*:[[:space:]]*//' | grep -q .; then
+          fail "[PUBG 정규화 우회] 원시 무기 키 직접 비교 — canonicalWeaponKey/weaponKind(pubg-weapon-key.ts) 경유 필요: $file"
+          FAIL_COUNT=$((FAIL_COUNT + 1))
+        fi
+        ;;
+    esac
+
     # 4) 디자인 토큰 Ground Truth 하드코딩 검사 (docs/design/DESIGN-TOKENS.md 존재 시)
     if [ "$DESIGN_TOKENS_GT" = true ]; then
       case "$file" in
