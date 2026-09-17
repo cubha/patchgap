@@ -5,7 +5,7 @@
 // 들고 동기화하는 대신, 상태를 한 곳에 올리고 배경은 그 상태의 유일한 구독자로 둔다.
 "use client";
 
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import type { LaneAxis } from "@/lib/lane";
 
 export interface AmbientState {
@@ -16,6 +16,14 @@ export interface AmbientState {
   /** 항목상세(챔피언) 히어로 스플래시 URL. null이면 상세 스플래시 레이어를 렌더하지 않는다. */
   detailSplashUrl: string | null;
   setDetailSplashUrl: (url: string | null) => void;
+  /**
+   * 인트로 재생 요청 카운터. 0 = 라우트 진입에 따른 **자동** 재생, 1 이상 = 사용자가 재생
+   * 버튼을 누른 **수동** 재생이다. 이 둘을 구분하는 이유는 `prefers-reduced-motion` 때문 —
+   * 자동 재생은 그 설정을 존중해 막지만, 사용자가 직접 누른 것은 명시적 의사라 재생한다
+   * (막으면 그 설정을 켠 사람은 인트로를 볼 방법이 아예 없다).
+   */
+  introNonce: number;
+  replayIntro: () => void;
 }
 
 const AmbientContext = createContext<AmbientState | null>(null);
@@ -23,10 +31,13 @@ const AmbientContext = createContext<AmbientState | null>(null);
 export function AmbientProvider({ children }: { children: ReactNode }) {
   const [selectedLane, setSelectedLane] = useState<LaneAxis>("all");
   const [detailSplashUrl, setDetailSplashUrl] = useState<string | null>(null);
+  const [introNonce, setIntroNonce] = useState(0);
+
+  const replayIntro = useCallback(() => setIntroNonce((n) => n + 1), []);
 
   const value = useMemo<AmbientState>(
-    () => ({ selectedLane, setSelectedLane, detailSplashUrl, setDetailSplashUrl }),
-    [selectedLane, detailSplashUrl]
+    () => ({ selectedLane, setSelectedLane, detailSplashUrl, setDetailSplashUrl, introNonce, replayIntro }),
+    [selectedLane, detailSplashUrl, introNonce, replayIntro]
   );
 
   return <AmbientContext.Provider value={value}>{children}</AmbientContext.Provider>;

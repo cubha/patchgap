@@ -155,6 +155,23 @@ https://claude.ai/artifact/CXqUtUXTXyfmDHH8gnUMys
 
 ---
 
+### 4-7. 인트로 재생 제어 (2026-09-17 추가 요구)
+
+사용자 원문: **"아직도 애니메이션은 안되는데? LOL, 배틀그라운드 둘다"**
+
+실측으로 재현한 원인 3건(둘 다 안 되던 공통 원인 포함):
+
+1. `prefers-reduced-motion: reduce`면 **양쪽 다** 자동 재생이 차단됐고, 그 설정을 켠 사용자에겐
+   인트로를 볼 수단이 하나도 없었다.
+2. `globals.css`의 전역 접근성 리셋(`animation-duration:.01ms !important`)이 PUBG 강하를
+   0.01ms 만에 끝내 `animationend`가 즉시 발화 → 클래스가 붙자마자 벗겨졌다.
+3. 한 세션에서 1회만 재생됐다(홈→대조표→홈 재진입 시 무반응).
+
+처방: 자동만 reduced-motion 존중 · 라우트 이탈 시 리셋 · 재생 시작을 effect로 이동(서버 렌더
+`window` 부재 문제) · `.ambient-pubg-art.is-descending` 한 선택자만 전역 리셋 예외 ·
+**재생 버튼을 양쪽 게임 브리핑에 배치**. 승인 시안에는 PUBG 히어로에만 `.replay-btn`이 있었으나
+사용자가 "둘 다"를 지적했고, 같은 자리 같은 어포던스가 게임 스위처의 전제(같은 사이트)와 맞는다.
+
 ## 5. SubTask
 
 | ID | 내용 | 대상 파일 |
@@ -177,6 +194,8 @@ https://claude.ai/artifact/CXqUtUXTXyfmDHH8gnUMys
 - `docs/design/DESIGN-TOKENS.md` `[data-game]` 계약 주석 "미출하 — 문서화만" → 출하
 - `docs/design/UX-BRIEF.md` 헤더 행(29줄)에 게임 드롭다운 추가 · `결과 화면 /pubg/` 서술
 - 메모리 `project_hackathon_topic_2026.md`
+- `docs/plan/verify-spec/game-switcher-2026-09-17.md` — 구현 결정이 바뀌면 여기도 같이 고친다
+  (2026-09-17 축A가 이 파일의 낡은 서술을 "기준선 문서 간 불일치"로 지목했다)
 
 ## 7. 완료 기준
 
@@ -190,4 +209,6 @@ https://claude.ai/artifact/CXqUtUXTXyfmDHH8gnUMys
 - [ ] **데스크톱 배경 프레이밍은 2026-09-16 이전과 동일**하다(이미지 상단 y=0)
 - [ ] PUBG 배경이 승인 시안의 공식 키아트이고, 강하 인트로(3.4s CSS)가 재생된다
 - [ ] PUBG 램프 9개 토큰이 승인 시안 §2 튜닝값과 **정확히** 일치한다
+- [ ] 인트로가 reduced-motion 환경에서도 재생 버튼으로 확인 가능하고, 브리핑 재진입 시 재생된다
+- [ ] PUBG 라우트 어디에서도 헤더가 LoL 집계 시각(스냅샷 캡션)을 주장하지 않는다
 - [ ] `bash verify.sh --full` PASS

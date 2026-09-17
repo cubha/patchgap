@@ -8,6 +8,7 @@ import type { DeltaRecord } from "@/pipeline/types";
 import { loadDdragonSafe } from "@/pipeline/match/ddragon";
 import Container from "@/components/Container";
 import HeroSummary from "@/components/home/HeroSummary";
+import IntroReplayButton from "@/components/IntroReplayButton";
 import ReleaseNoteStream, { type ReleaseStreamEntry } from "@/components/home/ReleaseNoteStream";
 import StreamLaneFilter from "@/components/home/StreamLaneFilter";
 import SideMatchAverages from "@/components/home/SideMatchAverages";
@@ -83,7 +84,7 @@ export default function Home() {
             같이 내려가므로 그 요구를 그대로 만족한다. 176px은 Tailwind 표준 스케일(11rem)이라
             arbitrary 불필요. */}
         <Container className="flex flex-col gap-6 pt-44 pb-8">
-          <HeroSummary stats={headline} />
+          <HeroSummary stats={headline} action={<IntroReplayButton label="인트로 재생" />} />
           <StreamColumnLayout
             leftHeader={<StreamLaneFilter />}
             left={

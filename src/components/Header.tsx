@@ -80,14 +80,20 @@ export interface GameChrome {
   aggregatedAt: string | null;
   /** 읽기전용 표본 칩(고정 조건). 비면 칩 그룹 자체를 렌더하지 않는다. */
   sampleChips: string[];
+  /**
+   * "2026-09-05 14:00 KST" 형태(fmtKst 출력). PAIR_SCOPED_SECTIONS **밖**(방법론 등)에서만
+   * 쓰인다 — 그 라우트는 특정 패치 쌍에 묶여 있지 않아 n·집계 캡션 대신 이것을 보여준다.
+   *
+   * **이것도 게임 소유다**(2026-09-17 /verify-impl 축A 지적): 예전엔 Header가 게임 무관
+   * `snapshotCaption` prop 하나를 받았고 그 값은 `listPatches()`/`loadSummary()`로 계산한
+   * **LoL 전용**이었다. 그래서 `/pubg/methodology/`가 LoL의 집계 시각을 자기 것처럼 표시했다 —
+   * 칩·n·패치쌍만 분기하고 이 캡션을 빠뜨린 잔여 결함이었다. 같은 파일 위쪽 주석이 경고한
+   * "실제 보고 있는 쌍과 다른 숫자를 주장"과 같은 계열이다.
+   */
+  snapshotCaption: string | null;
 }
 
 export interface HeaderProps {
-  /** "2026-09-05 14:00 KST" 형태(fmtKst 출력). 산출 데이터가 아직 없으면 null.
-   * PAIR_SCOPED_SECTIONS 밖에서만 쓰인다(그 안에서는 GameChrome의 n/집계 캡션이 대신한다 —
-   * 두 캡션이 동일 패치를 가리키는 경우가 많지만 소스가 달라(listPatches vs listPatchPairs)
-   * aggregate 완료·match 미완 구간에서 갈라질 수 있어 합치지 않는다). */
-  snapshotCaption?: string | null;
   /** 게임별 크롬 데이터. `pubg`가 null이면 **드롭다운에 배틀그라운드 옵션이 뜨지 않는다**
    * (출하 게이트 — 집계 산출물이 없거나 근거 딸린 판정이 0건인 경우). 정적 export라 라우트
    * 자체는 빌드되지만, 링크가 없으면 사용자는 도달하지 않고 그 라우트는 미연결 상태를
@@ -137,7 +143,7 @@ function pairLabel(pair: PatchPairOption): string {
   return `${pair.from} → ${pair.to}`;
 }
 
-export default function Header({ snapshotCaption = null, chrome }: HeaderProps) {
+export default function Header({ chrome }: HeaderProps) {
   const pathname = usePathname();
   const headerRef = useChromeHeight();
   const router = useRouter();
@@ -166,6 +172,7 @@ export default function Header({ snapshotCaption = null, chrome }: HeaderProps) 
   }
   const pairCaption = pairCaptionParts.length > 0 ? pairCaptionParts.join(" · ") : null;
   const sampleChips = current?.sampleChips ?? [];
+  const snapshotCaption = current?.snapshotCaption ?? null;
 
   return (
     <header ref={headerRef} className="glass-chrome sticky top-0 z-20 border-b">
