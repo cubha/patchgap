@@ -20,7 +20,8 @@ import { describe, expect, it } from "vitest";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import type { DeltasFile } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
-import { buildReleaseStream, sortMatchedGroups } from "../releaseStream";
+import { buildReleaseStream, contentTier, sortMatchedGroups } from "../releaseStream";
+import { indexNoteDeltas } from "../noteDeltaIndex";
 
 function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
   return {
@@ -268,5 +269,56 @@ describe("sortMatchedGroups — 3티어", () => {
   it("deltas가 없으면 전부 '관측 없음' 티어라 노트 순서 그대로(치장만 맨 뒤)", () => {
     const groups = buildReleaseStream(notes, null).filter((g) => g.kind === "matched");
     expect(sortMatchedGroups(groups, null, 0.1).map((g) => g.entity)).toEqual(["카시오페아", "바드", "에코", "바루스", "홀 오브 레전드"]);
+  });
+});
+
+// ── 섹션 묶음 티어 (2026-09-18, 채점 라운드5 ST2 / B2) ────────────────────────────────
+// h3 없는 섹션의 폴백 엔티티(「의회 - 투표 1 결과」·「증강」·「버그 수정」)는 엔티티가 아니다.
+// 관측 없음(2) 뒤·치장(4) 앞의 티어 3에 둔다 — 챔피언과 같은 위계로 섞이지 않되 숨기지도 않는다.
+// 판별(`isSectionBundle`)은 ddragon을 알아야 하므로 page.tsx가 하고, 정렬은 이름 집합만 받는다.
+describe("sortMatchedGroups — 섹션 묶음 티어(3)", () => {
+  const notes = notesFile([
+    note({ id: "n-council", entity: "의회 - 투표 1 결과", section: "champion", anchorKind: "section" }),
+    note({ id: "n-skin", entity: "홀 오브 레전드", section: "champion", summary: "떠오른 전설 오리아나 스킨" }),
+    note({ id: "n-bard", entity: "바드", section: "champion" }),
+    note({ id: "n-bug", entity: "버그 수정", section: "system", anchorKind: "section" }),
+    note({ id: "n-cass", entity: "카시오페아", section: "champion" }),
+  ]);
+  const deltas = deltasFile([
+    delta({ id: "d-bard", entityName: "바드", metric: "pickRate", delta: -0.022, ci: [-0.031, -0.013], q: 0.001, status: "announced-consistent", matchedNoteId: "n-bard", matchedNoteIds: ["n-bard"] }),
+    delta({ id: "d-cass", entityName: "카시오페아", metric: "winRate", delta: -0.006, ci: [-0.05, 0.04], q: 1, status: "announced-inconsistent", matchedNoteId: "n-cass", matchedNoteIds: ["n-cass"] }),
+  ]);
+  const bundles = new Set(["의회 - 투표 1 결과", "버그 수정"]);
+
+  it("일치 → 관측 없음 → 섹션 묶음 → 치장 순이고, 섹션 묶음 안에서는 노트 순서", () => {
+    const groups = buildReleaseStream(notes, deltas).filter((g) => g.kind === "matched");
+    expect(sortMatchedGroups(groups, deltas, 0.1, bundles).map((g) => g.entity)).toEqual([
+      "바드",
+      "카시오페아",
+      "의회 - 투표 1 결과",
+      "버그 수정",
+      "홀 오브 레전드",
+    ]);
+  });
+
+  it("집합을 안 주면 이전과 동일하게 동작한다(섹션 묶음은 관측 없음 티어에 노트 순서로 섞인다)", () => {
+    const groups = buildReleaseStream(notes, deltas).filter((g) => g.kind === "matched");
+    expect(sortMatchedGroups(groups, deltas, 0.1).map((g) => g.entity)).toEqual([
+      "바드",
+      "의회 - 투표 1 결과",
+      "버그 수정",
+      "카시오페아",
+      "홀 오브 레전드",
+    ]);
+  });
+
+  it("contentTier: 치장은 4, 섹션 묶음은 3, 짝 없는 일반 엔티티는 2", () => {
+    const groups = buildReleaseStream(notes, deltas).filter((g) => g.kind === "matched");
+    const byEntity = Object.fromEntries(groups.map((g) => [g.entity, g]));
+    const noteDeltas = indexNoteDeltas(deltas.rows, 0.1);
+    expect(contentTier(byEntity["홀 오브 레전드"], noteDeltas, 0.1, bundles)).toBe(4);
+    expect(contentTier(byEntity["의회 - 투표 1 결과"], noteDeltas, 0.1, bundles)).toBe(3);
+    expect(contentTier(byEntity["카시오페아"], noteDeltas, 0.1, bundles)).toBe(2);
+    expect(contentTier(byEntity["바드"], noteDeltas, 0.1, bundles)).toBe(1);
   });
 });
