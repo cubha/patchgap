@@ -28,13 +28,6 @@ export const GAMES: readonly GameDef[] = [
   { id: "pubg", label: "배틀그라운드", prefix: "/pubg" },
 ] as const;
 
-/**
- * 양쪽 게임에 **실제로 라우트가 존재하는** 섹션. 내비 3개와 1:1이다.
- * 여기 없는 경로(`/item/[id]` 등)에서 게임을 바꾸면 대응 라우트가 없으므로 브리핑으로
- * 떨어뜨린다 — 정적 export에서 없는 경로는 곧 404(빈 화면)라 조용히 깨지기 때문이다.
- */
-const SHARED_SECTIONS = ["", "compare", "methodology"] as const;
-
 function defOf(game: GameId): GameDef {
   const def = GAMES.find((g) => g.id === game);
   if (!def) throw new Error(`TODO(game): 알 수 없는 게임 "${game}" — GAMES에 추가한다.`);
@@ -50,26 +43,17 @@ export function gameFromPathname(pathname: string): GameId {
   return pathname === "/pubg" || pathname.startsWith("/pubg/") ? "pubg" : "lol";
 }
 
-/** 앞뒤 슬래시를 벗긴 세그먼트 배열 — `trailingSlash` 유무에 결과가 흔들리지 않게 한다. */
-function segments(pathname: string): string[] {
-  return pathname.split("/").filter((s) => s.length > 0);
-}
-
 /**
  * 현재 경로에서 `game`으로 전환했을 때 가야 할 경로.
  * - 같은 게임이면 현재 경로를 그대로 둔다(상세 화면에서 이탈시키지 않는다).
- * - 공용 섹션이면 같은 섹션으로 건너간다.
- * - 대응 라우트가 없으면 그 게임의 브리핑으로 떨어진다.
+ * - 다른 게임이면 **항상 그 게임의 브리핑**(`/` 또는 `/pubg/`)이다 — 2026-09-18 라운드6(사용자 C2
+ *   "테마전환될때마다 초기화되도록. 브리핑 메뉴가 기본값"). 이전엔 공용 섹션(대조표·방법론)이면 같은
+ *   섹션으로 건너뛰었는데, 게임이 바뀌면 보던 맥락(엔티티·패치 쌍)이 전부 바뀌므로 진입점으로 돌아가는
+ *   쪽이 맞다. 정적 export에서 없는 경로는 곧 404라, 브리핑은 언제나 실재하는 착지점이기도 하다.
  */
 export function gameHref(game: GameId, pathname: string): string {
   if (gameFromPathname(pathname) === game) return pathname;
-
-  const rest = segments(pathname);
-  if (rest[0] === "pubg") rest.shift();
-  const section = rest.length === 0 ? "" : rest[0];
-  const target = (SHARED_SECTIONS as readonly string[]).includes(section) ? section : "";
-
   const { prefix } = defOf(game);
   // trailingSlash:true 이므로 항상 슬래시로 끝낸다(정적 export가 그 경로로 디렉터리를 만든다).
-  return `${prefix}/${target ? `${target}/` : ""}` || "/";
+  return `${prefix}/`;
 }

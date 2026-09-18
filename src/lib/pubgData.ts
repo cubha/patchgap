@@ -8,6 +8,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { MatchStatus } from "@/pipeline/types";
+import { isReportable } from "@/pipeline/shared/pubg-status";
 import type { PubgPatchAggregate } from "@/pipeline/aggregate/pubg-weapons";
 import type { PubgAccuracyStat } from "@/pipeline/aggregate/pubg-accuracy";
 import type { PubgMapAggregate, PubgMapDeltaRow } from "@/pipeline/aggregate/pubg-maps";
@@ -134,11 +135,5 @@ export function loadPubgAssets(): PubgAssetManifest | null {
   return readJson<PubgAssetManifest>("assets.json");
 }
 
-/** 화면 상단 "발견" 영역에 올릴 자격이 있는 판정 — 근거가 실제로 선 것만. */
-export function isReportable(status: MatchStatus): boolean {
-  return (
-    status === "announced-consistent" ||
-    status === "announced-inconsistent" ||
-    status === "unannounced"
-  );
-}
+// `isReportable`은 클라이언트 번들 안전 모듈(pipeline/shared/pubg-status.ts)에 있다 — 서버 호출부 호환용 재export.
+export { isReportable } from "@/pipeline/shared/pubg-status";

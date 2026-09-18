@@ -1,31 +1,32 @@
 // src/components/pubg/PubgCompareTable.tsx
-// PUBG 전체 판정표 — 상태 필터 + 정렬. LoL 대조표(`CompareExplorer`)와 **같은 자리, 다른 구현**이다.
+// PUBG 판정표 — 상태 필터 + 정렬. LoL 대조표(`CompareExplorer`)와 **같은 자리, 다른 구현**이다.
 //
 // **왜 CompareExplorer를 제네릭화하지 않았나**(PLAN-game-switcher-2026-09-17 X3): 그 컴포넌트는
-// `DeltaRecord`(챔피언·아이템 엔티티 + q값 + LLM causes + 라인)를 전제로 만들어졌고 테스트 2종
-// (`compare/__tests__/logic.test.ts`·`render.test.tsx`)이 그 형태에 걸려 있다. PUBG 행에는 q도
-// causes도 라인도 **없다**. 제네릭화하면 양쪽 다 옵셔널투성이가 되고 LoL 테스트가 흔들린다.
-// 원자 컴포넌트(FilterPill·StatusBadge)만 공유하고 표는 따로 쓴다.
+// `DeltaRecord`(챔피언·아이템 엔티티 + q값 + LLM causes + 라인)를 전제로 만들어졌다. PUBG 행에는 q도
+// causes도 라인도 없다. 원자 컴포넌트(FilterPill·StatusBadge)만 공유하고 표는 따로 쓴다.
 //
-// **없는 열은 만들지 않는다**: q(BH-FDR 보정 p) 열이 없는 이유는 PUBG 판정이 효과크기 바닥 +
-// Wilson CI 방식이라 q를 계산하지 않기 때문이다. 0이나 빈칸으로 채우면 "무근거 문장은 회색"
-// 원칙 위반(있지도 않은 값을 있는 척)이라 열 자체를 두지 않는다.
+// 2026-09-18 라운드6(사용자 C1·C5·P1): **판정이 선 무기만** 올린다 — 바닥 미달·변화 없음·표본 부족은
+// 표시하지 않는다(그 규칙은 방법론이 말한다). 칩은 전체/공지/미공지 3종, 배지는 표시 키(공지 / 공지 ·
+// 이상 관측 / 미공지), 무기명은 상세 링크다(진입점 부재 지적).
+//
+// **없는 열은 만들지 않는다**: q(BH-FDR 보정 p) 열이 없는 이유는 PUBG 판정이 효과크기 바닥 + Wilson CI
+// 방식이라 q를 계산하지 않기 때문이다.
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import FilterPill from "@/components/FilterPill";
 import StatusBadge from "@/components/StatusBadge";
 import { signedPct } from "@/components/pubg/shared";
+import { isReportable } from "@/pipeline/shared/pubg-status";
+import { weaponHref } from "@/lib/pubgRoutes";
 import type { PubgDeltaRow } from "@/pipeline/match/pubg-delta";
+import { displayStatusOf } from "@/pipeline/shared/display-status";
 
-/** PUBG에 실제로 나타나는 상태만 올린다 — LoL의 `indirect-effect`는 PUBG 판정기에 없다. */
 const FILTERS = [
   { key: "all", label: "전체" },
+  { key: "announced", label: "공지" },
   { key: "unannounced", label: "미공지" },
-  { key: "announced", label: "공지 대조" },
-  { key: "below-threshold", label: "바닥 미달" },
-  { key: "no-change", label: "변화 없음" },
-  { key: "insufficient-sample", label: "표본 부족" },
 ] as const;
 
 type SortKey = "effect" | "share" | "name";
@@ -44,20 +45,23 @@ export default function PubgCompareTable({ rows }: PubgCompareTableProps) {
   const [filter, setFilter] = useState<string>("all");
   const [sort, setSort] = useState<SortKey>("effect");
 
+  // 노이즈 상태(바닥 미달·변화 없음·표본 부족)는 이 표에 없다(C1).
+  const judged = useMemo(() => rows.filter((row) => isReportable(row.status)), [rows]);
+
   const visible = useMemo(() => {
-    const filtered = rows.filter((row) => matches(row, filter));
+    const filtered = judged.filter((row) => matches(row, filter));
     const sorted = [...filtered];
     if (sort === "effect") sorted.sort((a, b) => Math.abs(b.relChange ?? 0) - Math.abs(a.relChange ?? 0));
     else if (sort === "share") sorted.sort((a, b) => (b.after ?? 0) - (a.after ?? 0));
     else sorted.sort((a, b) => a.weaponName.localeCompare(b.weaponName));
     return sorted;
-  }, [rows, filter, sort]);
+  }, [judged, filter, sort]);
 
   const counts = useMemo(() => {
     const out: Record<string, number> = {};
-    for (const f of FILTERS) out[f.key] = rows.filter((row) => matches(row, f.key)).length;
+    for (const f of FILTERS) out[f.key] = judged.filter((row) => matches(row, f.key)).length;
     return out;
-  }, [rows]);
+  }, [judged]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -99,9 +103,12 @@ export default function PubgCompareTable({ rows }: PubgCompareTableProps) {
           <tbody>
             {visible.map((row) => (
               <tr key={row.id} className="border-b border-border-soft">
-                <td className="py-2.5 pr-3 pl-1 font-display font-bold text-fg">{row.weaponName}</td>
-                {/* 점유율이 null인 행은 그 패치에 관측 자체가 없었다는 뜻이다 — 0%로 적으면
-                    "0번 주웠다"는 관측 주장이 되므로 값 없음(—)으로 구분한다. */}
+                <td className="py-2.5 pr-3 pl-1 font-display font-bold">
+                  <Link href={weaponHref(row.weaponKey)} className="text-fg underline-offset-4 hover:text-accent hover:underline">
+                    {row.weaponName} →
+                  </Link>
+                </td>
+                {/* 점유율이 null인 행은 그 패치에 관측 자체가 없었다는 뜻이다 — 0%로 적지 않는다. */}
                 <td className="py-2.5 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">
                   {row.before === null ? "—" : `${(row.before * 100).toFixed(2)}%`}
                 </td>
@@ -110,11 +117,7 @@ export default function PubgCompareTable({ rows }: PubgCompareTableProps) {
                 </td>
                 <td
                   className={`py-2.5 pr-3 text-right font-mono font-bold tabular-nums ${
-                    row.status === "no-change" || row.status === "insufficient-sample"
-                      ? "text-muted"
-                      : (row.relChange ?? 0) > 0
-                        ? "text-success"
-                        : "text-danger"
+                    (row.relChange ?? 0) > 0 ? "text-success" : "text-danger"
                   }`}
                 >
                   {signedPct(row.relChange ?? 0)}
@@ -126,7 +129,7 @@ export default function PubgCompareTable({ rows }: PubgCompareTableProps) {
                   {row.n.before.toLocaleString()}→{row.n.after.toLocaleString()}
                 </td>
                 <td className="py-2.5 pr-1">
-                  <StatusBadge status={row.status} />
+                  <StatusBadge status={displayStatusOf(row.status)} />
                 </td>
               </tr>
             ))}

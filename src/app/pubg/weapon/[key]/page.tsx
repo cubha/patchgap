@@ -11,7 +11,8 @@ import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
 import PubgDetailSplash, { type PubgDetailStat } from "@/components/pubg/PubgDetailSplash";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
-import { loadPubg, loadPubgAssets } from "@/lib/pubgData";
+import { isReportable, loadPubg, loadPubgAssets } from "@/lib/pubgData";
+import { displayStatusOf } from "@/pipeline/shared/display-status";
 import { weaponKeyFromSlug, weaponSlug } from "@/lib/pubgRoutes";
 import { publicWeaponPath } from "@/pipeline/pubg/asset-path";
 import { weaponCategoryLabel } from "@/pipeline/aggregate/pubg-weapon-key";
@@ -84,7 +85,19 @@ export default async function PubgWeaponPage({ params }: PageProps) {
   const assets = loadPubgAssets();
   const hasRender = assets?.weapons.includes(weaponKey) ?? false;
 
+  // 2026-09-18 라운드6(C1 + scope-critic ST9): 목록(브리핑·대조표·그리드)은 판정이 선 무기만 강조하지만,
+  // 사용자가 **직접 연 상세**에서는 관측값(변화·CI)을 숨기지 않고 판정이 없는 이유를 사실대로 말한다 —
+  // 표본 부족을 "유의한 변화 없음"이라 부르면 거짓이다. 배지는 판정이 선 행에만.
+  const judged = row !== null && isReportable(row.status);
   const rel = row?.relChange ?? null;
+  const unjudgedReason =
+    row === null
+      ? "판정 대상 아님"
+      : row.status === "insufficient-sample"
+        ? "획득 표본이 부족해 판정하지 않음"
+        : row.status === "below-threshold"
+          ? "변화가 효과크기 바닥 미만이라 판정하지 않음"
+          : "유의한 변화 없음";
   const stats: PubgDetailStat[] = [
     {
       label: "획득 점유율",
@@ -134,26 +147,16 @@ export default async function PubgWeaponPage({ params }: PageProps) {
           fallbackMark={statAfter.weaponName}
           stats={stats}
           verdict={
-            row ? (
+            row && judged ? (
               <>
-                <StatusBadge status={row.status} />{" "}
-                {note
-                  ? `공지 "${note.summary}"와 대조한 결과입니다.`
-                  : "43.1 패치노트에 이 무기 항목이 없습니다."}
+                <StatusBadge status={displayStatusOf(row.status)} />{" "}
+                {note ? `공지 "${note.summary}" 대조` : "43.1 패치노트에 이 무기 항목 없음"}
               </>
             ) : (
-              "이 무기는 판정 대상에 포함되지 않았습니다."
+              unjudgedReason
             )
           }
         />
-
-        {!hasRender ? (
-          <p className="text-xs leading-relaxed text-muted">
-            공식 자산 저장소(<span className="font-mono">pubg/api-assets</span>)에{" "}
-            {statAfter.weaponName} 렌더가 없어 이미지를 비웠습니다 — 다른 이미지를 가져다 붙이지
-            않습니다.
-          </p>
-        ) : null}
 
         <SectionCard eyebrow="근거" title="원천" variant="glass">
           <div className="flex flex-col gap-3 p-5 text-sm">
@@ -171,7 +174,7 @@ export default async function PubgWeaponPage({ params }: PageProps) {
                 target="_blank"
                 rel="noreferrer"
               >
-                패치노트 원문 →
+                패치노트 원문 보기 ↗
               </a>
             ) : null}
             {row && row.evidence.matchIds.length > 0 ? (
@@ -183,14 +186,9 @@ export default async function PubgWeaponPage({ params }: PageProps) {
                 </span>
               </div>
             ) : null}
-            <p className="text-xs leading-relaxed text-muted">
-              획득 점유율은 스폰율의 <strong className="text-fg-2">대리 지표</strong>입니다.
-              판정 규칙 전체는{" "}
-              <Link href="/pubg/methodology/" className="text-accent underline-offset-2 hover:underline">
-                방법론
-              </Link>
-              에 있습니다.
-            </p>
+            <Link href="/pubg/methodology/" className="text-xs font-bold text-accent hover:underline">
+              판정 규칙 보기 →
+            </Link>
           </div>
         </SectionCard>
 

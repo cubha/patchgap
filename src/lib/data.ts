@@ -23,6 +23,7 @@ import type {
   RowsFile as PipelineRowsFile,
   SpellIconIndexFile,
 } from "@/pipeline/types";
+import { normalizeDeltasForDisplay } from "@/pipeline/shared/display-normalize";
 import {
   DATA_ROOT,
   aggregatedDir,
@@ -162,7 +163,11 @@ export function loadNotes(patch: PatchId, dataRoot: string = DATA_ROOT): NotesFi
 /** data/aggregated/deltas/{from}_{to}.json — 파일이 없으면 null(ST-08 미착수 구간·빈 데이터
  * 빌드 모두 이 경로로 안전하게 처리된다). */
 export function loadDeltas(from: PatchId, to: PatchId, dataRoot: string = DATA_ROOT): DeltasFile | null {
-  return readJsonFile(deltasFile(from, to, dataRoot));
+  // 2026-09-18 라운드6 재판정 보완 1·2: 표시용 정규화(display-normalize.ts) — 게임 모드 섹션 줄에만
+  // 짝지어진 관측은 미공지, 그 줄을 인용한 원인은 회색. 모든 화면이 이 로더를 지나므로 한 곳에서 한다.
+  // 노트 파일이 없으면 원본 그대로(왕복 테스트·빈 데이터 빌드).
+  const raw = readJsonFile<DeltasFile>(deltasFile(from, to, dataRoot));
+  return normalizeDeltasForDisplay(raw, loadNotes(to, dataRoot)?.items ?? null);
 }
 
 /** data/aggregated/spell-icons.json — scripts/run-ddragon.ts 미실행이거나 노트에 스킬 표기가

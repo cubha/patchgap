@@ -42,6 +42,8 @@ import type { IndirectEffectEntry } from "./indirectEffects";
 import type { ContentTier, ReleaseStreamGroup } from "./releaseStream";
 import type { StreamEntityIcon } from "./releaseStreamEntity";
 import { segmentStream } from "./streamSegments";
+import MiscChangesSection from "./MiscChangesSection";
+import type { MiscSection } from "./miscSections";
 
 type StreamTab = "content" | "gap";
 
@@ -64,10 +66,9 @@ export interface ReleaseStreamEntry {
    * 노출된다(라인을 추측하지 않음 — src/lib/lane.ts의 lanesForEntityKey 계약). */
   lanes: LanePosition[];
   /** 공지 그룹의 티어(releaseStream.contentTier) — page.tsx가 정렬에 쓴 것과 **같은 값**.
-   * 미공지 그룹은 undefined. 접기(라운드5 E2)가 이 값으로 tier 2를 묶는다. */
+   * 미공지 그룹은 undefined. 접기(라운드5 E2)가 이 값으로 tier 2를 묶는다. tier 3·4는 이 목록에
+   * 오지 않는다(2026-09-18 라운드6 — `miscSections`로 간다). */
   tier?: ContentTier;
-  /** 섹션 묶음(라운드5 B2 — sectionBundle.ts). 엔티티 카드가 아닌 위계로 그린다. */
-  sectionBundle?: boolean;
 }
 
 export interface ReleaseNoteStreamProps {
@@ -91,6 +92,9 @@ export interface ReleaseNoteStreamProps {
   causes?: Record<string, IndirectEffectEntry>;
   /** note.id → 치장 스킨 미리보기(ST-B6, 2026-09-18). 자산 존재가 확인된 것만. */
   skinPreviews?: Record<string, CosmeticSkinItem[]>;
+  /** "기타 변경" 카테고리(2026-09-18 라운드6 L2) — 패치 내용 탭 목록의 마지막 1블록. 라인 필터와
+   * 무관하게 항상 실린다(줄에 라인 정보가 없다). */
+  miscSections?: MiscSection[];
 }
 
 function groupKey(group: ReleaseStreamGroup): string {
@@ -99,7 +103,7 @@ function groupKey(group: ReleaseStreamGroup): string {
 
 const EMPTY_MESSAGE: Record<StreamTab, string> = {
   content: "이 라인에서는 관측된 변화가 없습니다",
-  gap: "이 라인에서는 노트에 없는 변화가 없습니다",
+  gap: "이 라인에서는 미공지 변화가 없습니다",
 };
 
 export default function ReleaseNoteStream({
@@ -113,6 +117,7 @@ export default function ReleaseNoteStream({
   gapCount,
   causes,
   skinPreviews,
+  miscSections = [],
 }: ReleaseNoteStreamProps) {
   const { selectedLane } = useAmbient();
   const [tab, setTab] = useState<StreamTab>("content");
@@ -139,9 +144,10 @@ export default function ReleaseNoteStream({
       qAlpha={qAlpha}
       causes={causes}
       skinPreviews={skinPreviews}
-      sectionBundle={entry.sectionBundle}
     />
   );
+
+  const miscTotal = tab === "content" ? miscSections.reduce((sum, s) => sum + s.notes.length, 0) : 0;
 
   return (
     // NoteNavigator.tsx(/compare/)와 동일 골격 — <section>이 panel-surface-glass(레일+채움)를
@@ -170,13 +176,9 @@ export default function ReleaseNoteStream({
         })}
       </div>
 
-      {/* 정렬 고지(ST-8) — 노트를 위에서 아래로 훑는 독자에게 순서가 임의가 아님을 한 줄로. */}
-      {tab === "content" && filtered.length > 0 ? (
-        <p className="border-b border-border-soft px-5 py-2 text-xs text-muted">
-          관측이 있는 항목부터 · 같은 묶음 안에서는 패치노트 순서
-        </p>
-      ) : null}
-      {filtered.length === 0 ? (
+      {/* 정렬 고지("관측이 있는 항목부터 …")는 2026-09-18 라운드6(C3)에 뺐다 — 표기 이유는 방법론이
+          말한다("표시 규칙"). */}
+      {filtered.length === 0 && miscTotal === 0 ? (
         <div className="flex min-h-0 flex-1 items-center justify-center">
           <p className="p-5 text-sm text-muted">{EMPTY_MESSAGE[tab]}</p>
         </div>
@@ -192,7 +194,7 @@ export default function ReleaseNoteStream({
             segment.kind === "rows" ? (
               segment.entries.map((entry) => renderRow(entry))
             ) : (
-              // E2(라운드5) — "관측 변화 없음" 그룹(tier 2)을 요약 1행으로 접는다. 행은 전부 그 안에
+              // E2(라운드5) — tier 2("유의한 관측 없음", 라운드6에서 어휘 통일) 그룹을 요약 1행으로 접는다. 행은 전부 그 안에
               // 있고 펼치면 카드 그대로다(숨기지 않는다 — 아래로 내릴 뿐이라는 ST-8 결정의 연장).
               // 요약행은 **건수만** 말한다: 6건 중 5건이 사유 혼재(mixed)라 그룹 단위로 사유를
               // 단정하면 S4가 고친 "대표 1행 사유 거짓"이 그룹 단위로 재발한다. 조건 분기 없이
@@ -204,7 +206,7 @@ export default function ReleaseNoteStream({
               <li key={`fold:${segment.entries[0]?.group.entity ?? ""}`} className="border-b border-border-soft last:border-b-0">
                 <details className="group/fold">
                   <summary className="flex cursor-pointer list-none items-center gap-4 px-5 py-3 text-xs text-muted [&::-webkit-details-marker]:hidden">
-                    <span className="font-bold text-fg-2">관측 변화 없음</span>
+                    <span className="font-bold text-fg-2">유의한 관측 없음</span>
                     <span className="font-mono tabular-nums">{segment.entries.length}건</span>
                     <span className="flex-1" />
                     <span aria-hidden="true" className="transition-transform group-open/fold:rotate-180">
@@ -218,6 +220,7 @@ export default function ReleaseNoteStream({
               </li>
             )
           )}
+          {tab === "content" ? <MiscChangesSection sections={miscSections} /> : null}
         </ul>
       )}
     </section>

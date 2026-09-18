@@ -1,13 +1,14 @@
 // src/components/compare/__tests__/render.test.tsx
-// 대조표 컴포넌트 빈 상태 렌더 검증(ST-11 완료 조건 "빈 상태 렌더"). 프로젝트 관례대로
-// jest-dom 매처 없이 render()의 container를 직접 querying한다.
+// 대조표 컴포넌트 렌더 검증(ST-11 빈 상태 + 2026-09-18 라운드6 엔티티 1행·묶음·포커스). 프로젝트
+// 관례대로 jest-dom 매처 없이 render()의 container를 직접 querying한다.
 import { describe, expect, it } from "vitest";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import DeltaTable from "../DeltaTable";
 import NoteNavigator from "../NoteNavigator";
 import CoverageBar from "../CoverageBar";
 import CompareExplorer from "../CompareExplorer";
+import { buildEntityRows } from "../entityRows";
 
 function delta(overrides: Partial<DeltaRecord>): DeltaRecord {
   return {
@@ -17,9 +18,9 @@ function delta(overrides: Partial<DeltaRecord>): DeltaRecord {
     entityName: "테스트챔프",
     metric: "pickRate",
     before: 0.1,
-    after: 0.12,
-    delta: 0.02,
-    ci: [0.01, 0.03],
+    after: 0.15,
+    delta: 0.05,
+    ci: [0.03, 0.07],
     n: { before: 1000, after: 1200 },
     q: 0.02,
     status: "unannounced",
@@ -31,51 +32,83 @@ function delta(overrides: Partial<DeltaRecord>): DeltaRecord {
   };
 }
 
+function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
+  return {
+    id: "note:1",
+    patch: "26.17",
+    section: "champion",
+    entity: "초가스",
+    skill: null,
+    stat: null,
+    before: null,
+    after: null,
+    direction: "unknown",
+    summary: "요약",
+    anchorUrl: "https://example.com/#x",
+    anchorKind: "entity",
+    ...overrides,
+  };
+}
+
 describe("DeltaTable — 빈 상태(rows=[])", () => {
-  it("델타가 없다는 문구를 렌더하고 헤더는 그대로 보인다", () => {
-    const { container } = render(
-      <DeltaTable pair={null} rows={[]} highlightNoteId={null} sortKey="absDelta" sortDir="desc" onSort={() => {}} />
-    );
+  it("델타가 없다는 문구를 렌더하고 헤더는 엔티티·지표 4·상태 = 6열이다(2026-09-18 라운드6: 지표·버전 열 제거)", () => {
+    const { container } = render(<DeltaTable pair={null} rows={[]} focusKey={null} />);
     expect(container.textContent).toContain("표시할 델타가 없습니다");
-    expect(container.querySelectorAll("th")).toHaveLength(10);
+    expect(container.querySelectorAll("th")).toHaveLength(6);
   });
 });
 
-describe("DeltaTable — 아이콘·라인 태그 (ST-J)", () => {
-  it("entityType='lane' 행은 라인 글리프 박스를 렌더한다('골' 텍스트 폴백 대신)", () => {
-    const row = delta({
-      id: "lane:BOTTOM:goldAt10",
-      entityType: "lane",
-      entityKey: "BOTTOM",
-      entityName: "바텀",
-      metric: "goldAt10",
-    });
-    const { container } = render(
-      <DeltaTable pair={null} rows={[row]} highlightNoteId={null} sortKey="absDelta" sortDir="desc" onSort={() => {}} />
-    );
-    // 라인 글리프(svg)가 아이콘 자리에 렌더돼야 한다 — 옛 "골" 텍스트 폴백 박스 대신.
-    // 2026-09-10: 엔티티명("바텀")이 바로 옆에 있어 글리프는 labelled(장식) 처리라 <title>이
-    // 없다 — 접근명 "원딜바텀" 중복 방지. 존재 검사는 svg + aria-hidden으로 한다.
-    const glyph = container.querySelector("tbody svg");
-    expect(glyph).not.toBeNull();
-    expect(glyph?.getAttribute("aria-hidden")).toBe("true");
-    expect(container.querySelector("tbody svg title")).toBeNull();
+describe("DeltaTable — 엔티티 1행·인라인 지표(사용자 L3)", () => {
+  const rows = buildEntityRows(
+    [
+      delta({ id: "champion:Ekko:pickRate", entityKey: "Ekko", entityName: "에코", metric: "pickRate", status: "announced-consistent", matchedNoteIds: ["n-ekko"] }),
+      delta({ id: "champion:Ekko:banRate", entityKey: "Ekko", entityName: "에코", metric: "banRate", delta: -0.06, after: 0.04, ci: [-0.08, -0.04], status: "announced-consistent", matchedNoteIds: ["n-ekko"] }),
+      delta({ id: "champion:Ekko:winRate", entityKey: "Ekko", entityName: "에코", metric: "winRate", q: 0.8, status: "announced-consistent", matchedNoteIds: ["n-ekko"] }),
+      delta({ id: "champion:Bard:pickRate", entityKey: "Bard", entityName: "바드", metric: "pickRate" }),
+    ],
+    "all",
+    0.1
+  );
+
+  it("같은 챔피언은 1행이고 버전 이동은 헤더에 한 번만 나온다", () => {
+    const { container } = render(<DeltaTable pair={{ from: "26.17", to: "26.18" }} rows={rows} focusKey={null} />);
+    const trs = Array.from(container.querySelectorAll("tbody tr"));
+    expect(trs).toHaveLength(2);
+    expect(container.querySelector("thead")?.textContent).toContain("26.17 → 26.18");
+    // 열마다 버전을 두지 않는다 — "26.17"이 헤더에 정확히 한 번.
+    expect((container.querySelector("thead")?.textContent?.match(/26\.17/g) ?? []).length).toBe(1);
   });
 
-  it("챔피언 position-scope 행(4세그먼트 id)은 라인 태그(글리프+라벨·지표)를 렌더한다", () => {
-    const row = delta({ id: "champion:X:TOP:pickRate", metric: "pickRate" });
-    const { container } = render(
-      <DeltaTable pair={null} rows={[row]} highlightNoteId={null} sortKey="absDelta" sortDir="desc" onSort={() => {}} />
-    );
-    expect(container.textContent).toContain("탑 · 픽률");
+  it("셀은 전→후와 ▲/▼ Δ를 함께 보여주고, 보고 가능하지 않은 지표(승률 비유의)는 빈 셀이다", () => {
+    const { container } = render(<DeltaTable pair={null} rows={rows} focusKey={null} />);
+    const ekko = container.querySelector('tr[data-entity-key="champion:Ekko"]');
+    expect(ekko).not.toBeNull();
+    const cells = Array.from(ekko!.querySelectorAll("td")).map((td) => td.textContent ?? "");
+    // [엔티티, 밴률, 승률, 픽률, 채택률, 상태]
+    expect(cells[1]).toContain("10.0% → 4.0%");
+    expect(cells[1]).toContain("▼ −6.0%p");
+    expect(cells[2]).toBe("—");
+    expect(cells[3]).toContain("▲ +5.0%p");
+    expect(cells[4]).toBe("—");
+    expect(cells[5]).toContain("공지");
   });
 
-  it("scope=all 챔피언 행(3세그먼트 id)은 라인 태그를 렌더하지 않는다", () => {
-    const row = delta({ id: "champion:X:pickRate", metric: "pickRate" });
-    const { container } = render(
-      <DeltaTable pair={null} rows={[row]} highlightNoteId={null} sortKey="absDelta" sortDir="desc" onSort={() => {}} />
+  it("'전체'에서 position 행이 셀을 대표하면 라인 태그를 그린다", () => {
+    const laneRows = buildEntityRows(
+      [delta({ id: "champion:MonkeyKing:JUNGLE:winRate", entityKey: "MonkeyKing", entityName: "오공", metric: "winRate", delta: -0.1, before: 0.57, after: 0.47, ci: [-0.2, -0.03] })],
+      "all",
+      0.1
     );
-    expect(container.textContent).not.toContain(" · 픽률");
+    const { container } = render(<DeltaTable pair={null} rows={laneRows} focusKey={null} />);
+    const row = container.querySelector('tr[data-entity-key="champion:MonkeyKing"]');
+    expect(row?.textContent).toContain("정글");
+    expect(row?.querySelector("td:nth-child(3) svg")).not.toBeNull();
+  });
+
+  it("focusKey 행은 row-highlight로 강조된다", () => {
+    const { container } = render(<DeltaTable pair={null} rows={rows} focusKey="champion:Bard" />);
+    expect(container.querySelector('tr[data-entity-key="champion:Bard"]')?.className).toContain("row-highlight");
+    expect(container.querySelector('tr[data-entity-key="champion:Ekko"]')?.className).not.toContain("row-highlight");
   });
 });
 
@@ -89,7 +122,7 @@ describe("NoteNavigator — 빈 상태(notes=[])", () => {
         onSectionChange={() => {}}
         searchQuery=""
         onSearchChange={() => {}}
-        selectedNoteId={null}
+        selectedGroupId={null}
         onSelect={() => {}}
         icons={{}}
       />
@@ -99,111 +132,100 @@ describe("NoteNavigator — 빈 상태(notes=[])", () => {
   });
 });
 
-describe("NoteNavigator — 아이콘 (ST-J)", () => {
-  const item: PatchNoteItem = {
-    id: "note:1",
-    patch: "26.17",
-    section: "champion",
-    entity: "초가스",
-    skill: null,
-    stat: null,
-    before: null,
-    after: null,
-    direction: "unknown",
-    summary: "요약",
-    anchorUrl: "https://example.com/#x",
-    anchorKind: "entity",
-  };
+describe("NoteNavigator — 엔티티 묶음·아이콘·배지(사용자 L4·C1)", () => {
+  const items = [
+    note({ id: "note:1", entity: "초가스", skill: "Q - 파열" }),
+    note({ id: "note:2", entity: "초가스", skill: "E - 흡혈 가시" }),
+    note({ id: "note:3", entity: "바드" }),
+  ];
 
-  it("icons 맵에 항목이 있으면 EntityIcon(40px)을 렌더한다", () => {
+  it("같은 챔피언 줄 2개가 항목 1개로 묶이고 줄 수·스킬을 보여준다 · 탭 숫자는 엔티티 수", () => {
     const { container } = render(
       <NoteNavigator
-        notes={[item]}
+        notes={items}
         rows={[]}
         activeSection="champion"
         onSectionChange={() => {}}
         searchQuery=""
         onSearchChange={() => {}}
-        selectedNoteId={null}
+        selectedGroupId={null}
         onSelect={() => {}}
         icons={{ "note:1": { entityType: "champion", entityKey: "Chogath" } }}
       />
     );
+    expect(container.querySelectorAll("ul > li")).toHaveLength(2);
+    expect(container.textContent).toContain("2줄");
+    expect(container.textContent).toContain("Q - 파열 · E - 흡혈 가시");
+    expect(container.textContent).toContain("챔피언 2");
     const img = container.querySelector("img");
     expect(img?.getAttribute("src")).toBe("/dd/champion/Chogath.png");
     expect(img?.closest("span")?.getAttribute("style")).toContain("width: 40px");
   });
 
-  it("icons 맵에 항목이 없으면 아이콘 없이 폴백 글자만 렌더한다(무근거 아이콘 금지)", () => {
+  it("보고 가능한 관측이 없으면 배지 대신 '유의한 관측 없음'을 쓴다 · 클릭은 묶음을 넘긴다", () => {
+    const rows = [delta({ id: "champion:Chogath:pickRate", entityKey: "Chogath", entityName: "초가스", q: 0.9, status: "announced-consistent", matchedNoteIds: ["note:1"] })];
+    let picked: string | null = null;
     const { container } = render(
       <NoteNavigator
-        notes={[item]}
-        rows={[]}
+        notes={items}
+        rows={rows}
         activeSection="champion"
         onSectionChange={() => {}}
         searchQuery=""
         onSearchChange={() => {}}
-        selectedNoteId={null}
-        onSelect={() => {}}
+        selectedGroupId={null}
+        onSelect={(g) => {
+          picked = g.entity;
+        }}
         icons={{}}
       />
     );
+    expect(container.textContent).toContain("유의한 관측 없음");
     expect(container.querySelector("img")).toBeNull();
-    expect(container.textContent).toContain("초");
+    fireEvent.click(container.querySelector("ul > li button")!);
+    expect(picked).toBe("초가스");
   });
 });
 
 describe("CoverageBar — 전부 0", () => {
-  it("0을 그대로 렌더한다", () => {
+  it("0을 그대로 렌더하고 표본 부족·바닥 미달은 세지 않는다(2026-09-18 라운드6 C1)", () => {
     const { container } = render(
       <CoverageBar
-        stats={{
-          noteEntityCount: 0,
-          noteItemCount: 0,
-          matchedCount: 0,
-          unannouncedCount: 0,
-          lowSampleCount: 0,
-          belowThresholdCount: 0,
-          indirectEffectCount: 0,
-        }}
+        stats={{ noteEntityCount: 0, noteItemCount: 0, matchedCount: 0, unannouncedCount: 0, lowSampleCount: 0, belowThresholdCount: 0, indirectEffectCount: 0, gapEntityCount: 0 }}
       />
     );
     expect(container.textContent).toContain("노트 0엔티티(0항목) 중 관측 짝 0");
+    expect(container.textContent).not.toContain("표본 부족");
+    expect(container.textContent).not.toContain("바닥 미달");
   });
 });
 
-describe("CompareExplorer — 데이터 없음(쌍 0개) 전체 통합 빈 상태", () => {
-  it("크래시 없이 상태 필터·내비게이터·테이블·커버리지 바를 모두 렌더한다", () => {
-    const { container } = render(
-      <CompareExplorer
-        pair={null}
-        notes={[]}
-        rows={[]}
-        coverage={{
-          noteEntityCount: 0,
-          noteItemCount: 0,
-          matchedCount: 0,
-          unannouncedCount: 0,
-          lowSampleCount: 0,
-          belowThresholdCount: 0,
-          indirectEffectCount: 0,
-        }}
-      />
-    );
-    // 상태 칩 8종(2026-09-13 below-threshold·indirect-effect 추가 · 2026-09-17 통합
-    // 필터 "노트에 없는 변화" 추가 — 홈 타일이 세는 집합 49를 대조표에서도 표현할 수
-    // 있어야 타일 링크가 거짓말을 하지 않는다) + 라인 필터 6종(시안 .m-filter,
-    // 2026-09-10 신설) = 14 → 2026-09-18 ST-4 "공지 · 관측 미확인" 칩 추가로 15(명세 변경:
-    // 비유의 "불일치" 59건을 빨간 배지에서 분리 — 사용자 확정 M2).
-    // → 2026-09-18 S9/S10(사용자 확정 CF-1·CF-2) "공지 · 바닥 미달" 칩 추가로 16.
-    // **어휘를 갈랐다고 칩을 늘리는 것이 아니다** — `filterByStatus`가 표시 키 동등비교라,
-    // 칩 없이 표시 키만 추가하면 그 행들이 "전체" 외 어떤 칩으로도 닿지 않게 된다. 그러면
-    // "공지-일치" 칩이 32건을 말하면서 12건만 보여주는 상태가 되는데, 그건 위 GAP_FILTER_KEY
-    // 주석이 기록한 2026-09-17 결함("타일은 49, 화면은 47")과 같은 형태다. 배지 1종 = 칩 1종
-    // 불변식을 지키는 쪽이 옳다.
-    expect(container.querySelectorAll('[aria-pressed]')).toHaveLength(16);
+describe("CompareExplorer — 통합", () => {
+  const coverage = { noteEntityCount: 0, noteItemCount: 0, matchedCount: 0, unannouncedCount: 0, lowSampleCount: 0, belowThresholdCount: 0, indirectEffectCount: 0, gapEntityCount: 0 };
+
+  it("데이터 없음: 크래시 없이 상태 칩 4 + 라인 필터 6·내비게이터·테이블·커버리지 바를 렌더한다", () => {
+    const { container } = render(<CompareExplorer pair={null} notes={[]} rows={[]} coverage={coverage} />);
+    // 2026-09-18 라운드6(사용자 C5·C1): 칩 10종 → 4종(전체/공지/공지 · 이상 관측/미공지). 노이즈·세분 칩은
+    // 표에 올리지 않는 상태의 칩이라 함께 없앴다(배지 1종 = 칩 1종 불변식 유지).
+    expect(container.querySelectorAll("[aria-pressed]")).toHaveLength(10);
     expect(container.querySelector('[aria-label="라인 필터"]')).not.toBeNull();
     expect(container.textContent).toContain("표시할 델타가 없습니다");
     expect(container.textContent).toContain("노트 0엔티티(0항목)");
+  });
+
+  it("내비 묶음을 클릭하면 표의 그 엔티티 행이 포커스되고, 표에 없는 엔티티면 머리 1줄로 말한다", () => {
+    const notes = [note({ id: "n-ekko", entity: "에코", skill: "Q" }), note({ id: "n-bard", entity: "바드" })];
+    const rows = [
+      delta({ id: "champion:Ekko:pickRate", entityKey: "Ekko", entityName: "에코", status: "announced-consistent", matchedNoteIds: ["n-ekko"] }),
+      delta({ id: "champion:Bard:pickRate", entityKey: "Bard", entityName: "바드", q: 0.9, status: "announced-consistent", matchedNoteIds: ["n-bard"] }),
+    ];
+    const { container } = render(<CompareExplorer pair={null} notes={notes} rows={rows} coverage={coverage} qAlpha={0.1} />);
+    const buttons = Array.from(container.querySelectorAll('[aria-label="패치노트 항목 검색"] ~ * button, ul > li > button'));
+    const ekkoBtn = buttons.find((b) => b.textContent?.includes("에코"))!;
+    fireEvent.click(ekkoBtn);
+    expect(container.querySelector('tr[data-entity-key="champion:Ekko"]')?.className).toContain("row-highlight");
+    const bardBtn = buttons.find((b) => b.textContent?.includes("바드"))!;
+    fireEvent.click(bardBtn);
+    expect(container.textContent).toContain("유의한 관측이 없어 이 표에 행이 없습니다");
   });
 });

@@ -24,18 +24,21 @@ describe("gameFromPathname", () => {
 });
 
 describe("gameHref", () => {
-  it("공용 섹션은 같은 섹션끼리 이동한다", () => {
+  // 2026-09-18 라운드6(사용자 C2) 명세 변경: "배틀그라운드, 리그오브레전드 변환하는데 메뉴는 유지됨 →
+  // 브리핑 메뉴가 기본값. 테마전환될때마다 초기화되도록". 다른 게임으로 바꾸면 **어느 화면에서든** 그
+  // 게임의 브리핑으로 간다(같은 섹션으로 건너뛰지 않는다).
+  it("다른 게임으로 바꾸면 어느 섹션에서든 그 게임의 브리핑으로 간다", () => {
     expect(gameHref("pubg", "/")).toBe("/pubg/");
-    expect(gameHref("pubg", "/compare/")).toBe("/pubg/compare/");
-    expect(gameHref("pubg", "/methodology/")).toBe("/pubg/methodology/");
+    expect(gameHref("pubg", "/compare/")).toBe("/pubg/");
+    expect(gameHref("pubg", "/methodology/")).toBe("/pubg/");
     expect(gameHref("lol", "/pubg/")).toBe("/");
-    expect(gameHref("lol", "/pubg/compare/")).toBe("/compare/");
-    expect(gameHref("lol", "/pubg/methodology/")).toBe("/methodology/");
+    expect(gameHref("lol", "/pubg/compare/")).toBe("/");
+    expect(gameHref("lol", "/pubg/methodology/")).toBe("/");
   });
 
-  it("대응 라우트가 없는 경로에서는 그 게임의 브리핑으로 떨어진다 — 404 방지", () => {
+  it("대응 라우트가 없는 경로(상세)에서도 브리핑 — 404 방지", () => {
     expect(gameHref("pubg", "/item/aatrox-winrate/")).toBe("/pubg/");
-    expect(gameHref("pubg", "/item/aatrox-winrate")).toBe("/pubg/");
+    expect(gameHref("lol", "/pubg/weapon/rpd/")).toBe("/");
   });
 
   it("같은 게임을 고르면 현재 경로를 그대로 둔다 — 상세 화면에서 이탈시키지 않는다", () => {
@@ -43,9 +46,9 @@ describe("gameHref", () => {
     expect(gameHref("pubg", "/pubg/compare/")).toBe("/pubg/compare/");
   });
 
-  it("후행 슬래시가 없어도 같은 결과를 낸다 — next.config trailingSlash 유무에 안 물린다", () => {
-    expect(gameHref("pubg", "/compare")).toBe("/pubg/compare/");
-    expect(gameHref("lol", "/pubg/compare")).toBe("/compare/");
+  it("후행 슬래시가 없어도 같은 결과를 낸다", () => {
+    expect(gameHref("pubg", "/compare")).toBe("/pubg/");
+    expect(gameHref("lol", "/pubg/compare")).toBe("/");
   });
 });
 

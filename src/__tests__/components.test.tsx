@@ -11,9 +11,20 @@ import LaneGlyph from "../components/LaneGlyph";
 import SpellIcon from "../components/SpellIcon";
 
 describe("StatusBadge", () => {
-  it("공지-일치 상태를 렌더한다", () => {
-    const { container } = render(<StatusBadge status="announced-consistent" />);
-    expect(container.textContent).toContain("공지-일치");
+  // 2026-09-18 라운드6(사용자 C5) 명세 변경 — "공지-일치" 어휘 폐지. 공지 계열은 "공지" 하나이고
+  // 방향 반대·유의·바닥 통과만 "공지 · 이상 관측"(danger)이다.
+  it("공지 상태를 중립 톤으로 렌더한다", () => {
+    const { container } = render(<StatusBadge status="announced" />);
+    const badge = container.querySelector("span");
+    expect(container.textContent).toContain("공지");
+    expect(badge?.className).not.toContain("text-danger");
+  });
+
+  it("공지 · 이상 관측은 danger 색 유틸을 포함한다", () => {
+    const { container } = render(<StatusBadge status="announced-anomaly" />);
+    const badge = container.querySelector("span");
+    expect(badge?.className).toContain("text-danger");
+    expect(container.textContent).toContain("공지 · 이상 관측");
   });
 
   it("미공지 상태는 accent 색 유틸을 포함한다", () => {

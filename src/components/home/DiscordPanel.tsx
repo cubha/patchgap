@@ -25,7 +25,7 @@ export default function DiscordPanel({ generatedAt }: DiscordPanelProps) {
     <SectionCard title="디스코드로 공유" variant="glass">
       <div className="flex flex-col items-start gap-3 p-5">
         <p className="text-sm text-muted">
-          미공지 변화·공지 불일치 항목을 요약해 서버로 전송합니다.
+          미공지 · 공지 · 이상 관측 항목을 요약해 서버로 전송합니다.
         </p>
         <Link
           href="/methodology/#discord"

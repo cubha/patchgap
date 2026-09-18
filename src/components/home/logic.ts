@@ -79,6 +79,7 @@ export interface HeadlineStats {
    * 셋이 어긋나면 화면이 스스로를 반박한다(PLAN-home-tab-split-intro-fix-2026-09-14.md
    * "카운트 배지 소스").
    */
+  /** 미공지 Gap **엔티티** 수(관측 행 수가 아니다 — Gap 탭 카드 수와 같다). */
   unannouncedCount: number;
 }
 
@@ -95,12 +96,14 @@ export function computeHeadline(
   const noteItemCount = notes?.meta.itemCount ?? 0;
   const rows = deltas?.rows ?? [];
   let statCount = 0;
-  let unannouncedCount = 0;
+  // 미공지는 **엔티티 수**로 센다(라운드6 재판정 보완 4) — Gap 탭 카드·대조표 미공지 행·라인 분포 패널이
+  // 전부 엔티티 단위라, 관측 행 수(49)를 타일에 쓰면 카드 28개와 어긋났다.
+  const unannouncedEntities = new Set<string>();
   for (const row of rows) {
     if (isSignificantDelta(row, qAlpha)) statCount++;
-    if (isGapStatus(row.status)) unannouncedCount++;
+    if (isGapStatus(row.status)) unannouncedEntities.add(`${row.entityType}:${row.entityKey}`);
   }
-  return { noteEntityCount, noteItemCount, statCount, unannouncedCount };
+  return { noteEntityCount, noteItemCount, statCount, unannouncedCount: unannouncedEntities.size };
 }
 
 /** delta===null은 "측정 불가"에 가까운 취급으로 정렬 맨 뒤로 보낸다(ST-08 verdict.sortDeltas와
@@ -306,16 +309,16 @@ export function resolveGapCause(record: DeltaRecord): GapCauseDisplay {
     return { mode: "candidate", text: `${cause.text} — 후보 미검증` };
   }
   if (!record.llm) {
-    return { mode: "unreviewed", text: "원인 미검토 — 이번 실행의 분석 상한에 들지 않았습니다" };
+    return { mode: "unreviewed", text: "원인 미검토" };
   }
   if (record.llm.skipped) {
     return {
       mode: "unreviewed",
-      text: `원인 미검토 — ${record.llm.reason === "call-budget-exceeded" ? "호출 예산 소진" : "분석 건너뜀"}`,
+      text: `원인 미검토 · ${record.llm.reason === "call-budget-exceeded" ? "호출 예산 소진" : "분석 건너뜀"}`,
     };
   }
-  // 문구 압축(2026-09-18 ST-8) — 같은 문장이 Gap 탭에 21회 반복돼 노이즈였다. 뜻은 유지한다.
-  return { mode: "none", text: "설명 후보 없음 — 노트에 원인 조항 없음" };
+  // 문구 압축(2026-09-18 ST-8 → 라운드6 C3: 설명 꼬리를 뗐다. "왜"는 방법론이 말한다).
+  return { mode: "none", text: "설명 후보 없음" };
 }
 
 /** entityType이 champion/item이 아닌 행(objective·lane·summary)의 EntityIcon 폴백 글자 —

@@ -8,7 +8,6 @@ import type { DeltaRecord } from "@/pipeline/types";
 import { loadDdragonSafe } from "@/pipeline/match/ddragon";
 import Container from "@/components/Container";
 import HeroSummary from "@/components/home/HeroSummary";
-import IntroReplayButton from "@/components/IntroReplayButton";
 import ReleaseNoteStream, { type ReleaseStreamEntry } from "@/components/home/ReleaseNoteStream";
 import StreamLaneFilter from "@/components/home/StreamLaneFilter";
 import SideMatchAverages from "@/components/home/SideMatchAverages";
@@ -29,6 +28,8 @@ import {
   type ReleaseStreamGroup,
 } from "@/components/home/releaseStream";
 import { isSectionBundle } from "@/components/home/sectionBundle";
+import { buildMiscSections } from "@/components/home/miscSections";
+import { isExcludedNote, isModeSectionNote } from "@/pipeline/shared/excluded-notes";
 import type { StreamEntityIcon } from "@/components/home/releaseStreamEntity";
 import { indexNoteDeltas, indexNoteDeltaRows } from "@/components/home/noteDeltaIndex";
 import { resolveStreamEntityIcon } from "@/components/home/releaseStreamEntity";
@@ -66,9 +67,13 @@ export default function Home() {
   // S4 후속 — 카드 헤더의 **사유 계산**은 대표 1행이 아니라 짝 전수를 봐야 한다(noteDeltaIndex 주석).
   const noteDeltaRows: Record<string, DeltaRecord[]> = indexNoteDeltaRows(deltas?.rows ?? []);
 
-  const rawGroups = buildReleaseStream(notesTo, deltas);
-  // 아이콘 해석은 정렬 **앞**에서 한 번 — 섹션 묶음 판별(라운드5 B2)이 그 결과를 쓰고, 정렬도
-  // 같은 집합을 봐야 카드 위계와 자리가 어긋나지 않는다.
+  // 2026-09-18 라운드6(L1): 의회 투표 결과 묶음은 스트림에서 뺀다 — 엔티티 수(`countRelevantNoteEntities`)도
+  // 같은 술어(excluded-notes.ts)로 세므로 히어로·탭 배지·카드 수가 같은 집합을 본다.
+  const rawGroups = buildReleaseStream(notesTo, deltas).filter(
+    (group) => group.kind !== "matched" || !group.notes.every(isExcludedNote)
+  );
+  // 아이콘 해석은 정렬 **앞**에서 한 번 — 섹션 묶음 판별이 그 결과를 쓰고, 정렬도 같은 집합을 봐야
+  // 카드 위계와 자리가 어긋나지 않는다.
   const icons = new Map<ReleaseStreamGroup, StreamEntityIcon>(
     rawGroups.map((group) => [group, resolveStreamEntityIcon(group, ddragon)])
   );
@@ -78,17 +83,27 @@ export default function Home() {
       .filter((group) => isSectionBundle(group, icons.get(group)!, noteDeltaRows))
       .map((group) => group.entity)
   );
-  const streamGroups = [
-    ...sortMatchedGroups(matchedGroups, deltas, deltas?.meta.qAlpha, sectionBundles),
-    ...rawGroups.filter((g) => g.kind !== "matched"),
-  ];
+  const sortedMatched = sortMatchedGroups(matchedGroups, deltas, deltas?.meta.qAlpha, sectionBundles);
+  // 2026-09-18 라운드6(L2): tier 3(섹션 묶음)·tier 4(치장)는 카드가 아니라 목록 끝 "기타 변경" 1블록으로
+  // 모은다(miscSections.ts). tier 0~2(챔피언·아이템 밸런스 줄)는 카드 그대로 — 패치 내용은 누락하지 않는다.
+  // 게임 모드 섹션 묶음(클래식 "피오라" 65줄)은 관측이 짝지어져 있어도 카드가 아니라 기타 변경이다 —
+  // SR 챔피언 공지가 아니다(라운드6 재판정 보완 1, excluded-notes.ts).
+  const isModeGroup = (group: MatchedStreamGroup) => group.notes.every(isModeSectionNote);
+  const tierOf = (group: MatchedStreamGroup) => contentTier(group, noteDeltas, deltas?.meta.qAlpha, sectionBundles);
+  const cardGroups = sortedMatched.filter((group) => tierOf(group) <= 2 && !isModeGroup(group));
+  const miscSections = buildMiscSections(sortedMatched.filter((group) => tierOf(group) >= 3 || isModeGroup(group)));
+  const streamGroups = [...cardGroups, ...rawGroups.filter((g) => g.kind !== "matched")];
   const streamEntries: ReleaseStreamEntry[] = streamGroups.map((group) => {
     const icon = icons.get(group)!;
     const lanes = icon.entityKey ? lanesForEntityKey(deltas?.rows ?? [], icon.entityKey) : [];
-    const tier =
-      group.kind === "matched" ? contentTier(group, noteDeltas, deltas?.meta.qAlpha, sectionBundles) : undefined;
-    return { group, icon, lanes, tier, sectionBundle: sectionBundles.has(group.entity) };
+    const tier = group.kind === "matched" ? tierOf(group) : undefined;
+    return { group, icon, lanes, tier };
   });
+  // 탭 배지 = 화면에 실제로 실리는 줄 수(카드 줄 + 기타 변경 줄). 이전엔 `meta.itemCount`(181)였는데
+  // 의회 34줄을 뺀 지금은 그 숫자가 화면과 어긋난다.
+  const contentLineCount =
+    cardGroups.reduce((sum, group) => sum + group.notes.length, 0) +
+    miscSections.reduce((sum, section) => sum + section.notes.length, 0);
 
   // Gap 정의는 한 곳(`isGapStatus`)만 본다 — 라인 분포 패널이 히어로 타일·탭 배지와 다른
   // 모수를 쓰면 화면이 스스로를 반박한다(2026-09-17 B2 통합).
@@ -135,7 +150,7 @@ export default function Home() {
             같이 내려가므로 그 요구를 그대로 만족한다. 176px은 Tailwind 표준 스케일(11rem)이라
             arbitrary 불필요. */}
         <Container className="flex flex-col gap-6 pt-44 pb-8">
-          <HeroSummary stats={headline} action={<IntroReplayButton label="인트로 재생" />} />
+          <HeroSummary stats={headline} />
           <StreamColumnLayout
             leftHeader={<StreamLaneFilter />}
             left={
@@ -146,10 +161,11 @@ export default function Home() {
                 noteDeltaRows={noteDeltaRows}
                 patch={pair?.to ?? null}
                 qAlpha={deltas?.meta.qAlpha}
-                contentCount={headline.noteItemCount}
+                contentCount={contentLineCount}
                 gapCount={headline.unannouncedCount}
                 causes={indirectCauses}
                 skinPreviews={skinPreviews}
+                miscSections={miscSections}
               />
             }
             right={

@@ -15,6 +15,8 @@ import {
   formatCiCell,
   formatDeltaCell,
   formatNCell,
+  groupNotesForNav,
+  navBadgeStatus,
   representativeStatus,
   shortNoteId,
   sortRows,
@@ -77,29 +79,35 @@ describe("filterByStatus", () => {
     delta({ id: "3", status: "no-change" }),
   ];
 
-  it("all은 전체(그대로 반환, no-change 포함)", () => {
+  it("all은 전체(그대로 반환)", () => {
     expect(filterByStatus(rows, "all")).toHaveLength(3);
   });
 
-  it("특정 상태만 남긴다", () => {
+  it("특정 표시 키만 남긴다", () => {
     expect(filterByStatus(rows, "unannounced").map((r) => r.id)).toEqual(["1"]);
+    expect(filterByStatus(rows, "announced").map((r) => r.id)).toEqual(["2"]);
   });
 
-  // 2026-09-17(B2): 홈 히어로 타일이 세는 집합(미공지 + 간접 영향)을 대조표에서도 표현할 수
-  // 있어야 한다. 그 전엔 타일이 49를 말하면서 47만 보이는 화면(`#unannounced`)으로 링크했다.
-  it("gap은 미공지와 간접 영향을 함께 남긴다 — 홈 타일이 세는 집합과 같아야 한다", () => {
+  // 2026-09-18 라운드6(사용자 C5) 명세 변경: "미공지, 노트에없는변화, 간접영향은 결국 미공지내용" —
+  // 통합 필터 `gap`과 개별 칩(간접 영향)을 없애고 `unannounced` 하나가 둘을 함께 남긴다.
+  it("unannounced 칩은 미공지와 간접 영향을 함께 남긴다 — 홈 타일이 세는 집합과 같다", () => {
     const gapRows = [
       delta({ id: "u", status: "unannounced" }),
       delta({ id: "i", status: "indirect-effect" }),
       delta({ id: "a", status: "announced-consistent" }),
       delta({ id: "b", status: "below-threshold" }),
     ];
-    expect(filterByStatus(gapRows, "gap").map((r) => r.id)).toEqual(["u", "i"]);
+    expect(filterByStatus(gapRows, "unannounced").map((r) => r.id)).toEqual(["u", "i"]);
   });
 
-  it("개별 상태 칩도 그대로 동작한다 — 통합은 '같은 질문'이라는 뜻이지 구분 불가라는 뜻이 아니다", () => {
-    const gapRows = [delta({ id: "u", status: "unannounced" }), delta({ id: "i", status: "indirect-effect" })];
-    expect(filterByStatus(gapRows, "indirect-effect").map((r) => r.id)).toEqual(["i"]);
+  it("announced-anomaly 칩은 방향 반대·유의·바닥 통과 행만 남긴다", () => {
+    const mixed = [
+      delta({ id: "anom", status: "announced-inconsistent", delta: 0.05, after: 0.15, ci: [0.03, 0.07], q: 0.01 }),
+      delta({ id: "quiet", status: "announced-inconsistent", q: 0.6 }),
+      delta({ id: "ok", status: "announced-consistent" }),
+    ];
+    expect(filterByStatus(mixed, "announced-anomaly", 0.1).map((r) => r.id)).toEqual(["anom"]);
+    expect(filterByStatus(mixed, "announced", 0.1).map((r) => r.id)).toEqual(["quiet", "ok"]);
   });
 });
 
@@ -189,16 +197,55 @@ describe("representativeStatus", () => {
   });
 });
 
-describe("STATUS_FILTERS — below-threshold·indirect-effect 칩(2026-09-13 신규)", () => {
-  // 2026-09-18 S6 명세 변경: 라벨 "임계 미달"→"바닥 미달"(동의어 교체, 뜻 불변).
-  it("below-threshold 칩이 '바닥 미달' 라벨로 존재한다", () => {
-    const entry = STATUS_FILTERS.find((f) => f.key === "below-threshold");
-    expect(entry?.label).toBe("바닥 미달");
+describe("STATUS_FILTERS — 2026-09-18 라운드6 어휘 통일(사용자 C5·C1)", () => {
+  it("칩은 전체 / 공지 / 공지 · 이상 관측 / 미공지 4종뿐이다 — 노이즈·세분 칩은 없다", () => {
+    expect(STATUS_FILTERS.map((f) => [f.key, f.label])).toEqual([
+      ["all", "전체"],
+      ["announced", "공지"],
+      ["announced-anomaly", "공지 · 이상 관측"],
+      ["unannounced", "미공지"],
+    ]);
+  });
+});
+
+describe("groupNotesForNav — 좌 내비 엔티티 묶음(사용자 L4)", () => {
+  it("같은 엔티티의 줄을 하나로 묶고 스킬 목록·줄 수를 낸다(문서 순서 유지)", () => {
+    const items = [
+      note({ id: "a", entity: "카시오페아", skill: "E - 쌍독니", stat: "피해량" }),
+      note({ id: "b", entity: "바드", skill: "W - 수호자의 성소" }),
+      note({ id: "c", entity: "카시오페아", skill: "E - 쌍독니", stat: "마나" }),
+      note({ id: "d", entity: "카시오페아", skill: "Q - 유독성 폭발" }),
+    ];
+    const groups = groupNotesForNav(items);
+    expect(groups.map((g) => g.entity)).toEqual(["카시오페아", "바드"]);
+    expect(groups[0].notes.map((n) => n.id)).toEqual(["a", "c", "d"]);
+    expect(groups[0].skills).toEqual(["E - 쌍독니", "Q - 유독성 폭발"]);
+    expect(groups[0].id).toBe("a"); // 대표 id = 첫 줄
   });
 
-  it("indirect-effect 칩이 '간접 영향' 라벨로 존재한다", () => {
-    const entry = STATUS_FILTERS.find((f) => f.key === "indirect-effect");
-    expect(entry?.label).toBe("간접 영향");
+  it("빈 입력은 빈 배열", () => {
+    expect(groupNotesForNav([])).toEqual([]);
+  });
+});
+
+describe("navBadgeStatus — 엔티티 묶음의 배지(보고 가능 관측만)", () => {
+  const rows = [
+    delta({ id: "1", matchedNoteIds: ["n1"], status: "announced-consistent" }),
+    delta({ id: "2", matchedNoteIds: ["n2"], status: "announced-inconsistent", delta: -0.05, after: 0.05, ci: [-0.07, -0.03] }),
+    delta({ id: "3", matchedNoteIds: ["n3"], status: "announced-inconsistent", q: 0.7 }),
+  ];
+
+  it("보고 가능한 셀이 있으면 최우선 표시 키 — 이상 관측이 공지보다 앞", () => {
+    expect(navBadgeStatus(["n1", "n2"], rows, 0.1)).toBe("announced-anomaly");
+    expect(navBadgeStatus(["n1"], rows, 0.1)).toBe("announced");
+  });
+
+  it("짝은 있으나 전부 비유의면 null — 배지를 달지 않는다(사용자 C1)", () => {
+    expect(navBadgeStatus(["n3"], rows, 0.1)).toBeNull();
+  });
+
+  it("짝 자체가 없으면 null", () => {
+    expect(navBadgeStatus(["none"], rows, 0.1)).toBeNull();
   });
 });
 
@@ -248,6 +295,17 @@ describe("shortNoteId", () => {
   });
 });
 
+describe("groupNotesForNav — 제외 노트(라운드6 재판정 보완 1·5)", () => {
+  it("의회 투표 결과·게임 모드 섹션 줄은 내비 항목이 되지 않는다", () => {
+    const items = [
+      note({ id: "a", entity: "에코", anchorUrl: "https://x/#patch-ekko" }),
+      note({ id: "b", entity: "의회 - 투표 1 결과", anchorUrl: "https://x/#patch-classic" }),
+      note({ id: "c", entity: "피오라", anchorUrl: "https://x/#patch-classic" }),
+    ];
+    expect(groupNotesForNav(items).map((g) => g.entity)).toEqual(["에코"]);
+  });
+});
+
 describe("computeCoverage", () => {
   it("빈 입력(rows=[], notes=null)에서도 0으로 안전하게 계산된다", () => {
     expect(computeCoverage([], null)).toEqual({
@@ -258,10 +316,11 @@ describe("computeCoverage", () => {
       lowSampleCount: 0,
       belowThresholdCount: 0,
       indirectEffectCount: 0,
+      gapEntityCount: 0,
     });
   });
 
-  it("상태별 집계 + 노트 엔티티 수(+원문 항목 수)", () => {
+  it("상태별 집계 + 노트 엔티티 수(+원문 항목 수) + 미공지 엔티티 수(라운드6 보완 4)", () => {
     const notes = notesFile([note({ id: "a", entity: "A" }), note({ id: "b", entity: "A" })]);
     const rows = [
       delta({ id: "1", status: "announced-consistent" }),
@@ -279,6 +338,8 @@ describe("computeCoverage", () => {
       lowSampleCount: 1,
       belowThresholdCount: 1,
       indirectEffectCount: 1,
+      // 미공지 2행(unannounced·indirect-effect)이 같은 엔티티라 엔티티 수는 1.
+      gapEntityCount: 1,
     });
   });
 });

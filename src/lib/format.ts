@@ -3,7 +3,7 @@
 // 음수는 하이픈(-)이 아니라 유니코드 마이너스(U+2212, −)로 표기한다 — 타이포그래피 관례이자
 // 표에서 하이픈/마이너스 혼용을 없애기 위함(UX-BRIEF 델타 표기 전반에 일관 적용).
 
-import type { DeltaEntityType, DeltaMetric, Interval, LanePosition, TeamPosition } from "@/pipeline/types";
+import type { DeltaEntityType, DeltaMetric, Interval, LanePosition, MatchStatus, TeamPosition } from "@/pipeline/types";
 import type { DisplayStatus } from "@/pipeline/shared/display-status";
 
 const MINUS = "−";
@@ -87,34 +87,30 @@ export function fmtKst(iso: string): string {
   return `${y}-${mo}-${d} ${h}:${mi} KST`;
 }
 
-/** MatchStatus 6종(4종 + "no-change" + "below-threshold")을 수용하는 상태 라벨. 알려지지 않은
- * 값은 크래시 대신 원본 문자열을 그대로 반환한다(ST-08/09가 아직 만들지 않은 상태값이 와도
- * 안전). "below-threshold"(2026-09-13 신규) = 통계적으로 유의하지만 효과크기 바닥 미달. */
-const STATUS_LABELS: Record<DisplayStatus, string> = {
-  "announced-consistent": "공지-일치",
-  "announced-inconsistent": "공지-불일치",
-  // 표시 전용 키(2026-09-18 ST-4) — 노트 짝은 있으나 관측이 비유의. 빨간 "불일치"로 읽히지 않게.
-  "announced-unobserved": "공지 · 관측 미확인",
-  // 표시 전용 키(2026-09-18 S9/S10 = CF-1·CF-2) — 노트 짝 있음 + 유의함 + 규모가 바닥 미달.
-  // "바닥"은 이 저장소에서 효과크기 전용 어근이다(S6 통일과 같은 단어를 쓴다).
-  "announced-below-floor": "공지 · 바닥 미달",
-  // 표시 전용 키(2026-09-18 S5) — 그 노트 줄에 짝지어진 델타가 없다. 이전엔 호출부가 한국어
-  // 리터럴 "관측 보류"를 직접 넣었는데(홈 50건), "보류"는 곧 관측된다는 미래 약속이라 투표
-  // 결과·버그 수정 줄에는 거짓이다. 사실 서술로 바꾼다.
-  unpaired: "짝지은 관측 없음",
+/**
+ * 상태 라벨 — 2026-09-18 라운드6(사용자 C5) 어휘 통일. 표시 키(`DisplayStatus`) 3종 + 부재 1종 +
+ * 노이즈 3종(방법론 정의표용). raw `MatchStatus`가 그대로 들어와도(PUBG 화면은 q가 없어 상태값을
+ * 배지에 직접 넘긴다) **같은 통일 어휘**로 읽히도록 두 키 집합을 한 표에 둔다 — 옛 세분 어휘
+ * ("공지-일치"·"공지-불일치"·"관측 미확인"·"바닥 미달(공지)"·"간접 영향"·"노트에 없는 변화")는 화면
+ * 어디에도 남기지 않는다. 알려지지 않은 값은 크래시 대신 원본 문자열을 그대로 반환한다.
+ */
+const STATUS_LABELS: Record<DisplayStatus | MatchStatus, string> = {
+  announced: "공지",
+  "announced-anomaly": "공지 · 이상 관측",
   unannounced: "미공지",
-  "indirect-effect": "간접 영향",
+  unpaired: "짝지은 관측 없음",
+  // raw MatchStatus → 같은 통일 어휘
+  "announced-consistent": "공지",
+  "announced-inconsistent": "공지 · 이상 관측",
+  "indirect-effect": "미공지",
+  // 노이즈 3종 — 화면 배지에는 쓰지 않고 방법론 "표시하지 않는 관측" 정의표에만 나온다.
   "insufficient-sample": "표본 부족",
-  // S6(2026-09-18) "임계 미달" → "바닥 미달". 한 상태를 네 단어로 부르던 것을 어근 하나로
-  // 모은다: PUBG 칩("바닥 미달")·홈 판정문("변화 규모 바닥 미달")·방법론("효과크기 바닥 미달")이
-  // 전부 "바닥"을 쓰는데 LoL 배지·칩만 "임계"였다. "임계"는 q<α 임계와 충돌하는 단어이고
-  // "바닥"은 이 저장소에서 효과크기 전용이다(EFFECT_SIZE_FLOORS). 뜻은 그대로다(동의어 교체).
   "below-threshold": "바닥 미달",
   "no-change": "변화 없음",
 };
 
 export function statusLabel(status: string): string {
-  return STATUS_LABELS[status as DisplayStatus] ?? status;
+  return STATUS_LABELS[status as DisplayStatus | MatchStatus] ?? status;
 }
 
 /** DeltaRecord.metric(문자열 키) → 한글 라벨. 알려지지 않은 metric은 원본 문자열을 그대로

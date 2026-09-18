@@ -1,32 +1,25 @@
 // src/app/pubg/methodology/page.tsx
 // PUBG 방법론 — 내비 "방법론"이 PUBG일 때 도달하는 화면. LoL `/methodology/`와 같은 자리다.
 //
-// **왜 LoL 방법론을 그대로 재노출하지 않는가**: 그 화면의 수치는 전부 LoL 소유다(Riot Match-V5,
-// WIN_RATE_MIN_N=200, EFFECT_SIZE_FLOORS 지표별 바닥, KR·Master+ 표본). PUBG는 판정 규칙 자체가
-// 다르다 — 효과크기 바닥을 **데이터에서 유도**하고(PLAN-pubg-gate R3), q(BH-FDR) 대신 Wilson CI +
-// 비율 밴드로 공지 일치를 본다. 같은 화면을 띄우면 화면이 거짓을 말한다.
-// 공유되는 것은 **어댑터 매핑표**(AdapterMatrix — LoL↔PUBG 8계층 대조가 곧 내용이라 게임 무관)
-// 하나뿐이고, 나머지는 PUBG 값으로 다시 쓴다.
+// 2026-09-18 라운드6(사용자 P2·C3·C1): **판정표 기준으로 전면 재작성.** 다른 게임과의 비교 서술을 전부
+// 뺐고(어댑터 매핑표 포함), 브리핑에서 옮겨 온 표본·기저·게이트 카드와 "표시하지 않는 관측" 규칙을 여기
+// 모았다. 이 화면이 "왜 이렇게 판정·표시하나"의 유일한 집이다 — 브리핑·대조표·상세는 결과만 말한다.
 //
-// 2026-09-17: `/pubg/` 한 장이 이고 있던 "관측 축이 없는 공지 항목"과 "버린 축 재현(§8 반증표)"을
-// 이 화면으로 옮겼다. 둘 다 "무엇을 어떻게 판정했고 무엇을 못 했나"라 방법론의 내용이다.
+// PUBG 판정 규칙(pubg-delta.ts): 효과크기 바닥은 **이 데이터에서 유도**(패치노트가 언급하지 않은 무기의
+// 변화 분포 90번째 백분위수), 공지 일치는 비율 밴드 [0.5, 1.5], 표본 게이트는 획득 300회, q(BH-FDR)는
+// 계산하지 않는다(Wilson CI + 바닥). LLM 원인 추정은 이 게임에 없다 — 43.1 노트가 5항목이라 짝지을
+// 후보 조항 자체가 없다.
 import type { Metadata } from "next";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
-import AdapterMatrix from "@/components/methodology/AdapterMatrix";
-import {
-  PubgFooter,
-  PubgPageHeader,
-  PubgSampleNotice,
-  PubgUnavailable,
-  pct,
-  signedPct,
-} from "@/components/pubg/shared";
+import StatusBadge from "@/components/StatusBadge";
+import { PubgFooter, PubgPageHeader, PubgSampleNotice, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { loadPubg } from "@/lib/pubgData";
+import { ANNOUNCED_RATIO_BAND, PICKUP_MIN_N } from "@/pipeline/match/pubg-delta";
 
 export const metadata: Metadata = {
   title: "PUBG 방법론 · patchgap",
-  description: "PUBG 어댑터의 수집·집계·판정 규칙과 검증하지 못한 축을 밝힌다.",
+  description: "PUBG 판정표의 규칙 — 표본·기저·효과크기 바닥·상태 정의·표시 규칙·검증하지 못한 축.",
 };
 
 const PIPELINE = [
@@ -42,168 +35,267 @@ export default function PubgMethodologyPage() {
   if (!bundle) {
     return (
       <main>
-      <Container>
-        <PubgUnavailable />
-      </Container>
-    </main>
+        <Container>
+          <PubgUnavailable />
+        </Container>
+      </main>
     );
   }
 
-  const { deltas, notes, accuracyComparison } = bundle;
+  const { deltas, before, after, notes, accuracyComparison } = bundle;
   const unverifiable = notes.filter((note) => note.expectedRelChange === null);
+  const counts = deltas.meta.counts;
+  const hidden = (counts["below-threshold"] ?? 0) + (counts["no-change"] ?? 0) + (counts["insufficient-sample"] ?? 0);
+
+  const statusRows = [
+    {
+      status: "announced",
+      definition: "패치노트가 말한 무기의 점유율 변화가 공지 방향·규모와 맞음",
+      condition: `짝 존재 · 관측/공지 비율 ${ANNOUNCED_RATIO_BAND[0]}~${ANNOUNCED_RATIO_BAND[1]}`,
+    },
+    {
+      status: "announced-anomaly",
+      definition: "패치노트가 말한 무기인데 방향이 반대이거나 규모가 밴드 밖",
+      condition: `짝 존재 · 비율 밴드 밖`,
+    },
+    {
+      status: "unannounced",
+      definition: "패치노트에 없는 무기가 바닥을 넘어 움직임",
+      condition: `짝 없음 · |상대 변화| ≥ 바닥 ${pct(deltas.meta.effectFloor)}`,
+    },
+  ] as const;
 
   return (
     <main>
       <Container>
-      <div className="flex flex-col gap-6 py-8">
-        <PubgPageHeader
-          title="어떻게 판정했고, 무엇을 못 했나"
-          lead={
-            <>
-              판정 엔진은 리그 오브 레전드와 같습니다. 다른 것은 어댑터(수집·엔티티·지표)와
-              <strong className="text-fg"> 게이트 상수</strong>입니다 — PUBG는 효과크기 바닥을
-              LoL에서 가져오지 않고 이 데이터에서 유도합니다.
-            </>
-          }
-        />
+        <div className="flex flex-col gap-6 py-8">
+          <PubgPageHeader
+            title="어떻게 판정했고, 무엇을 못 했나"
+            lead={
+              <>
+                43.1 패치노트의 무기 변경을 매치 텔레메트리의 <strong className="text-fg">획득 점유율</strong> 한 축으로
+                대조합니다. 효과크기 바닥은 이 데이터에서 유도하고, 판정이 서지 않는 관측은 화면에 올리지 않습니다.
+              </>
+            }
+          />
 
-        <PubgSampleNotice sampleScope={deltas.meta.sampleScope} />
+          <PubgSampleNotice sampleScope={deltas.meta.sampleScope} />
 
-        <SectionCard eyebrow="신뢰" title="데이터 파이프라인" variant="glass">
-          <ol className="flex flex-col divide-y divide-border-soft">
-            {PIPELINE.map((s) => (
-              <li key={s.step} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-3">
-                <span className="font-mono text-xs font-bold text-accent">{s.step}</span>
-                <span className="font-display font-bold text-fg">{s.title}</span>
-                <span className="text-sm text-fg-2">{s.detail}</span>
-                <span className="ml-auto font-mono text-xs text-muted">{s.meta}</span>
-              </li>
-            ))}
-          </ol>
-          <p className="px-5 pt-1 pb-5 text-xs leading-relaxed text-muted" style={{ maxWidth: "var(--measure-wide)" }}>
-            `/samples`는 official 외에 airoyale·competitive·tutorialatoz·trainingroom을 함께
-            돌려줍니다 — 2026-09-16 실측에서 표본의 약 절반이 비경쟁 매치였고, 이벤트가 1,583건뿐인
-            튜토리얼 매치가 통계에 들어갈 뻔했습니다. 2단계에서 `matchType`을 저장해 3단계 이후가
-            official만 쓰도록 걸러냅니다.
-          </p>
-        </SectionCard>
+          {/* 브리핑에서 옮겨 온 표본·기저·게이트(2026-09-18 라운드6 C3). */}
+          <div className="grid gap-4 md:grid-cols-3">
+            <SectionCard eyebrow="표본" title="비교 구간" variant="glass">
+              <div className="p-5">
+                <dl className="flex flex-col gap-2 text-sm">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <dt className="text-muted">42.3 ({deltas.meta.window.before[0]?.slice(5)}~{deltas.meta.window.before.at(-1)?.slice(5)})</dt>
+                    <dd className="font-mono tabular-nums text-fg">{before.nMatches.toLocaleString()}매치</dd>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-3">
+                    <dt className="text-muted">43.1 ({deltas.meta.window.after[0]?.slice(5)}~{deltas.meta.window.after.at(-1)?.slice(5)})</dt>
+                    <dd className="font-mono tabular-nums text-fg">{after.nMatches.toLocaleString()}매치</dd>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-3 border-t border-border-soft pt-2">
+                    <dt className="text-muted">봇 비율</dt>
+                    <dd className="font-mono tabular-nums text-fg-2">
+                      {pct(before.botShare)} → {pct(after.botShare)}
+                    </dd>
+                  </div>
+                </dl>
+                <p className="mt-3 text-xs leading-relaxed text-muted">
+                  양쪽 다 같은 요일 5일로 맞췄습니다. 주말 비중이 다르면 플레이어 구성 차이가 패치 효과와 섞입니다.
+                  패치 적용 시차가 검증되지 않은 경계 2일은 제외했습니다.
+                </p>
+              </div>
+            </SectionCard>
 
-        <SectionCard eyebrow="해석" title="판정 규칙" variant="glass">
-          <div className="flex flex-col gap-4 p-5">
-            <dl className="flex flex-col gap-3 text-sm">
+            <SectionCard eyebrow="기저" title="함께 움직인 값" variant="glass">
+              <div className="p-5">
+                <div className="flex items-baseline gap-2">
+                  <span className="font-mono text-2xl font-bold tabular-nums text-fg">{before.pickupsPerMatch.toFixed(0)}</span>
+                  <span className="text-muted">→</span>
+                  <span className="font-mono text-2xl font-bold tabular-nums text-fg">{after.pickupsPerMatch.toFixed(0)}</span>
+                  <span className="text-xs text-muted">매치당 총 획득</span>
+                </div>
+                <p className="mt-3 text-xs leading-relaxed text-muted">
+                  총량이 함께 내려갔습니다. 이 기저를 나누지 않으면 모든 무기가 하향된 것처럼 보입니다 — 모든 수치는{" "}
+                  <strong className="text-fg-2">총 획득 대비 점유율</strong>입니다.
+                </p>
+              </div>
+            </SectionCard>
+
+            <SectionCard eyebrow="게이트" title="효과크기 바닥" variant="glass">
+              <div className="p-5">
+                <div className="font-mono text-2xl font-bold tabular-nums text-fg">{pct(deltas.meta.effectFloor)}</div>
+                <p className="mt-3 text-xs leading-relaxed text-muted">
+                  <strong className="text-fg-2">이 데이터에서 유도</strong>했습니다. 패치노트가 언급하지 않은 무기들의 변화
+                  분포(귀무분포) 90번째 백분위수 — 언급 없는 무기 10개 중 9개보다 크게 움직여야 판정합니다.
+                </p>
+              </div>
+            </SectionCard>
+          </div>
+
+          <SectionCard eyebrow="신뢰" title="데이터 파이프라인" variant="glass">
+            <ol className="flex flex-col divide-y divide-border-soft">
+              {PIPELINE.map((s) => (
+                <li key={s.step} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-3">
+                  <span className="font-mono text-xs font-bold text-accent">{s.step}</span>
+                  <span className="font-display font-bold text-fg">{s.title}</span>
+                  <span className="text-sm text-fg-2">{s.detail}</span>
+                  <span className="ml-auto font-mono text-xs text-muted">{s.meta}</span>
+                </li>
+              ))}
+            </ol>
+            <p className="px-5 pt-1 pb-5 text-xs leading-relaxed text-muted" style={{ maxWidth: "var(--measure-wide)" }}>
+              `/samples`는 official 외에 airoyale·competitive·tutorialatoz·trainingroom을 함께 돌려줍니다 — 실측에서
+              표본의 약 절반이 비경쟁 매치였습니다. 2단계에서 `matchType`을 저장해 official만 씁니다.
+            </p>
+          </SectionCard>
+
+          {/* 판정표 — 화면 배지가 쓰는 표시 키 3종과 조건. 표시하지 않는 관측은 아래 카드. */}
+          <SectionCard eyebrow="해석" title="판정표" variant="glass">
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-sm">
+                <thead>
+                  <tr>
+                    <th className="border-b border-border-soft px-5 py-3 text-left text-xs font-bold text-muted">상태</th>
+                    <th className="border-b border-border-soft px-5 py-3 text-left text-xs font-bold text-muted">정의</th>
+                    <th className="border-b border-border-soft px-5 py-3 text-left text-xs font-bold text-muted">판정 조건</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {statusRows.map((row) => (
+                    <tr key={row.status}>
+                      <td className="border-b border-border-soft px-5 py-4 align-top">
+                        <StatusBadge status={row.status} />
+                      </td>
+                      <td className="border-b border-border-soft px-5 py-4 align-top text-fg-2">{row.definition}</td>
+                      <td className="border-b border-border-soft px-5 py-4 align-top text-muted">{row.condition}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <dl className="flex flex-col gap-3 p-5 text-sm">
               <div>
-                <dt className="font-display font-bold text-fg">효과크기 바닥 {pct(deltas.meta.effectFloor)}</dt>
+                <dt className="font-display font-bold text-fg">공지 일치는 비율 밴드 [{ANNOUNCED_RATIO_BAND[0]}, {ANNOUNCED_RATIO_BAND[1]}]</dt>
                 <dd className="mt-1 leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
-                  패치노트가 언급하지 않은 무기들의 변화 분포(귀무분포) 90번째 백분위수입니다. LoL의
-                  지표별 바닥(<span className="font-mono text-xs">EFFECT_SIZE_FLOORS</span>)을 재사용하면
-                  픽률·승률 기준의 숫자를 무기 획득 점유율에 갖다 대는 셈이라, PUBG 데이터에서 직접
-                  유도했습니다.
+                  획득 점유율은 스폰율의 대리 지표입니다 — 스폰이 줄어도 남은 것을 더 적극적으로 줍거나(감쇠) 너프 소식에
+                  회피하면(증폭) 관측 배수가 달라집니다. 그래서 정확한 배수 일치가 아니라 방향과 자릿수로 판정합니다.
+                  &ldquo;공지값이 95% CI 안에 들어오면 일치&rdquo; 규칙은 시행수가 수만이면 CI가 ±1.3%p로 좁아져 모든
+                  공지가 불일치로 찍히기 때문에 쓰지 않습니다.
                 </dd>
               </div>
               <div>
-                <dt className="font-display font-bold text-fg">공지 일치는 비율 밴드 [0.5, 1.5]</dt>
+                <dt className="font-display font-bold text-fg">q(BH-FDR) 열이 없는 이유</dt>
                 <dd className="mt-1 leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
-                  &ldquo;공지값이 95% CI 안에 들어오면 일치&rdquo; 규칙을 처음에 썼다가 폐기했습니다 —
-                  시행수가 수만이면 CI가 ±1.3%p로 좁아져 공지값을 거의 항상 배제하고,{" "}
-                  <strong className="text-fg">모든 공지 항목이 불일치로 찍힙니다</strong>. 획득 점유율은
-                  스폰율의 대리 지표라 정확한 배수 일치를 요구할 근거가 없으므로 방향과 자릿수로
-                  판정합니다.
+                  이 판정은 효과크기 바닥 + Wilson 신뢰구간 방식이라 q를 계산하지 않습니다. 없는 값을 빈칸으로 채우지
+                  않습니다.
                 </dd>
               </div>
               <div>
-                <dt className="font-display font-bold text-fg">표본 부족 게이트 n &lt; 300</dt>
+                <dt className="font-display font-bold text-fg">LLM 원인 추정 없음</dt>
                 <dd className="mt-1 leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
-                  획득 수가 300 미만인 무기는 판정하지 않고 <span className="font-mono text-xs">insufficient-sample</span>로
-                  둡니다. 비율 변화율은 분모가 작을 때 폭발합니다.
-                </dd>
-              </div>
-              <div>
-                <dt className="font-display font-bold text-fg">요일 정렬 · 경계 2일 제외</dt>
-                <dd className="mt-1 leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
-                  전후 구간을 목~월 5일로 맞췄습니다(주말 비중이 다르면 플레이어 구성 차이가 패치
-                  효과와 섞입니다). 패치 적용 시차가 검증되지 않은 경계 2일(9/9~9/10)은 뺐습니다.
+                  43.1 패치노트는 무기 항목 5건뿐이라 미공지 변화에 짝지을 후보 조항이 없습니다. 무기 상세에는 관측값과
+                  판정 근거만 있습니다.
                 </dd>
               </div>
             </dl>
-          </div>
-        </SectionCard>
+          </SectionCard>
 
-        {/* 확장성의 증명 — 셀렉터가 아니라 어댑터 매핑표로 "다른 게임에도 같은 판정 엔진을 쓸 수
-            있다"를 보인다. 이 표는 LoL↔PUBG 대조 자체가 내용이라 양쪽 방법론 화면이 공유한다. */}
-        <SectionCard eyebrow="확장성" title="어댑터 매핑표 (LoL ↔ PUBG)" variant="glass">
-          <AdapterMatrix />
-        </SectionCard>
-
-        <SectionCard eyebrow="한계" title="관측 축이 없는 공지 항목" variant="glass">
-          <div className="p-5">
-            <p className="text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
-              43.1 패치노트의 나머지 항목은 이 표본으로 검증하지 못했습니다. 숫자를 지어내지 않고
-              비워 둡니다.
-            </p>
-            <ul className="mt-3 flex flex-col gap-2">
-              {unverifiable.map((note) => (
-                <li key={note.id} className="flex flex-wrap items-baseline gap-2 text-sm text-muted">
-                  <span className="font-mono text-xs text-muted">{note.stat}</span>
-                  <span>{note.summary}</span>
+          <SectionCard
+            eyebrow="표시 규칙"
+            title="표시하지 않는 관측"
+            variant="glass"
+            action={<span className="font-mono text-xs tabular-nums text-muted">{hidden} / {deltas.meta.n}</span>}
+          >
+            <div className="p-5">
+              <p className="text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
+                브리핑·대조표·무기 상세는 <strong className="text-fg">판정이 선 무기</strong>만 보여줍니다. 아래 세 상태는 판정
+                파일에 남되 화면에는 올리지 않습니다.
+              </p>
+              <ul className="mt-3 flex flex-col gap-2 text-sm">
+                <li className="flex flex-wrap items-baseline gap-2">
+                  <StatusBadge status="below-threshold" />
+                  <span className="text-muted">
+                    |상대 변화| &lt; 바닥 {pct(deltas.meta.effectFloor)} · {counts["below-threshold"] ?? 0}종
+                  </span>
                 </li>
-              ))}
-            </ul>
-            <p className="mt-3 text-xs leading-relaxed text-muted" style={{ maxWidth: "var(--measure-wide)" }}>
-              반동·조준 전환은 명중률로 분리하려 했으나 실패했습니다 — 반동이 나빠진 경기관총 3종이
-              대조군보다 <em>덜</em> 떨어져 방향이 반대로 나왔습니다. 교전 거리·상대 실력·봇 비율
-              변화가 패치 효과를 압도합니다. 차량 피해 배수는 피해량 합을 수집했으나 1차 출처
-              단독이라 판정 축에서 제외했습니다.
-            </p>
+                <li className="flex flex-wrap items-baseline gap-2">
+                  <StatusBadge status="no-change" />
+                  <span className="text-muted">95% CI가 0을 포함 · {counts["no-change"] ?? 0}종</span>
+                </li>
+                <li className="flex flex-wrap items-baseline gap-2">
+                  <StatusBadge status="insufficient-sample" />
+                  <span className="text-muted">
+                    획득 {PICKUP_MIN_N}회 미만 — 비율 변화율은 분모가 작을 때 폭발합니다 · {counts["insufficient-sample"] ?? 0}종
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </SectionCard>
 
-            {accuracyComparison && accuracyComparison.length > 0 ? (
-              <details className="mt-4 rounded-md border border-border-soft">
-                <summary className="cursor-pointer px-4 py-3 font-mono text-xs font-bold text-muted">
-                  버린 축 재현 — 명중률(hits ÷ attacks), 너프 3종 vs 대조군 2종
-                </summary>
-                <div className="overflow-x-auto border-t border-border-soft">
-                  <table className="w-full border-collapse text-sm" style={{ minWidth: "var(--table-min)" }}>
-                    <thead>
-                      <tr className="border-b border-border text-left">
-                        <th className="py-2 pl-4 pr-3 font-mono text-xs font-bold text-muted">무기</th>
-                        <th className="py-2 pr-3 font-mono text-xs font-bold text-muted">분류</th>
-                        <th className="py-2 pr-3 text-right font-mono text-xs font-bold text-muted">42.3</th>
-                        <th className="py-2 pr-3 text-right font-mono text-xs font-bold text-muted">43.1</th>
-                        <th className="py-2 pr-4 text-right font-mono text-xs font-bold text-muted">변화</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {accuracyComparison.map((row) => (
-                        <tr key={row.weaponKey} className="border-b border-border-soft">
-                          <td className="py-2 pl-4 pr-3 font-display font-bold text-fg">{row.weaponName}</td>
-                          <td className="py-2 pr-3 text-xs text-muted">
-                            {row.nerfed ? "반동 너프" : "대조군(무변경)"}
-                          </td>
-                          <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">
-                            {pct(row.before.accuracy, 2)}
-                          </td>
-                          <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">
-                            {pct(row.after.accuracy, 2)}
-                          </td>
-                          <td className="py-2 pr-4 text-right font-mono text-xs font-bold tabular-nums text-fg">
-                            {row.relChangePct === null ? "—" : signedPct(row.relChangePct / 100)}
-                          </td>
+          <SectionCard eyebrow="한계" title="관측 축이 없는 공지 항목" variant="glass">
+            <div className="p-5">
+              <p className="text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
+                43.1 패치노트의 나머지 항목은 이 표본으로 검증하지 못했습니다. 숫자를 지어내지 않고 비워 둡니다.
+              </p>
+              <ul className="mt-3 flex flex-col gap-2">
+                {unverifiable.map((note) => (
+                  <li key={note.id} className="flex flex-wrap items-baseline gap-2 text-sm text-muted">
+                    <span className="font-mono text-xs text-muted">{note.stat}</span>
+                    <span>{note.summary}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-3 text-xs leading-relaxed text-muted" style={{ maxWidth: "var(--measure-wide)" }}>
+                반동·조준 전환은 명중률로 분리하려 했으나 실패했습니다 — 반동이 나빠진 경기관총 3종이 대조군보다 <em>덜</em>{" "}
+                떨어져 방향이 반대로 나왔습니다. 교전 거리·상대 실력·봇 비율 변화가 패치 효과를 압도합니다. 차량 피해 배수는
+                1차 출처 단독이라 판정 축에서 제외했습니다.
+              </p>
+
+              {accuracyComparison && accuracyComparison.length > 0 ? (
+                <details className="mt-4 rounded-md border border-border-soft">
+                  <summary className="cursor-pointer px-4 py-3 font-mono text-xs font-bold text-muted">
+                    버린 축 재현 — 명중률(hits ÷ attacks), 너프 3종 vs 대조군 2종
+                  </summary>
+                  <div className="overflow-x-auto border-t border-border-soft">
+                    <table className="w-full border-collapse text-sm" style={{ minWidth: "var(--table-min)" }}>
+                      <thead>
+                        <tr className="border-b border-border text-left">
+                          <th className="py-2 pl-4 pr-3 font-mono text-xs font-bold text-muted">무기</th>
+                          <th className="py-2 pr-3 font-mono text-xs font-bold text-muted">분류</th>
+                          <th className="py-2 pr-3 text-right font-mono text-xs font-bold text-muted">42.3</th>
+                          <th className="py-2 pr-3 text-right font-mono text-xs font-bold text-muted">43.1</th>
+                          <th className="py-2 pr-4 text-right font-mono text-xs font-bold text-muted">변화</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <p className="px-4 py-3 text-xs leading-relaxed text-muted" style={{ maxWidth: "var(--measure-wide)" }}>
-                  너프당한 쪽이 대조군보다 <strong className="text-fg-2">덜</strong> 움직여야
-                  정상인데 실제로는 방향이 반대입니다 — 이 표가 판정에 쓰이지 않는 이유입니다.
-                </p>
-              </details>
-            ) : null}
-          </div>
-        </SectionCard>
+                      </thead>
+                      <tbody>
+                        {accuracyComparison.map((row) => (
+                          <tr key={row.weaponKey} className="border-b border-border-soft">
+                            <td className="py-2 pl-4 pr-3 font-display font-bold text-fg">{row.weaponName}</td>
+                            <td className="py-2 pr-3 text-xs text-muted">{row.nerfed ? "반동 너프" : "대조군(무변경)"}</td>
+                            <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">{pct(row.before.accuracy, 2)}</td>
+                            <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">{pct(row.after.accuracy, 2)}</td>
+                            <td className="py-2 pr-4 text-right font-mono text-xs font-bold tabular-nums text-fg">
+                              {row.relChangePct === null ? "—" : signedPct(row.relChangePct / 100)}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="px-4 py-3 text-xs leading-relaxed text-muted" style={{ maxWidth: "var(--measure-wide)" }}>
+                    너프당한 쪽이 대조군보다 <strong className="text-fg-2">덜</strong> 움직여야 정상인데 실제로는 방향이 반대입니다 —
+                    이 표가 판정에 쓰이지 않는 이유입니다.
+                  </p>
+                </details>
+              ) : null}
+            </div>
+          </SectionCard>
 
-        <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
-      </div>
-    </Container>
+          <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
+        </div>
+      </Container>
     </main>
   );
 }
