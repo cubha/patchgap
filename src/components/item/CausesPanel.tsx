@@ -5,6 +5,7 @@
 
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import { fmtKst } from "@/lib/format";
+import { sortCauses } from "./causeOrder";
 
 export interface CausesPanelProps {
   causes: DeltaRecord["causes"];
@@ -22,13 +23,16 @@ const CONFIDENCE_LABEL: Record<DeltaRecord["causes"][number]["confidence"], stri
 };
 
 export default function CausesPanel({ causes, llm, notesById, generatedAt }: CausesPanelProps) {
+  // 2026-09-18 라운드6(L5): 검증 high → medium → low → 미검증 순(causeOrder.ts). 본문은 카드 고정 높이
+  // 안에서 내부 스크롤(min-h-0 + overflow-y-auto) — 캡션 블록은 항상 카드 하단에 남는다.
+  const ordered = sortCauses(causes);
   return (
-    <div className="flex flex-1 flex-col">
-      {causes.length === 0 ? (
+    <div className="flex min-h-0 flex-1 flex-col">
+      {ordered.length === 0 ? (
         <p className="px-5 py-4 text-sm text-muted">간접 영향 후보 없음</p>
       ) : (
-        <div className="flex flex-col">
-          {causes.map((cause, i) => {
+        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+          {ordered.map((cause, i) => {
             const candidate = cause.candidateNoteId ? notesById.get(cause.candidateNoteId) : undefined;
             return (
               <div
@@ -52,7 +56,7 @@ export default function CausesPanel({ causes, llm, notesById, generatedAt }: Cau
                     cause.verified && cause.confidence !== "low" ? "text-accent" : "text-muted"
                   }`}
                 >
-                  {cause.verified ? `노트 인용 ✓ · 신뢰도 ${CONFIDENCE_LABEL[cause.confidence]}` : "인용 노트 없음"}
+                  {cause.verified ? `신뢰도 ${CONFIDENCE_LABEL[cause.confidence]}` : "인용 노트 없음"}
                 </span>
               </div>
             );
@@ -64,7 +68,7 @@ export default function CausesPanel({ causes, llm, notesById, generatedAt }: Cau
         // mt-auto — 부모(SectionCard)가 옆 컬럼과 하단을 맞추려 flex-1로 늘어난 경우, 카드
         // 안에서 이 블록(캡션 포함 마지막 요소)이 항상 카드 하단에 붙도록 한다. 늘어난 공간이
         // 없으면(자연 높이) mt-auto는 0이라 기존 pt-0 간격 그대로 유지된다.
-        <div className="mt-auto px-5 py-4 pt-0">
+        <div className="mt-auto border-t border-border-soft px-5 py-3">
           {llm.skipped ? (
             <p className="mb-2 text-xs text-muted">LLM 미실행({llm.reason ?? "사유 없음"})</p>
           ) : llm.summary ? (

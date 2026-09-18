@@ -28,8 +28,8 @@ function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
 describe("NoteContrastPanel — 짝 있음", () => {
   const matched = [
     { item: note({ id: "a" }), anchorCaption: null },
-    { item: note({ id: "b", skill: "E - 위상 도약", stat: "재사용 대기시간", summary: "재사용 대기시간: 9 ⇒ 8" }), anchorCaption: null },
-    { item: note({ id: "c", skill: "E - 위상 도약", stat: "피해량", summary: "피해량: 70 ⇒ 80" }), anchorCaption: null },
+    { item: note({ id: "b", skill: "E - 위상 도약", stat: "재사용 대기시간", before: "9", after: "8", summary: "재사용 대기시간: 9 ⇒ 8" }), anchorCaption: null },
+    { item: note({ id: "c", skill: "E - 위상 도약", stat: "피해량", before: "70", after: "80", summary: "피해량: 70 ⇒ 80" }), anchorCaption: null },
   ];
 
   it("줄을 전부 보여주고 원문 링크는 하단 1개 · 새 창", () => {

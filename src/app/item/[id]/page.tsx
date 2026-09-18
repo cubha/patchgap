@@ -231,78 +231,60 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
             </div>
           </div>
 
-          {/* items-start 제거 — 좌/우 컬럼 높이를 grid 기본 stretch로 맞추고, 각 컬럼의
-              마지막 카드(추정 원인 LLM · 원천 매치)가 flex-1로 남는 높이를 흡수해 하단을
-              정렬한다(2026-09-11, 사용자 지시 — 시안B 유지 + 컬럼 하단 정렬). */}
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
-            <div className="flex flex-col gap-6">
-              {/* 근거 패널(패치노트 대조)을 차트보다 위로 — HANDOFF §4-3 "차트 폭을 줄이고
-                  근거 패널을 위로". */}
-              <SectionCard eyebrow="선언 대조" title="패치노트 대조">
-                <NoteContrastPanel result={noteContrast} />
-              </SectionCard>
+          {/* 2026-09-18 라운드6(사용자 L5) 배치: 1행 [패치노트 대조 | 추정 원인(LLM)] · 2행 [전/후 관측값] ·
+              3행 [통계 게이트 | 원천 매치]. 추정 원인을 패치노트 대조와 같은 최상단에 두고, 통계 게이트·원천
+              매치(중요도 낮음)를 맨 아래로 내렸다. 1·3행 카드는 **고정 높이**(h-80 / h-64, Tailwind 표준
+              스케일) + 내부 스크롤이라 원천 매치 ID 수나 원인 개수에 따라 옆 카드가 늘어나지 않는다(이전엔
+              grid stretch + flex-1로 서로 높이를 맞추느라 매 항목 레이아웃이 달랐다). */}
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <SectionCard eyebrow="선언 대조" title="패치노트 대조" className="flex h-80 flex-col">
+              <NoteContrastPanel result={noteContrast} />
+            </SectionCard>
+            <SectionCard eyebrow="간접 영향" title="추정 원인(LLM)" className="flex h-80 flex-col">
+              <CausesPanel causes={delta.causes} llm={delta.llm} notesById={notesById} generatedAt={generatedAt} />
+            </SectionCard>
+          </div>
 
-              <SectionCard eyebrow="관측" title="전/후 관측값">
-                {/* 차트 폭 축소 — 근거 패널 대비 시각 우선순위를 낮춘다(HANDOFF §4-3). */}
-                <div className="max-w-xl">
-                  <ItemChart data={chartData} />
-                </div>
-                <div className="flex flex-wrap gap-4 border-t border-border-soft px-5 py-4 text-xs text-muted">
-                  <span className="inline-flex items-center gap-2">
-                    <span className="inline-block h-2.5 w-2.5 rounded-sm bg-fg-2" aria-hidden="true" />
-                    전({pair.from})
-                  </span>
-                  <span className="inline-flex items-center gap-2">
-                    <span className="inline-block h-2.5 w-2.5 rounded-sm bg-accent" aria-hidden="true" />
-                    후({pair.to})
-                  </span>
-                  <span className="inline-flex items-center gap-2">
-                    <span
-                      className="inline-block h-2.5 w-2.5 rounded-sm"
-                      style={{ background: "var(--muted)" }}
-                      aria-hidden="true"
-                    />
-                    {/* HANDOFF §4-3: "95% CI 오차 막대" 범례를 양쪽 막대 기준으로 수정 — 저장 CI가
-                        있으면 전/후 막대 각각 자기 패치 CI, 없으면(goldAt10 등) 후 막대에만 델타
-                        CI(storedCi.ts·chartData.ts 폴백 규칙과 표현 일치). */}
-                    95% CI 오차 막대(전/후 각각 — 없으면 후 막대에 델타 CI)
-                    {chartData.barCi ? (
-                      <span className="font-mono">
-                        {formatCiRange(chartData.barCi.before)} ·{" "}
-                        {formatCiRange(chartData.barCi.after)}
-                      </span>
-                    ) : null}
-                  </span>
-                </div>
-              </SectionCard>
-
-              <SectionCard
-                eyebrow="간접 영향"
-                title="추정 원인(LLM)"
-                className="flex flex-1 flex-col"
-              >
-                <CausesPanel
-                  causes={delta.causes}
-                  llm={delta.llm}
-                  notesById={notesById}
-                  generatedAt={generatedAt}
-                />
-              </SectionCard>
+          <SectionCard eyebrow="관측" title="전/후 관측값">
+            <div className="max-w-xl">
+              <ItemChart data={chartData} />
             </div>
+            <div className="flex flex-wrap gap-4 border-t border-border-soft px-5 py-4 text-xs text-muted">
+              <span className="inline-flex items-center gap-2">
+                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-fg-2" aria-hidden="true" />
+                전({pair.from})
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-accent" aria-hidden="true" />
+                후({pair.to})
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: "var(--muted)" }} aria-hidden="true" />
+                95% CI
+                {chartData.barCi ? (
+                  <span className="font-mono">
+                    {formatCiRange(chartData.barCi.before)} · {formatCiRange(chartData.barCi.after)}
+                  </span>
+                ) : null}
+              </span>
+            </div>
+          </SectionCard>
 
-            <aside className="flex flex-col gap-6">
-              <SectionCard title="통계 게이트">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <SectionCard title="통계 게이트" className="flex h-64 flex-col">
+              <div className="min-h-0 flex-1 overflow-y-auto">
                 <StatsGatePanel delta={delta} kind={kind} />
-              </SectionCard>
-
-              <SectionCard title="원천 매치" className="flex flex-1 flex-col">
+              </div>
+            </SectionCard>
+            <SectionCard title="원천 매치" className="flex h-64 flex-col">
+              <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
                 <SourceMatchesPanel
                   matchIds={delta.evidence.matchIds}
                   aggregatePath={delta.evidence.aggregatePath}
                   snapshotHash={hash ?? "unknown"}
                 />
-              </SectionCard>
-            </aside>
+              </div>
+            </SectionCard>
           </div>
         </Container>
       </main>
