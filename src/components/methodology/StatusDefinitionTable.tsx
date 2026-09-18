@@ -1,5 +1,5 @@
 // src/components/methodology/StatusDefinitionTable.tsx
-// 방법론 페이지 "상태 정의" 표(ST-12 ②) — 프로토타입 04 `.definition-table` 5행 + "임계 미달"
+// 방법론 페이지 "상태 정의" 표(ST-12 ②) — 프로토타입 04 `.definition-table` 5행 + "바닥 미달"
 // (below-threshold) + "간접 영향"(indirect-effect) 2행 = 7행(둘 다 2026-09-13 신규).
 // 임계값은 EFFECT_SIZE_FLOORS 전수를 주입받아 표시한다 — 화면이 코드보다 오래된 숫자를 말하는
 // 드리프트를 구조적으로 차단한다(props 주석 참고).
@@ -56,6 +56,14 @@ function buildRows(minN: number, alpha: number, floors: Record<DeltaMetric, Effe
       status: "announced-unobserved",
       definition: "패치노트는 변경을 말했지만 통계에서 유의한 변화가 관측되지 않음",
       condition: `짝 존재 · q≥${alpha} 또는 CI가 0 포함`,
+    },
+    {
+      // 표시 전용 키(2026-09-18 S9/S10 = CF-1·CF-2) — 판정 엔진에서는 "공지-일치"/"공지-불일치"와
+      // 같은 상태값이다. 실측 26.17→26.18: `announced-consistent` 32건 중 20건(63%)이 여기 해당해,
+      // 갈라 놓지 않으면 "노트대로 확인됐다"로 읽히는 배지가 다수에서 사실과 어긋난다.
+      status: "announced-below-floor",
+      definition: "패치노트가 말한 변경이 통계에서도 유의하게 보이지만, 변화 규모가 실무상 무시 가능한 수준",
+      condition: `짝 존재 · q<${alpha} · 효과크기 바닥 미만`,
     },
     {
       status: "unannounced",
@@ -130,6 +138,19 @@ export default function StatusDefinitionTable({ minN, alpha, floors }: StatusDef
           ))}
         </tbody>
       </table>
+      {/* S7(2026-09-18 채점 라운드4) — 표시 게이트 고지.
+          **왜 필요한가**: 위 표는 판정 엔진(`verdict.assignStatus`)과 정확히 일치한다(표가 옳다).
+          그런데 홈 카드는 대표 관측을 고를 때 **효과크기 바닥을 한 번 더** 건다
+          (`selectReportableObservation`). 그 추가 규칙이 화면 어디에도 없어서, 같은 항목이
+          상세에서는 "공지-일치"인데 홈에서는 "관측 변화 없음"으로 보이면 두 화면이 서로를
+          반박하는 것처럼 읽힌다. 실측(26.17→26.18): `announced-consistent` 32건 중 **20건(63%)**이
+          바닥 미달이라 소수 예외가 아니다. */}
+      <p className="border-t border-border-soft px-5 py-4 text-xs leading-relaxed text-muted">
+        홈 카드의 대표 관측은 위 판정에 더해 <strong className="text-fg-2">효과크기 바닥</strong>을 한 번
+        더 통과한 행만 씁니다 — 그래서 &ldquo;공지-일치&rdquo;로 판정된 항목도 홈에서는 &ldquo;관측 변화
+        없음&rdquo;으로 보일 수 있습니다. 유의성(q&lt;α)과 규모(바닥)는 서로 다른 질문이고, 이 사이트는
+        둘을 따로 묻습니다.
+      </p>
     </div>
   );
 }

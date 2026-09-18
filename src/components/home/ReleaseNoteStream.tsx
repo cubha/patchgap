@@ -69,6 +69,8 @@ export interface ReleaseNoteStreamProps {
   spellIcons: Record<string, string> | null;
   /** note.id → 짝지어진 델타(page.tsx가 matchedNoteIds 역색인으로 구성). */
   noteDeltas: Record<string, DeltaRecord>;
+  /** 헤더 비관측 사유 계산 전용 짝 전수(S4 후속) — ReleaseNoteRow로 그대로 통과시킨다. */
+  noteDeltaRows?: Record<string, DeltaRecord[]>;
   patch: string | null;
   /** deltas.meta.qAlpha — 판정 문장(streamVerdict)의 유의 임계. */
   qAlpha?: number;
@@ -98,6 +100,7 @@ export default function ReleaseNoteStream({
   entries,
   spellIcons,
   noteDeltas,
+  noteDeltaRows,
   patch,
   qAlpha,
   contentCount,
@@ -170,6 +173,7 @@ export default function ReleaseNoteStream({
               icon={entry.icon}
               spellIcons={spellIcons}
               noteDeltas={noteDeltas}
+              noteDeltaRows={noteDeltaRows}
               patch={patch}
               qAlpha={qAlpha}
               causes={causes}

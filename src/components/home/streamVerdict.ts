@@ -6,9 +6,9 @@
 // 이 모듈은 "어떤 델타를 대표로 쓰고 무슨 문장을 만들지"만 결정한다(부수효과 없음).
 //
 // 무근거 문장 금지 원칙: 짝지어진 델타가 없으면 문장을 만들지 않고 `null`을 돌려준다.
-// 호출부는 그 자리에 아무것도 렌더하지 않는다(StatusBadge "관측 보류"가 이미 상태를 말한다).
+// 호출부는 그 자리에 아무것도 렌더하지 않는다(StatusBadge "짝지은 관측 없음"이 이미 상태를 말한다).
 
-import type { DeltaMetric, DeltaRecord, PatchNoteItem } from "@/pipeline/types";
+import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import { metricLabel } from "@/lib/format";
 import { meetsEffectFloor } from "@/pipeline/aggregate/stats";
 import { absDelta, isSignificantDelta } from "./logic";
@@ -62,10 +62,70 @@ export function selectReportableObservation(
   for (const row of rows) {
     if (row.delta === null) continue;
     if (!isSignificantDelta(row, qAlpha)) continue;
-    if (!meetsEffectFloor(row.metric as DeltaMetric, row.delta, row.before)) continue;
+    if (!meetsEffectFloor(row.metric, row.delta, row.before)) continue;
     if (!best || absDelta(row) > absDelta(best)) best = row;
   }
   return best;
+}
+
+/**
+ * 대표 관측이 **없는** 이유. 카드 헤더가 그 이유를 말하려면 먼저 계산해야 한다.
+ *
+ * **왜 필요한가**(2026-09-18 채점 라운드4 S4): `ReleaseNoteRow`의 헤더는 `observation === null`인
+ * 모든 그룹에 상수 문자열 `"관측 변화 없음 · 바닥 미달"`을 찍고 있었다. 그런데 그 자리는
+ * `selectReportableObservation`이 null을 낸 자리이고, 그 함수는 **유의성과 바닥 둘 다**를 보므로
+ * 어느 쪽이 깨져도 null이 된다 — 즉 문구는 사유를 단정하는데 코드는 그 사유를 계산한 적이 없다.
+ *
+ * 실측(26.17→26.18): 노트 짝 96행 중 비보고 83행의 **59행(71%)**이 바닥이 아니라 유의차 문제였다.
+ * 엔티티 단위로는 그 문구를 쓰는 6개 중 **바닥 미달이 진짜 이유인 것이 0개**(비유의만 1 · 혼재 5).
+ * 「구인수의 격노검」(채택률 Δ−0.08%p, q=0.577)은 **문장 자체가 거짓**이었다.
+ *
+ * **`mixed`에서 사유를 비우는 것이 이 함수의 핵심이다.** 혼재가 다수인데 거기서 한 사유를 고르면
+ * 그게 바로 위의 거짓말이다. 어휘는 새로 만들지 않고 `buildNoteVerdict`가 이미 확정한 두 단어
+ * ("유의차 없음" / "변화 규모 바닥 미달")를 그대로 쓴다 — 같은 사실을 두 어휘로 부르지 않기 위해서다.
+ */
+export type NoObservationReason = "no-pair" | "not-significant" | "below-floor" | "mixed";
+
+/**
+ * 보고 가능한 행이 하나라도 있으면 `null`(사유를 물을 상황이 아니다).
+ * 그렇지 않으면 왜 없는지를 돌려준다.
+ */
+export function explainNoObservation(
+  rows: readonly DeltaRecord[],
+  qAlpha?: number
+): NoObservationReason | null {
+  if (rows.length === 0) return "no-pair";
+
+  let significant = 0;
+  let belowFloor = 0;
+  let insignificant = 0;
+  for (const row of rows) {
+    if (row.delta === null || !isSignificantDelta(row, qAlpha)) {
+      insignificant += 1;
+      continue;
+    }
+    significant += 1;
+    if (!meetsEffectFloor(row.metric, row.delta, row.before)) belowFloor += 1;
+  }
+
+  // 유의하면서 바닥도 넘은 행이 있다 = 보고 가능한 관측이 존재한다.
+  if (significant > belowFloor) return null;
+
+  if (significant === 0) return "not-significant";
+  if (insignificant === 0) return "below-floor";
+  return "mixed";
+}
+
+/** 사유 → 카드 헤더 문구. `mixed`는 **사유 없이** 사실만 말한다. */
+const NO_OBSERVATION_LABELS: Record<NoObservationReason, string> = {
+  "no-pair": "짝지은 관측 없음",
+  "not-significant": "관측 변화 없음 · 유의차 없음",
+  "below-floor": "관측 변화 없음 · 변화 규모 바닥 미달",
+  mixed: "관측 변화 없음",
+};
+
+export function noObservationLabel(reason: NoObservationReason): string {
+  return NO_OBSERVATION_LABELS[reason];
 }
 
 export interface NoteVerdict {
@@ -103,7 +163,7 @@ export function buildNoteVerdict(
   //
   // 문구를 "유의차 없음"으로 뭉뚱그리지 않는 이유: 차이는 **실재한다**. 없다고 말하면 그것도
   // 거짓이다. 방향어만 거두고 규모가 못 미친다고 말한다.
-  if (!meetsEffectFloor(record.metric as DeltaMetric, record.delta, record.before)) {
+  if (!meetsEffectFloor(record.metric, record.delta, record.before)) {
     return { noteLabel, observedLabel: "변화 규모 바닥 미달", kind: "none" };
   }
   const up = record.delta > 0;

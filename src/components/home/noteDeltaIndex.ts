@@ -11,7 +11,7 @@
 // 선택 규칙: ①보고 가능(유의 + 효과크기 바닥 통과) 우선 → ②상태 우선순위(STATUS_SORT_PRIORITY,
 // 불일치가 일치보다 앞) → ③|Δ| 큰 쪽. 통과 행이 하나도 없으면 아무 행이라도 남겨 노트가 짝을
 // 잃지 않게 한다(짝의 존재 자체는 판정 엔진의 사실이고, 여기서는 대표만 고른다).
-import type { DeltaMetric, DeltaRecord } from "@/pipeline/types";
+import type { DeltaRecord } from "@/pipeline/types";
 import { meetsEffectFloor } from "@/pipeline/aggregate/stats";
 import { isSignificantDelta } from "@/pipeline/shared/significance";
 import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
@@ -20,7 +20,7 @@ function reportable(record: DeltaRecord, qAlpha?: number): boolean {
   return (
     record.delta !== null &&
     isSignificantDelta(record, qAlpha) &&
-    meetsEffectFloor(record.metric as DeltaMetric, record.delta, record.before)
+    meetsEffectFloor(record.metric, record.delta, record.before)
   );
 }
 
@@ -32,6 +32,30 @@ function better(a: DeltaRecord, b: DeltaRecord, qAlpha?: number): boolean {
   const rank = STATUS_SORT_PRIORITY[a.status] - STATUS_SORT_PRIORITY[b.status];
   if (rank !== 0) return rank < 0;
   return Math.abs(a.delta ?? 0) > Math.abs(b.delta ?? 0);
+}
+
+/**
+ * note.id → 그 노트에 짝지어진 **모든** 델타 행(2026-09-18 채점 라운드4 S4 후속).
+ *
+ * **왜 대표 하나로는 부족한가**: `indexNoteDeltas`는 화면에 *보여줄* 한 행을 고르는 함수라,
+ * 보고 가능한 행이 없으면 `|Δ|`가 큰 쪽을 남긴다. 그런데 그 규칙은 **비유의·큰 변화**를
+ * **유의·작은 변화**보다 앞세운다(실측 자헨: 대표는 winRate +5.20%p q=0.51(비유의)이고,
+ * 유의한 pickRate +1.58%p q=0 세 행은 전부 밀렸다). 대표만 보고 "왜 관측이 없나"를 답하면
+ * "유의차 없음"이라고 단정하게 되는데 그 엔티티엔 유의한 행이 실재하므로 **거짓**이다 —
+ * 이 라운드가 고치려던 바로 그 결함의 축소판이다.
+ *
+ * 그래서 **대표 선택은 그대로 두고**(G1 규칙 불변), 사유 계산에만 전수를 준다.
+ */
+export function indexNoteDeltaRows(
+  rows: readonly DeltaRecord[]
+): Record<string, DeltaRecord[]> {
+  const index: Record<string, DeltaRecord[]> = {};
+  for (const row of rows) {
+    for (const noteId of row.matchedNoteIds) {
+      (index[noteId] ??= []).push(row);
+    }
+  }
+  return index;
 }
 
 export function indexNoteDeltas(

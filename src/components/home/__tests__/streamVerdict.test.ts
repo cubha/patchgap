@@ -5,7 +5,9 @@ import { describe, expect, it } from "vitest";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import {
   buildNoteVerdict,
+  explainNoObservation,
   formatQ,
+  noObservationLabel,
   selectEntityObservation,
   selectReportableObservation,
 } from "../streamVerdict";
@@ -166,5 +168,52 @@ describe("효과크기 바닥 게이트(B3)", () => {
     const verdict = buildNoteVerdict(note(), big);
     expect(verdict?.kind).toBe("up");
     expect(verdict?.observedLabel).toContain("상승");
+  });
+});
+
+// ── 2026-09-18(채점 라운드4 S4) 비관측 사유 계산 ──────────────────────────────────
+// **결함**: `ReleaseNoteRow.tsx:260`이 대표 관측이 없는 모든 그룹에 상수 문자열
+// "관측 변화 없음 · 바닥 미달"을 찍었다. 그 자리는 유의성 **또는** 바닥 어느 쪽이 깨져도
+// 참이므로, 문구가 사유를 단정하지만 그 사유를 계산하지는 않았다.
+// 실측(26.17→26.18): 노트 짝 96행 중 비보고 83행의 **59행(71%)**이 바닥이 아니라 유의차 문제였고,
+// 엔티티 단위로는 6개 중 바닥 미달이 진짜 이유인 것이 **0개**였다(비유의만 1 · 혼재 5).
+// 「구인수의 격노검」(채택률 Δ−0.08%p, q=0.577)은 문장 자체가 거짓이었다.
+//
+// `mixed`에서 사유를 비우는 것이 이 함수의 핵심이다 — 혼재가 다수인데 거기서 한 사유를 고르면
+// 그게 바로 위의 거짓말이다. 관측하지 않은 것을 관측했다고 쓰지 않는 원칙의 연장선.
+describe("비관측 사유 계산(S4)", () => {
+  const tiny = delta({ metric: "pickRate", before: 0.1, after: 0.105, delta: 0.005, ci: [0.003, 0.007] });
+  const insignificant = delta({ q: 1, ci: [-0.01, 0.2] });
+  const big = delta({ metric: "pickRate", before: 0.1, after: 0.14, delta: 0.04, ci: [0.03, 0.05] });
+
+  it("짝지어진 행이 하나도 없으면 no-pair", () => {
+    expect(explainNoObservation([])).toBe("no-pair");
+  });
+
+  it("전부 비유의면 not-significant — 바닥을 사유로 대지 않는다", () => {
+    expect(explainNoObservation([insignificant])).toBe("not-significant");
+    expect(noObservationLabel("not-significant")).not.toContain("바닥");
+  });
+
+  it("유의한 행이 전부 바닥 미달이면 below-floor", () => {
+    expect(explainNoObservation([tiny])).toBe("below-floor");
+  });
+
+  it("비유의와 바닥미달이 섞이면 mixed — 사유를 단정하지 않는다", () => {
+    expect(explainNoObservation([insignificant, tiny])).toBe("mixed");
+    const label = noObservationLabel("mixed");
+    expect(label).not.toContain("바닥");
+    expect(label).not.toContain("유의차");
+  });
+
+  it("보고 가능한 행이 있으면 사유를 묻는 상황이 아니다 — null", () => {
+    expect(explainNoObservation([tiny, big])).toBeNull();
+  });
+
+  it("네 사유의 라벨이 서로 다르다(같은 말로 뭉치면 결함이 되살아난다)", () => {
+    const labels = (["no-pair", "not-significant", "below-floor", "mixed"] as const).map(
+      noObservationLabel
+    );
+    expect(new Set(labels).size).toBe(4);
   });
 });

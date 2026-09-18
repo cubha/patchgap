@@ -1,6 +1,6 @@
 // src/components/StatusBadge.tsx
 // 상태 뱃지 — DESIGN-TOKENS.md "상태 색 문법(구현 불변식)" 4종 + "no-change"(변화 없음, ST-08
-// types.ts 확장) + "below-threshold"(임계 미달, 2026-09-13 신규) = 6종. 프로토타입
+// types.ts 확장) + "below-threshold"(바닥 미달, 2026-09-13 신규) = 6종. 프로토타입
 // `.badge`/`.badge-*` 1:1(색만 토큰 유틸로 재구현). status는 MatchStatus로 좁히지 않고 string을
 // 받는다 — 아직 정의되지 않은 미래 상태값이 와도(statusLabel과 동일한 방어적 원칙) 무너지지 않고
 // 뉴트럴 처리한다.
@@ -21,11 +21,16 @@ const STATUS_CLASSES: Record<string, string> = {
   "announced-inconsistent": "border-danger text-danger",
   // 표시 전용(2026-09-18 ST-4): 노트 짝은 있으나 관측 비유의 — 경고색이 아니라 중립 회색.
   "announced-unobserved": "border-border-soft text-muted",
+  // 표시 전용(2026-09-18 S9/S10): 유의하나 규모가 바닥 미달 — "below-threshold"와 같은 개념이므로
+  // 같은 강도를 쓴다(실재하는 변화이지만 실무상 무시 가능한 규모).
+  "announced-below-floor": "border-border-soft text-fg-2",
   unannounced: "border-accent text-accent",
   "indirect-effect": "border-accent text-fg-2",
   "insufficient-sample": "border-warn text-warn",
   "below-threshold": "border-border-soft text-fg-2",
   "no-change": "border-border-soft text-muted",
+  // 표시 전용(2026-09-18 S5) — 짝지은 관측이 없다. 판정이 아니라 부재이므로 최약 중립.
+  unpaired: "border-border-soft text-muted",
 };
 
 const FALLBACK_CLASSES = "border-border-soft text-muted";

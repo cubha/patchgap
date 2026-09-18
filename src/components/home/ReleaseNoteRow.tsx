@@ -21,6 +21,8 @@
 //   (`selectReportableObservation`). 미공지 카드는 이미 판정 단계에서 게이트돼 있어 그대로 둔다.
 // **B4 치장 항목**: 스킨·크로마처럼 관측할 지표가 원리적으로 없는 줄에는 뱃지를 붙이지 않는다.
 //   "관측 보류"는 "아직 관측 못 했다"는 뜻이라 스킨에 붙으면 거짓말에 가깝다.
+//   (2026-09-18 S5: 같은 이유가 투표 결과·버그 수정 줄에도 해당해 리터럴 자체를 표시 키
+//   `unpaired`("짝지은 관측 없음")로 교체했다 — 사실 서술이라 어느 줄에 붙어도 참이다.)
 
 import Link from "next/link";
 import type { DeltaRecord, LanePosition, PatchNoteItem } from "@/pipeline/types";
@@ -45,7 +47,9 @@ import {
 import { groupNotesBySkill, representativeRecord } from "./noteSkillGroups";
 import {
   buildNoteVerdict,
+  explainNoObservation,
   formatQ,
+  noObservationLabel,
   selectEntityObservation,
   selectReportableObservation,
 } from "./streamVerdict";
@@ -59,9 +63,12 @@ export interface ReleaseNoteRowProps {
   /** loadSpellIcons()?.icons — 없으면(자산 미보유·미실행) 전부 텍스트 폴백. */
   spellIcons: Record<string, string> | null;
   /** note.id → 그 노트를 근거로 매칭된 델타(deltas.rows의 matchedNoteIds 역색인, page.tsx가
-   * 구성). 매칭된 델타가 없는 노트는 이 맵에 키가 없다 — 뱃지는 "관측 보류", 판정 문장은
+   * 구성). 매칭된 델타가 없는 노트는 이 맵에 키가 없다 — 뱃지는 "짝지은 관측 없음"(S5), 판정 문장은
    * 아예 만들지 않는다(무근거 문장 금지). */
   noteDeltas: Record<string, DeltaRecord>;
+  /** note.id → 그 노트에 짝지어진 **모든** 델타 행. 헤더의 비관측 **사유 계산** 전용이다 —
+   * 대표 1행만 보면 유의한 행이 |Δ| 경쟁에서 밀려 "유의차 없음"이라 단정하게 된다(S4 후속). */
+  noteDeltaRows?: Record<string, DeltaRecord[]>;
   /** 미공지 그룹의 "✕ {patch} 패치노트에 없음" 문구에 쓸 to-패치 번호. */
   patch: string | null;
   /** deltas.meta.qAlpha — 유의 판정 임계. 없으면 FDR_ALPHA 기본값(isSignificantDelta). */
@@ -132,6 +139,23 @@ function ObservationLine({ record }: { record: DeltaRecord }) {
 
 /** 노트 그룹의 노트들에 짝지어진 델타 — 같은 델타가 노트 여러 줄에 매칭될 수 있어(ST-08
  * matchedNoteIds) id로 중복을 제거한다. */
+/** 짝 전수(중복 제거) — 사유 계산 전용. */
+function allMatchedRecords(
+  noteIds: readonly string[],
+  noteDeltaRows: Record<string, DeltaRecord[]>
+): DeltaRecord[] {
+  const seen = new Set<string>();
+  const out: DeltaRecord[] = [];
+  for (const id of noteIds) {
+    for (const record of noteDeltaRows[id] ?? []) {
+      if (seen.has(record.id)) continue;
+      seen.add(record.id);
+      out.push(record);
+    }
+  }
+  return out;
+}
+
 function matchedRecords(
   noteIds: readonly string[],
   noteDeltas: Record<string, DeltaRecord>
@@ -203,6 +227,7 @@ export default function ReleaseNoteRow({
   icon,
   spellIcons,
   noteDeltas,
+  noteDeltaRows,
   patch,
   qAlpha,
   causes,
@@ -214,9 +239,23 @@ export default function ReleaseNoteRow({
   const cosmeticGroup = !isUnannounced && isCosmeticGroup(group.notes);
 
   // B3 — 공지 카드만 게이트를 건다. 미공지 행은 판정 단계에서 이미 바닥을 넘은 것들이다.
+  // 짝 행 목록은 아래 사유 계산(S4)과 **같은 입력**이어야 하므로 한 번만 구해 재사용한다.
+  const noteIds = isUnannounced ? [] : group.notes.map((n) => n.id);
+  const pairedRecords = isUnannounced ? [] : matchedRecords(noteIds, noteDeltas);
   const observation = isUnannounced
     ? selectEntityObservation(group.deltas)
-    : selectReportableObservation(matchedRecords(group.notes.map((n) => n.id), noteDeltas), qAlpha);
+    : selectReportableObservation(pairedRecords, qAlpha);
+
+  // S4(2026-09-18) — 대표 관측이 없을 때 **왜 없는지를 계산한다**. 이전엔 헤더가
+  // "관측 변화 없음 · 바닥 미달"을 상수로 찍었는데, 그 자리는 유의성·바닥 어느 쪽이 깨져도
+  // 참이라 실측 비보고 83행 중 59행(71%)에서 사유가 틀렸다(「구인수의 격노검」은 문장이 거짓).
+  // 사유는 **짝 전수**로 계산한다(대표 1행이 아니라) — 대표 선택 규칙은 |Δ| 우선이라
+  // 유의·작은 행을 비유의·큰 행 뒤로 밀어낸다. 전수가 없으면(prop 미주입) 대표로 폴백한다.
+  const reasonRows =
+    !isUnannounced && noteDeltaRows
+      ? allMatchedRecords(noteIds, noteDeltaRows)
+      : pairedRecords;
+  const noObservation = observation ? null : explainNoObservation(reasonRows, qAlpha);
 
   // B2 — 이 카드의 대표 행에 규명된 원인이 있는가(indirect-effect).
   const gapRepresentative = isUnannounced ? selectEntityObservation(group.deltas) : null;
@@ -257,7 +296,10 @@ export default function ReleaseNoteRow({
               <div className="mt-1 text-xs text-muted">치장 항목 · 관측 대상 아님</div>
             ) : (
               // B3 — 바닥·유의 미달을 발견처럼 쓰지 않는다. 수치는 항목 상세가 그대로 보여준다.
-              <div className="mt-1 text-xs text-muted">관측 변화 없음 · 바닥 미달</div>
+              // S4 — 사유는 계산해서 말하고, 혼재면 단정하지 않는다(무근거 문장 금지의 연장).
+              <div className="mt-1 text-xs text-muted">
+                {noObservation ? noObservationLabel(noObservation) : "관측 변화 없음"}
+              </div>
             )}
           </div>
           <span
@@ -362,7 +404,9 @@ export default function ReleaseNoteRow({
                       })}
                     </div>
                   </div>
-                  {cosmeticRow ? null : <StatusBadge status={record ? displayStatus(record, qAlpha) : "관측 보류"} />}
+                  {cosmeticRow ? null : (
+                    <StatusBadge status={record ? displayStatus(record, qAlpha) : "unpaired"} />
+                  )}
                 </li>
               );
             })}

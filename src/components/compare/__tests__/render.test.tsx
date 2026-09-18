@@ -195,7 +195,13 @@ describe("CompareExplorer — 데이터 없음(쌍 0개) 전체 통합 빈 상�
     // 있어야 타일 링크가 거짓말을 하지 않는다) + 라인 필터 6종(시안 .m-filter,
     // 2026-09-10 신설) = 14 → 2026-09-18 ST-4 "공지 · 관측 미확인" 칩 추가로 15(명세 변경:
     // 비유의 "불일치" 59건을 빨간 배지에서 분리 — 사용자 확정 M2).
-    expect(container.querySelectorAll('[aria-pressed]')).toHaveLength(15);
+    // → 2026-09-18 S9/S10(사용자 확정 CF-1·CF-2) "공지 · 바닥 미달" 칩 추가로 16.
+    // **어휘를 갈랐다고 칩을 늘리는 것이 아니다** — `filterByStatus`가 표시 키 동등비교라,
+    // 칩 없이 표시 키만 추가하면 그 행들이 "전체" 외 어떤 칩으로도 닿지 않게 된다. 그러면
+    // "공지-일치" 칩이 32건을 말하면서 12건만 보여주는 상태가 되는데, 그건 위 GAP_FILTER_KEY
+    // 주석이 기록한 2026-09-17 결함("타일은 49, 화면은 47")과 같은 형태다. 배지 1종 = 칩 1종
+    // 불변식을 지키는 쪽이 옳다.
+    expect(container.querySelectorAll('[aria-pressed]')).toHaveLength(16);
     expect(container.querySelector('[aria-label="라인 필터"]')).not.toBeNull();
     expect(container.textContent).toContain("표시할 델타가 없습니다");
     expect(container.textContent).toContain("노트 0엔티티(0항목)");

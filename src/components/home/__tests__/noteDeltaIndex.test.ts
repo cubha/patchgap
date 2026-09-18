@@ -5,7 +5,7 @@
 // 말했다(실측: 관측 보유 엔티티 1/20 — best-row면 7/20).
 import { describe, expect, it } from "vitest";
 import type { DeltaRecord } from "@/pipeline/types";
-import { indexNoteDeltas } from "../noteDeltaIndex";
+import { indexNoteDeltaRows, indexNoteDeltas } from "../noteDeltaIndex";
 
 function delta(overrides: Partial<DeltaRecord>): DeltaRecord {
   return {
@@ -55,5 +55,47 @@ describe("indexNoteDeltas", () => {
     const idx = indexNoteDeltas([row], 0.1);
     expect(idx.n1.id).toBe("multi");
     expect(idx.n2.id).toBe("multi");
+  });
+});
+
+// ── 2026-09-18(채점 라운드4 S4 후속) 사유 계산은 대표가 아니라 전수를 본다 ──────────────
+// **실측 회귀**: 자헨은 대표가 winRate +5.20%p(q=0.51, **비유의**)인데 짝 행에는 유의한
+// pickRate +1.58%p(q=0)가 세 개 더 있다. 대표 규칙이 `|Δ|` 우선이라 유의·작은 행이 밀린 것이다.
+// 대표만 보고 "왜 관측이 없나"를 답하면 "유의차 없음"이라 단정하게 되는데, 그 엔티티엔 유의한
+// 행이 실재하므로 거짓이다 — 이 라운드가 고치려던 결함이 한 단계 아래에서 되살아난 형태였다.
+describe("indexNoteDeltaRows — 짝 전수(S4 후속)", () => {
+  const bigInsignificant = delta({
+    id: "champion:X:winRate",
+    metric: "winRate",
+    before: 0.5,
+    after: 0.552,
+    delta: 0.052,
+    ci: [-0.02, 0.12],
+    q: 0.51,
+    matchedNoteIds: ["n1"],
+  });
+  const smallSignificant = delta({
+    id: "champion:X:pickRate",
+    metric: "pickRate",
+    before: 0.1,
+    after: 0.1158,
+    delta: 0.0158,
+    ci: [0.012, 0.02],
+    q: 0,
+    matchedNoteIds: ["n1"],
+  });
+
+  it("대표는 |Δ| 큰 비유의 행이 이긴다(G1 규칙 불변 — 이 테스트가 그 전제를 고정한다)", () => {
+    expect(indexNoteDeltas([bigInsignificant, smallSignificant])["n1"].metric).toBe("winRate");
+  });
+
+  it("전수 색인은 두 행을 **모두** 돌려준다 — 사유 계산이 유의한 행을 놓치지 않는다", () => {
+    const all = indexNoteDeltaRows([bigInsignificant, smallSignificant])["n1"];
+    expect(all).toHaveLength(2);
+    expect(all.map((r) => r.metric).sort()).toEqual(["pickRate", "winRate"]);
+  });
+
+  it("한 노트에 짝이 없으면 키가 없다(빈 배열을 지어내지 않는다)", () => {
+    expect(indexNoteDeltaRows([bigInsignificant])["n2"]).toBeUndefined();
   });
 });

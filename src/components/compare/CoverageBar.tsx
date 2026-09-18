@@ -19,7 +19,7 @@ export default function CoverageBar({ stats }: CoverageBarProps) {
       <strong className="font-bold text-fg">{fmtInt(stats.matchedCount)}</strong> · 미공지{" "}
       <strong className="font-bold text-fg">{fmtInt(stats.unannouncedCount)}</strong> · 간접 영향{" "}
       <strong className="font-bold text-fg">{fmtInt(stats.indirectEffectCount)}</strong> · 표본 부족{" "}
-      <strong className="font-bold text-fg">{fmtInt(stats.lowSampleCount)}</strong> · 임계 미달{" "}
+      <strong className="font-bold text-fg">{fmtInt(stats.lowSampleCount)}</strong> · 바닥 미달{" "}
       <strong className="font-bold text-fg">{fmtInt(stats.belowThresholdCount)}</strong>
     </div>
   );
