@@ -50,7 +50,7 @@ export default function AdapterMatrix() {
       </div>
       <p className="px-5 text-xs text-muted">{JUDGMENT_ENGINE_NOTE}</p>
       <p className="px-5 pb-5 text-xs text-muted">
-        PUBG 실연결 완료(2026-09-16) — 42.3 ⇒ 43.1 구간을 실제 수집·집계·판정했다.{" "}
+        PUBG는 42.3 ⇒ 43.1 구간을 실제로 수집·집계·판정했습니다.{" "}
         <Link className="text-accent underline-offset-2 hover:underline" href="/pubg/">
           결과 보기 →
         </Link>

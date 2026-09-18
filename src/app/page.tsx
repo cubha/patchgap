@@ -21,7 +21,7 @@ import { isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
 import { matchSkinsInSummary, skinSplashPath } from "@/pipeline/shared/cosmetic-skin";
 import { indexIndirectCauses } from "@/components/home/indirectEffects";
 import { computeLaneDistribution } from "@/components/home/laneDistribution";
-import { buildReleaseStream } from "@/components/home/releaseStream";
+import { buildReleaseStream, sortMatchedGroups, type MatchedStreamGroup } from "@/components/home/releaseStream";
 import { resolveStreamEntityIcon } from "@/components/home/releaseStreamEntity";
 import { lanesForEntityKey } from "@/lib/lane";
 import {
@@ -49,7 +49,16 @@ export default function Home() {
 
   const headline = computeHeadline(deltas, notesTo, deltas?.meta.qAlpha);
 
-  const streamGroups = buildReleaseStream(notesTo, deltas);
+  // 2026-09-18(ST-8): 공지 그룹은 3티어(불일치 → 일치 → 관측 없음 → 치장)로, Gap 그룹은 그대로.
+  const rawGroups = buildReleaseStream(notesTo, deltas);
+  const streamGroups = [
+    ...sortMatchedGroups(
+      rawGroups.filter((g): g is MatchedStreamGroup => g.kind === "matched"),
+      deltas,
+      deltas?.meta.qAlpha
+    ),
+    ...rawGroups.filter((g) => g.kind !== "matched"),
+  ];
   const streamEntries: ReleaseStreamEntry[] = streamGroups.map((group) => {
     const icon = resolveStreamEntityIcon(group, ddragon);
     const lanes = icon.entityKey ? lanesForEntityKey(deltas?.rows ?? [], icon.entityKey) : [];

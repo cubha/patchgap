@@ -21,6 +21,8 @@
 import type { DeltaRecord, DeltasFile, PatchNoteItem } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
 import { isGapStatus } from "./logic";
+import { selectReportableObservation } from "./streamVerdict";
+import { isCosmeticGroup } from "@/pipeline/shared/cosmetic-note";
 
 export interface MatchedStreamGroup {
   kind: "matched";
@@ -105,6 +107,53 @@ function groupUnannouncedDeltas(rows: DeltaRecord[]): UnannouncedStreamGroup[] {
  * 않고 있는 쪽만으로 조립한다(ST-11 빈 상태 카드 관례와 동일). 소비처(ReleaseNoteStream.tsx)가
  * `group.kind`로 탭별 목록을 걸러낸다 — 이 함수는 두 그룹을 나누지 않고 이어붙이기만 한다.
  */
+/** "패치 내용" 탭의 티어(2026-09-18, 채점 라운드1 ST-8 / advisor 권장 A안).
+ * 0 = 노트와 반대 방향의 유의한 관측(공지-불일치) · 1 = 노트대로 관측됨 · 2 = 바닥을 넘는 관측
+ * 없음 · 3 = 치장(관측 대상 아님). 관측 선택은 카드가 쓰는 것과 **같은 함수**
+ * (`selectReportableObservation`)라 정렬된 자리와 카드 문구가 어긋나지 않는다. */
+export type ContentTier = 0 | 1 | 2 | 3;
+
+export function contentTier(
+  group: MatchedStreamGroup,
+  noteDeltas: Record<string, DeltaRecord>,
+  qAlpha?: number
+): ContentTier {
+  if (isCosmeticGroup(group.notes)) return 3;
+  const rows: DeltaRecord[] = [];
+  const seen = new Set<string>();
+  for (const note of group.notes) {
+    const row = noteDeltas[note.id];
+    if (row && !seen.has(row.id)) {
+      seen.add(row.id);
+      rows.push(row);
+    }
+  }
+  const observation = selectReportableObservation(rows, qAlpha);
+  if (!observation) return 2;
+  return observation.status === "announced-inconsistent" ? 0 : 1;
+}
+
+/**
+ * 공지(matched) 그룹을 티어 순으로 안정 정렬한다 — **티어 안에서는 패치노트 순서 그대로**.
+ * 실측(2026-09-18 프로덕션): 첫 행이 "홀 오브 레전드(치장)"이고 이어 8행이 "관측 변화 없음"
+ * 이었다. UX-BRIEF 01의 수용 기준 "상단 캡처가 패치노트 요약 사이트로 읽히면 실패"를 집행한다.
+ * 숨기지 않는다 — 16건은 그대로 아래에 있다.
+ */
+export function sortMatchedGroups(
+  groups: readonly MatchedStreamGroup[],
+  deltas: DeltasFile | null,
+  qAlpha?: number
+): MatchedStreamGroup[] {
+  const noteDeltas: Record<string, DeltaRecord> = {};
+  for (const row of deltas?.rows ?? []) {
+    for (const noteId of row.matchedNoteIds) noteDeltas[noteId] = row;
+  }
+  return groups
+    .map((group, index) => ({ group, index, tier: contentTier(group, noteDeltas, qAlpha) }))
+    .sort((a, b) => a.tier - b.tier || a.index - b.index)
+    .map((entry) => entry.group);
+}
+
 export function buildReleaseStream(
   notes: NotesFile | null,
   deltas: DeltasFile | null

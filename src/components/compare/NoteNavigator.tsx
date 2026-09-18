@@ -28,6 +28,8 @@ export interface NoteNavigatorProps {
   /** note.id → EntityIcon 계약(부모가 ddragon으로 빌드 타임에 해석해 내려준다 — 이 컴포넌트는
    * "use client" 경계 안이라 fs를 직접 읽지 못한다). 키가 없으면 아이콘 없이 폴백. */
   icons: Record<string, StreamEntityIcon>;
+  /** deltas.meta.qAlpha — 배지 표시 키(공지-불일치 vs 관측 미확인, ST-4). */
+  qAlpha?: number;
 }
 
 export default function NoteNavigator({
@@ -40,6 +42,7 @@ export default function NoteNavigator({
   selectedNoteId,
   onSelect,
   icons,
+  qAlpha,
 }: NoteNavigatorProps) {
   const sectionFiltered = filterNotesBySection(notes, activeSection);
   const visible = filterNotesBySearch(sectionFiltered, searchQuery);
@@ -87,7 +90,7 @@ export default function NoteNavigator({
         ) : (
           visible.map((item) => {
             const isSelected = item.id === selectedNoteId;
-            const status = representativeStatus(item.id, rows);
+            const status = representativeStatus(item.id, rows, qAlpha);
             const icon = icons[item.id] ?? { entityType: null, entityKey: null };
             return (
               <li key={item.id}>

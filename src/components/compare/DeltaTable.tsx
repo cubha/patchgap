@@ -15,6 +15,7 @@ import EntityIcon from "@/components/EntityIcon";
 import IconBox from "@/components/IconBox";
 import LaneGlyph from "@/components/LaneGlyph";
 import StatusBadge from "@/components/StatusBadge";
+import { displayStatus } from "@/pipeline/shared/display-status";
 import { entityFallbackLabel, formatMetricValue } from "@/components/home/logic";
 import { directionSymbol, formatCiCell, formatDeltaCell, formatNCell, shortNoteId, type SortKey } from "./logic";
 
@@ -64,6 +65,8 @@ export interface DeltaTableProps {
   sortKey: SortKey;
   sortDir: "asc" | "desc";
   onSort: (key: SortKey) => void;
+  /** deltas.meta.qAlpha — 행 배지 표시 키(ST-4). */
+  qAlpha?: number;
 }
 
 function sortIndicator(key: SortKey, activeKey: SortKey, dir: "asc" | "desc"): string {
@@ -71,7 +74,7 @@ function sortIndicator(key: SortKey, activeKey: SortKey, dir: "asc" | "desc"): s
   return dir === "desc" ? "▼" : "▲";
 }
 
-export default function DeltaTable({ pair, rows, highlightNoteId, sortKey, sortDir, onSort }: DeltaTableProps) {
+export default function DeltaTable({ pair, rows, highlightNoteId, sortKey, sortDir, onSort, qAlpha }: DeltaTableProps) {
   const fromLabel = pair?.from ?? "이전";
   const toLabel = pair?.to ?? "이후";
 
@@ -162,7 +165,7 @@ export default function DeltaTable({ pair, rows, highlightNoteId, sortKey, sortD
                   <td className="px-4 py-3 text-fg-2">{formatCiCell(row)}</td>
                   <td className="px-4 py-3 text-fg-2">{formatNCell(row)}</td>
                   <td className="px-4 py-3 font-body">
-                    <StatusBadge status={row.status} />
+                    <StatusBadge status={displayStatus(row, qAlpha)} />
                   </td>
                   <td className="px-4 py-3 text-fg-2">{shortNoteId(row.matchedNoteId)}</td>
                 </tr>

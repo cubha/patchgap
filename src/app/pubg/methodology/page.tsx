@@ -41,9 +41,11 @@ export default function PubgMethodologyPage() {
   const bundle = loadPubg();
   if (!bundle) {
     return (
+      <main>
       <Container>
         <PubgUnavailable />
       </Container>
+    </main>
     );
   }
 
@@ -51,7 +53,8 @@ export default function PubgMethodologyPage() {
   const unverifiable = notes.filter((note) => note.expectedRelChange === null);
 
   return (
-    <Container>
+    <main>
+      <Container>
       <div className="flex flex-col gap-6 py-8">
         <PubgPageHeader
           title="어떻게 판정했고, 무엇을 못 했나"
@@ -66,7 +69,7 @@ export default function PubgMethodologyPage() {
 
         <PubgSampleNotice sampleScope={deltas.meta.sampleScope} />
 
-        <SectionCard eyebrow="우선 1 · 신뢰" title="데이터 파이프라인" variant="glass">
+        <SectionCard eyebrow="신뢰" title="데이터 파이프라인" variant="glass">
           <ol className="flex flex-col divide-y divide-border-soft">
             {PIPELINE.map((s) => (
               <li key={s.step} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-3">
@@ -85,7 +88,7 @@ export default function PubgMethodologyPage() {
           </p>
         </SectionCard>
 
-        <SectionCard eyebrow="우선 1 · 해석" title="판정 규칙" variant="glass">
+        <SectionCard eyebrow="해석" title="판정 규칙" variant="glass">
           <div className="flex flex-col gap-4 p-5">
             <dl className="flex flex-col gap-3 text-sm">
               <div>
@@ -127,7 +130,7 @@ export default function PubgMethodologyPage() {
 
         {/* 확장성의 증명 — 셀렉터가 아니라 어댑터 매핑표로 "다른 게임에도 같은 판정 엔진을 쓸 수
             있다"를 보인다. 이 표는 LoL↔PUBG 대조 자체가 내용이라 양쪽 방법론 화면이 공유한다. */}
-        <SectionCard eyebrow="우선 2 · 확장성" title="어댑터 매핑표 (LoL ↔ PUBG)" variant="glass">
+        <SectionCard eyebrow="확장성" title="어댑터 매핑표 (LoL ↔ PUBG)" variant="glass">
           <AdapterMatrix />
         </SectionCard>
 
@@ -201,5 +204,6 @@ export default function PubgMethodologyPage() {
         <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
       </div>
     </Container>
+    </main>
   );
 }

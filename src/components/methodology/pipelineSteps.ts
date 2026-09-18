@@ -66,7 +66,7 @@ export function buildPipelineSteps(input: PipelineStepsInput): PipelineStepView[
     {
       step: 1,
       title: "수집",
-      detail: "Riot Match-V5 · Timeline API",
+      detail: "Riot Match-V5 · Timeline API — GitHub Actions cron 자동 수집",
       meta: [nCaption(input.matchesFrom, input.matchesTo), timeCaption(input.collectedAt)],
     },
     {

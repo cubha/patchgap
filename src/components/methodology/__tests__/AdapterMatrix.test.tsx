@@ -27,7 +27,9 @@ describe("AdapterMatrix", () => {
   // 데이터가 커밋된 시점부터 거짓이라 어서션을 사실에 맞춰 갱신한다(테스트 약화가 아니라 명세 반영).
   it("PUBG 실연결 고지와 판정 엔진 게임 무관 고지를 렌더한다", () => {
     const { container } = render(<AdapterMatrix />);
-    expect(container.textContent).toContain("PUBG 실연결 완료");
+    // 2026-09-18 명세 변경(ST-7): 개발자 메모 톤("실연결 완료 … 판정했다")을 사용자 문장으로 —
+    // 사실(실제 수집·집계·판정)은 그대로 어서션한다.
+    expect(container.textContent).toContain("실제로 수집·집계·판정했습니다");
     expect(container.textContent).not.toContain("수집 수치: 0건");
     expect(container.textContent).toContain("판정 엔진");
     expect(container.textContent).toContain("게임 무관");

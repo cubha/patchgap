@@ -60,17 +60,21 @@ export default function HeroSummary({ stats, action }: HeroSummaryProps) {
   return (
     <div className="flex flex-col gap-8">
       <div className="pt-1">
-        <p className="ambient-hero-headline max-w-3xl text-2xl font-bold leading-tight text-fg">
-          패치노트는{" "}
-          <strong className="font-mono tabular-nums">
-            {fmtInt(noteEntityCount)} 엔티티 / {fmtInt(noteItemCount)} 항목
-          </strong>
-          을 말했고, 통계는 <strong className="font-mono tabular-nums">{fmtInt(statCount)}개</strong> 변화를
-          말합니다
+        {/* 2026-09-18(채점 라운드1 ST-10): 첫 줄에 제품이 답하는 질문을 사람 말로 — 심사석·투표자는
+            30초 안에 "무엇을 하는 사이트인지" 알아야 한다. 숫자는 <h1> 한 문장에 넣고 mono span
+            안의 여백을 없앴다(이중 공백이 그대로 렌더되던 결함). 부제의 통계 용어(FDR·1차축·
+            게이트)는 방법론으로 보내고 여기는 표본과 규칙만 말한다. */}
+        <p className="ambient-hero-sub text-xs font-bold tracking-wide text-accent">
+          패치노트가 말한 것 vs 통계가 말하는 것
         </p>
+        <h1 className="ambient-hero-headline mt-2 max-w-3xl text-2xl font-bold leading-tight text-fg">
+          패치노트는 <strong className="font-mono tabular-nums">{fmtInt(noteEntityCount)}</strong>개
+          챔피언·아이템을 바꿨다고 말했고, 통계는{" "}
+          <strong className="font-mono tabular-nums">{fmtInt(statCount)}</strong>개 변화를 말합니다
+        </h1>
         <p className="ambient-hero-sub mt-3 max-w-2xl text-sm text-fg">
-          FDR q&lt;0.10 기준 · 1차축(픽·밴·아이템·골드·오브젝트) 유의 변화 집계 · 승률은 n≥200
-          게이트 통과분만 제시
+          패치 전후 KR 상위 티어 매치를 각각 집계해 통계적으로 유의한 변화만 셉니다 · 노트에 없는
+          변화는 <strong className="text-accent">미공지 Gap</strong>으로 따로 모읍니다
         </p>
         {/* 인트로 재생 버튼(2026-09-17) — PUBG 브리핑과 같은 자리·같은 어포던스. 인트로 영상은
             1.7초라 진입 순간을 놓치면 다시 볼 수 없었고, prefers-reduced-motion 환경에서는

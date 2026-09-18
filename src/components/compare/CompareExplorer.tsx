@@ -32,17 +32,19 @@ export interface CompareExplorerProps {
   coverage: CoverageStats;
   /** note.id → EntityIcon 계약 — 부모(compare/page.tsx)가 ddragon으로 빌드 타임에 해석. */
   noteIcons?: Record<string, StreamEntityIcon>;
+  /** deltas.meta.qAlpha — 표시 상태(공지-불일치 vs 관측 미확인) 판정에 쓴다(ST-4). */
+  qAlpha?: number;
 }
 
 const PAGE_SIZE = 200;
 
-export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons = {} }: CompareExplorerProps) {
+export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons = {}, qAlpha }: CompareExplorerProps) {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [laneFilter, setLaneFilter] = useState<LaneAxis>("all");
   const [activeSection, setActiveSection] = useState<PatchNoteSection>("champion");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
-  const [sortKey, setSortKey] = useState<SortKey>("absDelta");
+  const [sortKey, setSortKey] = useState<SortKey>("priority");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
@@ -71,8 +73,8 @@ export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons
   }
 
   const filteredSortedRows = useMemo(
-    () => sortRows(filterByLane(filterByStatus(rows, statusFilter), laneFilter), sortKey, sortDir),
-    [rows, statusFilter, laneFilter, sortKey, sortDir]
+    () => sortRows(filterByLane(filterByStatus(rows, statusFilter, qAlpha), laneFilter), sortKey, sortDir),
+    [rows, statusFilter, laneFilter, sortKey, sortDir, qAlpha]
   );
   const visibleRows = filteredSortedRows.slice(0, visibleCount);
   const hasMore = filteredSortedRows.length > visibleRows.length;
@@ -100,6 +102,7 @@ export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons
           <NoteNavigator
             notes={notes}
             rows={rows}
+            qAlpha={qAlpha}
             activeSection={activeSection}
             onSectionChange={(section) => {
               setActiveSection(section);
@@ -118,13 +121,14 @@ export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons
           <section className={`${panelSurfaceClass("glass")} overflow-hidden rounded-lg`}>
             <div className="panel-head-wash flex items-center justify-between gap-4 border-b border-border-soft px-5 py-5">
               <div>
-                <span className="block text-xs font-bold text-muted">우선 1 · 선언↔관측</span>
+                <span className="block text-xs font-bold text-muted">선언 ↔ 관측</span>
                 <h2 className="font-display text-lg font-bold text-fg">델타 테이블</h2>
               </div>
             </div>
             <DeltaTable
               pair={pair}
               rows={visibleRows}
+              qAlpha={qAlpha}
               highlightNoteId={selectedNoteId}
               sortKey={sortKey}
               sortDir={sortDir}

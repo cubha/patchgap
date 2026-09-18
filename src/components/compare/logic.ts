@@ -3,12 +3,13 @@
 // 렌더(CompareExplorer.tsx 등)와 분리해 단위 테스트한다(완료 조건 "상태 필터·정렬 로직(순수
 // 함수)"). UX-BRIEF §3 "02 대조표" 기준.
 
-import type { DeltaRecord, MatchStatus, PatchNoteItem, PatchNoteSection } from "@/pipeline/types";
+import type { DeltaRecord, PatchNoteItem, PatchNoteSection } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
 import { fmtCiHalf, fmtDeltaInt, fmtDeltaSec, fmtInt, fmtPp } from "@/lib/format";
 import { absDelta, countRelevantNoteEntities, metricKind } from "@/components/home/logic";
 import { parseLaneAxis, type LaneAxis } from "@/lib/lane";
 import { STATUS_SORT_PRIORITY, isGapStatus } from "@/pipeline/shared/status-order";
+import { DISPLAY_SORT_PRIORITY, displayStatus, type DisplayStatus } from "@/pipeline/shared/display-status";
 
 /** 상태 필터 칩 6종(UX-BRIEF "02 대조표" 필터 바) — "no-change"는 칩이 없다(전체=필터 없음이라
  * no-change 행도 "전체"에서는 그대로 보인다, ST-11.md 구현 결정 참고). `below-threshold`는
@@ -22,10 +23,12 @@ import { STATUS_SORT_PRIORITY, isGapStatus } from "@/pipeline/shared/status-orde
  * 2026-09-17(B2) 전에는 타일이 49를 말하면서 47만 보이는 화면으로 링크했다. */
 export const GAP_FILTER_KEY = "gap";
 
-export const STATUS_FILTERS: ReadonlyArray<{ key: MatchStatus | "all" | typeof GAP_FILTER_KEY; label: string }> = [
+export const STATUS_FILTERS: ReadonlyArray<{ key: DisplayStatus | "all" | typeof GAP_FILTER_KEY; label: string }> = [
   { key: "all", label: "전체" },
   { key: "announced-consistent", label: "공지-일치" },
   { key: "announced-inconsistent", label: "공지-불일치" },
+  // 2026-09-18(ST-4): 비유의 "불일치"를 분리한 표시 키 — 칩도 같은 어휘로 나뉜다.
+  { key: "announced-unobserved", label: "공지 · 관측 미확인" },
   { key: GAP_FILTER_KEY, label: "노트에 없는 변화" },
   { key: "unannounced", label: "미공지" },
   { key: "indirect-effect", label: "간접 영향" },
@@ -39,10 +42,11 @@ export const STATUS_FILTERS: ReadonlyArray<{ key: MatchStatus | "all" | typeof G
  * 소속 판정은 **여기서 다시 쓰지 않고** `shared/status-order.ts`의 `isGapStatus`를 부른다.
  * 조건을 두 곳에 적어 두면 한쪽만 고쳤을 때 홈 타일(49)과 이 화면(47)이 조용히 갈라진다 —
  * 이번 라운드에 실제로 한 번 난 어긋남이고, acceptance-critic이 그 재발 경로를 지적했다. */
-export function filterByStatus(rows: DeltaRecord[], key: string): DeltaRecord[] {
+export function filterByStatus(rows: DeltaRecord[], key: string, qAlpha?: number): DeltaRecord[] {
   if (key === "all") return rows;
   if (key === GAP_FILTER_KEY) return rows.filter((r) => isGapStatus(r.status));
-  return rows.filter((r) => r.status === key);
+  // 표시 키 기준(2026-09-18 ST-4) — "공지-불일치" 칩은 유의한 방향 반대만, 비유의는 별도 칩.
+  return rows.filter((r) => displayStatus(r, qAlpha) === key);
 }
 
 /**
@@ -66,7 +70,7 @@ export function filterByLane(rows: DeltaRecord[], lane: LaneAxis): DeltaRecord[]
 
 /** 헤더 정렬 3키(ST-11 프롬프트 "헤더 정렬(클라이언트, |Δ|·q·n)"). q는 낮을수록(더 유의할수록)
  * 우선이므로 오름차순, |Δ|·n은 클수록 우선이므로 내림차순이 기본 방향이다. */
-export type SortKey = "absDelta" | "q" | "n";
+export type SortKey = "absDelta" | "q" | "n" | "priority";
 
 function nOf(record: DeltaRecord): number {
   return record.n.before + record.n.after;
@@ -81,6 +85,14 @@ export function sortRows(rows: DeltaRecord[], key: SortKey, direction: "asc" | "
     if (key === "q") {
       const cmp = (a.q ?? Infinity) - (b.q ?? Infinity);
       return direction === "desc" ? cmp : -cmp;
+    }
+    // 2026-09-18(채점 라운드1 ST-9): 기본 정렬. |Δ| 단독이면 첫 화면이 라인골드 "임계 미달"
+    // 6행으로 채워진다(실측) — 골드는 절대값이 커서 비율 지표를 항상 이긴다. 상태 우선순위
+    // (미공지 → 간접 → 불일치 → …)를 먼저 보고, 같은 상태 안에서만 |Δ|로 가른다.
+    if (key === "priority") {
+      const rank = STATUS_SORT_PRIORITY[a.status] - STATUS_SORT_PRIORITY[b.status];
+      const cmp = rank !== 0 ? -rank : absDelta(a) - absDelta(b);
+      return direction === "asc" ? cmp : -cmp;
     }
     const cmp = key === "absDelta" ? absDelta(a) - absDelta(b) : nOf(a) - nOf(b);
     return direction === "asc" ? cmp : -cmp;
@@ -116,15 +128,16 @@ export function filterNotesBySearch(items: PatchNoteItem[], query: string): Patc
  * 배열 + `indexOf`였는데, 배열에 없는 상태값은 `indexOf`가 -1을 반환해 그 상태가 "최우선"으로
  * 오판정되는 결함이 있었다(tsc가 못 잡음, 2026-09-13 below-threshold 도입 시 발견). exhaustive
  * `Record`는 새 status가 여기 등록되지 않으면 tsc가 컴파일 타임에 잡는다. */
-export function representativeStatus(noteId: string, rows: DeltaRecord[]): MatchStatus | null {
-  let best: MatchStatus | null = null;
+export function representativeStatus(noteId: string, rows: DeltaRecord[], qAlpha?: number): DisplayStatus | null {
+  let best: DisplayStatus | null = null;
   let bestRank = Infinity;
   for (const row of rows) {
     if (!row.matchedNoteIds.includes(noteId)) continue;
-    const rank = STATUS_SORT_PRIORITY[row.status];
+    const shown = displayStatus(row, qAlpha);
+    const rank = DISPLAY_SORT_PRIORITY[shown];
     if (rank < bestRank) {
       bestRank = rank;
-      best = row.status;
+      best = shown;
     }
   }
   return best;

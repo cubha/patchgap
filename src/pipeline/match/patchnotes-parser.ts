@@ -562,7 +562,11 @@ export function parsePatchNotes(html: string, options: ParsePatchNotesOptions): 
       },
       idCounters
     );
-    items.push(...blockItems);
+    // 2026-09-18(채점 라운드1 ST-6): `A ⇒ A`는 선언이 아니다 — 방향이 없어 짝지을 수 없고,
+    // 대조표에서는 "공지-불일치" 배지를 달고 나갔다(실측: 26.18 카시오페아 "전체 주문력 계수
+    // 65% ⇒ 65%"). 라이엇 편집 잔여물이므로 항목으로 내보내지 않는다. before/after가 둘 다
+    // 있을 때만 비교한다 — 서술형(둘 다 null)은 이 규칙의 대상이 아니다.
+    items.push(...blockItems.filter((item) => item.before === null || item.before !== item.after));
   });
 
   return { patch: options.patch, sourceUrl: options.sourceUrl, summary, sections, items };

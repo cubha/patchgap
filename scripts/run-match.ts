@@ -2,7 +2,7 @@
 // F3~F4 파이프라인 진입점 — dotenv 로드 후 패치노트 로드(없으면 fetch+parse) → ddragon 로드 →
 // 델타 계산(ST-08) → 1단 결정론 매칭(ST-08) → 판정(ST-08) → 2단 LLM 간접 추론(ST-09, --no-llm 시
 // 스킵) → deltas/{from}_{to}.json 기록 → 콘솔 요약.
-// 실행: npm run pipeline:match -- --from 26.16 --to 26.17 [--llm-max 50] [--no-llm] [--dry-run]
+// 실행: npm run pipeline:match -- --from 26.16 --to 26.17 [--llm-max 120] [--no-llm] [--dry-run]
 
 import "dotenv/config";
 import fs from "node:fs";
@@ -32,7 +32,7 @@ export function parseArgs(argv: string[]): RunMatchArgs {
   const raw = parseCliArgs("run-match", argv, [
     { name: "from", type: "patch", required: true },
     { name: "to", type: "patch", required: true },
-    { name: "llmMax", type: "number", default: 50 },
+    { name: "llmMax", type: "number", default: 120 },
     { name: "noLlm", type: "boolean", default: false },
     { name: "dryRun", type: "boolean", default: false },
   ]);

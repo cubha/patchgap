@@ -24,16 +24,19 @@ export default function PubgComparePage() {
   const bundle = loadPubg();
   if (!bundle) {
     return (
+      <main>
       <Container>
         <PubgUnavailable />
       </Container>
+    </main>
     );
   }
 
   const { deltas } = bundle;
 
   return (
-    <Container>
+    <main>
+      <Container>
       <div className="flex flex-col gap-6 py-8">
         <PubgPageHeader
           title="무기 판정 전체 — 42.3 ⇒ 43.1"
@@ -76,5 +79,6 @@ export default function PubgComparePage() {
         <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
       </div>
     </Container>
+    </main>
   );
 }

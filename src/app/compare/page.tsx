@@ -36,6 +36,7 @@ export default function ComparePage() {
           rows={rows}
           coverage={coverage}
           noteIcons={noteIcons}
+          qAlpha={deltas?.meta.qAlpha}
         />
       </main>
     </div>
