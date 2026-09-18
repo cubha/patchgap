@@ -153,6 +153,10 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
           )}
         </tbody>
       </table>
+      {/* 포커스 여백(L4 "최상단으로 Scroll Focus") — 바닥 근처 행은 스크롤이 끝에 닿아 최상단까지 못 올라온다
+          (실측: 마지막 행 바드는 헤더 아래 574px에 멈췄다). 포커스가 있을 때만 컨테이너 높이만큼 빈 여백을
+          두어 어느 행이든 헤더 바로 아래에 앉을 수 있게 한다. 인라인 style — 토큰이 없는 1회성 배치 수치. */}
+      {focusKey ? <div aria-hidden="true" style={{ height: "600px" }} /> : null}
     </div>
   );
 }
