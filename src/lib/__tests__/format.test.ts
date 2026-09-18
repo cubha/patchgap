@@ -119,14 +119,25 @@ describe("fmtKst", () => {
 });
 
 describe("statusLabel", () => {
-  it("4개 알려진 상태 + no-change + below-threshold를 한글 라벨로 매핑한다", () => {
-    expect(statusLabel("announced-consistent")).toBe("공지-일치");
-    expect(statusLabel("announced-inconsistent")).toBe("공지-불일치");
+  // 2026-09-18 라운드6(사용자 C5) 명세 변경 — 배지 어휘 통일. 표시 키 3종(공지 / 공지 · 이상 관측 /
+  // 미공지)으로 줄였고, 판정 엔진의 raw 상태값이 그대로 들어와도 같은 통일 어휘로 읽힌다(PUBG
+  // 화면은 q가 없어 raw 상태를 배지에 넘긴다).
+  it("표시 키 3종 + 부재 1종을 통일 어휘로 매핑한다", () => {
+    expect(statusLabel("announced")).toBe("공지");
+    expect(statusLabel("announced-anomaly")).toBe("공지 · 이상 관측");
     expect(statusLabel("unannounced")).toBe("미공지");
+    expect(statusLabel("unpaired")).toBe("짝지은 관측 없음");
+  });
+
+  it("raw MatchStatus도 같은 통일 어휘로 읽힌다 — 옛 세분 어휘(공지-일치/불일치/간접 영향)는 없다", () => {
+    expect(statusLabel("announced-consistent")).toBe("공지");
+    expect(statusLabel("announced-inconsistent")).toBe("공지 · 이상 관측");
+    expect(statusLabel("indirect-effect")).toBe("미공지");
+  });
+
+  it("노이즈 3종 라벨은 방법론 정의표용으로 남는다", () => {
     expect(statusLabel("insufficient-sample")).toBe("표본 부족");
     expect(statusLabel("no-change")).toBe("변화 없음");
-    // 2026-09-18 S6 명세 변경: "임계 미달"→"바닥 미달"(동의어 교체, 뜻 불변). "임계"가 q<α
-    // 임계와 충돌해 한 상태를 네 단어로 부르던 것을 "바닥" 어근 하나로 모았다.
     expect(statusLabel("below-threshold")).toBe("바닥 미달");
   });
 
