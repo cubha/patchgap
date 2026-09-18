@@ -51,7 +51,9 @@ function LaneTag({ row }: { row: DeltaRecord }) {
   const lane = parseLaneAxis(row.id);
   if (lane === null || lane === "all") return null;
   return (
-    <span className="mt-0.5 flex items-center gap-1 text-xs text-muted">
+    // whitespace-nowrap(2026-09-18 채점 라운드3 G2): 엔티티 열이 좁아지면 "정글 · 승률"이 한 글자씩
+    // 세로로 꺾여 첫 화면 1행부터 깨져 보였다(프로덕션 실측). 태그는 한 줄이어야 한다.
+    <span className="mt-0.5 flex items-center gap-1 whitespace-nowrap text-xs text-muted">
       <LaneGlyph lane={lane} size={12} labelled />
       {positionLabel(lane)} · {metricLabel(row.metric)}
     </span>

@@ -22,6 +22,7 @@ import { matchSkinsInSummary, skinSplashPath } from "@/pipeline/shared/cosmetic-
 import { indexIndirectCauses } from "@/components/home/indirectEffects";
 import { computeLaneDistribution } from "@/components/home/laneDistribution";
 import { buildReleaseStream, sortMatchedGroups, type MatchedStreamGroup } from "@/components/home/releaseStream";
+import { indexNoteDeltas } from "@/components/home/noteDeltaIndex";
 import { resolveStreamEntityIcon } from "@/components/home/releaseStreamEntity";
 import { lanesForEntityKey } from "@/lib/lane";
 import {
@@ -67,10 +68,8 @@ export default function Home() {
 
   // note.id → 그 노트를 근거로 매칭된 델타. 스트림 카드가 뱃지(status)뿐 아니라 관측 수치
   // (.rn-obs)와 판정 문장(.verdict .m)까지 그리므로 status가 아니라 레코드 전체를 넘긴다.
-  const noteDeltas: Record<string, DeltaRecord> = {};
-  for (const row of deltas?.rows ?? []) {
-    for (const noteId of row.matchedNoteIds) noteDeltas[noteId] = row;
-  }
+  // 2026-09-18(라운드3 G1): last-wins → best-row. 선택 규칙은 noteDeltaIndex.ts 한 곳.
+  const noteDeltas: Record<string, DeltaRecord> = indexNoteDeltas(deltas?.rows ?? [], deltas?.meta.qAlpha);
 
   // Gap 정의는 한 곳(`isGapStatus`)만 본다 — 라인 분포 패널이 히어로 타일·탭 배지와 다른
   // 모수를 쓰면 화면이 스스로를 반박한다(2026-09-17 B2 통합).
