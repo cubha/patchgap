@@ -93,6 +93,18 @@ describe("DeltaTable — 엔티티 1행·인라인 지표(사용자 L3)", () => 
     expect(cells[5]).toContain("공지");
   });
 
+  it("'전체'에서 position 행이 셀을 대표하면 라인 태그를 그린다", () => {
+    const laneRows = buildEntityRows(
+      [delta({ id: "champion:MonkeyKing:JUNGLE:winRate", entityKey: "MonkeyKing", entityName: "오공", metric: "winRate", delta: -0.1, before: 0.57, after: 0.47, ci: [-0.2, -0.03] })],
+      "all",
+      0.1
+    );
+    const { container } = render(<DeltaTable pair={null} rows={laneRows} focusKey={null} />);
+    const row = container.querySelector('tr[data-entity-key="champion:MonkeyKing"]');
+    expect(row?.textContent).toContain("정글");
+    expect(row?.querySelector("td:nth-child(3) svg")).not.toBeNull();
+  });
+
   it("focusKey 행은 row-highlight로 강조된다", () => {
     const { container } = render(<DeltaTable pair={null} rows={rows} focusKey="champion:Bard" />);
     expect(container.querySelector('tr[data-entity-key="champion:Bard"]')?.className).toContain("row-highlight");

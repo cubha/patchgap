@@ -9,9 +9,11 @@
 // **규칙**
 // ① 챔피언·아이템만. 라인 골드·오브젝트·매치 평균은 홈 사이드(매치 평균)가 이미 말하고 이 표의
 //    열(밴·승·픽·채택)에 들어갈 자리가 없다.
-// ② 라인 축: "전체"는 scope=all 행(3세그먼트 id), 특정 라인은 그 라인의 position 행(4세그먼트)만.
-//    밴은 라인 무관이라 라인 선택 시 셀이 비고, 아이템은 라인 축이 없어 "전체"에서만 나온다
-//    (기존 `filterByLane`과 같은 결정 — HANDOFF §6 "라인별 밴률 컬럼을 만들지 말 것").
+// ② 라인 축: 특정 라인은 그 라인의 position 행(4세그먼트)만. "전체"는 scope=all 행(3세그먼트)을 우선하되,
+//    그 지표의 all 행이 보고 가능하지 않으면 **보고 가능한 position 행 중 |Δ| 최대**를 대표로 쓰고 셀에
+//    라인을 표기한다(실측 26.18: 에코의 유일한 이상 관측은 미드 승률이라 all 행만 보면 표에서 사라지고,
+//    좌 내비 배지 "공지 · 이상 관측"과 표가 서로를 반박했다). 밴은 라인 무관이라 라인 선택 시 셀이 비고,
+//    아이템은 라인 축이 없어 "전체"에서만 나온다(HANDOFF §6 "라인별 밴률 컬럼을 만들지 말 것").
 // ③ 셀 = **보고 가능** 지표만: 노이즈 상태가 아니고(`isNoiseStatus`) 유의하며(`isSignificantDelta`)
 //    효과크기 바닥을 넘는(`meetsEffectFloor`) 행. 홈 카드 대표 관측(`selectReportableObservation`)과
 //    같은 잣대라 두 화면이 서로를 반박하지 않는다.
@@ -29,16 +31,22 @@ export { isReportableRecord };
 export const ENTITY_METRICS = ["banRate", "winRate", "pickRate", "adoptionRate"] as const;
 export type EntityMetric = (typeof ENTITY_METRICS)[number];
 
+/** 셀 1개 — 어느 라인 축의 행인지 함께 든다("all"이 아니면 셀에 라인 태그를 그린다). */
+export interface EntityCell {
+  record: DeltaRecord;
+  lane: LaneAxis;
+}
+
 export interface EntityCompareRow {
   /** `${entityType}:${entityKey}` — React key·스크롤 포커스 대상. */
   key: string;
   entityType: Extract<DeltaEntityType, "champion" | "item">;
   entityKey: string;
   entityName: string;
-  /** 셀이 어느 라인 축에서 왔는가("all" = scope all 행). */
+  /** 선택한 라인 축("all" = 전체 보기). */
   lane: LaneAxis;
   /** 보고 가능한 지표만 든다. 없는 지표는 키 자체가 없다(빈 셀 `—`). */
-  cells: Partial<Record<EntityMetric, DeltaRecord>>;
+  cells: Partial<Record<EntityMetric, EntityCell>>;
   /** 셀 중 최우선 표시 키. */
   status: DisplayStatus;
   /** |Δ| 최대 보고 셀 — 상세 링크·강조에 쓴다. */
@@ -52,10 +60,17 @@ function isEntityMetric(metric: string): metric is EntityMetric {
   return (ENTITY_METRICS as readonly string[]).includes(metric);
 }
 
-/** 이 행이 선택한 라인 축에 속하는가(규칙 ②). */
-function belongsToLane(record: DeltaRecord, lane: LaneAxis): boolean {
-  if (record.entityType === "item") return lane === "all";
-  return parseLaneAxis(record.id) === lane;
+/** 이 행의 라인 축 — 아이템은 라인이 없어 "all"로 본다. 파싱 불가(비챔피언 id 형태)는 null. */
+function laneOf(record: DeltaRecord): LaneAxis | null {
+  if (record.entityType === "item") return "all";
+  return parseLaneAxis(record.id);
+}
+
+/** 같은 지표에 후보가 둘일 때 어느 쪽이 셀을 차지하는가 — all 행 우선, 그다음 |Δ|. */
+function betterCell(candidate: EntityCell, current: EntityCell): boolean {
+  if (candidate.lane === "all" && current.lane !== "all") return true;
+  if (candidate.lane !== "all" && current.lane === "all") return false;
+  return Math.abs(candidate.record.delta ?? 0) > Math.abs(current.record.delta ?? 0);
 }
 
 export function buildEntityRows(
@@ -69,12 +84,14 @@ export function buildEntityRows(
   for (const record of rows) {
     if (record.entityType !== "champion" && record.entityType !== "item") continue;
     if (!isEntityMetric(record.metric)) continue;
-    if (!belongsToLane(record, lane)) continue;
+    const recordLane = laneOf(record);
+    if (recordLane === null) continue;
+    // 특정 라인: 그 라인의 행만. 전체: 모든 라인의 행이 후보(all 우선은 betterCell이 정한다).
+    if (lane !== "all" && recordLane !== lane) continue;
     if (!isReportableRecord(record, qAlpha)) continue;
 
     const key = `${record.entityType}:${record.entityKey}`;
-    const shown = displayStatus(record, qAlpha);
-    const abs = Math.abs(record.delta ?? 0);
+    const cell: EntityCell = { record, lane: recordLane };
     const existing = byKey.get(key);
     if (!existing) {
       byKey.set(key, {
@@ -83,30 +100,45 @@ export function buildEntityRows(
         entityKey: record.entityKey,
         entityName: record.entityName,
         lane,
-        cells: { [record.metric]: record },
-        status: shown,
+        cells: { [record.metric]: cell },
+        status: displayStatus(record, qAlpha),
         representative: record,
         matchedNoteIds: [...record.matchedNoteIds],
-        maxAbsDelta: abs,
+        maxAbsDelta: Math.abs(record.delta ?? 0),
       });
       order.push(key);
-      continue;
-    }
-    existing.cells[record.metric] = record;
-    if (DISPLAY_SORT_PRIORITY[shown] < DISPLAY_SORT_PRIORITY[existing.status]) existing.status = shown;
-    if (abs > existing.maxAbsDelta) {
-      existing.maxAbsDelta = abs;
-      existing.representative = record;
-    }
-    for (const id of record.matchedNoteIds) {
-      if (!existing.matchedNoteIds.includes(id)) existing.matchedNoteIds.push(id);
+    } else {
+      const current = existing.cells[record.metric];
+      if (!current || betterCell(cell, current)) existing.cells[record.metric] = cell;
+      for (const id of record.matchedNoteIds) {
+        if (!existing.matchedNoteIds.includes(id)) existing.matchedNoteIds.push(id);
+      }
     }
   }
 
-  return order
-    .map((key) => byKey.get(key)!)
-    .sort(
-      (a, b) =>
-        DISPLAY_SORT_PRIORITY[a.status] - DISPLAY_SORT_PRIORITY[b.status] || b.maxAbsDelta - a.maxAbsDelta
-    );
+  // 대표 상태·대표 델타·|Δ|는 **셀로 확정된 행**에서 계산한다(후보였다가 밀린 행이 상태를 올리면 안 된다).
+  const out = order.map((key) => byKey.get(key)!);
+  for (const row of out) {
+    const cells = Object.values(row.cells) as EntityCell[];
+    let status: DisplayStatus = displayStatus(cells[0].record, qAlpha);
+    let representative = cells[0].record;
+    let maxAbs = Math.abs(representative.delta ?? 0);
+    for (const cell of cells) {
+      const shown = displayStatus(cell.record, qAlpha);
+      if (DISPLAY_SORT_PRIORITY[shown] < DISPLAY_SORT_PRIORITY[status]) status = shown;
+      const abs = Math.abs(cell.record.delta ?? 0);
+      if (abs > maxAbs) {
+        maxAbs = abs;
+        representative = cell.record;
+      }
+    }
+    row.status = status;
+    row.representative = representative;
+    row.maxAbsDelta = maxAbs;
+  }
+
+  return out.sort(
+    (a, b) =>
+      DISPLAY_SORT_PRIORITY[a.status] - DISPLAY_SORT_PRIORITY[b.status] || b.maxAbsDelta - a.maxAbsDelta
+  );
 }

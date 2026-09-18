@@ -76,12 +76,14 @@ describe("buildEntityRows — 엔티티 1행·인라인 지표", () => {
     delta({ id: "summary:avgDurationSec", entityType: "summary", entityKey: "avgDurationSec", entityName: "경기 시간", metric: "avgDurationSec", delta: -70, before: 1800, after: 1730, ci: [-90, -50], q: 0.001, status: "unannounced", matchedNoteIds: [] }),
   ];
 
-  it("같은 챔피언은 한 행이고 셀은 보고 가능 지표만 든다", () => {
+  it("같은 챔피언은 한 행이고 셀은 보고 가능 지표만 든다 — 같은 지표에 all 행이 있으면 all 행이 셀", () => {
     const out = buildEntityRows(rows, "all", Q);
     const cass = out.find((r) => r.entityKey === "Cassiopeia");
     expect(cass).toBeDefined();
     expect(Object.keys(cass!.cells).sort()).toEqual(["pickRate"]);
-    expect(cass!.cells.pickRate?.id).toBe("champion:Cassiopeia:pickRate"); // position 행이 아니다
+    // 미드 픽률(+8%p)이 더 크지만 all 행이 보고 가능하면 all 행이 대표다.
+    expect(cass!.cells.pickRate?.record.id).toBe("champion:Cassiopeia:pickRate");
+    expect(cass!.cells.pickRate?.lane).toBe("all");
     expect(out.filter((r) => r.entityKey === "Cassiopeia")).toHaveLength(1);
   });
 
@@ -97,10 +99,15 @@ describe("buildEntityRows — 엔티티 1행·인라인 지표", () => {
     expect(Object.keys(item!.cells)).toEqual(["adoptionRate"]);
   });
 
-  it("'전체'에서는 오공의 정글 승률(position 행)을 쓰지 않는다 — 셀은 전체 픽률만", () => {
+  // 명세 변경(2026-09-18 실렌더 실측): 에코의 유일한 이상 관측이 미드 승률이라 all 행만 보면 표에서
+  // 사라지고 좌 내비 배지와 표가 서로를 반박했다. "전체"에서는 그 지표의 all 행이 보고 가능하지 않을 때
+  // 보고 가능한 position 행(|Δ| 최대)이 셀을 대표하고 라인을 표기한다.
+  it("'전체'에서 all 행이 보고 가능하지 않은 지표는 position 행이 대표한다(라인 표기) — 오공 정글 승률", () => {
     const wk = buildEntityRows(rows, "all", Q).find((r) => r.entityKey === "MonkeyKing");
-    expect(Object.keys(wk!.cells)).toEqual(["pickRate"]);
-    expect(wk!.status).toBe("announced");
+    expect(Object.keys(wk!.cells).sort()).toEqual(["pickRate", "winRate"]);
+    expect(wk!.cells.winRate?.lane).toBe("JUNGLE");
+    expect(wk!.cells.pickRate?.lane).toBe("all");
+    expect(wk!.status).toBe("unannounced");
   });
 
   it("라인 '정글'을 고르면 그 라인의 position 행으로 셀을 채우고 밴률·아이템은 없다", () => {
@@ -118,7 +125,8 @@ describe("buildEntityRows — 엔티티 1행·인라인 지표", () => {
 
   it("정렬: 미공지 → 이상 관측 → 공지, 같은 상태 안에서는 |Δ| 내림차순", () => {
     const out = buildEntityRows(rows, "all", Q);
-    expect(out.map((r) => r.entityName)).toEqual(["폭풍갈퀴", "에코", "카시오페아", "오공"]);
+    // 오공은 정글 승률(미공지, |Δ| 0.116)이 대표가 되어 폭풍갈퀴(0.02)보다 앞선다.
+    expect(out.map((r) => r.entityName)).toEqual(["오공", "폭풍갈퀴", "에코", "카시오페아"]);
   });
 
   it("대표 델타는 |Δ| 최대 보고 셀이고 matchedNoteIds는 셀 합집합이다", () => {

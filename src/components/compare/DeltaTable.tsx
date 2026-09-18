@@ -20,12 +20,13 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import type { DeltaRecord } from "@/pipeline/types";
-import { itemHref, metricLabel } from "@/lib/format";
+import { itemHref, metricLabel, positionLabel } from "@/lib/format";
 import EntityIcon from "@/components/EntityIcon";
+import LaneGlyph from "@/components/LaneGlyph";
 import StatusBadge from "@/components/StatusBadge";
 import { formatMetricValue, metricKind } from "@/components/home/logic";
 import { fmtPp } from "@/lib/format";
-import { ENTITY_METRICS, type EntityCompareRow, type EntityMetric } from "./entityRows";
+import { ENTITY_METRICS, type EntityCell, type EntityCompareRow, type EntityMetric } from "./entityRows";
 
 export interface DeltaTableProps {
   pair: { from: string; to: string } | null;
@@ -34,8 +35,9 @@ export interface DeltaTableProps {
   focusKey: string | null;
 }
 
-/** 지표 셀 — `전 → 후` + `▲/▼ Δ`. 색은 DeltaValue와 같은 관례(상승 success · 하락 danger). */
-function MetricCell({ record }: { record: DeltaRecord }) {
+/** 지표 셀 — `전 → 후` + `▲/▼ Δ`(+ 전체 보기에서 라인 행이 대표면 라인 태그). 색은 DeltaValue 관례. */
+function MetricCell({ cell, showLane }: { cell: EntityCell; showLane: boolean }) {
+  const record: DeltaRecord = cell.record;
   const delta = record.delta ?? 0;
   const up = delta > 0;
   const kind = metricKind(record.metric);
@@ -53,6 +55,12 @@ function MetricCell({ record }: { record: DeltaRecord }) {
       <span className={`font-bold ${up ? "text-success" : "text-danger"}`}>
         {up ? "▲" : "▼"} {deltaText}
       </span>
+      {showLane && cell.lane !== "all" ? (
+        <span className="flex items-center gap-1 whitespace-nowrap font-body text-xs text-muted">
+          <LaneGlyph lane={cell.lane} size={11} labelled />
+          {positionLabel(cell.lane)}
+        </span>
+      ) : null}
     </Link>
   );
 }
@@ -70,9 +78,10 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
     const row = Array.from(scroller.querySelectorAll<HTMLTableRowElement>("tr[data-entity-key]")).find(
       (tr) => tr.dataset.entityKey === focusKey
     );
-    if (!row || typeof scroller.scrollTo !== "function") return;
+    if (!row) return;
+    // 즉시 이동 — `behavior: "smooth"`는 실측(정적 빌드, Chromium)에서 이동이 시작되지 않는 경우가 있었다.
     const headerHeight = theadRef.current?.offsetHeight ?? 0;
-    scroller.scrollTo({ top: Math.max(0, row.offsetTop - headerHeight), behavior: "smooth" });
+    scroller.scrollTop = Math.max(0, row.offsetTop - headerHeight);
   }, [focusKey]);
 
   const fromLabel = pair?.from ?? "이전";
@@ -131,7 +140,7 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                     const cell = row.cells[metric];
                     return (
                       <td key={metric} className="px-3 py-2 align-middle">
-                        {cell ? <MetricCell record={cell} /> : <span className="px-1 text-muted">—</span>}
+                        {cell ? <MetricCell cell={cell} showLane={row.lane === "all"} /> : <span className="px-1 text-muted">—</span>}
                       </td>
                     );
                   })}
