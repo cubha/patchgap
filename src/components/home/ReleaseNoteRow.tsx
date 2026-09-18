@@ -32,6 +32,7 @@ import LaneGlyph from "@/components/LaneGlyph";
 import SpellIcon from "@/components/SpellIcon";
 import StatusBadge from "@/components/StatusBadge";
 import { displayStatus } from "@/pipeline/shared/display-status";
+import { isReportableRecord } from "@/components/compare/entityRows";
 import DeltaValue from "@/components/DeltaValue";
 import { itemHref, metricLabel } from "@/lib/format";
 import { isCosmeticGroup, isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
@@ -45,14 +46,7 @@ import {
   type GapCauseMode,
 } from "./logic";
 import { groupNotesBySkill, representativeRecord } from "./noteSkillGroups";
-import {
-  buildNoteVerdict,
-  explainNoObservation,
-  formatQ,
-  noObservationLabel,
-  selectEntityObservation,
-  selectReportableObservation,
-} from "./streamVerdict";
+import { buildNoteVerdict, formatQ, selectEntityObservation, selectReportableObservation } from "./streamVerdict";
 import type { IndirectEffectEntry } from "./indirectEffects";
 import type { ReleaseStreamGroup } from "./releaseStream";
 import type { StreamEntityIcon } from "./releaseStreamEntity";
@@ -66,8 +60,8 @@ export interface ReleaseNoteRowProps {
    * 구성). 매칭된 델타가 없는 노트는 이 맵에 키가 없다 — 뱃지는 "짝지은 관측 없음"(S5), 판정 문장은
    * 아예 만들지 않는다(무근거 문장 금지). */
   noteDeltas: Record<string, DeltaRecord>;
-  /** note.id → 그 노트에 짝지어진 **모든** 델타 행. 헤더의 비관측 **사유 계산** 전용이다 —
-   * 대표 1행만 보면 유의한 행이 |Δ| 경쟁에서 밀려 "유의차 없음"이라 단정하게 된다(S4 후속). */
+  /** note.id → 그 노트에 짝지어진 **모든** 델타 행. 2026-09-18 라운드6부터 이 카드는 비관측 사유를
+   * 말하지 않아 읽지 않는다 — 호출부(ReleaseNoteStream) 계약 유지를 위해 prop만 남긴다. */
   noteDeltaRows?: Record<string, DeltaRecord[]>;
   /** 미공지 그룹의 "✕ {patch} 패치노트에 없음" 문구에 쓸 to-패치 번호. */
   patch: string | null;
@@ -80,10 +74,6 @@ export interface ReleaseNoteRowProps {
    * 유무 판정은 page.tsx가 빌드 타임에 끝낸다. 키가 없으면 그 줄은 이미지 없이 텍스트만.
    */
   skinPreviews?: Record<string, CosmeticSkinItem[]>;
-  /** 섹션 묶음(라운드5 B2, sectionBundle.ts) — 엔티티가 아니라 h3 없는 섹션의 폴백 라벨이다.
-   * 아이콘·굵은 제목을 쓰지 않고 "N개 항목 · 패치노트 섹션"으로 위계를 낮춘다. 본문(줄·배지)은
-   * 그대로다. */
-  sectionBundle?: boolean;
 }
 
 const SECTION_LABELS: Record<string, string> = {
@@ -143,23 +133,6 @@ function ObservationLine({ record }: { record: DeltaRecord }) {
 
 /** 노트 그룹의 노트들에 짝지어진 델타 — 같은 델타가 노트 여러 줄에 매칭될 수 있어(ST-08
  * matchedNoteIds) id로 중복을 제거한다. */
-/** 짝 전수(중복 제거) — 사유 계산 전용. */
-function allMatchedRecords(
-  noteIds: readonly string[],
-  noteDeltaRows: Record<string, DeltaRecord[]>
-): DeltaRecord[] {
-  const seen = new Set<string>();
-  const out: DeltaRecord[] = [];
-  for (const id of noteIds) {
-    for (const record of noteDeltaRows[id] ?? []) {
-      if (seen.has(record.id)) continue;
-      seen.add(record.id);
-      out.push(record);
-    }
-  }
-  return out;
-}
-
 function matchedRecords(
   noteIds: readonly string[],
   noteDeltas: Record<string, DeltaRecord>
@@ -231,16 +204,12 @@ export default function ReleaseNoteRow({
   icon,
   spellIcons,
   noteDeltas,
-  noteDeltaRows,
   patch,
   qAlpha,
   causes,
   skinPreviews,
-  sectionBundle: sectionBundleProp = false,
 }: ReleaseNoteRowProps) {
   const isUnannounced = group.kind === "unannounced";
-  // 섹션 묶음은 공지 그룹에만 존재한다(미공지 그룹은 델타 행이라 엔티티가 확정돼 있다).
-  const sectionBundle = !isUnannounced && sectionBundleProp;
 
   // B4 — 그룹 전체가 치장이면 이 카드엔 뱃지가 하나도 붙지 않는다.
   const cosmeticGroup = !isUnannounced && isCosmeticGroup(group.notes);
@@ -253,17 +222,9 @@ export default function ReleaseNoteRow({
     ? selectEntityObservation(group.deltas)
     : selectReportableObservation(pairedRecords, qAlpha);
 
-  // S4(2026-09-18) — 대표 관측이 없을 때 **왜 없는지를 계산한다**. 이전엔 헤더가
-  // "관측 변화 없음 · 바닥 미달"을 상수로 찍었는데, 그 자리는 유의성·바닥 어느 쪽이 깨져도
-  // 참이라 실측 비보고 83행 중 59행(71%)에서 사유가 틀렸다(「구인수의 격노검」은 문장이 거짓).
-  // 사유는 **짝 전수**로 계산한다(대표 1행이 아니라) — 대표 선택 규칙은 |Δ| 우선이라
-  // 유의·작은 행을 비유의·큰 행 뒤로 밀어낸다. 전수가 없으면(prop 미주입) 대표로 폴백한다.
-  const reasonRows =
-    !isUnannounced && noteDeltaRows
-      ? allMatchedRecords(noteIds, noteDeltaRows)
-      : pairedRecords;
-  const noObservation = observation ? null : explainNoObservation(reasonRows, qAlpha);
-
+  // 2026-09-18 라운드6(C1): 대표 관측이 없을 때 사유(유의차 없음 / 바닥 미달 / 혼재)를 더 이상 말하지
+  // 않는다 — 그 어휘 자체가 사용자가 "아예 보여주지 않도록" 한 노이즈다. 헤더는 "유의한 관측 없음"
+  // 한 마디만 하고, 수치는 항목 상세가 그대로 보여준다.
   // B2 — 이 카드의 대표 행에 규명된 원인이 있는가(indirect-effect).
   const gapRepresentative = isUnannounced ? selectEntityObservation(group.deltas) : null;
   const causeEntry = gapRepresentative ? (causes?.[gapRepresentative.id] ?? null) : null;
@@ -293,34 +254,17 @@ export default function ReleaseNoteRow({
           네이티브 <details>/<summary>라 서버 컴포넌트 그대로 유지할 수 있다(JS 상태 불필요). */}
       <details className="group px-5 py-4">
         <summary className="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
-          {sectionBundle ? (
-            <IconBox size={56} className="font-mono text-xs font-bold text-muted">
-              §
-            </IconBox>
-          ) : (
-            <CardIcon icon={icon} entity={group.entity} />
-          )}
+          <CardIcon icon={icon} entity={group.entity} />
           <div className="min-w-0 flex-1">
-            <div className={sectionBundle ? "font-display text-base font-bold text-fg-2" : "font-display text-base font-bold text-fg"}>
-              {group.entity}
-            </div>
-            {sectionBundle ? (
-              // B2(라운드5) — 엔티티가 아니라 섹션이다. 관측 사유를 말하지 않는다(짝이 없는 게
-              // 아니라 짝지을 대상 자체가 아니다).
-              <div className="mt-1 text-xs text-muted">
-                {noteIds.length}개 항목 · 패치노트 섹션 · 엔티티 아님
-              </div>
-            ) : observation ? (
+            <div className="font-display text-base font-bold text-fg">{group.entity}</div>
+            {observation ? (
               <ObservationLine record={observation} />
             ) : cosmeticGroup ? (
-              // B4 — 스킨·크로마엔 측정할 지표가 없다. "관측 보류"가 아니라 관측 대상이 아니다.
-              <div className="mt-1 text-xs text-muted">치장 항목 · 관측 대상 아님</div>
+              // B4 — 스킨·크로마엔 측정할 지표가 없다.
+              <div className="mt-1 text-xs text-muted">치장 항목</div>
             ) : (
-              // B3 — 바닥·유의 미달을 발견처럼 쓰지 않는다. 수치는 항목 상세가 그대로 보여준다.
-              // S4 — 사유는 계산해서 말하고, 혼재면 단정하지 않는다(무근거 문장 금지의 연장).
-              <div className="mt-1 text-xs text-muted">
-                {noObservation ? noObservationLabel(noObservation) : "관측 변화 없음"}
-              </div>
+              // C1(라운드6) — 사유를 단정하지 않고 사실만: 유의하고 바닥을 넘는 관측이 없다.
+              <div className="mt-1 text-xs text-muted">유의한 관측 없음</div>
             )}
           </div>
           <span
@@ -335,7 +279,7 @@ export default function ReleaseNoteRow({
           <>
             {patch ? (
               <div className="mt-3 text-xs font-bold text-accent">
-                ✕ {patch} 패치노트에 {group.entity} 항목 없음 — 짝지을 선언이 존재하지 않습니다
+                ✕ {patch} 패치노트에 없음
               </div>
             ) : null}
             {/* B2 — 원인이 규명된 Gap은 인과 체인을, 아닌 Gap은 네 상태를 구분한 문구를 쓴다. */}
@@ -381,9 +325,11 @@ export default function ReleaseNoteRow({
                 ? (spellIcons?.[spellIconKey(group.entity, skillGroup.skill)] ?? null)
                 : null;
               const record = representativeRecord(skillGroup.notes, noteDeltas);
-              // 뱃지는 행당 1개다(이전엔 노트 줄마다 1개라 같은 뱃지가 5번 반복됐다).
-              // 치장 줄에는 아예 붙이지 않는다(B4) — 관측 대상이 아니기 때문이다.
+              // 뱃지는 행당 1개이고(이전엔 노트 줄마다 1개), **보고 가능한 관측**(유의·바닥 통과·노이즈
+              // 아님)이 있을 때만 붙는다 — 2026-09-18 라운드6(C1·C5). "짝지은 관측 없음"·"관측 미확인"
+              // 같은 부재 배지는 정보가 아니라 잡음이었다. 치장 줄은 원래 붙지 않는다(B4).
               const cosmeticRow = skillGroup.notes.every(isCosmeticNote);
+              const badgeRecord = record && isReportableRecord(record, qAlpha) ? record : null;
               // 판정 문장은 여전히 **노트 줄 단위**다 — 스탯마다 노트 방향이 다를 수 있다
               // (같은 스킬에서 계수는 상향인데 마나는 하향인 경우가 실제로 있다).
               return (
@@ -397,7 +343,12 @@ export default function ReleaseNoteRow({
                     ) : null}
                     <div className="flex flex-col gap-0.5">
                       {skillGroup.notes.map((note) => {
-                        const verdict = buildNoteVerdict(note, noteDeltas[note.id], qAlpha);
+                        // 판정문도 보고 가능한 관측에만 — "유의차 없음"·"바닥 미달"은 쓰지 않는다(C1).
+                        const noteRecord = noteDeltas[note.id];
+                        const verdict =
+                          noteRecord && isReportableRecord(noteRecord, qAlpha)
+                            ? buildNoteVerdict(note, noteRecord, qAlpha)
+                            : null;
                         return (
                           <div key={note.id}>
                             <StatLine note={note} />
@@ -425,9 +376,7 @@ export default function ReleaseNoteRow({
                       })}
                     </div>
                   </div>
-                  {cosmeticRow ? null : (
-                    <StatusBadge status={record ? displayStatus(record, qAlpha) : "unpaired"} />
-                  )}
+                  {cosmeticRow || !badgeRecord ? null : <StatusBadge status={displayStatus(badgeRecord, qAlpha)} />}
                 </li>
               );
             })}

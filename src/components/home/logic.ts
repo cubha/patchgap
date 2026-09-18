@@ -306,16 +306,16 @@ export function resolveGapCause(record: DeltaRecord): GapCauseDisplay {
     return { mode: "candidate", text: `${cause.text} — 후보 미검증` };
   }
   if (!record.llm) {
-    return { mode: "unreviewed", text: "원인 미검토 — 이번 실행의 분석 상한에 들지 않았습니다" };
+    return { mode: "unreviewed", text: "원인 미검토" };
   }
   if (record.llm.skipped) {
     return {
       mode: "unreviewed",
-      text: `원인 미검토 — ${record.llm.reason === "call-budget-exceeded" ? "호출 예산 소진" : "분석 건너뜀"}`,
+      text: `원인 미검토 · ${record.llm.reason === "call-budget-exceeded" ? "호출 예산 소진" : "분석 건너뜀"}`,
     };
   }
-  // 문구 압축(2026-09-18 ST-8) — 같은 문장이 Gap 탭에 21회 반복돼 노이즈였다. 뜻은 유지한다.
-  return { mode: "none", text: "설명 후보 없음 — 노트에 원인 조항 없음" };
+  // 문구 압축(2026-09-18 ST-8 → 라운드6 C3: 설명 꼬리를 뗐다. "왜"는 방법론이 말한다).
+  return { mode: "none", text: "설명 후보 없음" };
 }
 
 /** entityType이 champion/item이 아닌 행(objective·lane·summary)의 EntityIcon 폴백 글자 —

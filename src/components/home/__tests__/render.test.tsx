@@ -226,99 +226,120 @@ describe("ReleaseNoteStream — 라인 엔티티(entityType='lane') 카드 아�
   });
 });
 
-// ── 2026-09-18 채점 라운드5(ST4) — 접힘 구간 + 섹션 묶음 위계 ─────────────────────────
-describe("ReleaseNoteStream — tier 2 접기 · 섹션 묶음", () => {
+// ── 2026-09-18 채점 라운드5(ST4) 접힘 구간 · 라운드6(L2) 기타 변경 블록 ─────────────────────
+// 라운드6 명세 변경: 요약행 어휘 "관측 변화 없음" → "유의한 관측 없음"(C1 어휘 통일), 섹션 묶음(tier 3)은
+// 카드가 아니라 `miscSections`로 목록 끝 "기타 변경" 블록에 실린다.
+describe("ReleaseNoteStream — tier 2 접기 · 기타 변경", () => {
   const entries: ReleaseStreamEntry[] = [
-    {
-      group: { kind: "matched", entity: "에코", notes: [] },
-      icon: { entityType: "champion", entityKey: "Ekko" },
-      lanes: [],
-      tier: 0,
-    },
+    { group: { kind: "matched", entity: "에코", notes: [] }, icon: { entityType: "champion", entityKey: "Ekko" }, lanes: [], tier: 0 },
     { group: { kind: "matched", entity: "카사딘", notes: [] }, icon: { entityType: "champion", entityKey: "Kassadin" }, lanes: [], tier: 2 },
     { group: { kind: "matched", entity: "마스터 이", notes: [] }, icon: { entityType: "champion", entityKey: "MasterYi" }, lanes: [], tier: 2 },
+  ];
+  const misc = [
     {
-      group: {
-        kind: "matched",
-        entity: "의회 - 투표 1 결과",
-        notes: [
-          {
-            id: "c1",
-            patch: "26.18",
-            section: "champion",
-            entity: "의회 - 투표 1 결과",
-            skill: null,
-            stat: null,
-            before: null,
-            after: null,
-            direction: "unknown",
-            summary: "제안된 아이템 3개 모두 부활",
-            anchorUrl: "https://example.com/#council",
-            anchorKind: "section",
-          },
-        ],
-      },
-      icon: { entityType: null, entityKey: null },
-      lanes: [],
-      tier: 3,
-      sectionBundle: true,
+      category: "bugfix" as const,
+      label: "버그 수정",
+      notes: [
+        {
+          id: "b1",
+          patch: "26.18",
+          section: "system" as const,
+          entity: "버그 수정",
+          skill: null,
+          stat: null,
+          before: null,
+          after: null,
+          direction: "unknown" as const,
+          summary: "티모의 버섯 함정이 정상적으로 지속되지 않던 버그를 수정했습니다.",
+          anchorUrl: "https://example.com/#classic",
+          anchorKind: "section" as const,
+        },
+      ],
+    },
+    {
+      category: "cosmetic" as const,
+      label: "신규 스킨·치장",
+      notes: [
+        {
+          id: "h1",
+          patch: "26.18",
+          section: "system" as const,
+          entity: "홀 오브 레전드",
+          skill: null,
+          stat: null,
+          before: null,
+          after: null,
+          direction: "unknown" as const,
+          summary: "떠오른 전설 오리아나 스킨 및 테두리",
+          anchorUrl: "https://example.com/#hall-of-legends",
+          anchorKind: "section" as const,
+        },
+      ],
     },
   ];
 
   function renderStream() {
     return render(
       withAmbient(
-        <ReleaseNoteStream entries={entries} spellIcons={null} noteDeltas={{}} patch="26.18" contentCount={4} gapCount={0} />
+        <ReleaseNoteStream entries={entries} spellIcons={null} noteDeltas={{}} patch="26.18" contentCount={5} gapCount={0} miscSections={misc} />
       )
     );
   }
 
-  it("연속 tier 2는 요약 1행('관측 변화 없음 · N건')으로 접히고, 그 안에 카드가 전부 남는다", () => {
+  it("연속 tier 2는 요약 1행('유의한 관측 없음 · N건')으로 접히고, 그 안에 카드가 전부 남는다", () => {
     const { container } = renderStream();
     const summaries = Array.from(container.querySelectorAll("ul > li > details > summary")).map((s) => s.textContent ?? "");
-    const collapsed = summaries.find((t) => t.startsWith("관측 변화 없음"));
+    const collapsed = summaries.find((t) => t.startsWith("유의한 관측 없음"));
     expect(collapsed).toBeDefined();
     expect(collapsed).toContain("2건");
-    // 요약행은 건수만 말한다 — 사유 문구(유의차 없음/바닥 미달)를 그룹 단위로 단정하지 않는다.
     expect(collapsed).not.toContain("유의차");
     expect(collapsed).not.toContain("바닥");
-    // 접힌 안에 두 카드가 그대로 있다(숨기지 않는다).
     expect(container.textContent).toContain("카사딘");
     expect(container.textContent).toContain("마스터 이");
     const details = Array.from(container.querySelectorAll("details")).find((d) =>
-      d.querySelector("summary")?.textContent?.startsWith("관측 변화 없음")
+      d.querySelector("summary")?.textContent?.startsWith("유의한 관측 없음")
     );
     expect(details?.querySelectorAll(":scope > ul > li")).toHaveLength(2);
   });
 
   it("tier 2가 떨어져 있으면 접힘 구간이 둘 — 각각 자기 건수를 말하고 key가 겹치지 않는다(scope-critic ST3)", () => {
-    const split: ReleaseStreamEntry[] = [
-      entries[1], // 카사딘 tier 2
-      entries[0], // 에코 tier 0
-      entries[2], // 마스터 이 tier 2
-    ];
+    const split: ReleaseStreamEntry[] = [entries[1], entries[0], entries[2]];
     const { container } = render(
       withAmbient(
         <ReleaseNoteStream entries={split} spellIcons={null} noteDeltas={{}} patch="26.18" contentCount={3} gapCount={0} />
       )
     );
     const folds = Array.from(container.querySelectorAll("ul > li > details > summary")).filter((s) =>
-      s.textContent?.startsWith("관측 변화 없음")
+      s.textContent?.startsWith("유의한 관측 없음")
     );
     expect(folds).toHaveLength(2);
-    expect(folds.map((s) => s.textContent)).toEqual(["관측 변화 없음1건▾", "관측 변화 없음1건▾"]);
-    // React key 중복 경고는 console.error로 나온다 — 여기서는 렌더 결과(카드 3장 전부 존재)로 확인한다.
+    expect(folds.map((s) => s.textContent)).toEqual(["유의한 관측 없음1건▾", "유의한 관측 없음1건▾"]);
     expect(container.textContent).toContain("카사딘");
     expect(container.textContent).toContain("에코");
     expect(container.textContent).toContain("마스터 이");
   });
 
-  it("섹션 묶음은 엔티티 카드가 아닌 위계로 — § 표식 + 'N개 항목 · 패치노트 섹션 · 엔티티 아님', 첫 글자 폴백 없음", () => {
+  it("기타 변경 블록은 목록의 마지막 항목 1개 — 카테고리 소제목 아래 줄만, 배지·아이콘 없음", () => {
     const { container } = renderStream();
-    expect(container.textContent).toContain("1개 항목 · 패치노트 섹션 · 엔티티 아님");
-    expect(container.textContent).toContain("§");
-    // 첫 글자 폴백("의")이 아이콘 박스에 단독으로 들어가지 않는다.
-    const boxes = Array.from(container.querySelectorAll('span[style*="width: 56px"]')).map((b) => b.textContent?.trim());
-    expect(boxes).not.toContain("의");
+    // 스트림 <ul>의 직접 자식만 — 기타 변경 블록 안의 카테고리 <section><ul>과 헷갈리지 않게 :scope로 센다.
+    const streamList = container.querySelector("section > ul")!;
+    const items = streamList.querySelectorAll(":scope > li");
+    const last = items[items.length - 1];
+    const summary = last.querySelector("summary");
+    expect(summary?.textContent).toContain("기타 변경");
+    expect(summary?.textContent).toContain("2건");
+    expect(summary?.textContent).toContain("버그 수정 · 신규 스킨·치장");
+    expect(last.textContent).toContain("티모의 버섯 함정");
+    expect(last.textContent).toContain("떠오른 전설 오리아나");
+    // 배지(StatusBadge는 font-mono span에 점 마커) — 기타 변경 안에는 없다. 섹션 묶음 카드의 § 표식도 없다.
+    expect(last.querySelectorAll('span[aria-hidden="true"].bg-current')).toHaveLength(0);
+    expect(container.textContent).not.toContain("패치노트 섹션 · 엔티티 아님");
+  });
+
+  it("미공지 Gap 탭에서는 기타 변경 블록이 없다", () => {
+    const { container } = renderStream();
+    const gapTab = Array.from(container.querySelectorAll('button[role="tab"]')).find((b) => b.textContent?.startsWith("미공지 Gap"));
+    fireEvent.click(gapTab!);
+    expect(container.textContent).not.toContain("기타 변경");
   });
 });
