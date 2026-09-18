@@ -24,7 +24,7 @@
 - 저장·집계: JSONL reduce-on-ingest + 순수 TS 집계(`data/raw` gitignore, `data/aggregated` 커밋). 네이티브 의존 0
 - 통계: 자체 구현(Wilson/Newcombe/BH-FDR) — 외부 통계 라이브러리 의존 0
 - 패치노트 파서: `cheerio`
-- LLM 짝짓기·요약: `@anthropic-ai/sdk` — Claude Sonnet 5(`claude-sonnet-5`), 배치 1회 상한·캐시 우선
+- LLM 짝짓기·요약: `@anthropic-ai/sdk` — Claude Opus 5(`claude-opus-5`, 2026-09-18 SCOPE §3 갱신으로 Sonnet 5에서 상향), 배치 1회 상한(120)·캐시 우선
 - 알림: `fetch` Discord Webhook (의존 0)
 - 배포·모니터링: Vercel(정적) + UptimeRobot 5분
 - 테스트·품질: vitest + eslint + tsc + `verify.sh`

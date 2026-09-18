@@ -2,7 +2,7 @@
 
 > 생성일: 2026-09-05
 > 기반 리서치: docs/research/RESEARCH-patchgap-2026-09-05.md
-> 상태: 확정 (스택 사용자 승인 완료 2026-09-05 — 타임라인 표본 Must 승격, LLM=Claude Sonnet 5)
+> 상태: 확정 (스택 사용자 승인 완료 2026-09-05 — 타임라인 표본 Must 승격, LLM=Claude Sonnet 5 → 2026-09-18 Opus 5로 상향)
 
 ---
 
@@ -59,7 +59,7 @@
 | 통계 | 자체 구현(Wilson·Newcombe·Beta-binomial 축소·BH-FDR) | simple-statistics | 함수 4개 수준, 판정 로직 투명성 |
 | 패치노트 파서 | **cheerio** | linkedom | ko-kr·en-us 정적 HTML 실측 |
 | 엔티티 ID | Data Dragon(champion·item JSON) 한글명↔key 매핑 | 수동 테이블 | 공식 정적 데이터, 패치별 버전 |
-| LLM 짝짓기·요약 | **Claude API — Sonnet 5** (`claude-sonnet-5`; 캐시·배치 세부는 구현 시 claude-api 스킬로 확정; 배치 1회 상한·캐시 우선·폴백) | Haiku 4.5 | 요구사항 3 "자체 에이전트 파이프라인", AI 활용 적절성 |
+| LLM 짝짓기·요약 | **Claude API — Opus 5** (`claude-opus-5`; ~~Sonnet 5~~ → 2026-09-18 사용자 확정 상향. 근거: 동일 델타 12건 A/B에서 간접 원인 탐지 Opus 12/12 vs Sonnet 1/12(`docs/plan/LLM-AB-2026-09-17.md`), Gap 원인 커버리지 20%가 심사 축 "AI 활용 적절성"의 직접 감점. 저신뢰(low) 후보는 화면에서 회색 "가능성" 문장으로만 표시해 무근거 회색 원칙 유지; 배치 1회 상한·캐시 우선·폴백) | Sonnet 5 / Haiku 4.5 | 요구사항 3 "자체 에이전트 파이프라인", AI 활용 적절성 |
 | 프론트 | **Next.js 16 App Router `output:'export'`** + Tailwind + recharts | Astro | 완전 정적·Vercel 무료·하네스 스킬(ui-plan/design-lint) 경험치 |
 | 배치 실행 | 로컬(초기·도그푸딩) → **GitHub Actions cron + workflow_dispatch**(9/19~) | Vercel Cron | 6h job·무료, Vercel Cron은 60~300s |
 | 알림 | `fetch` Discord Webhook | discord.js | 의존 0, embed 제한만 준수 |
@@ -70,7 +70,7 @@
 - **D+1 게이트(9/6, 구현과 병행)**: 실매치 1건으로 `info.gameVersion` 포맷·`startTime` 파라미터·`challenges` 골드 필드 존재 확인 → F1 컷 규칙 확정
 - **표본 리스크**: 26.16 매치는 8/12~8/26 창 — 상위 티어 ID 조회로 1만 확보 가능 여부를 첫 수집 1h 내 판정(미달 시 다이아 확장)
 - **미공지 오탐**: F2 게이트 값(n≥200 초안)은 첫 집계 후 시뮬레이션으로 재산정
-- **LLM 예산**: 델타 상위 50건만 2단 호출, 결과 캐시 커밋 → 예선 중 LLM 호출 0
+- **LLM 예산**: 델타 상위 120건(미공지·간접·공지-불일치 전수, 2026-09-17 50→120)만 2단 호출, 결과 캐시 커밋 → 예선 중 LLM 호출 0
 - **경쟁 (b) 선점 미확인 4곳**: C3 게이트, 배포 전
 - **미해결 결정**: 디스코드 웹훅 URL(사용자 제공), 브리핑 도메인명(Vercel 기본 사용)
 

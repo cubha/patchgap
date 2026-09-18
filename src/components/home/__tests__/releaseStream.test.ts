@@ -20,7 +20,7 @@ import { describe, expect, it } from "vitest";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import type { DeltasFile } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
-import { buildReleaseStream } from "../releaseStream";
+import { buildReleaseStream, sortMatchedGroups } from "../releaseStream";
 
 function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
   return {
@@ -235,5 +235,38 @@ describe("buildReleaseStream", () => {
     const notes = notesFile([note({ id: "n1", entity: "노트1" })]);
     const stream = buildReleaseStream(notes, deltasFile([]));
     expect(stream).toEqual([{ kind: "matched", entity: "노트1", notes: notes.items }]);
+  });
+});
+
+// ── "패치 내용" 탭 3티어 정렬 (2026-09-18, 채점 라운드1 ST-8 / advisor 권장 A안) ──────
+// 첫 행이 "홀 오브 레전드(치장)"이고 이어 8행이 "관측 변화 없음"이었다(실측). UX-BRIEF 01의
+// 수용 기준 "상단 캡처가 패치노트 요약 사이트로 읽히면 실패"를 그대로 집행한다 — 숨기지 않고
+// 아래로 내릴 뿐이며, 티어 안에서는 패치노트 순서를 유지한다.
+describe("sortMatchedGroups — 3티어", () => {
+  const notes = notesFile([
+    note({ id: "n-skin", entity: "홀 오브 레전드", section: "champion", summary: "떠오른 전설 오리아나 스킨", stat: null, direction: "unknown" }),
+    note({ id: "n-cass", entity: "카시오페아", section: "champion" }),
+    note({ id: "n-bard", entity: "바드", section: "champion" }),
+    note({ id: "n-ekko", entity: "에코", section: "champion" }),
+    note({ id: "n-varus", entity: "바루스", section: "champion" }),
+  ]);
+  const deltas = deltasFile([
+    // 바드: 노트와 방향 일치·유의·바닥 통과
+    delta({ id: "d-bard", entityName: "바드", metric: "pickRate", delta: -0.022, ci: [-0.031, -0.013], q: 0.001, status: "announced-consistent", matchedNoteId: "n-bard", matchedNoteIds: ["n-bard"] }),
+    // 에코: 방향 반대·유의·바닥 통과 → 불일치가 최상단
+    delta({ id: "d-ekko", entityName: "에코", metric: "winRate", before: 0.5, after: 0.404, delta: -0.096, ci: [-0.15, -0.04], q: 0.01, status: "announced-inconsistent", matchedNoteId: "n-ekko", matchedNoteIds: ["n-ekko"] }),
+    // 카시오페아: 짝은 있으나 비유의 → 관측 없음
+    delta({ id: "d-cass", entityName: "카시오페아", metric: "winRate", delta: -0.006, ci: [-0.05, 0.04], q: 1, status: "announced-inconsistent", matchedNoteId: "n-cass", matchedNoteIds: ["n-cass"] }),
+  ]);
+
+  it("불일치 → 일치 → 관측 없음 → 치장 순이고, 티어 안에서는 노트 순서를 지킨다", () => {
+    const groups = buildReleaseStream(notes, deltas).filter((g) => g.kind === "matched");
+    const sorted = sortMatchedGroups(groups, deltas, 0.1);
+    expect(sorted.map((g) => g.entity)).toEqual(["에코", "바드", "카시오페아", "바루스", "홀 오브 레전드"]);
+  });
+
+  it("deltas가 없으면 전부 '관측 없음' 티어라 노트 순서 그대로(치장만 맨 뒤)", () => {
+    const groups = buildReleaseStream(notes, null).filter((g) => g.kind === "matched");
+    expect(sortMatchedGroups(groups, null, 0.1).map((g) => g.entity)).toEqual(["카시오페아", "바드", "에코", "바루스", "홀 오브 레전드"]);
   });
 });

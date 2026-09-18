@@ -324,3 +324,33 @@ describe("filterByLane — 대조표 라인 필터(시안 .m-filter, 2026-09-10)
     expect(filterByLane(rows, "MIDDLE")).toEqual([]);
   });
 });
+
+// ── sortRows "priority" (2026-09-18, 채점 라운드1 ST-9) ───────────────────────────
+// 기본 정렬이 |Δ| 단독이면 첫 화면이 라인골드 "임계 미달"로 채워진다(실측 6행). 상태 우선순위
+// (STATUS_SORT_PRIORITY: 미공지 → 간접 → 불일치 → …)를 먼저 보고 그 안에서 |Δ|로 정렬한다.
+describe("sortRows — priority", () => {
+  it("상태 우선순위가 |Δ|보다 먼저다", () => {
+    const rows = [
+      delta({ id: "gold-below", status: "below-threshold", delta: -0.9 }),
+      delta({ id: "gap-small", status: "unannounced", delta: 0.01 }),
+      delta({ id: "incons", status: "announced-inconsistent", delta: 0.5 }),
+    ];
+    expect(sortRows(rows, "priority", "desc").map((r) => r.id)).toEqual(["gap-small", "incons", "gold-below"]);
+  });
+
+  it("같은 상태 안에서는 |Δ| 내림차순", () => {
+    const rows = [
+      delta({ id: "gap-small", status: "unannounced", delta: 0.01 }),
+      delta({ id: "gap-big", status: "unannounced", delta: -0.08 }),
+    ];
+    expect(sortRows(rows, "priority", "desc").map((r) => r.id)).toEqual(["gap-big", "gap-small"]);
+  });
+
+  it("asc는 전체를 뒤집는다(헤더 토글 대칭)", () => {
+    const rows = [
+      delta({ id: "gap", status: "unannounced", delta: 0.01 }),
+      delta({ id: "none", status: "no-change", delta: 0.5 }),
+    ];
+    expect(sortRows(rows, "priority", "asc").map((r) => r.id)).toEqual(["none", "gap"]);
+  });
+});
