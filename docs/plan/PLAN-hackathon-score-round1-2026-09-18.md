@@ -45,3 +45,10 @@
 
 ## 5. 완료 조건
 1. `verify.sh --full` PASS 2. 26.17→26.18 Gap 행 원인 보유 ≥60%(D3 6점 구간) 3. LLM 요약문 중 "제공된/후보 목록"·소수점 원값 0건 4. 홈 403 = 방법론 STEP4 5. 대조표 첫 행이 Gap/불일치 6. 프로덕션 텍스트에 "우선 N ·"·"적었다"·"발송 2026" 0건 7. 노트 65%⇒65% 0건 8. PUBG Lighthouse a11y ≥ 95.
+
+## 6. 라운드 3 (2026-09-18, 라운드2 92/100 이후 소규모 보완 — SCORECARD §3 G1~G3)
+| ID | 태그 | 내용 | 파일 |
+|---|---|---|---|
+| G1 | [TDD] | 노트→델타 역색인 last-wins → best-row(보고 가능 → 상태 우선순위 → \|Δ\|). 홈 카드·3티어 정렬이 같은 사전을 봄 | src/components/home/noteDeltaIndex.ts(신규) · src/app/page.tsx · src/components/home/releaseStream.ts |
+| G2 | — | 대조표 라인 태그 `whitespace-nowrap` | src/components/compare/DeltaTable.tsx |
+| G3 | — | LoL 히어로 h1 `break-keep` | src/components/home/HeroSummary.tsx |

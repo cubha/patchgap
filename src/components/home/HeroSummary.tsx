@@ -67,7 +67,7 @@ export default function HeroSummary({ stats, action }: HeroSummaryProps) {
         <p className="ambient-hero-sub text-xs font-bold tracking-wide text-accent">
           패치노트가 말한 것 vs 통계가 말하는 것
         </p>
-        <h1 className="ambient-hero-headline mt-2 max-w-3xl text-2xl font-bold leading-tight text-fg">
+        <h1 className="ambient-hero-headline mt-2 max-w-3xl break-keep text-2xl font-bold leading-tight text-fg">
           패치노트는 <strong className="font-mono tabular-nums">{fmtInt(noteEntityCount)}</strong>개
           챔피언·아이템을 바꿨다고 말했고, 통계는{" "}
           <strong className="font-mono tabular-nums">{fmtInt(statCount)}</strong>개 변화를 말합니다

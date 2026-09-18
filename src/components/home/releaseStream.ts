@@ -22,6 +22,7 @@ import type { DeltaRecord, DeltasFile, PatchNoteItem } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
 import { isGapStatus } from "./logic";
 import { selectReportableObservation } from "./streamVerdict";
+import { indexNoteDeltas } from "./noteDeltaIndex";
 import { isCosmeticGroup } from "@/pipeline/shared/cosmetic-note";
 
 export interface MatchedStreamGroup {
@@ -144,10 +145,8 @@ export function sortMatchedGroups(
   deltas: DeltasFile | null,
   qAlpha?: number
 ): MatchedStreamGroup[] {
-  const noteDeltas: Record<string, DeltaRecord> = {};
-  for (const row of deltas?.rows ?? []) {
-    for (const noteId of row.matchedNoteIds) noteDeltas[noteId] = row;
-  }
+  // page.tsx와 **같은** 역색인(best-row) — 사전이 다르면 정렬된 자리와 카드 문구가 어긋난다.
+  const noteDeltas = indexNoteDeltas(deltas?.rows ?? [], qAlpha);
   return groups
     .map((group, index) => ({ group, index, tier: contentTier(group, noteDeltas, qAlpha) }))
     .sort((a, b) => a.tier - b.tier || a.index - b.index)
