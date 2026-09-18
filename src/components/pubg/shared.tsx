@@ -1,8 +1,7 @@
 // src/components/pubg/shared.tsx
-// PUBG 화면 3개(브리핑·대조표·방법론)가 함께 쓰는 조각. 게임 스위처 도입(2026-09-17)으로
-// `/pubg/` 한 장이 세 라우트로 쪼개지면서, 어느 화면에 들어와도 **표본 성격 고지와 권리 고지가
-// 함께 붙어야** 한다 — 사용자가 대조표로 바로 들어와도 "이 숫자는 KR·Master+가 아니다"를
-// 알아야 하기 때문이다(PLAN-pubg-gate §9-2 R5).
+// PUBG 화면 3개(브리핑·대조표·방법론)가 함께 쓰는 조각. 2026-09-18 라운드6(사용자 P2): 이 파일의
+// 사용자 노출 문구에서 다른 게임과의 비교 서술을 전부 뺐다 — PUBG는 PUBG의 판정표로만 말한다.
+// 표본 성격 고지는 방법론에만 붙는다(브리핑·대조표는 결과만).
 import type { ReactNode } from "react";
 import { fmtKst } from "@/lib/format";
 
@@ -27,7 +26,7 @@ export function PubgPageHeader({ title, lead }: { title: ReactNode; lead: ReactN
   return (
     <header className="flex flex-col gap-3">
       <p className="ambient-hero-sub font-mono text-xs font-bold tracking-wide text-accent uppercase">
-        PUBG: BATTLEGROUNDS · 어댑터 실연결
+        PUBG: BATTLEGROUNDS
       </p>
       <h1 className="ambient-hero-headline font-display text-3xl leading-tight font-bold text-balance break-keep text-fg">
         {title}
@@ -39,16 +38,14 @@ export function PubgPageHeader({ title, lead }: { title: ReactNode; lead: ReactN
   );
 }
 
-/** 표본 성격 고지 — LoL과 성격이 다르므로 각 화면에서 반드시 먼저 말한다. */
+/** 표본 성격 고지 — 방법론 화면 상단. 판정 숫자를 읽기 전에 알아야 할 표본의 성격만 말한다. */
 export function PubgSampleNotice({ sampleScope }: { sampleScope: string }) {
   return (
     <div className="rounded-md border border-warn/40 bg-surface-warm/40 p-4">
-      <p className="font-mono text-xs font-bold text-warn">표본 성격이 LoL과 다릅니다</p>
+      <p className="font-mono text-xs font-bold text-warn">표본</p>
       <p className="mt-2 text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
-        {sampleScope}. PUBG API는 지역 샤드가 폐지돼 한국 한정 표본을 뽑을 수 없습니다 — 게임을
-        리그 오브 레전드로 바꾸면 보이는{" "}
-        <span className="font-mono text-xs">KR · Master+ · 솔로/듀오</span>와 달리 이 표본은{" "}
-        <strong className="text-fg">전 지역·전 티어 무작위</strong>이며 봇이 포함됩니다.
+        {sampleScope}. 지역·티어를 고정할 수 없는 API라 <strong className="text-fg">전 지역·전 티어 무작위</strong>{" "}
+        표본이며 봇이 포함됩니다(비율 병기).
       </p>
     </div>
   );

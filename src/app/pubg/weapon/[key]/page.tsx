@@ -11,7 +11,8 @@ import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
 import PubgDetailSplash, { type PubgDetailStat } from "@/components/pubg/PubgDetailSplash";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
-import { loadPubg, loadPubgAssets } from "@/lib/pubgData";
+import { isReportable, loadPubg, loadPubgAssets } from "@/lib/pubgData";
+import { displayStatusOf } from "@/pipeline/shared/display-status";
 import { weaponKeyFromSlug, weaponSlug } from "@/lib/pubgRoutes";
 import { publicWeaponPath } from "@/pipeline/pubg/asset-path";
 import { weaponCategoryLabel } from "@/pipeline/aggregate/pubg-weapon-key";
@@ -84,7 +85,10 @@ export default async function PubgWeaponPage({ params }: PageProps) {
   const assets = loadPubgAssets();
   const hasRender = assets?.weapons.includes(weaponKey) ?? false;
 
-  const rel = row?.relChange ?? null;
+  // 2026-09-18 라운드6(C1): 판정이 선 행만 배지·변화를 말한다. 노이즈 상태(바닥 미달·변화 없음·표본 부족)는
+  // "유의한 변화 없음"으로만 — 그 상태 어휘는 방법론 "표시하지 않는 관측"에만 나온다.
+  const judged = row !== null && isReportable(row.status);
+  const rel = judged ? (row.relChange ?? null) : null;
   const stats: PubgDetailStat[] = [
     {
       label: "획득 점유율",
@@ -98,11 +102,13 @@ export default async function PubgWeaponPage({ params }: PageProps) {
       tone: rel > 0 ? "up" : "down",
     });
   }
-  if (row) {
+  if (row && judged) {
     stats.push({
       label: "95% CI",
       value: `[${signedPct(row.relCi[0])}, ${signedPct(row.relCi[1])}]`,
     });
+  }
+  if (row) {
     stats.push({
       label: "표본 n",
       value: `${row.n.before.toLocaleString()} → ${row.n.after.toLocaleString()}`,
@@ -134,26 +140,18 @@ export default async function PubgWeaponPage({ params }: PageProps) {
           fallbackMark={statAfter.weaponName}
           stats={stats}
           verdict={
-            row ? (
+            row && judged ? (
               <>
-                <StatusBadge status={row.status} />{" "}
-                {note
-                  ? `공지 "${note.summary}"와 대조한 결과입니다.`
-                  : "43.1 패치노트에 이 무기 항목이 없습니다."}
+                <StatusBadge status={displayStatusOf(row.status)} />{" "}
+                {note ? `공지 "${note.summary}" 대조` : "43.1 패치노트에 이 무기 항목 없음"}
               </>
+            ) : row ? (
+              "유의한 변화 없음"
             ) : (
-              "이 무기는 판정 대상에 포함되지 않았습니다."
+              "판정 대상 아님"
             )
           }
         />
-
-        {!hasRender ? (
-          <p className="text-xs leading-relaxed text-muted">
-            공식 자산 저장소(<span className="font-mono">pubg/api-assets</span>)에{" "}
-            {statAfter.weaponName} 렌더가 없어 이미지를 비웠습니다 — 다른 이미지를 가져다 붙이지
-            않습니다.
-          </p>
-        ) : null}
 
         <SectionCard eyebrow="근거" title="원천" variant="glass">
           <div className="flex flex-col gap-3 p-5 text-sm">
@@ -171,7 +169,7 @@ export default async function PubgWeaponPage({ params }: PageProps) {
                 target="_blank"
                 rel="noreferrer"
               >
-                패치노트 원문 →
+                패치노트 원문 보기 ↗
               </a>
             ) : null}
             {row && row.evidence.matchIds.length > 0 ? (
@@ -184,8 +182,7 @@ export default async function PubgWeaponPage({ params }: PageProps) {
               </div>
             ) : null}
             <p className="text-xs leading-relaxed text-muted">
-              획득 점유율은 스폰율의 <strong className="text-fg-2">대리 지표</strong>입니다.
-              판정 규칙 전체는{" "}
+              판정 규칙은{" "}
               <Link href="/pubg/methodology/" className="text-accent underline-offset-2 hover:underline">
                 방법론
               </Link>

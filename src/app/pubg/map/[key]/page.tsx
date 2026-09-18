@@ -144,8 +144,8 @@ export default async function PubgMapPage({ params }: PageProps) {
           stats={stats}
           verdict={
             oneSided
-              ? "한쪽 구간에만 표본이 잡혀 두 패치를 비교하지 않았습니다 — 없어진 것인지 표본에 안 걸린 것인지 이 표본으로는 구분할 수 없습니다."
-              : "43.1 패치노트에 맵 항목이 없습니다 — 판정을 붙이지 않고 관측값만 표시합니다."
+              ? "한쪽 구간에만 표본이 잡혀 두 패치를 비교하지 않았습니다."
+              : "43.1 패치노트에 맵 항목 없음 · 관측값만 표시"
           }
         />
 
@@ -177,13 +177,7 @@ export default async function PubgMapPage({ params }: PageProps) {
               ))}
             </ul>
           )}
-          <p className="px-5 pt-3 pb-5 text-xs leading-relaxed text-muted">
-            이 맵 안의 총 무기 획득 대비 점유율입니다 — 전 맵 합산 점유율(
-            <Link href="/pubg/compare/" className="text-accent underline-offset-2 hover:underline">
-              대조표
-            </Link>
-            )과 분모가 다릅니다.
-          </p>
+          <p className="px-5 pt-3 pb-5 text-xs text-muted">이 맵 안의 총 무기 획득 대비 점유율</p>
         </SectionCard>
 
         <PubgFooter generatedAt={maps.deltas.meta.generatedAt} nVerdicts={bundle.deltas.meta.n} />
