@@ -277,7 +277,7 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
               </div>
             </SectionCard>
             <SectionCard title="원천 매치" className="flex h-64 flex-col">
-              <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+              <div className="flex min-h-0 flex-1 flex-col">
                 <SourceMatchesPanel
                   matchIds={delta.evidence.matchIds}
                   aggregatePath={delta.evidence.aggregatePath}

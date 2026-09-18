@@ -324,12 +324,17 @@ export default function ReleaseNoteRow({
               const filename = skillGroup.skill
                 ? (spellIcons?.[spellIconKey(group.entity, skillGroup.skill)] ?? null)
                 : null;
-              const record = representativeRecord(skillGroup.notes, noteDeltas);
               // 뱃지는 행당 1개이고(이전엔 노트 줄마다 1개), **보고 가능한 관측**(유의·바닥 통과·노이즈
               // 아님)이 있을 때만 붙는다 — 2026-09-18 라운드6(C1·C5). "짝지은 관측 없음"·"관측 미확인"
               // 같은 부재 배지는 정보가 아니라 잡음이었다. 치장 줄은 원래 붙지 않는다(B4).
+              // scope-critic ST5: `representativeRecord`(상태 우선순위)가 비보고 행을 고르면 같은 스킬에 보고
+              // 가능한 형제 행이 있어도 배지가 사라진다 — 보고 가능한 행 **중에서** 대표를 고른다.
               const cosmeticRow = skillGroup.notes.every(isCosmeticNote);
-              const badgeRecord = record && isReportableRecord(record, qAlpha) ? record : null;
+              const reportableNotes = skillGroup.notes.filter((note) => {
+                const r = noteDeltas[note.id];
+                return r !== undefined && isReportableRecord(r, qAlpha);
+              });
+              const badgeRecord = representativeRecord(reportableNotes, noteDeltas);
               // 판정 문장은 여전히 **노트 줄 단위**다 — 스탯마다 노트 방향이 다를 수 있다
               // (같은 스킬에서 계수는 상향인데 마나는 하향인 경우가 실제로 있다).
               return (

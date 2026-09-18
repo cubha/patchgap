@@ -13,7 +13,7 @@ import type { PubgWeaponStat } from "@/pipeline/aggregate/pubg-weapons";
 import type { PubgDeltaRow } from "@/pipeline/match/pubg-delta";
 import { publicWeaponPath } from "@/pipeline/pubg/asset-path";
 import { weaponHref } from "@/lib/pubgRoutes";
-import { isReportable } from "@/lib/pubgData";
+import { isReportable } from "@/pipeline/shared/pubg-status";
 import { pct, signedPct } from "./shared";
 
 export interface PubgWeaponGridProps {

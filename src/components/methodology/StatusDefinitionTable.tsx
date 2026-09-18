@@ -57,7 +57,7 @@ function buildShownRows(alpha: number): DefinitionRow[] {
     {
       status: "unannounced",
       definition: "패치노트에 대응 조항이 없는 유의 변화. 다른 조항의 파급으로 설명되는 것도 여기 포함(원인이 규명됐는가만 다르다)",
-      condition: `짝 없음 · q<${alpha} · CI가 0 미포함 · 효과크기 바닥 이상`,
+      condition: `짝 없음 · q<${alpha} · CI가 0 미포함 · 효과크기 바닥 이상 (원인 후보가 신뢰도 보통 이상으로 검증되면 파급으로 재분류 — 표시는 같다)`,
     },
   ];
 }

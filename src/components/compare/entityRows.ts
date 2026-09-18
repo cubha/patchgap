@@ -19,14 +19,11 @@
 // ⑤ 대표 상태 = 셀 중 `DISPLAY_SORT_PRIORITY` 최우선. ⑥ 정렬 = 상태 우선순위 → |Δ| 내림차순.
 import type { DeltaEntityType, DeltaRecord } from "@/pipeline/types";
 import { type LaneAxis, parseLaneAxis } from "@/lib/lane";
-import { meetsEffectFloor } from "@/pipeline/aggregate/stats";
-import { isSignificantDelta } from "@/pipeline/shared/significance";
-import {
-  DISPLAY_SORT_PRIORITY,
-  displayStatus,
-  isNoiseStatus,
-  type DisplayStatus,
-} from "@/pipeline/shared/display-status";
+import { DISPLAY_SORT_PRIORITY, displayStatus, type DisplayStatus } from "@/pipeline/shared/display-status";
+import { isReportableRecord } from "@/pipeline/shared/reportable";
+
+// 술어는 shared에 있다(홈과 같은 잣대) — 기존 호출부·테스트를 위해 여기서 재export한다.
+export { isReportableRecord };
 
 /** 표의 지표 열 — 이 순서로 렌더한다. */
 export const ENTITY_METRICS = ["banRate", "winRate", "pickRate", "adoptionRate"] as const;
@@ -53,14 +50,6 @@ export interface EntityCompareRow {
 
 function isEntityMetric(metric: string): metric is EntityMetric {
   return (ENTITY_METRICS as readonly string[]).includes(metric);
-}
-
-/** 화면에 올릴 자격 — 노이즈 아님 ∧ 유의 ∧ 효과크기 바닥 통과. */
-export function isReportableRecord(record: DeltaRecord, qAlpha?: number): boolean {
-  if (isNoiseStatus(record.status)) return false;
-  if (record.delta === null) return false;
-  if (!isSignificantDelta(record, qAlpha)) return false;
-  return meetsEffectFloor(record.metric, record.delta, record.before);
 }
 
 /** 이 행이 선택한 라인 축에 속하는가(규칙 ②). */

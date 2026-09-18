@@ -12,17 +12,11 @@
 // 불일치가 일치보다 앞) → ③|Δ| 큰 쪽. 통과 행이 하나도 없으면 아무 행이라도 남겨 노트가 짝을
 // 잃지 않게 한다(짝의 존재 자체는 판정 엔진의 사실이고, 여기서는 대표만 고른다).
 import type { DeltaRecord } from "@/pipeline/types";
-import { meetsEffectFloor } from "@/pipeline/aggregate/stats";
-import { isSignificantDelta } from "@/pipeline/shared/significance";
+import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
 
-function reportable(record: DeltaRecord, qAlpha?: number): boolean {
-  return (
-    record.delta !== null &&
-    isSignificantDelta(record, qAlpha) &&
-    meetsEffectFloor(record.metric, record.delta, record.before)
-  );
-}
+// 자격 술어는 shared/reportable.ts 한 곳(라운드6 scope-critic ST2 — 세 곳 중복 제거).
+const reportable = isReportableRecord;
 
 /** a가 b보다 대표로 더 적합하면 true. */
 function better(a: DeltaRecord, b: DeltaRecord, qAlpha?: number): boolean {

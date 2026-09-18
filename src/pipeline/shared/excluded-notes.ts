@@ -12,7 +12,8 @@
 // `section==="champion"`이라 섹션으로도 못 가른다. 투표 결과 묶음은 이름이 곧 정체다.
 import type { PatchNoteItem } from "../types";
 
-const EXCLUDED_ENTITY_RE = /의회|투표\s*\d*\s*결과/;
+// scope-critic ST4 권고: "의회" 단독 매치는 미래의 "의회 공지" 같은 묶음을 오탐한다 — 투표와 결합된 형태만.
+const EXCLUDED_ENTITY_RE = /의회.*투표|투표\s*\d*\s*결과/;
 
 export function isExcludedNote(note: Pick<PatchNoteItem, "entity">): boolean {
   return EXCLUDED_ENTITY_RE.test(note.entity);

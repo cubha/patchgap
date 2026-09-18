@@ -20,10 +20,12 @@ export default function SourceMatchesPanel({
   aggregatePath,
   snapshotHash,
 }: SourceMatchesPanelProps) {
+  // 2026-09-18 라운드6(scope-critic ST8): 카드가 고정 높이(h-64)가 되면서 **칩 목록만** 내부 스크롤하고
+  // 메타(집계 경로·해시)는 카드 하단에 고정한다 — 래퍼 전체가 스크롤하면 메타가 같이 밀려 보이지 않는다.
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex min-h-0 flex-1 flex-col">
       {matchIds.length > 0 ? (
-        <div className="flex flex-wrap gap-2 p-5">
+        <div className="flex min-h-0 flex-1 flex-wrap content-start gap-2 overflow-y-auto p-5">
           {matchIds.map((id) => (
             <span
               key={id}
@@ -38,7 +40,7 @@ export default function SourceMatchesPanel({
       )}
       {/* mt-auto — 부모(SectionCard)가 옆 컬럼과 하단을 맞추려 flex-1로 늘어난 경우, 이 메타
           블록이 항상 카드 하단에 붙는다. 늘어난 공간이 없으면 자연 높이 그대로. */}
-      <div className="mt-auto flex min-w-0 flex-col gap-2 px-5 pb-5 font-mono text-xs text-muted">
+      <div className="flex min-w-0 flex-col gap-2 border-t border-border-soft px-5 py-3 font-mono text-xs text-muted">
         {/* `break-all`은 **이 두 줄에만** 건다(2026-09-18 채점 라운드4 S3).
             **왜 필요한가 — 상세 페이지 좌우 폭 역전의 원인이 이 한 줄이었다.** `aggregatePath`는
             `data/aggregated/26.18/champions.json#rows[championId=62,scope=position,position=JUNGLE]`

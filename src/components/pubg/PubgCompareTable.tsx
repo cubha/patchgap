@@ -18,7 +18,7 @@ import { useMemo, useState } from "react";
 import FilterPill from "@/components/FilterPill";
 import StatusBadge from "@/components/StatusBadge";
 import { signedPct } from "@/components/pubg/shared";
-import { isReportable } from "@/lib/pubgData";
+import { isReportable } from "@/pipeline/shared/pubg-status";
 import { weaponHref } from "@/lib/pubgRoutes";
 import type { PubgDeltaRow } from "@/pipeline/match/pubg-delta";
 import { displayStatusOf } from "@/pipeline/shared/display-status";

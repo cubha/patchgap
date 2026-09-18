@@ -85,10 +85,19 @@ export default async function PubgWeaponPage({ params }: PageProps) {
   const assets = loadPubgAssets();
   const hasRender = assets?.weapons.includes(weaponKey) ?? false;
 
-  // 2026-09-18 라운드6(C1): 판정이 선 행만 배지·변화를 말한다. 노이즈 상태(바닥 미달·변화 없음·표본 부족)는
-  // "유의한 변화 없음"으로만 — 그 상태 어휘는 방법론 "표시하지 않는 관측"에만 나온다.
+  // 2026-09-18 라운드6(C1 + scope-critic ST9): 목록(브리핑·대조표·그리드)은 판정이 선 무기만 강조하지만,
+  // 사용자가 **직접 연 상세**에서는 관측값(변화·CI)을 숨기지 않고 판정이 없는 이유를 사실대로 말한다 —
+  // 표본 부족을 "유의한 변화 없음"이라 부르면 거짓이다. 배지는 판정이 선 행에만.
   const judged = row !== null && isReportable(row.status);
-  const rel = judged ? (row.relChange ?? null) : null;
+  const rel = row?.relChange ?? null;
+  const unjudgedReason =
+    row === null
+      ? "판정 대상 아님"
+      : row.status === "insufficient-sample"
+        ? "획득 표본이 부족해 판정하지 않음"
+        : row.status === "below-threshold"
+          ? "변화가 효과크기 바닥 미만이라 판정하지 않음"
+          : "유의한 변화 없음";
   const stats: PubgDetailStat[] = [
     {
       label: "획득 점유율",
@@ -102,13 +111,11 @@ export default async function PubgWeaponPage({ params }: PageProps) {
       tone: rel > 0 ? "up" : "down",
     });
   }
-  if (row && judged) {
+  if (row) {
     stats.push({
       label: "95% CI",
       value: `[${signedPct(row.relCi[0])}, ${signedPct(row.relCi[1])}]`,
     });
-  }
-  if (row) {
     stats.push({
       label: "표본 n",
       value: `${row.n.before.toLocaleString()} → ${row.n.after.toLocaleString()}`,
@@ -145,10 +152,8 @@ export default async function PubgWeaponPage({ params }: PageProps) {
                 <StatusBadge status={displayStatusOf(row.status)} />{" "}
                 {note ? `공지 "${note.summary}" 대조` : "43.1 패치노트에 이 무기 항목 없음"}
               </>
-            ) : row ? (
-              "유의한 변화 없음"
             ) : (
-              "판정 대상 아님"
+              unjudgedReason
             )
           }
         />

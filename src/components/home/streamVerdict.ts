@@ -11,6 +11,7 @@
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import { metricLabel } from "@/lib/format";
 import { meetsEffectFloor } from "@/pipeline/aggregate/stats";
+import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { absDelta, isSignificantDelta } from "./logic";
 
 /** 노트 방향(direction) → 시안 표기. `unknown`은 방향을 지어내지 않고 "변경"으로 둔다. */
@@ -58,11 +59,10 @@ export function selectReportableObservation(
   rows: readonly DeltaRecord[],
   qAlpha?: number
 ): DeltaRecord | null {
+  // 자격 술어는 shared/reportable.ts 한 곳 — 대조표 `entityRows`와 같은 잣대(라운드6 scope-critic ST2).
   let best: DeltaRecord | null = null;
   for (const row of rows) {
-    if (row.delta === null) continue;
-    if (!isSignificantDelta(row, qAlpha)) continue;
-    if (!meetsEffectFloor(row.metric, row.delta, row.before)) continue;
+    if (!isReportableRecord(row, qAlpha)) continue;
     if (!best || absDelta(row) > absDelta(best)) best = row;
   }
   return best;

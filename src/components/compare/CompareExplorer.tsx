@@ -111,8 +111,13 @@ export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons
               <span className="font-mono text-xs tabular-nums text-muted">{entityRows.length}개 엔티티</span>
             </div>
             {focusMissing ? (
+              // scope-critic ST3: 행이 없는 이유는 둘이다 — 라인·상태 필터에 걸렸거나, 유의한 관측이 없거나.
+              // 필터가 "전체"가 아니면 그쪽을 먼저 의심하는 것이 사실에 가깝다(아이템은 라인 선택 시 항상 빠진다).
               <p className="border-b border-border-soft px-5 py-2 text-xs text-muted">
-                <strong className="text-fg-2">{selectedGroup?.entity}</strong> — 유의한 관측이 없어 이 표에 행이 없습니다
+                <strong className="text-fg-2">{selectedGroup?.entity}</strong> —{" "}
+                {laneFilter !== "all" || statusFilter !== "all"
+                  ? "현재 라인·상태 필터에서는 이 표에 행이 없습니다"
+                  : "유의한 관측이 없어 이 표에 행이 없습니다"}
               </p>
             ) : null}
             <DeltaTable pair={pair} rows={entityRows} focusKey={focusKey} />
