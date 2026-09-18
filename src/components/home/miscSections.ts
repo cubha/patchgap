@@ -16,23 +16,29 @@
 // 순서는 사용자가 부른 순서(버그 수정 → 편의성 개선 → 신규 스킨) 뒤에 증강·기타.
 import type { PatchNoteItem } from "@/pipeline/types";
 import { isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
+import { isModeSectionNote } from "@/pipeline/shared/excluded-notes";
 import type { MatchedStreamGroup } from "./releaseStream";
 
-export type MiscCategory = "bugfix" | "qol" | "cosmetic" | "augment" | "other";
+export type MiscCategory = "bugfix" | "qol" | "cosmetic" | "augment" | "mode" | "other";
 
-export const MISC_CATEGORY_ORDER: readonly MiscCategory[] = ["bugfix", "qol", "cosmetic", "augment", "other"];
+export const MISC_CATEGORY_ORDER: readonly MiscCategory[] = ["bugfix", "qol", "cosmetic", "augment", "mode", "other"];
 
 export const MISC_CATEGORY_LABELS: Record<MiscCategory, string> = {
   bugfix: "버그 수정",
   qol: "편의성 개선",
   cosmetic: "신규 스킨·치장",
   augment: "증강",
+  mode: "게임 모드(클래식)",
   other: "기타 변경",
 };
 
 export function classifyMiscNote(note: PatchNoteItem): MiscCategory {
   if (/증강/.test(note.entity)) return "augment";
   if (isCosmeticNote(note)) return "cosmetic";
+  // 클래식 모드 섹션(#patch-classic)의 챔피언 줄(26.18 "피오라" 65줄) — SR 밸런스가 아니라 모드 콘텐츠다.
+  // 같은 앵커 아래 「버그 수정」·「시스템 사양」 같은 시스템 줄은 이름 규칙으로 가르므로 챔피언·아이템
+  // 섹션으로 파싱된 줄만 여기서 잡는다(라운드6 재판정 보완 1).
+  if ((note.section === "champion" || note.section === "item") && isModeSectionNote(note)) return "mode";
   // 「버그 수정 및 편의성 개선」처럼 묶음 이름이 두 종류를 다 말하면 이름은 힌트가 못 된다 — 요약만 본다.
   const mixed = /버그/.test(note.entity) && /편의성|개선/.test(note.entity);
   const text = mixed ? note.summary : `${note.entity} ${note.summary}`;

@@ -5,7 +5,7 @@
 // scripts/run-notify.ts 두 곳에 동일 로직이 따로 구현돼 있었다).
 
 import type { PatchNoteItem } from "../types";
-import { isExcludedNote } from "./excluded-notes";
+import { isDisplayExcludedNote } from "./excluded-notes";
 
 /** 챔피언·아이템 노트만 "엔티티"로 센다(시스템/기타 제외) — entity-match.ts 블로킹 대상 정의와
  * 동일. */
@@ -23,7 +23,8 @@ export function countRelevantNoteEntities(items: readonly PatchNoteItem[]): numb
     if (!ENTITY_NOTE_SECTIONS.has(item.section)) continue;
     // 2026-09-18 라운드6(L1): 의회 투표 결과 묶음은 section=champion으로 파싱돼 있지만 엔티티가 아니다 —
     // 홈 스트림이 제외하는 것과 같은 술어(excluded-notes.ts)로 세지 않는다(홈·방법론·디스코드 정합).
-    if (isExcludedNote(item)) continue;
+    // 게임 모드 섹션 줄(클래식 피오라 65줄)도 SR 엔티티가 아니다(라운드6 재판정 보완 1).
+    if (isDisplayExcludedNote(item)) continue;
     keys.add(`${item.section}:${item.entity}`);
   }
   return keys.size;

@@ -191,7 +191,7 @@ describe("CoverageBar — 전부 0", () => {
   it("0을 그대로 렌더하고 표본 부족·바닥 미달은 세지 않는다(2026-09-18 라운드6 C1)", () => {
     const { container } = render(
       <CoverageBar
-        stats={{ noteEntityCount: 0, noteItemCount: 0, matchedCount: 0, unannouncedCount: 0, lowSampleCount: 0, belowThresholdCount: 0, indirectEffectCount: 0 }}
+        stats={{ noteEntityCount: 0, noteItemCount: 0, matchedCount: 0, unannouncedCount: 0, lowSampleCount: 0, belowThresholdCount: 0, indirectEffectCount: 0, gapEntityCount: 0 }}
       />
     );
     expect(container.textContent).toContain("노트 0엔티티(0항목) 중 관측 짝 0");
@@ -201,7 +201,7 @@ describe("CoverageBar — 전부 0", () => {
 });
 
 describe("CompareExplorer — 통합", () => {
-  const coverage = { noteEntityCount: 0, noteItemCount: 0, matchedCount: 0, unannouncedCount: 0, lowSampleCount: 0, belowThresholdCount: 0, indirectEffectCount: 0 };
+  const coverage = { noteEntityCount: 0, noteItemCount: 0, matchedCount: 0, unannouncedCount: 0, lowSampleCount: 0, belowThresholdCount: 0, indirectEffectCount: 0, gapEntityCount: 0 };
 
   it("데이터 없음: 크래시 없이 상태 칩 4 + 라인 필터 6·내비게이터·테이블·커버리지 바를 렌더한다", () => {
     const { container } = render(<CompareExplorer pair={null} notes={[]} rows={[]} coverage={coverage} />);

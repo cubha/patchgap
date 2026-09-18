@@ -163,7 +163,7 @@ function StatLine({ note }: { note: PatchNoteItem }) {
 }
 
 /** 인과 체인 1줄(B2) — `IndirectEffectPanel`이 그리던 `관측 ← [섹션] 원인`을 그대로 옮겼다. */
-function CauseChain({ entry }: { entry: IndirectEffectEntry }) {
+function CauseChain({ entry, href }: { entry: IndirectEffectEntry; href: string }) {
   const { causeEntity, causeSection, causeAnchor, causeText } = entry;
   return (
     <>
@@ -194,7 +194,13 @@ function CauseChain({ entry }: { entry: IndirectEffectEntry }) {
           <span className="text-muted">원인 노트 확인 불가</span>
         )}
       </p>
-      <p className="mt-1 text-xs leading-relaxed text-muted">{causeText}</p>
+      {/* 재판정 보완 3: 파급 카드도 상태 어휘("추정 원인")와 자기 관측 근거 링크를 가진다 — 다른 Gap 카드와 같은 틀. */}
+      <p className="mt-1 text-xs leading-relaxed text-muted">
+        추정 원인: {causeText}{" "}
+        <Link href={href} className="font-bold text-accent hover:underline">
+          근거 보기 →
+        </Link>
+      </p>
     </>
   );
 }
@@ -284,7 +290,7 @@ export default function ReleaseNoteRow({
             ) : null}
             {/* B2 — 원인이 규명된 Gap은 인과 체인을, 아닌 Gap은 네 상태를 구분한 문구를 쓴다. */}
             {causeEntry ? (
-              <CauseChain entry={causeEntry} />
+              <CauseChain entry={causeEntry} href={itemHref(gapRepresentative!.id)} />
             ) : gapCause ? (
               <p className={`mt-2 text-xs ${CAUSE_TONE[gapCause.mode]}`}>
                 {gapCause.mode === "verified" ? "추정 원인: " : gapCause.mode === "weak" ? "가능성(신뢰도 낮음): " : null}
@@ -293,7 +299,7 @@ export default function ReleaseNoteRow({
                   href={itemHref(gapRepresentative!.id)}
                   className="font-bold text-accent hover:underline"
                 >
-                  관측 근거 보기 →
+                  근거 보기 →
                 </Link>
               </p>
             ) : null}

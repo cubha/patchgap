@@ -29,7 +29,7 @@ import {
 } from "@/components/home/releaseStream";
 import { isSectionBundle } from "@/components/home/sectionBundle";
 import { buildMiscSections } from "@/components/home/miscSections";
-import { isExcludedNote } from "@/pipeline/shared/excluded-notes";
+import { isExcludedNote, isModeSectionNote } from "@/pipeline/shared/excluded-notes";
 import type { StreamEntityIcon } from "@/components/home/releaseStreamEntity";
 import { indexNoteDeltas, indexNoteDeltaRows } from "@/components/home/noteDeltaIndex";
 import { resolveStreamEntityIcon } from "@/components/home/releaseStreamEntity";
@@ -86,9 +86,12 @@ export default function Home() {
   const sortedMatched = sortMatchedGroups(matchedGroups, deltas, deltas?.meta.qAlpha, sectionBundles);
   // 2026-09-18 라운드6(L2): tier 3(섹션 묶음)·tier 4(치장)는 카드가 아니라 목록 끝 "기타 변경" 1블록으로
   // 모은다(miscSections.ts). tier 0~2(챔피언·아이템 밸런스 줄)는 카드 그대로 — 패치 내용은 누락하지 않는다.
+  // 게임 모드 섹션 묶음(클래식 "피오라" 65줄)은 관측이 짝지어져 있어도 카드가 아니라 기타 변경이다 —
+  // SR 챔피언 공지가 아니다(라운드6 재판정 보완 1, excluded-notes.ts).
+  const isModeGroup = (group: MatchedStreamGroup) => group.notes.every(isModeSectionNote);
   const tierOf = (group: MatchedStreamGroup) => contentTier(group, noteDeltas, deltas?.meta.qAlpha, sectionBundles);
-  const cardGroups = sortedMatched.filter((group) => tierOf(group) <= 2);
-  const miscSections = buildMiscSections(sortedMatched.filter((group) => tierOf(group) >= 3));
+  const cardGroups = sortedMatched.filter((group) => tierOf(group) <= 2 && !isModeGroup(group));
+  const miscSections = buildMiscSections(sortedMatched.filter((group) => tierOf(group) >= 3 || isModeGroup(group)));
   const streamGroups = [...cardGroups, ...rawGroups.filter((g) => g.kind !== "matched")];
   const streamEntries: ReleaseStreamEntry[] = streamGroups.map((group) => {
     const icon = icons.get(group)!;

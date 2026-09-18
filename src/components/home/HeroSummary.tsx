@@ -72,10 +72,7 @@ export default function HeroSummary({ stats, action }: HeroSummaryProps) {
           챔피언·아이템을 바꿨다고 말했고, 통계는{" "}
           <strong className="font-mono tabular-nums">{fmtInt(statCount)}</strong>개 변화를 말합니다
         </h1>
-        <p className="ambient-hero-sub mt-3 max-w-2xl text-sm text-fg">
-          패치 전후 KR 상위 티어 매치를 각각 집계해 통계적으로 유의한 변화만 셉니다 · 노트에 없는
-          변화는 <strong className="text-accent">미공지 Gap</strong>으로 따로 모읍니다
-        </p>
+        {/* 계산 방법 설명 문장("패치 전후 … 유의한 변화만 셉니다")은 방법론으로 옮겼다(재판정 보완 6, C3). */}
         {/* 인트로 재생 버튼은 2026-09-18 라운드6(사용자 C4 "인트로재생 버튼 제거")에 뺐다. `action`
             슬롯은 히어로 아래 조작 요소 주입용으로 남긴다(지금은 호출부가 넘기지 않는다). */}
         {action ? <div className="mt-4">{action}</div> : null}
@@ -91,7 +88,7 @@ export default function HeroSummary({ stats, action }: HeroSummaryProps) {
           <strong className="block font-display text-3xl font-bold tabular-nums text-fg">
             {fmtInt(statCount)}
           </strong>
-          <span className="text-sm text-muted">유의 변화</span>
+          <span className="text-sm text-muted">유의한 관측</span>
         </div>
         {/* hover 채움(2026-09-13·6차 연속): `bg-surface-warm`(완전 불투명)은 hover 순간 이 타일만
             유리가 꺼져 보였다 — 유리 패널 안의 상태 표현은 전부 반투명으로 통일한다. */}

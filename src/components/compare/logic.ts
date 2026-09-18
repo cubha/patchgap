@@ -3,6 +3,8 @@
 // 렌더(CompareExplorer.tsx 등)와 분리해 단위 테스트한다(완료 조건 "상태 필터·정렬 로직(순수
 // 함수)"). UX-BRIEF §3 "02 대조표" 기준.
 
+import { isGapStatus } from "@/pipeline/shared/status-order";
+import { isDisplayExcludedNote } from "@/pipeline/shared/excluded-notes";
 import type { DeltaRecord, PatchNoteItem, PatchNoteSection } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
 import { fmtCiHalf, fmtDeltaInt, fmtDeltaSec, fmtInt, fmtPp } from "@/lib/format";
@@ -140,6 +142,8 @@ export function groupNotesForNav(items: readonly PatchNoteItem[]): NoteEntityGro
   const order: string[] = [];
   const byEntity = new Map<string, NoteEntityGroup>();
   for (const item of items) {
+    // 의회 투표 결과·게임 모드 섹션 줄은 SR 엔티티 항목이 아니다 — 홈·엔티티 수와 같은 술어(라운드6 보완 1·5).
+    if (isDisplayExcludedNote(item)) continue;
     const key = `${item.section}:${item.entity}`;
     const group = byEntity.get(key);
     if (group) {
@@ -247,6 +251,9 @@ export interface CoverageStats {
   /** 2026-09-13 신규 — 노트 직접 조항은 없으나 다른 조항의 파급효과로 설명되는 건수
    * (`indirect-effect`). `unannouncedCount`에서 빠져나간 만큼이 여기로 온다. */
   indirectEffectCount: number;
+  /** 미공지(`unannounced`+`indirect-effect`) **엔티티** 수 — 커버리지 바·히어로 타일·Gap 탭이 같은 단위를
+   * 쓴다(2026-09-18 라운드6 재판정 보완 4: 관측 행 49 vs 엔티티 28이 설명 없이 병존했다). */
+  gapEntityCount: number;
 }
 
 export function computeCoverage(rows: DeltaRecord[], notes: NotesFile | null): CoverageStats {
@@ -255,12 +262,14 @@ export function computeCoverage(rows: DeltaRecord[], notes: NotesFile | null): C
   let lowSampleCount = 0;
   let belowThresholdCount = 0;
   let indirectEffectCount = 0;
+  const gapEntities = new Set<string>();
   for (const row of rows) {
     if (row.status === "announced-consistent" || row.status === "announced-inconsistent") matchedCount++;
     else if (row.status === "unannounced") unannouncedCount++;
     else if (row.status === "insufficient-sample") lowSampleCount++;
     else if (row.status === "below-threshold") belowThresholdCount++;
     else if (row.status === "indirect-effect") indirectEffectCount++;
+    if (isGapStatus(row.status)) gapEntities.add(`${row.entityType}:${row.entityKey}`);
   }
   return {
     noteEntityCount: countRelevantNoteEntities(notes),
@@ -270,5 +279,6 @@ export function computeCoverage(rows: DeltaRecord[], notes: NotesFile | null): C
     lowSampleCount,
     belowThresholdCount,
     indirectEffectCount,
+    gapEntityCount: gapEntities.size,
   };
 }

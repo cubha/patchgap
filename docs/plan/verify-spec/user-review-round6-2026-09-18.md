@@ -83,3 +83,7 @@
 
 ## 전체
 - `data/aggregated/**`·`patchnotes-parser.ts`·`verdict.ts`·`pubg-delta.ts`·`next.config.ts` diff 0 — Phase 3 verify 전 `git status`/`git diff --stat`으로 확인한다.
+
+## FIX-3 (2026-09-19 — 독립 채점 1회차 82/100 보완)
+- 구현 결정: `excluded-notes.ts`에 `isModeSectionNote`(앵커 해시 `patch-(classic|aram|arena|swiftplay|brawl|mayhem)`)·`isDisplayExcludedNote` 추가. `display-normalize.ts`(순수)가 `loadDeltas`에서 표시용 정규화(짝 전부 제외 → unannounced / 제외 인용 원인 → verified:false / 검증 후보 0인 indirect-effect → unannounced, counts 재계산). 홈 `miscSections` 카테고리 `mode`("게임 모드(클래식)", champion·item 섹션 줄만). 대조표 내비 제외. 미공지 수 = 엔티티(`computeHeadline`·`computeCoverage.gapEntityCount`). 파급 카드 "추정 원인: … 근거 보기 →". 히어로 설명 문장 제거(홈·PUBG)·"유의한 관측"·"근거 보기 →"·"판정 규칙 보기 →"·디스코드 패널 어휘.
+- 미확인 사항: ① 피오라 픽률(−2.3%p, q=0)이 표시용 미공지 Gap 카드로 올라오며 원인은 "원인 미검토"(LLM이 공지로 보고 분석하지 않았다) — 근본 수정(파서 스코프+재매칭)은 사용자 결정. ② 앵커 해시 규칙이 26.18 외 패치에서 어떤 섹션을 잡는지는 26.16·26.17 실데이터로만 확인(빌드 통과). ③ 보완 7(LLM 문장) 미반영.

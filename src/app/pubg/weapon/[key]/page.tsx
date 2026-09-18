@@ -186,13 +186,9 @@ export default async function PubgWeaponPage({ params }: PageProps) {
                 </span>
               </div>
             ) : null}
-            <p className="text-xs leading-relaxed text-muted">
-              판정 규칙은{" "}
-              <Link href="/pubg/methodology/" className="text-accent underline-offset-2 hover:underline">
-                방법론
-              </Link>
-              에 있습니다.
-            </p>
+            <Link href="/pubg/methodology/" className="text-xs font-bold text-accent hover:underline">
+              판정 규칙 보기 →
+            </Link>
           </div>
         </SectionCard>
 

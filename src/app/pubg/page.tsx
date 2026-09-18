@@ -70,8 +70,10 @@ export default function PubgPage() {
             }
             lead={
               <>
-                43.1 패치노트가 말한 무기 변경을 실제 매치의 획득 점유율로 대조합니다. 공지에 없는데 움직인
-                무기는 <strong className="text-fg">미공지</strong>로 따로 모읍니다.
+                {/* 설명 문장은 방법론으로(재판정 보완 6) — 리드는 표본 수치만. */}
+                KR 스쿼드 <strong className="text-fg">{before.nMatches.toLocaleString()}</strong> →{" "}
+                <strong className="text-fg">{after.nMatches.toLocaleString()}</strong>매치 · 무기{" "}
+                <strong className="text-fg">{deltas.meta.n}</strong>종
               </>
             }
           />
@@ -84,7 +86,7 @@ export default function PubgPage() {
             </div>
             <div className="border-r border-border-soft p-5">
               <strong className="block font-display text-3xl font-bold tabular-nums text-fg">{reportable.length}</strong>
-              <span className="mt-1 block text-xs text-muted">유의 변화</span>
+              <span className="mt-1 block text-xs text-muted">유의한 관측</span>
             </div>
             <div className="p-5">
               <strong className="block font-display text-3xl font-bold tabular-nums text-accent">{unannounced.length}</strong>

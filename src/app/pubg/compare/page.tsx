@@ -37,8 +37,7 @@ export default function PubgComparePage() {
             title="무기 판정표 — 42.3 ⇒ 43.1"
             lead={
               <>
-                {deltas.meta.n}개 무기 중 판정이 선 <strong className="text-fg">{judged}개</strong>입니다. 무기명을
-                누르면 상세로 갑니다.
+                {deltas.meta.n}개 무기 중 판정 <strong className="text-fg">{judged}개</strong>
               </>
             }
           />

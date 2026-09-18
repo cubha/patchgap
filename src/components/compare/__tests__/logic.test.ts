@@ -295,6 +295,17 @@ describe("shortNoteId", () => {
   });
 });
 
+describe("groupNotesForNav — 제외 노트(라운드6 재판정 보완 1·5)", () => {
+  it("의회 투표 결과·게임 모드 섹션 줄은 내비 항목이 되지 않는다", () => {
+    const items = [
+      note({ id: "a", entity: "에코", anchorUrl: "https://x/#patch-ekko" }),
+      note({ id: "b", entity: "의회 - 투표 1 결과", anchorUrl: "https://x/#patch-classic" }),
+      note({ id: "c", entity: "피오라", anchorUrl: "https://x/#patch-classic" }),
+    ];
+    expect(groupNotesForNav(items).map((g) => g.entity)).toEqual(["에코"]);
+  });
+});
+
 describe("computeCoverage", () => {
   it("빈 입력(rows=[], notes=null)에서도 0으로 안전하게 계산된다", () => {
     expect(computeCoverage([], null)).toEqual({
@@ -305,10 +316,11 @@ describe("computeCoverage", () => {
       lowSampleCount: 0,
       belowThresholdCount: 0,
       indirectEffectCount: 0,
+      gapEntityCount: 0,
     });
   });
 
-  it("상태별 집계 + 노트 엔티티 수(+원문 항목 수)", () => {
+  it("상태별 집계 + 노트 엔티티 수(+원문 항목 수) + 미공지 엔티티 수(라운드6 보완 4)", () => {
     const notes = notesFile([note({ id: "a", entity: "A" }), note({ id: "b", entity: "A" })]);
     const rows = [
       delta({ id: "1", status: "announced-consistent" }),
@@ -326,6 +338,8 @@ describe("computeCoverage", () => {
       lowSampleCount: 1,
       belowThresholdCount: 1,
       indirectEffectCount: 1,
+      // 미공지 2행(unannounced·indirect-effect)이 같은 엔티티라 엔티티 수는 1.
+      gapEntityCount: 1,
     });
   });
 });

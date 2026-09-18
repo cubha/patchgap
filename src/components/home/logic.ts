@@ -79,6 +79,7 @@ export interface HeadlineStats {
    * 셋이 어긋나면 화면이 스스로를 반박한다(PLAN-home-tab-split-intro-fix-2026-09-14.md
    * "카운트 배지 소스").
    */
+  /** 미공지 Gap **엔티티** 수(관측 행 수가 아니다 — Gap 탭 카드 수와 같다). */
   unannouncedCount: number;
 }
 
@@ -95,12 +96,14 @@ export function computeHeadline(
   const noteItemCount = notes?.meta.itemCount ?? 0;
   const rows = deltas?.rows ?? [];
   let statCount = 0;
-  let unannouncedCount = 0;
+  // 미공지는 **엔티티 수**로 센다(라운드6 재판정 보완 4) — Gap 탭 카드·대조표 미공지 행·라인 분포 패널이
+  // 전부 엔티티 단위라, 관측 행 수(49)를 타일에 쓰면 카드 28개와 어긋났다.
+  const unannouncedEntities = new Set<string>();
   for (const row of rows) {
     if (isSignificantDelta(row, qAlpha)) statCount++;
-    if (isGapStatus(row.status)) unannouncedCount++;
+    if (isGapStatus(row.status)) unannouncedEntities.add(`${row.entityType}:${row.entityKey}`);
   }
-  return { noteEntityCount, noteItemCount, statCount, unannouncedCount };
+  return { noteEntityCount, noteItemCount, statCount, unannouncedCount: unannouncedEntities.size };
 }
 
 /** delta===null은 "측정 불가"에 가까운 취급으로 정렬 맨 뒤로 보낸다(ST-08 verdict.sortDeltas와

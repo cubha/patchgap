@@ -32,6 +32,13 @@ function group(entity: string, notes: PatchNoteItem[]): MatchedStreamGroup {
 }
 
 describe("classifyMiscNote", () => {
+  it("클래식 모드 섹션(#patch-classic)의 챔피언 줄 → mode(라운드6 재판정 보완 1: 26.18 '피오라' 65줄)", () => {
+    expect(classifyMiscNote(note({ section: "champion", entity: "피오라", skill: "Q - 찌르기", summary: "피오라가 돌진하여 주변 적을 공격합니다." }))).toBe("mode");
+    expect(MISC_CATEGORY_LABELS.mode).toBe("게임 모드(클래식)");
+    // 같은 앵커 아래라도 이름이 카테고리를 말하는 줄은 이름 규칙이 먼저다.
+    expect(classifyMiscNote(note({ entity: "버그 수정", summary: "버그를 수정했습니다." }))).toBe("bugfix");
+  });
+
   it("버그 수정 묶음 → bugfix", () => {
     expect(classifyMiscNote(note({ entity: "버그 수정", summary: "티모의 버섯 함정이 정상적으로 지속되지 않던 버그를 수정했습니다." }))).toBe("bugfix");
   });
@@ -88,8 +95,8 @@ describe("buildMiscSections", () => {
     expect(total).toBe(6);
   });
 
-  it("빈 입력은 빈 배열 · 라벨 표는 5종 전부 있다", () => {
+  it("빈 입력은 빈 배열 · 라벨 표는 6종 전부 있다", () => {
     expect(buildMiscSections([])).toEqual([]);
-    expect(Object.keys(MISC_CATEGORY_LABELS).sort()).toEqual(["augment", "bugfix", "cosmetic", "other", "qol"]);
+    expect(Object.keys(MISC_CATEGORY_LABELS).sort()).toEqual(["augment", "bugfix", "cosmetic", "mode", "other", "qol"]);
   });
 });
