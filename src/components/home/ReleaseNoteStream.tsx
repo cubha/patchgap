@@ -39,8 +39,9 @@ import { panelSurfaceClass } from "@/lib/panelSurface";
 import ReleaseNoteRow from "./ReleaseNoteRow";
 import type { CosmeticSkinItem } from "./CosmeticSkinPreview";
 import type { IndirectEffectEntry } from "./indirectEffects";
-import type { ReleaseStreamGroup } from "./releaseStream";
+import type { ContentTier, ReleaseStreamGroup } from "./releaseStream";
 import type { StreamEntityIcon } from "./releaseStreamEntity";
+import { segmentStream } from "./streamSegments";
 
 type StreamTab = "content" | "gap";
 
@@ -62,6 +63,11 @@ export interface ReleaseStreamEntry {
   /** 이 엔티티의 position-scope 델타에서 도출한 라인 집합. 빈 배열이면 "전체" 필터에서만
    * 노출된다(라인을 추측하지 않음 — src/lib/lane.ts의 lanesForEntityKey 계약). */
   lanes: LanePosition[];
+  /** 공지 그룹의 티어(releaseStream.contentTier) — page.tsx가 정렬에 쓴 것과 **같은 값**.
+   * 미공지 그룹은 undefined. 접기(라운드5 E2)가 이 값으로 tier 2를 묶는다. */
+  tier?: ContentTier;
+  /** 섹션 묶음(라운드5 B2 — sectionBundle.ts). 엔티티 카드가 아닌 위계로 그린다. */
+  sectionBundle?: boolean;
 }
 
 export interface ReleaseNoteStreamProps {
@@ -121,6 +127,22 @@ export default function ReleaseNoteStream({
     [laneFiltered, tab]
   );
 
+  const renderRow = (entry: ReleaseStreamEntry) => (
+    <ReleaseNoteRow
+      key={groupKey(entry.group)}
+      group={entry.group}
+      icon={entry.icon}
+      spellIcons={spellIcons}
+      noteDeltas={noteDeltas}
+      noteDeltaRows={noteDeltaRows}
+      patch={patch}
+      qAlpha={qAlpha}
+      causes={causes}
+      skinPreviews={skinPreviews}
+      sectionBundle={entry.sectionBundle}
+    />
+  );
+
   return (
     // NoteNavigator.tsx(/compare/)와 동일 골격 — <section>이 panel-surface-glass(레일+채움)를
     // 소유하고, 탭 행 아래 <ul>은 순수 스크롤 컨테이너(자체 표면 없음). 탭 행은 목록이 비어도
@@ -166,20 +188,36 @@ export default function ReleaseNoteStream({
         // 읽힌다(의도된 부수효과, panel.css 주석 참고). 2026-09-14부터 이 표면 클래스는
         // <ul>이 아니라 부모 <section>에 있다 — 탭 행도 같은 레일 아래 들어오게 하려는 것.
         <ul className="min-h-0 flex-1 overflow-y-auto">
-          {filtered.map((entry) => (
-            <ReleaseNoteRow
-              key={groupKey(entry.group)}
-              group={entry.group}
-              icon={entry.icon}
-              spellIcons={spellIcons}
-              noteDeltas={noteDeltas}
-              noteDeltaRows={noteDeltaRows}
-              patch={patch}
-              qAlpha={qAlpha}
-              causes={causes}
-              skinPreviews={skinPreviews}
-            />
-          ))}
+          {segmentStream(filtered).map((segment) =>
+            segment.kind === "rows" ? (
+              segment.entries.map((entry) => renderRow(entry))
+            ) : (
+              // E2(라운드5) — "관측 변화 없음" 그룹(tier 2)을 요약 1행으로 접는다. 행은 전부 그 안에
+              // 있고 펼치면 카드 그대로다(숨기지 않는다 — 아래로 내릴 뿐이라는 ST-8 결정의 연장).
+              // 요약행은 **건수만** 말한다: 6건 중 5건이 사유 혼재(mixed)라 그룹 단위로 사유를
+              // 단정하면 S4가 고친 "대표 1행 사유 거짓"이 그룹 단위로 재발한다. 조건 분기 없이
+              // 항상 접는다 — 26.19에서 관측 그룹이 줄어도 건수는 거짓이 없다.
+              // key: 구간 첫 엔티티명 — segmentStream은 tier 2가 떨어져 있으면 구간을 여러 개
+              // 만들 수 있으므로(scope-critic ST3) 상수 key를 쓰면 React key가 중복된다.
+              // `group/fold`: 카드(ReleaseNoteRow)도 `<details className="group">`이라 이름 없는
+              // group을 쓰면 이 요약행이 열릴 때 **안쪽 카드의 화살표까지** `group-open:`에 반응한다.
+              <li key={`fold:${segment.entries[0]?.group.entity ?? ""}`} className="border-b border-border-soft last:border-b-0">
+                <details className="group/fold">
+                  <summary className="flex cursor-pointer list-none items-center gap-4 px-5 py-3 text-xs text-muted [&::-webkit-details-marker]:hidden">
+                    <span className="font-bold text-fg-2">관측 변화 없음</span>
+                    <span className="font-mono tabular-nums">{segment.entries.length}건</span>
+                    <span className="flex-1" />
+                    <span aria-hidden="true" className="transition-transform group-open/fold:rotate-180">
+                      ▾
+                    </span>
+                  </summary>
+                  <ul className="border-t border-border-soft">
+                    {segment.entries.map((entry) => renderRow(entry))}
+                  </ul>
+                </details>
+              </li>
+            )
+          )}
         </ul>
       )}
     </section>

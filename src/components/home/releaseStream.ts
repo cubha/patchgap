@@ -112,14 +112,22 @@ function groupUnannouncedDeltas(rows: DeltaRecord[]): UnannouncedStreamGroup[] {
  * 0 = 노트와 반대 방향의 유의한 관측(공지-불일치) · 1 = 노트대로 관측됨 · 2 = 바닥을 넘는 관측
  * 없음 · 3 = 치장(관측 대상 아님). 관측 선택은 카드가 쓰는 것과 **같은 함수**
  * (`selectReportableObservation`)라 정렬된 자리와 카드 문구가 어긋나지 않는다. */
-export type ContentTier = 0 | 1 | 2 | 3;
+export type ContentTier = 0 | 1 | 2 | 3 | 4;
 
+/**
+ * 2026-09-18(채점 라운드5 B2): 티어 3 = **섹션 묶음**(h3 없는 패치노트 섹션의 폴백 엔티티 —
+ * 「의회 - 투표 1 결과」·「증강」·「버그 수정」류). 엔티티가 아니므로 챔피언 카드와 같은 위계에
+ * 두지 않고 관측 없음(2) 뒤·치장(4) 앞에 둔다. 판별은 `sectionBundle.ts`가 하고 여기선 이름
+ * 집합만 받는다 — 이 함수가 ddragon을 알 필요는 없다.
+ */
 export function contentTier(
   group: MatchedStreamGroup,
   noteDeltas: Record<string, DeltaRecord>,
-  qAlpha?: number
+  qAlpha?: number,
+  sectionBundles?: ReadonlySet<string>
 ): ContentTier {
-  if (isCosmeticGroup(group.notes)) return 3;
+  if (isCosmeticGroup(group.notes)) return 4;
+  if (sectionBundles?.has(group.entity)) return 3;
   const rows: DeltaRecord[] = [];
   const seen = new Set<string>();
   for (const note of group.notes) {
@@ -143,12 +151,13 @@ export function contentTier(
 export function sortMatchedGroups(
   groups: readonly MatchedStreamGroup[],
   deltas: DeltasFile | null,
-  qAlpha?: number
+  qAlpha?: number,
+  sectionBundles?: ReadonlySet<string>
 ): MatchedStreamGroup[] {
   // page.tsx와 **같은** 역색인(best-row) — 사전이 다르면 정렬된 자리와 카드 문구가 어긋난다.
   const noteDeltas = indexNoteDeltas(deltas?.rows ?? [], qAlpha);
   return groups
-    .map((group, index) => ({ group, index, tier: contentTier(group, noteDeltas, qAlpha) }))
+    .map((group, index) => ({ group, index, tier: contentTier(group, noteDeltas, qAlpha, sectionBundles) }))
     .sort((a, b) => a.tier - b.tier || a.index - b.index)
     .map((entry) => entry.group);
 }

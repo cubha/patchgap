@@ -5,7 +5,6 @@
 
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import { fmtKst } from "@/lib/format";
-import { LLM_MODEL } from "@/pipeline/match/llm-config";
 
 export interface CausesPanelProps {
   causes: DeltaRecord["causes"];
@@ -82,8 +81,12 @@ export default function CausesPanel({ causes, llm, notesById, generatedAt }: Cau
   );
 }
 
-/** llm 캡션("모델 claude-sonnet-5 · 캐시 {generatedAt}")을 만든다 — 컴포넌트 밖에서도 재사용
- * 가능하도록 분리한 소품 함수(순수). */
+/** llm 캡션("LLM 검토 · {generatedAt} 기준")을 만든다 — 컴포넌트 밖에서도 재사용 가능하도록
+ * 분리한 소품 함수(순수).
+ * 2026-09-18(라운드5 D4, 사용자 결정 "분석 LLM 모델을 사용자가 알아야 할 이유가 있나"): 모델 id와
+ * "캐시"(개발 어휘)를 뺐다. 이 캡션이 사이트에서 모델명을 말하던 **유일한** 자리였고(방법론은
+ * `pipelineSteps.ts` "2단 LLM 후보 검증"으로 역할만 말한다 — Phase 3 critic 확인), 사용자 결정에
+ * 따라 이제 어디에도 두지 않는다. 캡션은 이 문장이 LLM 검토 결과라는 사실과 기준 시각만 말한다. */
 export function llmCaption(generatedAt: string): string {
-  return `모델 ${LLM_MODEL} · 캐시 ${fmtKst(generatedAt)}`;
+  return `LLM 검토 · ${fmtKst(generatedAt)} 기준`;
 }
