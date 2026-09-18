@@ -71,7 +71,8 @@ export default function PubgPage() {
             lead={
               <>
                 {/* 설명 문장은 방법론으로(재판정 보완 6) — 리드는 표본 수치만. */}
-                KR 스쿼드 <strong className="text-fg">{before.nMatches.toLocaleString()}</strong> →{" "}
+                {/* 표본은 Steam 전 지역·전 티어(지역 샤드 없음) — 헤더·방법론과 같은 표기여야 한다. */}
+                Steam · 전 지역·전 티어 <strong className="text-fg">{before.nMatches.toLocaleString()}</strong> →{" "}
                 <strong className="text-fg">{after.nMatches.toLocaleString()}</strong>매치 · 무기{" "}
                 <strong className="text-fg">{deltas.meta.n}</strong>종
               </>

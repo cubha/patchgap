@@ -8,7 +8,8 @@
 //   ① 짝지은 노트가 전부 제외 노트(또는 노트 파일에 없음)인 공지 관측 → 짝이 없는 것이다 → 엔진과 같은
 //      규칙으로 다시 읽는다: 유의·바닥 통과면 `unannounced`, 유의하나 바닥 미달이면 `below-threshold`,
 //      비유의면 `no-change`(표본 부족은 그대로). 무조건 미공지로 돌리면 q=0.38짜리 행이 Gap 카드에 오른다(실측).
-//   ② 제외 노트를 인용한 원인 후보 → `verified:false`(무근거는 회색 — CLAUDE.md 원칙)
+//   ② 제외 노트를 인용한 원인 후보 → `verified:false`(무근거는 회색 — CLAUDE.md 원칙). LLM 요약(S3)이
+//      인용한 후보(`llm.summaryCites`)에 제외 노트가 있으면 `summaryVerified:false`(상세 원인 카드가 회색으로).
 //   ③ ②로 검증된 후보가 하나도 안 남은 `indirect-effect` → `unannounced`(재분류 근거가 사라졌다)
 // 노트 파일이 없으면 손대지 않는다(loadDeltas 왕복 테스트·빈 데이터 빌드 보존). `meta.counts`는
 // 정규화 뒤 행 기준으로 다시 센다 — 방법론 파이프라인 카드가 이 값을 읽는다.
@@ -58,8 +59,13 @@ export function normalizeRecordForDisplay(
     status = "unannounced";
     changed = true;
   }
+  let llm = record.llm;
+  if (llm && llm.summaryVerified && (llm.summaryCites ?? []).some(excluded)) {
+    llm = { ...llm, summaryVerified: false };
+    changed = true;
+  }
   if (!changed) return record;
-  return { ...record, status, matchedNoteIds, matchedNoteId, causes };
+  return { ...record, status, matchedNoteIds, matchedNoteId, causes, llm };
 }
 
 export function normalizeDeltasForDisplay(

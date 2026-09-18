@@ -104,6 +104,16 @@ describe("normalizeRecordForDisplay", () => {
     expect(rec.causes[0].verified).toBe(true); // 입력 불변
   });
 
+  it("LLM 요약이 모드 섹션 줄을 인용하면 summaryVerified가 false가 된다(상세 요약 회색)", () => {
+    const rec = delta({
+      status: "unannounced", matchedNoteId: null, matchedNoteIds: [],
+      llm: { skipped: false, summary: "끝없는 갈증 너프가 가장 유력한 원인입니다", summaryCites: ["fiora-classic-1"], summaryVerified: true },
+    });
+    expect(normalizeRecordForDisplay(rec, byId).llm?.summaryVerified).toBe(false);
+    const ok = delta({ status: "unannounced", matchedNoteId: null, matchedNoteIds: [], llm: { skipped: false, summary: "s", summaryCites: ["ekko-q"], summaryVerified: true } });
+    expect(normalizeRecordForDisplay(ok, byId)).toBe(ok);
+  });
+
   it("SR 노트를 인용한 검증 원인이 남으면 간접 영향을 유지한다", () => {
     const rec = delta({
       status: "indirect-effect",
