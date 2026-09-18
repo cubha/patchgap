@@ -1,175 +1,143 @@
 // src/components/compare/DeltaTable.tsx
-// 우 델타 테이블(2/3) — 프로토타입 `table.delta-table` 1:1(docs/design/prototype/02-comparison-table.html).
-// 순수 프레젠테이션 — 정렬 상태·선택 하이라이트는 부모 CompareExplorer가 소유.
+// 우 델타 테이블(2/3) — 프로토타입 `table.delta-table`(docs/design/prototype/02-comparison-table.html)의
+// 골격을 유지하되, 2026-09-18 라운드6(사용자 L3·L4·C1)부터 **행 = 엔티티**다.
+//
+// 이전엔 `DeltaRecord` 1건 = 1행이라 같은 챔피언이 지표·라인별로 최대 13번 반복됐고 "지표"·"26.17"·
+// "26.18" 열이 따로 있었다. 사용자: "델타테이블 Label에 버전 Mig 표시하고, 지표 및 버전 col 제거 →
+// 밴률 / 승률 / 픽률 / 채택률을 인라인으로 표시. 상승 하락 기호까지 cell 데이터에 함께 표시".
+// 조립(`buildEntityRows`)은 entityRows.ts가 하고 여기선 그린다 — 셀에는 `전 → 후`와 `▲/▼ Δ`만.
+// 보고 가능하지 않은 지표는 빈 셀(`—`)이다. 라인 골드·오브젝트·매치 평균 행은 표에 없다.
+//
+// **스크롤 포커스(L4)**: 좌 내비에서 엔티티를 고르면 `focusKey`가 바뀌고, 그 행을 640px 내부 스크롤
+// 컨테이너의 **최상단**(sticky 헤더 바로 아래)으로 옮긴 뒤 `.row-highlight`로 강조한다.
+// `scrollIntoView`를 쓰지 않는 이유: 문서 스크롤까지 같이 움직여 페이지가 튄다 — 컨테이너의
+// scrollTop만 계산한다.
 //
 // 2026-09-12(4차, R5): 본문을 640px 내부 스크롤(NoteNavigator.tsx의 `.note-item-list` 규약과
-// 동일값)로 감쌌다 — 이전엔 rows(최대 PAGE_SIZE=200행)가 전부 펼쳐져 페이지 전체가 13,000px
-// 넘게 길어졌다(사용자 실측 지적). `더 보기`/CoverageBar는 CompareExplorer.tsx에서 이 스크롤러
-// 밖(패널 푸터)에 그대로 둔다.
+// 동일값)로 감쌌다 — 이전엔 rows(최대 200행)가 전부 펼쳐져 페이지 전체가 13,000px 넘게 길어졌다.
+"use client";
 
 import Link from "next/link";
-import type { DeltaRecord, LanePosition } from "@/pipeline/types";
-import { itemHref, metricLabel, positionLabel } from "@/lib/format";
-import { parseLaneAxis } from "@/lib/lane";
+import { useEffect, useRef } from "react";
+import type { DeltaRecord } from "@/pipeline/types";
+import { itemHref, metricLabel } from "@/lib/format";
 import EntityIcon from "@/components/EntityIcon";
-import IconBox from "@/components/IconBox";
-import LaneGlyph from "@/components/LaneGlyph";
 import StatusBadge from "@/components/StatusBadge";
-import { displayStatus } from "@/pipeline/shared/display-status";
-import { entityFallbackLabel, formatMetricValue } from "@/components/home/logic";
-import { directionSymbol, formatCiCell, formatDeltaCell, formatNCell, shortNoteId, type SortKey } from "./logic";
-
-/** 행의 엔티티 열 아이콘 — entityType==="lane"(라인 골드 지표, 챔피언 자산 없음)은 라인 글리프로,
- * 그 외는 기존 EntityIcon(champion/item은 ddragon 이미지, objective/summary는 폴백 글자)로.
- * HANDOFF-redesign-2026-09-10.md §4-2 "라인 행(바텀·미드 등)은 챔피언 자산이 없다 → '골' 텍스트
- * 박스를 라인 글리프 박스로 교체". */
-function RowIcon({ row, size }: { row: DeltaRecord; size: number }) {
-  if (row.entityType === "lane") {
-    // 2026-09-12(6차, /verify-impl 재검증): IconBox 공용 컴포넌트 — ReleaseNoteRow.tsx의 동형
-    // 라인 글리프 박스와 함께 각자 손으로 재구현되던 것을 정리(src/components/IconBox.tsx 참고).
-    return (
-      <IconBox size={size}>
-        <LaneGlyph lane={row.entityKey as LanePosition} size={Math.round(size * 0.6)} labelled />
-      </IconBox>
-    );
-  }
-  return (
-    <EntityIcon
-      entityType={row.entityType}
-      entityKey={row.entityKey}
-      name={row.entityName}
-      fallbackLabel={entityFallbackLabel(row)}
-      size={size}
-    />
-  );
-}
-
-/** 챔피언 position-scope 행(4세그먼트 id)의 라인 태그 — "엔티티 열 하위에 라인 태그(글리프 +
- * '탑 · 승률')"(HANDOFF §4-2). scope=all·라인 파싱 불가(non-champion)면 렌더하지 않는다. */
-function LaneTag({ row }: { row: DeltaRecord }) {
-  if (row.entityType !== "champion") return null;
-  const lane = parseLaneAxis(row.id);
-  if (lane === null || lane === "all") return null;
-  return (
-    // whitespace-nowrap(2026-09-18 채점 라운드3 G2): 엔티티 열이 좁아지면 "정글 · 승률"이 한 글자씩
-    // 세로로 꺾여 첫 화면 1행부터 깨져 보였다(프로덕션 실측). 태그는 한 줄이어야 한다.
-    <span className="mt-0.5 flex items-center gap-1 whitespace-nowrap text-xs text-muted">
-      <LaneGlyph lane={lane} size={12} labelled />
-      {positionLabel(lane)} · {metricLabel(row.metric)}
-    </span>
-  );
-}
+import { formatMetricValue, metricKind } from "@/components/home/logic";
+import { fmtPp } from "@/lib/format";
+import { ENTITY_METRICS, type EntityCompareRow, type EntityMetric } from "./entityRows";
 
 export interface DeltaTableProps {
   pair: { from: string; to: string } | null;
-  rows: DeltaRecord[];
-  highlightNoteId: string | null;
-  sortKey: SortKey;
-  sortDir: "asc" | "desc";
-  onSort: (key: SortKey) => void;
-  /** deltas.meta.qAlpha — 행 배지 표시 키(ST-4). */
-  qAlpha?: number;
+  rows: EntityCompareRow[];
+  /** 강조·스크롤 포커스 대상 행의 key(`champion:Ekko`). null이면 없음. */
+  focusKey: string | null;
 }
 
-function sortIndicator(key: SortKey, activeKey: SortKey, dir: "asc" | "desc"): string {
-  if (key !== activeKey) return "↕";
-  return dir === "desc" ? "▼" : "▲";
+/** 지표 셀 — `전 → 후` + `▲/▼ Δ`. 색은 DeltaValue와 같은 관례(상승 success · 하락 danger). */
+function MetricCell({ record }: { record: DeltaRecord }) {
+  const delta = record.delta ?? 0;
+  const up = delta > 0;
+  const kind = metricKind(record.metric);
+  // 이 표의 4개 지표는 전부 비율(pp)이다 — 다른 kind가 오면 formatMetricValue가 단위를 안다.
+  const deltaText = kind === "pp" ? fmtPp(delta) : String(delta);
+  return (
+    <Link
+      href={itemHref(record.id)}
+      className="group/cell flex flex-col gap-0.5 rounded-sm px-1 py-0.5 hover:bg-accent/10"
+      aria-label={`${record.entityName} ${metricLabel(record.metric)} 상세`}
+    >
+      <span className="text-xs text-muted">
+        {formatMetricValue(record.before, record.metric)} → {formatMetricValue(record.after, record.metric)}
+      </span>
+      <span className={`font-bold ${up ? "text-success" : "text-danger"}`}>
+        {up ? "▲" : "▼"} {deltaText}
+      </span>
+    </Link>
+  );
 }
 
-export default function DeltaTable({ pair, rows, highlightNoteId, sortKey, sortDir, onSort, qAlpha }: DeltaTableProps) {
+export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const theadRef = useRef<HTMLTableSectionElement>(null);
+
+  // 포커스 행을 컨테이너 최상단으로 — sticky 헤더 높이만큼 아래에 앉힌다.
+  useEffect(() => {
+    if (!focusKey) return;
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    // `CSS.escape`·`scrollTo`는 jsdom에 없다 — 속성 비교로 찾고 존재할 때만 스크롤한다.
+    const row = Array.from(scroller.querySelectorAll<HTMLTableRowElement>("tr[data-entity-key]")).find(
+      (tr) => tr.dataset.entityKey === focusKey
+    );
+    if (!row || typeof scroller.scrollTo !== "function") return;
+    const headerHeight = theadRef.current?.offsetHeight ?? 0;
+    scroller.scrollTo({ top: Math.max(0, row.offsetTop - headerHeight), behavior: "smooth" });
+  }, [focusKey]);
+
   const fromLabel = pair?.from ?? "이전";
   const toLabel = pair?.to ?? "이후";
 
-  // sticky 헤더(2026-09-12·4차, R5) — 640px 내부 스크롤(아래 컨테이너)에서 헤더가 스크롤을 따라
-  // 사라지면 표를 읽을 수 없다. `border-collapse`(아래 <table>)와 `position:sticky`를 같이 쓰면
-  // th의 하단 border가 사라지는 알려진 상호작용이 있어(테두리가 collapse 규칙을 따라 sticky
-  // 레이어링 밖으로 밀림), `border-b`를 `shadow-[inset_0_-1px_0_var(--border-soft)]`로 대체한다
-  // — 색은 여전히 토큰 참조라 verify.sh Spec 하드코딩 검사에 걸리지 않는다. 헤더 배경은
-  // bg-surface(불투명 단색)로 — panel-surface의 그라디언트 채움을 그대로 쓰면 스크롤 시
-  // 헤더 영역만 평평한 띠로 끊겨 보인다.
+  // sticky 헤더(2026-09-12·4차, R5) — `border-collapse`와 `position:sticky`를 같이 쓰면 th 하단
+  // border가 사라지는 상호작용이 있어 `shadow-[inset_0_-1px_0_var(--border-soft)]`로 대체한다(색은
+  // 토큰 참조). 헤더 배경은 불투명 단색 — 스크롤 시 그라디언트가 띠로 끊겨 보이지 않게.
   const thBase =
-    "sticky top-0 z-10 whitespace-nowrap bg-surface px-4 py-3 text-left shadow-[inset_0_-1px_0_var(--border-soft)]";
+    "sticky top-0 z-10 whitespace-nowrap bg-surface px-4 py-3 text-left shadow-[inset_0_-1px_0_var(--border-soft)] font-body text-xs font-bold text-muted";
+
   return (
-    <div className="max-h-[640px] overflow-auto"> {/* design-lint-ignore: 프로토타입 .note-item-list{max-height:640px}와 동일 규약(NoteNavigator.tsx 참고), 대응 토큰 없음 */}
+    <div ref={scrollerRef} className="max-h-[640px] overflow-auto"> {/* design-lint-ignore: 프로토타입 .note-item-list{max-height:640px}와 동일 규약(NoteNavigator.tsx 참고), 대응 토큰 없음 */}
       <table className="w-full border-collapse font-mono text-sm tabular-nums">
-        <thead>
+        <thead ref={theadRef}>
           <tr>
-            <th scope="col" className={thBase} />
-            <th scope="col" className={`${thBase} font-body text-xs font-bold text-muted`}>
-              엔티티
+            <th scope="col" className={thBase}>
+              {/* 버전 이동은 여기 한 번만 — 열마다 "26.17"·"26.18"을 두지 않는다(L3). */}
+              엔티티 <span className="ml-1 font-mono font-normal">{fromLabel} → {toLabel}</span>
             </th>
-            <th scope="col" className={`${thBase} font-body text-xs font-bold text-muted`}>
-              지표
-            </th>
-            <th scope="col" className={`${thBase} font-body text-xs font-bold text-muted`}>
-              {fromLabel}
-            </th>
-            <th scope="col" className={`${thBase} font-body text-xs font-bold text-muted`}>
-              {toLabel}
-            </th>
-            <th scope="col" className={`${thBase} font-body text-xs font-bold text-muted`}>
-              <button type="button" onClick={() => onSort("absDelta")} className="inline-flex items-center gap-1">
-                Δ <span aria-hidden="true">{sortIndicator("absDelta", sortKey, sortDir)}</span>
-              </button>
-            </th>
-            <th scope="col" className={`${thBase} font-body text-xs font-bold text-muted`}>
-              <button type="button" onClick={() => onSort("q")} className="inline-flex items-center gap-1">
-                95% CI <span aria-hidden="true">{sortIndicator("q", sortKey, sortDir)}</span>
-              </button>
-            </th>
-            <th scope="col" className={`${thBase} font-body text-xs font-bold text-muted`}>
-              <button type="button" onClick={() => onSort("n")} className="inline-flex items-center gap-1">
-                n <span aria-hidden="true">{sortIndicator("n", sortKey, sortDir)}</span>
-              </button>
-            </th>
-            <th scope="col" className={`${thBase} font-body text-xs font-bold text-muted`}>
+            {ENTITY_METRICS.map((metric) => (
+              <th key={metric} scope="col" className={thBase}>
+                {metricLabel(metric)}
+              </th>
+            ))}
+            <th scope="col" className={thBase}>
               상태
-            </th>
-            <th scope="col" className={`${thBase} font-body text-xs font-bold text-muted`}>
-              짝
             </th>
           </tr>
         </thead>
         <tbody>
           {rows.length === 0 ? (
             <tr>
-              <td colSpan={10} className="px-4 py-8 text-center font-body text-sm text-muted">
+              <td colSpan={ENTITY_METRICS.length + 2} className="px-4 py-8 text-center font-body text-sm text-muted">
                 표시할 델타가 없습니다
               </td>
             </tr>
           ) : (
             rows.map((row) => {
-              const dir = directionSymbol(row);
-              const highlighted = highlightNoteId !== null && row.matchedNoteIds.includes(highlightNoteId);
+              const highlighted = focusKey === row.key;
               return (
                 <tr
-                  key={row.id}
-                  // 2026-09-12(6차, /verify-impl 재검증): bg-[color-mix(...)](arbitrary bracket)
-                  // → .row-highlight(src/styles/panel.css, --row-highlight-fill 토큰).
+                  key={row.key}
+                  data-entity-key={row.key}
                   className={`border-b border-border-soft ${highlighted ? "row-highlight" : ""}`}
                 >
-                  <td className={`px-4 py-3 ${dir.colorClass}`}>{dir.symbol}</td>
                   <td className="px-4 py-3 font-body">
                     <div className="flex items-center gap-3">
-                      <RowIcon row={row} size={40} />
-                      <div className="flex flex-col">
-                        <Link href={itemHref(row.id)} className="text-fg hover:text-accent hover:underline">
-                          {row.entityName}
-                        </Link>
-                        <LaneTag row={row} />
-                      </div>
+                      <EntityIcon entityType={row.entityType} entityKey={row.entityKey} name={row.entityName} size={40} />
+                      <Link href={itemHref(row.representative.id)} className="font-bold text-fg hover:text-accent hover:underline">
+                        {row.entityName}
+                      </Link>
                     </div>
                   </td>
-                  <td className="px-4 py-3 font-body text-fg-2">{metricLabel(row.metric)}</td>
-                  <td className="px-4 py-3">{formatMetricValue(row.before, row.metric)}</td>
-                  <td className="px-4 py-3">{formatMetricValue(row.after, row.metric)}</td>
-                  <td className={`px-4 py-3 ${dir.colorClass}`}>{formatDeltaCell(row)}</td>
-                  <td className="px-4 py-3 text-fg-2">{formatCiCell(row)}</td>
-                  <td className="px-4 py-3 text-fg-2">{formatNCell(row)}</td>
+                  {ENTITY_METRICS.map((metric: EntityMetric) => {
+                    const cell = row.cells[metric];
+                    return (
+                      <td key={metric} className="px-3 py-2 align-middle">
+                        {cell ? <MetricCell record={cell} /> : <span className="px-1 text-muted">—</span>}
+                      </td>
+                    );
+                  })}
                   <td className="px-4 py-3 font-body">
-                    <StatusBadge status={displayStatus(row, qAlpha)} />
+                    <StatusBadge status={row.status} />
                   </td>
-                  <td className="px-4 py-3 text-fg-2">{shortNoteId(row.matchedNoteId)}</td>
                 </tr>
               );
             })

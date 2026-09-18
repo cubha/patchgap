@@ -8,47 +8,29 @@ import type { NotesFile } from "@/lib/data";
 import { fmtCiHalf, fmtDeltaInt, fmtDeltaSec, fmtInt, fmtPp } from "@/lib/format";
 import { absDelta, countRelevantNoteEntities, metricKind } from "@/components/home/logic";
 import { parseLaneAxis, type LaneAxis } from "@/lib/lane";
-import { STATUS_SORT_PRIORITY, isGapStatus } from "@/pipeline/shared/status-order";
+import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
 import { DISPLAY_SORT_PRIORITY, displayStatus, type DisplayStatus } from "@/pipeline/shared/display-status";
+import { isReportableRecord } from "./entityRows";
 
-/** 상태 필터 칩 6종(UX-BRIEF "02 대조표" 필터 바) — "no-change"는 칩이 없다(전체=필터 없음이라
- * no-change 행도 "전체"에서는 그대로 보인다, ST-11.md 구현 결정 참고). `below-threshold`는
- * 2026-09-13 신규 — 통계적으로 유의하지만 효과크기 바닥 미달인 델타(기본 접힘/비강조, 대조표
- * 탭에서만 명시적으로 선택해야 보인다). `key`를 `MatchStatus | "all"`로 좁혀(2026-09-05 리팩토링)
- * 오타로 존재하지 않는 상태값을 넣으면 컴파일 타임에 잡는다 — `filterByStatus`/
- * `CompareExplorer.tsx`의 `statusFilter` 상태는 URL 해시에서도 올 수 있어 여전히 `string`을
- * 받는다(런타임 값이라 타입으로 좁힐 수 없음). */
-/** 상태 하나가 아니라 **묶음**을 가리키는 필터 키. 홈 히어로 타일·Gap 탭이 세는 집합
- * (`unannounced` + `indirect-effect`)을 대조표에서도 그대로 표현할 수 있어야 한다 —
- * 2026-09-17(B2) 전에는 타일이 49를 말하면서 47만 보이는 화면으로 링크했다. */
-export const GAP_FILTER_KEY = "gap";
-
-export const STATUS_FILTERS: ReadonlyArray<{ key: DisplayStatus | "all" | typeof GAP_FILTER_KEY; label: string }> = [
+/**
+ * 상태 필터 칩 — 2026-09-18 라운드6(사용자 C5·C1) **4종**. 이전 10종(전체·공지-일치·공지-불일치·
+ * 공지 · 관측 미확인·공지 · 바닥 미달·노트에 없는 변화·미공지·간접 영향·표본 부족·바닥 미달)은
+ * 판정 엔진 어휘를 그대로 칩으로 옮긴 것이라 "공지된 내용은 공지된 내용인데 상세 value가 나뉜다"는
+ * 지적을 받았다. 화면이 답할 질문은 둘이다 — 노트가 말한 것인가 · 노트와 반대로 움직였는가.
+ * 노이즈 3종(표본 부족·바닥 미달·변화 없음)은 표에 올리지 않으므로 칩도 없다(배지 1종 = 칩 1종 불변식
+ * 유지 — 표에 없는 상태의 칩은 항상 0건을 가리키게 된다).
+ */
+export const STATUS_FILTERS: ReadonlyArray<{ key: DisplayStatus | "all"; label: string }> = [
   { key: "all", label: "전체" },
-  { key: "announced-consistent", label: "공지-일치" },
-  { key: "announced-inconsistent", label: "공지-불일치" },
-  // 2026-09-18(ST-4): 비유의 "불일치"를 분리한 표시 키 — 칩도 같은 어휘로 나뉜다.
-  { key: "announced-unobserved", label: "공지 · 관측 미확인" },
-  // 2026-09-18(S9/S10 = CF-1·CF-2): 유의하나 바닥 미달인 공지 행을 분리한다. 이 칩이 없으면
-  // 해당 행이 "전체" 말고는 어떤 칩으로도 닿지 않는다(filterByStatus가 표시 키 동등비교라서).
-  { key: "announced-below-floor", label: "공지 · 바닥 미달" },
-  { key: GAP_FILTER_KEY, label: "노트에 없는 변화" },
+  { key: "announced", label: "공지" },
+  { key: "announced-anomaly", label: "공지 · 이상 관측" },
   { key: "unannounced", label: "미공지" },
-  { key: "indirect-effect", label: "간접 영향" },
-  { key: "insufficient-sample", label: "표본 부족" },
-  { key: "below-threshold", label: "바닥 미달" }, // S6 — 표기 통일(뜻 불변, 아래 format.ts 주석)
 ];
 
-/** `gap`은 두 상태를 함께 통과시킨다. 개별 상태 칩(미공지·간접 영향)도 남겨 둔다 — 통합은
- * "같은 질문의 답"이라는 뜻이지 둘을 구분할 수 없다는 뜻이 아니다.
- *
- * 소속 판정은 **여기서 다시 쓰지 않고** `shared/status-order.ts`의 `isGapStatus`를 부른다.
- * 조건을 두 곳에 적어 두면 한쪽만 고쳤을 때 홈 타일(49)과 이 화면(47)이 조용히 갈라진다 —
- * 이번 라운드에 실제로 한 번 난 어긋남이고, acceptance-critic이 그 재발 경로를 지적했다. */
+/** 표시 키 동등비교 — `unannounced`는 `indirect-effect`까지 함께 남긴다(displayStatus가 한 키로
+ * 접는다). 소속 판정을 여기서 다시 쓰지 않는다. */
 export function filterByStatus(rows: DeltaRecord[], key: string, qAlpha?: number): DeltaRecord[] {
   if (key === "all") return rows;
-  if (key === GAP_FILTER_KEY) return rows.filter((r) => isGapStatus(r.status));
-  // 표시 키 기준(2026-09-18 ST-4) — "공지-불일치" 칩은 유의한 방향 반대만, 비유의는 별도 칩.
   return rows.filter((r) => displayStatus(r, qAlpha) === key);
 }
 
@@ -126,11 +108,8 @@ export function filterNotesBySearch(items: PatchNoteItem[], query: string): Patc
 }
 
 /** 노트 id → 그 노트와 짝지어진 델타들의 "대표 상태"(우선순위 최상위 1개). 짝지어진 델타가 하나도
- * 없으면 null(호출부가 "관측 없음" muted로 렌더). 우선순위는 `shared/status-order.ts`의
- * `STATUS_SORT_PRIORITY`(verdict.ts와 공유하는 단일 소스)를 쓴다 — 이전엔 로컬 `MatchStatus[]`
- * 배열 + `indexOf`였는데, 배열에 없는 상태값은 `indexOf`가 -1을 반환해 그 상태가 "최우선"으로
- * 오판정되는 결함이 있었다(tsc가 못 잡음, 2026-09-13 below-threshold 도입 시 발견). exhaustive
- * `Record`는 새 status가 여기 등록되지 않으면 tsc가 컴파일 타임에 잡는다. */
+ * 없으면 null. 우선순위는 `DISPLAY_SORT_PRIORITY`(exhaustive `Record` — 새 표시 키가 등록되지 않으면
+ * tsc가 잡는다; 옛 `indexOf` 구현은 미등록 상태를 -1로 최우선 오판정했다, 2026-09-13). */
 export function representativeStatus(noteId: string, rows: DeltaRecord[], qAlpha?: number): DisplayStatus | null {
   let best: DisplayStatus | null = null;
   let bestRank = Infinity;
@@ -142,6 +121,61 @@ export function representativeStatus(noteId: string, rows: DeltaRecord[], qAlpha
       bestRank = rank;
       best = shown;
     }
+  }
+  return best;
+}
+
+/** 좌 내비 항목 1개 = 엔티티 1개(2026-09-18 라운드6, 사용자 L4 "챔피언, 아이템 별로 하나의 항목으로
+ * 묶어서 표시"). 줄 목록은 문서 순서 그대로, 스킬은 첫 등장 순서로 중복 제거. */
+export interface NoteEntityGroup {
+  /** 대표 id = 첫 줄 id(선택·React key). */
+  id: string;
+  entity: string;
+  section: PatchNoteSection;
+  notes: PatchNoteItem[];
+  skills: string[];
+}
+
+export function groupNotesForNav(items: readonly PatchNoteItem[]): NoteEntityGroup[] {
+  const order: string[] = [];
+  const byEntity = new Map<string, NoteEntityGroup>();
+  for (const item of items) {
+    const key = `${item.section}:${item.entity}`;
+    const group = byEntity.get(key);
+    if (group) {
+      group.notes.push(item);
+      if (item.skill && !group.skills.includes(item.skill)) group.skills.push(item.skill);
+      continue;
+    }
+    byEntity.set(key, {
+      id: item.id,
+      entity: item.entity,
+      section: item.section,
+      notes: [item],
+      skills: item.skill ? [item.skill] : [],
+    });
+    order.push(key);
+  }
+  return order.map((key) => byEntity.get(key)!);
+}
+
+/**
+ * 엔티티 묶음의 배지 — 그 묶음의 줄들에 짝지어진 행 중 **보고 가능**(유의·바닥 통과·노이즈 아님)한
+ * 것만 보고 최우선 표시 키를 낸다. 하나도 없으면 null이고 호출부는 배지 대신 "유의한 관측 없음"을
+ * 쓴다(사용자 C1 — 비유의 관측에 배지를 달지 않는다). 델타 테이블 행(`buildEntityRows`)과 같은
+ * 잣대라 배지가 있는데 표에 행이 없는 일은 생기지 않는다.
+ */
+export function navBadgeStatus(
+  noteIds: readonly string[],
+  rows: readonly DeltaRecord[],
+  qAlpha?: number
+): DisplayStatus | null {
+  let best: DisplayStatus | null = null;
+  for (const row of rows) {
+    if (!row.matchedNoteIds.some((id) => noteIds.includes(id))) continue;
+    if (!isReportableRecord(row, qAlpha)) continue;
+    const shown = displayStatus(row, qAlpha);
+    if (best === null || DISPLAY_SORT_PRIORITY[shown] < DISPLAY_SORT_PRIORITY[best]) best = shown;
   }
   return best;
 }

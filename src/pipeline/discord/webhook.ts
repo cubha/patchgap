@@ -156,7 +156,7 @@ export function buildBriefingEmbeds(deltas: DeltasFile, options: BuildBriefingOp
   // 이라 하고 디스코드는 같은 항목을 "공지-불일치"로 알렸다 — A4 어휘 불일치를 웹에서만 닫으면
   // 모순이 이 표면으로 이사할 뿐이라, 같은 `displayStatus`를 부른다(판정 엔진은 불변).
   const inconsistentRows = deltas.rows.filter(
-    (r) => displayStatus(r, qAlpha) === "announced-inconsistent"
+    (r) => displayStatus(r, qAlpha) === "announced-anomaly"
   );
   const significantCount = deltas.rows.filter((r) => isSignificantDelta(r, qAlpha)).length;
 

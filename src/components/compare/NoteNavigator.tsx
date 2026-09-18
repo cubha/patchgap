@@ -3,10 +3,12 @@
 // (docs/design/prototype/02-comparison-table.html). 순수 프레젠테이션 — 상태는 부모
 // CompareExplorer가 소유(섹션 탭·검색어·선택 항목 전부 콜백으로 위임).
 //
-// panel-surface-glass(2026-09-12·5차, R6 확대 — 사용자가 홈과 동일 스타일 쓰는 곳을 찾아
-// 통일하라고 지시): /compare/도 layout.tsx의 전역 앰비언트 배경을 그대로 받는데, 이 패널이
-// top≈143px부터 카메라 노출 밴드(y<873px) 전체를 불투명으로 덮고 있었다 — 홈에서 이미
-// "전면 유리화"로 방향을 바꿨으므로 같은 처리를 여기도 적용한다.
+// 2026-09-18 라운드6(사용자 L4): **항목 = 엔티티**. 이전엔 패치노트 줄 1개 = 항목 1개라 같은 챔피언이
+// 스킬·스탯마다 별도 행으로 반복됐다("동일챔피언에 대한 항목이 별도 행으로 표기됨"). 묶기는
+// `groupNotesForNav`가 하고, 항목엔 줄 수·스킬 목록·배지(보고 가능 관측이 있을 때만)를 그린다. 클릭은
+// 부모가 받아 우측 표의 해당 엔티티 행을 최상단으로 스크롤한다.
+//
+// panel-surface-glass(2026-09-12·5차, R6 확대): /compare/도 전역 앰비언트 배경을 그대로 받는다.
 
 import type { DeltaRecord, PatchNoteItem, PatchNoteSection } from "@/pipeline/types";
 import EntityIcon from "@/components/EntityIcon";
@@ -14,7 +16,14 @@ import IconBox from "@/components/IconBox";
 import StatusBadge from "@/components/StatusBadge";
 import type { StreamEntityIcon } from "@/components/home/releaseStreamEntity";
 import { panelSurfaceClass } from "@/lib/panelSurface";
-import { NAV_SECTIONS, filterNotesBySearch, filterNotesBySection, representativeStatus } from "./logic";
+import {
+  NAV_SECTIONS,
+  filterNotesBySearch,
+  filterNotesBySection,
+  groupNotesForNav,
+  navBadgeStatus,
+  type NoteEntityGroup,
+} from "./logic";
 
 export interface NoteNavigatorProps {
   notes: PatchNoteItem[];
@@ -23,12 +32,12 @@ export interface NoteNavigatorProps {
   onSectionChange: (section: PatchNoteSection) => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
-  selectedNoteId: string | null;
-  onSelect: (noteId: string) => void;
-  /** note.id → EntityIcon 계약(부모가 ddragon으로 빌드 타임에 해석해 내려준다 — 이 컴포넌트는
-   * "use client" 경계 안이라 fs를 직접 읽지 못한다). 키가 없으면 아이콘 없이 폴백. */
+  /** 선택된 엔티티 묶음의 대표 id(`NoteEntityGroup.id`). */
+  selectedGroupId: string | null;
+  onSelect: (group: NoteEntityGroup) => void;
+  /** note.id → EntityIcon 계약(부모가 ddragon으로 빌드 타임에 해석해 내려준다). 키가 없으면 폴백. */
   icons: Record<string, StreamEntityIcon>;
-  /** deltas.meta.qAlpha — 배지 표시 키(공지-불일치 vs 관측 미확인, ST-4). */
+  /** deltas.meta.qAlpha — 배지 표시 키. */
   qAlpha?: number;
 }
 
@@ -39,24 +48,23 @@ export default function NoteNavigator({
   onSectionChange,
   searchQuery,
   onSearchChange,
-  selectedNoteId,
+  selectedGroupId,
   onSelect,
   icons,
   qAlpha,
 }: NoteNavigatorProps) {
   const sectionFiltered = filterNotesBySection(notes, activeSection);
-  const visible = filterNotesBySearch(sectionFiltered, searchQuery);
+  const visible = groupNotesForNav(filterNotesBySearch(sectionFiltered, searchQuery));
 
   return (
-    // 2026-09-12(3차): 골드 4변 프레임 → .panel-surface(src/styles/panel.css, Q2 "A+B 결합").
-    // 2026-09-12(6차): 리터럴 대신 panelSurfaceClass() — src/lib/panelSurface.ts.
     <section className={`${panelSurfaceClass("glass")} overflow-hidden rounded-lg`}>
       <div className="panel-head-wash border-b border-border-soft px-5 py-5">
         <h2 className="font-display text-lg font-bold text-fg">패치노트 항목</h2>
       </div>
       <div className="flex gap-2 px-5 pt-4" role="tablist" aria-label="패치노트 섹션">
         {NAV_SECTIONS.map((section) => {
-          const count = filterNotesBySection(notes, section.key).length;
+          // 탭 숫자 = 엔티티 수(항목이 엔티티 단위이므로 줄 수를 세면 화면과 어긋난다).
+          const count = groupNotesForNav(filterNotesBySection(notes, section.key)).length;
           const isActive = section.key === activeSection;
           return (
             <button
@@ -88,42 +96,45 @@ export default function NoteNavigator({
         {visible.length === 0 ? (
           <li className="px-5 py-4 text-sm text-muted">검색 결과가 없습니다</li>
         ) : (
-          visible.map((item) => {
-            const isSelected = item.id === selectedNoteId;
-            const status = representativeStatus(item.id, rows, qAlpha);
-            const icon = icons[item.id] ?? { entityType: null, entityKey: null };
+          visible.map((group) => {
+            const isSelected = group.id === selectedGroupId;
+            const status = navBadgeStatus(
+              group.notes.map((n) => n.id),
+              rows,
+              qAlpha
+            );
+            const icon = icons[group.id] ?? { entityType: null, entityKey: null };
             return (
-              <li key={item.id}>
+              <li key={group.id}>
                 <button
                   type="button"
-                  onClick={() => onSelect(item.id)}
+                  onClick={() => onSelect(group)}
                   aria-current={isSelected ? "true" : undefined}
-                  // 선택 표현(2026-09-13·6차 연속): `bg-surface-warm`(완전 불투명)이 유리 패널 안에서
-                  // 혼자 불투명 블록으로 남았다. 같은 "선택된 행"을 DeltaTable.tsx이 이미
-                  // `.row-highlight`(반투명 골드 워시)로 그리고 있으므로 양쪽 언어를 맞춘다.
                   className={`flex w-full items-start gap-3 border-l-2 px-5 py-3 text-left ${
                     isSelected ? "row-highlight border-accent" : "border-transparent"
                   }`}
                 >
                   {icon.entityType && icon.entityKey ? (
-                    <EntityIcon entityType={icon.entityType} entityKey={icon.entityKey} name={item.entity} size={40} />
+                    <EntityIcon entityType={icon.entityType} entityKey={icon.entityKey} name={group.entity} size={40} />
                   ) : (
-                    // 2026-09-12(6차, /verify-impl 재검증): EntityIcon.tsx 폴백과 동형이던 인라인
-                    // 마크업을 IconBox 공용 컴포넌트로 교체 — src/components/IconBox.tsx 참고.
                     <IconBox size={40} className="font-display text-xs font-bold">
-                      {item.entity.slice(0, 1)}
+                      {group.entity.slice(0, 1)}
                     </IconBox>
                   )}
                   <span className="flex min-w-0 flex-1 flex-col items-start gap-1">
-                    <span className="text-sm font-bold text-fg">{item.entity}</span>
-                    <span className="line-clamp-2 font-mono text-xs tabular-nums text-muted">
-                      {item.skill ? `${item.skill} ` : ""}
-                      {item.before && item.after ? `${item.before}⇒${item.after}` : item.summary}
+                    <span className="flex items-baseline gap-2">
+                      <span className="text-sm font-bold text-fg">{group.entity}</span>
+                      <span className="font-mono text-xs tabular-nums text-muted">{group.notes.length}줄</span>
                     </span>
+                    {group.skills.length > 0 ? (
+                      <span className="line-clamp-2 text-xs text-muted">{group.skills.join(" · ")}</span>
+                    ) : (
+                      <span className="line-clamp-2 text-xs text-muted">{group.notes[0]?.summary}</span>
+                    )}
                     {status ? (
                       <StatusBadge status={status} className="mt-1 w-fit" />
                     ) : (
-                      <span className="mt-1 w-fit text-xs text-muted">관측 없음</span>
+                      <span className="mt-1 w-fit text-xs text-muted">유의한 관측 없음</span>
                     )}
                   </span>
                 </button>

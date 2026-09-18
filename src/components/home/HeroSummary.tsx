@@ -96,9 +96,9 @@ export default function HeroSummary({ stats, action }: HeroSummaryProps) {
         </div>
         {/* hover 채움(2026-09-13·6차 연속): `bg-surface-warm`(완전 불투명)은 hover 순간 이 타일만
             유리가 꺼져 보였다 — 유리 패널 안의 상태 표현은 전부 반투명으로 통일한다. */}
-        {/* 2026-09-17(B2): `#unannounced`(47행)로 가면 타일이 말한 49와 어긋난다 —
-            대조표에 통합 필터 `#gap`을 만들고 그쪽을 가리킨다. */}
-        <Link href="/compare/#gap" className="p-5 transition-colors hover:bg-accent/10">
+        {/* 2026-09-18 라운드6: 대조표 칩 `unannounced`가 미공지+간접 영향을 함께 남긴다(어휘 통일) —
+            타일이 세는 집합과 같은 칩으로 간다. */}
+        <Link href="/compare/#unannounced" className="p-5 transition-colors hover:bg-accent/10">
           <strong className="block font-display text-3xl font-bold tabular-nums text-accent">
             {fmtInt(unannouncedCount)}
           </strong>
