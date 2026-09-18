@@ -80,6 +80,10 @@ export interface ReleaseNoteRowProps {
    * 유무 판정은 page.tsx가 빌드 타임에 끝낸다. 키가 없으면 그 줄은 이미지 없이 텍스트만.
    */
   skinPreviews?: Record<string, CosmeticSkinItem[]>;
+  /** 섹션 묶음(라운드5 B2, sectionBundle.ts) — 엔티티가 아니라 h3 없는 섹션의 폴백 라벨이다.
+   * 아이콘·굵은 제목을 쓰지 않고 "N개 항목 · 패치노트 섹션"으로 위계를 낮춘다. 본문(줄·배지)은
+   * 그대로다. */
+  sectionBundle?: boolean;
 }
 
 const SECTION_LABELS: Record<string, string> = {
@@ -232,8 +236,11 @@ export default function ReleaseNoteRow({
   qAlpha,
   causes,
   skinPreviews,
+  sectionBundle: sectionBundleProp = false,
 }: ReleaseNoteRowProps) {
   const isUnannounced = group.kind === "unannounced";
+  // 섹션 묶음은 공지 그룹에만 존재한다(미공지 그룹은 델타 행이라 엔티티가 확정돼 있다).
+  const sectionBundle = !isUnannounced && sectionBundleProp;
 
   // B4 — 그룹 전체가 치장이면 이 카드엔 뱃지가 하나도 붙지 않는다.
   const cosmeticGroup = !isUnannounced && isCosmeticGroup(group.notes);
@@ -286,10 +293,24 @@ export default function ReleaseNoteRow({
           네이티브 <details>/<summary>라 서버 컴포넌트 그대로 유지할 수 있다(JS 상태 불필요). */}
       <details className="group px-5 py-4">
         <summary className="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
-          <CardIcon icon={icon} entity={group.entity} />
+          {sectionBundle ? (
+            <IconBox size={56} className="font-mono text-xs font-bold text-muted">
+              §
+            </IconBox>
+          ) : (
+            <CardIcon icon={icon} entity={group.entity} />
+          )}
           <div className="min-w-0 flex-1">
-            <div className="font-display text-base font-bold text-fg">{group.entity}</div>
-            {observation ? (
+            <div className={sectionBundle ? "font-display text-base font-bold text-fg-2" : "font-display text-base font-bold text-fg"}>
+              {group.entity}
+            </div>
+            {sectionBundle ? (
+              // B2(라운드5) — 엔티티가 아니라 섹션이다. 관측 사유를 말하지 않는다(짝이 없는 게
+              // 아니라 짝지을 대상 자체가 아니다).
+              <div className="mt-1 text-xs text-muted">
+                {noteIds.length}개 항목 · 패치노트 섹션 · 엔티티 아님
+              </div>
+            ) : observation ? (
               <ObservationLine record={observation} />
             ) : cosmeticGroup ? (
               // B4 — 스킨·크로마엔 측정할 지표가 없다. "관측 보류"가 아니라 관측 대상이 아니다.

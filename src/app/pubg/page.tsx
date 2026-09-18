@@ -115,67 +115,6 @@ export default function PubgPage() {
           </div>
         </section>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          <SectionCard eyebrow="표본" title="비교 구간" variant="glass">
-            <div className="p-5">
-              <dl className="flex flex-col gap-2 text-sm">
-                <div className="flex items-baseline justify-between gap-3">
-                  <dt className="text-muted">42.3 (9/4~9/8)</dt>
-                  <dd className="font-mono tabular-nums text-fg">{before.nMatches.toLocaleString()}매치</dd>
-                </div>
-                <div className="flex items-baseline justify-between gap-3">
-                  <dt className="text-muted">43.1 (9/11~9/15)</dt>
-                  <dd className="font-mono tabular-nums text-fg">{after.nMatches.toLocaleString()}매치</dd>
-                </div>
-                <div className="flex items-baseline justify-between gap-3 border-t border-border-soft pt-2">
-                  <dt className="text-muted">봇 비율</dt>
-                  <dd className="font-mono tabular-nums text-fg-2">
-                    {pct(before.botShare)} → {pct(after.botShare)}
-                  </dd>
-                </div>
-              </dl>
-              <p className="mt-3 text-xs leading-relaxed text-muted">
-                양쪽 다 목~월 5일로 요일을 맞췄습니다. 주말 비중이 다르면 플레이어 구성 차이가 패치
-                효과와 섞입니다. 경계 2일(9/9~9/10)은 적용 시차가 미검증이라 제외했습니다.
-              </p>
-            </div>
-          </SectionCard>
-
-          <SectionCard eyebrow="기저" title="함께 움직인 값" variant="glass">
-            <div className="p-5">
-              <div className="flex items-baseline gap-2">
-                <span className="font-mono text-2xl font-bold tabular-nums text-fg">
-                  {before.pickupsPerMatch.toFixed(0)}
-                </span>
-                <span className="text-muted">→</span>
-                <span className="font-mono text-2xl font-bold tabular-nums text-fg">
-                  {after.pickupsPerMatch.toFixed(0)}
-                </span>
-                <span className="text-xs text-muted">매치당 총 획득</span>
-              </div>
-              <p className="mt-3 text-xs leading-relaxed text-muted">
-                총량이 함께 내려갔습니다. 이 기저를 빼지 않으면 <em>모든</em> 무기가 하향된 것처럼
-                보입니다 — 모든 수치는 <strong className="text-fg-2">총 획득 대비 점유율</strong>로
-                정규화한 값입니다.
-              </p>
-            </div>
-          </SectionCard>
-
-          <SectionCard eyebrow="게이트" title="효과크기 바닥" variant="glass">
-            <div className="p-5">
-              <div className="font-mono text-2xl font-bold tabular-nums text-fg">
-                {pct(deltas.meta.effectFloor)}
-              </div>
-              <p className="mt-3 text-xs leading-relaxed text-muted">
-                리그 오브 레전드 바닥값을 가져오지 않고{" "}
-                <strong className="text-fg-2">이 데이터에서 유도</strong>했습니다. 패치노트가
-                언급하지 않은 무기들의 변화 분포(귀무분포) 90번째 백분위수 — 즉 &ldquo;언급 없는
-                무기 10개 중 9개보다 크게 움직였다&rdquo;가 기준입니다.
-              </p>
-            </div>
-          </SectionCard>
-        </div>
-
         {/* 요구 1·2(2026-09-17): 공지 대조가 **기본 탭**이고 미공지는 두 번째 탭이다.
             이전엔 미공지 섹션이 대조 섹션 위에 통째로 놓여 있었다 — LoL 홈과 순서가 정반대라
             게임을 바꾸면 같은 질문이 다른 자리에서 답해졌다. 카운트 배지는 화면에 실제로
@@ -191,6 +130,12 @@ export default function PubgPage() {
               variant="glass"
               action={<span className="font-mono text-xs text-muted">{announced.length}건</span>}
             >
+              {/* 기저 카드가 표 아래로 내려갔으므로(라운드5 A3) 정규화 사실은 표 머리에서 먼저 말한다 —
+                  매치당 총 획득이 490 → 427로 함께 내려가, 이 한 줄이 없으면 모든 무기가 하향으로 읽힌다. */}
+              <p className="border-b border-border-soft px-5 py-2 text-xs text-muted">
+                모든 수치는 매치당 총 획득 대비 <strong className="text-fg-2">점유율</strong>(기저 보정) ·{" "}
+                {before.nMatches.toLocaleString()} → {after.nMatches.toLocaleString()}매치
+              </p>
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse text-sm" style={{ minWidth: "var(--table-min)" }}>
                   <thead>
@@ -298,6 +243,71 @@ export default function PubgPage() {
           }
         />
 
+        {/* 라운드5 A3(2026-09-18): 표본·기저·게이트 카드는 **결과(탭) 아래**에 둔다. 이전엔 타일 →
+            카드 3장 → 탭 순서라 방법이 결과 위에 있었다 — LoL 홈은 히어로 → 스트림(결과)이고 방법
+            패널은 옆 열이다. 채점표가 4라운드 동안 "승인 시안"이라 적었으나 실물 시안(「PUBG 테마
+            시안」)은 히어로·stat-tile까지만 정의하고 이 카드는 #9 구현이 임의 배치한 것이었다
+            (docs/plan/BRAINTRUST-residual3-2026-09-18.md §0). */}
+        <div className="grid gap-4 md:grid-cols-3">
+          <SectionCard eyebrow="표본" title="비교 구간" variant="glass">
+            <div className="p-5">
+              <dl className="flex flex-col gap-2 text-sm">
+                <div className="flex items-baseline justify-between gap-3">
+                  <dt className="text-muted">42.3 (9/4~9/8)</dt>
+                  <dd className="font-mono tabular-nums text-fg">{before.nMatches.toLocaleString()}매치</dd>
+                </div>
+                <div className="flex items-baseline justify-between gap-3">
+                  <dt className="text-muted">43.1 (9/11~9/15)</dt>
+                  <dd className="font-mono tabular-nums text-fg">{after.nMatches.toLocaleString()}매치</dd>
+                </div>
+                <div className="flex items-baseline justify-between gap-3 border-t border-border-soft pt-2">
+                  <dt className="text-muted">봇 비율</dt>
+                  <dd className="font-mono tabular-nums text-fg-2">
+                    {pct(before.botShare)} → {pct(after.botShare)}
+                  </dd>
+                </div>
+              </dl>
+              <p className="mt-3 text-xs leading-relaxed text-muted">
+                양쪽 다 목~월 5일로 요일을 맞췄습니다. 주말 비중이 다르면 플레이어 구성 차이가 패치
+                효과와 섞입니다. 경계 2일(9/9~9/10)은 적용 시차가 미검증이라 제외했습니다.
+              </p>
+            </div>
+          </SectionCard>
+
+          <SectionCard eyebrow="기저" title="함께 움직인 값" variant="glass">
+            <div className="p-5">
+              <div className="flex items-baseline gap-2">
+                <span className="font-mono text-2xl font-bold tabular-nums text-fg">
+                  {before.pickupsPerMatch.toFixed(0)}
+                </span>
+                <span className="text-muted">→</span>
+                <span className="font-mono text-2xl font-bold tabular-nums text-fg">
+                  {after.pickupsPerMatch.toFixed(0)}
+                </span>
+                <span className="text-xs text-muted">매치당 총 획득</span>
+              </div>
+              <p className="mt-3 text-xs leading-relaxed text-muted">
+                총량이 함께 내려갔습니다. 이 기저를 빼지 않으면 <em>모든</em> 무기가 하향된 것처럼
+                보입니다 — 모든 수치는 <strong className="text-fg-2">총 획득 대비 점유율</strong>로
+                정규화한 값입니다.
+              </p>
+            </div>
+          </SectionCard>
+
+          <SectionCard eyebrow="게이트" title="효과크기 바닥" variant="glass">
+            <div className="p-5">
+              <div className="font-mono text-2xl font-bold tabular-nums text-fg">
+                {pct(deltas.meta.effectFloor)}
+              </div>
+              <p className="mt-3 text-xs leading-relaxed text-muted">
+                리그 오브 레전드 바닥값을 가져오지 않고{" "}
+                <strong className="text-fg-2">이 데이터에서 유도</strong>했습니다. 패치노트가
+                언급하지 않은 무기들의 변화 분포(귀무분포) 90번째 백분위수 — 즉 &ldquo;언급 없는
+                무기 10개 중 9개보다 크게 움직였다&rdquo;가 기준입니다.
+              </p>
+            </div>
+          </SectionCard>
+        </div>
 
         {/* 맵 축(2026-09-17, A4) — 판정이 아니라 **기술 통계**다. 43.1 패치노트에 맵 항목이
             0건이라 짝지을 선언이 없다. 그 사실을 숨기지 않고 카드 안에서 말한다. */}

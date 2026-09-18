@@ -21,7 +21,15 @@ import { isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
 import { matchSkinsInSummary, skinSplashPath } from "@/pipeline/shared/cosmetic-skin";
 import { indexIndirectCauses } from "@/components/home/indirectEffects";
 import { computeLaneDistribution } from "@/components/home/laneDistribution";
-import { buildReleaseStream, sortMatchedGroups, type MatchedStreamGroup } from "@/components/home/releaseStream";
+import {
+  buildReleaseStream,
+  contentTier,
+  sortMatchedGroups,
+  type MatchedStreamGroup,
+  type ReleaseStreamGroup,
+} from "@/components/home/releaseStream";
+import { isSectionBundle } from "@/components/home/sectionBundle";
+import type { StreamEntityIcon } from "@/components/home/releaseStreamEntity";
 import { indexNoteDeltas, indexNoteDeltaRows } from "@/components/home/noteDeltaIndex";
 import { resolveStreamEntityIcon } from "@/components/home/releaseStreamEntity";
 import { lanesForEntityKey } from "@/lib/lane";
@@ -51,27 +59,36 @@ export default function Home() {
   const headline = computeHeadline(deltas, notesTo, deltas?.meta.qAlpha);
 
   // 2026-09-18(ST-8): 공지 그룹은 3티어(불일치 → 일치 → 관측 없음 → 치장)로, Gap 그룹은 그대로.
-  const rawGroups = buildReleaseStream(notesTo, deltas);
-  const streamGroups = [
-    ...sortMatchedGroups(
-      rawGroups.filter((g): g is MatchedStreamGroup => g.kind === "matched"),
-      deltas,
-      deltas?.meta.qAlpha
-    ),
-    ...rawGroups.filter((g) => g.kind !== "matched"),
-  ];
-  const streamEntries: ReleaseStreamEntry[] = streamGroups.map((group) => {
-    const icon = resolveStreamEntityIcon(group, ddragon);
-    const lanes = icon.entityKey ? lanesForEntityKey(deltas?.rows ?? [], icon.entityKey) : [];
-    return { group, icon, lanes };
-  });
-
   // note.id → 그 노트를 근거로 매칭된 델타. 스트림 카드가 뱃지(status)뿐 아니라 관측 수치
   // (.rn-obs)와 판정 문장(.verdict .m)까지 그리므로 status가 아니라 레코드 전체를 넘긴다.
   // 2026-09-18(라운드3 G1): last-wins → best-row. 선택 규칙은 noteDeltaIndex.ts 한 곳.
   const noteDeltas: Record<string, DeltaRecord> = indexNoteDeltas(deltas?.rows ?? [], deltas?.meta.qAlpha);
   // S4 후속 — 카드 헤더의 **사유 계산**은 대표 1행이 아니라 짝 전수를 봐야 한다(noteDeltaIndex 주석).
   const noteDeltaRows: Record<string, DeltaRecord[]> = indexNoteDeltaRows(deltas?.rows ?? []);
+
+  const rawGroups = buildReleaseStream(notesTo, deltas);
+  // 아이콘 해석은 정렬 **앞**에서 한 번 — 섹션 묶음 판별(라운드5 B2)이 그 결과를 쓰고, 정렬도
+  // 같은 집합을 봐야 카드 위계와 자리가 어긋나지 않는다.
+  const icons = new Map<ReleaseStreamGroup, StreamEntityIcon>(
+    rawGroups.map((group) => [group, resolveStreamEntityIcon(group, ddragon)])
+  );
+  const matchedGroups = rawGroups.filter((g): g is MatchedStreamGroup => g.kind === "matched");
+  const sectionBundles = new Set(
+    matchedGroups
+      .filter((group) => isSectionBundle(group, icons.get(group)!, noteDeltaRows))
+      .map((group) => group.entity)
+  );
+  const streamGroups = [
+    ...sortMatchedGroups(matchedGroups, deltas, deltas?.meta.qAlpha, sectionBundles),
+    ...rawGroups.filter((g) => g.kind !== "matched"),
+  ];
+  const streamEntries: ReleaseStreamEntry[] = streamGroups.map((group) => {
+    const icon = icons.get(group)!;
+    const lanes = icon.entityKey ? lanesForEntityKey(deltas?.rows ?? [], icon.entityKey) : [];
+    const tier =
+      group.kind === "matched" ? contentTier(group, noteDeltas, deltas?.meta.qAlpha, sectionBundles) : undefined;
+    return { group, icon, lanes, tier, sectionBundle: sectionBundles.has(group.entity) };
+  });
 
   // Gap 정의는 한 곳(`isGapStatus`)만 본다 — 라인 분포 패널이 히어로 타일·탭 배지와 다른
   // 모수를 쓰면 화면이 스스로를 반박한다(2026-09-17 B2 통합).
