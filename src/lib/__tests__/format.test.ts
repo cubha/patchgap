@@ -125,7 +125,9 @@ describe("statusLabel", () => {
     expect(statusLabel("unannounced")).toBe("미공지");
     expect(statusLabel("insufficient-sample")).toBe("표본 부족");
     expect(statusLabel("no-change")).toBe("변화 없음");
-    expect(statusLabel("below-threshold")).toBe("임계 미달");
+    // 2026-09-18 S6 명세 변경: "임계 미달"→"바닥 미달"(동의어 교체, 뜻 불변). "임계"가 q<α
+    // 임계와 충돌해 한 상태를 네 단어로 부르던 것을 "바닥" 어근 하나로 모았다.
+    expect(statusLabel("below-threshold")).toBe("바닥 미달");
   });
 
   it("알려지지 않은 상태값은 원본을 그대로 반환한다(크래시 없음)", () => {

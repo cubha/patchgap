@@ -190,9 +190,10 @@ describe("representativeStatus", () => {
 });
 
 describe("STATUS_FILTERS — below-threshold·indirect-effect 칩(2026-09-13 신규)", () => {
-  it("below-threshold 칩이 '임계 미달' 라벨로 존재한다", () => {
+  // 2026-09-18 S6 명세 변경: 라벨 "임계 미달"→"바닥 미달"(동의어 교체, 뜻 불변).
+  it("below-threshold 칩이 '바닥 미달' 라벨로 존재한다", () => {
     const entry = STATUS_FILTERS.find((f) => f.key === "below-threshold");
-    expect(entry?.label).toBe("임계 미달");
+    expect(entry?.label).toBe("바닥 미달");
   });
 
   it("indirect-effect 칩이 '간접 영향' 라벨로 존재한다", () => {

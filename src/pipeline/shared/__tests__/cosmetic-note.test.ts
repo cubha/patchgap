@@ -65,7 +65,9 @@ describe("isCosmeticNote — 절대 잡으면 안 되는 것", () => {
     expect(isCosmeticNote(note({ entity: "홀 오브 레전드", direction: "buff" }))).toBe(false);
   });
 
-  it("증강·버그 수정·의회는 지표가 '없는' 게 아니라 '파싱 안 된' 것이다 — 관측 보류가 맞다", () => {
+  // 2026-09-18(S5) 제목만 갱신 — 단언은 그대로다. 이 테스트가 지키는 것은 "치장으로 접지
+  // 않는다"이고, 그 줄에 붙는 배지 문구는 별개 축이다(표시 키 `unpaired`로 교체됨).
+  it("증강·버그 수정·의회는 지표가 '없는' 게 아니라 '파싱 안 된' 것이다 — 치장으로 접지 않는다", () => {
     for (const entity of ["증강", "버그 수정", "의회 - 투표 1 결과", "버그 수정 및 편의성 개선"]) {
       expect(isCosmeticNote(note({ entity, summary: "설명 문장" }))).toBe(false);
     }

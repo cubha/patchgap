@@ -1,6 +1,6 @@
 # patchgap
 
-**패치노트는 12줄인데 통계는 37개가 바뀐다.** patchgap는 LoL 공식 패치노트가 *말한 것*과
+**패치노트는 14개 챔피언·아이템을 바꿨다고 말했고, 통계는 403개 변화를 말한다.**(26.17→26.18 실측) patchgap는 LoL 공식 패치노트가 *말한 것*과
 매치 통계가 *실제로 말하는 것* 사이의 괴리 — 미공지 변화·간접 메타 이동 — 를 통계 게이트를
 통과한 원천 매치 링크와 함께 24~72h 안에 보여주는 정적 브리핑 사이트다.
 
@@ -27,7 +27,7 @@
 3. **패치노트 파싱** — ko-kr 공식 패치노트 정적 HTML을 cheerio로 파싱해 `{entity, skill, stat,
    before, after, direction}` 구조 + 원문 anchor 링크로 변환. → `data/aggregated/notes/{patch}.json`
 4. **짝짓기 + 판정** — 1단 결정론(엔티티 ID 블로킹 + 방향 정합 스코어) → 2단 LLM(Claude
-   Sonnet 5, 짝 없는 델타만 배치 추론, 반환 후보 ID를 입력 후보셋 안에서만 검증, 세션 상한 +
+   Opus 5, 짝 없는 델타만 배치 추론, 반환 후보 ID를 입력 후보셋 안에서만 검증, 세션 상한 +
    캐시 우선 + 예산 소진 시 캐시 폴백). → `data/aggregated/deltas/{from}_{to}.json`(모든 판정문에
    원천 링크, 무근거는 `--muted`로만 렌더)
 5. **정적 빌드** — Next.js 16 App Router `output: 'export'`. 빌드 타임에 `data/aggregated/**` JSON을

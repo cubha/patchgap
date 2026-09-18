@@ -50,6 +50,13 @@ on:
         required: false
         type: string
       llm_max:
+        # 120 → 400 (2026-09-18): 상한은 **천장이지 목표가 아니다** — 후보가 상한보다 적으면
+        # 호출 수도 비용도 그대로다(26.17→26.18: 후보 113, calls 113). 문제는 반대쪽이었다:
+        # 26.16→26.17은 후보 244건인데 상한 120이 걸려 **124건이 LLM을 아예 거치지 못했다**
+        # (원인 보유 117/244). 후보 수가 패치마다 113↔244로 두 배 넘게 흔들리므로(공지-불일치
+        # 64↔208) 120은 큰 패치에서 조용히 커버리지를 깎는다 — 실패가 아니라 설계된 절단이라
+        # 경보도 안 울린다. 관측 최대 244에 여유를 둔 400으로 전수를 보장하고, 예산 폭주 가드
+        # (이상 입력에서 1,951행 전량 호출)는 그대로 남긴다. SCOPE §3 선행 갱신 완료.
         # 50 → 120 (2026-09-17): 실측 후보가 113건(미공지 47 + 간접 2 + 공지-불일치 64)인데
         # 상한이 50이라 **미공지 14건이 LLM을 아예 거치지 못했다**. 그 행들은 화면에서
         # "근거 미확인"으로 보였지만 실제로는 "검토하지 않음"이었다 — 사용자가 "미공지 Gap의
@@ -58,7 +65,7 @@ on:
         # 새 델타에만 든다.
         description: "LLM 2단 매칭 세션 상한(run-match --llm-max)"
         required: false
-        default: "120"
+        default: "400"
         type: string
       force:
         description: "true면 data/aggregated/{patch}/summary.json이 이미 있어도 재실행한다(재수집·재집계 강제)"
@@ -268,7 +275,7 @@ jobs:
         env:
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
-          LLM_MAX: ${{ github.event.inputs.llm_max || '120' }}
+          LLM_MAX: ${{ github.event.inputs.llm_max || '400' }}
         run: |
           npx tsx scripts/run-match.ts \
             --from "$PATCH_FROM" \

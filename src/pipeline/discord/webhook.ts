@@ -5,6 +5,7 @@
 
 import type { DeltaRecord, DeltasFile, LlmCause } from "../types";
 import { fmtCiHalf, fmtDeltaInt, fmtDeltaSec, fmtInt, fmtKst, fmtPct, fmtPp, fmtSec, itemHref, metricKind, metricLabel, positionLabel } from "../../lib/format";
+import { displayStatus } from "../shared/display-status";
 import { isSignificantDelta } from "../shared/significance";
 
 // ─── 디스코드 embed 제한(공식 API 제약, PLAN F6 "embed(≤10·6,000자)") ────────────────────────
@@ -147,7 +148,16 @@ export function buildBriefingEmbeds(deltas: DeltasFile, options: BuildBriefingOp
   const { from, to, qAlpha, generatedAt } = deltas.meta;
 
   const unannouncedRows = deltas.rows.filter((r) => r.status === "unannounced");
-  const inconsistentRows = deltas.rows.filter((r) => r.status === "announced-inconsistent");
+  // S11(2026-09-18, 사용자 확정 CF-3) — **웹과 같은 표시 키로 거른다.**
+  // 이전엔 `status === "announced-inconsistent"`만 보고 상위 3건을 방송했는데, 그 상태값은
+  // 판정 엔진이 "유의 + 방향 반대"와 "비유의"와 "유의하나 바닥 미달"을 **한데 넣는** 값이다.
+  // 실측: 두 패치 모두 방송된 3건 중 **2건이 사이트에서는 회색으로 강등된 행**이었다
+  // (26.18 마스터 이 +8.43%p q=0.251 · 에코 −5.58%p / 26.17 녹턴 · 럭스). 즉 웹은 "관측 미확인"
+  // 이라 하고 디스코드는 같은 항목을 "공지-불일치"로 알렸다 — A4 어휘 불일치를 웹에서만 닫으면
+  // 모순이 이 표면으로 이사할 뿐이라, 같은 `displayStatus`를 부른다(판정 엔진은 불변).
+  const inconsistentRows = deltas.rows.filter(
+    (r) => displayStatus(r, qAlpha) === "announced-inconsistent"
+  );
   const significantCount = deltas.rows.filter((r) => isSignificantDelta(r, qAlpha)).length;
 
   const topUnannounced = unannouncedRows.slice(0, topN);

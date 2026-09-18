@@ -29,11 +29,14 @@ export const STATUS_FILTERS: ReadonlyArray<{ key: DisplayStatus | "all" | typeof
   { key: "announced-inconsistent", label: "공지-불일치" },
   // 2026-09-18(ST-4): 비유의 "불일치"를 분리한 표시 키 — 칩도 같은 어휘로 나뉜다.
   { key: "announced-unobserved", label: "공지 · 관측 미확인" },
+  // 2026-09-18(S9/S10 = CF-1·CF-2): 유의하나 바닥 미달인 공지 행을 분리한다. 이 칩이 없으면
+  // 해당 행이 "전체" 말고는 어떤 칩으로도 닿지 않는다(filterByStatus가 표시 키 동등비교라서).
+  { key: "announced-below-floor", label: "공지 · 바닥 미달" },
   { key: GAP_FILTER_KEY, label: "노트에 없는 변화" },
   { key: "unannounced", label: "미공지" },
   { key: "indirect-effect", label: "간접 영향" },
   { key: "insufficient-sample", label: "표본 부족" },
-  { key: "below-threshold", label: "임계 미달" },
+  { key: "below-threshold", label: "바닥 미달" }, // S6 — 표기 통일(뜻 불변, 아래 format.ts 주석)
 ];
 
 /** `gap`은 두 상태를 함께 통과시킨다. 개별 상태 칩(미공지·간접 영향)도 남겨 둔다 — 통합은
@@ -86,7 +89,7 @@ export function sortRows(rows: DeltaRecord[], key: SortKey, direction: "asc" | "
       const cmp = (a.q ?? Infinity) - (b.q ?? Infinity);
       return direction === "desc" ? cmp : -cmp;
     }
-    // 2026-09-18(채점 라운드1 ST-9): 기본 정렬. |Δ| 단독이면 첫 화면이 라인골드 "임계 미달"
+    // 2026-09-18(채점 라운드1 ST-9): 기본 정렬. |Δ| 단독이면 첫 화면이 라인골드 "바닥 미달"
     // 6행으로 채워진다(실측) — 골드는 절대값이 커서 비율 지표를 항상 이긴다. 상태 우선순위
     // (미공지 → 간접 → 불일치 → …)를 먼저 보고, 같은 상태 안에서만 |Δ|로 가른다.
     if (key === "priority") {
