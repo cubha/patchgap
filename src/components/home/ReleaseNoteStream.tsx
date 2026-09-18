@@ -103,7 +103,7 @@ function groupKey(group: ReleaseStreamGroup): string {
 
 const EMPTY_MESSAGE: Record<StreamTab, string> = {
   content: "이 라인에서는 관측된 변화가 없습니다",
-  gap: "이 라인에서는 노트에 없는 변화가 없습니다",
+  gap: "이 라인에서는 미공지 변화가 없습니다",
 };
 
 export default function ReleaseNoteStream({

@@ -29,7 +29,7 @@ export default function CausesPanel({ causes, llm, notesById, generatedAt }: Cau
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       {ordered.length === 0 ? (
-        <p className="px-5 py-4 text-sm text-muted">간접 영향 후보 없음</p>
+        <p className="px-5 py-4 text-sm text-muted">원인 후보 없음</p>
       ) : (
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
           {ordered.map((cause, i) => {

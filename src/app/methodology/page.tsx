@@ -106,6 +106,45 @@ export default function MethodologyPage() {
             />
           </SectionCard>
 
+          {/* 표시 규칙(2026-09-18 라운드6, 사용자 C3) — 각 메뉴에 흩어져 있던 "왜 이렇게 보이나"를 여기 모았다.
+              브리핑·대조표·상세는 결과만 말하고, 그 결과가 어떻게 골라졌는지는 이 카드가 말한다. */}
+          <SectionCard eyebrow="표시 규칙" title="화면이 고르는 것" variant="glass">
+            <dl className="grid grid-cols-1 gap-x-8 gap-y-4 p-5 text-sm md:grid-cols-2">
+              <div>
+                <dt className="font-display font-bold text-fg">브리핑 — 패치 내용 탭</dt>
+                <dd className="mt-1 leading-relaxed text-fg-2">
+                  챔피언·아이템 카드는 관측이 있는 항목부터(공지 · 이상 관측 → 공지 → 유의한 관측 없음), 같은 묶음 안에서는
+                  패치노트 순서. 유의한 관측이 없는 카드는 연속 구간을 1행으로 접습니다. 버그 수정·편의성 개선·신규
+                  스킨·증강은 목록 끝 &ldquo;기타 변경&rdquo; 1블록에 카테고리별로 모으고 배지를 달지 않습니다. 커뮤니티
+                  투표 결과 묶음은 패치 내용이 아니라 싣지 않습니다.
+                </dd>
+              </div>
+              <div>
+                <dt className="font-display font-bold text-fg">브리핑 — 미공지 Gap 탭</dt>
+                <dd className="mt-1 leading-relaxed text-fg-2">
+                  패치노트에 없는 유의 변화를 |Δ| 큰 순으로. 원인은 LLM이 노트 조항을 인용해 추정하되, 인용이 실재하고
+                  신뢰도가 보통 이상일 때만 본문색으로 씁니다. 나머지는 회색(가능성 · 후보 미검증 · 원인 미검토 · 설명 후보
+                  없음)입니다.
+                </dd>
+              </div>
+              <div>
+                <dt className="font-display font-bold text-fg">대조표</dt>
+                <dd className="mt-1 leading-relaxed text-fg-2">
+                  행은 챔피언·아이템 1개씩이고 셀은 밴률·승률·픽률·채택률 중 유의하고 바닥을 넘는 지표만 채웁니다. 유의한
+                  관측이 없는 엔티티는 표에 없고, 라인 골드·오브젝트·경기 시간은 홈 사이드 &ldquo;매치 평균&rdquo;에서만
+                  봅니다. 라인을 고르면 그 라인의 픽률·승률로 셀이 바뀝니다(밴은 라인 무관).
+                </dd>
+              </div>
+              <div>
+                <dt className="font-display font-bold text-fg">항목 상세</dt>
+                <dd className="mt-1 leading-relaxed text-fg-2">
+                  패치노트 대조와 추정 원인이 맨 위, 전/후 관측값이 가운데, 통계 게이트와 원천 매치가 맨 아래입니다.
+                  추정 원인은 검증·신뢰도 순(높음 → 보통 → 낮음 → 인용 없음)입니다.
+                </dd>
+              </div>
+            </dl>
+          </SectionCard>
+
           {/* 확장성의 증명 — HANDOFF-redesign-2026-09-10.md §4-4. 셀렉터가 아니라 어댑터
               매핑표로 "다른 게임에도 같은 판정 엔진을 쓸 수 있다"를 보인다. */}
           <SectionCard eyebrow="확장성" title="어댑터 매핑표 (LoL ↔ PUBG)" variant="glass">

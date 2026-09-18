@@ -240,7 +240,7 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
             <SectionCard eyebrow="선언 대조" title="패치노트 대조" className="flex h-80 flex-col">
               <NoteContrastPanel result={noteContrast} />
             </SectionCard>
-            <SectionCard eyebrow="간접 영향" title="추정 원인(LLM)" className="flex h-80 flex-col">
+            <SectionCard eyebrow="원인" title="추정 원인(LLM)" className="flex h-80 flex-col">
               <CausesPanel causes={delta.causes} llm={delta.llm} notesById={notesById} generatedAt={generatedAt} />
             </SectionCard>
           </div>
