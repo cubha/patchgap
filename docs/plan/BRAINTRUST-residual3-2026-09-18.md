@@ -59,3 +59,18 @@ rubric D4 문구는 "모델명 노출 없음"인데 상세 1,737페이지 중 22
 ## 7. 하지 말 것
 
 - 파서 수정(B2-a) · notes/deltas JSON 손 편집(B2-c) · 4건을 다른 탭으로 이동 · 요약행에 사유 문구 · 조건부 접기 · stat-tile 3개 변경(시안 요소) · 별도 탭(UX-BRIEF §3-01)
+
+## 8. 결과 (2026-09-18, PR #20 → 프로덕션 `9f3e737`)
+
+- 사용자 결정: "둘다 ux및 디자인시안먼저 확인받고 진행방향 선택할게" → 격리 worktree 실빌드로 현행↔시안 비교
+  아티팩트(https://claude.ai/artifact/XwKP7PM9j8JpyDmdyPCUL3) → **"전건 권고방향에맞게 진행"**. D4: "분석 LLM 모델을
+  사용자가 알아야 할 이유가 있나" → 캡션에서 제거, 사이트 어디에도 두지 않음.
+- 구현: `/sh-dev-loop --tdd --auto` — RED 15 선커밋 → GREEN. 권고 §6 순서 그대로(A3 → B2-(b) → D4 → E2).
+- 패널이 못 본 것 2개(Phase 3 critic이 잡음): ① 접힘 구간이 둘 이상이면 React key 중복(scope-critic ST3) ②
+  "방법론이 모델명을 말한다"는 §5의 전제가 거짓 — 방법론은 역할만 말한다(acceptance V1·scope-critic ST6).
+  그리고 메인이 스스로 잡은 것 1개: 바깥 요약행 `<details className="group">`이 열리면 안쪽 카드의
+  `group-open:rotate-180` 화살표가 같이 돈다 → named group(`group/fold`). ST4 scope-critic은 이것을
+  "충돌 없음"으로 **잘못 판정**했다(안쪽 summary에 `group-open:`이 있는데 없다고 읽음).
+- 프로덕션 실측: 첫 10행 관측없음 3→1(연속 6→1) · 섹션 엔티티 카드 4→0 · 의회 34줄/배지 34 · PUBG 순서 OK ·
+  2,091 라우트 raw 모델 id/캐시/관측 보류 0 · 393px 0 · 콘솔 0 · Lighthouse 홈 100/100/100.
+- 채점 R5 = **100**(해석 의존 2: A3·E2) — `SCORECARD-hackathon-2026-09-18.md` §3 라운드 5.
