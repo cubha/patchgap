@@ -19,6 +19,8 @@ export interface StatusBadgeProps {
 const STATUS_CLASSES: Record<string, string> = {
   "announced-consistent": "border-border text-fg-2",
   "announced-inconsistent": "border-danger text-danger",
+  // 표시 전용(2026-09-18 ST-4): 노트 짝은 있으나 관측 비유의 — 경고색이 아니라 중립 회색.
+  "announced-unobserved": "border-border-soft text-muted",
   unannounced: "border-accent text-accent",
   "indirect-effect": "border-accent text-fg-2",
   "insufficient-sample": "border-warn text-warn",

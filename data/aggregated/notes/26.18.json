@@ -256,20 +256,6 @@
       "anchorKind": "entity"
     },
     {
-      "id": "note:26.18:champion:cassiopeia:943d9387",
-      "patch": "26.18",
-      "section": "champion",
-      "entity": "카시오페아",
-      "skill": "E - 쌍독니",
-      "stat": "전체 주문력 계수",
-      "before": "65%",
-      "after": "65%",
-      "direction": "adjust",
-      "summary": "전체 주문력 계수: 65% ⇒ 65%",
-      "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia",
-      "anchorKind": "entity"
-    },
-    {
       "id": "note:26.18:champion:cassiopeia:23105cb4",
       "patch": "26.18",
       "section": "champion",

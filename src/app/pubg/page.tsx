@@ -48,9 +48,11 @@ export default function PubgPage() {
   const bundle = loadPubg();
   if (!bundle) {
     return (
+      <main>
       <Container>
         <PubgUnavailable />
       </Container>
+    </main>
     );
   }
 
@@ -61,7 +63,8 @@ export default function PubgPage() {
   const announced = reportable.filter((row) => row.status !== "unannounced");
 
   return (
-    <Container>
+    <main>
+      <Container>
       {/* pt-40(160px) — 승인 시안의 `.hero-body`가 히어로 스테이지 **하단**에 붙어 있는 배치를
           옮긴 것이다. 키아트가 가장 밝은 상단 구간(잔해·낙하산)을 글자로 덮지 않고 그대로
           보여주고, 제목은 스크림이 충분히 내려앉은 아래쪽에서 읽히게 한다. LoL 홈이 같은
@@ -250,7 +253,7 @@ export default function PubgPage() {
                 줄어도 플레이어가 남은 것을 더 적극적으로 줍거나(감쇠) 너프 소식에 회피하면(증폭) 관측
                 배수가 달라집니다. 그래서 정확한 배수 일치가 아니라 <strong className="text-fg-2">
                 방향과 자릿수</strong>로 판정합니다(공지값의 50~150% 범위면 일치).{" "}
-                <Link href="/pubg/methodology/" className="text-accent underline-offset-2 hover:underline">
+                <Link href="/pubg/methodology/" className="text-accent underline underline-offset-2">
                   판정 규칙 전체 →
                 </Link>
               </p>
@@ -345,7 +348,7 @@ export default function PubgPage() {
 
         <p className="text-sm text-muted">
           바닥 미달·무변화까지 포함한 전체 {deltas.meta.n}개 무기 판정은{" "}
-          <Link href="/pubg/compare/" className="text-accent underline-offset-2 hover:underline">
+          <Link href="/pubg/compare/" className="text-accent underline underline-offset-2">
             대조표
           </Link>
           에 있습니다.
@@ -354,5 +357,6 @@ export default function PubgPage() {
         <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
       </div>
     </Container>
+    </main>
   );
 }

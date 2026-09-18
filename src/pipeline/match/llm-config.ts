@@ -1,0 +1,20 @@
+// src/pipeline/match/llm-config.ts
+// LLM 2단 추론의 고정값 — 모델·프롬프트 버전. `llm-match.ts`에서 분리한 이유(2026-09-18,
+// acceptance-critic V2): 상세 화면 캡션이 모델명을 **문자열로 하드코딩**하고 있어 모델을 올린 뒤에도
+// "claude-sonnet-5"로 남았다. 화면이 `llm-match.ts`를 직접 import하면 `@anthropic-ai/sdk`·fs가
+// 컴포넌트 번들에 딸려오므로, 의존 없는 이 모듈을 화면과 파이프라인이 함께 읽는다.
+//
+// 값 변경 규칙: CLAUDE.md §기술 스택 고정값 — SCOPE §3을 먼저 갱신한다(2026-09-18 Sonnet 5 →
+// Opus 5 상향이 그 절차를 밟은 선례).
+
+// 2026-09-18(사용자 확정 M1, SCOPE §3 갱신): Sonnet 5 → Opus 5. 동일 델타 12건 A/B에서 간접 원인
+// 탐지 12/12 vs 1/12(`docs/plan/LLM-AB-2026-09-17.md`). 캐시 키에 model이 들어가므로 옛 Sonnet
+// 캐시와 충돌하지 않는다. 저신뢰(low) 후보는 화면에서 회색으로만 나간다(home/logic.resolveGapCause).
+export const LLM_MODEL = "claude-opus-5";
+
+// v3(2026-09-18, 채점 라운드1 ST-3): 규칙 7~9 추가 — 요약문이 사용자용 문장이어야 한다. 실측
+// 26.17→26.18 요약 50건 중 41건이 "제공된 후보 목록에는…"(프롬프트 맥락 노출)·"0.571에서
+// 0.455로"(소수점 원값) 형태였다. 사용자 프롬프트의 수치도 사람이 읽는 단위(%·%p)로 바꿨다.
+// v2(B4 후속): summaryCites 필드 추가 + 규칙 6. 캐시 키에 promptVersion이 들어가 옛 버전과 절대
+// 충돌하지 않는다.
+export const PROMPT_VERSION = "v3";

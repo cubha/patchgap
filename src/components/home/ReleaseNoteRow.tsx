@@ -29,6 +29,7 @@ import IconBox from "@/components/IconBox";
 import LaneGlyph from "@/components/LaneGlyph";
 import SpellIcon from "@/components/SpellIcon";
 import StatusBadge from "@/components/StatusBadge";
+import { displayStatus } from "@/pipeline/shared/display-status";
 import DeltaValue from "@/components/DeltaValue";
 import { itemHref, metricLabel } from "@/lib/format";
 import { isCosmeticGroup, isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
@@ -84,6 +85,7 @@ const SECTION_LABELS: Record<string, string> = {
 /** 원인 표시 모드별 글자색 — 규명된 것만 본문색, 나머지는 회색(무근거 문장은 회색). */
 const CAUSE_TONE: Record<GapCauseMode, string> = {
   verified: "text-fg-2",
+  weak: "text-muted",
   candidate: "text-muted",
   none: "text-muted",
   unreviewed: "text-muted",
@@ -255,7 +257,7 @@ export default function ReleaseNoteRow({
               <div className="mt-1 text-xs text-muted">치장 항목 · 관측 대상 아님</div>
             ) : (
               // B3 — 바닥·유의 미달을 발견처럼 쓰지 않는다. 수치는 항목 상세가 그대로 보여준다.
-              <div className="mt-1 text-xs text-muted">효과크기 바닥을 넘는 관측 변화 없음</div>
+              <div className="mt-1 text-xs text-muted">관측 변화 없음 · 바닥 미달</div>
             )}
           </div>
           <span
@@ -278,7 +280,7 @@ export default function ReleaseNoteRow({
               <CauseChain entry={causeEntry} />
             ) : gapCause ? (
               <p className={`mt-2 text-xs ${CAUSE_TONE[gapCause.mode]}`}>
-                {gapCause.mode === "verified" ? "추정 원인: " : null}
+                {gapCause.mode === "verified" ? "추정 원인: " : gapCause.mode === "weak" ? "가능성(신뢰도 낮음): " : null}
                 {gapCause.text}{" "}
                 <Link
                   href={itemHref(gapRepresentative!.id)}
@@ -360,7 +362,7 @@ export default function ReleaseNoteRow({
                       })}
                     </div>
                   </div>
-                  {cosmeticRow ? null : <StatusBadge status={record?.status ?? "관측 보류"} />}
+                  {cosmeticRow ? null : <StatusBadge status={record ? displayStatus(record, qAlpha) : "관측 보류"} />}
                 </li>
               );
             })}

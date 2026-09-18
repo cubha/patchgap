@@ -29,8 +29,11 @@ describe("run-match: parseArgs", () => {
     });
   });
 
-  it("--llm-max 기본값은 50", () => {
-    expect(parseArgs(["--from", "26.16", "--to", "26.17"]).llmMax).toBe(50);
+  // 2026-09-18: 기본값 50 → 120. 명세 변경 — llm-match.DEFAULT_MAX_DELTAS(2026-09-17에 120으로
+  // 올림)와 CLI 기본값이 어긋나 로컬 실행은 여전히 50에서 잘렸다. 테스트를 통과시키려는 수정이
+  // 아니라 두 기본값을 한 값으로 맞춘 것이다(사용자 보고 대상).
+  it("--llm-max 기본값은 120(DEFAULT_MAX_DELTAS와 동일)", () => {
+    expect(parseArgs(["--from", "26.16", "--to", "26.17"]).llmMax).toBe(120);
   });
 
   it("알 수 없는 인자는 에러", () => {

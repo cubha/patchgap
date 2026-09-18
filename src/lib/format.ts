@@ -3,7 +3,8 @@
 // 음수는 하이픈(-)이 아니라 유니코드 마이너스(U+2212, −)로 표기한다 — 타이포그래피 관례이자
 // 표에서 하이픈/마이너스 혼용을 없애기 위함(UX-BRIEF 델타 표기 전반에 일관 적용).
 
-import type { DeltaEntityType, DeltaMetric, Interval, LanePosition, MatchStatus, TeamPosition } from "@/pipeline/types";
+import type { DeltaEntityType, DeltaMetric, Interval, LanePosition, TeamPosition } from "@/pipeline/types";
+import type { DisplayStatus } from "@/pipeline/shared/display-status";
 
 const MINUS = "−";
 
@@ -89,9 +90,11 @@ export function fmtKst(iso: string): string {
 /** MatchStatus 6종(4종 + "no-change" + "below-threshold")을 수용하는 상태 라벨. 알려지지 않은
  * 값은 크래시 대신 원본 문자열을 그대로 반환한다(ST-08/09가 아직 만들지 않은 상태값이 와도
  * 안전). "below-threshold"(2026-09-13 신규) = 통계적으로 유의하지만 효과크기 바닥 미달. */
-const STATUS_LABELS: Record<MatchStatus, string> = {
+const STATUS_LABELS: Record<DisplayStatus, string> = {
   "announced-consistent": "공지-일치",
   "announced-inconsistent": "공지-불일치",
+  // 표시 전용 키(2026-09-18 ST-4) — 노트 짝은 있으나 관측이 비유의. 빨간 "불일치"로 읽히지 않게.
+  "announced-unobserved": "공지 · 관측 미확인",
   unannounced: "미공지",
   "indirect-effect": "간접 영향",
   "insufficient-sample": "표본 부족",
@@ -100,7 +103,7 @@ const STATUS_LABELS: Record<MatchStatus, string> = {
 };
 
 export function statusLabel(status: string): string {
-  return STATUS_LABELS[status as MatchStatus] ?? status;
+  return STATUS_LABELS[status as DisplayStatus] ?? status;
 }
 
 /** DeltaRecord.metric(문자열 키) → 한글 라벨. 알려지지 않은 metric은 원본 문자열을 그대로

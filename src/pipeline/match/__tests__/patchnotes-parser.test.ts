@@ -377,3 +377,28 @@ describe("fetchPatchNotesHtml", () => {
     ).rejects.toThrow(/500/);
   });
 });
+
+// ── before===after 항목 제거 (2026-09-18, 채점 라운드1 ST-6) ─────────────────────
+// 실측: 26.18 "카시오페아 E - 쌍독니 전체 주문력 계수: 65% ⇒ 65%"가 항목으로 살아남아 대조표에
+// "공지-불일치" 배지를 달고 나갔다. 값이 같으면 선언이 아니다 — 짝지을 방향이 없다.
+describe("parsePatchNotes — 값이 바뀌지 않은 'A ⇒ A' 항목은 내보내지 않는다", () => {
+  it("before와 after가 같은 줄은 items에서 빠지고, 다른 줄은 그대로 남는다", () => {
+    const $ = cheerio.load(FIXTURE_17);
+    const container = $("#patch-notes-container");
+    const aurelionBlock = container.find("h3.change-title#patch-aurelionsol").closest(".content-border");
+    aurelionBlock.before(
+      $(
+        '<div class="content-border"><div class="patch-change-block white-stone accent-before"><div>' +
+          '<h3 class="change-title" id="patch-same-decoy">동일값 디코이</h3>' +
+          '<h4 class="change-detail-title ability-title">E - 디코이 스킬</h4>' +
+          "<ul><li><strong>전체 주문력 계수</strong>: 65% ⇒ <strong>65%</strong></li>" +
+          "<li><strong>피해량</strong>: 10 ⇒ <strong>20</strong></li></ul>" +
+          "</div></div></div>"
+      )
+    );
+    const parsed = parsePatchNotes($.html(), { patch: "26.17", sourceUrl: SOURCE_URL_17 });
+    const decoy = parsed.items.filter((i) => i.entity === "동일값 디코이");
+    expect(decoy.map((i) => i.stat)).toEqual(["피해량"]);
+    expect(parsed.items.some((i) => i.before !== null && i.before === i.after)).toBe(false);
+  });
+});

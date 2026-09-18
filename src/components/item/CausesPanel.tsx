@@ -5,6 +5,7 @@
 
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import { fmtKst } from "@/lib/format";
+import { LLM_MODEL } from "@/pipeline/match/llm-config";
 
 export interface CausesPanelProps {
   causes: DeltaRecord["causes"];
@@ -14,6 +15,12 @@ export interface CausesPanelProps {
   /** deltas 파일 meta.generatedAt — llm 캡션의 "캐시 {시각}"에 쓴다. */
   generatedAt: string | null;
 }
+
+const CONFIDENCE_LABEL: Record<DeltaRecord["causes"][number]["confidence"], string> = {
+  high: "높음",
+  medium: "보통",
+  low: "낮음",
+};
 
 export default function CausesPanel({ causes, llm, notesById, generatedAt }: CausesPanelProps) {
   return (
@@ -29,10 +36,12 @@ export default function CausesPanel({ causes, llm, notesById, generatedAt }: Cau
                 key={`${cause.candidateNoteId ?? "none"}-${i}`}
                 className="flex items-start justify-between gap-4 border-b border-border-soft px-5 py-4 last:border-b-0"
               >
+                {/* 2026-09-18(ST-2): `low`는 인용 노트가 실재해도(verified) 회색으로 둔다 —
+                    "검증 ✓"가 "믿을 만함"으로 읽히던 것을 신뢰도 라벨로 바꿨다. */}
                 {cause.verified && candidate ? (
                   <a
                     href={candidate.anchorUrl}
-                    className="text-sm text-accent hover:underline"
+                    className={`text-sm hover:underline ${cause.confidence === "low" ? "text-muted" : "text-accent"}`}
                   >
                     {cause.text}
                   </a>
@@ -41,10 +50,10 @@ export default function CausesPanel({ causes, llm, notesById, generatedAt }: Cau
                 )}
                 <span
                   className={`whitespace-nowrap text-xs font-bold ${
-                    cause.verified ? "text-accent" : "text-muted"
+                    cause.verified && cause.confidence !== "low" ? "text-accent" : "text-muted"
                   }`}
                 >
-                  {cause.verified ? "검증 ✓" : "검증 ✗ · 근거 미확인"}
+                  {cause.verified ? `노트 인용 ✓ · 신뢰도 ${CONFIDENCE_LABEL[cause.confidence]}` : "인용 노트 없음"}
                 </span>
               </div>
             );
@@ -76,5 +85,5 @@ export default function CausesPanel({ causes, llm, notesById, generatedAt }: Cau
 /** llm 캡션("모델 claude-sonnet-5 · 캐시 {generatedAt}")을 만든다 — 컴포넌트 밖에서도 재사용
  * 가능하도록 분리한 소품 함수(순수). */
 export function llmCaption(generatedAt: string): string {
-  return `모델 claude-sonnet-5 · 캐시 ${fmtKst(generatedAt)}`;
+  return `모델 ${LLM_MODEL} · 캐시 ${fmtKst(generatedAt)}`;
 }

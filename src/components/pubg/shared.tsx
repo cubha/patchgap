@@ -39,7 +39,7 @@ export function PubgPageHeader({
       <p className="ambient-hero-sub font-mono text-xs font-bold tracking-wide text-accent uppercase">
         PUBG: BATTLEGROUNDS · 어댑터 실연결
       </p>
-      <h1 className="ambient-hero-headline font-display text-3xl leading-tight font-bold text-balance text-fg">
+      <h1 className="ambient-hero-headline font-display text-3xl leading-tight font-bold text-balance break-keep text-fg">
         {title}
       </h1>
       <p className="ambient-hero-sub text-sm leading-relaxed text-fg" style={{ maxWidth: "var(--measure)" }}>
@@ -74,8 +74,7 @@ export function PubgFooter({ generatedAt, nVerdicts }: { generatedAt: string; nV
       </p>
       <p className="text-xs leading-relaxed text-muted">
         PUBG: BATTLEGROUNDS 및 관련 이미지·데이터의 권리는 KRAFTON, Inc.에 있습니다. 이 페이지는
-        비상업 개인 프로젝트이며 KRAFTON이 후원·제휴·승인한 서비스가 아닙니다. 자산 사용 문의
-        발송 2026-09-16.
+        비상업 개인 프로젝트이며 KRAFTON이 후원·제휴·승인한 서비스가 아닙니다.
       </p>
     </footer>
   );

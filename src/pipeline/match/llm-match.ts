@@ -23,11 +23,8 @@ import type { DeltaRecord, LlmCause, PatchNoteItem } from "../types";
 import { llmCacheDir } from "../shared/paths";
 import type { DdragonData } from "./ddragon";
 
-export const LLM_MODEL = "claude-sonnet-5";
-// v2(B4 후속 수정): summaryCites 필드 추가 + 프롬프트 규칙 6 추가 — 출력 스키마·프롬프트가
-// 바뀌었으므로 promptVersion을 올려 v1 캐시 키와 절대 충돌하지 않게 한다(캐시 키에 promptVersion
-// 포함 — 옛 v1 캐시 파일이 있어도 자동으로 miss 처리되어 재호출된다).
-export const PROMPT_VERSION = "v2";
+export { LLM_MODEL, PROMPT_VERSION } from "./llm-config";
+import { LLM_MODEL, PROMPT_VERSION } from "./llm-config";
 // 2026-09-17: 50 → 120. 실측 후보가 113건(미공지 47 + 간접 2 + 공지-불일치 64)인데 상한이
 // 50이라 미공지 14건이 LLM을 **아예 거치지 못했고**, 화면은 그것을 "근거 미확인"으로 표시해
 // "검토했으나 후보 없음"과 구분되지 않았다(사용자 지적 B5).
@@ -108,22 +105,59 @@ const SYSTEM_INSTRUCTIONS = [
   "   근거로 쓰세요. summaryCites에는 summary 문장에서 실제로 인용한 후보 id만 정확히 넣으세요",
   "   (지어낸 id 금지). 델타 수치만으로 요약했다면(인용한 후보가 없다면) summaryCites는 빈",
   "   배열로 반환하세요.",
+  "7. summary와 causes[].text는 코치·클랜장이 읽는 브리핑 문장입니다. '제공된 목록', '후보 목록',",
+  "   '후보 패치노트' 같은 이 대화의 맥락을 언급하지 마세요 — 독자는 목록을 본 적이 없습니다.",
+  "8. 수치는 사용자 메시지에 적힌 표기(%, %p, 초)를 그대로 쓰고 0.571 같은 소수 원값이나",
+  "   MonkeyKing 같은 영문 키를 쓰지 마세요. 엔티티는 한국어 이름만 쓰세요.",
+  "9. 한 문장은 80자 안팎으로 간결하게. 후보가 없으면 summary는 '패치노트에서 이 변화를 설명할",
+  "   조항을 찾지 못했습니다' 한 문장으로 끝내세요 — 이유를 장황하게 나열하지 마세요.",
 ].join("\n");
 
 function buildSystemPrompt(notes: readonly PatchNoteItem[]): string {
   return `${SYSTEM_INSTRUCTIONS}\n\n후보 패치노트 항목 목록(JSON):\n${serializeCandidates(notes)}`;
 }
 
+/** 비율 지표(픽률·밴률·승률·채택률)는 %로, 그 차이는 %p로 — 모델이 이 표기를 그대로 받아쓴다
+ * (규칙 8). 골드·시간은 원 단위 그대로. `fmt`를 여기 두는 이유: 이 모듈은 파이프라인 계층이라
+ * `src/lib/format.ts`(웹 포맷 유틸)에 의존하지 않는다. */
+const RATE_METRICS = new Set(["pickRate", "banRate", "winRate", "adoptionRate"]);
+
+function fmtValue(metric: string, value: number | null, delta = false): string {
+  if (value === null) return "N/A";
+  if (RATE_METRICS.has(metric)) return `${(value * 100).toFixed(1)}${delta ? "%p" : "%"}`;
+  if (metric.endsWith("Sec")) return `${Math.round(value)}초`;
+  return `${Math.round(value)}`;
+}
+
+const METRIC_KO: Record<string, string> = {
+  pickRate: "픽률",
+  banRate: "밴률",
+  winRate: "승률",
+  adoptionRate: "채택률",
+  goldAt10: "골드@10",
+  goldAt14: "골드@14",
+};
+
+const POSITION_KO: Record<string, string> = {
+  TOP: "탑",
+  JUNGLE: "정글",
+  MIDDLE: "미드",
+  BOTTOM: "원딜",
+  UTILITY: "서포터",
+};
+
 function buildUserPrompt(delta: DeltaRecord): string {
+  const parts = delta.id.split(":");
+  const positionHint = parts.length >= 4 && POSITION_KO[parts[2]] ? ` (${POSITION_KO[parts[2]]})` : "";
   return [
-    `엔티티: ${delta.entityName} (${delta.entityKey}, ${delta.entityType})`,
-    `지표: ${delta.metric}`,
-    `이전 값: ${delta.before ?? "N/A"}`,
-    `이후 값: ${delta.after ?? "N/A"}`,
-    `델타: ${delta.delta ?? "N/A"}`,
-    `95% CI: [${delta.ci[0]}, ${delta.ci[1]}]`,
+    `엔티티: ${delta.entityName}${positionHint}`,
+    `지표: ${METRIC_KO[delta.metric] ?? delta.metric}`,
+    `이전 값: ${fmtValue(delta.metric, delta.before)}`,
+    `이후 값: ${fmtValue(delta.metric, delta.after)}`,
+    `변화: ${fmtValue(delta.metric, delta.delta, true)}`,
+    `95% CI: [${fmtValue(delta.metric, delta.ci[0], true)}, ${fmtValue(delta.metric, delta.ci[1], true)}]`,
     `표본 n: 이전=${delta.n.before}, 이후=${delta.n.after}`,
-    `현재 판정 상태: ${delta.status}`,
+    `현재 판정 상태: ${delta.status === "unannounced" ? "미공지(패치노트에 직접 조항 없음)" : "공지-불일치(노트 방향과 관측이 다름)"}`,
   ].join("\n");
 }
 

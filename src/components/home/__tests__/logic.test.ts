@@ -426,3 +426,30 @@ describe("resolveGapCause", () => {
     expect(unreviewed.mode).not.toBe(none.mode);
   });
 });
+
+// ── resolveGapCause — confidence 분리 (2026-09-18, 채점 라운드1 ST-2 / 사용자 확정 M1) ──────
+// 모델을 Opus로 올리면 후보는 늘지만 대부분 `low`다. `verified:true`(id가 실재)와 "믿을 만함"은
+// 다른 말이라, low는 본문색 "추정 원인"이 아니라 회색 "가능성"으로만 나간다(무근거 회색 원칙).
+describe("resolveGapCause — 신뢰도 분리", () => {
+  it("verified + medium 이상은 verified(본문색)", () => {
+    expect(resolveGapCause(delta({ causes: [llmCause({ confidence: "medium" })] })).mode).toBe("verified");
+    expect(resolveGapCause(delta({ causes: [llmCause({ confidence: "high" })] })).mode).toBe("verified");
+  });
+
+  it("verified + low는 weak — 회색 '가능성' 문장", () => {
+    const result = resolveGapCause(delta({ causes: [llmCause({ confidence: "low" })] }));
+    expect(result.mode).toBe("weak");
+    expect(result.text).toBe("폭풍갈퀴 변경의 파급");
+  });
+
+  it("첫 후보가 low라도 뒤에 medium이 있으면 그것을 대표로 쓴다", () => {
+    const result = resolveGapCause(
+      delta({ causes: [llmCause({ confidence: "low", text: "약한 후보" }), llmCause({ confidence: "medium", text: "강한 후보" })] })
+    );
+    expect(result).toEqual({ mode: "verified", text: "강한 후보" });
+  });
+
+  it("미검증(verified:false)은 신뢰도와 무관하게 candidate", () => {
+    expect(resolveGapCause(delta({ causes: [llmCause({ verified: false, confidence: "high" })] })).mode).toBe("candidate");
+  });
+});

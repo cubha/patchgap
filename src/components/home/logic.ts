@@ -271,7 +271,26 @@ export function indexNotesById(notes: NotesFile | null): Record<string, PatchNot
  * 표기 계보: 프로토타입 `01-briefing-home.html`의 `.delta-cause` 5개 행. 검증된 것만 본문색,
  * 나머지는 회색이라는 규칙은 그대로 승계한다(무근거 문장은 회색).
  */
-export type GapCauseMode = "verified" | "candidate" | "none" | "unreviewed";
+/**
+ * 2026-09-18(채점 라운드1 ST-2, 사용자 확정 M1): `weak` 추가. 모델을 Opus로 올리면 후보는
+ * 늘지만(A/B 12/12) 신뢰도가 거의 전부 `low`다. `verified:true`는 "인용한 노트 id가 실재한다"는
+ * 뜻이지 "믿을 만하다"가 아니므로, low는 본문색 "추정 원인"이 아니라 회색 "가능성"으로만
+ * 나간다 — 무근거 회색 원칙을 신뢰도 축까지 확장한 것이다.
+ */
+export type GapCauseMode = "verified" | "weak" | "candidate" | "none" | "unreviewed";
+
+const CONFIDENCE_RANK: Record<LlmCause["confidence"], number> = { high: 2, medium: 1, low: 0 };
+
+/** 대표 후보 — 검증된 것 중 신뢰도가 가장 높은 것, 없으면 첫 후보. `causes[0]`을 그대로
+ * 쓰면 low가 앞에 오고 medium이 뒤에 있는 행이 회색으로 떨어진다. */
+function representativeCause(causes: readonly LlmCause[]): LlmCause | undefined {
+  let best: LlmCause | undefined;
+  for (const cause of causes) {
+    if (!cause.verified) continue;
+    if (!best || CONFIDENCE_RANK[cause.confidence] > CONFIDENCE_RANK[best.confidence]) best = cause;
+  }
+  return best ?? causes[0];
+}
 
 export interface GapCauseDisplay {
   mode: GapCauseMode;
@@ -279,9 +298,11 @@ export interface GapCauseDisplay {
 }
 
 export function resolveGapCause(record: DeltaRecord): GapCauseDisplay {
-  const cause: LlmCause | undefined = record.causes[0];
+  const cause: LlmCause | undefined = representativeCause(record.causes);
   if (cause) {
-    if (cause.verified) return { mode: "verified", text: cause.text };
+    if (cause.verified) {
+      return { mode: cause.confidence === "low" ? "weak" : "verified", text: cause.text };
+    }
     return { mode: "candidate", text: `${cause.text} — 후보 미검증` };
   }
   if (!record.llm) {
@@ -293,7 +314,8 @@ export function resolveGapCause(record: DeltaRecord): GapCauseDisplay {
       text: `원인 미검토 — ${record.llm.reason === "call-budget-exceeded" ? "호출 예산 소진" : "분석 건너뜀"}`,
     };
   }
-  return { mode: "none", text: "설명 후보 없음 — 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다" };
+  // 문구 압축(2026-09-18 ST-8) — 같은 문장이 Gap 탭에 21회 반복돼 노이즈였다. 뜻은 유지한다.
+  return { mode: "none", text: "설명 후보 없음 — 노트에 원인 조항 없음" };
 }
 
 /** entityType이 champion/item이 아닌 행(objective·lane·summary)의 EntityIcon 폴백 글자 —

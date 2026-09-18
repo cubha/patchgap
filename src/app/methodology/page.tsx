@@ -18,6 +18,7 @@
 // 본문 래퍼에 `flex-1`을 줘 "고지" 카드의 짧은 텍스트가 카드 하단에 눌리지 않고 자연스럽게
 // 채워지도록 했다(children 자체는 SectionCard가 감싸지 않으므로 각 소비처가 이 규약을 따름).
 
+import { isSignificantDelta } from "@/pipeline/shared/significance";
 import fs from "node:fs";
 import path from "node:path";
 import Container from "@/components/Container";
@@ -56,8 +57,11 @@ export default function MethodologyPage() {
   const deltas = pair ? loadDeltas(pair.from, pair.to) : null;
   const ddragonVersion = latestDdragonVersion();
 
+  // 2026-09-18(채점 라운드1 ST-5): 홈 타일 "유의 변화"와 **같은 술어**를 쓴다. 이전엔 여기만
+  // `q<α` 단독이라 홈 403 vs 방법론 410으로 두 페이지가 서로를 반박했다(표본 부족 7행이 q는
+  // 통과하지만 승률 게이트에서 제외되는 차이).
   const significantCount = deltas
-    ? deltas.rows.filter((row) => row.q !== null && row.q < FDR_ALPHA).length
+    ? deltas.rows.filter((row) => isSignificantDelta(row, deltas.meta.qAlpha ?? FDR_ALPHA)).length
     : null;
 
   const steps = buildPipelineSteps({
@@ -90,11 +94,11 @@ export default function MethodologyPage() {
     <div className="flex flex-1 flex-col">
       <main>
         <Container className="flex flex-col gap-6 pt-[152px] pb-8"> {/* design-lint-ignore: PLAN-deployed-ui-fix-2026-09-12.md R8 — 사용자 확정 +120px, 대응 토큰 없는 페이지별 배치 수치 */}
-          <SectionCard eyebrow="우선 1 · 신뢰" title="데이터 파이프라인" variant="glass">
+          <SectionCard eyebrow="신뢰" title="데이터 파이프라인" variant="glass">
             <PipelineDiagram steps={steps} />
           </SectionCard>
 
-          <SectionCard eyebrow="우선 1 · 해석" title="상태 정의" variant="glass">
+          <SectionCard eyebrow="해석" title="상태 정의" variant="glass">
             <StatusDefinitionTable
               minN={WIN_RATE_MIN_N}
               alpha={FDR_ALPHA}
@@ -104,13 +108,13 @@ export default function MethodologyPage() {
 
           {/* 확장성의 증명 — HANDOFF-redesign-2026-09-10.md §4-4. 셀렉터가 아니라 어댑터
               매핑표로 "다른 게임에도 같은 판정 엔진을 쓸 수 있다"를 보인다. */}
-          <SectionCard eyebrow="우선 2 · 확장성" title="어댑터 매핑표 (LoL ↔ PUBG)" variant="glass">
+          <SectionCard eyebrow="확장성" title="어댑터 매핑표 (LoL ↔ PUBG)" variant="glass">
             <AdapterMatrix />
           </SectionCard>
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
             <div id="gates">
-              <SectionCard eyebrow="우선 2 · 투명성" title="통계 게이트" variant="glass" className="flex h-full flex-col">
+              <SectionCard eyebrow="투명성" title="통계 게이트" variant="glass" className="flex h-full flex-col">
                 <div className="flex flex-1 flex-col">
                   <GateGrid minN={WIN_RATE_MIN_N} alpha={FDR_ALPHA} />
                 </div>

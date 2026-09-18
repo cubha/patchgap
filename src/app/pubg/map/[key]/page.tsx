@@ -57,9 +57,11 @@ export default async function PubgMapPage({ params }: PageProps) {
   const maps = loadPubgMaps();
   if (!bundle || !maps) {
     return (
+      <main>
       <Container>
         <PubgUnavailable />
       </Container>
+    </main>
     );
   }
 
@@ -70,6 +72,7 @@ export default async function PubgMapPage({ params }: PageProps) {
 
   if (!mapKey || !shown) {
     return (
+      <main>
       <Container>
         <div className="py-12">
           <h1 className="font-display text-2xl font-bold text-fg">알 수 없는 맵</h1>
@@ -81,6 +84,7 @@ export default async function PubgMapPage({ params }: PageProps) {
           </p>
         </div>
       </Container>
+    </main>
     );
   }
 
@@ -120,7 +124,8 @@ export default async function PubgMapPage({ params }: PageProps) {
   ];
 
   return (
-    <Container>
+    <main>
+      <Container>
       <div className="flex flex-col gap-6 pt-12 pb-8">
         <nav className="font-mono text-xs text-muted">
           <Link href="/pubg/" className="hover:text-fg-2">
@@ -184,5 +189,6 @@ export default async function PubgMapPage({ params }: PageProps) {
         <PubgFooter generatedAt={maps.deltas.meta.generatedAt} nVerdicts={bundle.deltas.meta.n} />
       </div>
     </Container>
+    </main>
   );
 }

@@ -7,10 +7,11 @@
 
 import StatusBadge from "@/components/StatusBadge";
 import type { EffectFloor } from "@/pipeline/aggregate/stats";
-import type { DeltaMetric, MatchStatus } from "@/pipeline/types";
+import type { DeltaMetric } from "@/pipeline/types";
+import type { DisplayStatus } from "@/pipeline/shared/display-status";
 
 interface DefinitionRow {
-  status: MatchStatus;
+  status: DisplayStatus;
   definition: string;
   condition: string;
 }
@@ -46,8 +47,15 @@ function buildRows(minN: number, alpha: number, floors: Record<DeltaMetric, Effe
     },
     {
       status: "announced-inconsistent",
-      definition: "선언 방향과 관측 델타 방향이 다르거나 유의하지 않음",
-      condition: "짝 존재 · 방향 불일치 또는 비유의",
+      definition: "패치노트 선언과 반대 방향의 유의한 변화가 관측됨",
+      condition: `짝 존재 · 방향 반대 · q<${alpha}`,
+    },
+    {
+      // 표시 전용 키(2026-09-18 ST-4) — 판정 엔진에서는 위 행과 같은 상태값이다. 화면에서만
+      // "노트가 틀렸다"와 "노트대로인지 아직 모른다"를 갈라 보여준다.
+      status: "announced-unobserved",
+      definition: "패치노트는 변경을 말했지만 통계에서 유의한 변화가 관측되지 않음",
+      condition: `짝 존재 · q≥${alpha} 또는 CI가 0 포함`,
     },
     {
       status: "unannounced",

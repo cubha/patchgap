@@ -37,37 +37,37 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
   {
     layer: "주 엔티티",
     lol: "챔피언 (173)",
-    pubg: "무기 · 차량 · 소모품",
+    pubg: "무기 47종 · 맵 9종 (설계: 차량 · 소모품)",
     iface: "Entity{type,key,name}",
   },
   {
     layer: "공간 축",
     lol: "라인 5종 (탑·정글·미드·원딜·서포터)",
-    pubg: "맵 · 낙하 구역",
+    pubg: "맵 (설계: 낙하 구역)",
     iface: "Segment[]",
   },
   {
     layer: "채택률 지표",
     lol: "픽률 · 밴률",
-    pubg: "픽업률 · 초반 교전 사용률",
+    pubg: "무기 획득 점유율 (설계: 초반 교전 사용률)",
     iface: "Metric.adoption",
   },
   {
     layer: "성과 지표",
     lol: "승률 (n≥200 게이트)",
-    pubg: "순위 · 생존 시간",
+    pubg: "(설계) 순위 · 생존 시간",
     iface: "Metric.outcome",
   },
   {
     layer: "시계열 지표",
     lol: "골드@10/14 · 첫 오브젝트 시각",
-    pubg: "첫 교전 시각 · 자기장 단계별 생존",
+    pubg: "(설계) 첫 교전 시각 · 자기장 단계별 생존",
     iface: "Metric.timeline",
   },
   {
     layer: "엔티티 자산",
     lol: "Data Dragon (아이콘·스펠)",
-    pubg: "PUBG 자산 CDN",
+    pubg: "pubg/api-assets 공식 렌더(무기 38/47 · 맵 9/9)",
     iface: "AssetSource.icon()",
   },
   {
@@ -88,4 +88,4 @@ export const PUBG_COLUMN_HEADER = "PUBG (실연결 · 42.3 ⇒ 43.1)";
 
 /** 표 아래 강조 문단 — 시안 `.note-blocked`. 마지막 행(판정 엔진)이 왜 핵심인지 말한다. */
 export const JUDGMENT_ENGINE_NOTE =
-  "마지막 행이 핵심이다 — 게임을 갈아끼울 때 바뀌는 것은 어댑터 8줄이고 판정 엔진은 고정이다. PUBG 열은 확인된 사실(2026-09-16 실측 · 패치노트가 동일한 A ⇒ B 구조)과 설계 제안을 구분해 적었다.";
+  "마지막 행이 핵심입니다 — 게임을 바꿀 때 달라지는 것은 어댑터 8줄이고 판정 엔진은 그대로입니다. PUBG 열에서 (설계) 표시가 붙은 칸은 아직 연결하지 않은 제안이고, 나머지는 실제로 연결된 값입니다.";

@@ -25,6 +25,7 @@ import DeltaValue from "@/components/DeltaValue";
 import EntityIcon from "@/components/EntityIcon";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
+import { displayStatus } from "@/pipeline/shared/display-status";
 import { listPatchPairs, loadChampions, loadDeltas, loadItems, loadNotes, type PatchPair } from "@/lib/data";
 import { entityTypeLabel, fmtInt, itemIdFromSlug, itemSlug } from "@/lib/format";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
@@ -55,6 +56,7 @@ interface FoundDelta {
   pair: PatchPair;
   delta: DeltaRecord;
   generatedAt: string;
+  qAlpha?: number;
 }
 
 /**
@@ -79,7 +81,7 @@ function findDeltaForId(rawId: string): FoundDelta | null {
     const deltas = loadDeltas(pair.from, pair.to);
     if (!deltas) continue;
     const delta = deltas.rows.find((row) => row.id === rawId);
-    if (delta) return { pair, delta, generatedAt: deltas.meta.generatedAt };
+    if (delta) return { pair, delta, generatedAt: deltas.meta.generatedAt, qAlpha: deltas.meta.qAlpha };
   }
   return null;
 }
@@ -131,7 +133,7 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
     return <EmptyState />;
   }
 
-  const { pair, delta, generatedAt } = found;
+  const { pair, delta, generatedAt, qAlpha } = found;
   const notes = loadNotes(pair.to);
   const notesById = new Map<string, PatchNoteItem>((notes?.items ?? []).map((item) => [item.id, item]));
   const kind = metricKind(delta.metric);
@@ -197,7 +199,9 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
                 <h1 className="ambient-detail-headline font-display text-xl font-bold text-fg">
                   {delta.entityName} — {displayMetricLabel(delta)}
                 </h1>
-                <StatusBadge status={delta.status} />
+                {/* 2026-09-18(ST-4, scope-critic 지적): 대조표와 같은 표시 키 — 비유의 "불일치"는
+                    여기서도 회색 "관측 미확인"이어야 두 화면이 서로를 반박하지 않는다. */}
+                <StatusBadge status={displayStatus(delta, qAlpha)} />
               </div>
               <p className="ambient-detail-sub mt-2 text-lg text-fg-2">
                 {pair.from}→{pair.to} {displayMetricLabel(delta)}{" "}
@@ -234,16 +238,11 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
             <div className="flex flex-col gap-6">
               {/* 근거 패널(패치노트 대조)을 차트보다 위로 — HANDOFF §4-3 "차트 폭을 줄이고
                   근거 패널을 위로". */}
-              <SectionCard eyebrow="우선 1 · 선언 대조" title="패치노트 대조">
+              <SectionCard eyebrow="선언 대조" title="패치노트 대조">
                 <NoteContrastPanel result={noteContrast} />
               </SectionCard>
 
-              <SectionCard eyebrow="우선 1 · 시각 근거" title="전/후 관측값">
-                <div className="p-5 pb-0">
-                  <p className="text-xs text-muted">
-                    일별 추이는 수집 확장 후 제공 — 현재 집계는 패치 단위 전/후 값만 제공합니다.
-                  </p>
-                </div>
+              <SectionCard eyebrow="관측" title="전/후 관측값">
                 {/* 차트 폭 축소 — 근거 패널 대비 시각 우선순위를 낮춘다(HANDOFF §4-3). */}
                 <div className="max-w-xl">
                   <ItemChart data={chartData} />
@@ -278,7 +277,7 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
               </SectionCard>
 
               <SectionCard
-                eyebrow="우선 2 · 간접 영향 후보"
+                eyebrow="간접 영향"
                 title="추정 원인(LLM)"
                 className="flex flex-1 flex-col"
               >

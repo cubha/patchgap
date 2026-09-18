@@ -145,6 +145,12 @@ export default function ReleaseNoteStream({
         })}
       </div>
 
+      {/* 정렬 고지(ST-8) — 노트를 위에서 아래로 훑는 독자에게 순서가 임의가 아님을 한 줄로. */}
+      {tab === "content" && filtered.length > 0 ? (
+        <p className="border-b border-border-soft px-5 py-2 text-xs text-muted">
+          관측이 있는 항목부터 · 같은 묶음 안에서는 패치노트 순서
+        </p>
+      ) : null}
       {filtered.length === 0 ? (
         <div className="flex min-h-0 flex-1 items-center justify-center">
           <p className="p-5 text-sm text-muted">{EMPTY_MESSAGE[tab]}</p>
