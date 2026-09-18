@@ -76,9 +76,8 @@ export default function HeroSummary({ stats, action }: HeroSummaryProps) {
           패치 전후 KR 상위 티어 매치를 각각 집계해 통계적으로 유의한 변화만 셉니다 · 노트에 없는
           변화는 <strong className="text-accent">미공지 Gap</strong>으로 따로 모읍니다
         </p>
-        {/* 인트로 재생 버튼(2026-09-17) — PUBG 브리핑과 같은 자리·같은 어포던스. 인트로 영상은
-            1.7초라 진입 순간을 놓치면 다시 볼 수 없었고, prefers-reduced-motion 환경에서는
-            아예 재생되지 않아 확인할 방법이 없었다(사용자 지적 "둘 다 안 된다"). */}
+        {/* 인트로 재생 버튼은 2026-09-18 라운드6(사용자 C4 "인트로재생 버튼 제거")에 뺐다. `action`
+            슬롯은 히어로 아래 조작 요소 주입용으로 남긴다(지금은 호출부가 넘기지 않는다). */}
         {action ? <div className="mt-4">{action}</div> : null}
       </div>
       <section className={`${panelSurfaceClass("glass")} grid grid-cols-3 overflow-hidden rounded-lg`}>

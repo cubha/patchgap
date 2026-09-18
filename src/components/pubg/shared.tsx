@@ -4,7 +4,6 @@
 // 함께 붙어야** 한다 — 사용자가 대조표로 바로 들어와도 "이 숫자는 KR·Master+가 아니다"를
 // 알아야 하기 때문이다(PLAN-pubg-gate §9-2 R5).
 import type { ReactNode } from "react";
-import IntroReplayButton from "@/components/IntroReplayButton";
 import { fmtKst } from "@/lib/format";
 
 export function pct(value: number, digits = 1): string {
@@ -24,16 +23,7 @@ export function signedPct(value: number, digits = 1): string {
  * 글자가 묻히지 않게 시안 `.hero-body h2`의 text-shadow를 승계한다. 사진이 깔리지 않는
  * 라우트(대조표·방법론)에서도 그림자는 무해하다(배경이 단색이면 보이지 않는다).
  */
-export function PubgPageHeader({
-  title,
-  lead,
-  showReplay = false,
-}: {
-  title: ReactNode;
-  lead: ReactNode;
-  /** 배경 키아트가 깔리는 브리핑에서만 true — 대조표·방법론은 아트가 없어 누를 대상이 없다. */
-  showReplay?: boolean;
-}) {
+export function PubgPageHeader({ title, lead }: { title: ReactNode; lead: ReactNode }) {
   return (
     <header className="flex flex-col gap-3">
       <p className="ambient-hero-sub font-mono text-xs font-bold tracking-wide text-accent uppercase">
@@ -45,7 +35,6 @@ export function PubgPageHeader({
       <p className="ambient-hero-sub text-sm leading-relaxed text-fg" style={{ maxWidth: "var(--measure)" }}>
         {lead}
       </p>
-      {showReplay ? <IntroReplayButton label="강하 인트로 재생" /> : null}
     </header>
   );
 }

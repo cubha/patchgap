@@ -71,7 +71,6 @@ export default function PubgPage() {
           이유로 pt-44를 쓴다(src/app/page.tsx:85) — 아트 밴드 높이에 맞춰 한 단계 작은 값. */}
       <div className="flex flex-col gap-6 pt-40 pb-8">
         <PubgPageHeader
-          showReplay
           title={
             <>
               <span className="text-accent">42.3 ⇒ 43.1</span> · 무기 획득 점유율
