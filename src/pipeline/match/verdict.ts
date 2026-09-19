@@ -128,9 +128,10 @@ export interface DeltasLlmMeta {
    * 측정할 수 있게** 남기는 수치다 — 근거는 llm-match.ts의 summarizeProseHygiene 주석.
    */
   prose?: ProseHygieneStats;
-  /** 길이 상한 위반으로 1회 재요청한 델타 수(v5, 2026-09-19). `calls`처럼 **이 실행**의 수치라
-   * 캐시 적중 실행에서는 0이다. 없으면 계수기가 생기기 전의 파일이다. */
-  lengthRepairs?: number;
+  /** 문장 규칙 위반으로 1회 재요청한 델타 수(v5). `calls`처럼 **이 실행**의 수치다 — 2026-09-19
+   * 부터는 캐시 적중분도 검사·재요청 대상이라 캐시만 읽은 실행에서도 0이 아닐 수 있다.
+   * 없으면 계수기가 생기기 전의 파일이다. */
+  proseRepairs?: number;
 }
 
 export interface WriteDeltasParams {

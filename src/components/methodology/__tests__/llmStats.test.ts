@@ -48,10 +48,14 @@ describe("computeLlmCauseStats", () => {
   });
 
   it("빈 입력은 전부 0", () => {
+    // 2026-09-19 **명세 변경**: `withUnverifiedCauseOnly` 통이 생겨 이 deep-equal에 칸이 하나
+    // 늘었다. 통과시키려고 고친 것이 아니라 집계 구조 자체가 바뀐 경우다(최종 채점 K2-7 — 세 통의
+    // 합이 attempted와 같아야 화면이 셈을 닫는다).
     expect(computeLlmCauseStats([])).toEqual({
       attempted: 0,
       withoutCause: 0,
       withVerifiedCause: 0,
+      withUnverifiedCauseOnly: 0,
       confidence: { high: 0, medium: 0, low: 0 },
     });
   });
@@ -101,14 +105,14 @@ describe("dominantConfidence", () => {
   // 화면이 "낮음이 대부분"이라고 리터럴로 단언하면 프롬프트·모델이 바뀐 다음 라운드에 조용히
   // 거짓이 된다. 분포에서 뽑게 만들어 그 경로를 없앤다.
   it("가장 많은 등급을 고른다", () => {
-    expect(dominantConfidence({ attempted: 0, withoutCause: 0, withVerifiedCause: 0, confidence: { high: 2, medium: 9, low: 3 } })).toEqual({ label: "보통", count: 9 });
+    expect(dominantConfidence({ attempted: 0, withoutCause: 0, withVerifiedCause: 0, withUnverifiedCauseOnly: 0, confidence: { high: 2, medium: 9, low: 3 } })).toEqual({ label: "보통", count: 9 });
   });
 
   it("동률이면 보수적으로 낮은 쪽을 고른다", () => {
-    expect(dominantConfidence({ attempted: 0, withoutCause: 0, withVerifiedCause: 0, confidence: { high: 5, medium: 5, low: 5 } })).toEqual({ label: "낮음", count: 5 });
+    expect(dominantConfidence({ attempted: 0, withoutCause: 0, withVerifiedCause: 0, withUnverifiedCauseOnly: 0, confidence: { high: 5, medium: 5, low: 5 } })).toEqual({ label: "낮음", count: 5 });
   });
 
   it("검증 통과 원인이 없으면 null — 할 말이 없다", () => {
-    expect(dominantConfidence({ attempted: 3, withoutCause: 3, withVerifiedCause: 0, confidence: { high: 0, medium: 0, low: 0 } })).toBeNull();
+    expect(dominantConfidence({ attempted: 3, withoutCause: 3, withVerifiedCause: 0, withUnverifiedCauseOnly: 0, confidence: { high: 0, medium: 0, low: 0 } })).toBeNull();
   });
 });

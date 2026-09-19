@@ -70,7 +70,7 @@
 | # | SubTask | 대상 파일 | TDD |
 |---|---|---|---|
 | ST-1 | PUBG 근거 문장 분기를 인용 수치에서 도출 | `src/components/pubg/evidenceProse.ts` · `src/app/pubg/weapon/[key]/page.tsx` | `[TDD]` |
-| ST-2 | 문장 위생에 명사형 종결 추가 + 재요청 조건 확대 + 캐시 적중 재요청 | `src/pipeline/match/llm-match.ts` | `[TDD]` |
+| ST-2 | 문장 위생에 명사형 종결 추가 + 재요청 조건 확대 + 캐시 적중 재요청 | `src/pipeline/match/llm-match.ts` · `src/pipeline/match/verdict.ts` · `scripts/run-match.ts`(타입 리네임 전파 — 2026-09-19 acceptance-critic V4 지적으로 기준선 갱신) | `[TDD]` |
 | ST-3 | 방법론 LLM 수치 셈 정합 + 단위 명시 | `src/components/methodology/llmStats.ts` · `src/app/methodology/page.tsx` | `[TDD]` |
 | ST-4 | 홈 라인 필터 아이템 제외 고지 | `src/components/home/ReleaseNoteStream.tsx` | — (UI) |
 | ST-5 | 기타 변경 스킨 스플래시 중복 제거 | `src/components/home/MiscChangesSection.tsx` | `[TDD]` |

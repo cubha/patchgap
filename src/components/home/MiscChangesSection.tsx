@@ -15,6 +15,7 @@ import type { PatchNoteItem } from "@/pipeline/types";
 import CosmeticSkinPreview, { type CosmeticSkinItem } from "./CosmeticSkinPreview";
 import type { MiscSection } from "./miscSections";
 import { groupNotesBySkill } from "./noteSkillGroups";
+import { dedupeBundleSkins } from "./skinPreviewBundle";
 
 export interface MiscChangesSectionProps {
   sections: MiscSection[];
@@ -92,12 +93,13 @@ export default function MiscChangesSection({ sections, skinPreviews = {}, laneFi
                           <li key={group.key} className="text-sm leading-relaxed text-fg-2">
                             {group.skill ? <span className="mr-1.5 font-bold text-fg">{group.skill}</span> : null}
                             {group.notes.map((note) => note.summary).join(" · ")}
-                            {group.notes.map((note) => (
-                              <CosmeticSkinPreview key={note.id} skins={skinPreviews[note.id] ?? []} />
-                            ))}
                           </li>
                         ))}
                       </ul>
+                      {/* 2026-09-19 최종 채점 K2-5: 스플래시를 줄마다 그리면 "스킨 및 테두리"·
+                          "이벤트 크로마"·"앞으로 나올 스킨" 세 줄이 같은 그림을 세 번 띄운다. 줄은
+                          서로 다른 항목이라 합칠 수 없지만 그림은 같으므로, 묶음당 한 번만 그린다. */}
+                      <CosmeticSkinPreview skins={dedupeBundleSkins(bundle.notes, skinPreviews)} />
                     </div>
                   ))}
                 </div>

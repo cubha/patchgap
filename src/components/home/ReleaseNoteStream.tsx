@@ -59,6 +59,14 @@ function tabForGroup(group: ReleaseStreamGroup): StreamTab {
   return group.kind === "matched" ? "content" : "gap";
 }
 
+/** 이 그룹이 아이템을 다루는가 — 라인 필터가 무엇을 걷어냈는지 화면이 정확히 말하기 위한 판별.
+ * 두 그룹 종류가 서로 다른 필드를 들고 있어 kind로 갈라 본다(새 분류 축을 만들지 않는다). */
+function isItemGroup(group: ReleaseStreamGroup): boolean {
+  return group.kind === "matched"
+    ? group.notes.some((note) => note.section === "item")
+    : group.deltas.some((delta) => delta.entityType === "item");
+}
+
 export interface ReleaseStreamEntry {
   group: ReleaseStreamGroup;
   icon: StreamEntityIcon;
@@ -125,6 +133,13 @@ export default function ReleaseNoteStream({
   const laneFiltered = useMemo(() => {
     if (selectedLane === "all") return entries;
     return entries.filter((entry) => entry.lanes.includes(selectedLane));
+  }, [entries, selectedLane]);
+
+  /** 라인 선택 때문에 목록에서 빠진 **아이템**이 실제로 있는가 — 있을 때만 말한다(없는데 말하면
+   * 그것도 거짓이다). 아이템은 `lanes`가 비어 있어 어떤 라인에도 속하지 않는다(lane.ts 계약). */
+  const hasLaneExcludedItems = useMemo(() => {
+    if (selectedLane === "all") return false;
+    return entries.some((entry) => isItemGroup(entry.group) && !entry.lanes.includes(selectedLane));
   }, [entries, selectedLane]);
 
   const filtered = useMemo(
@@ -196,6 +211,16 @@ export default function ReleaseNoteStream({
               없으므로 그 블록은 그대로 둔다. */}
           {filtered.length === 0 ? (
             <li className="border-b border-border-soft px-5 py-3 text-sm text-muted">{EMPTY_MESSAGE[tab]}</li>
+          ) : null}
+          {/* 2026-09-19 최종 채점 K1-4: 라인을 고르면 아이템 행이 **말없이** 사라졌다(구인수의
+              격노검이 6건 → 5건으로 줄어드는데 화면은 아무 말도 안 했다). 대조표는 같은 상황을
+              캡션으로 말하고 있었으므로(CompareExplorer.tsx) 같은 어휘·같은 층위로 맞춘다.
+              아이템에 라인 축이 없다는 것은 데이터의 사실이지 필터의 버그가 아니다 — 그래서
+              숨기지 않고 사실로 말한다. */}
+          {selectedLane !== "all" && hasLaneExcludedItems ? (
+            <li className="border-b border-border-soft px-5 py-2 text-xs text-muted">
+              아이템은 라인별로 집계하지 않아 라인을 고르면 이 목록에서 빠집니다.
+            </li>
           ) : null}
           {segmentStream(filtered).map((segment) =>
             segment.kind === "rows" ? (

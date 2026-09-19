@@ -25,6 +25,7 @@ import DeltaValue from "@/components/DeltaValue";
 import EntityIcon from "@/components/EntityIcon";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
+import { detailRouteIds } from "@/lib/detailRoutes";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import { listPatchPairs, loadChampions, loadDeltas, loadItems, loadNotes, type PatchPair } from "@/lib/data";
 import { entityTypeLabel, fmtInt, itemIdFromSlug, itemSlug } from "@/lib/format";
@@ -101,15 +102,17 @@ function readDeltasRaw(pair: PatchPair): string | null {
 }
 
 export function generateStaticParams(): Array<{ id: string }> {
+  // 2026-09-19 최종 채점 K2-4: 노이즈 상태(표본 부족·바닥 미달·변화 없음) 상세가 1,870건 빌드돼
+  // 있었다. 링크는 0이라 우연히 밟을 일은 없었지만, 사용자 지시는 "아예 보여주지 않도록"이었고
+  // URL을 직접 열면 그 관측이 그대로 나왔다 — 자격 판정은 `detailRouteIds`가 소유한다.
   const pairs = listPatchPairs();
-  const ids = new Set<string>();
-  for (const pair of pairs) {
-    const deltas = loadDeltas(pair.from, pair.to);
-    if (!deltas) continue;
-    for (const row of deltas.rows) ids.add(row.id);
-  }
-  if (ids.size === 0) return [{ id: "_placeholder" }];
-  return Array.from(ids).map((id) => ({ id: itemSlug(id) }));
+  const rowsByPair = pairs
+    .map((pair) => loadDeltas(pair.from, pair.to))
+    .filter((deltas): deltas is NonNullable<typeof deltas> => deltas !== null)
+    .map((deltas) => deltas.rows);
+  const ids = detailRouteIds(rowsByPair);
+  if (ids.length === 0) return [{ id: "_placeholder" }];
+  return ids.map((id) => ({ id: itemSlug(id) }));
 }
 
 function EmptyState() {

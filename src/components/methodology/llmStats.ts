@@ -14,6 +14,12 @@ export interface LlmCauseStats {
   withoutCause: number;
   /** 검증을 통과한 원인을 하나 이상 가진 행 수. */
   withVerifiedCause: number;
+  /**
+   * 원인 후보는 냈으나 **전부 검증에서 기각된** 행 수(2026-09-19 최종 채점 K2-7).
+   * 이 통이 없던 탓에 화면이 "110건 중 28 + 81"이라 말해 셈이 1 모자랐다 — 그 1건은
+   * `champion:Syndra:TOP:pickRate`였다. 세 통의 합은 항상 `attempted`와 같다.
+   */
+  withUnverifiedCauseOnly: number;
   /** 검증 통과 원인의 신뢰도 분포. */
   confidence: { high: number; medium: number; low: number };
 }
@@ -23,14 +29,17 @@ export function computeLlmCauseStats(rows: readonly DeltaRecord[]): LlmCauseStat
     attempted: 0,
     withoutCause: 0,
     withVerifiedCause: 0,
+    withUnverifiedCauseOnly: 0,
     confidence: { high: 0, medium: 0, low: 0 },
   };
   for (const row of rows) {
     if (!row.llm) continue;
     stats.attempted += 1;
     const verified = row.causes.filter((cause) => cause.verified);
+    // 세 통은 서로 배타적이고 합이 attempted와 같다 — 화면이 셈을 닫을 수 있어야 한다.
     if (row.causes.length === 0) stats.withoutCause += 1;
-    if (verified.length > 0) stats.withVerifiedCause += 1;
+    else if (verified.length > 0) stats.withVerifiedCause += 1;
+    else stats.withUnverifiedCauseOnly += 1;
     for (const cause of verified) stats.confidence[cause.confidence] += 1;
   }
   return stats;

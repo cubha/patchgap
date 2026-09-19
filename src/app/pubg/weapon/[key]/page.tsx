@@ -88,7 +88,10 @@ export default async function PubgWeaponPage({ params }: PageProps) {
 
   // 2026-09-18 라운드6(C1 + scope-critic ST9): 목록(브리핑·대조표·그리드)은 판정이 선 무기만 강조하지만,
   // 사용자가 **직접 연 상세**에서는 관측값(변화·CI)을 숨기지 않고 판정이 없는 이유를 사실대로 말한다 —
-  // 표본 부족을 "유의한 변화 없음"이라 부르면 거짓이다. 배지는 판정이 선 행에만.
+  // 표본 부족을 "유의한 관측 없음"이라 부르면 거짓이다. 배지는 판정이 선 행에만.
+  // 2026-09-19 최종 채점 K4-4(R6): 같은 뜻을 LoL은 "유의한 관측 없음", PUBG는 "유의한 변화 없음"
+  // 으로 부르고 있었다(17 라우트). 게임이 달라도 같은 판정이면 같은 말이어야 한다 — LoL 쪽 어휘로
+  // 맞춘다(`NoteNavigator.tsx:137`·`ReleaseNoteRow.tsx:273`·`ReleaseNoteStream.tsx:216`).
   const judged = row !== null && isReportable(row.status);
   const rel = row?.relChange ?? null;
   const unjudgedReason =
@@ -98,7 +101,7 @@ export default async function PubgWeaponPage({ params }: PageProps) {
         ? "획득 표본이 부족해 판정하지 않음"
         : row.status === "below-threshold"
           ? "변화가 효과크기 바닥 미만이라 판정하지 않음"
-          : "유의한 변화 없음";
+          : "유의한 관측 없음";
   const stats: PubgDetailStat[] = [
     {
       label: "획득 점유율",
@@ -176,6 +179,7 @@ export default async function PubgWeaponPage({ params }: PageProps) {
                 after: statAfter.share,
                 row,
                 noteSummary: note?.summary ?? null,
+                effectFloor: deltas.meta.effectFloor,
               }).map((sentence) => (
                 <p key={sentence}>{sentence}</p>
               ))}

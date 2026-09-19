@@ -369,24 +369,39 @@ export interface ProseCauseEntry {
   confidence: LlmCause["confidence"];
 }
 
-/** 상한을 넘긴 문장 수(요약 1 + 원인 n). 0이면 재요청하지 않는다. */
-export function countLengthViolations(parsed: LlmOutput): number {
+/**
+ * 재요청이 필요한 문장 수(길이 초과 + 명사형 종결). 0이면 재요청하지 않는다.
+ *
+ * 2026-09-19 최종 채점 K1-7로 **길이에서 문장 위생 전반으로 넓혔다**(이전 이름
+ * `countLengthViolations`). 길이만 보던 조건은 명사형 종결 11건을 전부 통과시켰다.
+ */
+export function countProseViolations(parsed: LlmOutput): number {
   const summaryOver = parsed.summary.length > SUMMARY_MAX_CHARS ? 1 : 0;
-  return summaryOver + parsed.causes.filter((cause) => cause.text.length > CAUSE_MAX_CHARS).length;
+  const causeBad = parsed.causes.filter(
+    (cause) => cause.text.length > CAUSE_MAX_CHARS || isNounEnding(cause.text)
+  ).length;
+  return summaryOver + causeBad;
 }
 
 /**
- * 길이 재요청 문구. **어느 문장이 몇 자인지 숫자로 알려준다** — v4에서 배운 것이 "어림수보다
- * 숫자"였는데, 재요청은 그보다 한 걸음 더 나아가 *이 응답의* 실제 초과분을 짚어 줄 수 있다.
+ * 재요청 문구. **어느 문장이 무엇을 어겼는지 숫자와 함께 알려준다** — v4에서 배운 것이 "어림수보다
+ * 숫자"였는데, 재요청은 그보다 한 걸음 더 나아가 *이 응답의* 실제 위반을 짚어 줄 수 있다.
+ * (이전 이름 `buildLengthRepairNote` — 대상이 길이만이 아니게 되어 바꿨다.)
  */
-export function buildLengthRepairNote(parsed: LlmOutput): string {
-  const lines: string[] = ["직전 답의 길이 상한 위반을 고쳐 **같은 내용으로** 다시 답하세요."];
+export function buildProseRepairNote(parsed: LlmOutput): string {
+  const lines: string[] = ["직전 답의 문장 규칙 위반을 고쳐 **같은 내용으로** 다시 답하세요."];
   if (parsed.summary.length > SUMMARY_MAX_CHARS) {
     lines.push(`- summary가 ${parsed.summary.length}자입니다. ${SUMMARY_MAX_CHARS}자 이하로 줄이세요.`);
   }
   parsed.causes.forEach((cause, index) => {
     if (cause.text.length > CAUSE_MAX_CHARS) {
       lines.push(`- causes[${index}]가 ${cause.text.length}자입니다. ${CAUSE_MAX_CHARS}자 이하로 줄이세요.`);
+    }
+    if (isNounEnding(cause.text)) {
+      lines.push(
+        `- causes[${index}]가 명사로 끝납니다("${cause.text.trim().slice(-12)}"). ` +
+          "합쇼체 문장으로 바꾸세요(예: \"…밀린 영향.\" → \"…밀렸습니다.\")."
+      );
     }
   });
   lines.push("수치와 인과는 남기고 수식어·부연부터 버리세요. candidateNoteId와 confidence는 그대로 두세요.");
@@ -407,6 +422,25 @@ export interface ProseHygieneStats {
    * 아니다. 근거가 분명한 문장까지 흐린 경우만 결함이다.
    */
   causeHedgedConfident: number;
+  /**
+   * 합쇼체로 끝나지 않은 원인 문장 수(2026-09-19, 최종 채점 K1-7). v5 산출에서 11건이
+   * "…밀린 영향."처럼 명사로 끝나 같은 카드의 다른 문장과 문체가 섞였다. 길이·완곡만 세던
+   * 게이트가 그것을 못 봤다 — `ACCEPT-prose-v5`가 위험으로 적어 둔 바로 그 형태다.
+   */
+  causeNounEnding: number;
+}
+
+/**
+ * 합쇼체로 끝나지 않는가 — 이 프로젝트의 산문은 전부 합쇼체이므로 명사형 종결은 문체 혼입이다.
+ *
+ * 왜 프롬프트가 아니라 여기서 보는가: 규칙을 더하려면 `PROMPT_VERSION`을 올려야 하고, 그러면
+ * 캐시 236건이 전량 무효가 되어 **지금 통과하는 문장까지 전부 다시 굴린다**(새 위반이 다른 자리에
+ * 생길 수 있다). 결함은 230건 중 13건이므로 그 13건만 고치는 것이 옳다.
+ */
+export function isNounEnding(text: string): boolean {
+  const trimmed = text.trim().replace(/[.!?\s]+$/, "");
+  if (trimmed.length === 0) return false;
+  return !/[다요]$/.test(trimmed);
 }
 
 function isHedged(text: string): boolean {
@@ -435,6 +469,7 @@ export function summarizeProseHygiene(
     causeOverLength: 0,
     causeHedged: 0,
     causeHedgedConfident: 0,
+    causeNounEnding: 0,
   };
   for (const entry of entries) {
     if (entry.summary !== null && entry.summary.length > 0) {
@@ -450,6 +485,7 @@ export function summarizeProseHygiene(
         stats.causeHedged += 1;
         if (cause.confidence !== "low") stats.causeHedgedConfident += 1;
       }
+      if (isNounEnding(cause.text)) stats.causeNounEnding += 1;
     }
   }
   return stats;
@@ -475,9 +511,9 @@ export interface LlmRunSummary {
   cacheHits: number;
   /** 예산/상한 초과로 아예 시도하지 못한 델타 수. */
   skipped: number;
-  /** 길이 상한 위반으로 1회 재요청한 델타 수(v5). `calls`에 이미 포함된다 — 별도 예산이 아니라
-   * 같은 지갑에서 나간다는 사실을 보이려고 따로 센다. */
-  lengthRepairs: number;
+  /** 문장 규칙 위반으로 1회 재요청한 델타 수(v5, 2026-09-19에 명사형 종결까지 포함하도록 확대).
+   * `calls`에 이미 포함된다 — 별도 예산이 아니라 같은 지갑에서 나간다는 사실을 보이려고 따로 센다. */
+  proseRepairs: number;
   usage: LlmUsageTotals;
 }
 
@@ -523,7 +559,7 @@ export async function inferIndirectCandidates(
     calls: 0,
     cacheHits: 0,
     skipped: 0,
-    lengthRepairs: 0,
+    proseRepairs: 0,
     usage: emptyUsage(),
     prose: summarizeProseHygiene([]),
   };
@@ -535,15 +571,45 @@ export async function inferIndirectCandidates(
     const cached = readCache(cacheDir, key);
     if (cached) {
       summary.cacheHits += 1;
-      const causes = verifyCauses(cached.parsed.causes, candidates, delta, ddragon);
-      const summaryVerified = verifySummaryCites(cached.parsed.summaryCites, candidates);
+      let cachedParsed = cached.parsed;
+
+      // 캐시 적중에도 문장 규칙을 적용한다(2026-09-19 최종 채점 K1-7). **이것이 없으면 이미 캐시된
+      // 위반은 영원히 고쳐지지 않는다** — 재생성해도 캐시를 그대로 읽기 때문이다. 프롬프트를 고쳐
+      // PROMPT_VERSION을 올리면 236건이 전량 무효가 되지만, 이 경로는 위반한 13건만 다시 묻고
+      // 결과를 **같은 키에 되쓴다**. 길이 재요청이 이미 v5 키에 되쓰고 있으므로 새 규약은 아니다.
+      if (countProseViolations(cachedParsed) > 0 && summary.calls < maxTotalCalls) {
+        try {
+          summary.calls += 1;
+          summary.proseRepairs += 1;
+          const repaired = await callLlmForDelta(
+            client,
+            model,
+            delta,
+            candidates,
+            buildProseRepairNote(cachedParsed)
+          );
+          addUsage(summary.usage, repaired.usage);
+          if (
+            repaired.parsed !== null &&
+            countProseViolations(repaired.parsed) < countProseViolations(cachedParsed)
+          ) {
+            cachedParsed = repaired.parsed;
+            writeCache(cacheDir, key, { ...cached, generatedAt: new Date().toISOString(), parsed: cachedParsed });
+          }
+        } catch {
+          // 재요청 실패는 치명적이지 않다 — 캐시된 원문을 그대로 쓴다(위생 집계가 그것을 센다).
+        }
+      }
+
+      const causes = verifyCauses(cachedParsed.causes, candidates, delta, ddragon);
+      const summaryVerified = verifySummaryCites(cachedParsed.summaryCites, candidates);
       resultById.set(delta.id, {
         ...delta,
         causes,
         llm: {
           skipped: false,
-          summary: cached.parsed.summary,
-          summaryCites: cached.parsed.summaryCites,
+          summary: cachedParsed.summary,
+          summaryCites: cachedParsed.summaryCites,
           summaryVerified,
         },
       });
@@ -570,18 +636,12 @@ export async function inferIndirectCandidates(
       // 길이 재요청(v5, 1회 한정) — 프롬프트 문구로는 2~4%가 남는다는 것이 v4의 실측이다. 상한을
       // 넘긴 응답에 대해서만 "몇 자인지"를 짚어 다시 묻고, **위반이 더 적은 쪽**을 택한다. 응답을
       // 통째로 고르는 이유: summary와 summaryCites는 한 쌍이라 섞으면 인용이 문장과 어긋난다.
-      if (parsed !== null && countLengthViolations(parsed) > 0 && summary.calls < maxTotalCalls) {
+      if (parsed !== null && countProseViolations(parsed) > 0 && summary.calls < maxTotalCalls) {
         summary.calls += 1;
-        summary.lengthRepairs += 1;
-        const repaired = await callLlmForDelta(
-          client,
-          model,
-          delta,
-          candidates,
-          buildLengthRepairNote(parsed)
-        );
+        summary.proseRepairs += 1;
+        const repaired = await callLlmForDelta(client, model, delta, candidates, buildProseRepairNote(parsed));
         addUsage(usage, repaired.usage);
-        if (repaired.parsed !== null && countLengthViolations(repaired.parsed) < countLengthViolations(parsed)) {
+        if (repaired.parsed !== null && countProseViolations(repaired.parsed) < countProseViolations(parsed)) {
           parsed = repaired.parsed;
         }
       }

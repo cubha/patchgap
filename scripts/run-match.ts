@@ -216,7 +216,7 @@ export async function main(): Promise<void> {
         `원인 ${s.prose.causeCount}건 중 ${CAUSE_MAX_CHARS}자 초과 ${s.prose.causeOverLength}건 · 완곡 ${s.prose.causeHedged}건`
     );
     console.log(
-      `[run-match] LLM 2단: calls=${s.calls} cacheHits=${s.cacheHits} skipped=${s.skipped} lengthRepairs=${s.lengthRepairs} ` +
+      `[run-match] LLM 2단: calls=${s.calls} cacheHits=${s.cacheHits} skipped=${s.skipped} proseRepairs=${s.proseRepairs} ` +
         `usage(input=${s.usage.inputTokens} cacheRead=${s.usage.cacheReadInputTokens} ` +
         `cacheCreate=${s.usage.cacheCreationInputTokens} output=${s.usage.outputTokens})`
     );
@@ -268,7 +268,7 @@ export async function main(): Promise<void> {
           skipped: pipelineResult.llmSummary.skipped,
           usage: pipelineResult.llmSummary.usage,
           prose: pipelineResult.llmSummary.prose,
-          lengthRepairs: pipelineResult.llmSummary.lengthRepairs,
+          proseRepairs: pipelineResult.llmSummary.proseRepairs,
         }
       : undefined,
   });

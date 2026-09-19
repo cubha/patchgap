@@ -193,11 +193,14 @@ export default function MethodologyPage() {
                     {llmStats ? (
                       <>
                         실측({pair?.to ?? "최근 패치"}): 대상 {llmStats.attempted}건 중 원인을 못 찾은 것이{" "}
-                        {llmStats.withoutCause}건, 검증을 통과한 원인을 가진 것이 {llmStats.withVerifiedCause}건이며
+                        {llmStats.withoutCause}건, 후보를 냈으나 검증에서 전부 기각된 것이{" "}
+                        {llmStats.withUnverifiedCauseOnly}건, 검증을 통과한 원인을 가진 것이{" "}
+                        {llmStats.withVerifiedCause}건입니다. 검증을 통과한 원인 문장{" "}
+                        {llmStats.confidence.low + llmStats.confidence.medium + llmStats.confidence.high}건의
                         신뢰도는 낮음 {llmStats.confidence.low} · 보통 {llmStats.confidence.medium} · 높음{" "}
-                        {llmStats.confidence.high}건입니다.{" "}
-                        가장 많은 등급은 <strong className="text-fg">{dominant?.label ?? "없음"}</strong>이며, 그
-                        분포 자체가 이 추정의 한계를 말합니다.
+                        {llmStats.confidence.high}건으로, 가장 많은 등급은{" "}
+                        <strong className="text-fg">{dominant?.label ?? "없음"}</strong>입니다 — 그 분포 자체가 이
+                        추정의 한계를 말합니다.
                       </>
                     ) : null}
                   </dd>

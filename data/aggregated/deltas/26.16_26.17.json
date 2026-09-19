@@ -2,7 +2,7 @@
   "meta": {
     "from": "26.16",
     "to": "26.17",
-    "generatedAt": "2026-09-19T03:09:29.192Z",
+    "generatedAt": "2026-09-19T05:08:57.620Z",
     "n": 1966,
     "counts": {
       "unannounced": 15,
@@ -15,25 +15,27 @@
     },
     "qAlpha": 0.1,
     "llm": {
-      "calls": 124,
-      "cacheHits": 0,
+      "calls": 1,
+      "cacheHits": 120,
       "skipped": 0,
       "usage": {
-        "inputTokens": 16272,
-        "cacheReadInputTokens": 767151,
+        "inputTokens": 364,
+        "cacheReadInputTokens": 0,
         "cacheCreationInputTokens": 6237,
-        "outputTokens": 68118
+        "outputTokens": 381
       },
       "prose": {
         "summaryCount": 120,
         "summaryOverLength": 0,
-        "summaryHedged": 25,
+        "summaryHedged": 26,
         "maxSummaryLength": 94,
         "causeCount": 225,
         "causeOverLength": 0,
-        "causeHedged": 79,
-        "causeHedgedConfident": 0
-      }
+        "causeHedged": 78,
+        "causeHedgedConfident": 0,
+        "causeNounEnding": 0
+      },
+      "proseRepairs": 1
     }
   },
   "rows": [
@@ -3822,19 +3824,19 @@
       ],
       "causes": [
         {
-          "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 탑 브루저 상대가 약해졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+          "text": "야스오 치명타 피해량 감소 폭이 10%에서 5%로 완화돼 탑 대치 구도가 변했습니다.",
+          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "나서스 생명력 흡수 12/18/24%→10/15/20% 너프로 탑 대치 구도가 베인에 유리해진 측면.",
+          "text": "나서스 생명력 흡수가 12/18/24%에서 10/15/20%로 줄어 탑 맞라인 지속력이 밀렸습니다.",
           "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향이 베인 빌드 효율을 일부 보완.",
+          "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 올라 베인 딜 효율을 일부 보완했습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
@@ -3858,10 +3860,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "베인 탑 승률 2.4%p 상승은 CI [-4.3%p, 9.1%p]와 표본 298판으로 유의하지 않으며, 갈라진 하늘 너프로 인한 탑 브루저 약화가 일부 작용했습니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe"
-        ],
+        "summary": "베인 탑 승률이 46.9%→49.3%로 올랐지만 CI가 [-4.3%p, 9.1%p]로 넓고 표본도 298판이라 통계적 변동일 수 있습니다.",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
