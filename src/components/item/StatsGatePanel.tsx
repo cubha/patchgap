@@ -60,7 +60,7 @@ export default function StatsGatePanel({ delta, kind }: StatsGatePanelProps) {
         ) : null}
       </div>
       <div className="px-5 pb-5">
-        <a href="/methodology/#gates" className="text-sm font-bold text-accent hover:underline">
+        <a href="/lol/methodology/#gates" className="text-sm font-bold text-accent hover:underline">
           판정 규칙 보기 →
         </a>
       </div>

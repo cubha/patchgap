@@ -28,8 +28,8 @@
 //     그때 실제 이동 경로를 붙인다.
 //   - 고정 표본(KR·Master+·솔로/듀오)은 disabled select 3개 대신 읽기전용 메타 칩으로 바꿨다 —
 //     disabled select는 포커스 불가·스크린리더에 혼선을 준다.
-//   - 패치 쌍 select·메타 칩·n/집계 캡션은 "패치 쌍을 소유하는 라우트"(`/`·`/compare/`)에서만
-//     렌더한다. `/item/*`·`/methodology/`는 스냅샷 캡션만 그대로 — 이유: 항목상세의
+//   - 패치 쌍 select·메타 칩·n/집계 캡션은 "패치 쌍을 소유하는 라우트"(`/lol/`·`/lol/compare/`)에서만
+//     렌더한다. `/lol/item/*`·`/lol/methodology/`는 스냅샷 캡션만 그대로 — 이유: 항목상세의
 //     `findDeltaForId`는 그 id를 가진 첫 패치 쌍을 쓰므로(item/[id]/page.tsx), 쌍이 여럿인
 //     데이터에서 옛 쌍에만 있는 항목을 열면 이 헤더가 `getDefaultPair()` 기준 n·집계를 표시해
 //     실제 보고 있는 쌍과 다른 숫자를 주장하게 된다("모든 판정문은 원천 링크를 가진다" 위반).
@@ -48,7 +48,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Container from "@/components/Container";
-import { GAMES, gameFromPathname, gameHref, sectionHref, type GameId } from "@/lib/game";
+import { GAMES, gameFromPathname, gameHref, sectionHref, sectionOfPathname, type GameId } from "@/lib/game";
 import { fmtInt, fmtKst } from "@/lib/format";
 
 /** 내비 섹션 — 게임과 무관하게 항상 이 3개다. 게임은 아래 드롭다운이 바꾼다. */
@@ -132,13 +132,6 @@ function useChromeHeight() {
   return ref;
 }
 
-/** 경로의 섹션 키("" | "compare" | "methodology" | 그 외) — 게임 접두를 벗기고 첫 세그먼트. */
-function sectionOf(pathname: string): string {
-  const rest = pathname.split("/").filter((seg) => seg.length > 0);
-  if (rest[0] === "pubg") rest.shift();
-  return rest[0] ?? "";
-}
-
 function pairLabel(pair: PatchPairOption): string {
   return `${pair.from} → ${pair.to}`;
 }
@@ -148,13 +141,13 @@ export default function Header({ chrome }: HeaderProps) {
   const headerRef = useChromeHeight();
   const router = useRouter();
   const game = gameFromPathname(pathname);
-  const section = sectionOf(pathname);
-  const isPairScoped = (PAIR_SCOPED_SECTIONS as readonly string[]).includes(section);
+  const section = sectionOfPathname(pathname);
+  const isPairScoped = section !== null && (PAIR_SCOPED_SECTIONS as readonly string[]).includes(section);
 
   // 드롭다운에는 크롬 데이터가 실제로 있는 게임만 올린다(출하 게이트). LoL이 없을 일은
   // 없지만 빈 데이터 빌드에서도 무너지지 않도록 같은 규칙을 적용한다.
   const available = GAMES.filter((g) => chrome[g.id] !== null);
-  const current = chrome[game];
+  const current = game === null ? null : chrome[game];
 
   const pairs = current?.pairs ?? [];
   const currentPair = current?.currentPair ?? null;
@@ -174,6 +167,26 @@ export default function Header({ chrome }: HeaderProps) {
   const sampleChips = current?.sampleChips ?? [];
   const snapshotCaption = current?.snapshotCaption ?? null;
 
+  // 랜딩(게임 없음)은 크롬을 거의 갖지 않는다 — 확정 시안 05-landing-B.html은 브랜드 한 줄이
+  // 전부다. 게임 드롭다운·내비·패치쌍·표본 칩·스냅샷 캡션은 **어느 게임 안에 있는지**를 전제로
+  // 하는 컨트롤이라, 게임이 정해지지 않은 화면에서 그리면 LoL을 임의로 주장하게 된다
+  // (이 파일 위 주석이 경고한 "실제 보고 있는 쌍과 다른 숫자를 주장"과 같은 결함군).
+  if (game === null) {
+    return (
+      <header ref={headerRef} className="glass-chrome sticky top-0 z-20 border-b">
+        <Container className="flex items-center justify-between gap-6 py-3">
+          <Link href="/" className="flex min-h-8 items-center gap-2">
+            <span className="h-2 w-2 rounded-pill bg-accent" aria-hidden="true" />
+            <span className="font-display text-lg font-bold tracking-tight text-fg">patchgap</span>
+          </Link>
+          <a href="#how" className="text-xs text-fg-2 hover:text-fg">
+            어떻게 판정하나
+          </a>
+        </Container>
+      </header>
+    );
+  }
+
   return (
     <header ref={headerRef} className="glass-chrome sticky top-0 z-20 border-b">
       <Container className="flex flex-wrap items-center gap-6 py-3">
@@ -187,7 +200,7 @@ export default function Header({ chrome }: HeaderProps) {
             맞는다. 옵션이 1개뿐이면(PUBG 미출하) 선택할 게 없으므로 아예 렌더하지 않는다 —
             disabled select는 포커스 불가·스크린리더 혼선을 준다(2026-09-12 고정표본 칩 전환과
             같은 판단). 전환 경로 계산은 gameHref가 소유한다(src/lib/game.ts, 단위테스트 보유):
-            /item/* 처럼 대응 라우트가 없는 곳에서는 그 게임의 브리핑으로 떨어진다. */}
+            /lol/item/* 처럼 대응 라우트가 없는 곳에서는 그 게임의 브리핑으로 떨어진다. */}
         {available.length > 1 ? (
           <label className="flex min-h-8 items-center gap-2">
             <span className="sr-only">게임</span>

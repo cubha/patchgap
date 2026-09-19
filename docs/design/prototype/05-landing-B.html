@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>patchgap — 랜딩 시안 B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto+Mono:wght@400..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#030d18; --surface:#0a1626; --fg:#f0e6d2; --fg-2:#c3b79f; --muted:#8b8677;
+  --border:#8c6b33; --border-soft:#242c3a; --accent:#c8a355; --accent-on:#030d18;
+  --font-display:Inter,system-ui,sans-serif; --font-body:Inter,system-ui,sans-serif;
+  --font-mono:"Roboto Mono",ui-monospace,Menlo,monospace; --radius-pill:999px; --radius-lg:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:14px;line-height:1.45;word-break:keep-all}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px}
+.nav{display:flex;align-items:center;justify-content:space-between;height:56px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700}
+.brand svg{width:26px;height:26px}
+.nav a{color:var(--fg-2);text-decoration:none;font-size:12px}
+/* ── 상단 진술 ── */
+.introwrap{position:relative;overflow:hidden;padding-bottom:32px}
+.introwrap .art{position:absolute;inset:0;background:url('/public/bg/splash-wall.jpg') center top/cover}
+.introwrap::after{content:"";position:absolute;inset:0;background:radial-gradient(46% 82% at 50% 26%,rgba(3,13,24,.86),rgba(3,13,24,.5) 62%,rgba(3,13,24,.14) 100%),linear-gradient(180deg,rgba(3,13,24,.5) 0%,rgba(3,13,24,.12) 32%,rgba(3,13,24,.62) 74%,rgba(3,13,24,.95) 92%,var(--bg) 100%)}
+.intro{position:relative;z-index:2;padding:48px 0 32px;text-align:center}
+.eyebrow{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.04em;margin:0 0 11px}
+h1{font-family:var(--font-display);font-size:44px;line-height:1.12;margin:0 auto 14px;max-width:24ch;text-wrap:balance;text-shadow:0 2px 24px rgba(3,13,24,.85)}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{color:var(--fg-2);max-width:60ch;margin:0 auto 20px;font-size:15px;text-shadow:0 1px 14px rgba(3,13,24,.9)}
+.summary{display:inline-flex;gap:0;border:1px solid var(--border-soft);border-radius:var(--radius-lg);overflow:hidden;background:rgba(10,22,38,.72);backdrop-filter:blur(8px)}
+.summary div{padding:14px 24px;border-right:1px solid var(--border-soft);text-align:left}
+.summary div:last-child{border-right:0}
+.summary b{display:block;font-family:var(--font-display);font-size:24px;font-variant-numeric:tabular-nums}
+.summary span{color:var(--muted);font-size:var(--text-xs)}
+.summary .gap b{color:var(--accent)}
+/* ── 무드 패널 ── */
+.panels{display:flex;gap:4px;height:430px;padding:24px 24px 11px;max-width:1180px;margin:0 auto}
+.panel{position:relative;flex:1 1 0;border-radius:var(--radius-lg);overflow:hidden;text-decoration:none;color:inherit;
+  border:1px solid var(--border-soft);transition:flex-grow .35s ease}
+.panel:first-child{flex-grow:1.55}
+.panel .art{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.62}
+.panel::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,13,24,.15),rgba(3,13,24,.92) 74%)}
+.panel .body{position:absolute;inset:auto 0 0 0;z-index:2;padding:20px 24px}
+.panel .tag{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--accent);letter-spacing:.06em}
+.panel h3{margin:4px 0 4px;font-size:22px}
+.panel .pair{font-family:var(--font-mono);font-size:12px;color:var(--fg-2)}
+.panel .metrics{display:flex;gap:16px;margin-top:14px}
+.panel .metrics i{font-style:normal}
+.panel .metrics b{display:block;font-family:var(--font-display);font-size:20px;font-variant-numeric:tabular-nums}
+.panel .metrics em{font-style:normal;color:var(--muted);font-size:var(--text-xs)}
+.panel .metrics .g b{color:var(--accent)}
+.enter{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 16px;border-radius:var(--radius-pill);
+  background:var(--accent);color:var(--accent-on);font-weight:700;font-size:13px;margin-top:16px}
+.panel.next{flex:0 0 190px;border-style:dashed;background:rgba(10,22,38,.45);display:flex;align-items:center;justify-content:center;text-align:center}
+.panel.next .body{position:static;padding:20px}
+.panel.next h3.next-q{font-family:var(--font-mono);font-size:22px;line-height:1.25;letter-spacing:.12em;color:var(--accent);opacity:.85;margin:0 0 12px}
+.panel.next p{margin:0;color:var(--muted);font-size:var(--text-xs)}
+/* ── 하단 ── */
+.how{border-top:1px solid var(--border-soft);margin-top:24px;padding:32px 0 56px}
+.how .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.how h4{margin:0 0 4px;font-size:13px;color:var(--accent)}
+.how p{margin:0;color:var(--fg-2);font-size:13px}
+footer{border-top:1px solid var(--border-soft);padding:16px 0 36px;color:var(--muted);font-size:var(--text-xs)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <span class="brand">
+      <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M128 38 L204 82 L204 174 L128 218 L52 174 L52 82 Z" fill="none" stroke="#f0e6d2" stroke-width="16" stroke-linejoin="round" clip-path="inset(0 51% 0 0)"/><path d="M128 84 L168 158 L88 158 Z" fill="#f0e6d2" clip-path="inset(0 51% 0 0)"/><path d="M128 38 L204 82 L204 174 L128 218 L52 174 L52 82 Z" fill="none" stroke="#c8a355" stroke-width="16" stroke-linejoin="round" clip-path="inset(0 0 0 51%)"/><path d="M128 84 L168 158 L88 158 Z" fill="#c8a355" clip-path="inset(0 0 0 51%)"/></svg>
+      patchgap
+    </span>
+    <a href="#how">어떻게 판정하나</a>
+  </div>
+</div>
+
+<div class="introwrap"><i class="art"></i><div class="intro wrap">
+  <p class="eyebrow">패치노트가 말한 것 vs 통계가 말하는 것</p>
+  <h1>패치노트에 <em>없는 변화</em>를 찾습니다</h1>
+  <p class="lede">패치 전후 매치를 전량 집계해 공식 패치노트와 대조하고, 짝이 없는 변화에 통계 게이트와 원천 링크를 붙입니다.</p>
+  <div class="summary">
+    <div><b>33,329</b><span>분석한 매치</span></div>
+    <div><b>410</b><span>유의한 관측</span></div>
+    <div class="gap"><b>34</b><span>패치노트에 없던 변화</span></div>
+  </div>
+</div></div>
+
+<div class="panels">
+  <a class="panel" href="/lol/">
+    <i class="art" style="background-image:url('/public/bg/island.webp')"></i>
+    <div class="body">
+      <div class="tag">LEAGUE OF LEGENDS</div>
+      <h3>리그 오브 레전드</h3>
+      <div class="pair">26.17 → 26.18 · KR 상위 티어 10,000매치</div>
+      <div class="metrics">
+        <i><b>12</b><em>공지된 변화</em></i>
+        <i><b>403</b><em>유의한 관측</em></i>
+        <i class="g"><b>29</b><em>미공지</em></i>
+      </div>
+      <span class="enter">시작하기 →</span>
+    </div>
+  </a>
+  <a class="panel" href="/pubg/">
+    <i class="art" style="background-image:url('/public/bg/pubg-key-art.webp')"></i>
+    <div class="body">
+      <div class="tag">PUBG: BATTLEGROUNDS</div>
+      <h3>배틀그라운드</h3>
+      <div class="pair">42.3 → 43.1 · Steam 전 지역 3,329매치</div>
+      <div class="metrics">
+        <i><b>5</b><em>공지된 변화</em></i>
+        <i><b>7</b><em>유의한 관측</em></i>
+        <i class="g"><b>5</b><em>미공지</em></i>
+      </div>
+      <span class="enter">시작하기 →</span>
+    </div>
+  </a>
+  <div class="panel next">
+    <div class="body">
+      <h3 class="next-q">WHO&rsquo;S<br>NEXT?</h3>
+      <p>패치노트를 내고<br>매치 API를 여는 게임이면<br>어댑터만 붙습니다</p>
+    </div>
+  </div>
+</div>
+
+<section class="how wrap" id="how">
+  <div class="grid3">
+    <div><h4>수집</h4><p>패치 라이브 구간의 매치를 전량 수집하고, 표본이 모자란 지표는 판정하지 않습니다.</p></div>
+    <div><h4>판정</h4><p>Wilson·Newcombe 신뢰구간과 BH-FDR로 거짓양성을 통제한 뒤 패치노트 항목과 짝을 맞춥니다.</p></div>
+    <div><h4>근거</h4><p>모든 판정문에 원천 링크가 붙습니다. 근거가 없으면 회색으로 남기고 지어내지 않습니다.</p></div>
+  </div>
+</section>
+
+<footer class="wrap">patchgap는 각 게임사와 제휴하거나 보증을 받지 않았습니다. 상표·자산의 저작권은 각 권리자에게 있습니다.</footer>
+</body>
+</html>

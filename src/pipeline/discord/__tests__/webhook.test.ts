@@ -92,7 +92,7 @@ describe("buildBriefingEmbeds", () => {
     const rows = [delta({ id: "champion:Trundle:pickRate", status: "unannounced" })];
     const [embed] = buildBriefingEmbeds(deltasFile(rows), { siteUrl: SITE, topN: 5 });
     const urls = embed.fields.map((f) => f.value).join("\n");
-    const url = `${SITE}/item/champion~Trundle~pickRate/`;
+    const url = `${SITE}/lol/item/champion~Trundle~pickRate/`;
     expect(urls).toContain(url);
     expect(url).not.toContain("%");
   });

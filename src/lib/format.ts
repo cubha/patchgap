@@ -5,6 +5,7 @@
 
 import type { DeltaEntityType, DeltaMetric, Interval, LanePosition, MatchStatus, TeamPosition } from "@/pipeline/types";
 import type { DisplayStatus } from "@/pipeline/shared/display-status";
+import { sectionHref } from "./game";
 
 const MINUS = "−";
 
@@ -191,7 +192,7 @@ export function positionLabel(position: LanePosition | TeamPosition | string): s
 }
 
 /**
- * `DeltaRecord.id` → `/item/[id]/` 정적 라우트 슬러그(오케스트레이터 지시, 2026-09-05 근본
+ * `DeltaRecord.id` → `/lol/item/[id]/` 정적 라우트 슬러그(오케스트레이터 지시, 2026-09-05 근본
  * 수정). `encodeURIComponent(id)`는 `:` 포함 id를 퍼센트 인코딩하는데, 실측(정적 파일 서버로
  * `out/`를 직접 서빙 — Vercel과 동일한 "URL 1회 디코드 후 파일 매칭" 규칙)으로 단일 인코딩·
  * 원문 콜론 둘 다 404, 이중 인코딩만 200이 나오는 걸 확인했다 — 즉 퍼센트 인코딩을 슬러그에
@@ -209,13 +210,16 @@ export function itemSlug(id: string): string {
   return id.replaceAll(":", "~");
 }
 
-/** `itemSlug`의 역변환 — `/item/[id]/` 라우트 파라미터에서 원래 `DeltaRecord.id`를 복원한다. */
+/** `itemSlug`의 역변환 — `/lol/item/[id]/` 라우트 파라미터에서 원래 `DeltaRecord.id`를 복원한다. */
 export function itemIdFromSlug(slug: string): string {
   return slug.replaceAll("~", ":");
 }
 
-/** `DeltaRecord.id` → `/item/{slug}/` 링크 href. 홈·대조표·디스코드 알림 등 항목 상세로
- * 링크를 거는 모든 곳이 이 함수를 통해서만 href를 만든다(퍼센트 인코딩 재도입 방지). */
+/** `DeltaRecord.id` → `/lol/item/{slug}/` 링크 href. 홈·대조표·디스코드 알림 등 항목 상세로
+ * 링크를 거는 모든 곳이 이 함수를 통해서만 href를 만든다(퍼센트 인코딩 재도입 방지).
+ *
+ * 2026-09-19: 게임 접두(`/lol`)를 `sectionHref`에서 가져온다 — 접두를 여기 문자열로 박으면
+ * `game.ts`의 GAMES와 두 벌이 되고, 다음에 접두가 바뀔 때 한쪽만 고쳐질 자리가 생긴다. */
 export function itemHref(id: string): string {
-  return `/item/${itemSlug(id)}/`;
+  return `${sectionHref("lol", "item")}${itemSlug(id)}/`;
 }

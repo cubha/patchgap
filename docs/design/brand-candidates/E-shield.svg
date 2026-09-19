@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <rect width="256" height="256" rx="58" fill="#050f1c"/>
+  <rect x="3" y="3" width="250" height="250" rx="55" fill="none" stroke="#c8a355" stroke-opacity="0.3" stroke-width="3"/>
+  <defs>
+    <clipPath id="top"><rect x="0" y="0" width="256" height="128"/></clipPath>
+    <clipPath id="bot"><rect x="0" y="140" width="256" height="116"/></clipPath>
+  </defs>
+  <!-- 방패가 가로로 어긋나 있다 = 선언과 관측의 어긋남 -->
+  <g clip-path="url(#top)">
+    <path d="M128 40 L198 68 L198 132 Q198 190 128 214 Q58 190 58 132 L58 68 Z" fill="#f0e6d2" fill-opacity="0.9"/>
+  </g>
+  <g clip-path="url(#bot)" transform="translate(22 0)">
+    <path d="M128 40 L198 68 L198 132 Q198 190 128 214 Q58 190 58 132 L58 68 Z" fill="#c8a355"/>
+  </g>
+</svg>

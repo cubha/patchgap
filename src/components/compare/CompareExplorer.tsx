@@ -46,7 +46,7 @@ export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons
   // toast를 "다시 띄우기" 위한 선택 일련번호 — 같은 항목을 두 번 눌러도 새 key가 되어 다시 뜬다.
   const [selectSeq, setSelectSeq] = useState(0);
 
-  // 홈 히어로 타일 "미공지 Gap"이 `/compare/#unannounced`로 링크한다(정적 경로 + 앵커만). 해시가
+  // 홈 히어로 타일 "미공지 Gap"이 `/lol/compare/#unannounced`로 링크한다(정적 경로 + 앵커만). 해시가
   // 칩 키와 일치하면 선반영 — 빌드 타임엔 window가 없어 초기 상태는 "all"이고 마운트 후 조정한다.
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");

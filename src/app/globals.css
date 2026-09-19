@@ -3,6 +3,7 @@
 @import "../styles/ambient.css";
 @import "../styles/panel.css";
 @import "../styles/scrollbar.css";
+@import "../styles/landing.css";
 
 /* --font-mono-fallback: tokens.css --font-mono의 raw 스택 값을 별도 이름으로 보존한다(ST-10).
    아래 @theme inline이 Tailwind 테마 키 --font-mono 자체를 재정의하므로, 그 정의 안에서

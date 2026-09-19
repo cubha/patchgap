@@ -9,6 +9,7 @@ import type { NotesFile } from "@/lib/data";
 import { METRIC_KIND, fmtDeltaInt, fmtDeltaSec, fmtInt, fmtPct, fmtPp, fmtSec, metricLabel } from "@/lib/format";
 import { countRelevantNoteEntities as countRelevantNoteEntitiesInFile } from "@/pipeline/shared/notes-count";
 import { isSignificantDelta } from "@/pipeline/shared/significance";
+import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { FDR_ALPHA } from "@/pipeline/aggregate/stats";
 import { isGapStatus } from "@/pipeline/shared/status-order";
 
@@ -40,6 +41,9 @@ export function countRelevantNoteEntities(notes: NotesFile | null): number {
  */
 export { isSignificantDelta };
 
+/** 표시 자격 술어 — 목록·대조표·히어로가 같은 것을 쓴다(2026-09-19). */
+export { isReportableRecord };
+
 /**
  * Gap 소속 판정 — 실제 정의는 `pipeline/shared/status-order.ts`에 있다(서버·클라이언트가
  * 공유하는 단일 소스). 여기서는 기존 호출부(`page.tsx`·`releaseStream.ts`)의 import 경로를
@@ -62,7 +66,17 @@ export interface HeadlineStats {
   /** 원문 패치노트 "항목" 수(`NotesFile.meta.itemCount`) — HANDOFF §4-1 "35 엔티티 / 215 항목"
    * 분리 표기에 쓰는 참고 병기 수치. */
   noteItemCount: number;
-  /** "통계는 M개 변화를 말합니다" + 스탯 타일 "유의 변화" — `isSignificantDelta` 통과 건수. */
+  /**
+   * "통계는 M개 변화를 말합니다" + 스탯 타일 "유의한 관측" — **`isReportableRecord` 통과 건수**.
+   *
+   * 2026-09-19 계약 변경(사용자 지적): 이전엔 `isSignificantDelta` 단독이라 **효과크기 바닥
+   * 미달(`below-threshold`)까지 세고 있었다**. 26.17→26.18 실측으로 403건 중 321건(80%)이
+   * 그것이었고, 그 321건은 **어느 목록에도 렌더되지 않는다**(표시 자격 없음). 즉 히어로가
+   * 자기 화면이 보여주지 않는 것을 세고 "유의한 관측"이라 부르고 있었다 — 라벨과 수치가
+   * 어긋난다. 사용자 판정: "유의미한 내용만 cnt한다고 하면 히어로를 바꾸는 게 맞다."
+   * 이제 목록·대조표가 쓰는 술어와 같은 것을 쓴다(403 → 62). 판정 엔진은 건드리지 않았다 —
+   * 세는 술어만 표시 계층의 것으로 맞춘 것이다.
+   */
   statCount: number;
   /**
    * 스탯 타일·Gap 탭 배지 "미공지 Gap" — **`unannounced` + `indirect-effect`** 건수.
@@ -100,7 +114,7 @@ export function computeHeadline(
   // 전부 엔티티 단위라, 관측 행 수(49)를 타일에 쓰면 카드 28개와 어긋났다.
   const unannouncedEntities = new Set<string>();
   for (const row of rows) {
-    if (isSignificantDelta(row, qAlpha)) statCount++;
+    if (isReportableRecord(row, qAlpha)) statCount++;
     if (isGapStatus(row.status)) unannouncedEntities.add(`${row.entityType}:${row.entityKey}`);
   }
   return { noteEntityCount, noteItemCount, statCount, unannouncedCount: unannouncedEntities.size };

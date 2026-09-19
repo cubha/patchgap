@@ -21,9 +21,14 @@ import { usePathname } from "next/navigation";
 import { gameFromPathname } from "@/lib/game";
 
 export default function GameRoot({ children }: { children: ReactNode }) {
+  // 2026-09-19: 랜딩은 어느 게임에도 속하지 않아 `null`이 올 수 있다. 그때 속성을 아예 빼지
+  // 않고 `"none"`을 박는 이유는 **디버깅 가능성**이다 — 속성이 없으면 "랜딩이라서 없는 것"과
+  // "GameRoot가 안 감싼 것"이 DOM에서 구분되지 않는다. 토큰 계약은
+  // `:root:has([data-game="pubg"])` 하나뿐이라(src/styles/tokens.css) 그 외 값은 전부 기본
+  // 팔레트로 떨어진다 — 랜딩은 브랜드 팔레트를 쓴다.
   const game = gameFromPathname(usePathname());
   return (
-    <div data-game={game} className="contents">
+    <div data-game={game ?? "none"} className="contents">
       {children}
     </div>
   );

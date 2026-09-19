@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>patchgap — 랜딩 시안 A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto+Mono:wght@400..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#030d18; --surface:#0a1626; --surface-warm:#12213a; --fg:#f0e6d2; --fg-2:#c3b79f;
+  --muted:#8b8677; --border:#8c6b33; --border-soft:#242c3a; --accent:#c8a355; --accent-on:#030d18;
+  --success:#0ac8b9; --font-display:Inter,system-ui,sans-serif; --font-body:Inter,system-ui,sans-serif;
+  --font-mono:"Roboto Mono",ui-monospace,Menlo,monospace;
+  --radius-sm:6px; --radius-md:10px; --radius-lg:16px; --radius-pill:999px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:14px;line-height:1.45;word-break:keep-all}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:24px}
+/* ── 헤더 ── */
+.nav{position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;height:56px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em}
+.brand svg{width:26px;height:26px}
+.nav a{color:var(--fg-2);text-decoration:none;font-size:12px}
+/* ── 히어로 ── */
+.hero{position:relative;overflow:hidden;padding:84px 0 72px}
+.hero-art{position:absolute;inset:0;z-index:0}
+.hero-art i{position:absolute;inset:0;background:url('/public/bg/splash-wall.jpg') center top/cover;opacity:1}
+.hero-art::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(3,13,24,.95) 0%,rgba(3,13,24,.86) 30%,rgba(3,13,24,.3) 64%,rgba(3,13,24,.2) 100%),linear-gradient(180deg,rgba(3,13,24,.35),rgba(3,13,24,.25) 48%,rgba(3,13,24,.9) 92%,var(--bg) 100%)}
+.hero-in{position:relative;z-index:2}
+.eyebrow{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.04em;margin:0 0 10px}
+h1{font-family:var(--font-display);font-size:46px;line-height:1.12;margin:0 0 16px;max-width:22ch;text-wrap:balance;text-shadow:0 2px 22px rgba(3,13,24,.9)}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{color:var(--fg-2);max-width:62ch;font-size:15px;margin:0 0 28px;text-shadow:0 1px 14px rgba(3,13,24,.95)}
+.cta{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 22px;border-radius:var(--radius-pill);
+  background:var(--accent);color:var(--accent-on);font-weight:700;text-decoration:none;font-size:14px}
+.btn.ghost{background:transparent;color:var(--fg-2);border:1px solid var(--border-soft)}
+/* ── 요약 타일 ── */
+.stats{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);margin-top:36px;
+  border:1px solid var(--border-soft);border-radius:var(--radius-lg);overflow:hidden;background:rgba(10,22,38,.62);backdrop-filter:blur(6px)}
+.stats div{padding:18px 20px;border-right:1px solid var(--border-soft)}
+.stats div:last-child{border-right:0}
+.stats b{display:block;font-family:var(--font-display);font-size:30px;font-weight:700;font-variant-numeric:tabular-nums}
+.stats span{color:var(--muted);font-size:12px}
+.stats .gap b{color:var(--accent)}
+/* ── 게임 카드 ── */
+section.games{padding:56px 0 72px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:18px;flex-wrap:wrap}
+.sec-head h2{font-size:18px;margin:0}
+.sec-head p{margin:0;color:var(--muted);font-size:12px;max-width:52ch;text-align:right}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px}
+.card{position:relative;border:1px solid var(--border-soft);border-radius:var(--radius-lg);overflow:hidden;
+  min-height:232px;display:flex;flex-direction:column;justify-content:flex-end;text-decoration:none;color:inherit}
+.card .art{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.5}
+.card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,13,24,.25) 0%,rgba(3,13,24,.9) 72%)}
+.card .body{position:relative;z-index:2;padding:18px 20px}
+.card h3{margin:0 0 4px;font-size:19px}
+.card .pair{font-family:var(--font-mono);font-size:12px;color:var(--fg-2)}
+.card .row{display:flex;align-items:center;gap:14px;margin-top:12px}
+.pill{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 11px;border-radius:var(--radius-pill);
+  border:1px solid var(--border);color:var(--accent);font-size:12px;font-weight:700}
+.card .go{margin-left:auto;font-size:12px;color:var(--fg-2)}
+.card.next{display:flex;align-items:center;justify-content:center;border-style:dashed;background:rgba(10,22,38,.4);min-height:232px}
+.card.next .body{text-align:center;padding:24px}
+.card.next h3.next-q{font-family:var(--font-mono);font-size:19px;letter-spacing:.14em;color:var(--accent);opacity:.85;margin:0 0 10px}
+.card.next p{margin:6px 0 0;color:var(--muted);font-size:12px;max-width:26ch}
+/* ── 하단 설명 ── */
+.how{border-top:1px solid var(--border-soft);padding:40px 0 64px}
+.how .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.how h4{margin:0 0 6px;font-size:13px;color:var(--accent)}
+.how p{margin:0;color:var(--fg-2);font-size:13px}
+footer{border-top:1px solid var(--border-soft);padding:20px 0 40px;color:var(--muted);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <span class="brand">
+      <svg viewBox="0 0 256 256" aria-hidden="true"><g><path d="M128 38 L204 82 L204 174 L128 218 L52 174 L52 82 Z" fill="none" stroke="#f0e6d2" stroke-width="16" stroke-linejoin="round" clip-path="inset(0 51% 0 0)"/><path d="M128 84 L168 158 L88 158 Z" fill="#f0e6d2" clip-path="inset(0 51% 0 0)"/><path d="M128 38 L204 82 L204 174 L128 218 L52 174 L52 82 Z" fill="none" stroke="#c8a355" stroke-width="16" stroke-linejoin="round" clip-path="inset(0 0 0 51%)"/><path d="M128 84 L168 158 L88 158 Z" fill="#c8a355" clip-path="inset(0 0 0 51%)"/></g></svg>
+      patchgap
+    </span>
+    <a href="#how">방법론</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-art">
+    <i></i>
+  </div>
+  <div class="wrap hero-in">
+    <p class="eyebrow">패치노트가 말한 것 vs 통계가 말하는 것</p>
+    <h1>패치노트에 <em>없는 변화</em>를 찾습니다</h1>
+    <p class="lede">공식 패치노트와 실제 매치 통계를 자동으로 대조합니다. 짝이 없는 변화 — 공지되지 않은 조정과 간접 파급 — 만 골라, 통계 게이트를 통과한 것에 원천 매치·집계·패치노트 링크를 붙여 보여줍니다.</p>
+    <div class="cta">
+      <a class="btn" href="#games">시작하기 →</a>
+      <a class="btn ghost" href="#how">어떻게 판정하나</a>
+    </div>
+    <div class="stats">
+      <div><b>33,329</b><span>분석한 매치</span></div>
+      <div><b>410</b><span>유의한 관측</span></div>
+      <div class="gap"><b>34</b><span>패치노트에 없던 변화</span></div>
+    </div>
+  </div>
+</div>
+
+<section class="games wrap" id="games">
+  <div class="sec-head">
+    <h2>어느 게임을 볼까요</h2>
+    <p>판정 엔진은 게임을 모릅니다 — 어댑터가 지표를 정규화하면 같은 규칙이 적용됩니다</p>
+  </div>
+  <div class="grid">
+    <a class="card" href="/lol/">
+      <i class="art" style="background-image:url('/public/bg/island.webp')"></i>
+      <div class="body">
+        <h3>리그 오브 레전드</h3>
+        <div class="pair">26.17 → 26.18 · KR 상위 티어 10,000매치</div>
+        <div class="row"><span class="pill">미공지 29</span><span class="go">브리핑 열기 →</span></div>
+      </div>
+    </a>
+    <a class="card" href="/pubg/">
+      <i class="art" style="background-image:url('/public/bg/pubg-key-art.webp')"></i>
+      <div class="body">
+        <h3>배틀그라운드</h3>
+        <div class="pair">42.3 → 43.1 · Steam 전 지역 3,329매치</div>
+        <div class="row"><span class="pill">미공지 5</span><span class="go">브리핑 열기 →</span></div>
+      </div>
+    </a>
+    <div class="card next">
+      <div class="body">
+        <h3 class="next-q">WHO&rsquo;S NEXT?</h3>
+        <p>패치노트를 내고 매치 API를 여는 게임이면 어댑터만 붙습니다</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how wrap" id="how">
+  <div class="grid3">
+    <div><h4>수집</h4><p>패치 라이브 구간의 매치를 전량 수집하고, 표본이 모자란 지표는 판정하지 않습니다.</p></div>
+    <div><h4>판정</h4><p>Wilson·Newcombe 신뢰구간과 BH-FDR로 거짓양성을 통제한 뒤, 패치노트 항목과 짝을 맞춥니다.</p></div>
+    <div><h4>근거</h4><p>모든 판정문에 원천 링크가 붙습니다. 근거가 없으면 회색으로 남기고 지어내지 않습니다.</p></div>
+  </div>
+</section>
+
+<footer class="wrap">patchgap는 각 게임사와 제휴하거나 보증을 받지 않았습니다. 상표·자산의 저작권은 각 권리자에게 있습니다.</footer>
+</body>
+</html>

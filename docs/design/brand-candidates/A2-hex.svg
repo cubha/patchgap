@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <rect width="256" height="256" rx="58" fill="#050f1c"/>
+  <rect x="3" y="3" width="250" height="250" rx="55" fill="none" stroke="#c8a355" stroke-opacity="0.3" stroke-width="3"/>
+  <!-- 헥스 프레임: 오른쪽 변 한 칸이 통째로 빠져 있다 -->
+  <path d="M128 38 L206 82 L206 118" fill="none" stroke="#f0e6d2" stroke-opacity="0.85" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M128 38 L50 82 L50 174 L128 218 L172 193" fill="none" stroke="#f0e6d2" stroke-opacity="0.85" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 빠진 칸을 금색이 바깥으로 어긋나 이어받는다 -->
+  <path d="M222 146 L222 182" fill="none" stroke="#c8a355" stroke-width="15" stroke-linecap="round"/>
+  <!-- 안쪽 델타 -->
+  <path d="M128 92 L164 158 L92 158 Z" fill="#c8a355"/>
+</svg>

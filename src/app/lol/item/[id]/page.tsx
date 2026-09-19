@@ -191,7 +191,7 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
               모두 그렸는데 구현에만 없던 것을 2026-09-12 /verify-impl 화면 대조로 잡아 보완했다.
               진입 경로가 대조표 행 클릭이므로(UX-BRIEF §2 화면 흐름) 첫 마디는 대조표 링크다. */}
           <nav aria-label="위치" className="ambient-detail-sub pt-1 font-mono text-xs text-fg-2">
-            <Link href="/compare/" className="hover:text-fg">
+            <Link href="/lol/compare/" className="hover:text-fg">
               대조표
             </Link>
             <span className="px-1.5 text-muted" aria-hidden="true">
@@ -240,7 +240,7 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
             </div>
             <div className="ml-auto">
               <Link
-                href="/methodology/#discord"
+                href="/lol/methodology/#discord"
                 className="inline-flex min-h-10 items-center justify-center rounded-md bg-accent px-5 text-sm font-bold text-accent-on hover:opacity-90"
               >
                 방송 규칙 보기 →

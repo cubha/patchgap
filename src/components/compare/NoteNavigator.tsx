@@ -8,7 +8,7 @@
 // `groupNotesForNav`가 하고, 항목엔 줄 수·스킬 목록·배지(보고 가능 관측이 있을 때만)를 그린다. 클릭은
 // 부모가 받아 우측 표의 해당 엔티티 행을 최상단으로 스크롤한다.
 //
-// panel-surface-glass(2026-09-12·5차, R6 확대): /compare/도 전역 앰비언트 배경을 그대로 받는다.
+// panel-surface-glass(2026-09-12·5차, R6 확대): /lol/compare/도 전역 앰비언트 배경을 그대로 받는다.
 
 import type { DeltaRecord, PatchNoteItem, PatchNoteSection } from "@/pipeline/types";
 import EntityIcon from "@/components/EntityIcon";
