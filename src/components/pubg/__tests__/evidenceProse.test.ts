@@ -71,3 +71,53 @@ describe("buildPubgEvidenceProse", () => {
     expect(out[1]).toContain("판정 대상 목록에 없어");
   });
 });
+
+// 2026-09-19 최종 채점 K2-1(高): 바닥 미달 21종이 "95% 신뢰구간이 [+3.3%, +5.8%]로 0을 포함해"라고
+// 말하고 있었다 — 그 구간은 0을 포함하지 않는다. `!isReportable(status)`로 두 종류를 한 덩어리로
+// 묶은 것이 원인이다: no-change(CI가 0을 포함)와 below-threshold(CI는 0을 안 포함하지만 변화폭이
+// 효과크기 바닥 미만)는 판정을 보류한 **사유가 다르다**. 그래서 문장을 status가 아니라 **그 문장이
+// 인용하는 수치(relCi)** 에서 고른다 — 같은 종류의 거짓이 다시 생기지 않는 유일한 방법이다.
+describe("판정 보류 사유별 문장 분기(최종 채점 K2-1)", () => {
+  it("바닥 미달이면 CI가 아니라 효과크기 바닥을 사유로 말한다", () => {
+    const out = buildPubgEvidenceProse({
+      ...base,
+      row: row({ status: "below-threshold", relChange: 0.0876, relCi: [0.072, 0.103] }),
+      effectFloor: 0.132,
+    });
+    expect(out[1]).toContain("효과크기 바닥");
+    expect(out[1]).toContain("13.2%");
+    expect(out[1]).toContain("+8.8%");
+    // 0을 포함하지 않는 구간을 두고 "0을 포함해"라고 말하지 않는다.
+    expect(out[1]).not.toContain("0을 포함해");
+  });
+
+  it("바닥 값을 모르면 수치를 지어내지 않고 사유만 말한다", () => {
+    const out = buildPubgEvidenceProse({
+      ...base,
+      row: row({ status: "below-threshold", relChange: 0.0876, relCi: [0.072, 0.103] }),
+    });
+    expect(out[1]).toContain("효과크기 바닥");
+    expect(out[1]).not.toContain("NaN");
+    expect(out[1]).not.toContain("undefined");
+  });
+
+  it("CI가 0을 포함할 때만 '0을 포함해'라고 말한다", () => {
+    const includes = buildPubgEvidenceProse({
+      ...base,
+      row: row({ status: "no-change", relChange: 0.004, relCi: [-0.02, 0.03] }),
+    });
+    expect(includes[1]).toContain("0을 포함해");
+  });
+
+  it("공지 대조 행도 CI가 0을 포함하면 그렇게 말한다 — status로 단정하지 않는다", () => {
+    // classify()는 짝 노트가 있으면 significant() 검사 없이 announced-*를 낸다. 그래서 공지 행의
+    // CI가 0을 포함할 수 있고, status만 보고 "0을 포함하지 않아"라고 말하면 거짓이 된다.
+    const out = buildPubgEvidenceProse({
+      ...base,
+      row: row({ status: "announced-consistent", relChange: 0.01, relCi: [-0.01, 0.03] }),
+      noteSummary: "베릴 스폰율 조정",
+    });
+    expect(out[1]).toContain("0을 포함해");
+    expect(out[1]).not.toContain("0을 포함하지 않아");
+  });
+});

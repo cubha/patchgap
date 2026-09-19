@@ -12,8 +12,9 @@ import {
   serializeCandidates,
   SYSTEM_INSTRUCTIONS_TEXT,
   summarizeProseHygiene,
-  countLengthViolations,
-  buildLengthRepairNote,
+  countProseViolations,
+  buildProseRepairNote,
+  isNounEnding,
   verifyCauses,
   verifySummaryCites,
 } from "../llm-match";
@@ -479,6 +480,39 @@ describe("문장 위생 집계(2026-09-19 — 항목7)", () => {
   });
 });
 
+// 2026-09-19 최종 채점 K1-7·K4-4(中): v5 산출 원인 11건이 "…브루저 경쟁에서 밀린 영향."처럼
+// 명사형으로 끝나 같은 카드의 합쇼체와 섞여 노출됐다. ACCEPT-prose-v5가 "억지 명사형·문체 혼입"을
+// 위험으로 적어 놓고 게이트에 그 검사를 넣지 않은 것이 원인이다. 프롬프트를 고치면
+// PROMPT_VERSION을 올려야 하고 그러면 지금 통과하는 문장까지 전부 다시 굴리므로, 230건 중 13건만
+// 고치도록 **호출부와 캐시**에서 닫는다.
+describe("명사형 종결 검출(최종 채점 K1-7)", () => {
+  it("합쇼체로 끝나면 위반이 아니다", () => {
+    expect(isNounEnding("정글 상성에서 밀렸습니다.")).toBe(false);
+    expect(isNounEnding("교전 주도권이 옮겨졌습니다")).toBe(false);
+  });
+
+  it("명사로 끝나면 위반이다", () => {
+    expect(isNounEnding("브루저 경쟁에서 밀린 영향.")).toBe(true);
+    expect(isNounEnding("서포트 밴 우선순위가 파이크로 이동.")).toBe(true);
+    expect(isNounEnding("정글 주도권 재분배.")).toBe(true);
+  });
+
+  it("위생 집계가 명사형 원인을 센다", () => {
+    const stats = summarizeProseHygiene([
+      {
+        summary: "요약은 단정합니다.",
+        causes: [
+          { text: "밀렸습니다.", confidence: "high" },
+          { text: "밀린 영향.", confidence: "high" },
+          { text: "파이크로 이동.", confidence: "low" },
+        ],
+      },
+    ]);
+    expect(stats.causeCount).toBe(3);
+    expect(stats.causeNounEnding).toBe(2);
+  });
+});
+
 describe("길이 재요청(v5) — 문구가 아니라 호출부가 닫는다", () => {
   // v4가 "80자 안팎"을 숫자로 바꿔 요약 초과를 72% → 2~4%로 줄였다. 남은 2~4%를 더 강한 문구로
   // 0으로 만들려는 것은 이미 멈춘 레버를 다시 당기는 일이라, 위반한 응답에만 1회 되묻는다.
@@ -489,21 +523,31 @@ describe("길이 재요청(v5) — 문구가 아니라 호출부가 닫는다", 
   });
 
   it("상한 안이면 재요청하지 않는다(위반 0)", () => {
-    expect(countLengthViolations(out("짧은 요약입니다.", ["짧은 원인입니다."]))).toBe(0);
+    expect(countProseViolations(out("짧은 요약입니다.", ["짧은 원인입니다."]))).toBe(0);
   });
 
   it("요약·원인 위반을 각각 센다", () => {
-    expect(countLengthViolations(out("가".repeat(101), ["나".repeat(81), "짧습니다."]))).toBe(2);
+    expect(countProseViolations(out("가".repeat(101), ["나".repeat(81), "짧습니다."]))).toBe(2);
+  });
+
+  it("명사형 종결도 재요청 대상이다 — 길이만 보면 11건이 통과해 버린다", () => {
+    expect(countProseViolations(out("짧은 요약입니다.", ["브루저 경쟁에서 밀린 영향."]))).toBe(1);
   });
 
   it("재요청 문구가 실제 글자 수와 상한을 함께 짚는다", () => {
-    const note = buildLengthRepairNote(out("가".repeat(110), ["나".repeat(90)]));
+    const note = buildProseRepairNote(out("가".repeat(110), ["나".repeat(90)]));
     expect(note).toContain("110자");
     expect(note).toContain("100자 이하");
     expect(note).toContain("causes[0]");
     expect(note).toContain("90자");
-    // 인용·신뢰도를 흔들면 검증 단계가 다른 것을 보게 된다 — 길이만 고치라고 못박는다.
+    // 인용·신뢰도를 흔들면 검증 단계가 다른 것을 보게 된다 — 표현만 고치라고 못박는다.
     expect(note).toContain("candidateNoteId");
+  });
+
+  it("재요청 문구가 명사형 종결을 어떻게 고칠지 말한다", () => {
+    const note = buildProseRepairNote(out("짧은 요약입니다.", ["밴 우선순위가 파이크로 이동."]));
+    expect(note).toContain("causes[0]");
+    expect(note).toContain("합쇼체");
   });
 });
 
