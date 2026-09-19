@@ -2,7 +2,7 @@
   "meta": {
     "from": "26.16",
     "to": "26.17",
-    "generatedAt": "2026-09-19T01:04:02.019Z",
+    "generatedAt": "2026-09-19T02:14:50.769Z",
     "n": 1966,
     "counts": {
       "unannounced": 17,
@@ -15,18 +15,18 @@
     },
     "qAlpha": 0.1,
     "llm": {
-      "calls": 120,
-      "cacheHits": 0,
+      "calls": 0,
+      "cacheHits": 120,
       "skipped": 0,
       "usage": {
-        "inputTokens": 15303,
-        "cacheReadInputTokens": 720188,
-        "cacheCreationInputTokens": 6052,
-        "outputTokens": 66024
+        "inputTokens": 0,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 0
       },
       "prose": {
         "summaryCount": 120,
-        "summaryOverLength": 47,
+        "summaryOverLength": 3,
         "summaryHedged": 46,
         "maxSummaryLength": 110,
         "causeCount": 245,

@@ -212,7 +212,9 @@ export default function MethodologyPage() {
               이 페이지로 오는데 정작 방송에 대한 서술이 0건이었다. 2026-09-14에 제거된 것은
               **미리보기 목업**이고, 무엇이 언제 나가는지에 대한 서술은 방법론이 총망라해야 한다
               (공통3). 목업을 되살리지 않고 규칙만 적는다. */}
-          <div id="discord">
+          {/* scroll-mt: sticky 헤더(높이 ~57px)가 앵커 착지 시 카드 제목을 덮는다 — 실측 21px 가림
+              (독립 채점 보완4). 착지점을 헤더 아래로 내린다. */}
+          <div id="discord" className="scroll-mt-20">
             <SectionCard eyebrow="알림" title="디스코드로 무엇이 나가나" variant="glass">
               <div className="flex flex-col gap-3 p-5 text-sm leading-relaxed text-fg-2">
                 <p>
