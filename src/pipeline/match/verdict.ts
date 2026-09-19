@@ -25,6 +25,7 @@
 // 무시 가능한 규모"라는 정의와 일치).
 
 import fs from "node:fs";
+import type { ProseHygieneStats } from "./llm-match";
 import path from "node:path";
 import type { DeltaRecord, DeltasFileMeta, MatchStatus, PatchId, PatchNoteItem } from "../types";
 import { DATA_ROOT } from "../shared/paths";
@@ -122,6 +123,15 @@ export interface DeltasLlmMeta {
     cacheCreationInputTokens: number;
     outputTokens: number;
   };
+  /**
+   * 산출 문장의 길이·완곡 종결 위생 집계(2026-09-19). 판정에는 쓰이지 않고 **다음 실행이 개선을
+   * 측정할 수 있게** 남기는 수치다 — 근거는 llm-match.ts의 summarizeProseHygiene 주석.
+   */
+  prose?: ProseHygieneStats;
+  /** 문장 규칙 위반으로 1회 재요청한 델타 수(v5). `calls`처럼 **이 실행**의 수치다 — 2026-09-19
+   * 부터는 캐시 적중분도 검사·재요청 대상이라 캐시만 읽은 실행에서도 0이 아닐 수 있다.
+   * 없으면 계수기가 생기기 전의 파일이다. */
+  proseRepairs?: number;
 }
 
 export interface WriteDeltasParams {

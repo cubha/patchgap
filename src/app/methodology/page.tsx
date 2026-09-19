@@ -23,6 +23,7 @@ import fs from "node:fs";
 import path from "node:path";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
+import { computeLlmCauseStats, dominantConfidence } from "@/components/methodology/llmStats";
 import { getDefaultPair, loadDeltas, loadNotes, loadSummary } from "@/lib/data";
 import { fmtKst } from "@/lib/format";
 import { EFFECT_SIZE_FLOORS, FDR_ALPHA, WIN_RATE_MIN_N } from "@/pipeline/aggregate/stats";
@@ -60,6 +61,10 @@ export default function MethodologyPage() {
   // 2026-09-18(채점 라운드1 ST-5): 홈 타일 "유의 변화"와 **같은 술어**를 쓴다. 이전엔 여기만
   // `q<α` 단독이라 홈 403 vs 방법론 410으로 두 페이지가 서로를 반박했다(표본 부족 7행이 q는
   // 통과하지만 승률 게이트에서 제외되는 차이).
+  // 추정 원인 카드의 수치 — 리터럴로 적으면 재생성에 뒤처져 화면이 거짓을 말한다(독립 채점 K2-7).
+  const llmStats = deltas ? computeLlmCauseStats(deltas.rows) : null;
+  const dominant = llmStats ? dominantConfidence(llmStats) : null;
+
   const significantCount = deltas
     ? deltas.rows.filter((row) => isSignificantDelta(row, deltas.meta.qAlpha ?? FDR_ALPHA)).length
     : null;
@@ -145,6 +150,110 @@ export default function MethodologyPage() {
               </div>
             </dl>
           </SectionCard>
+
+          {/* 추정 원인의 판정 기준(2026-09-19 사용자 질문: "원인후보 없음 항목이 대다수인거같은데
+              LLM 판정기준이 어떻게되고 어떤 기준으로 분석하여 판정하는지?"). 화면 곳곳이 LLM 문장을
+              쓰면서 그 규칙은 코드에만 있었다 — 방법론에 총망라한다는 원칙(공통3)대로 여기 적는다. */}
+          <SectionCard eyebrow="추정 원인" title="LLM은 무엇을 보고 판정하나" variant="glass">
+            <div className="flex flex-col gap-4 p-5 text-sm leading-relaxed text-fg-2">
+              <p>
+                패치노트와 짝지어지지 않았거나 노트와 방향이 어긋난 관측에 한해, 언어 모델이 <strong className="text-fg">다른
+                항목의 파급 효과</strong>를 추정합니다. 직접 변경(그 챔피언·아이템 자신의 노트)은 앞 단계인 결정론 매칭이
+                이미 처리하므로 후보에서 제외됩니다 — 그래서 모델이 찾는 것은 처음부터 간접 원인뿐입니다.
+              </p>
+              <dl className="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-2">
+                <div>
+                  <dt className="font-display font-bold text-fg">무엇을 대상으로 하나</dt>
+                  <dd className="mt-1">
+                    판정이 &ldquo;미공지&rdquo; 또는 &ldquo;공지 · 이상 관측&rdquo;인 관측만, 중요도 상위 120건입니다
+                    (상태 우선순위 → 변화폭 내림차순). 나머지는 아예 묻지 않습니다.
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-display font-bold text-fg">무엇을 보여주나</dt>
+                  <dd className="mt-1">
+                    그 패치 노트 전체를 항목 id · 엔티티 · 스킬 · 변경 전/후 값 · 방향 · 섹션만 남긴 목록으로 줍니다.
+                    본문 산문이 아니라 구조화된 목록이라, 모델이 인용할 수 있는 것은 실재하는 항목뿐입니다.
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-display font-bold text-fg">기각 규칙(기계가 검사)</dt>
+                  <dd className="mt-1">
+                    인용한 id가 목록에 없으면 기각합니다. 그 관측의 엔티티 자신을 가리키면 기각합니다. 다른 게임
+                    모드(LoL 클래식 · 아수라장 · 아레나)의 항목이면 기각합니다 — 우리가 재는 것은 소환사의 협곡이기
+                    때문입니다. 기각된 문장은 링크 없이 회색으로만 남습니다.
+                  </dd>
+                </div>
+                <div>
+                  <dt className="font-display font-bold text-fg">왜 &ldquo;후보 없음&rdquo;이 많나</dt>
+                  <dd className="mt-1">
+                    관측 변화의 상당수는 패치가 아니라 메타 이동·표본 구성 변화에서 옵니다. 그럴듯한 조항이 없을 때
+                    지어내지 않는 것이 이 사이트의 규칙이라, 그런 경우는 &ldquo;설명할 조항을 찾지 못했습니다&rdquo;로
+                    끝냅니다.{" "}
+                    {llmStats ? (
+                      <>
+                        실측({pair?.to ?? "최근 패치"}): 대상 {llmStats.attempted}건 중 원인을 못 찾은 것이{" "}
+                        {llmStats.withoutCause}건, 후보를 냈으나 검증에서 전부 기각된 것이{" "}
+                        {llmStats.withUnverifiedCauseOnly}건, 검증을 통과한 원인을 가진 것이{" "}
+                        {llmStats.withVerifiedCause}건입니다. 검증을 통과한 원인 문장{" "}
+                        {llmStats.confidence.low + llmStats.confidence.medium + llmStats.confidence.high}건의
+                        신뢰도는 낮음 {llmStats.confidence.low} · 보통 {llmStats.confidence.medium} · 높음{" "}
+                        {llmStats.confidence.high}건으로, 가장 많은 등급은{" "}
+                        <strong className="text-fg">{dominant?.label ?? "없음"}</strong>입니다 — 그 분포 자체가 이
+                        추정의 한계를 말합니다.
+                      </>
+                    ) : null}
+                  </dd>
+                </div>
+              </dl>
+              <p className="text-muted">
+                본문색으로 단언하는 것은 인용이 실재하고 신뢰도가 보통 이상인 문장뿐입니다. 그 외는 전부 회색이며,
+                회색 문장은 &ldquo;근거가 약하다&rdquo;는 표시이지 판정이 아닙니다.
+              </p>
+            </div>
+          </SectionCard>
+
+          {/* 디스코드 방송 규칙(2026-09-19, 독립 채점 K1-2): 홈·항목 상세의 "방송 규칙 보기 →"가
+              이 페이지로 오는데 정작 방송에 대한 서술이 0건이었다. 2026-09-14에 제거된 것은
+              **미리보기 목업**이고, 무엇이 언제 나가는지에 대한 서술은 방법론이 총망라해야 한다
+              (공통3). 목업을 되살리지 않고 규칙만 적는다. */}
+          {/* scroll-mt: sticky 헤더(높이 ~57px)가 앵커 착지 시 카드 제목을 덮는다 — 실측 21px 가림
+              (독립 채점 보완4). 착지점을 헤더 아래로 내린다. */}
+          <div id="discord" className="scroll-mt-20">
+            <SectionCard eyebrow="알림" title="디스코드로 무엇이 나가나" variant="glass">
+              <div className="flex flex-col gap-3 p-5 text-sm leading-relaxed text-fg-2">
+                <p>
+                  브리핑은 <strong className="text-fg">배치가 보냅니다</strong>. 이 사이트는 정적 페이지라
+                  브라우저에서 아무것도 전송하지 않습니다 — 패치 수집·집계·판정이 끝난 뒤 CI가 한 번 보냅니다.
+                </p>
+                <dl className="grid grid-cols-1 gap-x-8 gap-y-3 md:grid-cols-2">
+                  <div>
+                    <dt className="font-display font-bold text-fg">보내는 것</dt>
+                    <dd className="mt-1">
+                      미공지 관측 상위 항목과 이상 관측(공지 방향과 반대로 움직인 관측) 상위 3건입니다.
+                      <strong className="text-fg"> 공지대로 움직인 관측은 보내지 않습니다</strong> — 패치노트를
+                      읽으면 아는 내용이기 때문입니다.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-display font-bold text-fg">보내지 않는 것</dt>
+                    <dd className="mt-1">
+                      표본 부족 · 바닥 미달 · 변화 없음으로 판정된 관측은 화면과 마찬가지로 방송에서도 빠집니다.
+                      그래서 건수가 적은 패치에는 짧은 브리핑이 갑니다.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-display font-bold text-fg">언제</dt>
+                    <dd className="mt-1">패치 수집이 끝난 뒤 판정 파이프라인 마지막 단계에서 1회. 실패해도 재전송하지 않습니다.</dd>
+                  </div>
+                  <div>
+                    <dt className="font-display font-bold text-fg">홈의 &ldquo;마지막 집계&rdquo;</dt>
+                    <dd className="mt-1">전송 시각이 아니라 이 판정 파일이 마지막으로 생성된 시각입니다.</dd>
+                  </div>
+                </dl>
+              </div>
+            </SectionCard>
+          </div>
 
           {/* 확장성의 증명 — HANDOFF-redesign-2026-09-10.md §4-4. 셀렉터가 아니라 어댑터
               매핑표로 "다른 게임에도 같은 판정 엔진을 쓸 수 있다"를 보인다. */}

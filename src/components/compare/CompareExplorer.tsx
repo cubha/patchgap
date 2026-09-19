@@ -22,6 +22,7 @@ import StatusFilterChips from "./StatusFilterChips";
 import NoteNavigator from "./NoteNavigator";
 import DeltaTable from "./DeltaTable";
 import CoverageBar from "./CoverageBar";
+import FocusToast from "./FocusToast";
 import { buildEntityRows } from "./entityRows";
 import { STATUS_FILTERS, filterByStatus, type CoverageStats, type NoteEntityGroup } from "./logic";
 
@@ -42,6 +43,8 @@ export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons
   const [activeSection, setActiveSection] = useState<PatchNoteSection>("champion");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGroup, setSelectedGroup] = useState<NoteEntityGroup | null>(null);
+  // toast를 "다시 띄우기" 위한 선택 일련번호 — 같은 항목을 두 번 눌러도 새 key가 되어 다시 뜬다.
+  const [selectSeq, setSelectSeq] = useState(0);
 
   // 홈 히어로 타일 "미공지 Gap"이 `/compare/#unannounced`로 링크한다(정적 경로 + 앵커만). 해시가
   // 칩 키와 일치하면 선반영 — 빌드 타임엔 window가 없어 초기 상태는 "all"이고 마운트 후 조정한다.
@@ -73,10 +76,21 @@ export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons
     return null;
   }, [selectedGroup, entityRows, noteIcons]);
 
+  // 선택한 묶음의 행이 표에 없을 때의 안내. 표 머리 한 줄로는 보이지 않는다는 사용자 지적으로
+  // toast로 옮겼다(FocusToast 주석 참고). 행이 없는 이유는 둘이다 — 필터에 걸렸거나, 유의한
+  // 관측이 없거나. 필터가 "전체"가 아니면 그쪽을 먼저 의심하는 것이 사실에 가깝다.
   const focusMissing = selectedGroup !== null && focusKey === null;
+  const toastMessage = focusMissing
+    ? `${selectedGroup?.entity ?? ""} — ${
+        laneFilter !== "all" || statusFilter !== "all"
+          ? "현재 라인·상태 필터에서는 이 표에 행이 없습니다"
+          : "유의한 관측이 없어 이 표에 행이 없습니다"
+      }`
+    : null;
 
   return (
     <>
+      <FocusToast key={`${selectedGroup?.id ?? ""}:${selectSeq}`} message={toastMessage} />
       {/* 시안 .m-filter — 상태 칩과 라인 필터를 같은 필터바 줄에 둔다(홈과 동일한 어휘). 표면은
           헤더와 같은 반투명 크롬(.glass-chrome-2). 2026-09-13(R8) +120px 배치는 홈과 동일 결정. */}
       <div className="glass-chrome-2 border-b mt-[120px]"> {/* design-lint-ignore: PLAN-deployed-ui-fix-2026-09-12.md R8 — 사용자 확정 +120px, 대응 토큰 없는 페이지별 배치 수치 */}
@@ -99,7 +113,10 @@ export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
             selectedGroupId={selectedGroup?.id ?? null}
-            onSelect={setSelectedGroup}
+            onSelect={(group) => {
+              setSelectedGroup(group);
+              setSelectSeq((seq) => seq + 1);
+            }}
             icons={noteIcons}
           />
           <section className={`${panelSurfaceClass("glass")} overflow-hidden rounded-lg`}>
@@ -110,14 +127,13 @@ export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons
               </div>
               <span className="font-mono text-xs tabular-nums text-muted">{entityRows.length}개 엔티티</span>
             </div>
-            {focusMissing ? (
-              // scope-critic ST3: 행이 없는 이유는 둘이다 — 라인·상태 필터에 걸렸거나, 유의한 관측이 없거나.
-              // 필터가 "전체"가 아니면 그쪽을 먼저 의심하는 것이 사실에 가깝다(아이템은 라인 선택 시 항상 빠진다).
+            {/* 2026-09-19 사용자 결정항목: 라인을 고르면 아이템 행이 전부 사라지는데 화면이 그
+                사실을 말하지 않았다. 데이터가 그렇게 강제한다 — 아이템 델타는 `item:3504:adoptionRate`
+                처럼 라인 축이 없다(챔피언만 라인별 4세그먼트). 없는 축을 지어내 "정글에서의 채택률"을
+                보여주는 대신, 빠진다는 사실을 적는다. */}
+            {laneFilter !== "all" ? (
               <p className="border-b border-border-soft px-5 py-2 text-xs text-muted">
-                <strong className="text-fg-2">{selectedGroup?.entity}</strong> —{" "}
-                {laneFilter !== "all" || statusFilter !== "all"
-                  ? "현재 라인·상태 필터에서는 이 표에 행이 없습니다"
-                  : "유의한 관측이 없어 이 표에 행이 없습니다"}
+                아이템은 라인별로 집계하지 않아 라인을 고르면 이 표에서 빠집니다.
               </p>
             ) : null}
             <DeltaTable pair={pair} rows={entityRows} focusKey={focusKey} />

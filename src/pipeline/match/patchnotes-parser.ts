@@ -71,6 +71,11 @@
 // stat이 없어 애초에 ST-08 매칭 대상이 아니라 실질적 영향이 없다(VERIFY-SPEC 미확인 사항 참고).
 
 import * as cheerio from "cheerio";
+import {
+  assertModeScopeConsistent,
+  modeScopeFromAnchorUrl,
+  type NoteModeScope,
+} from "../shared/mode-scope";
 import type { AnyNode } from "domhandler";
 import crypto from "node:crypto";
 import fs from "node:fs";
@@ -304,6 +309,7 @@ interface BuildItemContext {
   patch: PatchId;
   sourceUrl: string;
   section: PatchNoteSection;
+  modeScope: NoteModeScope;
   subsection?: "rune" | "system";
   entityAnchorId: string | null;
   sectionAnchorId: string | null;
@@ -340,6 +346,7 @@ function buildItem(line: RawNoteLine, ctx: BuildItemContext): PatchNoteItem {
     id,
     patch: ctx.patch,
     section: ctx.section,
+    modeScope: ctx.modeScope,
     subsection: ctx.subsection,
     entity: line.entity,
     skill: line.skill,
@@ -355,6 +362,8 @@ function buildItem(line: RawNoteLine, ctx: BuildItemContext): PatchNoteItem {
 
 interface ParseBlockOptions {
   section: PatchNoteSection;
+  /** 이 블록이 속한 h2 섹션의 적용 범위 — 블록의 모든 노트에 그대로 새긴다. */
+  modeScope: NoteModeScope;
   subsection?: "rune" | "system";
   patch: PatchId;
   sourceUrl: string;
@@ -457,6 +466,7 @@ function parseNoteBlock(
       patch: opts.patch,
       sourceUrl: opts.sourceUrl,
       section: opts.section,
+      modeScope: opts.modeScope,
       subsection: opts.subsection,
       entityAnchorId,
       sectionAnchorId: opts.sectionAnchorId,
@@ -484,6 +494,7 @@ export function parsePatchNotes(html: string, options: ParsePatchNotesOptions): 
   let currentStrategy: SectionStrategy = { kind: "skip" };
   let currentH2 = "";
   let currentSectionAnchorId: string | null = null;
+  let currentModeScope: NoteModeScope = "core";
   let classicCategory: ClassicCategory = null;
   const sections: string[] = [];
   const items: PatchNoteItem[] = [];
@@ -499,6 +510,17 @@ export function parsePatchNotes(html: string, options: ParsePatchNotesOptions): 
       currentH2 = title;
       currentSectionAnchorId = $el.attr("id") ?? h2.attr("id") ?? null;
       currentStrategy = resolveSectionStrategy(title);
+      // 적용 범위는 **섹션 단위**로 정해 블록의 모든 노트에 새긴다(노트 자신의 anchorUrl로 뒤늦게
+      // 추론하지 않는다 — 모드 섹션 안에 엔티티 h3 앵커가 생기면 그 노트만 core로 새어 나간다).
+      // 제목·앵커 두 신호가 엇갈리면 여기서 크게 실패한다(mode-scope.ts 참고).
+      if (currentStrategy.kind !== "skip") {
+        const sectionAnchorUrl =
+          currentSectionAnchorId === null ? options.sourceUrl : `${options.sourceUrl}#${currentSectionAnchorId}`;
+        assertModeScopeConsistent(title, sectionAnchorUrl);
+        currentModeScope = modeScopeFromAnchorUrl(sectionAnchorUrl);
+      } else {
+        currentModeScope = "core";
+      }
       if (currentStrategy.kind === "classic") classicCategory = null; // 클래식 섹션 진입 시 리셋
       sawFirstHeader = true;
       return;
@@ -554,6 +576,7 @@ export function parsePatchNotes(html: string, options: ParsePatchNotesOptions): 
       $el,
       {
         section: blockSection,
+        modeScope: currentModeScope,
         subsection: blockSubsection,
         patch: options.patch,
         sourceUrl: options.sourceUrl,

@@ -57,6 +57,7 @@ function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
     summary: "공격 속도: 20% ⇒ 25%",
     anchorUrl: "https://example.com/#stormrazor",
     anchorKind: "entity",
+    modeScope: "core",
     ...overrides,
   };
 }

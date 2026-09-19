@@ -1,3 +1,4 @@
+import type { NoteModeScope } from "./shared/mode-scope";
 // src/pipeline/types.ts
 // 파이프라인 핵심 도메인 타입. 구현은 각 모듈(collect/aggregate/match)에서 채운다 — 여기는
 // 계약(contract)만 정의한다. SCOPE §2 F1~F4 참고. ST-01 확정본 — 다른 배치가 그대로 소비한다.
@@ -284,6 +285,16 @@ export interface PatchNoteItem {
    * 화면)가 링크 정밀도를 구분해 표시할 수 있도록 ST-07 라운드 2에서 추가.
    */
   anchorKind: "entity" | "section" | "page";
+  /**
+   * 이 노트가 **어디에 적용되나**. `"core"`는 소환사의 협곡(우리 집계 대상), 나머지는 별도 게임
+   * 모드(LoL 클래식·아수라장·아레나 등)다. `section`이 "무엇이 바뀌었나"라면 이쪽은 적용 범위이고,
+   * 짝짓기·인과 추론 자격은 **이 필드 하나로** 판정한다(2026-09-19).
+   *
+   * 왜 section 재분류가 아니라 새 필드인가: 노트 id가 section을 포함해서, section을 바꾸면 커밋된
+   * 델타의 matchedNoteIds가 전부 댕글링되고 LLM 캐시(candidateSetHash)도 전량 무효가 된다.
+   * 근거: docs/plan/BRAINTRUST-root-fix-2026-09-19.md §4.
+   */
+  modeScope: NoteModeScope;
 }
 
 /**

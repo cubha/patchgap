@@ -20,6 +20,7 @@ function note(over: Partial<PatchNoteItem> = {}): PatchNoteItem {
     summary: "떠오른 전설 오리아나 스킨 및 테두리",
     anchorUrl: "https://example.test/notes",
     anchorKind: "section",
+    modeScope: "core",
     ...over,
   };
 }

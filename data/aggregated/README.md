@@ -20,9 +20,19 @@ data/aggregated/
 │   └── summary.json            # DataFile<PatchSummary> — 매치 평균(경기 시간 등) + nMatches 등 메타
 ├── notes/
 │   └── {patch}.json            # ST-07 패치노트 파서 출력 — {meta, summary, sections, items}
+│                               # items[].modeScope(2026-09-19): core | classic | aram | arena | swiftplay | brawl
+│                               #   "이 줄이 어디에 적용되나". core(소환사의 협곡)만 짝짓기·인과 추론
+│                               #   대상이다. 값은 섹션 앵커에서 파생하며 파서와 마이그레이션이 같은
+│                               #   규칙(src/pipeline/shared/mode-scope.ts)을 쓴다.
 └── deltas/
     └── {from}_{to}.json        # ST-08/09 최종 판정 — {meta:{from,to,generatedAt,n,counts,qAlpha,llm?}, rows: DeltaRecord[]}
 ```
+
+> ⚠️ **노트 파일은 재파싱하지 않는다**(2026-09-19). 라이엇은 발행 후 패치노트 페이지를 수정한다 —
+> 실측으로 26.18은 저장본 180건 대비 오늘자 페이지가 162건이었고(아수라장 증강 18건 삭제), 문구가
+> 바뀐 1건은 내용 해시 기반 id까지 달라져 기존 델타의 `matchedNoteIds`를 댕글링시킨다. 원문 HTML
+> 아카이브가 없어 복원 경로도 없다. 스키마가 바뀌면 `npm run pipeline:migrate-notes -- --all`로
+> **필드만 덧붙인다**(그 스크립트가 modeScope 외 변경이 생기면 기록을 중단한다).
 
 각 5종 집계 파일의 `meta`는 `AggregateMeta`(`patch, generatedAt, nMatches, nParticipants, nTimelines,
 source`) 공통 포맷을 따른다. `deltas/*.json`만 별도 스키마(`DeltasFileMeta`)를 쓴다 —

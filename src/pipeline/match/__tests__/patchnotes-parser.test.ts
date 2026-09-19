@@ -402,3 +402,75 @@ describe("parsePatchNotes — 값이 바뀌지 않은 'A ⇒ A' 항목은 내보
     expect(parsed.items.some((i) => i.before !== null && i.before === i.after)).toBe(false);
   });
 });
+
+describe("modeScope — 적용 범위 새기기(2026-09-19 근본수정)", () => {
+  const parsed17 = parsePatchNotes(FIXTURE_17, { patch: "26.17", sourceUrl: SOURCE_URL_17 });
+  const parsed16 = parsePatchNotes(FIXTURE_16, { patch: "26.16", sourceUrl: SOURCE_URL_16 });
+
+  it("클래식 섹션 항목은 section이 champion이어도 modeScope='classic'이다", () => {
+    const classicItems = parsed17.items.filter((i) => i.anchorUrl.endsWith("#patch-classic"));
+    expect(classicItems.length).toBeGreaterThan(50);
+    expect(classicItems.every((i) => i.modeScope === "classic")).toBe(true);
+    // section은 **바뀌지 않는다** — 노트 id가 section을 포함하므로 바꾸면 기존 델타의
+    // matchedNoteIds가 전부 댕글링된다(BRAINTRUST-root-fix-2026-09-19.md §4).
+    expect(classicItems.some((i) => i.section === "champion")).toBe(true);
+  });
+
+  it("아레나·아수라장도 모드로 새겨진다", () => {
+    const arena = parsed17.items.filter((i) => i.anchorUrl.endsWith("#patch-arena"));
+    expect(arena.length).toBeGreaterThan(0);
+    expect(arena.every((i) => i.modeScope === "arena")).toBe(true);
+    const aram = parsed17.items.filter((i) => i.anchorUrl.includes("#patch-aram"));
+    expect(aram.length).toBeGreaterThan(0);
+    expect(aram.every((i) => i.modeScope === "aram")).toBe(true);
+  });
+
+  it("26.16도 같은 규칙으로 새겨진다(클래식 패턴이 다른 패치)", () => {
+    const classic16 = parsed16.items.filter((i) => i.anchorUrl.endsWith("#patch-classic"));
+    expect(classic16.length).toBeGreaterThan(50);
+    expect(classic16.every((i) => i.modeScope === "classic")).toBe(true);
+  });
+
+  it("SR 챔피언·아이템 항목은 core다 — 이들만 짝짓기 자격을 갖는다", () => {
+    const core = parsed17.items.filter((i) => i.modeScope === "core");
+    expect(core.length).toBeGreaterThan(0);
+    expect(core.every((i) => !i.anchorUrl.includes("#patch-classic"))).toBe(true);
+    // 엔티티 앵커(h3)를 가진 항목은 전부 core여야 한다 — 구조 신호와 제목 신호의 교차 확인.
+    const entityAnchored = parsed17.items.filter((i) => i.anchorKind === "entity");
+    expect(entityAnchored.length).toBeGreaterThan(0);
+    expect(entityAnchored.every((i) => i.modeScope === "core")).toBe(true);
+  });
+});
+
+describe("모르는 섹션의 안전한 기본값 — 새 모드가 SR 짝짓기에 닿지 않는다(2026-09-19)", () => {
+  // scope-critic 질문: 라이엇이 새 모드(예: 우르프)를 추가하면 mode-scope 규칙표에 없어 core로
+  // 읽히는데, 그러면 원래 버그가 재발하는가? **재발하지 않는다** — 모르는 h2 제목은
+  // resolveSectionStrategy의 기본값 `section:"system"`으로 떨어지고, entity-match는
+  // champion|item 버킷만 만들므로 SR 델타와 짝지어질 경로가 없다. 오귀속이 가능했던 것은
+  // "클래식"이 **명시적으로** 하위 라벨을 champion/item으로 재분류하는 분기를 갖고 있었기
+  // 때문이다. 이 테스트는 그 안전한 기본값이 유지되는지를 고정한다.
+  //
+  // 남는 잔여 위험은 하나다: 그런 노트가 `system` 섹션으로 LLM 후보 풀에 들어간다(체계·버그
+  // 수정 노트와 구분할 구조 신호가 없다). 커밋된 데이터에 대한 불변식 검사
+  // (notes-invariants.test.ts)가 champion/item 누출만 잡는다는 한계도 함께 기록해 둔다.
+  const UNKNOWN_MODE_HTML = `
+    <div id="patch-notes-container">
+      <header id="patch-mystery-mode"><h2>정체불명 모드</h2></header>
+      <div class="content-border">
+        <h4 class="change-detail-title">챔피언</h4>
+        <p><strong>아리</strong></p>
+        <ul><li>기본 공격력: 55 ⇒ 60</li></ul>
+      </div>
+    </div>`;
+
+  it("모르는 섹션의 항목은 champion이 아니라 system이 된다(짝짓기 대상 밖)", () => {
+    const parsed = parsePatchNotes(UNKNOWN_MODE_HTML, { patch: "26.19", sourceUrl: SOURCE_URL_17 });
+    expect(parsed.items.length).toBeGreaterThan(0);
+    expect(parsed.items.every((i) => i.section === "system")).toBe(true);
+  });
+
+  it("실제 패치 3종 파싱은 예외 없이 끝난다(교차 단언이 정상 데이터를 막지 않는다)", () => {
+    expect(() => parsePatchNotes(FIXTURE_16, { patch: "26.16", sourceUrl: SOURCE_URL_16 })).not.toThrow();
+    expect(() => parsePatchNotes(FIXTURE_17, { patch: "26.17", sourceUrl: SOURCE_URL_17 })).not.toThrow();
+  });
+});

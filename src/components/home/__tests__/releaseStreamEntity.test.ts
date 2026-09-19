@@ -36,6 +36,7 @@ function stubNote(overrides: Partial<PatchNoteItem>): PatchNoteItem {
     summary: "",
     anchorUrl: "",
     anchorKind: "page",
+    modeScope: "core",
     ...overrides,
   };
 }

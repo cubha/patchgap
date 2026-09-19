@@ -48,7 +48,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Container from "@/components/Container";
-import { GAMES, gameFromPathname, gameHref, type GameId } from "@/lib/game";
+import { GAMES, gameFromPathname, gameHref, sectionHref, type GameId } from "@/lib/game";
 import { fmtInt, fmtKst } from "@/lib/format";
 
 /** 내비 섹션 — 게임과 무관하게 항상 이 3개다. 게임은 아래 드롭다운이 바꾼다. */
@@ -177,7 +177,7 @@ export default function Header({ chrome }: HeaderProps) {
   return (
     <header ref={headerRef} className="glass-chrome sticky top-0 z-20 border-b">
       <Container className="flex flex-wrap items-center gap-6 py-3">
-        <Link href={gameHref(game, "/")} className="flex min-h-8 items-center gap-2">
+        <Link href={sectionHref(game, "")} className="flex min-h-8 items-center gap-2">
           <span className="h-2 w-2 rounded-pill bg-accent" aria-hidden="true" />
           <span className="font-display text-lg font-bold tracking-tight text-fg">patchgap</span>
         </Link>
@@ -211,7 +211,7 @@ export default function Header({ chrome }: HeaderProps) {
             return (
               <Link
                 key={item.section}
-                href={gameHref(game, `/${item.section}`)}
+                href={sectionHref(game, item.section)}
                 aria-current={active ? "page" : undefined}
                 className={`border-b-2 pt-1.5 pb-1 text-sm font-bold ${
                   active

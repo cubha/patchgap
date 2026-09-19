@@ -2,6 +2,7 @@
 // 표시용 델타 정규화(2026-09-18 라운드6 재판정 보완 1·2) — RED 먼저. 클래식 모드 섹션 줄에만 짝지어진
 // 관측은 미공지가 되고, 그 줄을 인용한 원인 후보는 회색(verified:false)이 된다. 엔진 산출물은 불변.
 import { describe, expect, it } from "vitest";
+import { modeScopeFromAnchorUrl } from "../mode-scope";
 import type { DeltaRecord, PatchNoteItem } from "../../types";
 import { normalizeDeltasForDisplay, normalizeRecordForDisplay } from "../display-normalize";
 import { isDisplayExcludedNote, isModeSectionNote } from "../excluded-notes";
@@ -23,6 +24,9 @@ function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
     anchorUrl: `${BASE}#patch-x`,
     anchorKind: "entity",
     ...overrides,
+    // modeScope는 앵커에서 파생시킨다 — 실제 데이터의 불변식(파서·마이그레이션이 같은 규칙을
+    // 쓴다)과 픽스처를 어긋나게 두면, 모드 앵커를 쓰는 케이스가 조용히 core로 테스트된다.
+    modeScope: overrides.modeScope ?? modeScopeFromAnchorUrl(overrides.anchorUrl ?? `${BASE}#patch-x`),
   };
 }
 

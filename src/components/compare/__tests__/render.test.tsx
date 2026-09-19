@@ -46,6 +46,7 @@ function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
     summary: "요약",
     anchorUrl: "https://example.com/#x",
     anchorKind: "entity",
+    modeScope: "core",
     ...overrides,
   };
 }

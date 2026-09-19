@@ -3,6 +3,7 @@
 // 상태 산출·테이블 셀 포맷·커버리지 집계. ST-11 완료 조건("상태 필터·정렬 로직(순수 함수)").
 
 import { describe, expect, it } from "vitest";
+import { modeScopeFromAnchorUrl } from "@/pipeline/shared/mode-scope";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
 import {
@@ -60,6 +61,9 @@ function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
     anchorUrl: "https://example.com/#x",
     anchorKind: "entity",
     ...overrides,
+    // modeScope는 앵커에서 파생시킨다 — 실제 데이터의 불변식(파서·마이그레이션이 같은 규칙을
+    // 쓴다)과 픽스처를 어긋나게 두면, 모드 앵커를 쓰는 케이스가 조용히 core로 테스트된다.
+    modeScope: overrides.modeScope ?? modeScopeFromAnchorUrl(overrides.anchorUrl ?? "https://example.com/#x"),
   };
 }
 

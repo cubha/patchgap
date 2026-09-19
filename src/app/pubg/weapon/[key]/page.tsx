@@ -5,6 +5,7 @@
 // output:'export'라 generateStaticParams가 필수다. 집계가 없으면 `_placeholder` 1건을 남긴다 —
 // 빈 배열을 반환하면 `next build`가 즉시 실패한다(2026-09-05 실측, `/item/[id]`와 동일).
 import type { Metadata } from "next";
+import { buildPubgEvidenceProse } from "@/components/pubg/evidenceProse";
 import Link from "next/link";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
@@ -87,7 +88,10 @@ export default async function PubgWeaponPage({ params }: PageProps) {
 
   // 2026-09-18 라운드6(C1 + scope-critic ST9): 목록(브리핑·대조표·그리드)은 판정이 선 무기만 강조하지만,
   // 사용자가 **직접 연 상세**에서는 관측값(변화·CI)을 숨기지 않고 판정이 없는 이유를 사실대로 말한다 —
-  // 표본 부족을 "유의한 변화 없음"이라 부르면 거짓이다. 배지는 판정이 선 행에만.
+  // 표본 부족을 "유의한 관측 없음"이라 부르면 거짓이다. 배지는 판정이 선 행에만.
+  // 2026-09-19 최종 채점 K4-4(R6): 같은 뜻을 LoL은 "유의한 관측 없음", PUBG는 "유의한 변화 없음"
+  // 으로 부르고 있었다(17 라우트). 게임이 달라도 같은 판정이면 같은 말이어야 한다 — LoL 쪽 어휘로
+  // 맞춘다(`NoteNavigator.tsx:137`·`ReleaseNoteRow.tsx:273`·`ReleaseNoteStream.tsx:216`).
   const judged = row !== null && isReportable(row.status);
   const rel = row?.relChange ?? null;
   const unjudgedReason =
@@ -97,7 +101,7 @@ export default async function PubgWeaponPage({ params }: PageProps) {
         ? "획득 표본이 부족해 판정하지 않음"
         : row.status === "below-threshold"
           ? "변화가 효과크기 바닥 미만이라 판정하지 않음"
-          : "유의한 변화 없음";
+          : "유의한 관측 없음";
   const stats: PubgDetailStat[] = [
     {
       label: "획득 점유율",
@@ -158,37 +162,68 @@ export default async function PubgWeaponPage({ params }: PageProps) {
           }
         />
 
-        <SectionCard eyebrow="근거" title="원천" variant="glass">
-          <div className="flex flex-col gap-3 p-5 text-sm">
-            <div className="flex flex-wrap items-baseline gap-x-2 text-muted">
-              <span className="font-bold text-fg-2">집계 파일</span>
-              <span className="font-mono text-xs break-all">
-                {row?.evidence.aggregatePath ??
-                  `data/aggregated/pubg/weapons-43.1.json#weapons[weaponKey=${weaponKey}]`}
-              </span>
+        <SectionCard eyebrow="근거" title="이렇게 판정했습니다" variant="glass">
+          <div className="flex flex-col gap-4 p-5 text-sm">
+            {/* 2026-09-19 사용자 지적("근거가 전혀 사용자가 알아볼 수 없게되어있어 … 자연어로
+                근거를 제공받아야함"): 집계 파일 경로와 매치 UUID는 감사 흔적이지 사람이 읽는
+                근거가 아니다. 문장이 먼저 오고 식별자는 접힌 영역으로 내린다 — 원천을 지우는
+                것은 "모든 판정문은 원천 링크를 가진다"(CLAUDE.md) 위반이라 위계만 바꾼다. */}
+            <div className="flex flex-col gap-2 leading-relaxed text-fg-2">
+              {buildPubgEvidenceProse({
+                subjectName: statAfter.weaponName,
+                subjectKind: "무기",
+                metricLabel: "획득 점유율",
+                from: deltas.meta.from,
+                to: deltas.meta.to,
+                before: statBefore?.share ?? null,
+                after: statAfter.share,
+                row,
+                noteSummary: note?.summary ?? null,
+                effectFloor: deltas.meta.effectFloor,
+              }).map((sentence) => (
+                <p key={sentence}>{sentence}</p>
+              ))}
             </div>
-            {row?.evidence.noteAnchor ? (
-              <a
-                className="font-mono text-xs text-accent underline-offset-2 hover:underline"
-                href={row.evidence.noteAnchor}
-                target="_blank"
-                rel="noreferrer"
-              >
-                패치노트 원문 보기 ↗
-              </a>
-            ) : null}
-            {row && row.evidence.matchIds.length > 0 ? (
-              <div className="text-muted">
-                <span className="font-bold text-fg-2">표본 매치</span>{" "}
-                <span className="font-mono text-xs break-all">
-                  {row.evidence.matchIds.slice(0, 3).join(" · ")}
-                  {row.evidence.matchIds.length > 3 ? ` 외 ${row.evidence.matchIds.length - 3}건` : ""}
-                </span>
+
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              <Link href="/pubg/methodology/" className="text-xs font-bold text-accent hover:underline">
+                판정 규칙 보기 →
+              </Link>
+              {row?.evidence.noteAnchor ? (
+                <a
+                  className="text-xs font-bold text-accent underline-offset-2 hover:underline"
+                  href={row.evidence.noteAnchor}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  패치노트 원문 보기 ↗
+                </a>
+              ) : null}
+            </div>
+
+            <details className="rounded-md border border-border-soft">
+              <summary className="cursor-pointer list-none px-4 py-2 text-xs font-bold text-muted hover:text-fg-2 [&::-webkit-details-marker]:hidden">
+                원천 데이터 보기
+              </summary>
+              <div className="flex flex-col gap-2 border-t border-border-soft px-4 py-3 text-muted">
+                <div className="flex flex-wrap items-baseline gap-x-2">
+                  <span className="font-bold text-fg-2">집계 파일</span>
+                  <span className="font-mono text-xs break-all">
+                    {row?.evidence.aggregatePath ??
+                      `data/aggregated/pubg/weapons-${deltas.meta.to}.json#weapons[weaponKey=${weaponKey}]`}
+                  </span>
+                </div>
+                {row && row.evidence.matchIds.length > 0 ? (
+                  <div>
+                    <span className="font-bold text-fg-2">표본 매치</span>{" "}
+                    <span className="font-mono text-xs break-all">
+                      {row.evidence.matchIds.slice(0, 3).join(" · ")}
+                      {row.evidence.matchIds.length > 3 ? ` 외 ${row.evidence.matchIds.length - 3}건` : ""}
+                    </span>
+                  </div>
+                ) : null}
               </div>
-            ) : null}
-            <Link href="/pubg/methodology/" className="text-xs font-bold text-accent hover:underline">
-              판정 규칙 보기 →
-            </Link>
+            </details>
           </div>
         </SectionCard>
 

@@ -37,7 +37,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
   {
     layer: "주 엔티티",
     lol: "챔피언 (173)",
-    pubg: "무기 47종 · 맵 9종 (설계: 차량 · 소모품)",
+    pubg: "무기 47종 · 맵 관측 7종(자산 9종) · 차량·소모품 미수집",
     iface: "Entity{type,key,name}",
   },
   {

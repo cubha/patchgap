@@ -157,6 +157,7 @@ describe("applyVerdicts", () => {
         summary: "피해량: 10 ⇒ 20",
         anchorUrl: "https://example.com/#patch-aatrox",
         anchorKind: "entity",
+        modeScope: "core",
       },
     ];
     const deltas = [delta({ id: "champion:Aatrox:winRate" })];

@@ -29,7 +29,8 @@
       "direction": "unknown",
       "summary": "떠오른 전설 오리아나 스킨 및 테두리",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-hall-of-legends",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:system:홀-오브-레전드:be5be69f-2",
@@ -43,7 +44,8 @@
       "direction": "unknown",
       "summary": "떠오른 전설 오리아나 이벤트 크로마",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-hall-of-legends",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:system:홀-오브-레전드:be5be69f-3",
@@ -57,7 +59,8 @@
       "direction": "unknown",
       "summary": "프렐요드 탈리야, 나무정령 르블랑, 창공 아칼리 스킨",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-hall-of-legends",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:system:홀-오브-레전드:be5be69f-4",
@@ -71,7 +74,8 @@
       "direction": "unknown",
       "summary": "신화 정수 125개",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-hall-of-legends",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:system:홀-오브-레전드:be5be69f-5",
@@ -85,7 +89,8 @@
       "direction": "unknown",
       "summary": "구 11개",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-hall-of-legends",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:system:홀-오브-레전드:be5be69f-6",
@@ -99,7 +104,8 @@
       "direction": "unknown",
       "summary": "Caps 선수 테마의 아이콘 및 감정표현 15개",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-hall-of-legends",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:system:홀-오브-레전드:be5be69f-7",
@@ -113,7 +119,8 @@
       "direction": "unknown",
       "summary": "불사의 악마 선인장 와드",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-hall-of-legends",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:system:홀-오브-레전드:be5be69f-8",
@@ -127,7 +134,8 @@
       "direction": "unknown",
       "summary": "희망의 등불 휘장",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-hall-of-legends",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:system:홀-오브-레전드:be5be69f-9",
@@ -141,7 +149,8 @@
       "direction": "unknown",
       "summary": "'마르틴 1' 칭호",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-hall-of-legends",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:system:홀-오브-레전드:be5be69f-10",
@@ -155,7 +164,8 @@
       "direction": "unknown",
       "summary": "그 외 다수!",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-hall-of-legends",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:bard:453ef7b4",
@@ -169,7 +179,8 @@
       "direction": "nerf",
       "summary": "방어력: 34 + 레벨당 5 ⇒ 32 + 레벨당 4.7",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-bard",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:cassiopeia:a01d452d",
@@ -183,7 +194,8 @@
       "direction": "nerf",
       "summary": "이동 속도 추가 효과: 6~40% (레벨에 따라) ⇒ 5~36% (레벨에 따라)",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:cassiopeia:91d07d6f",
@@ -197,7 +209,8 @@
       "direction": "nerf",
       "summary": "피해량: 75/110/145/180/215 ⇒ 65/100/135/170/205",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:cassiopeia:957165bc",
@@ -211,7 +224,8 @@
       "direction": "buff",
       "summary": "주문력 계수: 65% ⇒ 75%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:cassiopeia:571817a6",
@@ -225,7 +239,8 @@
       "direction": "nerf",
       "summary": "마나 소모량: 40 ⇒ 45",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:cassiopeia:1deb6c5e",
@@ -239,7 +254,8 @@
       "direction": "buff",
       "summary": "기본 주문력 계수: 10% ⇒ 20%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:cassiopeia:620aea16",
@@ -253,7 +269,8 @@
       "direction": "nerf",
       "summary": "강화 주문력 계수: 55% ⇒ 45%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:cassiopeia:23105cb4",
@@ -267,7 +284,8 @@
       "direction": "nerf",
       "summary": "피해량: 52~120 ⇒ 50~120",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:cassiopeia:64976414",
@@ -281,7 +299,8 @@
       "direction": "nerf",
       "summary": "피해량: 150/250/350 ⇒ 125/225/325",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:cassiopeia:8209fcaf",
@@ -295,7 +314,8 @@
       "direction": "buff",
       "summary": "주문력 계수: 50% ⇒ 75%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:ekko:dfd6f002",
@@ -309,7 +329,8 @@
       "direction": "buff",
       "summary": "마나 소모량: 50/60/70/80/90 ⇒ 40/50/60/70/80",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:ekko:433f5bb2",
@@ -323,7 +344,8 @@
       "direction": "buff",
       "summary": "돌아올 때 피해량 주문력 계수: 60% ⇒ 70%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:kassadin:d631af52",
@@ -337,7 +359,8 @@
       "direction": "buff",
       "summary": "주문력 계수: 주문력의 70% ⇒ 주문력의 80%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-kassadin",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:kassadin:d9a6b909",
@@ -351,7 +374,8 @@
       "direction": "buff",
       "summary": "기본 피해량: 70/90/110 ⇒ 80/95/110",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-kassadin",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:masteryi:d392c3c6",
@@ -365,7 +389,8 @@
       "direction": "buff",
       "summary": "방어력 증가량: 33 + 레벨당 4.5 ⇒ 33 + 레벨당 5",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:masteryi:c898ee27",
@@ -379,7 +404,8 @@
       "direction": "buff",
       "summary": "이동 속도: 35/45/55% ⇒ 40/50/60%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:nautilus:b6aff2b2",
@@ -393,7 +419,8 @@
       "direction": "nerf",
       "summary": "공격력: 61 + 레벨당 3.3 ⇒ 58 + 레벨당 3.3",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:nautilus:878378b8",
@@ -407,7 +434,8 @@
       "direction": "nerf",
       "summary": "피해량: 85/130/175/220/265 (+주문력의 90%) ⇒ 85/125/165/205/245 (+주문력의 90%)",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:seraphine:4519a08c",
@@ -421,7 +449,8 @@
       "direction": "nerf",
       "summary": "재사용 대기시간: 11/10.5/10/9.5/9초 ⇒ 11초",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-seraphine",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:syndra:5db255ef",
@@ -435,7 +464,8 @@
       "direction": "nerf",
       "summary": "분노의 조각 마나: 20~255 ⇒ 20~199",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:syndra:cb99a266",
@@ -449,7 +479,8 @@
       "direction": "nerf",
       "summary": "재사용 대기시간: 12/11/10/9/8초 ⇒ 13/12/11/10/9초",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:viego:3477e7c5",
@@ -463,7 +494,8 @@
       "direction": "buff",
       "summary": "공격력 증가량: 3.5 ⇒ 4",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:viego:caf9b23d",
@@ -477,7 +509,8 @@
       "direction": "buff",
       "summary": "체력 회복량: 대상 최대 체력의 2% (+…. ) ⇒ 대상 최대 체력의 2% (+추가 공격력 100당 2.5%) (+추가 주문력 100당 2%) (+추가 공격 속도 100%당 5%) (+추가 체력 500당 2%)",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:zaahen:3d1ae789",
@@ -491,7 +524,8 @@
       "direction": "nerf",
       "summary": "신규 재사용 대기시간 작동 방식: Q - 다르킨의 글레이브가 활성화된 경우, 부활에 돌입하는 즉시 재사용 대기시간이 적용됩니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:zaahen:bce84005",
@@ -505,7 +539,8 @@
       "direction": "buff",
       "summary": "Q2 피해량: 25/50/75/100/125 (+추가 공격력의 20/25/30/35/40%) ⇒ 30/60/90/120/150 (+추가 공격력의 20/25/30/35/40%)",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:zeri:d0cacf0b",
@@ -519,7 +554,8 @@
       "direction": "nerf",
       "summary": "피해량: 30/70/110/150/190 (+총공격력의 120%) ⇒ 30/70/110/150/190 (+총공격력의 100%)",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zeri",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:zeri:e371a79d",
@@ -533,7 +569,8 @@
       "direction": "nerf",
       "summary": "지형 관통 피해량: 45/105/165/225/285 (+총공격력의 180%) ⇒ 45/105/165/225/285 (+총공격력의 150%)",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zeri",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:zeri:3f709c34",
@@ -547,7 +584,8 @@
       "direction": "unknown",
       "summary": "치명타: 150% (무한의 대검 장착 시 +15%)",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zeri",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:item:guinsoos-rageblade:f624219b",
@@ -561,7 +599,8 @@
       "direction": "buff",
       "summary": "들끓는 일격 중첩 지속시간: 3초 ⇒ 4초",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-Guinsoos-Rageblade",
-      "anchorKind": "entity"
+      "anchorKind": "entity",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:champion:피오라:6f1542ba",
@@ -575,7 +614,8 @@
       "direction": "nerf",
       "summary": "피오라는 피해를 입힐 때마다 체력을 회복합니다. 챔피언을 맞히면 이 회복 효과를 중첩할 수 있습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:7f761812",
@@ -589,7 +629,8 @@
       "direction": "nerf",
       "summary": "피오라가 돌진하여 주변 적을 공격합니다. 찌르기는 마나 소모 없이 한 번 더 사용할 수 있습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:aaeaaede",
@@ -603,7 +644,8 @@
       "direction": "nerf",
       "summary": "기본 지속 효과: 피오라가 추가 공격력을 얻습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:aaeaaede-2",
@@ -617,7 +659,8 @@
       "direction": "nerf",
       "summary": "사용 시: 피오라가 짧은 시간 동안 다음 기본 공격을 막아내고, 공격자에게 피해를 돌려줍니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:8f0268f5",
@@ -631,7 +674,8 @@
       "direction": "nerf",
       "summary": "피오라가 일시적으로 공격 속도를 얻습니다. 지속시간 동안 기본 공격 및 찌르기가 중첩되는 추가 이동 속도를 부여합니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:69d227f2",
@@ -645,7 +689,8 @@
       "direction": "nerf",
       "summary": "이 순간만을 기다리셨을 겁니다. 피오라가 대상으로 지정할 수 없는 상태가 되어 전장을 질주하며 주변 적들을 타격해 (다 같이 외쳐보시죠.) 엄청난 피해를 입힙니다. 모든 타격에는 적중 시 효과가 적용되며, 동일한 대상을 반복 타격할 경우 피해량이 감소합니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:3c1c56de",
@@ -659,7 +704,8 @@
       "direction": "nerf",
       "summary": "갈리오는 마법 저항력의 일정 비율만큼 주문력을 얻습니다. 한 문장으로 끝나는 기본 지속 효과 만세!",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:8d85408a",
@@ -673,7 +719,8 @@
       "direction": "nerf",
       "summary": "갈리오가 눈에서 충격 에너지를 발사해 적중한 적에게 피해를 입히고 둔화시킵니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:ac0de268",
@@ -687,7 +734,8 @@
       "direction": "nerf",
       "summary": "갈리오가 주변 아군 챔피언에게 추가 방어력 및 마법 저항력을 부여합니다. 효과 대상이 피해를 입을 때마다 갈리오의 체력이 회복됩니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:758023c0",
@@ -701,7 +749,8 @@
       "direction": "nerf",
       "summary": "갈리오가 돌풍을 일으켜 일직선상의 적에게 피해를 입히고 지나간 경로에 기류를 남깁니다. 기류는 경로를 따라 움직이는 모든 아군에게 이동 속도를 부여합니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:758023c0-2",
@@ -715,7 +764,8 @@
       "direction": "nerf",
       "summary": "흐웨이가 이 스킬을 훔쳤습니다. 정말 못됐네요.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:fa816596",
@@ -729,7 +779,8 @@
       "direction": "nerf",
       "summary": "갈리오가 정신을 집중해 주변 모든 적을 도발하고 그동안 받는 피해가 감소합니다. 정신 집중을 완료하면 범위 내 모든 적에게 정신 집중 도중 받은 피해량에 비례한 피해를 입힙니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:3889a54d",
@@ -743,7 +794,8 @@
       "direction": "nerf",
       "summary": "뽀삐는 현재 체력의 10%를 넘는 모든 받는 피해를 50%만 적용받습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:3889a54d-2",
@@ -757,7 +809,8 @@
       "direction": "nerf",
       "summary": "뽀삐가 혹시라도 너무 쉽게 쓰러진다고 느끼실까 봐 준비했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:6cf0a04f",
@@ -771,7 +824,8 @@
       "direction": "nerf",
       "summary": "뽀삐의 다음 기본 공격이 대상의 최대 체력에 비례한 추가 피해를 입힙니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:65334be6",
@@ -785,7 +839,8 @@
       "direction": "nerf",
       "summary": "기본 지속 효과: 뽀삐가 기본 공격으로 피해를 받거나 입히면 방어력과 공격력이 증가합니다. (최대치까지 중첩 가능)",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:65334be6-2",
@@ -799,7 +854,8 @@
       "direction": "nerf",
       "summary": "사용 시: 뽀삐가 즉시 데마시아의 모범 중첩을 최대로 얻고, 몇 초 동안 이동 속도가 증가합니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:c5a4bf69",
@@ -813,7 +869,8 @@
       "direction": "nerf",
       "summary": "뽀삐가 적에게 돌진하여 피해를 입히고 뒤로 밀어냅니다. 대상이 벽에 부딪히면 추가 피해를 입고 기절합니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:98ec736c",
@@ -827,7 +884,8 @@
       "direction": "nerf",
       "summary": "뽀삐가 적 1명을 선택합니다. 다음 몇 초 동안 대상을 제외한 모든 적으로부터 아무런 영향을 받지 않으며 대상에게 추가 피해를 입힙니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:98ec736c-2",
@@ -841,7 +899,8 @@
       "direction": "nerf",
       "summary": "추가 피해에 속지 마세요. 소라카에게 궁극기를 사용하고 적 원거리 딜러를 처치하세요. 대응할 방법이 없습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:98ec736c-3",
@@ -855,7 +914,8 @@
       "direction": "nerf",
       "summary": "뽀삐를 업데이트하며 이 스킬을 삭제했다니 믿을 수가 없네요.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:bf5d9696",
@@ -869,7 +929,8 @@
       "direction": "nerf",
       "summary": "쉬바나의 기본 공격은 각 기본 스킬을 강화합니다. Q - 두 번 물어뜯기의 재사용 대기시간이 감소하고, W - 연소의 지속시간이 증가하며, E - 화염 숨결 최초 피해량의 일부만큼 피해를 입히고, 궁극기에 필요한 분노를 생성합니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:a7fb99f1",
@@ -883,7 +944,8 @@
       "direction": "nerf",
       "summary": "쉬바나가 다음 기본 공격 시 2회 타격해 추가 피해를 입힙니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:a7fb99f1-2",
@@ -897,7 +959,8 @@
       "direction": "nerf",
       "summary": "용 형상일 때는 두 번 물어뜯기가 전방 원뿔 범위에 피해를 입힙니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:55ede34d",
@@ -911,7 +974,8 @@
       "direction": "nerf",
       "summary": "쉬바나가 이동 속도를 얻고 주변 적에게 지속적으로 피해를 입힙니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:55ede34d-2",
@@ -925,7 +989,8 @@
       "direction": "nerf",
       "summary": "용 형상일 때는 연소가 불타는 흔적을 남겨 그 위에 있는 적에게 피해를 입힙니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:48ae7018",
@@ -939,7 +1004,8 @@
       "direction": "nerf",
       "summary": "쉬바나가 화염구를 던져 처음 적중한 적에게 피해를 입히고 방어력을 감소시킵니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:48ae7018-2",
@@ -953,7 +1019,8 @@
       "direction": "nerf",
       "summary": "용 형상일 때 원뿔 범위에 화염구를 발사해 더 많은 적을 타격합니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:24bf2916",
@@ -967,7 +1034,8 @@
       "direction": "nerf",
       "summary": "기본 지속 효과: 쉬바나가 추가 방어력 및 마법 저항력을 얻습니다. 용 형상일 때는 이 추가 효과가 두 배로 적용됩니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:24bf2916-2",
@@ -981,7 +1049,8 @@
       "direction": "nerf",
       "summary": "쉬바나가 용으로 변신해 전방으로 날아가며 경로상의 모든 적에게 피해를 입히고 밀어냅니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:be03f26c",
@@ -995,7 +1064,8 @@
       "direction": "nerf",
       "summary": "신 짜오가 최근 공격 대상에게 도전해 방어력을 감소시킵니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:13b4ff5b",
@@ -1009,7 +1079,8 @@
       "direction": "nerf",
       "summary": "신 짜오가 가하는 다음 3회의 기본 공격이 추가 피해를 입히고 다른 스킬의 재사용 대기시간을 1초 감소시킵니다. 세 번째 기본 공격은 대상을 공중에 띄웁니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:eaf39cd9",
@@ -1023,7 +1094,8 @@
       "direction": "nerf",
       "summary": "기본 지속 효과: 신 짜오가 기본 공격을 3회 가할 때마다 체력을 회복합니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:eaf39cd9-2",
@@ -1037,7 +1109,8 @@
       "direction": "nerf",
       "summary": "사용 시: 신 짜오가 몇 초 동안 추가 공격 속도를 얻습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:9f5a7c71",
@@ -1051,7 +1124,8 @@
       "direction": "nerf",
       "summary": "신 짜오가 적에게 돌진한 뒤 도전합니다. 대상을 포함한 주변 적에게 피해를 입히고 둔화시킵니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:38d23539",
@@ -1065,7 +1139,8 @@
       "direction": "nerf",
       "summary": "신 짜오가 주변 모든 적을 휩쓸어 피해를 입히고 적중한 적의 수에 비례해 방어력 및 마법 저항력을 얻습니다. 도전받지 않은 모든 적을 뒤로 밀어냅니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:4320c6b0",
@@ -1079,7 +1154,8 @@
       "direction": "nerf",
       "summary": "투사체 속도: 950 ⇒ 850",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:54ac6e21",
@@ -1093,7 +1169,8 @@
       "direction": "nerf",
       "summary": "수동 폭발 기절 지속시간: 1초 ⇒ 0.75초",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:8a13f058",
@@ -1107,7 +1184,8 @@
       "direction": "nerf",
       "summary": "수동 폭발 반경: 230 ⇒ 210",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:1e7de4b9",
@@ -1121,7 +1199,8 @@
       "direction": "buff",
       "summary": "재사용 최소 지연 시간: 0초 ⇒ 0.25초",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:a8027822",
@@ -1135,7 +1214,8 @@
       "direction": "buff",
       "summary": "처치 시 추가 골드: 4/5/6/7/8 ⇒ 4/6/8/10/12",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:953f570f",
@@ -1149,7 +1229,8 @@
       "direction": "buff",
       "summary": "사용 시 공격력: 12/19/26/33/40 ⇒ 14/22/30/38/46",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:771e99e7",
@@ -1163,7 +1244,8 @@
       "direction": "buff",
       "summary": "사용 시 이동 속도: 8/11/14/17/20% ⇒ 10/14/18/22/26%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:5526f860",
@@ -1177,7 +1259,8 @@
       "direction": "nerf",
       "summary": "아군 추가 효과: 아군은 여전히 갱플랭크가 얻는 추가 효과의 50%를 얻습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:912bf6b1",
@@ -1191,7 +1274,8 @@
       "direction": "buff",
       "summary": "기본 체력 재생: 4.5 ⇒ 5.05",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:e3c72b05",
@@ -1205,7 +1289,8 @@
       "direction": "buff",
       "summary": "기본 피해량: 28/36/44/52/60 ⇒ 30/38/46/54/62",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:096eae9b",
@@ -1219,7 +1304,8 @@
       "direction": "buff",
       "summary": "마나 소모량: 65/85/105/125/145 ⇒ 60/75/90/105/120",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:a674baca",
@@ -1233,7 +1319,8 @@
       "direction": "buff",
       "summary": "재사용 대기시간: 14/13/12/11/10초 ⇒ 13/12/11/10/9초",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:65b34081",
@@ -1247,7 +1334,8 @@
       "direction": "buff",
       "summary": "스킬 사거리: 920 ⇒ 925",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:ac5b4a4d",
@@ -1261,7 +1349,8 @@
       "direction": "nerf",
       "summary": "주문력 획득량: 추가 공격력의 30% ⇒ 총공격력의 30%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:16150c0d",
@@ -1275,7 +1364,8 @@
       "direction": "buff",
       "summary": "공격 속도 증가량: 1.36% ⇒ 3%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:74f0cb92",
@@ -1289,7 +1379,8 @@
       "direction": "buff",
       "summary": "공격 속도 계수: 0.625 ⇒ 0.658",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:51a9e051",
@@ -1303,7 +1394,8 @@
       "direction": "buff",
       "summary": "이동 속도: 400 ⇒ 460",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:1e265a2f",
@@ -1317,7 +1409,8 @@
       "direction": "nerf",
       "summary": "기본 공격 사용 프레임: 12 ⇒ 9",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:57228db8",
@@ -1331,7 +1424,8 @@
       "direction": "buff",
       "summary": "처치 시 골드: 2 ⇒ 12",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:7e8e4fab",
@@ -1345,7 +1439,8 @@
       "direction": "nerf",
       "summary": "주문력 계수: 80% ⇒ 70%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:1d7650be",
@@ -1359,7 +1454,8 @@
       "direction": "nerf",
       "summary": "버그 수정: 이제 R - 황천의 손아귀가 정신 집중이 중단된 이후에 계속해서 피해를 입히지 않습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:35b385b4",
@@ -1373,7 +1469,8 @@
       "direction": "nerf",
       "summary": "이제 중첩 추가 피해량에 치명타가 적용되지 않습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:2b7d8ffc",
@@ -1387,7 +1484,8 @@
       "direction": "buff",
       "summary": "둔화 효과 증가 주기: 0.5초 ⇒ 1.0초, 강인함의 영향을 받음",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:6a4cc57e",
@@ -1401,7 +1499,8 @@
       "direction": "nerf",
       "summary": "버그 수정: 이제 둔화 효과가 의도한 것보다 두 배 빠르게 증가하지 않습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:744cdab9",
@@ -1415,7 +1514,8 @@
       "direction": "nerf",
       "summary": "공격 속도: 0.644 ⇒ 0.625",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:624ce4d1",
@@ -1429,7 +1529,8 @@
       "direction": "nerf",
       "summary": "기본 피해량: 3~16, 선형적으로 증가 ⇒ 3 + 9레벨까지 레벨당 0.5, 이후 레벨당 +1",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:6ebea4b2",
@@ -1443,7 +1544,8 @@
       "direction": "nerf",
       "summary": "재사용 대기시간: 24/22/20/18/16초 ⇒ 30/27/24/21/18초",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:cb45f0a7",
@@ -1457,7 +1559,8 @@
       "direction": "nerf",
       "summary": "피해량: 250/335/420 +추가 공격력의 200% ⇒ 180/300/420 +추가 공격력의 200%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:피오라:9cff7f57",
@@ -1471,7 +1574,8 @@
       "direction": "nerf",
       "summary": "스킬 사용 표시: 스킬 사거리를 더 잘 반영하도록 스킬 사용 표시를 업데이트했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f",
@@ -1485,7 +1589,8 @@
       "direction": "unknown",
       "summary": "제안된 아이템 3개 모두 부활",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-2",
@@ -1499,7 +1604,8 @@
       "direction": "unknown",
       "summary": "최신 정글 타이머 추가",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-3",
@@ -1513,7 +1619,8 @@
       "direction": "unknown",
       "summary": "거북이, 오리",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-4",
@@ -1527,7 +1634,8 @@
       "direction": "unknown",
       "summary": "1. 너무 짧다 - 1.87%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-5",
@@ -1541,7 +1649,8 @@
       "direction": "unknown",
       "summary": "2. 짧다 - 5.88%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-6",
@@ -1555,7 +1664,8 @@
       "direction": "unknown",
       "summary": "3. 적당하다 - 52.80%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-7",
@@ -1569,7 +1679,8 @@
       "direction": "unknown",
       "summary": "4. 길다 - 26.21%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-8",
@@ -1583,7 +1694,8 @@
       "direction": "unknown",
       "summary": "5. 너무 길다 - 13.24%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-9",
@@ -1597,7 +1709,8 @@
       "direction": "unknown",
       "summary": "1. 30분 - 16.75%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-10",
@@ -1611,7 +1724,8 @@
       "direction": "unknown",
       "summary": "2. 40분 - 32.68%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-11",
@@ -1625,7 +1739,8 @@
       "direction": "unknown",
       "summary": "3. 50분 - 29.29%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-12",
@@ -1639,7 +1754,8 @@
       "direction": "unknown",
       "summary": "4. 60분 - 11.64%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-13",
@@ -1653,7 +1769,8 @@
       "direction": "unknown",
       "summary": "5. 선호 최대 시간 없음 - 9.63%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-14",
@@ -1667,7 +1784,8 @@
       "direction": "unknown",
       "summary": "1. 즈롯 차원문 - 16.16%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-15",
@@ -1681,7 +1799,8 @@
       "direction": "unknown",
       "summary": "2. 망토와 단검 - 3.75%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-16",
@@ -1695,7 +1814,8 @@
       "direction": "unknown",
       "summary": "3. 달빛 마법검 - 5.11%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-17",
@@ -1709,7 +1829,8 @@
       "direction": "unknown",
       "summary": "4. 3개 모두 - 60.67%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-18",
@@ -1723,7 +1844,8 @@
       "direction": "unknown",
       "summary": "5. 없음 - 14.32%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-19",
@@ -1737,7 +1859,8 @@
       "direction": "unknown",
       "summary": "1. 미니맵에서 언제나 볼 수 있는 최신 정글 타이머를 추가해야 한다 - 45.74%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-20",
@@ -1751,7 +1874,8 @@
       "direction": "unknown",
       "summary": "2. 점수판을 열었을 때 한해 추가해야 한다 - 23.46%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-21",
@@ -1765,7 +1889,8 @@
       "direction": "unknown",
       "summary": "3. 현재 미니맵을 유지해야 한다 - 30.79%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-22",
@@ -1779,7 +1904,8 @@
       "direction": "unknown",
       "summary": "1. 유지해야 한다 - 55.03%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-23",
@@ -1793,7 +1919,8 @@
       "direction": "unknown",
       "summary": "2. 삭제해야 한다 - 44.97%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-24",
@@ -1807,7 +1934,8 @@
       "direction": "unknown",
       "summary": "1. 스노우볼 굴리기가 매우 심하다 - 8.89%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-25",
@@ -1821,7 +1949,8 @@
       "direction": "unknown",
       "summary": "2. 스노우볼 굴리기가 다소 심하다 - 24.99%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-26",
@@ -1835,7 +1964,8 @@
       "direction": "unknown",
       "summary": "3. 적당하다 - 48.82%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-27",
@@ -1849,7 +1979,8 @@
       "direction": "unknown",
       "summary": "4. 스노우볼 불리기가 조금 부족하다 - 12.24%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-28",
@@ -1863,7 +1994,8 @@
       "direction": "unknown",
       "summary": "5. 스노우볼 굴리기가 매우 부족하다 - 5.06%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-29",
@@ -1877,7 +2009,8 @@
       "direction": "unknown",
       "summary": "1. 그렇다, 마음에 든다 - 69.72%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-30",
@@ -1891,7 +2024,8 @@
       "direction": "unknown",
       "summary": "2. 아니다, 마음에 들지 않는다 - 30.28%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-31",
@@ -1905,7 +2039,8 @@
       "direction": "unknown",
       "summary": "1. 거북이, 거북이 - 11.31%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-32",
@@ -1919,7 +2054,8 @@
       "direction": "unknown",
       "summary": "2. 거북이, 오리 - 52.09%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-33",
@@ -1933,7 +2069,8 @@
       "direction": "unknown",
       "summary": "3. 오리, 거북이 - 28.39%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:champion:의회-투표-1-결과:be5be69f-34",
@@ -1947,7 +2084,8 @@
       "direction": "unknown",
       "summary": "4. 오리, 오리 - 8.21%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:system:클래식:be5be69f",
@@ -1962,7 +2100,8 @@
       "direction": "unknown",
       "summary": "클래식 스킨 크로마 및 크로마 지급 방식이 다소 변경됩니다. 클래식 스킨 크로마를 직접 판매하는 대신, 관련 기본 스킨에 통합됩니다. 이를 통해 구매 체계를 단순화하고, 몇 가지 예외 상황(플레이어가 클래식 크로마를 먼저 구매한 후 기본 스킨을 구매하여 이중 지불을 하게 되는 경우)을 방지할 수 있기를 기대합니다.클래식 크로마만 구매한 플레이어 여러분께 해당 기본 스킨을 무료로 지급해 드립니다!람머스 남작 스킨 판매가 26.20 패치에서 종료될 예정입니다. 그전까지 할인된 가격으로 구매할 수 있습니다!",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:system:버그-수정:be5be69f",
@@ -1977,7 +2116,8 @@
       "direction": "unknown",
       "summary": "티모의 버섯 함정이 정상적으로 10분 동안 지속되지 않던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:system:버그-수정:be5be69f-2",
@@ -1992,7 +2132,8 @@
       "direction": "unknown",
       "summary": "아칼리의 Q - 암살자의 표식 스킬 사용 표시가 실제 스킬 사거리와 일치하지 않던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:system:버그-수정:be5be69f-3",
@@ -2007,7 +2148,8 @@
       "direction": "unknown",
       "summary": "아칼리가 W - 황혼의 장막을 이동 중에 사용할 수 있던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:system:버그-수정:be5be69f-4",
@@ -2022,7 +2164,8 @@
       "direction": "unknown",
       "summary": "아칼리의 R - 그림자 춤 스킬 사용 표시가 실제 스킬 사거리와 일치하지 않던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:system:버그-수정:be5be69f-5",
@@ -2037,7 +2180,8 @@
       "direction": "unknown",
       "summary": "스카너 E - 균열의 체력 회복량이 전체 수치보다 낮게 적용되던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:system:버그-수정:be5be69f-6",
@@ -2052,7 +2196,8 @@
       "direction": "unknown",
       "summary": "니달리의 쿠거 형태 E - 할퀴기의 사거리가 350이 아닌 310으로 적용되던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:system:버그-수정:be5be69f-7",
@@ -2067,7 +2212,8 @@
       "direction": "unknown",
       "summary": "니달리의 인간 형태 E - 태고의 생명력 스킬 사거리가 600이 아닌 900으로 적용되던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "classic"
     },
     {
       "id": "note:26.18:other:증강:f18f5395",
@@ -2081,7 +2227,8 @@
       "direction": "unknown",
       "summary": "신규 상태: 다시 활성화되었습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:35873480",
@@ -2095,7 +2242,8 @@
       "direction": "buff",
       "summary": "궁극기 피해량 증가: 30% ⇒ 50%",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:496fcfff",
@@ -2109,7 +2257,8 @@
       "direction": "unknown",
       "summary": "신규 판매 제한: 이 증강을 보유하는 동안 히드라 아이템을 판매할 수 없습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1",
@@ -2123,7 +2272,8 @@
       "direction": "unknown",
       "summary": "신규 증강 제외 목록: 무작위로 부여되는 증강에서 제외할 증강 목록이 추가됩니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-2",
@@ -2137,7 +2287,8 @@
       "direction": "unknown",
       "summary": "현재 적용 대상: 전환 증강, 판도라의 상자, 나는 왕이다",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-3",
@@ -2151,7 +2302,8 @@
       "direction": "unknown",
       "summary": "제외 증강: 적응형 능력치, 기본으로 돌아가기, 어깨 위의 악마(현재 비활성화), 검을 뽑아라, 마법사 (물리), 범람, 순수주의자 - 마법사, 궁극기 봇, 흡혈병(현재 비활성화)",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-4",
@@ -2165,7 +2317,8 @@
       "direction": "unknown",
       "summary": "신규 게임 후반 급성장 목록: 극악무도, 탱크 엔진, 이빨 요정 삭제",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-5",
@@ -2179,7 +2332,8 @@
       "direction": "unknown",
       "summary": "남은 증강: 시작부터 끝까지, 도박꾼, 무한 반복, 다중 공격, 퀘스트: 우르프의 챔피언, 다단 중첩 여전히 포함",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-6",
@@ -2193,7 +2347,8 @@
       "direction": "unknown",
       "summary": "신규 제외 필터: 주문력 계수가 없는 챔피언을 제외하는 '주문력 계수 보유' 제외 필터 새롭게 추가",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-7",
@@ -2207,7 +2362,8 @@
       "direction": "unknown",
       "summary": "적용 대상: 적응형 능력치, 마법사 (물리), 극악무도",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-8",
@@ -2221,7 +2377,8 @@
       "direction": "unknown",
       "summary": "포함되는 챔피언: 아트록스, 암베사, 카밀, 다리우스, 문도 박사, 드레이븐, 가렌, 크산테, 케인, 클레드, 나피리, 닐라, 올라프, 파이크, 리븐, 사미라, 세트, 탈론, 우르곳, 자야, 요네, 자헨, 제드",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-9",
@@ -2235,7 +2392,8 @@
       "direction": "unknown",
       "summary": "군중 제어 효과 목록: 말랑 찰싹 손 삭제",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-10",
@@ -2249,7 +2407,8 @@
       "direction": "unknown",
       "summary": "체력 목록: 애니비아, 아우렐리온 솔, 카시오페아, 릴리아, 니달리로부터 삭제",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:c51e841d",
@@ -2263,7 +2422,8 @@
       "direction": "adjust",
       "summary": "체력 목록: 낮음 ⇒ 매우 낮음: 바드",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:26ff1f37",
@@ -2277,7 +2437,8 @@
       "direction": "adjust",
       "summary": "체력 목록: 중간 ⇒ 낮음: 모르가나, 라이즈",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-11",
@@ -2291,7 +2452,8 @@
       "direction": "unknown",
       "summary": "보석 건틀릿: 목록에서 삭제: 공격력 원거리 딜러, 폭발적 원거리 딜러, 공격력 근접 딜러, 폭발적 근접 딜러",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-12",
@@ -2305,7 +2467,8 @@
       "direction": "unknown",
       "summary": "탱크 엔진 및 드롭킥: 라이즈, 모르가나, 오리아나, 카서스, 럼블 제외",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-13",
@@ -2319,7 +2482,8 @@
       "direction": "unknown",
       "summary": "무법자의 투지 + 대지의 각성: 빈도가 낮은 궁극기 한정 돌진 챔피언 제외: 벡스, 피들스틱, 이블린, 헤카림, 말파이트, 오른, 워윅",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-14",
@@ -2333,7 +2497,8 @@
       "direction": "unknown",
       "summary": "지옥불 난사 발동: 질리언 제외",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-15",
@@ -2347,7 +2512,8 @@
       "direction": "unknown",
       "summary": "바람전달자의 축복: 벨베스 제외",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:089fcac1-16",
@@ -2361,7 +2527,8 @@
       "direction": "unknown",
       "summary": "다단 중첩: 갱플랭크 제외",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:14bd016b",
@@ -2375,7 +2542,8 @@
       "direction": "unknown",
       "summary": "굶주린 히드라 업그레이드를 보유한 경우 아이템 피해가 쪼개기 효과를 발동시키던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:14bd016b-2",
@@ -2389,7 +2557,8 @@
       "direction": "unknown",
       "summary": "같은 팀에 앙파상을 보유한 플레이어가 2명 이상일 경우 앙파상이 작동하지 않던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:14bd016b-3",
@@ -2403,7 +2572,8 @@
       "direction": "unknown",
       "summary": "비에고가 궁극의 히드라를 보유한 상태에서 다른 챔피언을 지배할 경우 티아맷을 여러 개 획득하던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:14bd016b-4",
@@ -2417,7 +2587,8 @@
       "direction": "unknown",
       "summary": "궁극의 히드라 증강을 보유한 상태에서 히드라 아이템을 판매했다가 다시 구매해 추가 골드를 획득할 수 있던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:14bd016b-5",
@@ -2431,7 +2602,8 @@
       "direction": "unknown",
       "summary": "궁극의 히드라 퀘스트로 굶주린 히드라를 여러 개 구매하고 세 아이템에 업그레이드 굶주린 히드라 생명력 흡수 효과가 적용되던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:14bd016b-6",
@@ -2445,7 +2617,8 @@
       "direction": "unknown",
       "summary": "광대 대학의 속임수가 치명타 계수에 따라 잘못된 피해를 입히던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:other:증강:14bd016b-7",
@@ -2459,7 +2632,8 @@
       "direction": "unknown",
       "summary": "초월 의식으로 강화된 스킬이 봉인되던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "aram"
     },
     {
       "id": "note:26.18:system:버그-수정-및-편의성-개선:be5be69f",
@@ -2473,7 +2647,8 @@
       "direction": "unknown",
       "summary": "내셔 남작 공허의 부패 최대 중첩이 의도한 것보다 높게 적용되던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-bugfixes-and-qol-changes",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:system:버그-수정-및-편의성-개선:be5be69f-2",
@@ -2487,7 +2662,8 @@
       "direction": "unknown",
       "summary": "독사의 송곳니 보호막 파괴자 피해량에 모든 피해 흡혈이 적용되던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-bugfixes-and-qol-changes",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:system:버그-수정-및-편의성-개선:be5be69f-3",
@@ -2501,7 +2677,8 @@
       "direction": "unknown",
       "summary": "다이애나의 R - 달빛 낙하 시각 효과가 맵의 특정 지역에서 제대로 표시되지 않던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-bugfixes-and-qol-changes",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:system:버그-수정-및-편의성-개선:be5be69f-4",
@@ -2515,7 +2692,8 @@
       "direction": "unknown",
       "summary": "비에고가 클레드를 지배할 경우 음향 효과가 무한 반복되던 버그를 수정했습니다.",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-bugfixes-and-qol-changes",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:other:앞으로-나올-스킨-및-크로마:be5be69f",
@@ -2529,7 +2707,8 @@
       "direction": "unknown",
       "summary": "이번 패치 기간에 다음과 같은 스킨이 출시됩니다.불멸의 전설 트리스타나떠오른 전설 오리아나떠오른 전설 트리스타나",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-upcoming-skins-and-chromas",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     },
     {
       "id": "note:26.18:other:앞으로-나올-스킨-및-크로마:be5be69f-2",
@@ -2543,7 +2722,8 @@
       "direction": "unknown",
       "summary": "이번 패치 기간에 다음과 같은 크로마가 출시됩니다.떠오른 전설 오리아나 (질서)떠오른 전설 오리아나 (신화 등반자)나무정령 르블랑 (질서)창공 아칼리 (질서)프렐요드 탈리야 (질서)",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-upcoming-skins-and-chromas",
-      "anchorKind": "section"
+      "anchorKind": "section",
+      "modeScope": "core"
     }
   ]
 }

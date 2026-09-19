@@ -25,7 +25,8 @@ import DeltaValue from "@/components/DeltaValue";
 import EntityIcon from "@/components/EntityIcon";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
-import { displayStatus } from "@/pipeline/shared/display-status";
+import { detailRouteIds } from "@/lib/detailRoutes";
+import { displayStatus, isNoiseStatus } from "@/pipeline/shared/display-status";
 import { listPatchPairs, loadChampions, loadDeltas, loadItems, loadNotes, type PatchPair } from "@/lib/data";
 import { entityTypeLabel, fmtInt, itemIdFromSlug, itemSlug } from "@/lib/format";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
@@ -76,14 +77,28 @@ function decodeIdParam(id: string): string {
   return itemIdFromSlug(decoded);
 }
 
+/**
+ * 이 id의 상세로 보여줄 레코드를 고른다 — **판정이 선 쌍을 우선**한다(2026-09-19 재판정 K2-4).
+ *
+ * `listPatchPairs()`는 최신 우선이고, 그전에는 최신 쌍의 레코드를 무조건 썼다. 그런데 라우트
+ * 자격(`detailRouteIds`)은 **어느 한 쌍에서라도** 판정이 서면 주는 합집합이라, 옛 쌍에서 미공지였고
+ * 최신 쌍에서 노이즈가 된 id가 상세에서 "표본 부족"을 그대로 렌더했다(실측 268장 중 126장).
+ * 자격과 렌더가 서로 다른 쌍을 보고 있던 것이 결함의 정체다 — 자격을 좁히는 대신 **렌더가 자격을
+ * 준 바로 그 쌍**을 고르게 한다. 어느 쌍에서도 판정이 안 섰으면(직접 URL 진입) 최신 쌍으로
+ * 떨어뜨려 관측을 사실대로 보여준다.
+ */
 function findDeltaForId(rawId: string): FoundDelta | null {
+  let fallback: FoundDelta | null = null;
   for (const pair of listPatchPairs()) {
     const deltas = loadDeltas(pair.from, pair.to);
     if (!deltas) continue;
     const delta = deltas.rows.find((row) => row.id === rawId);
-    if (delta) return { pair, delta, generatedAt: deltas.meta.generatedAt, qAlpha: deltas.meta.qAlpha };
+    if (!delta) continue;
+    const found = { pair, delta, generatedAt: deltas.meta.generatedAt, qAlpha: deltas.meta.qAlpha };
+    if (!isNoiseStatus(delta.status)) return found;
+    fallback ??= found;
   }
-  return null;
+  return fallback;
 }
 
 /** deltas 파일 원문 텍스트(스냅샷 해시 계산용) — data.ts(loadDeltas)는 파싱된 객체만 반환하고
@@ -101,15 +116,17 @@ function readDeltasRaw(pair: PatchPair): string | null {
 }
 
 export function generateStaticParams(): Array<{ id: string }> {
+  // 2026-09-19 최종 채점 K2-4: 노이즈 상태(표본 부족·바닥 미달·변화 없음) 상세가 1,870건 빌드돼
+  // 있었다. 링크는 0이라 우연히 밟을 일은 없었지만, 사용자 지시는 "아예 보여주지 않도록"이었고
+  // URL을 직접 열면 그 관측이 그대로 나왔다 — 자격 판정은 `detailRouteIds`가 소유한다.
   const pairs = listPatchPairs();
-  const ids = new Set<string>();
-  for (const pair of pairs) {
-    const deltas = loadDeltas(pair.from, pair.to);
-    if (!deltas) continue;
-    for (const row of deltas.rows) ids.add(row.id);
-  }
-  if (ids.size === 0) return [{ id: "_placeholder" }];
-  return Array.from(ids).map((id) => ({ id: itemSlug(id) }));
+  const rowsByPair = pairs
+    .map((pair) => loadDeltas(pair.from, pair.to))
+    .filter((deltas): deltas is NonNullable<typeof deltas> => deltas !== null)
+    .map((deltas) => deltas.rows);
+  const ids = detailRouteIds(rowsByPair);
+  if (ids.length === 0) return [{ id: "_placeholder" }];
+  return ids.map((id) => ({ id: itemSlug(id) }));
 }
 
 function EmptyState() {
@@ -226,7 +243,7 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
                 href="/methodology/#discord"
                 className="inline-flex min-h-10 items-center justify-center rounded-md bg-accent px-5 text-sm font-bold text-accent-on hover:opacity-90"
               >
-                디스코드로 전송
+                방송 규칙 보기 →
               </Link>
             </div>
           </div>

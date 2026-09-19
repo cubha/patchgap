@@ -59,6 +59,33 @@ function tabForGroup(group: ReleaseStreamGroup): StreamTab {
   return group.kind === "matched" ? "content" : "gap";
 }
 
+/** 이 그룹이 아이템을 다루는가 — 라인 필터가 무엇을 걷어냈는지 화면이 정확히 말하기 위한 판별.
+ * 두 그룹 종류가 서로 다른 필드를 들고 있어 kind로 갈라 본다(새 분류 축을 만들지 않는다). */
+export function isItemGroup(group: ReleaseStreamGroup): boolean {
+  return group.kind === "matched"
+    ? group.notes.some((note) => note.section === "item")
+    : group.deltas.some((delta) => delta.entityType === "item");
+}
+
+/**
+ * 지금 보고 있는 탭에서 **라인 선택 때문에 빠진 아이템**이 실제로 있는가.
+ *
+ * 순수 함수로 빼 둔 이유(2026-09-19 재판정 지적): 탭 스코프 누락은 현 데이터로는 수정 전후가
+ * 구별되지 않는다 — 두 탭 모두 아이템을 갖고 있어 우연히 같은 결과가 나온다. 그래서 통과가
+ * 코드 독해에만 기대고 회귀를 막을 자리가 비어 있었다. 픽스처로 고정할 수 있게 분리한다.
+ */
+export function hasLaneExcludedItemsIn(
+  entries: readonly ReleaseStreamEntry[],
+  selectedLane: LanePosition | "all",
+  tab: StreamTab
+): boolean {
+  if (selectedLane === "all") return false;
+  return entries.some(
+    (entry) =>
+      tabForGroup(entry.group) === tab && isItemGroup(entry.group) && !entry.lanes.includes(selectedLane)
+  );
+}
+
 export interface ReleaseStreamEntry {
   group: ReleaseStreamGroup;
   icon: StreamEntityIcon;
@@ -127,6 +154,13 @@ export default function ReleaseNoteStream({
     return entries.filter((entry) => entry.lanes.includes(selectedLane));
   }, [entries, selectedLane]);
 
+  /** 라인 선택 때문에 목록에서 빠진 **아이템**이 실제로 있는가 — 있을 때만 말한다(없는데 말하면
+   * 그것도 거짓이다). 아이템은 `lanes`가 비어 있어 어떤 라인에도 속하지 않는다(lane.ts 계약). */
+  const hasLaneExcludedItems = useMemo(
+    () => hasLaneExcludedItemsIn(entries, selectedLane, tab),
+    [entries, selectedLane, tab]
+  );
+
   const filtered = useMemo(
     () => laneFiltered.filter((entry) => tabForGroup(entry.group) === tab),
     [laneFiltered, tab]
@@ -190,6 +224,23 @@ export default function ReleaseNoteStream({
         // 읽힌다(의도된 부수효과, panel.css 주석 참고). 2026-09-14부터 이 표면 클래스는
         // <ul>이 아니라 부모 <section>에 있다 — 탭 행도 같은 레일 아래 들어오게 하려는 것.
         <ul className="min-h-0 flex-1 overflow-y-auto">
+          {/* 2026-09-19: 라인 필터 결과가 0건인데 "기타 변경"이 있으면, 이전엔 위 빈 상태 분기가
+              걸리지 않아 **안내 없이 무관한 블록만** 남았다(사용자가 고른 라인에 대해 아무 말도
+              하지 않는 화면). 목록 머리에 한 줄로 말한다 — 기타 변경 줄에는 라인 축이 원리적으로
+              없으므로 그 블록은 그대로 둔다. */}
+          {filtered.length === 0 ? (
+            <li className="border-b border-border-soft px-5 py-3 text-sm text-muted">{EMPTY_MESSAGE[tab]}</li>
+          ) : null}
+          {/* 2026-09-19 최종 채점 K1-4: 라인을 고르면 아이템 행이 **말없이** 사라졌다(구인수의
+              격노검이 6건 → 5건으로 줄어드는데 화면은 아무 말도 안 했다). 대조표는 같은 상황을
+              캡션으로 말하고 있었으므로(CompareExplorer.tsx) 같은 어휘·같은 층위로 맞춘다.
+              아이템에 라인 축이 없다는 것은 데이터의 사실이지 필터의 버그가 아니다 — 그래서
+              숨기지 않고 사실로 말한다. */}
+          {selectedLane !== "all" && hasLaneExcludedItems ? (
+            <li className="border-b border-border-soft px-5 py-2 text-xs text-muted">
+              아이템은 라인별로 집계하지 않아 라인을 고르면 이 목록에서 빠집니다.
+            </li>
+          ) : null}
           {segmentStream(filtered).map((segment) =>
             segment.kind === "rows" ? (
               segment.entries.map((entry) => renderRow(entry))
@@ -220,7 +271,7 @@ export default function ReleaseNoteStream({
               </li>
             )
           )}
-          {tab === "content" ? <MiscChangesSection sections={miscSections} /> : null}
+          {tab === "content" ? <MiscChangesSection sections={miscSections} skinPreviews={skinPreviews} laneFiltered={selectedLane !== "all"} /> : null}
         </ul>
       )}
     </section>

@@ -13,6 +13,17 @@
 //   ③ ②로 검증된 후보가 하나도 안 남은 `indirect-effect` → `unannounced`(재분류 근거가 사라졌다)
 // 노트 파일이 없으면 손대지 않는다(loadDeltas 왕복 테스트·빈 데이터 빌드 보존). `meta.counts`는
 // 정규화 뒤 행 기준으로 다시 센다 — 방법론 파이프라인 카드가 이 값을 읽는다.
+// ── 2026-09-19 강등 고지 ──────────────────────────────────────────────────────────────────
+// **이 모듈은 더 이상 1차 방어가 아니다.** 파서가 노트에 `modeScope`를 새기고, 결정론 매칭
+// (entity-match.ts)과 LLM 인용 검증(llm-match.ts)이 파이프라인 단계에서 모드 노트를 거르므로,
+// 새로 생성된 `data/aggregated/deltas/*.json`에 대해 아래 재작성 분기는 **입력이 0**이다
+// (실측 2026-09-19: 두 쌍 모두 모드 노트 짝 0건·모드 인용 verified 원인 0건).
+//
+// 그래도 남겨 둔다. 노트만 갱신되고 델타는 옛 판정으로 남는 중간 상태가 실제로 가능하고
+// (재매칭은 API 키가 있는 로컬에서만 돌고 Vercel 빌드는 커밋된 JSON을 읽는다), 그때 이 가드가
+// 없으면 같은 결함이 조용히 화면으로 돌아온다. 변경이 없으면 같은 객체를 그대로 반환하므로
+// 비용은 0이다. 지우려면 "노트와 델타가 항상 함께 재생성된다"를 먼저 보장해야 한다.
+
 import type { DeltaRecord, DeltasFile, LlmCause, MatchStatus, PatchNoteItem } from "../types";
 import { meetsEffectFloor } from "../aggregate/stats";
 import { isDisplayExcludedNote } from "./excluded-notes";
