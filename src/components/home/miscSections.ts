@@ -72,3 +72,27 @@ export function buildMiscSections(groups: readonly MatchedStreamGroup[]): MiscSe
     notes: bucket.get(category)!,
   }));
 }
+
+/** 공백·구두점을 걷어낸 비교용 키 — "게임 모드(클래식)"과 "게임모드클래식"을 같게 본다. */
+function normalizeLabel(text: string): string {
+  return text.replace(/[\s·()（）:：,，/-]/g, "");
+}
+
+/**
+ * 묶음 머리글(엔티티 이름)을 달지 결정한다.
+ *
+ * **왜 개수로 정하면 안 되나**(2026-09-19 사용자 지적): 이전 규칙은 "한 카테고리에 엔티티가
+ * 둘 이상일 때만 머리글"이었다. 의도는 「버그 수정」 카테고리에서 엔티티가 "버그 수정" 하나뿐일 때
+ * 같은 말을 두 번 하지 않는 것이었는데, 26.18 「게임 모드(클래식)」은 **피오라 65줄 하나**라
+ * 같은 규칙에 걸려 머리글이 사라졌다 — 화면에는 "Q - 찌르기"·"W - 응수"만 남아 **누구의 변경인지
+ * 알 수 없었다**(26.17은 엔티티가 19개라 우연히 문제가 안 보였다).
+ *
+ * 진짜 기준은 개수가 아니라 **그 이름이 카테고리 라벨과 같은 말인가**다. 포함 관계면 중복이므로
+ * 숨기고("버그 수정 및 편의성 개선" ⊃ "버그 수정"), 아니면 보여준다(「게임 모드(클래식)」의 "피오라").
+ */
+export function showsEntityHeading(categoryLabel: string, entity: string): boolean {
+  const label = normalizeLabel(categoryLabel);
+  const name = normalizeLabel(entity);
+  if (name.length === 0) return false;
+  return !label.includes(name) && !name.includes(label);
+}

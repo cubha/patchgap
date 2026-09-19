@@ -13,7 +13,7 @@
 //    한 항목은 한 행이 되게 한다(카드 목록이 이미 쓰는 groupNotesBySkill과 같은 규약).
 import type { PatchNoteItem } from "@/pipeline/types";
 import CosmeticSkinPreview, { type CosmeticSkinItem } from "./CosmeticSkinPreview";
-import type { MiscSection } from "./miscSections";
+import { showsEntityHeading, type MiscSection } from "./miscSections";
 import { groupNotesBySkill } from "./noteSkillGroups";
 import { createSkinDeduper } from "./skinPreviewBundle";
 
@@ -73,9 +73,6 @@ export default function MiscChangesSection({ sections, skinPreviews = {}, laneFi
         <div className="flex flex-col gap-3 border-t border-border-soft bg-surface-warm/30 px-5 py-4">
           {sections.map((section) => {
             const bundles = bundleByEntity(section.notes);
-            // 엔티티 머리글은 **구분이 생길 때만** 단다. 버그 수정처럼 엔티티가 한 종류면 카테고리
-            // 라벨과 같은 말을 두 번 하는 셈이라 오히려 위계가 흐려진다.
-            const showEntityHeading = bundles.length > 1;
             return (
               <section
                 key={section.category}
@@ -89,7 +86,11 @@ export default function MiscChangesSection({ sections, skinPreviews = {}, laneFi
                 <div className="flex flex-col gap-3 px-4 py-3">
                   {bundles.map((bundle) => (
                     <div key={bundle.entity}>
-                      {showEntityHeading ? (
+                      {/* 머리글 판정은 개수가 아니라 **이름이 카테고리 라벨과 같은 말인가**로 한다
+                          (showsEntityHeading). 개수 기준이던 이전 규칙은 26.18 클래식처럼 엔티티가
+                          하나뿐인 카테고리에서 머리글을 지워, 피오라 65줄이 "Q - 찌르기"·"W - 응수"만
+                          남아 누구의 변경인지 알 수 없게 만들었다(사용자 지적). */}
+                      {showsEntityHeading(section.label, bundle.entity) ? (
                         <p className="mb-1 font-display text-sm font-bold text-fg">{bundle.entity}</p>
                       ) : null}
                       <ul className="flex flex-col gap-1">

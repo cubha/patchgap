@@ -11,7 +11,15 @@
 .landing-hero {
   position: relative;
   overflow: hidden;
-  padding-bottom: 2rem;
+  padding-bottom: 2.5rem;
+}
+
+/* 스플래시 월이 게임 패널 구간까지 내려온다 — 패널은 그 위에 떠 있는 카드로 읽힌다
+   (2026-09-19 사용자 지시). 히어로만 덮던 이전 구조에서는 패널 아래가 평평한 단색이라
+   화면이 위아래로 잘려 보였다. `.landing-stage`가 히어로+패널을 한 배경 무대로 묶는다. */
+.landing-stage {
+  position: relative;
+  overflow: hidden;
 }
 
 /* 스플래시 월 — 우리가 실제로 판정하는 게임들의 아트만 쓴다(합성 스크립트:
@@ -30,18 +38,21 @@
   position: absolute;
   inset: 0;
   background:
+    /* 헤드라인 뒤 국소 암막 — 아트 전체를 누르지 않고 글자 자리만 덮는다. */
     radial-gradient(
-      46% 82% at 50% 26%,
+      44% 42% at 50% 16%,
       color-mix(in oklab, var(--bg) 86%, transparent),
-      color-mix(in oklab, var(--bg) 50%, transparent) 62%,
-      color-mix(in oklab, var(--bg) 14%, transparent) 100%
+      color-mix(in oklab, var(--bg) 46%, transparent) 62%,
+      color-mix(in oklab, var(--bg) 10%, transparent) 100%
     ),
+    /* 세로 흐름 — 위는 헤더와 맞물리게, 가운데는 아트가 살게, 맨 아래는 배경색으로 완전히
+       잠겨 다음 섹션(수집·판정·근거)과의 경계가 보이지 않게. */
     linear-gradient(
       180deg,
-      color-mix(in oklab, var(--bg) 50%, transparent) 0%,
-      color-mix(in oklab, var(--bg) 12%, transparent) 32%,
-      color-mix(in oklab, var(--bg) 62%, transparent) 74%,
-      color-mix(in oklab, var(--bg) 95%, transparent) 92%,
+      color-mix(in oklab, var(--bg) 52%, transparent) 0%,
+      color-mix(in oklab, var(--bg) 10%, transparent) 26%,
+      color-mix(in oklab, var(--bg) 24%, transparent) 62%,
+      color-mix(in oklab, var(--bg) 72%, transparent) 88%,
       var(--bg) 100%
     );
 }
@@ -63,11 +74,14 @@
   text-shadow: 0 1px 14px color-mix(in oklab, var(--bg) 90%, transparent);
 }
 
-/* 게임 패널 — 키아트가 꽉 차고 아래에서 위로 어두워진다. 링크 전체가 히트 영역이다. */
+/* 게임 패널 — 키아트가 꽉 차고 아래에서 위로 어두워진다. 링크 전체가 히트 영역이다.
+   **불투명 바탕이 필요하다**: 뒤에 스플래시 월이 깔리면서 패널이 반투명하면 자기 키아트와
+   월이 섞여 카드 경계가 사라진다(실측: 첫 렌더에서 협곡 아트와 월이 겹쳐 읽혔다). */
 .landing-panel {
   position: relative;
   overflow: hidden;
   min-height: 24rem;
+  background: var(--bg);
 }
 
 .landing-panel-art {
@@ -75,13 +89,13 @@
   inset: 0;
   background-position: center;
   background-size: cover;
-  opacity: 0.62;
+  opacity: 0.82;
   transition: opacity 200ms ease, transform 300ms ease;
 }
 
 .landing-panel:hover .landing-panel-art,
 .landing-panel:focus-visible .landing-panel-art {
-  opacity: 0.78;
+  opacity: 1;
   transform: scale(1.02);
 }
 
@@ -104,4 +118,18 @@
     color-mix(in oklab, var(--bg) 92%, transparent) 74%,
     color-mix(in oklab, var(--bg) 97%, transparent) 100%
   );
+}
+
+/* 패널이 아트 위에 떠 보이도록 — 테두리를 밝히고 그림자로 들어올린다. 카드 자체는 각 게임의
+   키아트를 배경으로 쓰므로(.landing-panel-art) 여기서는 부유감만 준다. */
+.landing-panel {
+  box-shadow: 0 24px 64px color-mix(in oklab, var(--bg) 72%, transparent);
+}
+
+/* WHO'S NEXT 슬롯 — 자기 아트가 없으므로 뒤의 스플래시 월이 그대로 비친다. 반투명 판을
+   깔아 글자가 읽히게 하되, 빈자리라는 성격이 남도록 점선 테두리와 낮은 불투명도를 유지한다. */
+.landing-next {
+  background: color-mix(in oklab, var(--surface) 62%, transparent);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 24px 64px color-mix(in oklab, var(--bg) 60%, transparent);
 }

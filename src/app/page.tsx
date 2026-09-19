@@ -42,7 +42,10 @@ export default function LandingPage() {
 
   return (
     <main>
-      <div className="landing-hero">
+      {/* 스플래시 월 한 장이 히어로와 게임 패널을 함께 덮는다 — 패널은 그 위에 떠 있는 카드로
+          읽힌다(2026-09-19 사용자 지시). 배경을 히어로에만 걸면 패널 아래가 평평한 단색이라
+          화면이 위아래로 잘려 보였다. */}
+      <div className="landing-stage">
         <div className="landing-hero-art" aria-hidden="true" />
         <div className="landing-hero-scrim" aria-hidden="true" />
         <Container className="landing-hero-content py-14 text-center">
@@ -81,10 +84,9 @@ export default function LandingPage() {
             </div>
           </div>
         </Container>
-      </div>
 
-      <Container className="pb-10">
-        <div className="grid gap-4 md:grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
+        <Container className="landing-hero-content pb-14">
+          <div className="grid gap-4 md:grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
           {cards.map((card) => (
             <Link
               key={card.id}
@@ -132,8 +134,10 @@ export default function LandingPage() {
             </Link>
           ))}
 
-          {/* 열린 끝 — 다음 게임 자리. 문구는 사용자 지정("who is next? to be continue같은"). */}
-          <div className="flex min-h-24 items-center justify-center rounded-lg border border-dashed border-border-soft p-6 text-center">
+          {/* 열린 끝 — 다음 게임 자리. 문구는 사용자 지정("who is next? to be continue같은").
+              자기 키아트가 없으므로 뒤의 스플래시 월이 그대로 비친다 → 반투명 판(.landing-next)을
+              깔아 글자만 읽히게 하고, 빈자리라는 성격은 점선 테두리로 남긴다. */}
+          <div className="landing-next flex min-h-24 items-center justify-center rounded-lg border border-dashed border-border-soft p-6 text-center">
             <div>
               <p className="font-mono text-lg leading-snug tracking-widest text-accent/85">
                 WHO&rsquo;S
@@ -145,8 +149,9 @@ export default function LandingPage() {
               </p>
             </div>
           </div>
-        </div>
-      </Container>
+          </div>
+        </Container>
+      </div>
 
       <Container>
         <section id="how" className="border-t border-border-soft py-9">
