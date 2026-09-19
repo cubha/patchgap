@@ -7,7 +7,10 @@ import {
   callLlmForDelta,
   candidateSetHash,
   inferIndirectCandidates,
+  coreCandidatesOf,
+  PROMPT_VERSION,
   serializeCandidates,
+  SYSTEM_INSTRUCTIONS_TEXT,
   summarizeProseHygiene,
   verifyCauses,
   verifySummaryCites,
@@ -445,5 +448,41 @@ describe("문장 위생 집계(2026-09-19 — 항목7 기계적 절반)", () => 
     expect(stats.causeCount).toBe(3);
     expect(stats.causeHedged).toBe(2);
     expect(stats.maxSummaryLength).toBeGreaterThan(80);
+  });
+});
+
+describe("후보 풀 정화(2026-09-19 항목7 — 프롬프트 v4와 같은 실행에 묶는다)", () => {
+  // 사후 기각(verifyCauses)만으로는 모델이 **인용할 수 없는 항목을 계속 보게 된다**. 실측으로
+  // 26.17 노트 215건 중 173건이 모드 섹션이라, 모델은 프롬프트의 80%를 쓸 수 없는 후보로 읽고
+  // 있었다. 풀에서 빼면 프롬프트가 1/4로 줄고 남은 SR 후보에 집중된다. 대신 candidateSetHash가
+  // 바뀌어 캐시가 전량 무효가 되므로 PROMPT_VERSION 상향과 **한 번에** 처리한다.
+  it("serializeCandidates에 넘기기 전에 모드 노트를 걷어낸다", () => {
+    const core = note({ id: "core-1" });
+    const classic = note({ id: "classic-1", modeScope: "classic", anchorUrl: "https://x/#patch-classic" });
+    const serialized = serializeCandidates(coreCandidatesOf([core, classic]));
+    expect(serialized).toContain("core-1");
+    expect(serialized).not.toContain("classic-1");
+  });
+
+  it("전부 모드 노트면 후보는 빈 배열이다(그 패치엔 인용할 SR 조항이 없다)", () => {
+    const classic = note({ id: "classic-1", modeScope: "classic", anchorUrl: "https://x/#patch-classic" });
+    expect(coreCandidatesOf([classic])).toEqual([]);
+  });
+});
+
+describe("프롬프트 v4 — 길이 상한과 종결 어미(2026-09-19 항목7)", () => {
+  it("글자 수 상한을 숫자로 못박고, 완곡 표현 중복을 금지한다", () => {
+    // 규칙 9에 "80자 안팎"이 **이미 있었는데** 26.18 요약 102건 중 72건이 초과했다(최장 124자).
+    // 어림수("안팎")는 지켜지지 않으므로 숫자와 세는 방법을 준다. 완곡 자체는 추론 문장에서
+    // 정당하므로 금지하지 않고 **중복**만 막는다 — 금지하면 무근거 확신이 되어 회색 원칙과 충돌한다.
+    expect(SYSTEM_INSTRUCTIONS_TEXT).toContain("100자");
+    expect(SYSTEM_INSTRUCTIONS_TEXT).toContain("80자");
+    expect(SYSTEM_INSTRUCTIONS_TEXT).toContain("완곡");
+    expect(SYSTEM_INSTRUCTIONS_TEXT).not.toContain("80자 안팎");
+  });
+
+  it("PROMPT_VERSION이 올라가 옛 캐시를 재사용하지 않는다", () => {
+    // 프롬프트를 바꾸고 버전을 안 올리면, 캐시된 답이 그것을 만들지 않은 프롬프트에 귀속된다.
+    expect(PROMPT_VERSION).toBe("v4");
   });
 });

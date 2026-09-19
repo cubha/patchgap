@@ -100,7 +100,9 @@ export function migrateFile(patch: string, dataRoot?: string): MigrateResult {
 
 export function main(argv: readonly string[]): void {
   const raw = parseCliArgs("run-migrate-notes", [...argv], [
-    { name: "patch", type: "string" },
+    // 다른 파이프라인 스크립트와 동일하게 patch 형식을 강제한다 — 임의 문자열이 그대로
+    // data/aggregated/notes/{patch}.json 경로 조합으로 흘러드는 것을 막는다(scripts/shared/cli.ts).
+    { name: "patch", type: "patch" },
     { name: "all", type: "boolean", default: false },
   ]);
   const all = raw.all as boolean;

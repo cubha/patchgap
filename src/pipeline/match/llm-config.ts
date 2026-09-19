@@ -20,4 +20,7 @@ export const LLM_MODEL = "claude-opus-5";
 // 0.455로"(소수점 원값) 형태였다. 사용자 프롬프트의 수치도 사람이 읽는 단위(%·%p)로 바꿨다.
 // v2(B4 후속): summaryCites 필드 추가 + 규칙 6. 캐시 키에 promptVersion이 들어가 옛 버전과 절대
 // 충돌하지 않는다.
-export const PROMPT_VERSION = "v3";
+// v4(2026-09-19): 후보 풀을 core(소환사의 협곡) 노트로 좁히고, 문장 길이 상한을 어림수("80자
+// 안팎")에서 숫자(summary 100자·원인 80자)로 바꾸고, 완곡 표현 중복 금지를 넣었다. 프롬프트를
+// 바꾸면서 버전을 올리지 않으면 캐시된 답이 그것을 만들지 않은 프롬프트에 귀속된다.
+export const PROMPT_VERSION = "v4";

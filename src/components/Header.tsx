@@ -177,7 +177,7 @@ export default function Header({ chrome }: HeaderProps) {
   return (
     <header ref={headerRef} className="glass-chrome sticky top-0 z-20 border-b">
       <Container className="flex flex-wrap items-center gap-6 py-3">
-        <Link href={gameHref(game, "/")} className="flex min-h-8 items-center gap-2">
+        <Link href={sectionHref(game, "")} className="flex min-h-8 items-center gap-2">
           <span className="h-2 w-2 rounded-pill bg-accent" aria-hidden="true" />
           <span className="font-display text-lg font-bold tracking-tight text-fg">patchgap</span>
         </Link>

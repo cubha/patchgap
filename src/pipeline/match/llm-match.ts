@@ -79,6 +79,18 @@ export function serializeCandidates(notes: readonly PatchNoteItem[]): string {
   return JSON.stringify(sorted);
 }
 
+/**
+ * LLM에게 보여줄 후보만 남긴다 — 소환사의 협곡(core) 노트뿐이다.
+ *
+ * 왜 사후 기각(verifyCauses)만으로 부족한가: 그건 **답을 버리는** 것이지 질문을 고치는 게 아니다.
+ * 실측으로 26.17 노트 215건 중 173건(80%)이 모드 섹션이라, 모델은 프롬프트 대부분을 인용 불가
+ * 후보로 읽고 그중 62%를 실제로 집었다. 풀에서 빼면 프롬프트가 1/4로 줄고 남은 SR 후보에 집중된다.
+ * 대가는 candidateSetHash 변경 = 캐시 전량 무효이며, 그래서 PROMPT_VERSION 상향과 같은 실행에 묶었다.
+ */
+export function coreCandidatesOf(notes: readonly PatchNoteItem[]): PatchNoteItem[] {
+  return notes.filter(isCoreNote);
+}
+
 export function candidateSetHash(serialized: string): string {
   return crypto.createHash("sha256").update(serialized).digest("hex");
 }
@@ -110,9 +122,17 @@ const SYSTEM_INSTRUCTIONS = [
   "   '후보 패치노트' 같은 이 대화의 맥락을 언급하지 마세요 — 독자는 목록을 본 적이 없습니다.",
   "8. 수치는 사용자 메시지에 적힌 표기(%, %p, 초)를 그대로 쓰고 0.571 같은 소수 원값이나",
   "   MonkeyKing 같은 영문 키를 쓰지 마세요. 엔티티는 한국어 이름만 쓰세요.",
-  "9. 한 문장은 80자 안팎으로 간결하게. 후보가 없으면 summary는 '패치노트에서 이 변화를 설명할",
-  "   조항을 찾지 못했습니다' 한 문장으로 끝내세요 — 이유를 장황하게 나열하지 마세요.",
+  "9. 길이 상한을 지키세요 — summary는 **100자 이내**, causes[].text는 각각 **80자 이내**입니다.",
+  "   쓰고 나서 글자 수를 세어 넘으면 줄이세요(수식어와 부연부터 버리고, 수치와 인과만 남깁니다).",
+  "   후보가 없으면 summary는 '패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다' 한 문장으로",
+  "   끝내세요 — 이유를 장황하게 나열하지 마세요.",
+  "10. 한 문장에 완곡 표현은 **하나만** 쓰세요. 추정이라는 사실은 confidence 필드가 이미 말하므로,",
+  "   '~로 보이며 ~할 가능성이 있습니다'처럼 겹쳐 쓰지 마세요. 근거가 분명하면 그대로 서술하고,",
+  "   불확실하면 무엇이 불확실한지를 한 번만 밝히세요.",
 ].join("\n");
+
+/** 테스트가 규칙 문구를 직접 검사할 수 있게 노출한다(프롬프트는 산출물의 계약이다). */
+export const SYSTEM_INSTRUCTIONS_TEXT = SYSTEM_INSTRUCTIONS;
 
 function buildSystemPrompt(notes: readonly PatchNoteItem[]): string {
   return `${SYSTEM_INSTRUCTIONS}\n\n후보 패치노트 항목 목록(JSON):\n${serializeCandidates(notes)}`;
@@ -429,7 +449,8 @@ export async function inferIndirectCandidates(
   const cacheDir = options.cacheDir ?? llmCacheDir();
   const model = options.model ?? LLM_MODEL;
 
-  const candSetHash = candidateSetHash(serializeCandidates(notes));
+  const candidates = coreCandidatesOf(notes);
+  const candSetHash = candidateSetHash(serializeCandidates(candidates));
 
   const targets = deltas
     .filter((d) => d.status === "unannounced" || d.status === "announced-inconsistent")
@@ -451,8 +472,8 @@ export async function inferIndirectCandidates(
     const cached = readCache(cacheDir, key);
     if (cached) {
       summary.cacheHits += 1;
-      const causes = verifyCauses(cached.parsed.causes, notes, delta, ddragon);
-      const summaryVerified = verifySummaryCites(cached.parsed.summaryCites, notes);
+      const causes = verifyCauses(cached.parsed.causes, candidates, delta, ddragon);
+      const summaryVerified = verifySummaryCites(cached.parsed.summaryCites, candidates);
       resultById.set(delta.id, {
         ...delta,
         causes,
@@ -478,7 +499,7 @@ export async function inferIndirectCandidates(
 
     try {
       summary.calls += 1;
-      const { parsed, usage } = await callLlmForDelta(client, model, delta, notes);
+      const { parsed, usage } = await callLlmForDelta(client, model, delta, candidates);
       addUsage(summary.usage, usage);
 
       if (parsed === null) {
@@ -500,8 +521,8 @@ export async function inferIndirectCandidates(
         usage,
       });
 
-      const causes = verifyCauses(parsed.causes, notes, delta, ddragon);
-      const summaryVerified = verifySummaryCites(parsed.summaryCites, notes);
+      const causes = verifyCauses(parsed.causes, candidates, delta, ddragon);
+      const summaryVerified = verifySummaryCites(parsed.summaryCites, candidates);
       resultById.set(delta.id, {
         ...delta,
         causes,
