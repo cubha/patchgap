@@ -47,6 +47,7 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import BrandMark from "@/components/BrandMark";
 import Container from "@/components/Container";
 import { GAMES, gameFromPathname, gameHref, sectionHref, sectionOfPathname, type GameId } from "@/lib/game";
 import { fmtInt, fmtKst } from "@/lib/format";
@@ -176,7 +177,7 @@ export default function Header({ chrome }: HeaderProps) {
       <header ref={headerRef} className="glass-chrome sticky top-0 z-20 border-b">
         <Container className="flex items-center justify-between gap-6 py-3">
           <Link href="/" className="flex min-h-8 items-center gap-2">
-            <span className="h-2 w-2 rounded-pill bg-accent" aria-hidden="true" />
+            <BrandMark />
             <span className="font-display text-lg font-bold tracking-tight text-fg">patchgap</span>
           </Link>
           <a href="#how" className="text-xs text-fg-2 hover:text-fg">
@@ -191,7 +192,7 @@ export default function Header({ chrome }: HeaderProps) {
     <header ref={headerRef} className="glass-chrome sticky top-0 z-20 border-b">
       <Container className="flex flex-wrap items-center gap-6 py-3">
         <Link href={sectionHref(game, "")} className="flex min-h-8 items-center gap-2">
-          <span className="h-2 w-2 rounded-pill bg-accent" aria-hidden="true" />
+          <BrandMark />
           <span className="font-display text-lg font-bold tracking-tight text-fg">patchgap</span>
         </Link>
 

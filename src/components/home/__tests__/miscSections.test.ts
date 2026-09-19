@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest";
 import { modeScopeFromAnchorUrl } from "@/pipeline/shared/mode-scope";
 import type { PatchNoteItem } from "@/pipeline/types";
 import type { MatchedStreamGroup } from "../releaseStream";
-import { MISC_CATEGORY_LABELS, buildMiscSections, classifyMiscNote } from "../miscSections";
+import { MISC_CATEGORY_LABELS, buildMiscSections, classifyMiscNote, showsEntityHeading } from "../miscSections";
 
 function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
   return {
@@ -102,5 +102,37 @@ describe("buildMiscSections", () => {
   it("빈 입력은 빈 배열 · 라벨 표는 6종 전부 있다", () => {
     expect(buildMiscSections([])).toEqual([]);
     expect(Object.keys(MISC_CATEGORY_LABELS).sort()).toEqual(["augment", "bugfix", "cosmetic", "mode", "other", "qol"]);
+  });
+});
+
+describe("showsEntityHeading — 누구의 변경인지 보이게", () => {
+  // 실측 결함(2026-09-19 사용자 지적): 26.18 「게임 모드(클래식)」은 엔티티가 피오라 하나(65줄)라
+  // "엔티티가 둘 이상일 때만 머리글" 규칙에 걸려 머리글이 사라졌다. 화면에는 "Q - 찌르기"·
+  // "W - 응수"만 남아 **누구의 변경인지 알 수 없었다**. 26.17은 엔티티가 19개라 우연히 안 보였다.
+  it("엔티티가 하나뿐이어도 카테고리 라벨과 다른 이름이면 보여준다", () => {
+    expect(showsEntityHeading("게임 모드(클래식)", "피오라")).toBe(true);
+  });
+
+  it("카테고리 라벨과 같은 말이면 숨긴다 — 같은 말을 두 번 하지 않는다", () => {
+    expect(showsEntityHeading("버그 수정", "버그 수정")).toBe(false);
+    expect(showsEntityHeading("증강", "증강")).toBe(false);
+  });
+
+  it("포함 관계도 같은 말로 본다", () => {
+    expect(showsEntityHeading("버그 수정", "버그 수정 및 편의성 개선")).toBe(false);
+    expect(showsEntityHeading("편의성 개선", "버그 수정 및 편의성 개선")).toBe(false);
+  });
+
+  it("구두점·공백 차이는 무시한다", () => {
+    expect(showsEntityHeading("게임 모드(클래식)", "게임모드 클래식")).toBe(false);
+  });
+
+  it("치장 카테고리의 챔피언·모드 이름은 보여준다", () => {
+    expect(showsEntityHeading("신규 스킨·치장", "홀 오브 레전드")).toBe(true);
+    expect(showsEntityHeading("신규 스킨·치장", "클래식")).toBe(true);
+  });
+
+  it("빈 이름은 머리글을 달지 않는다", () => {
+    expect(showsEntityHeading("버그 수정", "")).toBe(false);
   });
 });
