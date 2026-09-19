@@ -139,8 +139,16 @@ export default function ReleaseNoteStream({
    * 그것도 거짓이다). 아이템은 `lanes`가 비어 있어 어떤 라인에도 속하지 않는다(lane.ts 계약). */
   const hasLaneExcludedItems = useMemo(() => {
     if (selectedLane === "all") return false;
-    return entries.some((entry) => isItemGroup(entry.group) && !entry.lanes.includes(selectedLane));
-  }, [entries, selectedLane]);
+    // **탭 스코프까지 본다**(2026-09-19 재판정 지적): 지금 데이터는 두 탭 모두 아이템을 갖고 있어
+    // 우연히 가려졌지만, 한쪽 탭에만 아이템이 있는 패치가 오면 빠진 것이 없는 탭에서도 캡션이 떠
+    // 거짓이 된다. 캡션은 **이 탭에서 실제로 빠진 것**이 있을 때만 말한다.
+    return entries.some(
+      (entry) =>
+        tabForGroup(entry.group) === tab &&
+        isItemGroup(entry.group) &&
+        !entry.lanes.includes(selectedLane)
+    );
+  }, [entries, selectedLane, tab]);
 
   const filtered = useMemo(
     () => laneFiltered.filter((entry) => tabForGroup(entry.group) === tab),

@@ -15,6 +15,7 @@ import {
   countProseViolations,
   buildProseRepairNote,
   isNounEnding,
+  mergeRepairedProse,
   verifyCauses,
   verifySummaryCites,
 } from "../llm-match";
@@ -542,6 +543,57 @@ describe("길이 재요청(v5) — 문구가 아니라 호출부가 닫는다", 
     expect(note).toContain("90자");
     // 인용·신뢰도를 흔들면 검증 단계가 다른 것을 보게 된다 — 표현만 고치라고 못박는다.
     expect(note).toContain("candidateNoteId");
+  });
+
+  // 2026-09-19 재판정: 재요청 응답을 **통째로** 채택했더니 인용 7행·confidence 3행이 바뀌고
+  // `champion:Pyke:banRate`의 판정이 unannounced → indirect-effect로 뒤집혔다(3단 재분류가
+  // 원인 문장을 보기 때문). PLAN §3은 "판정 엔진 불변 · 전부 표시·산문 계층"이었고 재요청 문구도
+  // "candidateNoteId와 confidence는 그대로 두세요"라고 말하지만, **아무것도 그것을 강제하지
+  // 않았다.** 문구는 계약이 아니다 — 코드가 계약이다. 그래서 문장만 갈아끼운다.
+  describe("재요청 병합 — 근거는 원본을 지킨다", () => {
+    const original = {
+      summary: "원래 요약입니다.",
+      summaryCites: ["note:a"],
+      causes: [
+        { text: "밀린 영향.", candidateNoteId: "note:a", confidence: "high" as const },
+        { text: "짧습니다.", candidateNoteId: "note:b", confidence: "low" as const },
+      ],
+    };
+
+    it("원인 문장만 가져오고 인용·신뢰도는 원본을 쓴다", () => {
+      const repaired = {
+        summary: "원래 요약입니다.",
+        summaryCites: ["note:a"],
+        causes: [
+          { text: "밀렸습니다.", candidateNoteId: "note:ZZZ", confidence: "low" as const },
+          { text: "짧습니다.", candidateNoteId: "note:YYY", confidence: "high" as const },
+        ],
+      };
+      const merged = mergeRepairedProse(original, repaired);
+      expect(merged).not.toBeNull();
+      expect(merged?.causes[0].text).toBe("밀렸습니다.");
+      expect(merged?.causes[0].candidateNoteId).toBe("note:a");
+      expect(merged?.causes[0].confidence).toBe("high");
+      expect(merged?.causes[1].candidateNoteId).toBe("note:b");
+      expect(merged?.causes[1].confidence).toBe("low");
+    });
+
+    it("원인 개수가 달라지면 병합하지 않는다 — 짝을 지을 수 없다", () => {
+      const repaired = { ...original, causes: [original.causes[0]] };
+      expect(mergeRepairedProse(original, repaired)).toBeNull();
+    });
+
+    it("요약 인용이 바뀌면 요약은 원본을 쓴다 — 문장과 인용은 한 쌍이다", () => {
+      const repaired = { ...original, summary: "새 요약입니다.", summaryCites: ["note:b"] };
+      const merged = mergeRepairedProse(original, repaired);
+      expect(merged?.summary).toBe("원래 요약입니다.");
+      expect(merged?.summaryCites).toEqual(["note:a"]);
+    });
+
+    it("요약 인용이 같으면 새 요약을 쓴다", () => {
+      const repaired = { ...original, summary: "새 요약입니다." };
+      expect(mergeRepairedProse(original, repaired)?.summary).toBe("새 요약입니다.");
+    });
   });
 
   it("재요청 문구가 명사형 종결을 어떻게 고칠지 말한다", () => {

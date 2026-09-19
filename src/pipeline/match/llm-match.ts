@@ -388,6 +388,34 @@ export function countProseViolations(parsed: LlmOutput): number {
  * 숫자"였는데, 재요청은 그보다 한 걸음 더 나아가 *이 응답의* 실제 위반을 짚어 줄 수 있다.
  * (이전 이름 `buildLengthRepairNote` — 대상이 길이만이 아니게 되어 바꿨다.)
  */
+/**
+ * 재요청 응답에서 **문장만** 가져오고 근거(인용·신뢰도)는 원본을 지킨다.
+ *
+ * 왜 필요한가(2026-09-19 재판정): 재요청 응답을 통째로 채택했더니 인용 7행·confidence 3행이
+ * 바뀌고 `champion:Pyke:banRate`의 판정이 unannounced → indirect-effect로 뒤집혔다(3단 재분류가
+ * 원인 문장을 보기 때문이다). 계획은 "판정 엔진 불변 · 전부 표시·산문 계층"이었고 재요청 문구도
+ * "candidateNoteId와 confidence는 그대로 두세요"라고 적고 있었지만 **아무것도 그것을 강제하지
+ * 않았다**. 문구는 계약이 아니다 — 코드가 계약이다.
+ *
+ * 원인 개수가 달라지면 짝을 지을 수 없으므로 병합을 포기한다(null). 요약은 `summaryCites`가
+ * 그대로일 때만 새 문장을 쓴다 — 문장과 인용은 한 쌍이라 한쪽만 바꾸면 인용이 문장을 벗어난다.
+ */
+export function mergeRepairedProse(original: LlmOutput, repaired: LlmOutput): LlmOutput | null {
+  if (repaired.causes.length !== original.causes.length) return null;
+  const citesUnchanged =
+    repaired.summaryCites.length === original.summaryCites.length &&
+    repaired.summaryCites.every((id, index) => id === original.summaryCites[index]);
+  return {
+    summary: citesUnchanged ? repaired.summary : original.summary,
+    summaryCites: original.summaryCites,
+    causes: original.causes.map((cause, index) => ({
+      candidateNoteId: cause.candidateNoteId,
+      confidence: cause.confidence,
+      text: repaired.causes[index].text,
+    })),
+  };
+}
+
 export function buildProseRepairNote(parsed: LlmOutput): string {
   const lines: string[] = ["직전 답의 문장 규칙 위반을 고쳐 **같은 내용으로** 다시 답하세요."];
   if (parsed.summary.length > SUMMARY_MAX_CHARS) {
@@ -589,11 +617,10 @@ export async function inferIndirectCandidates(
             buildProseRepairNote(cachedParsed)
           );
           addUsage(summary.usage, repaired.usage);
-          if (
-            repaired.parsed !== null &&
-            countProseViolations(repaired.parsed) < countProseViolations(cachedParsed)
-          ) {
-            cachedParsed = repaired.parsed;
+          const merged =
+            repaired.parsed === null ? null : mergeRepairedProse(cachedParsed, repaired.parsed);
+          if (merged !== null && countProseViolations(merged) < countProseViolations(cachedParsed)) {
+            cachedParsed = merged;
             writeCache(cacheDir, key, { ...cached, generatedAt: new Date().toISOString(), parsed: cachedParsed });
           }
         } catch {
@@ -641,8 +668,9 @@ export async function inferIndirectCandidates(
         summary.proseRepairs += 1;
         const repaired = await callLlmForDelta(client, model, delta, candidates, buildProseRepairNote(parsed));
         addUsage(usage, repaired.usage);
-        if (repaired.parsed !== null && countProseViolations(repaired.parsed) < countProseViolations(parsed)) {
-          parsed = repaired.parsed;
+        const merged = repaired.parsed === null ? null : mergeRepairedProse(parsed, repaired.parsed);
+        if (merged !== null && countProseViolations(merged) < countProseViolations(parsed)) {
+          parsed = merged;
         }
       }
 
@@ -695,13 +723,15 @@ export async function inferIndirectCandidates(
   const merged = deltas.map((d) => (targetIds.has(d.id) ? (resultById.get(d.id) ?? d) : d));
   // 산출 문장 위생은 **검증을 통과한 문장**만 센다 — 회색으로 떨어진 문장은 화면에 단언으로
   // 나가지 않으므로 개선 측정 대상이 아니다.
+  // 원인 문장은 **검증 통과 여부와 무관하게 전부** 센다(2026-09-19 재판정 지적). 회색으로 떨어진
+  // 문장도 화면에서 사라지지 않고 "근거가 약하다"는 표시만 달고 남으므로, 그 문장의 위생도
+  // 사용자가 읽는 품질의 일부다. 요약은 본문색으로 단언하는 것만 센다 — 검증 실패한 요약은
+  // 회색이라 단언이 아니다.
   summary.prose = summarizeProseHygiene(
     merged.map((record) => ({
       summary:
         record.llm && !record.llm.skipped && record.llm.summaryVerified ? (record.llm.summary ?? null) : null,
-      causes: record.causes
-        .filter((cause) => cause.verified)
-        .map((cause) => ({ text: cause.text, confidence: cause.confidence })),
+      causes: record.causes.map((cause) => ({ text: cause.text, confidence: cause.confidence })),
     }))
   );
   return { deltas: merged, summary };

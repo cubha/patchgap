@@ -2,7 +2,7 @@
   "meta": {
     "from": "26.16",
     "to": "26.17",
-    "generatedAt": "2026-09-19T05:08:57.620Z",
+    "generatedAt": "2026-09-19T05:32:29.020Z",
     "n": 1966,
     "counts": {
       "unannounced": 15,
@@ -15,14 +15,14 @@
     },
     "qAlpha": 0.1,
     "llm": {
-      "calls": 1,
-      "cacheHits": 120,
+      "calls": 2,
+      "cacheHits": 118,
       "skipped": 0,
       "usage": {
-        "inputTokens": 364,
-        "cacheReadInputTokens": 0,
-        "cacheCreationInputTokens": 6237,
-        "outputTokens": 381
+        "inputTokens": 250,
+        "cacheReadInputTokens": 12474,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 1408
       },
       "prose": {
         "summaryCount": 120,
@@ -35,7 +35,7 @@
         "causeHedgedConfident": 0,
         "causeNounEnding": 0
       },
-      "proseRepairs": 1
+      "proseRepairs": 0
     }
   },
   "rows": [
@@ -2915,22 +2915,22 @@
       ],
       "causes": [
         {
-          "text": "야스오 치명타 피해량 감소 폭이 -10%에서 -5%로 조정되며 미드 경쟁 구도가 흔들렸습니다.",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "요네도 같은 치명타 페널티 조정을 받아 미드 픽 분포가 키아나 쪽으로 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "제라스 Q 피해량과 체력 너프로 빠진 미드 지분을 키아나가 흡수했습니다.",
+          "text": "제라스 Q 피해량과 체력이 깎이며 미드 경쟁 픽이 빠진 자리를 키아나가 흡수했습니다.",
           "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
           "verified": true,
           "confidence": "medium"
+        },
+        {
+          "text": "그레이브즈 Q 공격력 계수 너프로 정글 상위권이 약해져 키아나 정글 채택이 늘었습니다.",
+          "candidateNoteId": "note:26.17:champion:graves:39e7c86f",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "녹턴 체력·방어력 하향도 정글 픽 분산에 기여했습니다.",
+          "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
+          "verified": true,
+          "confidence": "low"
         }
       ],
       "evidence": {
@@ -2951,7 +2951,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "키아나 픽률이 16.1%→20.4%(+4.4%p) 올랐습니다. 제라스 Q 피해량 너프 등 미드 경쟁군 약화가 주요 배경입니다.",
+        "summary": "키아나 픽률이 16.1%→20.4%(+4.4%p)로 올랐습니다. 제라스 Q·체력 너프로 미드 경쟁 픽이 빠진 영향이 큽니다.",
         "summaryCites": [
           "note:26.17:champion:xerath:43a6f4aa"
         ],
@@ -3824,19 +3824,19 @@
       ],
       "causes": [
         {
-          "text": "야스오 치명타 피해량 감소 폭이 10%에서 5%로 완화돼 탑 대치 구도가 변했습니다.",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+          "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 탑 브루저 상대가 약해졌습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "나서스 생명력 흡수가 12/18/24%에서 10/15/20%로 줄어 탑 맞라인 지속력이 밀렸습니다.",
+          "text": "나서스 생명력 흡수 12/18/24%→10/15/20% 너프로 탑 맞라인 지속력이 줄었습니다.",
           "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 올라 베인 딜 효율을 일부 보완했습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향이 베인 빌드 효율을 일부 보전했을 수 있습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
@@ -3860,8 +3860,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "베인 탑 승률이 46.9%→49.3%로 올랐지만 CI가 [-4.3%p, 9.1%p]로 넓고 표본도 298판이라 통계적 변동일 수 있습니다.",
-        "summaryCites": [],
+        "summary": "베인 탑 승률 2.4%p 상승은 CI [-4.3%p, 9.1%p]로 유의하지 않고, 갈라진 하늘·나서스 너프로 맞라인이 약해진 영향으로 보입니다.",
+        "summaryCites": [
+          "note:26.17:item:sundered-sky:0aec77fe",
+          "note:26.17:champion:nasus:0915ac64"
+        ],
         "summaryVerified": true
       }
     },

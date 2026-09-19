@@ -26,7 +26,7 @@ import EntityIcon from "@/components/EntityIcon";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
 import { detailRouteIds } from "@/lib/detailRoutes";
-import { displayStatus } from "@/pipeline/shared/display-status";
+import { displayStatus, isNoiseStatus } from "@/pipeline/shared/display-status";
 import { listPatchPairs, loadChampions, loadDeltas, loadItems, loadNotes, type PatchPair } from "@/lib/data";
 import { entityTypeLabel, fmtInt, itemIdFromSlug, itemSlug } from "@/lib/format";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
@@ -77,14 +77,28 @@ function decodeIdParam(id: string): string {
   return itemIdFromSlug(decoded);
 }
 
+/**
+ * 이 id의 상세로 보여줄 레코드를 고른다 — **판정이 선 쌍을 우선**한다(2026-09-19 재판정 K2-4).
+ *
+ * `listPatchPairs()`는 최신 우선이고, 그전에는 최신 쌍의 레코드를 무조건 썼다. 그런데 라우트
+ * 자격(`detailRouteIds`)은 **어느 한 쌍에서라도** 판정이 서면 주는 합집합이라, 옛 쌍에서 미공지였고
+ * 최신 쌍에서 노이즈가 된 id가 상세에서 "표본 부족"을 그대로 렌더했다(실측 268장 중 126장).
+ * 자격과 렌더가 서로 다른 쌍을 보고 있던 것이 결함의 정체다 — 자격을 좁히는 대신 **렌더가 자격을
+ * 준 바로 그 쌍**을 고르게 한다. 어느 쌍에서도 판정이 안 섰으면(직접 URL 진입) 최신 쌍으로
+ * 떨어뜨려 관측을 사실대로 보여준다.
+ */
 function findDeltaForId(rawId: string): FoundDelta | null {
+  let fallback: FoundDelta | null = null;
   for (const pair of listPatchPairs()) {
     const deltas = loadDeltas(pair.from, pair.to);
     if (!deltas) continue;
     const delta = deltas.rows.find((row) => row.id === rawId);
-    if (delta) return { pair, delta, generatedAt: deltas.meta.generatedAt, qAlpha: deltas.meta.qAlpha };
+    if (!delta) continue;
+    const found = { pair, delta, generatedAt: deltas.meta.generatedAt, qAlpha: deltas.meta.qAlpha };
+    if (!isNoiseStatus(delta.status)) return found;
+    fallback ??= found;
   }
-  return null;
+  return fallback;
 }
 
 /** deltas 파일 원문 텍스트(스냅샷 해시 계산용) — data.ts(loadDeltas)는 파싱된 객체만 반환하고

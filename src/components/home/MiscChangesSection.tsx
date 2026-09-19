@@ -15,7 +15,7 @@ import type { PatchNoteItem } from "@/pipeline/types";
 import CosmeticSkinPreview, { type CosmeticSkinItem } from "./CosmeticSkinPreview";
 import type { MiscSection } from "./miscSections";
 import { groupNotesBySkill } from "./noteSkillGroups";
-import { dedupeBundleSkins } from "./skinPreviewBundle";
+import { createSkinDeduper } from "./skinPreviewBundle";
 
 export interface MiscChangesSectionProps {
   sections: MiscSection[];
@@ -49,6 +49,10 @@ function bundleByEntity(notes: readonly PatchNoteItem[]): EntityBundle[] {
 export default function MiscChangesSection({ sections, skinPreviews = {}, laneFiltered = false }: MiscChangesSectionProps) {
   const total = sections.reduce((sum, section) => sum + section.notes.length, 0);
   if (total === 0) return null;
+  // 중복 제거의 단위는 묶음이 아니라 **이 블록 전체**다(2026-09-19 재판정): 오리아나 3행이 두
+  // 묶음에 걸쳐 있어 묶음 단위로는 3회가 2회로 줄 뿐이었다. 사용자에게 보이는 것은 묶음 경계가
+  // 아니라 같은 그림이 두 번 뜬다는 사실이다.
+  const dedupeSkins = createSkinDeduper();
   return (
     <li className="border-b border-border-soft last:border-b-0">
       {/* `group/misc` — 요약행(group/fold)과 같은 규약으로 이름을 준다. */}
@@ -99,7 +103,7 @@ export default function MiscChangesSection({ sections, skinPreviews = {}, laneFi
                       {/* 2026-09-19 최종 채점 K2-5: 스플래시를 줄마다 그리면 "스킨 및 테두리"·
                           "이벤트 크로마"·"앞으로 나올 스킨" 세 줄이 같은 그림을 세 번 띄운다. 줄은
                           서로 다른 항목이라 합칠 수 없지만 그림은 같으므로, 묶음당 한 번만 그린다. */}
-                      <CosmeticSkinPreview skins={dedupeBundleSkins(bundle.notes, skinPreviews)} />
+                      <CosmeticSkinPreview skins={dedupeSkins(bundle.notes, skinPreviews)} />
                     </div>
                   ))}
                 </div>
