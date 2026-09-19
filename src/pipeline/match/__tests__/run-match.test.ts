@@ -211,6 +211,7 @@ describe("run-match: runMatchPipeline — LLM 상위 N은 정렬(중요도)순�
       summary: "공격 속도: 20% ⇒ 25%",
       anchorUrl: "https://example.com/#stormrazor",
       anchorKind: "entity",
+      modeScope: "core",
     };
 
     const before: AggregatedPatch = {

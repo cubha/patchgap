@@ -48,7 +48,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Container from "@/components/Container";
-import { GAMES, gameFromPathname, gameHref, type GameId } from "@/lib/game";
+import { GAMES, gameFromPathname, gameHref, sectionHref, type GameId } from "@/lib/game";
 import { fmtInt, fmtKst } from "@/lib/format";
 
 /** 내비 섹션 — 게임과 무관하게 항상 이 3개다. 게임은 아래 드롭다운이 바꾼다. */
@@ -211,7 +211,7 @@ export default function Header({ chrome }: HeaderProps) {
             return (
               <Link
                 key={item.section}
-                href={gameHref(game, `/${item.section}`)}
+                href={sectionHref(game, item.section)}
                 aria-current={active ? "page" : undefined}
                 className={`border-b-2 pt-1.5 pb-1 text-sm font-bold ${
                   active

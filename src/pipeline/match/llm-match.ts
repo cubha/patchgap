@@ -14,6 +14,7 @@
 // 레벨에서 보장된다(타임스탬프·랜덤 없음 — 프롬프트 prefix 안정성 = 프롬프트 캐싱 히트 전제조건).
 
 import Anthropic from "@anthropic-ai/sdk";
+import { isCoreNote } from "../shared/mode-scope";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
 import crypto from "node:crypto";
@@ -275,6 +276,14 @@ export function verifyCauses(
       return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
     }
     const note = notesById.get(cause.candidateNoteId);
+    // 2026-09-19: 다른 게임 모드(LoL 클래식·아수라장·아레나)의 노트는 SR 관측의 원인이 될 수 없다.
+    // 실측으로 26.16→26.17 쌍의 verified 원인 453건 중 282건이 모드 노트를 인용하고 있었다
+    // ("클래식 피오라의 공격 속도 계수 상향으로 탑 결투 구도가…" — 라이브 협곡에 없던 변경).
+    // 후보 풀 자체를 거르면 candidateSetHash가 바뀌어 LLM 캐시가 전량 무효가 되므로, 교정은
+    // **검증 지점**에서 한다(BRAINTRUST-root-fix-2026-09-19.md §4).
+    if (note && !isCoreNote(note)) {
+      return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
+    }
     if (note && resolvesToSameEntity(note, delta, ddragon)) {
       return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
     }
@@ -297,8 +306,74 @@ export function verifySummaryCites(
   candidates: readonly PatchNoteItem[]
 ): boolean {
   if (summaryCites.length === 0) return true;
-  const candidateIds = new Set(candidates.map((note) => note.id));
-  return summaryCites.every((id) => candidateIds.has(id));
+  // 존재 + core. 모드 노트를 근거로 쓴 요약은 본문색으로 단언할 수 없다(위 verifyCauses와 같은 이유).
+  const coreIds = new Set(candidates.filter(isCoreNote).map((note) => note.id));
+  return summaryCites.every((id) => coreIds.has(id));
+}
+
+/** 완곡 종결 어미 — 추론 문장에서 정당하지만, 두어 종에 몰리면 그것이 "AI스러움"의 실체가 된다. */
+const HEDGE_ENDINGS = [
+  "수 있습니다",
+  "가능성이 있습니다",
+  "보입니다",
+  "것으로 추정됩니다",
+  "일 수 있습니다",
+  "듯합니다",
+];
+
+/** 한 문장의 길이 상한(프롬프트 규칙 9의 "80자 안팎"을 기계가 세는 형태로 고정). */
+export const PROSE_MAX_CHARS = 80;
+
+export interface ProseHygieneStats {
+  summaryCount: number;
+  summaryOverLength: number;
+  summaryHedged: number;
+  maxSummaryLength: number;
+  causeCount: number;
+  causeOverLength: number;
+  causeHedged: number;
+}
+
+function isHedged(text: string): boolean {
+  const trimmed = text.trim().replace(/[.!?]+$/, "");
+  return HEDGE_ENDINGS.some((ending) => trimmed.endsWith(ending));
+}
+
+/**
+ * 산출 문장의 길이·종결 위생을 집계한다(2026-09-19, 항목7의 기계적 절반).
+ *
+ * 왜 집계만 하고 강제하지 않는가: 프롬프트에 "80자 안팎"이 **이미 있는데도** 실측 요약 113건 중
+ * 82건(72%)이 초과했다 — 문구를 더 적는 것으로는 해결되지 않는다. 그렇다고 길이를 이유로 회색
+ * 처리하면 근거 있는 문장을 숨기게 되어 프로젝트 원칙과 충돌하고, 프롬프트를 고치려면
+ * PROMPT_VERSION을 올려야 하는데 그러면 캐시가 전량 무효가 되어 채점된 문장 전부가 비결정적으로
+ * 교체된다. 그래서 이번 라운드는 **다음 실행이 측정 가능하도록 수치를 남기는 것**까지만 한다.
+ */
+export function summarizeProseHygiene(
+  entries: readonly { summary: string | null; causes: readonly string[] }[]
+): ProseHygieneStats {
+  const stats: ProseHygieneStats = {
+    summaryCount: 0,
+    summaryOverLength: 0,
+    summaryHedged: 0,
+    maxSummaryLength: 0,
+    causeCount: 0,
+    causeOverLength: 0,
+    causeHedged: 0,
+  };
+  for (const entry of entries) {
+    if (entry.summary !== null && entry.summary.length > 0) {
+      stats.summaryCount += 1;
+      if (entry.summary.length > PROSE_MAX_CHARS) stats.summaryOverLength += 1;
+      if (isHedged(entry.summary)) stats.summaryHedged += 1;
+      stats.maxSummaryLength = Math.max(stats.maxSummaryLength, entry.summary.length);
+    }
+    for (const cause of entry.causes) {
+      stats.causeCount += 1;
+      if (cause.length > PROSE_MAX_CHARS) stats.causeOverLength += 1;
+      if (isHedged(cause)) stats.causeHedged += 1;
+    }
+  }
+  return stats;
 }
 
 export interface LlmMatchOptions {
@@ -314,6 +389,8 @@ export interface LlmMatchOptions {
 }
 
 export interface LlmRunSummary {
+  /** 산출 문장 위생 집계(2026-09-19) — summarizeProseHygiene 참고. */
+  prose: ProseHygieneStats;
   /** 실제 API 호출 횟수(캐시 히트 제외). */
   calls: number;
   cacheHits: number;
@@ -359,7 +436,13 @@ export async function inferIndirectCandidates(
     .slice(0, maxDeltas);
   const targetIds = new Set(targets.map((d) => d.id));
 
-  const summary: LlmRunSummary = { calls: 0, cacheHits: 0, skipped: 0, usage: emptyUsage() };
+  const summary: LlmRunSummary = {
+    calls: 0,
+    cacheHits: 0,
+    skipped: 0,
+    usage: emptyUsage(),
+    prose: summarizeProseHygiene([]),
+  };
   const client = options.client ?? new Anthropic();
   const resultById = new Map<string, DeltaRecord>();
 
@@ -441,5 +524,14 @@ export async function inferIndirectCandidates(
   }
 
   const merged = deltas.map((d) => (targetIds.has(d.id) ? (resultById.get(d.id) ?? d) : d));
+  // 산출 문장 위생은 **검증을 통과한 문장**만 센다 — 회색으로 떨어진 문장은 화면에 단언으로
+  // 나가지 않으므로 개선 측정 대상이 아니다.
+  summary.prose = summarizeProseHygiene(
+    merged.map((record) => ({
+      summary:
+        record.llm && !record.llm.skipped && record.llm.summaryVerified ? (record.llm.summary ?? null) : null,
+      causes: record.causes.filter((cause) => cause.verified).map((cause) => cause.text),
+    }))
+  );
   return { deltas: merged, summary };
 }

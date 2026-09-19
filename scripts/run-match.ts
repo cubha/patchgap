@@ -14,7 +14,12 @@ import { buildDeltas, carryOverMatchIds, loadAggregatedPatch, type AggregatedPat
 import type { DdragonData } from "../src/pipeline/match/ddragon";
 import { matchDeterministic } from "../src/pipeline/match/entity-match";
 import { applyVerdicts, indexNotesById, sortDeltas, writeDeltas } from "../src/pipeline/match/verdict";
-import { inferIndirectCandidates, type LlmMatchOptions, type LlmRunSummary } from "../src/pipeline/match/llm-match";
+import {
+  inferIndirectCandidates,
+  PROSE_MAX_CHARS,
+  type LlmMatchOptions,
+  type LlmRunSummary,
+} from "../src/pipeline/match/llm-match";
 import { reclassifyIndirectEffects } from "../src/pipeline/match/indirect-effect";
 import { deltasFile, matchesJsonl } from "../src/pipeline/shared/paths";
 import type { DeltaRecord, DeltasFile, MatchStatus, PatchId, PatchNoteItem, PatchNoteSection } from "../src/pipeline/types";
@@ -205,6 +210,11 @@ export async function main(): Promise<void> {
   if (pipelineResult.llmSummary) {
     const s = pipelineResult.llmSummary;
     console.log(
+      `[run-match] 문장 위생: 요약 ${s.prose.summaryCount}건 중 ${PROSE_MAX_CHARS}자 초과 ` +
+        `${s.prose.summaryOverLength}건(최장 ${s.prose.maxSummaryLength}자) · 완곡 종결 ${s.prose.summaryHedged}건 / ` +
+        `원인 ${s.prose.causeCount}건 중 초과 ${s.prose.causeOverLength}건 · 완곡 ${s.prose.causeHedged}건`
+    );
+    console.log(
       `[run-match] LLM 2단: calls=${s.calls} cacheHits=${s.cacheHits} skipped=${s.skipped} ` +
         `usage(input=${s.usage.inputTokens} cacheRead=${s.usage.cacheReadInputTokens} ` +
         `cacheCreate=${s.usage.cacheCreationInputTokens} output=${s.usage.outputTokens})`
@@ -256,6 +266,7 @@ export async function main(): Promise<void> {
           cacheHits: pipelineResult.llmSummary.cacheHits,
           skipped: pipelineResult.llmSummary.skipped,
           usage: pipelineResult.llmSummary.usage,
+          prose: pipelineResult.llmSummary.prose,
         }
       : undefined,
   });

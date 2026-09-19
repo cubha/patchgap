@@ -134,16 +134,29 @@ describe("SideMatchAverages — 데이터 없음(전부 null)", () => {
   });
 });
 
+// 2026-09-19 **명세 변경**(코드가 아니라 문구가 틀렸던 경우): 이 패널은 정적 사이트라 아무것도
+// 전송하지 못한다(전송은 CI의 scripts/run-notify.ts가 한다). 그런데 캡션이 "마지막 전송"이고
+// 버튼이 "디스코드로 브리핑 보내기"라 할 수 없는 행위를 약속했고, 설명은 "미공지 · 공지 · 이상
+// 관측"을 보낸다고 했지만 webhook.ts가 보내는 것은 미공지 상위 N + 이상 관측 상위 3뿐이다
+// ("공지"는 방송 대상이 아니다). 넘기던 값도 실제로는 델타 파일 생성 시각(generatedAt)이다.
+// 그래서 테스트를 통과시키려고 고친 것이 아니라, **테스트가 고정하던 문구가 거짓이어서** 함께
+// 갱신했다. 링크의 죽은 프래그먼트(#discord)도 함께 뗐다(그 섹션은 2026-09-14 사용자 지시로 제거).
 describe("DiscordPanel — generatedAt 없음", () => {
-  it("마지막 전송 캡션을 생략한다", () => {
+  it("집계 시각 캡션을 생략한다", () => {
     const { container } = render(<DiscordPanel generatedAt={null} />);
-    expect(container.textContent).not.toContain("마지막 전송");
-    expect(container.textContent).toContain("디스코드로 브리핑 보내기");
+    expect(container.textContent).not.toContain("마지막 집계");
+    expect(container.textContent).toContain("방송 규칙 보기");
   });
 
   it("generatedAt이 있으면 KST로 포맷한 캡션을 렌더한다", () => {
     const { container } = render(<DiscordPanel generatedAt="2026-09-05T05:00:00.000Z" />);
-    expect(container.textContent).toContain("마지막 전송 2026-09-05 14:00 KST");
+    expect(container.textContent).toContain("마지막 집계 2026-09-05 14:00 KST");
+  });
+
+  it("보내지 않는 것을 보낸다고 말하지 않는다 — '공지'는 방송 대상이 아니다", () => {
+    const { container } = render(<DiscordPanel generatedAt={null} />);
+    expect(container.textContent).not.toContain("디스코드로 브리핑 보내기");
+    expect(container.textContent).toContain("미공지 상위 항목과 이상 관측");
   });
 });
 
@@ -251,6 +264,7 @@ describe("ReleaseNoteStream — tier 2 접기 · 기타 변경", () => {
           summary: "티모의 버섯 함정이 정상적으로 지속되지 않던 버그를 수정했습니다.",
           anchorUrl: "https://example.com/#classic",
           anchorKind: "section" as const,
+          modeScope: "core" as const,
         },
       ],
     },
@@ -271,6 +285,7 @@ describe("ReleaseNoteStream — tier 2 접기 · 기타 변경", () => {
           summary: "떠오른 전설 오리아나 스킨 및 테두리",
           anchorUrl: "https://example.com/#hall-of-legends",
           anchorKind: "section" as const,
+          modeScope: "core" as const,
         },
       ],
     },

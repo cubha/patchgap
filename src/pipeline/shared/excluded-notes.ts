@@ -19,16 +19,18 @@ export function isExcludedNote(note: Pick<PatchNoteItem, "entity">): boolean {
   return EXCLUDED_ENTITY_RE.test(note.entity);
 }
 
-// ── 게임 모드 섹션(2026-09-18 라운드6 재판정 보완 1·2) ──────────────────────────────────────────
-// 26.18 원문의 「클래식 모드」(#patch-classic — 신규 피오라·갈리오·뽀삐 소개 + 모드 전용 밸런스)와
-// 「아수라장 증강」(#patch-aram:-mayhem)은 소환사의 협곡 랭크와 무관한 섹션인데, 파서는 클래식 도입부의
-// 첫 챔피언명(피오라)을 엔티티로 잡아 **65줄을 SR 챔피언 피오라의 공지로** 귀속했고, 판정도 그 노트에
-// 짝지어 피오라 픽률을 "공지"로 냈다(독립 채점 K1-2·K2-2·K2-3 결함). 파서·판정 산출물은 이번 라운드
-// 보호 대상이라 표시 층위에서 의회 제외와 **같은 메커니즘**으로 흡수한다 — 이 노트들은 SR 엔티티 노트가
-// 아니므로 ① 엔티티 수·대조표 내비에서 빠지고 ② 홈 "기타 변경"의 카테고리 줄로만 실리며 ③ 이 노트에만
-// 짝지어진 관측은 표시용으로 미공지가 된다(display-normalize.ts). 앵커 해시가 곧 섹션이다 — 같은 앵커
-// 아래 「버그 수정」·「의회」도 있지만 그건 이름 규칙(위·miscSections)이 먼저 잡는다.
-const MODE_SECTION_HASH_RE = /^patch-(classic|aram|arena|swiftplay|brawl|mayhem)/;
+// ── 게임 모드 섹션 ────────────────────────────────────────────────────────────────────────
+// 2026-09-19: 이 판정의 **1차 방어는 이제 파이프라인**이다. 파서가 노트마다 `modeScope`를 새기고
+// (src/pipeline/shared/mode-scope.ts), 결정론 매칭과 LLM 인용 검증이 그 값으로 모드 노트를 거른다.
+// 여기 있는 술어는 화면이 같은 질문을 할 때 **같은 답을 돌려주기 위한 것**이고, 판정 키를 둘로
+// 늘리지 않도록 modeScope를 우선해서 읽는다. 앵커 폴백은 modeScope가 없던 시절의 데이터(또는
+// 노트만 갱신되고 델타는 옛 판정으로 남은 중간 상태)를 위한 방어다.
+//
+// 라운드6 기록(왜 이 층이 먼저 생겼나): 26.18 원문의 「클래식」(#patch-classic — LoL 클래식 모드)
+// 아래 피오라 65줄이 파서에서 SR 챔피언 피오라의 공지로 귀속됐고, 판정이 그 노트에 짝지어 피오라
+// 픽률을 "공지"로 냈다. 당시엔 파서·판정 산출물이 보호 대상이라 표시 층위에서 흡수했고, 2026-09-19에
+// 근본 수정(modeScope)이 들어가면서 이 층은 멱등 가드가 됐다.
+import { isCoreNote, modeScopeFromAnchorUrl } from "./mode-scope";
 
 export function noteAnchorHash(note: Pick<PatchNoteItem, "anchorUrl">): string {
   const idx = note.anchorUrl.indexOf("#");
@@ -36,12 +38,15 @@ export function noteAnchorHash(note: Pick<PatchNoteItem, "anchorUrl">): string {
 }
 
 /** 게임 모드 섹션(클래식·아수라장·아레나 …)에 속한 줄 — SR 챔피언·아이템 공지가 아니다. */
-export function isModeSectionNote(note: Pick<PatchNoteItem, "anchorUrl">): boolean {
-  return MODE_SECTION_HASH_RE.test(noteAnchorHash(note));
+export function isModeSectionNote(note: Pick<PatchNoteItem, "anchorUrl"> & Partial<Pick<PatchNoteItem, "modeScope">>): boolean {
+  if (note.modeScope !== undefined) return !isCoreNote({ modeScope: note.modeScope });
+  return modeScopeFromAnchorUrl(note.anchorUrl) !== "core";
 }
 
 /** 엔티티 수·내비·짝짓기 우주에서 빠지는 줄 = 의회 투표 결과 ∪ 게임 모드 섹션. 홈은 둘을 다르게
  * 다룬다(의회는 비표시, 모드 섹션은 "기타 변경" 줄) — 그 분기는 호출부가 두 술어를 따로 본다. */
-export function isDisplayExcludedNote(note: Pick<PatchNoteItem, "entity" | "anchorUrl">): boolean {
+export function isDisplayExcludedNote(
+  note: Pick<PatchNoteItem, "entity" | "anchorUrl"> & Partial<Pick<PatchNoteItem, "modeScope">>
+): boolean {
   return isExcludedNote(note) || isModeSectionNote(note);
 }

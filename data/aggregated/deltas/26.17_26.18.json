@@ -2,27 +2,36 @@
   "meta": {
     "from": "26.17",
     "to": "26.18",
-    "generatedAt": "2026-09-18T01:11:31.219Z",
+    "generatedAt": "2026-09-19T00:08:01.438Z",
     "n": 1951,
     "counts": {
-      "unannounced": 34,
-      "indirect-effect": 15,
-      "announced-inconsistent": 64,
-      "announced-consistent": 32,
-      "below-threshold": 317,
+      "unannounced": 38,
+      "indirect-effect": 12,
+      "announced-inconsistent": 60,
+      "announced-consistent": 27,
+      "below-threshold": 321,
       "insufficient-sample": 577,
-      "no-change": 912
+      "no-change": 916
     },
     "qAlpha": 0.1,
     "llm": {
-      "calls": 113,
-      "cacheHits": 0,
+      "calls": 0,
+      "cacheHits": 110,
       "skipped": 0,
       "usage": {
-        "inputTokens": 14308,
-        "cacheReadInputTokens": 1896496,
-        "cacheCreationInputTokens": 16933,
-        "outputTokens": 63534
+        "inputTokens": 0,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 0
+      },
+      "prose": {
+        "summaryCount": 102,
+        "summaryOverLength": 72,
+        "summaryHedged": 39,
+        "maxSummaryLength": 124,
+        "causeCount": 206,
+        "causeOverLength": 38,
+        "causeHedged": 169
       }
     }
   },
@@ -231,6 +240,144 @@
         "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
         "summaryCites": [],
         "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Pyke:winRate",
+      "entityType": "champion",
+      "entityKey": "Pyke",
+      "entityName": "파이크",
+      "metric": "winRate",
+      "before": 0.4312210200927357,
+      "after": 0.5319148936170213,
+      "delta": 0.10069387352428555,
+      "ci": [
+        0.04546340772940351,
+        0.15507359354510553
+      ],
+      "n": {
+        "before": 647,
+        "after": 611
+      },
+      "q": 0.0030899622043913965,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "증강 '승리를 위한 회전'의 궁극기 피해량 증가가 30%→50%로 상향되어, 처형 임계값이 피해량에 직결되는 파이크 궁극기가 큰 반사이익을 얻었을 수 있습니다.",
+          "candidateNoteId": null,
+          "verified": false,
+          "confidence": "medium"
+        },
+        {
+          "text": "노틸러스 기본 공격력 61→58, Q 피해량 하향으로 경쟁 서포트 탱커가 약해져 파이크의 상대적 입지가 개선됐을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "세라핀 E 재사용 대기시간이 전 구간 11초로 고정 너프되어 바텀 경쟁 서포트 풀이 약화된 영향도 고려할 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "바드 방어력이 34+레벨당 5에서 32+레벨당 4.7로 낮아져 파이크의 처형 각이 더 쉬워졌을 가능성이 있습니다.",
+          "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8375318678",
+          "KR_8375353973",
+          "KR_8375314950",
+          "KR_8375347493",
+          "KR_8375373250",
+          "KR_8375376355",
+          "KR_8375314942",
+          "KR_8375384286",
+          "KR_8375381460",
+          "KR_8375391363"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=555,scope=all]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "파이크 승률이 43.1%→53.2%(+10.1%p, n=647→611)로 급등했는데, 직접 조항은 없고 증강 '승리를 위한 회전'의 궁극기 피해량 30%→50% 상향이 가장 유력한 간접 요인입니다.",
+        "summaryCites": [
+          "note:26.18:other:증강:35873480"
+        ],
+        "summaryVerified": false
+      }
+    },
+    {
+      "id": "champion:Aatrox:TOP:winRate",
+      "entityType": "champion",
+      "entityKey": "Aatrox",
+      "entityName": "아트록스",
+      "metric": "winRate",
+      "before": 0.5087108013937283,
+      "after": 0.40822784810126583,
+      "delta": -0.10048295329246243,
+      "ci": [
+        -0.17841354602941667,
+        -0.02087660522019294
+      ],
+      "n": {
+        "before": 287,
+        "after": 316
+      },
+      "q": 0.06947657529205611,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "이번 패치에서 '끝없는 갈증' 패시브 기본 피해량이 기존 3~16 선형 증가에서 3 + 9레벨까지 레벨당 0.5, 이후 레벨당 1로 바뀌며 중반 구간 딜·회복이 크게 줄었습니다. 아트록스 라인전 지속력 손실과 직결되는 변경입니다.",
+          "candidateNoteId": null,
+          "verified": false,
+          "confidence": "high"
+        },
+        {
+          "text": "주문력 전환 계수가 추가 공격력 기준에서 총공격력 기준으로 조정되며 근접 브루저 계열의 아이템 효율이 흔들려, 아트록스 빌드 가치가 간접적으로 하락했을 수 있습니다.",
+          "candidateNoteId": null,
+          "verified": false,
+          "confidence": "low"
+        },
+        {
+          "text": "구인수의 격노검 중첩 지속시간이 3초에서 4초로 늘어 지속 평타형 탑 챔피언의 대치 능력이 올라갔고, 그 결과 아트록스의 상대 매치업이 불리해졌을 가능성이 있습니다.",
+          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8375365095",
+          "KR_8375362768",
+          "KR_8375317311",
+          "KR_8375353260",
+          "KR_8375355344",
+          "KR_8375367558",
+          "KR_8375322177",
+          "KR_8375392209",
+          "KR_8375358771",
+          "KR_8375390761"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=266,scope=position,position=TOP]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "아트록스 탑 승률이 50.9%에서 40.8%로 10.0%p 급락했는데, '끝없는 갈증' 기본 피해량이 레벨당 0.5 증가 구조로 바뀐 너프가 가장 유력한 원인입니다.",
+        "summaryCites": [
+          "note:26.18:champion:피오라:624ce4d1"
+        ],
+        "summaryVerified": false
       }
     },
     {
@@ -1239,6 +1386,79 @@
       }
     },
     {
+      "id": "champion:Sylas:banRate",
+      "entityType": "champion",
+      "entityKey": "Sylas",
+      "entityName": "사일러스",
+      "metric": "banRate",
+      "before": 0.1328,
+      "after": 0.1699,
+      "delta": 0.037099999999999994,
+      "ci": [
+        0.02717704458705339,
+        0.047021962414862645
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "증강 '승리를 위한 회전'의 궁극기 피해량 증가가 30%→50%로 올라, 궁극기를 훔쳐 쓰는 사일러스의 체감 위협이 커져 밴 대상으로 지목되기 쉬워졌습니다.",
+          "candidateNoteId": null,
+          "verified": false,
+          "confidence": "medium"
+        },
+        {
+          "text": "카시오페아 R 석화의 응시 주문력 계수가 50%→75%로 상향되어, 이를 훔쳐 쓰는 사일러스의 광역 CC·피해 기대값이 올라갔습니다.",
+          "candidateNoteId": "note:26.18:champion:cassiopeia:8209fcaf",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "카사딘 R 균열 이동 기본 피해량이 70/90/110→80/95/110으로 상향돼, 훔친 궁극기 중 저렙 구간 딜이 개선됐습니다.",
+          "candidateNoteId": "note:26.18:champion:kassadin:d9a6b909",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "마스터 이 R 이동 속도가 40/50/60%로 상향되어 훔쳤을 때의 기동성 이득이 커졌습니다.",
+          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8375347592",
+          "KR_8375336156",
+          "KR_8375315960",
+          "KR_8375325640",
+          "KR_8375345281",
+          "KR_8375359292",
+          "KR_8375322355",
+          "KR_8375360739",
+          "KR_8375355954",
+          "KR_8375344654"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=517,scope=all]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "사일러스 직접 변경은 없지만 궁극기 피해량을 30%→50%로 키운 증강 '승리를 위한 회전'과 카시오페아 R 계수 상향(50%→75%)이 궁극기 탈취 가치를 높여 밴률이 13.3%→17.0%로 올랐을 가능성이 큽니다.",
+        "summaryCites": [
+          "note:26.18:other:증강:35873480",
+          "note:26.18:champion:cassiopeia:8209fcaf"
+        ],
+        "summaryVerified": false
+      }
+    },
+    {
       "id": "champion:Pantheon:banRate",
       "entityType": "champion",
       "entityKey": "Pantheon",
@@ -1401,14 +1621,14 @@
       "causes": [
         {
           "text": "피오라의 공격 속도 계수가 0.625에서 0.658로 상향되어 탑 결투 구도가 불리해졌을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:피오라:74f0cb92",
-          "verified": true,
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         },
         {
           "text": "피오라의 기본 체력 재생이 4.5에서 5.05로 올라 라인 유지력이 좋아진 점도 올라프의 탑 선호도를 떨어뜨린 요인으로 볼 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:피오라:912bf6b1",
-          "verified": true,
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         },
         {
@@ -1446,7 +1666,7 @@
         "summaryCites": [
           "note:26.18:champion:피오라:74f0cb92"
         ],
-        "summaryVerified": true
+        "summaryVerified": false
       }
     },
     {
@@ -1479,8 +1699,8 @@
         },
         {
           "text": "경쟁 탑 라이너 피오라의 궁극기 초반 피해량이 250에서 180으로 깎이면서, 상대적으로 이렐리아가 더 위협적인 밴 우선순위로 인식됐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:피오라:cb45f0a7",
-          "verified": true,
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         }
       ],
@@ -1507,7 +1727,7 @@
           "note:26.18:item:guinsoos-rageblade:f624219b",
           "note:26.18:champion:피오라:cb45f0a7"
         ],
-        "summaryVerified": true
+        "summaryVerified": false
       }
     },
     {
@@ -2000,6 +2220,72 @@
       }
     },
     {
+      "id": "champion:Fiora:pickRate",
+      "entityType": "champion",
+      "entityKey": "Fiora",
+      "entityName": "피오라",
+      "metric": "pickRate",
+      "before": 0.0779,
+      "after": 0.0554,
+      "delta": -0.0225,
+      "ci": [
+        -0.029425487760956073,
+        -0.015599336518993888
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "구인수의 격노검 중첩 유지시간이 3초에서 4초로 늘어 지속 평타형 브루저·원거리 딜러의 가치가 올라가면서, 상대적으로 피오라의 선택 우선순위가 밀렸을 수 있습니다.",
+          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "비에고가 레벨당 공격력 증가량 3.5→4로 강화되어 근접 딜러 픽 경쟁에서 피오라 수요를 일부 흡수했을 가능성이 있습니다.",
+          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "마스터 이 궁극기 이동 속도가 40/50/60%로 상향되며 평타 기반 캐리 픽 인기가 올라, 피오라 픽률 분산에 영향을 줬을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8375365153",
+          "KR_8375379044",
+          "KR_8375332362",
+          "KR_8375329035",
+          "KR_8375390155",
+          "KR_8375392209",
+          "KR_8375367415",
+          "KR_8375318580",
+          "KR_8375356909",
+          "KR_8375335200"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=all]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "피오라 픽률이 7.8%에서 5.5%로 2.3%p 떨어졌지만 직접 조항은 없고, 구인수의 격노검 중첩 지속시간 3초→4초 등 평타 딜러 강화의 간접 파급이 유력한 설명입니다.",
+        "summaryCites": [
+          "note:26.18:item:guinsoos-rageblade:f624219b"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
       "id": "champion:LeeSin:pickRate",
       "entityType": "champion",
       "entityKey": "LeeSin",
@@ -2029,8 +2315,8 @@
         },
         {
           "text": "정글 동선 관련 스킬(사냥 본능)의 재사용 대기시간이 크게 늘어난 챔피언군이 약화되며 리 신의 상대적 선호도가 올랐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:피오라:6ebea4b2",
-          "verified": true,
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         }
       ],
@@ -2122,144 +2408,6 @@
         "summaryCites": [
           "note:26.18:item:guinsoos-rageblade:f624219b",
           "note:26.18:champion:nautilus:b6aff2b2"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Pyke:winRate",
-      "entityType": "champion",
-      "entityKey": "Pyke",
-      "entityName": "파이크",
-      "metric": "winRate",
-      "before": 0.4312210200927357,
-      "after": 0.5319148936170213,
-      "delta": 0.10069387352428555,
-      "ci": [
-        0.04546340772940351,
-        0.15507359354510553
-      ],
-      "n": {
-        "before": 647,
-        "after": 611
-      },
-      "q": 0.0030899622043913965,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "증강 '승리를 위한 회전'의 궁극기 피해량 증가가 30%→50%로 상향되어, 처형 임계값이 피해량에 직결되는 파이크 궁극기가 큰 반사이익을 얻었을 수 있습니다.",
-          "candidateNoteId": "note:26.18:other:증강:35873480",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "노틸러스 기본 공격력 61→58, Q 피해량 하향으로 경쟁 서포트 탱커가 약해져 파이크의 상대적 입지가 개선됐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "세라핀 E 재사용 대기시간이 전 구간 11초로 고정 너프되어 바텀 경쟁 서포트 풀이 약화된 영향도 고려할 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "바드 방어력이 34+레벨당 5에서 32+레벨당 4.7로 낮아져 파이크의 처형 각이 더 쉬워졌을 가능성이 있습니다.",
-          "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8375318678",
-          "KR_8375353973",
-          "KR_8375314950",
-          "KR_8375347493",
-          "KR_8375373250",
-          "KR_8375376355",
-          "KR_8375314942",
-          "KR_8375384286",
-          "KR_8375381460",
-          "KR_8375391363"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=555,scope=all]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "파이크 승률이 43.1%→53.2%(+10.1%p, n=647→611)로 급등했는데, 직접 조항은 없고 증강 '승리를 위한 회전'의 궁극기 피해량 30%→50% 상향이 가장 유력한 간접 요인입니다.",
-        "summaryCites": [
-          "note:26.18:other:증강:35873480"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Aatrox:TOP:winRate",
-      "entityType": "champion",
-      "entityKey": "Aatrox",
-      "entityName": "아트록스",
-      "metric": "winRate",
-      "before": 0.5087108013937283,
-      "after": 0.40822784810126583,
-      "delta": -0.10048295329246243,
-      "ci": [
-        -0.17841354602941667,
-        -0.02087660522019294
-      ],
-      "n": {
-        "before": 287,
-        "after": 316
-      },
-      "q": 0.06947657529205611,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "이번 패치에서 '끝없는 갈증' 패시브 기본 피해량이 기존 3~16 선형 증가에서 3 + 9레벨까지 레벨당 0.5, 이후 레벨당 1로 바뀌며 중반 구간 딜·회복이 크게 줄었습니다. 아트록스 라인전 지속력 손실과 직결되는 변경입니다.",
-          "candidateNoteId": "note:26.18:champion:피오라:624ce4d1",
-          "verified": true,
-          "confidence": "high"
-        },
-        {
-          "text": "주문력 전환 계수가 추가 공격력 기준에서 총공격력 기준으로 조정되며 근접 브루저 계열의 아이템 효율이 흔들려, 아트록스 빌드 가치가 간접적으로 하락했을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:피오라:ac5b4a4d",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "구인수의 격노검 중첩 지속시간이 3초에서 4초로 늘어 지속 평타형 탑 챔피언의 대치 능력이 올라갔고, 그 결과 아트록스의 상대 매치업이 불리해졌을 가능성이 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8375365095",
-          "KR_8375362768",
-          "KR_8375317311",
-          "KR_8375353260",
-          "KR_8375355344",
-          "KR_8375367558",
-          "KR_8375322177",
-          "KR_8375392209",
-          "KR_8375358771",
-          "KR_8375390761"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=266,scope=position,position=TOP]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "아트록스 탑 승률이 50.9%에서 40.8%로 10.0%p 급락했는데, '끝없는 갈증' 기본 피해량이 레벨당 0.5 증가 구조로 바뀐 너프가 가장 유력한 원인입니다.",
-        "summaryCites": [
-          "note:26.18:champion:피오라:624ce4d1"
         ],
         "summaryVerified": true
       }
@@ -2546,79 +2694,6 @@
         "summaryCites": [
           "note:26.18:champion:seraphine:4519a08c",
           "note:26.18:champion:nautilus:b6aff2b2"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Sylas:banRate",
-      "entityType": "champion",
-      "entityKey": "Sylas",
-      "entityName": "사일러스",
-      "metric": "banRate",
-      "before": 0.1328,
-      "after": 0.1699,
-      "delta": 0.037099999999999994,
-      "ci": [
-        0.02717704458705339,
-        0.047021962414862645
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "증강 '승리를 위한 회전'의 궁극기 피해량 증가가 30%→50%로 올라, 궁극기를 훔쳐 쓰는 사일러스의 체감 위협이 커져 밴 대상으로 지목되기 쉬워졌습니다.",
-          "candidateNoteId": "note:26.18:other:증강:35873480",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "카시오페아 R 석화의 응시 주문력 계수가 50%→75%로 상향되어, 이를 훔쳐 쓰는 사일러스의 광역 CC·피해 기대값이 올라갔습니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:8209fcaf",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카사딘 R 균열 이동 기본 피해량이 70/90/110→80/95/110으로 상향돼, 훔친 궁극기 중 저렙 구간 딜이 개선됐습니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d9a6b909",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "마스터 이 R 이동 속도가 40/50/60%로 상향되어 훔쳤을 때의 기동성 이득이 커졌습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8375347592",
-          "KR_8375336156",
-          "KR_8375315960",
-          "KR_8375325640",
-          "KR_8375345281",
-          "KR_8375359292",
-          "KR_8375322355",
-          "KR_8375360739",
-          "KR_8375355954",
-          "KR_8375344654"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=517,scope=all]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-aram:-mayhem"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "사일러스 직접 변경은 없지만 궁극기 피해량을 30%→50%로 키운 증강 '승리를 위한 회전'과 카시오페아 R 계수 상향(50%→75%)이 궁극기 탈취 가치를 높여 밴률이 13.3%→17.0%로 올랐을 가능성이 큽니다.",
-        "summaryCites": [
-          "note:26.18:other:증강:35873480",
-          "note:26.18:champion:cassiopeia:8209fcaf"
         ],
         "summaryVerified": true
       }
@@ -3177,8 +3252,8 @@
         },
         {
           "text": "'궁극의 히드라' 증강 조정이 히드라 계열 아이템 선택 흐름에 영향을 준 가능성이 있습니다.",
-          "candidateNoteId": "note:26.18:other:증강:496fcfff",
-          "verified": true,
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         }
       ],
@@ -3531,8 +3606,8 @@
         },
         {
           "text": "피오라 R 계열 피해량 하향(250/335/420 → 180/300/420) 등 탑 경쟁 챔피언 약화가 자헨의 상대적 지표를 끌어올린 요인일 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:피오라:cb45f0a7",
-          "verified": true,
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         }
       ],
@@ -3557,139 +3632,6 @@
         "summary": "자헨(탑) 승률이 47.8%→53.0%로 5.2%p 올랐지만 95% CI가 [-3.5%p, 13.8%p]로 0을 포함해, 구인수의 격노검 중첩 지속시간 4초 연장 같은 간접 요인 외에는 확정 근거가 약합니다.",
         "summaryCites": [
           "note:26.18:item:guinsoos-rageblade:f624219b"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Fiora:winRate",
-      "entityType": "champion",
-      "entityKey": "Fiora",
-      "entityName": "피오라",
-      "metric": "winRate",
-      "before": 0.5096277278562259,
-      "after": 0.4602888086642599,
-      "delta": -0.04933891919196598,
-      "ci": [
-        -0.10329589799032993,
-        0.00509654375060431
-      ],
-      "n": {
-        "before": 779,
-        "after": 554
-      },
-      "q": 0.24669565792619028,
-      "status": "announced-inconsistent",
-      "matchedNoteId": "note:26.18:champion:피오라:6f1542ba",
-      "matchedNoteIds": [
-        "note:26.18:champion:피오라:6f1542ba",
-        "note:26.18:champion:피오라:7f761812",
-        "note:26.18:champion:피오라:aaeaaede",
-        "note:26.18:champion:피오라:aaeaaede-2",
-        "note:26.18:champion:피오라:8f0268f5",
-        "note:26.18:champion:피오라:69d227f2",
-        "note:26.18:champion:피오라:3c1c56de",
-        "note:26.18:champion:피오라:8d85408a",
-        "note:26.18:champion:피오라:ac0de268",
-        "note:26.18:champion:피오라:758023c0",
-        "note:26.18:champion:피오라:758023c0-2",
-        "note:26.18:champion:피오라:fa816596",
-        "note:26.18:champion:피오라:3889a54d",
-        "note:26.18:champion:피오라:3889a54d-2",
-        "note:26.18:champion:피오라:6cf0a04f",
-        "note:26.18:champion:피오라:65334be6",
-        "note:26.18:champion:피오라:65334be6-2",
-        "note:26.18:champion:피오라:c5a4bf69",
-        "note:26.18:champion:피오라:98ec736c",
-        "note:26.18:champion:피오라:98ec736c-2",
-        "note:26.18:champion:피오라:98ec736c-3",
-        "note:26.18:champion:피오라:bf5d9696",
-        "note:26.18:champion:피오라:a7fb99f1",
-        "note:26.18:champion:피오라:a7fb99f1-2",
-        "note:26.18:champion:피오라:55ede34d",
-        "note:26.18:champion:피오라:55ede34d-2",
-        "note:26.18:champion:피오라:48ae7018",
-        "note:26.18:champion:피오라:48ae7018-2",
-        "note:26.18:champion:피오라:24bf2916",
-        "note:26.18:champion:피오라:24bf2916-2",
-        "note:26.18:champion:피오라:be03f26c",
-        "note:26.18:champion:피오라:13b4ff5b",
-        "note:26.18:champion:피오라:eaf39cd9",
-        "note:26.18:champion:피오라:eaf39cd9-2",
-        "note:26.18:champion:피오라:9f5a7c71",
-        "note:26.18:champion:피오라:38d23539",
-        "note:26.18:champion:피오라:4320c6b0",
-        "note:26.18:champion:피오라:54ac6e21",
-        "note:26.18:champion:피오라:8a13f058",
-        "note:26.18:champion:피오라:1e7de4b9",
-        "note:26.18:champion:피오라:a8027822",
-        "note:26.18:champion:피오라:953f570f",
-        "note:26.18:champion:피오라:771e99e7",
-        "note:26.18:champion:피오라:5526f860",
-        "note:26.18:champion:피오라:912bf6b1",
-        "note:26.18:champion:피오라:e3c72b05",
-        "note:26.18:champion:피오라:096eae9b",
-        "note:26.18:champion:피오라:a674baca",
-        "note:26.18:champion:피오라:65b34081",
-        "note:26.18:champion:피오라:ac5b4a4d",
-        "note:26.18:champion:피오라:16150c0d",
-        "note:26.18:champion:피오라:74f0cb92",
-        "note:26.18:champion:피오라:51a9e051",
-        "note:26.18:champion:피오라:1e265a2f",
-        "note:26.18:champion:피오라:57228db8",
-        "note:26.18:champion:피오라:7e8e4fab",
-        "note:26.18:champion:피오라:1d7650be",
-        "note:26.18:champion:피오라:35b385b4",
-        "note:26.18:champion:피오라:2b7d8ffc",
-        "note:26.18:champion:피오라:6a4cc57e",
-        "note:26.18:champion:피오라:744cdab9",
-        "note:26.18:champion:피오라:624ce4d1",
-        "note:26.18:champion:피오라:6ebea4b2",
-        "note:26.18:champion:피오라:cb45f0a7",
-        "note:26.18:champion:피오라:9cff7f57"
-      ],
-      "causes": [
-        {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간이 3초에서 4초로 늘어, 지속 평타 딜러들의 맞라인·후반 교전 강도가 올라가면서 피오라의 상대적 우위가 줄었을 수 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "'승리를 위한 회전' 증강의 궁극기 피해량 증가가 30%에서 50%로 상향되어, 궁극기 한 방 위주 조합이 강해지며 지속 딜 위주의 피오라가 불리해졌을 가능성이 있습니다.",
-          "candidateNoteId": "note:26.18:other:증강:35873480",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "마스터 이의 궁극기 이동 속도와 레벨당 방어력이 함께 상향되어, 대표적인 결투 상대와의 1대1 구도에서 피오라가 밀릴 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8375365153",
-          "KR_8375379044",
-          "KR_8375332362",
-          "KR_8375329035",
-          "KR_8375390155",
-          "KR_8375392209",
-          "KR_8375367415",
-          "KR_8375318580",
-          "KR_8375356909",
-          "KR_8375335200"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=all]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "피오라 승률은 51.0%에서 46.0%로 -4.9%p 하락했지만 95% CI가 [-10.3%p, 0.5%p]로 0을 포함해 표본 변동일 소지가 크며, 간접 요인으로는 구인수의 격노검 중첩 지속시간 4초 상향과 마스터 이 강화가 꼽힙니다.",
-        "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b",
-          "note:26.18:champion:masteryi:c898ee27"
         ],
         "summaryVerified": true
       }
@@ -3760,138 +3702,6 @@
         "summaryCites": [
           "note:26.18:champion:kassadin:d631af52",
           "note:26.18:champion:ekko:dfd6f002"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Fiora:TOP:winRate",
-      "entityType": "champion",
-      "entityKey": "Fiora",
-      "entityName": "피오라",
-      "metric": "winRate",
-      "before": 0.5076708507670851,
-      "after": 0.46285714285714286,
-      "delta": -0.04481370790994221,
-      "ci": [
-        -0.10060145684867308,
-        0.011436688607669498
-      ],
-      "n": {
-        "before": 717,
-        "after": 525
-      },
-      "q": 0.3314627160249767,
-      "status": "announced-inconsistent",
-      "matchedNoteId": "note:26.18:champion:피오라:6f1542ba",
-      "matchedNoteIds": [
-        "note:26.18:champion:피오라:6f1542ba",
-        "note:26.18:champion:피오라:7f761812",
-        "note:26.18:champion:피오라:aaeaaede",
-        "note:26.18:champion:피오라:aaeaaede-2",
-        "note:26.18:champion:피오라:8f0268f5",
-        "note:26.18:champion:피오라:69d227f2",
-        "note:26.18:champion:피오라:3c1c56de",
-        "note:26.18:champion:피오라:8d85408a",
-        "note:26.18:champion:피오라:ac0de268",
-        "note:26.18:champion:피오라:758023c0",
-        "note:26.18:champion:피오라:758023c0-2",
-        "note:26.18:champion:피오라:fa816596",
-        "note:26.18:champion:피오라:3889a54d",
-        "note:26.18:champion:피오라:3889a54d-2",
-        "note:26.18:champion:피오라:6cf0a04f",
-        "note:26.18:champion:피오라:65334be6",
-        "note:26.18:champion:피오라:65334be6-2",
-        "note:26.18:champion:피오라:c5a4bf69",
-        "note:26.18:champion:피오라:98ec736c",
-        "note:26.18:champion:피오라:98ec736c-2",
-        "note:26.18:champion:피오라:98ec736c-3",
-        "note:26.18:champion:피오라:bf5d9696",
-        "note:26.18:champion:피오라:a7fb99f1",
-        "note:26.18:champion:피오라:a7fb99f1-2",
-        "note:26.18:champion:피오라:55ede34d",
-        "note:26.18:champion:피오라:55ede34d-2",
-        "note:26.18:champion:피오라:48ae7018",
-        "note:26.18:champion:피오라:48ae7018-2",
-        "note:26.18:champion:피오라:24bf2916",
-        "note:26.18:champion:피오라:24bf2916-2",
-        "note:26.18:champion:피오라:be03f26c",
-        "note:26.18:champion:피오라:13b4ff5b",
-        "note:26.18:champion:피오라:eaf39cd9",
-        "note:26.18:champion:피오라:eaf39cd9-2",
-        "note:26.18:champion:피오라:9f5a7c71",
-        "note:26.18:champion:피오라:38d23539",
-        "note:26.18:champion:피오라:4320c6b0",
-        "note:26.18:champion:피오라:54ac6e21",
-        "note:26.18:champion:피오라:8a13f058",
-        "note:26.18:champion:피오라:1e7de4b9",
-        "note:26.18:champion:피오라:a8027822",
-        "note:26.18:champion:피오라:953f570f",
-        "note:26.18:champion:피오라:771e99e7",
-        "note:26.18:champion:피오라:5526f860",
-        "note:26.18:champion:피오라:912bf6b1",
-        "note:26.18:champion:피오라:e3c72b05",
-        "note:26.18:champion:피오라:096eae9b",
-        "note:26.18:champion:피오라:a674baca",
-        "note:26.18:champion:피오라:65b34081",
-        "note:26.18:champion:피오라:ac5b4a4d",
-        "note:26.18:champion:피오라:16150c0d",
-        "note:26.18:champion:피오라:74f0cb92",
-        "note:26.18:champion:피오라:51a9e051",
-        "note:26.18:champion:피오라:1e265a2f",
-        "note:26.18:champion:피오라:57228db8",
-        "note:26.18:champion:피오라:7e8e4fab",
-        "note:26.18:champion:피오라:1d7650be",
-        "note:26.18:champion:피오라:35b385b4",
-        "note:26.18:champion:피오라:2b7d8ffc",
-        "note:26.18:champion:피오라:6a4cc57e",
-        "note:26.18:champion:피오라:744cdab9",
-        "note:26.18:champion:피오라:624ce4d1",
-        "note:26.18:champion:피오라:6ebea4b2",
-        "note:26.18:champion:피오라:cb45f0a7",
-        "note:26.18:champion:피오라:9cff7f57"
-      ],
-      "causes": [
-        {
-          "text": "구인수의 격노검 들끓는 일격 중첩 유지가 3초에서 4초로 늘어 공속 기반 지속딜 챔피언들이 강해지면서, 결투로 이득을 보던 피오라의 탑 상성이 상대적으로 나빠졌을 수 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "마스터 이가 레벨당 방어력 4.5에서 5로 늘고 궁극기 이동 속도도 40/50/60%로 올라, 스플릿·듀얼 구도에서 피오라의 우위가 줄었을 가능성이 있습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "비에고가 레벨당 공격력 4로 상향되고 지속 효과 회복량이 공격력·공속·체력 비례로 확장되어, 브루저 대면 구도에서 피오라가 손해를 봤을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8375365153",
-          "KR_8375379044",
-          "KR_8375332362",
-          "KR_8375329035",
-          "KR_8375390155",
-          "KR_8375392209",
-          "KR_8375367415",
-          "KR_8375318580",
-          "KR_8375356909",
-          "KR_8375335200"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=TOP]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "피오라 탑 승률이 50.8%에서 46.3%로 4.5%p 내렸지만 95% 신뢰구간이 0을 포함해 유의성은 약하며, 구인수의 격노검 중첩 4초 연장 등 대면 챔피언 강화가 간접 요인으로 보입니다.",
-        "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
         ],
         "summaryVerified": true
       }
@@ -4227,8 +4037,8 @@
         },
         {
           "text": "증강 '승리를 위한 회전'의 궁극기 피해량 증가가 30%에서 50%로 상향되어, 궁극기 의존도가 높은 자헨 픽의 기대값이 올랐을 가능성이 있습니다.",
-          "candidateNoteId": "note:26.18:other:증강:35873480",
-          "verified": true,
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         }
       ],
@@ -4620,8 +4430,8 @@
         },
         {
           "text": "경쟁 라이너 피오라의 R - 무한의 구속 초반 피해량이 250에서 180으로 깎이면서, 같은 라인 대안인 자헨으로 픽이 이동했을 가능성이 있습니다.",
-          "candidateNoteId": "note:26.18:champion:피오라:cb45f0a7",
-          "verified": true,
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         }
       ],
@@ -4648,7 +4458,7 @@
           "note:26.18:item:guinsoos-rageblade:f624219b",
           "note:26.18:champion:피오라:cb45f0a7"
         ],
-        "summaryVerified": true
+        "summaryVerified": false
       }
     },
     {
@@ -4678,14 +4488,14 @@
       "causes": [
         {
           "text": "탑 경쟁 챔피언인 피오라의 궁극기 피해량이 초·중반 구간에서 하향되어(250/335/420 → 180/300/420) 탑 라인 대체 픽으로 자헨 수요가 옮겨간 것으로 보입니다.",
-          "candidateNoteId": "note:26.18:champion:피오라:cb45f0a7",
-          "verified": true,
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         },
         {
           "text": "피오라 기본 공격 속도 하향(0.644 → 0.625)으로 라인전 주도권이 약해져, 브루저 슬롯에서 자헨 선호도가 올라갈 여지가 있습니다.",
-          "candidateNoteId": "note:26.18:champion:피오라:744cdab9",
-          "verified": true,
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         },
         {
@@ -4718,7 +4528,7 @@
           "note:26.18:champion:피오라:cb45f0a7",
           "note:26.18:champion:피오라:744cdab9"
         ],
-        "summaryVerified": true
+        "summaryVerified": false
       }
     },
     {
@@ -4897,8 +4707,8 @@
         },
         {
           "text": "정글·탑 경쟁자 피오라 계열 스킬이 전반적으로 하향되어, 상대적으로 마스터 이의 선택 가치가 올라간 반사 효과일 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:피오라:13b4ff5b",
-          "verified": true,
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         }
       ],
@@ -5521,8 +5331,8 @@
       "causes": [
         {
           "text": "아레나 증강 체력 목록에서 바드가 '매우 낮음'으로 재분류돼 특정 모드 표본 구성이 달라졌을 수 있습니다.",
-          "candidateNoteId": "note:26.18:other:증강:c51e841d",
-          "verified": true,
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         }
       ],
@@ -5575,8 +5385,8 @@
       "causes": [
         {
           "text": "아레나 증강 체력 목록에서 바드가 '매우 낮음'으로 내려가, 일부 모드 성능이 함께 흔들릴 수 있습니다.",
-          "candidateNoteId": "note:26.18:other:증강:c51e841d",
-          "verified": true,
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         }
       ],
@@ -5602,7 +5412,7 @@
         "summaryCites": [
           "note:26.18:other:증강:c51e841d"
         ],
-        "summaryVerified": true
+        "summaryVerified": false
       }
     },
     {
@@ -6609,117 +6419,6 @@
       }
     },
     {
-      "id": "champion:Fiora:BOTTOM:pickRate",
-      "entityType": "champion",
-      "entityKey": "Fiora",
-      "entityName": "피오라",
-      "metric": "pickRate",
-      "before": 0.0016,
-      "after": 0.0015,
-      "delta": -0.00010000000000000005,
-      "ci": [
-        -0.0012594420785513494,
-        0.0010515132039057935
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0.9972592084440061,
-      "status": "announced-inconsistent",
-      "matchedNoteId": "note:26.18:champion:피오라:6f1542ba",
-      "matchedNoteIds": [
-        "note:26.18:champion:피오라:6f1542ba",
-        "note:26.18:champion:피오라:7f761812",
-        "note:26.18:champion:피오라:aaeaaede",
-        "note:26.18:champion:피오라:aaeaaede-2",
-        "note:26.18:champion:피오라:8f0268f5",
-        "note:26.18:champion:피오라:69d227f2",
-        "note:26.18:champion:피오라:3c1c56de",
-        "note:26.18:champion:피오라:8d85408a",
-        "note:26.18:champion:피오라:ac0de268",
-        "note:26.18:champion:피오라:758023c0",
-        "note:26.18:champion:피오라:758023c0-2",
-        "note:26.18:champion:피오라:fa816596",
-        "note:26.18:champion:피오라:3889a54d",
-        "note:26.18:champion:피오라:3889a54d-2",
-        "note:26.18:champion:피오라:6cf0a04f",
-        "note:26.18:champion:피오라:65334be6",
-        "note:26.18:champion:피오라:65334be6-2",
-        "note:26.18:champion:피오라:c5a4bf69",
-        "note:26.18:champion:피오라:98ec736c",
-        "note:26.18:champion:피오라:98ec736c-2",
-        "note:26.18:champion:피오라:98ec736c-3",
-        "note:26.18:champion:피오라:bf5d9696",
-        "note:26.18:champion:피오라:a7fb99f1",
-        "note:26.18:champion:피오라:a7fb99f1-2",
-        "note:26.18:champion:피오라:55ede34d",
-        "note:26.18:champion:피오라:55ede34d-2",
-        "note:26.18:champion:피오라:48ae7018",
-        "note:26.18:champion:피오라:48ae7018-2",
-        "note:26.18:champion:피오라:24bf2916",
-        "note:26.18:champion:피오라:24bf2916-2",
-        "note:26.18:champion:피오라:be03f26c",
-        "note:26.18:champion:피오라:13b4ff5b",
-        "note:26.18:champion:피오라:eaf39cd9",
-        "note:26.18:champion:피오라:eaf39cd9-2",
-        "note:26.18:champion:피오라:9f5a7c71",
-        "note:26.18:champion:피오라:38d23539",
-        "note:26.18:champion:피오라:4320c6b0",
-        "note:26.18:champion:피오라:54ac6e21",
-        "note:26.18:champion:피오라:8a13f058",
-        "note:26.18:champion:피오라:1e7de4b9",
-        "note:26.18:champion:피오라:a8027822",
-        "note:26.18:champion:피오라:953f570f",
-        "note:26.18:champion:피오라:771e99e7",
-        "note:26.18:champion:피오라:5526f860",
-        "note:26.18:champion:피오라:912bf6b1",
-        "note:26.18:champion:피오라:e3c72b05",
-        "note:26.18:champion:피오라:096eae9b",
-        "note:26.18:champion:피오라:a674baca",
-        "note:26.18:champion:피오라:65b34081",
-        "note:26.18:champion:피오라:ac5b4a4d",
-        "note:26.18:champion:피오라:16150c0d",
-        "note:26.18:champion:피오라:74f0cb92",
-        "note:26.18:champion:피오라:51a9e051",
-        "note:26.18:champion:피오라:1e265a2f",
-        "note:26.18:champion:피오라:57228db8",
-        "note:26.18:champion:피오라:7e8e4fab",
-        "note:26.18:champion:피오라:1d7650be",
-        "note:26.18:champion:피오라:35b385b4",
-        "note:26.18:champion:피오라:2b7d8ffc",
-        "note:26.18:champion:피오라:6a4cc57e",
-        "note:26.18:champion:피오라:744cdab9",
-        "note:26.18:champion:피오라:624ce4d1",
-        "note:26.18:champion:피오라:6ebea4b2",
-        "note:26.18:champion:피오라:cb45f0a7",
-        "note:26.18:champion:피오라:9cff7f57"
-      ],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375365153",
-          "KR_8375379044",
-          "KR_8375332362",
-          "KR_8375329035",
-          "KR_8375390155",
-          "KR_8375392209",
-          "KR_8375367415",
-          "KR_8375318580",
-          "KR_8375356909",
-          "KR_8375335200"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=BOTTOM]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "피오라 원딜 픽률은 0.2%에서 0.1%로 변동 폭이 신뢰구간(-0.1%p~0.1%p) 안에 있어 통계적으로 유의하지 않은 표본 노이즈로 보입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
-    },
-    {
       "id": "champion:Seraphine:MIDDLE:pickRate",
       "entityType": "champion",
       "entityKey": "Seraphine",
@@ -6762,117 +6461,6 @@
       "llm": {
         "skipped": false,
         "summary": "세라핀 미드 픽률은 0.1%로 변화 -0.0%p, 95% 신뢰구간 [-0.1%p, 0.1%p]에 0이 포함돼 통계적으로 의미 있는 변화로 보기 어렵습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Fiora:JUNGLE:pickRate",
-      "entityType": "champion",
-      "entityKey": "Fiora",
-      "entityName": "피오라",
-      "metric": "pickRate",
-      "before": 0.0001,
-      "after": 0,
-      "delta": -0.0001,
-      "ci": [
-        -0.0005662834557441313,
-        0.0002927425874911598
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0.5774932843661809,
-      "status": "announced-inconsistent",
-      "matchedNoteId": "note:26.18:champion:피오라:6f1542ba",
-      "matchedNoteIds": [
-        "note:26.18:champion:피오라:6f1542ba",
-        "note:26.18:champion:피오라:7f761812",
-        "note:26.18:champion:피오라:aaeaaede",
-        "note:26.18:champion:피오라:aaeaaede-2",
-        "note:26.18:champion:피오라:8f0268f5",
-        "note:26.18:champion:피오라:69d227f2",
-        "note:26.18:champion:피오라:3c1c56de",
-        "note:26.18:champion:피오라:8d85408a",
-        "note:26.18:champion:피오라:ac0de268",
-        "note:26.18:champion:피오라:758023c0",
-        "note:26.18:champion:피오라:758023c0-2",
-        "note:26.18:champion:피오라:fa816596",
-        "note:26.18:champion:피오라:3889a54d",
-        "note:26.18:champion:피오라:3889a54d-2",
-        "note:26.18:champion:피오라:6cf0a04f",
-        "note:26.18:champion:피오라:65334be6",
-        "note:26.18:champion:피오라:65334be6-2",
-        "note:26.18:champion:피오라:c5a4bf69",
-        "note:26.18:champion:피오라:98ec736c",
-        "note:26.18:champion:피오라:98ec736c-2",
-        "note:26.18:champion:피오라:98ec736c-3",
-        "note:26.18:champion:피오라:bf5d9696",
-        "note:26.18:champion:피오라:a7fb99f1",
-        "note:26.18:champion:피오라:a7fb99f1-2",
-        "note:26.18:champion:피오라:55ede34d",
-        "note:26.18:champion:피오라:55ede34d-2",
-        "note:26.18:champion:피오라:48ae7018",
-        "note:26.18:champion:피오라:48ae7018-2",
-        "note:26.18:champion:피오라:24bf2916",
-        "note:26.18:champion:피오라:24bf2916-2",
-        "note:26.18:champion:피오라:be03f26c",
-        "note:26.18:champion:피오라:13b4ff5b",
-        "note:26.18:champion:피오라:eaf39cd9",
-        "note:26.18:champion:피오라:eaf39cd9-2",
-        "note:26.18:champion:피오라:9f5a7c71",
-        "note:26.18:champion:피오라:38d23539",
-        "note:26.18:champion:피오라:4320c6b0",
-        "note:26.18:champion:피오라:54ac6e21",
-        "note:26.18:champion:피오라:8a13f058",
-        "note:26.18:champion:피오라:1e7de4b9",
-        "note:26.18:champion:피오라:a8027822",
-        "note:26.18:champion:피오라:953f570f",
-        "note:26.18:champion:피오라:771e99e7",
-        "note:26.18:champion:피오라:5526f860",
-        "note:26.18:champion:피오라:912bf6b1",
-        "note:26.18:champion:피오라:e3c72b05",
-        "note:26.18:champion:피오라:096eae9b",
-        "note:26.18:champion:피오라:a674baca",
-        "note:26.18:champion:피오라:65b34081",
-        "note:26.18:champion:피오라:ac5b4a4d",
-        "note:26.18:champion:피오라:16150c0d",
-        "note:26.18:champion:피오라:74f0cb92",
-        "note:26.18:champion:피오라:51a9e051",
-        "note:26.18:champion:피오라:1e265a2f",
-        "note:26.18:champion:피오라:57228db8",
-        "note:26.18:champion:피오라:7e8e4fab",
-        "note:26.18:champion:피오라:1d7650be",
-        "note:26.18:champion:피오라:35b385b4",
-        "note:26.18:champion:피오라:2b7d8ffc",
-        "note:26.18:champion:피오라:6a4cc57e",
-        "note:26.18:champion:피오라:744cdab9",
-        "note:26.18:champion:피오라:624ce4d1",
-        "note:26.18:champion:피오라:6ebea4b2",
-        "note:26.18:champion:피오라:cb45f0a7",
-        "note:26.18:champion:피오라:9cff7f57"
-      ],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375365153",
-          "KR_8375379044",
-          "KR_8375332362",
-          "KR_8375329035",
-          "KR_8375390155",
-          "KR_8375392209",
-          "KR_8375367415",
-          "KR_8375318580",
-          "KR_8375356909",
-          "KR_8375335200"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=JUNGLE]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -7661,111 +7249,6 @@
       }
     },
     {
-      "id": "champion:Fiora:pickRate",
-      "entityType": "champion",
-      "entityKey": "Fiora",
-      "entityName": "피오라",
-      "metric": "pickRate",
-      "before": 0.0779,
-      "after": 0.0554,
-      "delta": -0.0225,
-      "ci": [
-        -0.029425487760956073,
-        -0.015599336518993888
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0,
-      "status": "announced-consistent",
-      "matchedNoteId": "note:26.18:champion:피오라:6f1542ba",
-      "matchedNoteIds": [
-        "note:26.18:champion:피오라:6f1542ba",
-        "note:26.18:champion:피오라:7f761812",
-        "note:26.18:champion:피오라:aaeaaede",
-        "note:26.18:champion:피오라:aaeaaede-2",
-        "note:26.18:champion:피오라:8f0268f5",
-        "note:26.18:champion:피오라:69d227f2",
-        "note:26.18:champion:피오라:3c1c56de",
-        "note:26.18:champion:피오라:8d85408a",
-        "note:26.18:champion:피오라:ac0de268",
-        "note:26.18:champion:피오라:758023c0",
-        "note:26.18:champion:피오라:758023c0-2",
-        "note:26.18:champion:피오라:fa816596",
-        "note:26.18:champion:피오라:3889a54d",
-        "note:26.18:champion:피오라:3889a54d-2",
-        "note:26.18:champion:피오라:6cf0a04f",
-        "note:26.18:champion:피오라:65334be6",
-        "note:26.18:champion:피오라:65334be6-2",
-        "note:26.18:champion:피오라:c5a4bf69",
-        "note:26.18:champion:피오라:98ec736c",
-        "note:26.18:champion:피오라:98ec736c-2",
-        "note:26.18:champion:피오라:98ec736c-3",
-        "note:26.18:champion:피오라:bf5d9696",
-        "note:26.18:champion:피오라:a7fb99f1",
-        "note:26.18:champion:피오라:a7fb99f1-2",
-        "note:26.18:champion:피오라:55ede34d",
-        "note:26.18:champion:피오라:55ede34d-2",
-        "note:26.18:champion:피오라:48ae7018",
-        "note:26.18:champion:피오라:48ae7018-2",
-        "note:26.18:champion:피오라:24bf2916",
-        "note:26.18:champion:피오라:24bf2916-2",
-        "note:26.18:champion:피오라:be03f26c",
-        "note:26.18:champion:피오라:13b4ff5b",
-        "note:26.18:champion:피오라:eaf39cd9",
-        "note:26.18:champion:피오라:eaf39cd9-2",
-        "note:26.18:champion:피오라:9f5a7c71",
-        "note:26.18:champion:피오라:38d23539",
-        "note:26.18:champion:피오라:4320c6b0",
-        "note:26.18:champion:피오라:54ac6e21",
-        "note:26.18:champion:피오라:8a13f058",
-        "note:26.18:champion:피오라:1e7de4b9",
-        "note:26.18:champion:피오라:a8027822",
-        "note:26.18:champion:피오라:953f570f",
-        "note:26.18:champion:피오라:771e99e7",
-        "note:26.18:champion:피오라:5526f860",
-        "note:26.18:champion:피오라:912bf6b1",
-        "note:26.18:champion:피오라:e3c72b05",
-        "note:26.18:champion:피오라:096eae9b",
-        "note:26.18:champion:피오라:a674baca",
-        "note:26.18:champion:피오라:65b34081",
-        "note:26.18:champion:피오라:ac5b4a4d",
-        "note:26.18:champion:피오라:16150c0d",
-        "note:26.18:champion:피오라:74f0cb92",
-        "note:26.18:champion:피오라:51a9e051",
-        "note:26.18:champion:피오라:1e265a2f",
-        "note:26.18:champion:피오라:57228db8",
-        "note:26.18:champion:피오라:7e8e4fab",
-        "note:26.18:champion:피오라:1d7650be",
-        "note:26.18:champion:피오라:35b385b4",
-        "note:26.18:champion:피오라:2b7d8ffc",
-        "note:26.18:champion:피오라:6a4cc57e",
-        "note:26.18:champion:피오라:744cdab9",
-        "note:26.18:champion:피오라:624ce4d1",
-        "note:26.18:champion:피오라:6ebea4b2",
-        "note:26.18:champion:피오라:cb45f0a7",
-        "note:26.18:champion:피오라:9cff7f57"
-      ],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375365153",
-          "KR_8375379044",
-          "KR_8375332362",
-          "KR_8375329035",
-          "KR_8375390155",
-          "KR_8375392209",
-          "KR_8375367415",
-          "KR_8375318580",
-          "KR_8375356909",
-          "KR_8375335200"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=all]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic"
-      }
-    },
-    {
       "id": "champion:Bard:pickRate",
       "entityType": "champion",
       "entityKey": "Bard",
@@ -7845,111 +7328,6 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=432,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-bard"
-      }
-    },
-    {
-      "id": "champion:Fiora:TOP:pickRate",
-      "entityType": "champion",
-      "entityKey": "Fiora",
-      "entityName": "피오라",
-      "metric": "pickRate",
-      "before": 0.0717,
-      "after": 0.0525,
-      "delta": -0.019200000000000002,
-      "ci": [
-        -0.025903396320829393,
-        -0.012520605930500386
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 3.923564997198664e-7,
-      "status": "announced-consistent",
-      "matchedNoteId": "note:26.18:champion:피오라:6f1542ba",
-      "matchedNoteIds": [
-        "note:26.18:champion:피오라:6f1542ba",
-        "note:26.18:champion:피오라:7f761812",
-        "note:26.18:champion:피오라:aaeaaede",
-        "note:26.18:champion:피오라:aaeaaede-2",
-        "note:26.18:champion:피오라:8f0268f5",
-        "note:26.18:champion:피오라:69d227f2",
-        "note:26.18:champion:피오라:3c1c56de",
-        "note:26.18:champion:피오라:8d85408a",
-        "note:26.18:champion:피오라:ac0de268",
-        "note:26.18:champion:피오라:758023c0",
-        "note:26.18:champion:피오라:758023c0-2",
-        "note:26.18:champion:피오라:fa816596",
-        "note:26.18:champion:피오라:3889a54d",
-        "note:26.18:champion:피오라:3889a54d-2",
-        "note:26.18:champion:피오라:6cf0a04f",
-        "note:26.18:champion:피오라:65334be6",
-        "note:26.18:champion:피오라:65334be6-2",
-        "note:26.18:champion:피오라:c5a4bf69",
-        "note:26.18:champion:피오라:98ec736c",
-        "note:26.18:champion:피오라:98ec736c-2",
-        "note:26.18:champion:피오라:98ec736c-3",
-        "note:26.18:champion:피오라:bf5d9696",
-        "note:26.18:champion:피오라:a7fb99f1",
-        "note:26.18:champion:피오라:a7fb99f1-2",
-        "note:26.18:champion:피오라:55ede34d",
-        "note:26.18:champion:피오라:55ede34d-2",
-        "note:26.18:champion:피오라:48ae7018",
-        "note:26.18:champion:피오라:48ae7018-2",
-        "note:26.18:champion:피오라:24bf2916",
-        "note:26.18:champion:피오라:24bf2916-2",
-        "note:26.18:champion:피오라:be03f26c",
-        "note:26.18:champion:피오라:13b4ff5b",
-        "note:26.18:champion:피오라:eaf39cd9",
-        "note:26.18:champion:피오라:eaf39cd9-2",
-        "note:26.18:champion:피오라:9f5a7c71",
-        "note:26.18:champion:피오라:38d23539",
-        "note:26.18:champion:피오라:4320c6b0",
-        "note:26.18:champion:피오라:54ac6e21",
-        "note:26.18:champion:피오라:8a13f058",
-        "note:26.18:champion:피오라:1e7de4b9",
-        "note:26.18:champion:피오라:a8027822",
-        "note:26.18:champion:피오라:953f570f",
-        "note:26.18:champion:피오라:771e99e7",
-        "note:26.18:champion:피오라:5526f860",
-        "note:26.18:champion:피오라:912bf6b1",
-        "note:26.18:champion:피오라:e3c72b05",
-        "note:26.18:champion:피오라:096eae9b",
-        "note:26.18:champion:피오라:a674baca",
-        "note:26.18:champion:피오라:65b34081",
-        "note:26.18:champion:피오라:ac5b4a4d",
-        "note:26.18:champion:피오라:16150c0d",
-        "note:26.18:champion:피오라:74f0cb92",
-        "note:26.18:champion:피오라:51a9e051",
-        "note:26.18:champion:피오라:1e265a2f",
-        "note:26.18:champion:피오라:57228db8",
-        "note:26.18:champion:피오라:7e8e4fab",
-        "note:26.18:champion:피오라:1d7650be",
-        "note:26.18:champion:피오라:35b385b4",
-        "note:26.18:champion:피오라:2b7d8ffc",
-        "note:26.18:champion:피오라:6a4cc57e",
-        "note:26.18:champion:피오라:744cdab9",
-        "note:26.18:champion:피오라:624ce4d1",
-        "note:26.18:champion:피오라:6ebea4b2",
-        "note:26.18:champion:피오라:cb45f0a7",
-        "note:26.18:champion:피오라:9cff7f57"
-      ],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375365153",
-          "KR_8375379044",
-          "KR_8375332362",
-          "KR_8375329035",
-          "KR_8375390155",
-          "KR_8375392209",
-          "KR_8375367415",
-          "KR_8375318580",
-          "KR_8375356909",
-          "KR_8375335200"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=TOP]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic"
       }
     },
     {
@@ -8076,111 +7454,6 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=245,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
-      }
-    },
-    {
-      "id": "champion:Fiora:banRate",
-      "entityType": "champion",
-      "entityKey": "Fiora",
-      "entityName": "피오라",
-      "metric": "banRate",
-      "before": 0.112,
-      "after": 0.0972,
-      "delta": -0.014800000000000008,
-      "ci": [
-        -0.02328694197380387,
-        -0.006318440071720886
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0.005098506272838864,
-      "status": "announced-consistent",
-      "matchedNoteId": "note:26.18:champion:피오라:6f1542ba",
-      "matchedNoteIds": [
-        "note:26.18:champion:피오라:6f1542ba",
-        "note:26.18:champion:피오라:7f761812",
-        "note:26.18:champion:피오라:aaeaaede",
-        "note:26.18:champion:피오라:aaeaaede-2",
-        "note:26.18:champion:피오라:8f0268f5",
-        "note:26.18:champion:피오라:69d227f2",
-        "note:26.18:champion:피오라:3c1c56de",
-        "note:26.18:champion:피오라:8d85408a",
-        "note:26.18:champion:피오라:ac0de268",
-        "note:26.18:champion:피오라:758023c0",
-        "note:26.18:champion:피오라:758023c0-2",
-        "note:26.18:champion:피오라:fa816596",
-        "note:26.18:champion:피오라:3889a54d",
-        "note:26.18:champion:피오라:3889a54d-2",
-        "note:26.18:champion:피오라:6cf0a04f",
-        "note:26.18:champion:피오라:65334be6",
-        "note:26.18:champion:피오라:65334be6-2",
-        "note:26.18:champion:피오라:c5a4bf69",
-        "note:26.18:champion:피오라:98ec736c",
-        "note:26.18:champion:피오라:98ec736c-2",
-        "note:26.18:champion:피오라:98ec736c-3",
-        "note:26.18:champion:피오라:bf5d9696",
-        "note:26.18:champion:피오라:a7fb99f1",
-        "note:26.18:champion:피오라:a7fb99f1-2",
-        "note:26.18:champion:피오라:55ede34d",
-        "note:26.18:champion:피오라:55ede34d-2",
-        "note:26.18:champion:피오라:48ae7018",
-        "note:26.18:champion:피오라:48ae7018-2",
-        "note:26.18:champion:피오라:24bf2916",
-        "note:26.18:champion:피오라:24bf2916-2",
-        "note:26.18:champion:피오라:be03f26c",
-        "note:26.18:champion:피오라:13b4ff5b",
-        "note:26.18:champion:피오라:eaf39cd9",
-        "note:26.18:champion:피오라:eaf39cd9-2",
-        "note:26.18:champion:피오라:9f5a7c71",
-        "note:26.18:champion:피오라:38d23539",
-        "note:26.18:champion:피오라:4320c6b0",
-        "note:26.18:champion:피오라:54ac6e21",
-        "note:26.18:champion:피오라:8a13f058",
-        "note:26.18:champion:피오라:1e7de4b9",
-        "note:26.18:champion:피오라:a8027822",
-        "note:26.18:champion:피오라:953f570f",
-        "note:26.18:champion:피오라:771e99e7",
-        "note:26.18:champion:피오라:5526f860",
-        "note:26.18:champion:피오라:912bf6b1",
-        "note:26.18:champion:피오라:e3c72b05",
-        "note:26.18:champion:피오라:096eae9b",
-        "note:26.18:champion:피오라:a674baca",
-        "note:26.18:champion:피오라:65b34081",
-        "note:26.18:champion:피오라:ac5b4a4d",
-        "note:26.18:champion:피오라:16150c0d",
-        "note:26.18:champion:피오라:74f0cb92",
-        "note:26.18:champion:피오라:51a9e051",
-        "note:26.18:champion:피오라:1e265a2f",
-        "note:26.18:champion:피오라:57228db8",
-        "note:26.18:champion:피오라:7e8e4fab",
-        "note:26.18:champion:피오라:1d7650be",
-        "note:26.18:champion:피오라:35b385b4",
-        "note:26.18:champion:피오라:2b7d8ffc",
-        "note:26.18:champion:피오라:6a4cc57e",
-        "note:26.18:champion:피오라:744cdab9",
-        "note:26.18:champion:피오라:624ce4d1",
-        "note:26.18:champion:피오라:6ebea4b2",
-        "note:26.18:champion:피오라:cb45f0a7",
-        "note:26.18:champion:피오라:9cff7f57"
-      ],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375365153",
-          "KR_8375379044",
-          "KR_8375332362",
-          "KR_8375329035",
-          "KR_8375390155",
-          "KR_8375392209",
-          "KR_8375367415",
-          "KR_8375318580",
-          "KR_8375356909",
-          "KR_8375335200"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=all]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic"
       }
     },
     {
@@ -8572,111 +7845,6 @@
       }
     },
     {
-      "id": "champion:Fiora:MIDDLE:pickRate",
-      "entityType": "champion",
-      "entityKey": "Fiora",
-      "entityName": "피오라",
-      "metric": "pickRate",
-      "before": 0.003,
-      "after": 0.0011,
-      "delta": -0.0019,
-      "ci": [
-        -0.0032685078179182873,
-        -0.0006506938372525077
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0.019943303987315603,
-      "status": "announced-consistent",
-      "matchedNoteId": "note:26.18:champion:피오라:6f1542ba",
-      "matchedNoteIds": [
-        "note:26.18:champion:피오라:6f1542ba",
-        "note:26.18:champion:피오라:7f761812",
-        "note:26.18:champion:피오라:aaeaaede",
-        "note:26.18:champion:피오라:aaeaaede-2",
-        "note:26.18:champion:피오라:8f0268f5",
-        "note:26.18:champion:피오라:69d227f2",
-        "note:26.18:champion:피오라:3c1c56de",
-        "note:26.18:champion:피오라:8d85408a",
-        "note:26.18:champion:피오라:ac0de268",
-        "note:26.18:champion:피오라:758023c0",
-        "note:26.18:champion:피오라:758023c0-2",
-        "note:26.18:champion:피오라:fa816596",
-        "note:26.18:champion:피오라:3889a54d",
-        "note:26.18:champion:피오라:3889a54d-2",
-        "note:26.18:champion:피오라:6cf0a04f",
-        "note:26.18:champion:피오라:65334be6",
-        "note:26.18:champion:피오라:65334be6-2",
-        "note:26.18:champion:피오라:c5a4bf69",
-        "note:26.18:champion:피오라:98ec736c",
-        "note:26.18:champion:피오라:98ec736c-2",
-        "note:26.18:champion:피오라:98ec736c-3",
-        "note:26.18:champion:피오라:bf5d9696",
-        "note:26.18:champion:피오라:a7fb99f1",
-        "note:26.18:champion:피오라:a7fb99f1-2",
-        "note:26.18:champion:피오라:55ede34d",
-        "note:26.18:champion:피오라:55ede34d-2",
-        "note:26.18:champion:피오라:48ae7018",
-        "note:26.18:champion:피오라:48ae7018-2",
-        "note:26.18:champion:피오라:24bf2916",
-        "note:26.18:champion:피오라:24bf2916-2",
-        "note:26.18:champion:피오라:be03f26c",
-        "note:26.18:champion:피오라:13b4ff5b",
-        "note:26.18:champion:피오라:eaf39cd9",
-        "note:26.18:champion:피오라:eaf39cd9-2",
-        "note:26.18:champion:피오라:9f5a7c71",
-        "note:26.18:champion:피오라:38d23539",
-        "note:26.18:champion:피오라:4320c6b0",
-        "note:26.18:champion:피오라:54ac6e21",
-        "note:26.18:champion:피오라:8a13f058",
-        "note:26.18:champion:피오라:1e7de4b9",
-        "note:26.18:champion:피오라:a8027822",
-        "note:26.18:champion:피오라:953f570f",
-        "note:26.18:champion:피오라:771e99e7",
-        "note:26.18:champion:피오라:5526f860",
-        "note:26.18:champion:피오라:912bf6b1",
-        "note:26.18:champion:피오라:e3c72b05",
-        "note:26.18:champion:피오라:096eae9b",
-        "note:26.18:champion:피오라:a674baca",
-        "note:26.18:champion:피오라:65b34081",
-        "note:26.18:champion:피오라:ac5b4a4d",
-        "note:26.18:champion:피오라:16150c0d",
-        "note:26.18:champion:피오라:74f0cb92",
-        "note:26.18:champion:피오라:51a9e051",
-        "note:26.18:champion:피오라:1e265a2f",
-        "note:26.18:champion:피오라:57228db8",
-        "note:26.18:champion:피오라:7e8e4fab",
-        "note:26.18:champion:피오라:1d7650be",
-        "note:26.18:champion:피오라:35b385b4",
-        "note:26.18:champion:피오라:2b7d8ffc",
-        "note:26.18:champion:피오라:6a4cc57e",
-        "note:26.18:champion:피오라:744cdab9",
-        "note:26.18:champion:피오라:624ce4d1",
-        "note:26.18:champion:피오라:6ebea4b2",
-        "note:26.18:champion:피오라:cb45f0a7",
-        "note:26.18:champion:피오라:9cff7f57"
-      ],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375365153",
-          "KR_8375379044",
-          "KR_8375332362",
-          "KR_8375329035",
-          "KR_8375390155",
-          "KR_8375392209",
-          "KR_8375367415",
-          "KR_8375318580",
-          "KR_8375356909",
-          "KR_8375335200"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=MIDDLE]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic"
-      }
-    },
-    {
       "id": "champion:MasterYi:TOP:pickRate",
       "entityType": "champion",
       "entityKey": "MasterYi",
@@ -8800,111 +7968,6 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=38,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-kassadin"
-      }
-    },
-    {
-      "id": "champion:Fiora:UTILITY:pickRate",
-      "entityType": "champion",
-      "entityKey": "Fiora",
-      "entityName": "피오라",
-      "metric": "pickRate",
-      "before": 0.0015,
-      "after": 0.0003,
-      "delta": -0.0012000000000000001,
-      "ci": [
-        -0.002193530171542526,
-        -0.000370894256419149
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0.029105880182166026,
-      "status": "announced-consistent",
-      "matchedNoteId": "note:26.18:champion:피오라:6f1542ba",
-      "matchedNoteIds": [
-        "note:26.18:champion:피오라:6f1542ba",
-        "note:26.18:champion:피오라:7f761812",
-        "note:26.18:champion:피오라:aaeaaede",
-        "note:26.18:champion:피오라:aaeaaede-2",
-        "note:26.18:champion:피오라:8f0268f5",
-        "note:26.18:champion:피오라:69d227f2",
-        "note:26.18:champion:피오라:3c1c56de",
-        "note:26.18:champion:피오라:8d85408a",
-        "note:26.18:champion:피오라:ac0de268",
-        "note:26.18:champion:피오라:758023c0",
-        "note:26.18:champion:피오라:758023c0-2",
-        "note:26.18:champion:피오라:fa816596",
-        "note:26.18:champion:피오라:3889a54d",
-        "note:26.18:champion:피오라:3889a54d-2",
-        "note:26.18:champion:피오라:6cf0a04f",
-        "note:26.18:champion:피오라:65334be6",
-        "note:26.18:champion:피오라:65334be6-2",
-        "note:26.18:champion:피오라:c5a4bf69",
-        "note:26.18:champion:피오라:98ec736c",
-        "note:26.18:champion:피오라:98ec736c-2",
-        "note:26.18:champion:피오라:98ec736c-3",
-        "note:26.18:champion:피오라:bf5d9696",
-        "note:26.18:champion:피오라:a7fb99f1",
-        "note:26.18:champion:피오라:a7fb99f1-2",
-        "note:26.18:champion:피오라:55ede34d",
-        "note:26.18:champion:피오라:55ede34d-2",
-        "note:26.18:champion:피오라:48ae7018",
-        "note:26.18:champion:피오라:48ae7018-2",
-        "note:26.18:champion:피오라:24bf2916",
-        "note:26.18:champion:피오라:24bf2916-2",
-        "note:26.18:champion:피오라:be03f26c",
-        "note:26.18:champion:피오라:13b4ff5b",
-        "note:26.18:champion:피오라:eaf39cd9",
-        "note:26.18:champion:피오라:eaf39cd9-2",
-        "note:26.18:champion:피오라:9f5a7c71",
-        "note:26.18:champion:피오라:38d23539",
-        "note:26.18:champion:피오라:4320c6b0",
-        "note:26.18:champion:피오라:54ac6e21",
-        "note:26.18:champion:피오라:8a13f058",
-        "note:26.18:champion:피오라:1e7de4b9",
-        "note:26.18:champion:피오라:a8027822",
-        "note:26.18:champion:피오라:953f570f",
-        "note:26.18:champion:피오라:771e99e7",
-        "note:26.18:champion:피오라:5526f860",
-        "note:26.18:champion:피오라:912bf6b1",
-        "note:26.18:champion:피오라:e3c72b05",
-        "note:26.18:champion:피오라:096eae9b",
-        "note:26.18:champion:피오라:a674baca",
-        "note:26.18:champion:피오라:65b34081",
-        "note:26.18:champion:피오라:ac5b4a4d",
-        "note:26.18:champion:피오라:16150c0d",
-        "note:26.18:champion:피오라:74f0cb92",
-        "note:26.18:champion:피오라:51a9e051",
-        "note:26.18:champion:피오라:1e265a2f",
-        "note:26.18:champion:피오라:57228db8",
-        "note:26.18:champion:피오라:7e8e4fab",
-        "note:26.18:champion:피오라:1d7650be",
-        "note:26.18:champion:피오라:35b385b4",
-        "note:26.18:champion:피오라:2b7d8ffc",
-        "note:26.18:champion:피오라:6a4cc57e",
-        "note:26.18:champion:피오라:744cdab9",
-        "note:26.18:champion:피오라:624ce4d1",
-        "note:26.18:champion:피오라:6ebea4b2",
-        "note:26.18:champion:피오라:cb45f0a7",
-        "note:26.18:champion:피오라:9cff7f57"
-      ],
-      "causes": [],
-      "evidence": {
-        "matchIds": [
-          "KR_8375365153",
-          "KR_8375379044",
-          "KR_8375332362",
-          "KR_8375329035",
-          "KR_8375390155",
-          "KR_8375392209",
-          "KR_8375367415",
-          "KR_8375318580",
-          "KR_8375356909",
-          "KR_8375335200"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=UTILITY]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic"
       }
     },
     {
@@ -9499,6 +8562,45 @@
       }
     },
     {
+      "id": "champion:Fiora:TOP:pickRate",
+      "entityType": "champion",
+      "entityKey": "Fiora",
+      "entityName": "피오라",
+      "metric": "pickRate",
+      "before": 0.0717,
+      "after": 0.0525,
+      "delta": -0.019200000000000002,
+      "ci": [
+        -0.025903396320829393,
+        -0.012520605930500386
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 3.923564997198664e-7,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8375365153",
+          "KR_8375379044",
+          "KR_8375332362",
+          "KR_8375329035",
+          "KR_8375390155",
+          "KR_8375392209",
+          "KR_8375367415",
+          "KR_8375318580",
+          "KR_8375356909",
+          "KR_8375335200"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=TOP]",
+        "noteAnchor": null
+      }
+    },
+    {
       "id": "champion:Pantheon:pickRate",
       "entityType": "champion",
       "entityKey": "Pantheon",
@@ -10041,6 +9143,45 @@
           "KR_8375366056"
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=157,scope=all]",
+        "noteAnchor": null
+      }
+    },
+    {
+      "id": "champion:Fiora:banRate",
+      "entityType": "champion",
+      "entityKey": "Fiora",
+      "entityName": "피오라",
+      "metric": "banRate",
+      "before": 0.112,
+      "after": 0.0972,
+      "delta": -0.014800000000000008,
+      "ci": [
+        -0.02328694197380387,
+        -0.006318440071720886
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0.005098506272838864,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8375365153",
+          "KR_8375379044",
+          "KR_8375332362",
+          "KR_8375329035",
+          "KR_8375390155",
+          "KR_8375392209",
+          "KR_8375367415",
+          "KR_8375318580",
+          "KR_8375356909",
+          "KR_8375335200"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=all]",
         "noteAnchor": null
       }
     },
@@ -19405,6 +18546,45 @@
       }
     },
     {
+      "id": "champion:Fiora:MIDDLE:pickRate",
+      "entityType": "champion",
+      "entityKey": "Fiora",
+      "entityName": "피오라",
+      "metric": "pickRate",
+      "before": 0.003,
+      "after": 0.0011,
+      "delta": -0.0019,
+      "ci": [
+        -0.0032685078179182873,
+        -0.0006506938372525077
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0.019943303987315603,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8375365153",
+          "KR_8375379044",
+          "KR_8375332362",
+          "KR_8375329035",
+          "KR_8375390155",
+          "KR_8375392209",
+          "KR_8375367415",
+          "KR_8375318580",
+          "KR_8375356909",
+          "KR_8375335200"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=MIDDLE]",
+        "noteAnchor": null
+      }
+    },
+    {
       "id": "champion:Malzahar:TOP:pickRate",
       "entityType": "champion",
       "entityKey": "Malzahar",
@@ -20493,6 +19673,45 @@
           "KR_8375378378"
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=75,scope=position,position=JUNGLE]",
+        "noteAnchor": null
+      }
+    },
+    {
+      "id": "champion:Fiora:UTILITY:pickRate",
+      "entityType": "champion",
+      "entityKey": "Fiora",
+      "entityName": "피오라",
+      "metric": "pickRate",
+      "before": 0.0015,
+      "after": 0.0003,
+      "delta": -0.0012000000000000001,
+      "ci": [
+        -0.002193530171542526,
+        -0.000370894256419149
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0.029105880182166026,
+      "status": "below-threshold",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8375365153",
+          "KR_8375379044",
+          "KR_8375332362",
+          "KR_8375329035",
+          "KR_8375390155",
+          "KR_8375392209",
+          "KR_8375367415",
+          "KR_8375318580",
+          "KR_8375356909",
+          "KR_8375335200"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=UTILITY]",
         "noteAnchor": null
       }
     },
@@ -28225,74 +27444,8 @@
       },
       "q": 0.3798152883107753,
       "status": "insufficient-sample",
-      "matchedNoteId": "note:26.18:champion:피오라:6f1542ba",
-      "matchedNoteIds": [
-        "note:26.18:champion:피오라:6f1542ba",
-        "note:26.18:champion:피오라:7f761812",
-        "note:26.18:champion:피오라:aaeaaede",
-        "note:26.18:champion:피오라:aaeaaede-2",
-        "note:26.18:champion:피오라:8f0268f5",
-        "note:26.18:champion:피오라:69d227f2",
-        "note:26.18:champion:피오라:3c1c56de",
-        "note:26.18:champion:피오라:8d85408a",
-        "note:26.18:champion:피오라:ac0de268",
-        "note:26.18:champion:피오라:758023c0",
-        "note:26.18:champion:피오라:758023c0-2",
-        "note:26.18:champion:피오라:fa816596",
-        "note:26.18:champion:피오라:3889a54d",
-        "note:26.18:champion:피오라:3889a54d-2",
-        "note:26.18:champion:피오라:6cf0a04f",
-        "note:26.18:champion:피오라:65334be6",
-        "note:26.18:champion:피오라:65334be6-2",
-        "note:26.18:champion:피오라:c5a4bf69",
-        "note:26.18:champion:피오라:98ec736c",
-        "note:26.18:champion:피오라:98ec736c-2",
-        "note:26.18:champion:피오라:98ec736c-3",
-        "note:26.18:champion:피오라:bf5d9696",
-        "note:26.18:champion:피오라:a7fb99f1",
-        "note:26.18:champion:피오라:a7fb99f1-2",
-        "note:26.18:champion:피오라:55ede34d",
-        "note:26.18:champion:피오라:55ede34d-2",
-        "note:26.18:champion:피오라:48ae7018",
-        "note:26.18:champion:피오라:48ae7018-2",
-        "note:26.18:champion:피오라:24bf2916",
-        "note:26.18:champion:피오라:24bf2916-2",
-        "note:26.18:champion:피오라:be03f26c",
-        "note:26.18:champion:피오라:13b4ff5b",
-        "note:26.18:champion:피오라:eaf39cd9",
-        "note:26.18:champion:피오라:eaf39cd9-2",
-        "note:26.18:champion:피오라:9f5a7c71",
-        "note:26.18:champion:피오라:38d23539",
-        "note:26.18:champion:피오라:4320c6b0",
-        "note:26.18:champion:피오라:54ac6e21",
-        "note:26.18:champion:피오라:8a13f058",
-        "note:26.18:champion:피오라:1e7de4b9",
-        "note:26.18:champion:피오라:a8027822",
-        "note:26.18:champion:피오라:953f570f",
-        "note:26.18:champion:피오라:771e99e7",
-        "note:26.18:champion:피오라:5526f860",
-        "note:26.18:champion:피오라:912bf6b1",
-        "note:26.18:champion:피오라:e3c72b05",
-        "note:26.18:champion:피오라:096eae9b",
-        "note:26.18:champion:피오라:a674baca",
-        "note:26.18:champion:피오라:65b34081",
-        "note:26.18:champion:피오라:ac5b4a4d",
-        "note:26.18:champion:피오라:16150c0d",
-        "note:26.18:champion:피오라:74f0cb92",
-        "note:26.18:champion:피오라:51a9e051",
-        "note:26.18:champion:피오라:1e265a2f",
-        "note:26.18:champion:피오라:57228db8",
-        "note:26.18:champion:피오라:7e8e4fab",
-        "note:26.18:champion:피오라:1d7650be",
-        "note:26.18:champion:피오라:35b385b4",
-        "note:26.18:champion:피오라:2b7d8ffc",
-        "note:26.18:champion:피오라:6a4cc57e",
-        "note:26.18:champion:피오라:744cdab9",
-        "note:26.18:champion:피오라:624ce4d1",
-        "note:26.18:champion:피오라:6ebea4b2",
-        "note:26.18:champion:피오라:cb45f0a7",
-        "note:26.18:champion:피오라:9cff7f57"
-      ],
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
       "causes": [],
       "evidence": {
         "matchIds": [
@@ -28308,7 +27461,7 @@
           "KR_8375335200"
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=MIDDLE]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic"
+        "noteAnchor": null
       }
     },
     {
@@ -29164,74 +28317,8 @@
       },
       "q": 0.6605784331245267,
       "status": "insufficient-sample",
-      "matchedNoteId": "note:26.18:champion:피오라:6f1542ba",
-      "matchedNoteIds": [
-        "note:26.18:champion:피오라:6f1542ba",
-        "note:26.18:champion:피오라:7f761812",
-        "note:26.18:champion:피오라:aaeaaede",
-        "note:26.18:champion:피오라:aaeaaede-2",
-        "note:26.18:champion:피오라:8f0268f5",
-        "note:26.18:champion:피오라:69d227f2",
-        "note:26.18:champion:피오라:3c1c56de",
-        "note:26.18:champion:피오라:8d85408a",
-        "note:26.18:champion:피오라:ac0de268",
-        "note:26.18:champion:피오라:758023c0",
-        "note:26.18:champion:피오라:758023c0-2",
-        "note:26.18:champion:피오라:fa816596",
-        "note:26.18:champion:피오라:3889a54d",
-        "note:26.18:champion:피오라:3889a54d-2",
-        "note:26.18:champion:피오라:6cf0a04f",
-        "note:26.18:champion:피오라:65334be6",
-        "note:26.18:champion:피오라:65334be6-2",
-        "note:26.18:champion:피오라:c5a4bf69",
-        "note:26.18:champion:피오라:98ec736c",
-        "note:26.18:champion:피오라:98ec736c-2",
-        "note:26.18:champion:피오라:98ec736c-3",
-        "note:26.18:champion:피오라:bf5d9696",
-        "note:26.18:champion:피오라:a7fb99f1",
-        "note:26.18:champion:피오라:a7fb99f1-2",
-        "note:26.18:champion:피오라:55ede34d",
-        "note:26.18:champion:피오라:55ede34d-2",
-        "note:26.18:champion:피오라:48ae7018",
-        "note:26.18:champion:피오라:48ae7018-2",
-        "note:26.18:champion:피오라:24bf2916",
-        "note:26.18:champion:피오라:24bf2916-2",
-        "note:26.18:champion:피오라:be03f26c",
-        "note:26.18:champion:피오라:13b4ff5b",
-        "note:26.18:champion:피오라:eaf39cd9",
-        "note:26.18:champion:피오라:eaf39cd9-2",
-        "note:26.18:champion:피오라:9f5a7c71",
-        "note:26.18:champion:피오라:38d23539",
-        "note:26.18:champion:피오라:4320c6b0",
-        "note:26.18:champion:피오라:54ac6e21",
-        "note:26.18:champion:피오라:8a13f058",
-        "note:26.18:champion:피오라:1e7de4b9",
-        "note:26.18:champion:피오라:a8027822",
-        "note:26.18:champion:피오라:953f570f",
-        "note:26.18:champion:피오라:771e99e7",
-        "note:26.18:champion:피오라:5526f860",
-        "note:26.18:champion:피오라:912bf6b1",
-        "note:26.18:champion:피오라:e3c72b05",
-        "note:26.18:champion:피오라:096eae9b",
-        "note:26.18:champion:피오라:a674baca",
-        "note:26.18:champion:피오라:65b34081",
-        "note:26.18:champion:피오라:ac5b4a4d",
-        "note:26.18:champion:피오라:16150c0d",
-        "note:26.18:champion:피오라:74f0cb92",
-        "note:26.18:champion:피오라:51a9e051",
-        "note:26.18:champion:피오라:1e265a2f",
-        "note:26.18:champion:피오라:57228db8",
-        "note:26.18:champion:피오라:7e8e4fab",
-        "note:26.18:champion:피오라:1d7650be",
-        "note:26.18:champion:피오라:35b385b4",
-        "note:26.18:champion:피오라:2b7d8ffc",
-        "note:26.18:champion:피오라:6a4cc57e",
-        "note:26.18:champion:피오라:744cdab9",
-        "note:26.18:champion:피오라:624ce4d1",
-        "note:26.18:champion:피오라:6ebea4b2",
-        "note:26.18:champion:피오라:cb45f0a7",
-        "note:26.18:champion:피오라:9cff7f57"
-      ],
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
       "causes": [],
       "evidence": {
         "matchIds": [
@@ -29247,7 +28334,7 @@
           "KR_8375335200"
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=UTILITY]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic"
+        "noteAnchor": null
       }
     },
     {
@@ -33281,74 +32368,8 @@
       },
       "q": 0.8213728536560811,
       "status": "insufficient-sample",
-      "matchedNoteId": "note:26.18:champion:피오라:6f1542ba",
-      "matchedNoteIds": [
-        "note:26.18:champion:피오라:6f1542ba",
-        "note:26.18:champion:피오라:7f761812",
-        "note:26.18:champion:피오라:aaeaaede",
-        "note:26.18:champion:피오라:aaeaaede-2",
-        "note:26.18:champion:피오라:8f0268f5",
-        "note:26.18:champion:피오라:69d227f2",
-        "note:26.18:champion:피오라:3c1c56de",
-        "note:26.18:champion:피오라:8d85408a",
-        "note:26.18:champion:피오라:ac0de268",
-        "note:26.18:champion:피오라:758023c0",
-        "note:26.18:champion:피오라:758023c0-2",
-        "note:26.18:champion:피오라:fa816596",
-        "note:26.18:champion:피오라:3889a54d",
-        "note:26.18:champion:피오라:3889a54d-2",
-        "note:26.18:champion:피오라:6cf0a04f",
-        "note:26.18:champion:피오라:65334be6",
-        "note:26.18:champion:피오라:65334be6-2",
-        "note:26.18:champion:피오라:c5a4bf69",
-        "note:26.18:champion:피오라:98ec736c",
-        "note:26.18:champion:피오라:98ec736c-2",
-        "note:26.18:champion:피오라:98ec736c-3",
-        "note:26.18:champion:피오라:bf5d9696",
-        "note:26.18:champion:피오라:a7fb99f1",
-        "note:26.18:champion:피오라:a7fb99f1-2",
-        "note:26.18:champion:피오라:55ede34d",
-        "note:26.18:champion:피오라:55ede34d-2",
-        "note:26.18:champion:피오라:48ae7018",
-        "note:26.18:champion:피오라:48ae7018-2",
-        "note:26.18:champion:피오라:24bf2916",
-        "note:26.18:champion:피오라:24bf2916-2",
-        "note:26.18:champion:피오라:be03f26c",
-        "note:26.18:champion:피오라:13b4ff5b",
-        "note:26.18:champion:피오라:eaf39cd9",
-        "note:26.18:champion:피오라:eaf39cd9-2",
-        "note:26.18:champion:피오라:9f5a7c71",
-        "note:26.18:champion:피오라:38d23539",
-        "note:26.18:champion:피오라:4320c6b0",
-        "note:26.18:champion:피오라:54ac6e21",
-        "note:26.18:champion:피오라:8a13f058",
-        "note:26.18:champion:피오라:1e7de4b9",
-        "note:26.18:champion:피오라:a8027822",
-        "note:26.18:champion:피오라:953f570f",
-        "note:26.18:champion:피오라:771e99e7",
-        "note:26.18:champion:피오라:5526f860",
-        "note:26.18:champion:피오라:912bf6b1",
-        "note:26.18:champion:피오라:e3c72b05",
-        "note:26.18:champion:피오라:096eae9b",
-        "note:26.18:champion:피오라:a674baca",
-        "note:26.18:champion:피오라:65b34081",
-        "note:26.18:champion:피오라:ac5b4a4d",
-        "note:26.18:champion:피오라:16150c0d",
-        "note:26.18:champion:피오라:74f0cb92",
-        "note:26.18:champion:피오라:51a9e051",
-        "note:26.18:champion:피오라:1e265a2f",
-        "note:26.18:champion:피오라:57228db8",
-        "note:26.18:champion:피오라:7e8e4fab",
-        "note:26.18:champion:피오라:1d7650be",
-        "note:26.18:champion:피오라:35b385b4",
-        "note:26.18:champion:피오라:2b7d8ffc",
-        "note:26.18:champion:피오라:6a4cc57e",
-        "note:26.18:champion:피오라:744cdab9",
-        "note:26.18:champion:피오라:624ce4d1",
-        "note:26.18:champion:피오라:6ebea4b2",
-        "note:26.18:champion:피오라:cb45f0a7",
-        "note:26.18:champion:피오라:9cff7f57"
-      ],
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
       "causes": [],
       "evidence": {
         "matchIds": [
@@ -33364,7 +32385,7 @@
           "KR_8375335200"
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=BOTTOM]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic"
+        "noteAnchor": null
       }
     },
     {
@@ -42400,74 +41421,8 @@
       },
       "q": 1,
       "status": "insufficient-sample",
-      "matchedNoteId": "note:26.18:champion:피오라:6f1542ba",
-      "matchedNoteIds": [
-        "note:26.18:champion:피오라:6f1542ba",
-        "note:26.18:champion:피오라:7f761812",
-        "note:26.18:champion:피오라:aaeaaede",
-        "note:26.18:champion:피오라:aaeaaede-2",
-        "note:26.18:champion:피오라:8f0268f5",
-        "note:26.18:champion:피오라:69d227f2",
-        "note:26.18:champion:피오라:3c1c56de",
-        "note:26.18:champion:피오라:8d85408a",
-        "note:26.18:champion:피오라:ac0de268",
-        "note:26.18:champion:피오라:758023c0",
-        "note:26.18:champion:피오라:758023c0-2",
-        "note:26.18:champion:피오라:fa816596",
-        "note:26.18:champion:피오라:3889a54d",
-        "note:26.18:champion:피오라:3889a54d-2",
-        "note:26.18:champion:피오라:6cf0a04f",
-        "note:26.18:champion:피오라:65334be6",
-        "note:26.18:champion:피오라:65334be6-2",
-        "note:26.18:champion:피오라:c5a4bf69",
-        "note:26.18:champion:피오라:98ec736c",
-        "note:26.18:champion:피오라:98ec736c-2",
-        "note:26.18:champion:피오라:98ec736c-3",
-        "note:26.18:champion:피오라:bf5d9696",
-        "note:26.18:champion:피오라:a7fb99f1",
-        "note:26.18:champion:피오라:a7fb99f1-2",
-        "note:26.18:champion:피오라:55ede34d",
-        "note:26.18:champion:피오라:55ede34d-2",
-        "note:26.18:champion:피오라:48ae7018",
-        "note:26.18:champion:피오라:48ae7018-2",
-        "note:26.18:champion:피오라:24bf2916",
-        "note:26.18:champion:피오라:24bf2916-2",
-        "note:26.18:champion:피오라:be03f26c",
-        "note:26.18:champion:피오라:13b4ff5b",
-        "note:26.18:champion:피오라:eaf39cd9",
-        "note:26.18:champion:피오라:eaf39cd9-2",
-        "note:26.18:champion:피오라:9f5a7c71",
-        "note:26.18:champion:피오라:38d23539",
-        "note:26.18:champion:피오라:4320c6b0",
-        "note:26.18:champion:피오라:54ac6e21",
-        "note:26.18:champion:피오라:8a13f058",
-        "note:26.18:champion:피오라:1e7de4b9",
-        "note:26.18:champion:피오라:a8027822",
-        "note:26.18:champion:피오라:953f570f",
-        "note:26.18:champion:피오라:771e99e7",
-        "note:26.18:champion:피오라:5526f860",
-        "note:26.18:champion:피오라:912bf6b1",
-        "note:26.18:champion:피오라:e3c72b05",
-        "note:26.18:champion:피오라:096eae9b",
-        "note:26.18:champion:피오라:a674baca",
-        "note:26.18:champion:피오라:65b34081",
-        "note:26.18:champion:피오라:ac5b4a4d",
-        "note:26.18:champion:피오라:16150c0d",
-        "note:26.18:champion:피오라:74f0cb92",
-        "note:26.18:champion:피오라:51a9e051",
-        "note:26.18:champion:피오라:1e265a2f",
-        "note:26.18:champion:피오라:57228db8",
-        "note:26.18:champion:피오라:7e8e4fab",
-        "note:26.18:champion:피오라:1d7650be",
-        "note:26.18:champion:피오라:35b385b4",
-        "note:26.18:champion:피오라:2b7d8ffc",
-        "note:26.18:champion:피오라:6a4cc57e",
-        "note:26.18:champion:피오라:744cdab9",
-        "note:26.18:champion:피오라:624ce4d1",
-        "note:26.18:champion:피오라:6ebea4b2",
-        "note:26.18:champion:피오라:cb45f0a7",
-        "note:26.18:champion:피오라:9cff7f57"
-      ],
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
       "causes": [],
       "evidence": {
         "matchIds": [
@@ -42483,7 +41438,7 @@
           "KR_8375335200"
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=JUNGLE]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic"
+        "noteAnchor": null
       }
     },
     {
@@ -45559,6 +44514,45 @@
       }
     },
     {
+      "id": "champion:Fiora:winRate",
+      "entityType": "champion",
+      "entityKey": "Fiora",
+      "entityName": "피오라",
+      "metric": "winRate",
+      "before": 0.5096277278562259,
+      "after": 0.4602888086642599,
+      "delta": -0.04933891919196598,
+      "ci": [
+        -0.10329589799032993,
+        0.00509654375060431
+      ],
+      "n": {
+        "before": 779,
+        "after": 554
+      },
+      "q": 0.24669565792619028,
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8375365153",
+          "KR_8375379044",
+          "KR_8375332362",
+          "KR_8375329035",
+          "KR_8375390155",
+          "KR_8375392209",
+          "KR_8375367415",
+          "KR_8375318580",
+          "KR_8375356909",
+          "KR_8375335200"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=all]",
+        "noteAnchor": null
+      }
+    },
+    {
       "id": "champion:Talon:MIDDLE:winRate",
       "entityType": "champion",
       "entityKey": "Talon",
@@ -45945,6 +44939,45 @@
           "KR_8375371692"
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=121,scope=position,position=JUNGLE]",
+        "noteAnchor": null
+      }
+    },
+    {
+      "id": "champion:Fiora:TOP:winRate",
+      "entityType": "champion",
+      "entityKey": "Fiora",
+      "entityName": "피오라",
+      "metric": "winRate",
+      "before": 0.5076708507670851,
+      "after": 0.46285714285714286,
+      "delta": -0.04481370790994221,
+      "ci": [
+        -0.10060145684867308,
+        0.011436688607669498
+      ],
+      "n": {
+        "before": 717,
+        "after": 525
+      },
+      "q": 0.3314627160249767,
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8375365153",
+          "KR_8375379044",
+          "KR_8375332362",
+          "KR_8375329035",
+          "KR_8375390155",
+          "KR_8375392209",
+          "KR_8375367415",
+          "KR_8375318580",
+          "KR_8375356909",
+          "KR_8375335200"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=TOP]",
         "noteAnchor": null
       }
     },
@@ -74497,6 +73530,45 @@
       }
     },
     {
+      "id": "champion:Fiora:BOTTOM:pickRate",
+      "entityType": "champion",
+      "entityKey": "Fiora",
+      "entityName": "피오라",
+      "metric": "pickRate",
+      "before": 0.0016,
+      "after": 0.0015,
+      "delta": -0.00010000000000000005,
+      "ci": [
+        -0.0012594420785513494,
+        0.0010515132039057935
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0.9972592084440061,
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8375365153",
+          "KR_8375379044",
+          "KR_8375332362",
+          "KR_8375329035",
+          "KR_8375390155",
+          "KR_8375392209",
+          "KR_8375367415",
+          "KR_8375318580",
+          "KR_8375356909",
+          "KR_8375335200"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=BOTTOM]",
+        "noteAnchor": null
+      }
+    },
+    {
       "id": "champion:Kennen:MIDDLE:pickRate",
       "entityType": "champion",
       "entityKey": "Kennen",
@@ -75468,6 +74540,45 @@
           "KR_8375391363"
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=555,scope=position,position=BOTTOM]",
+        "noteAnchor": null
+      }
+    },
+    {
+      "id": "champion:Fiora:JUNGLE:pickRate",
+      "entityType": "champion",
+      "entityKey": "Fiora",
+      "entityName": "피오라",
+      "metric": "pickRate",
+      "before": 0.0001,
+      "after": 0,
+      "delta": -0.0001,
+      "ci": [
+        -0.0005662834557441313,
+        0.0002927425874911598
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0.5774932843661809,
+      "status": "no-change",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8375365153",
+          "KR_8375379044",
+          "KR_8375332362",
+          "KR_8375329035",
+          "KR_8375390155",
+          "KR_8375392209",
+          "KR_8375367415",
+          "KR_8375318580",
+          "KR_8375356909",
+          "KR_8375335200"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=114,scope=position,position=JUNGLE]",
         "noteAnchor": null
       }
     },

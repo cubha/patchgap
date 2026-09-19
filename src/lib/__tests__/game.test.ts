@@ -3,7 +3,9 @@
 // `/item/[id]`는 LoL 전용이고(PLAN-game-switcher-2026-09-17 X2), 정적 export라 404가 곧 빈
 // 페이지다. 게임 전환은 어떤 경로에서 눌러도 반드시 실재하는 라우트에 착지해야 한다.
 import { describe, expect, it } from "vitest";
-import { GAMES, gameFromPathname, gameHref, gameLabel } from "../game";
+import { GAMES, gameFromPathname, gameHref, gameLabel,
+  sectionHref,
+} from "../game";
 
 describe("gameFromPathname", () => {
   it("/pubg 접두가 붙은 경로는 pubg다", () => {
@@ -60,5 +62,20 @@ describe("GAMES", () => {
   it("드롭다운 라벨은 사용자가 말한 한국어 정식 명칭이다", () => {
     expect(gameLabel("lol")).toBe("리그 오브 레전드");
     expect(gameLabel("pubg")).toBe("배틀그라운드");
+  });
+});
+
+describe("sectionHref — 내비 섹션 경로(2026-09-19 회귀 수정)", () => {
+  // 실측 결함: 내비가 `gameHref(game, "/" + section)`으로 링크를 만들고 있었다. 라운드6에서
+  // gameHref가 "다른 게임이면 항상 그 게임의 브리핑"으로 바뀌면서, PUBG에서 대조표·방법론
+  // 링크가 둘 다 `/pubg/`(브리핑)로 굳었다 — 사용자 보고: "대조표, 방법론 메뉴를 클릭해도
+  // 안들어가지는 버그". 섹션 이동과 게임 전환은 서로 다른 계산이므로 함수를 가른다.
+  it("LoL은 무접두, PUBG는 /pubg 접두이며 언제나 슬래시로 끝난다(trailingSlash:true)", () => {
+    expect(sectionHref("lol", "")).toBe("/");
+    expect(sectionHref("lol", "compare")).toBe("/compare/");
+    expect(sectionHref("lol", "methodology")).toBe("/methodology/");
+    expect(sectionHref("pubg", "")).toBe("/pubg/");
+    expect(sectionHref("pubg", "compare")).toBe("/pubg/compare/");
+    expect(sectionHref("pubg", "methodology")).toBe("/pubg/methodology/");
   });
 });

@@ -8,6 +8,7 @@ import {
   candidateSetHash,
   inferIndirectCandidates,
   serializeCandidates,
+  summarizeProseHygiene,
   verifyCauses,
   verifySummaryCites,
 } from "../llm-match";
@@ -28,6 +29,7 @@ function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
     summary: "피해량: 10 ⇒ 20",
     anchorUrl: "https://example.com/#patch-aatrox",
     anchorKind: "entity",
+    modeScope: "core",
     ...overrides,
   };
 }
@@ -382,5 +384,66 @@ describe("inferIndirectCandidates", () => {
     expect(result.deltas[0].llm?.summary).toBe("지어낸 노트를 인용한 요약"); // 텍스트는 보존
     expect(result.deltas[0].llm?.summaryCites).toEqual(["n1", "n999"]);
     expect(result.deltas[0].llm?.summaryVerified).toBe(false);
+  });
+});
+
+describe("모드 노트 인용 기각(2026-09-19 근본수정)", () => {
+  // 실측: 26.16→26.17 쌍의 verified 원인 453건 중 282건(62%)이 다른 게임 모드의 노트를 인용하면서
+  // verified:true였다. 예: "피오라의 공격 속도 계수가 0.625에서 0.658로 상향되어 탑 결투 구도가
+  // 불리해졌을 수 있습니다"(클래식 모드 피오라) — 라이브 SR에서 일어나지 않은 일이다.
+  // verified는 "인용 id가 후보셋에 실존하는가"만 봤기 때문에 모드 오염을 구조적으로 못 잡았다.
+  const ddragon = makeDdragon();
+
+  it("모드 노트를 인용한 원인은 verified:false로 떨어지고 링크가 끊긴다(문장은 회색 표기용으로 보존)", () => {
+    const modeNote = note({ id: "note:mode:classic:1", entity: "피오라", modeScope: "classic" });
+    const causes = verifyCauses(
+      [{ candidateNoteId: "note:mode:classic:1", text: "클래식 피오라 상향의 여파", confidence: "low" }],
+      [modeNote],
+      delta({ id: "champion:Olaf:pickRate", entityKey: "Olaf" }),
+      ddragon
+    );
+    expect(causes[0].verified).toBe(false);
+    expect(causes[0].candidateNoteId).toBeNull();
+    expect(causes[0].text).toBe("클래식 피오라 상향의 여파");
+  });
+
+  it("core 노트 인용은 종전대로 verified:true다(회귀 방지)", () => {
+    const coreNote = note({ id: "note:core:1", entity: "그레이브즈" });
+    const causes = verifyCauses(
+      [{ candidateNoteId: "note:core:1", text: "그레이브즈 상향의 여파", confidence: "medium" }],
+      [coreNote],
+      delta({ id: "champion:Olaf:pickRate", entityKey: "Olaf" }),
+      ddragon
+    );
+    expect(causes[0].verified).toBe(true);
+    expect(causes[0].candidateNoteId).toBe("note:core:1");
+  });
+
+  it("요약이 모드 노트를 인용하면 summaryVerified가 false다", () => {
+    const modeNote = note({ id: "note:mode:aram:1", modeScope: "aram" });
+    const coreNote = note({ id: "note:core:2" });
+    expect(verifySummaryCites(["note:mode:aram:1"], [modeNote, coreNote])).toBe(false);
+    expect(verifySummaryCites(["note:core:2"], [modeNote, coreNote])).toBe(true);
+    expect(verifySummaryCites([], [modeNote])).toBe(true);
+  });
+});
+
+describe("문장 위생 집계(2026-09-19 — 항목7 기계적 절반)", () => {
+  // 프롬프트에 "한 문장은 80자 안팎"이 **이미 있는데** 실측 요약 113건 중 82건(72%)이 초과했고
+  // 최대 132자였다. 문구를 더 적는 것으로는 안 되므로, 다음 실행이 **측정 가능**하도록 위반을 센다.
+  // (프롬프트 v4 자체는 PROMPT_VERSION을 올려 캐시를 전량 무효화하므로 26.19 신규 실행에 묶는다.)
+  it("길이 초과와 완곡 종결을 센다", () => {
+    const stats = summarizeProseHygiene([
+      { summary: "짧고 단정한 한 문장입니다.", causes: ["원인도 짧습니다."] },
+      {
+        summary: "가".repeat(81) + ".",
+        causes: ["이 변화는 표본 변동일 가능성이 있습니다.", "영향이 있었을 수 있습니다."],
+      },
+    ]);
+    expect(stats.summaryCount).toBe(2);
+    expect(stats.summaryOverLength).toBe(1);
+    expect(stats.causeCount).toBe(3);
+    expect(stats.causeHedged).toBe(2);
+    expect(stats.maxSummaryLength).toBeGreaterThan(80);
   });
 });

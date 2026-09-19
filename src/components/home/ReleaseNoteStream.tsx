@@ -220,7 +220,7 @@ export default function ReleaseNoteStream({
               </li>
             )
           )}
-          {tab === "content" ? <MiscChangesSection sections={miscSections} /> : null}
+          {tab === "content" ? <MiscChangesSection sections={miscSections} skinPreviews={skinPreviews} laneFiltered={selectedLane !== "all"} /> : null}
         </ul>
       )}
     </section>

@@ -75,3 +75,16 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* 대조표 toast 등장 — 나타남 자체가 신호라 짧고 단정하게. motion-safe에서만 적용한다
+   (FocusToast.tsx가 motion-safe: 유틸리티로 감싼다). */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -57,3 +57,18 @@ export function gameHref(game: GameId, pathname: string): string {
   // trailingSlash:true 이므로 항상 슬래시로 끝낸다(정적 export가 그 경로로 디렉터리를 만든다).
   return `${prefix}/`;
 }
+
+/**
+ * 같은 게임 안에서 섹션(브리핑·대조표·방법론)으로 가는 경로.
+ *
+ * **왜 gameHref와 나뉘어 있나**(2026-09-19 회귀 수정): 헤더 내비가 `gameHref(game, "/"+section)`
+ * 으로 링크를 만들고 있었다. gameHref는 "지금 있는 경로에서 **게임을 바꾸면** 어디로 가나"를
+ * 답하는 함수인데, 넘긴 `/compare`는 무접두라 항상 LoL로 읽히고, 현재 게임이 PUBG면 "다른
+ * 게임" 분기를 타 `/pubg/`(브리핑)를 돌려줬다. 그래서 PUBG에서는 대조표·방법론을 눌러도
+ * 브리핑에 그대로 머물렀다(사용자 보고). 섹션 이동과 게임 전환은 다른 계산이다.
+ */
+export function sectionHref(game: GameId, section: string): string {
+  const { prefix } = defOf(game);
+  // trailingSlash:true — 정적 export가 그 경로로 디렉터리를 만든다.
+  return section.length === 0 ? `${prefix}/` : `${prefix}/${section}/`;
+}

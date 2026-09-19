@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { modeScopeFromAnchorUrl } from "../../shared/mode-scope";
 import type { DdragonChampion, DdragonData, DdragonItem } from "../ddragon";
 import { matchDeterministic } from "../entity-match";
 import type { DeltaRecord, PatchNoteItem } from "../../types";
@@ -46,6 +47,9 @@ function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
     anchorUrl: "https://example.com/#patch-aatrox",
     anchorKind: "entity",
     ...overrides,
+    // modeScope는 앵커에서 파생시킨다 — 실제 데이터의 불변식(파서·마이그레이션이 같은 규칙을
+    // 쓴다)과 픽스처를 어긋나게 두면, 모드 앵커를 쓰는 케이스가 조용히 core로 테스트된다.
+    modeScope: overrides.modeScope ?? modeScopeFromAnchorUrl(overrides.anchorUrl ?? "https://example.com/#patch-aatrox"),
   };
 }
 
@@ -189,5 +193,50 @@ describe("matchDeterministic", () => {
     const deltas = [delta({ id: "champion:Aatrox:winRate", entityKey: "Aatrox" })];
     const result = matchDeterministic(notes, deltas, ddragon);
     expect(result.matches.size).toBe(0);
+  });
+});
+
+describe("modeScope 게이트 — 다른 게임 모드의 노트는 SR 델타와 짝짓지 않는다(2026-09-19)", () => {
+  // 실측 배경: 26.18 "클래식"(LoL 클래식 — 2010~2017 시점 챔피언 복각 모드) 섹션의 피오라 65줄이
+  // section="champion"으로 재분류돼 SR 피오라 델타와 짝지어졌고, 화면에 "공지"로 떴다.
+  // 26.16→26.17 쌍에서는 짝지어진 351행 중 186행이 모드 노트에만 걸려 있었다.
+  const ddragon = makeDdragon();
+
+  it("클래식 모드 노트는 같은 챔피언이라도 버킷에 들어가지 않는다", () => {
+    const outcome = matchDeterministic(
+      [note({ id: "note:mode:1", modeScope: "classic", anchorUrl: "https://x/#patch-classic" })],
+      [delta({ id: "champion:Aatrox:winRate", entityType: "champion", entityKey: "Aatrox" })],
+      ddragon
+    );
+    expect(outcome.matches.size).toBe(0);
+  });
+
+  it("아레나·아수라장 노트도 마찬가지다", () => {
+    for (const scope of ["arena", "aram"] as const) {
+      const outcome = matchDeterministic(
+        [note({ id: `note:mode:${scope}`, modeScope: scope })],
+        [delta({ id: "champion:Aatrox:winRate", entityType: "champion", entityKey: "Aatrox" })],
+        ddragon
+      );
+      expect(outcome.matches.size).toBe(0);
+    }
+  });
+
+  it("모드 노트만 있으면 매핑 실패로도 세지 않는다 — 애초에 SR 대상이 아니다", () => {
+    const outcome = matchDeterministic(
+      [note({ id: "note:mode:2", entity: "존재하지않는챔피언", modeScope: "classic" })],
+      [],
+      ddragon
+    );
+    expect(outcome.mappingFailures).toHaveLength(0);
+  });
+
+  it("core 노트는 종전대로 짝지어진다(회귀 방지)", () => {
+    const outcome = matchDeterministic(
+      [note({ id: "note:core:1" })],
+      [delta({ id: "champion:Aatrox:winRate", entityType: "champion", entityKey: "Aatrox" })],
+      ddragon
+    );
+    expect(outcome.matches.get("champion:Aatrox:winRate")?.noteIds).toEqual(["note:core:1"]);
   });
 });

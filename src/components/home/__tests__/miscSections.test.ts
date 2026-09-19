@@ -5,6 +5,7 @@
 // 등은 신규스킨 등 Value별로 묶어 섹션이 명확하게 구분되게".
 // 입력은 섹션 묶음(tier 3)·치장(tier 4) 그룹이고, 출력은 카테고리별 줄 목록(문서 순서)이다.
 import { describe, expect, it } from "vitest";
+import { modeScopeFromAnchorUrl } from "@/pipeline/shared/mode-scope";
 import type { PatchNoteItem } from "@/pipeline/types";
 import type { MatchedStreamGroup } from "../releaseStream";
 import { MISC_CATEGORY_LABELS, buildMiscSections, classifyMiscNote } from "../miscSections";
@@ -24,6 +25,9 @@ function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
     anchorUrl: "https://example.com/#patch-classic",
     anchorKind: "section",
     ...overrides,
+    // modeScope는 앵커에서 파생시킨다 — 실제 데이터의 불변식(파서·마이그레이션이 같은 규칙을
+    // 쓴다)과 픽스처를 어긋나게 두면, 모드 앵커를 쓰는 케이스가 조용히 core로 테스트된다.
+    modeScope: overrides.modeScope ?? modeScopeFromAnchorUrl(overrides.anchorUrl ?? "https://example.com/#patch-classic"),
   };
 }
 

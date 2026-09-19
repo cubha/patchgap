@@ -21,6 +21,7 @@ function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
     summary: "마나 소모량: 60 ⇒ 50",
     anchorUrl: "https://example.com/notes#patch-ekko",
     anchorKind: "entity",
+    modeScope: "core",
     ...overrides,
   };
 }

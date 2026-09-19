@@ -11,6 +11,7 @@
 // lane/objective/summary 엔티티는 패치노트에 대응 엔티티명이 없어 매칭 대상에서 제외한다.
 
 import type { DeltaRecord, PatchNoteItem } from "../types";
+import { isCoreNote } from "../shared/mode-scope";
 import type { DdragonData } from "./ddragon";
 
 export type NoteDirectionMajority = "buff" | "nerf" | "neutral";
@@ -85,6 +86,11 @@ export function matchDeterministic(
   const mappingFailures = new Set<string>();
 
   for (const note of notes) {
+    // 2026-09-19: 짝짓기 자격 게이트. 다른 게임 모드(LoL 클래식·아수라장·아레나)의 노트는 우리가
+    // 집계하는 소환사의 협곡 데이터와 인과가 없다 — 26.18 클래식 피오라 65줄이 section="champion"
+    // 으로 재분류돼 SR 피오라 델타와 짝지어진 것이 이 게이트가 없어서 생긴 결함이었다.
+    // mappingFailures에도 넣지 않는다(SR 대상이 아니므로 "매핑 실패"가 아니다).
+    if (!isCoreNote(note)) continue;
     if (note.section === "champion") {
       const champion = ddragon.champions.byKoName(note.entity);
       if (!champion) {

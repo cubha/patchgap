@@ -17,6 +17,7 @@ function makeNote(overrides: Partial<PatchNoteItem> = {}): PatchNoteItem {
     summary: "사거리 표시 개선(수치 변경 없음)",
     anchorUrl: "https://example.com/notes#patch-trundle",
     anchorKind: "entity",
+    modeScope: "core",
     ...overrides,
   };
 }

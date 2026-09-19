@@ -402,3 +402,42 @@ describe("parsePatchNotes — 값이 바뀌지 않은 'A ⇒ A' 항목은 내보
     expect(parsed.items.some((i) => i.before !== null && i.before === i.after)).toBe(false);
   });
 });
+
+describe("modeScope — 적용 범위 새기기(2026-09-19 근본수정)", () => {
+  const parsed17 = parsePatchNotes(FIXTURE_17, { patch: "26.17", sourceUrl: SOURCE_URL_17 });
+  const parsed16 = parsePatchNotes(FIXTURE_16, { patch: "26.16", sourceUrl: SOURCE_URL_16 });
+
+  it("클래식 섹션 항목은 section이 champion이어도 modeScope='classic'이다", () => {
+    const classicItems = parsed17.items.filter((i) => i.anchorUrl.endsWith("#patch-classic"));
+    expect(classicItems.length).toBeGreaterThan(50);
+    expect(classicItems.every((i) => i.modeScope === "classic")).toBe(true);
+    // section은 **바뀌지 않는다** — 노트 id가 section을 포함하므로 바꾸면 기존 델타의
+    // matchedNoteIds가 전부 댕글링된다(BRAINTRUST-root-fix-2026-09-19.md §4).
+    expect(classicItems.some((i) => i.section === "champion")).toBe(true);
+  });
+
+  it("아레나·아수라장도 모드로 새겨진다", () => {
+    const arena = parsed17.items.filter((i) => i.anchorUrl.endsWith("#patch-arena"));
+    expect(arena.length).toBeGreaterThan(0);
+    expect(arena.every((i) => i.modeScope === "arena")).toBe(true);
+    const aram = parsed17.items.filter((i) => i.anchorUrl.includes("#patch-aram"));
+    expect(aram.length).toBeGreaterThan(0);
+    expect(aram.every((i) => i.modeScope === "aram")).toBe(true);
+  });
+
+  it("26.16도 같은 규칙으로 새겨진다(클래식 패턴이 다른 패치)", () => {
+    const classic16 = parsed16.items.filter((i) => i.anchorUrl.endsWith("#patch-classic"));
+    expect(classic16.length).toBeGreaterThan(50);
+    expect(classic16.every((i) => i.modeScope === "classic")).toBe(true);
+  });
+
+  it("SR 챔피언·아이템 항목은 core다 — 이들만 짝짓기 자격을 갖는다", () => {
+    const core = parsed17.items.filter((i) => i.modeScope === "core");
+    expect(core.length).toBeGreaterThan(0);
+    expect(core.every((i) => !i.anchorUrl.includes("#patch-classic"))).toBe(true);
+    // 엔티티 앵커(h3)를 가진 항목은 전부 core여야 한다 — 구조 신호와 제목 신호의 교차 확인.
+    const entityAnchored = parsed17.items.filter((i) => i.anchorKind === "entity");
+    expect(entityAnchored.length).toBeGreaterThan(0);
+    expect(entityAnchored.every((i) => i.modeScope === "core")).toBe(true);
+  });
+});

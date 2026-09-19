@@ -19,6 +19,7 @@ function note(over: Partial<PatchNoteItem> = {}): PatchNoteItem {
     summary: "마나 소모량: 40 ⇒ 45",
     anchorUrl: "https://example.test/notes",
     anchorKind: "section",
+    modeScope: "core",
     ...over,
   };
 }
