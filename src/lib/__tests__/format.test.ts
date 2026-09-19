@@ -200,7 +200,10 @@ describe("itemSlug / itemIdFromSlug / itemHref", () => {
     expect(() => itemSlug("champion:Weird~Name:pickRate")).toThrow();
   });
 
-  it("itemHref는 '/item/{slug}/' 형태를 반환한다", () => {
-    expect(itemHref("champion:Trundle:pickRate")).toBe("/item/champion~Trundle~pickRate/");
+  // 2026-09-19 명세 변경(사용자 지시): 루트는 랜딩이 쓰고 LoL은 `/lol` 접두를 받는다.
+  // 항목 상세는 LoL 전용이므로 이 href도 게임 접두를 탄다 — 디스코드 embed 링크도 이 함수
+  // 하나를 거치므로 함께 따라온다(webhook.ts의 `${siteUrl}${itemHref(id)}`).
+  it("itemHref는 '/lol/item/{slug}/' 형태를 반환한다", () => {
+    expect(itemHref("champion:Trundle:pickRate")).toBe("/lol/item/champion~Trundle~pickRate/");
   });
 });

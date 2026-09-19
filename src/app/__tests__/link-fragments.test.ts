@@ -11,7 +11,9 @@ import path from "node:path";
 const SRC = path.join(process.cwd(), "src");
 
 /** 해시가 DOM 앵커가 아니라 상태 키인 라우트 — 그 경우 프래그먼트는 페이지가 해석한다. */
-const STATE_FRAGMENT_ROUTES = new Set(["/compare/", "/pubg/compare/"]);
+// 2026-09-19: LoL이 `/lol` 접두를 받으면서 대조표 경로가 `/lol/compare/`로 옮겼다. 구 경로는
+// vercel.json 리다이렉트가 받으므로 소스에는 더 이상 존재하지 않는다(legacy-redirects.test.ts).
+const STATE_FRAGMENT_ROUTES = new Set(["/lol/compare/", "/pubg/compare/"]);
 
 function walk(dir: string): string[] {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {

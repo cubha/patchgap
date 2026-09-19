@@ -4,6 +4,38 @@
   "framework": "nextjs",
   "cleanUrls": true,
   "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/compare",
+      "destination": "/lol/compare/",
+      "permanent": false
+    },
+    {
+      "source": "/compare/",
+      "destination": "/lol/compare/",
+      "permanent": false
+    },
+    {
+      "source": "/methodology",
+      "destination": "/lol/methodology/",
+      "permanent": false
+    },
+    {
+      "source": "/methodology/",
+      "destination": "/lol/methodology/",
+      "permanent": false
+    },
+    {
+      "source": "/item/:slug",
+      "destination": "/lol/item/:slug/",
+      "permanent": false
+    },
+    {
+      "source": "/item/:slug/",
+      "destination": "/lol/item/:slug/",
+      "permanent": false
+    }
+  ],
   "headers": [
     {
       "source": "/dd/(.*)",

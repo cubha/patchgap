@@ -1,0 +1,107 @@
+/* src/styles/landing.css
+   랜딩(`/`) 전용 레이어 — 확정 시안 docs/design/prototype/05-landing-B.html 구현.
+
+   왜 Tailwind 유틸이 아니라 CSS 파일인가: 이 화면의 핵심은 **겹친 배경 레이어**(스플래시 월 +
+   국소 암막 + 하단 페이드)이고, 그건 유틸 클래스로 쓰면 arbitrary 값 범벅이 되어 토큰 게이트를
+   우회하게 된다(verify.sh Spec §4). ambient.css가 같은 이유로 존재한다.
+
+   색은 전부 토큰에서 파생한다 — 암막은 `--bg`를 color-mix로 희석해 쓴다. raw rgba를 쓰면
+   토큰 Ground Truth 하드코딩 경고 대상이고, 테마가 바뀌어도 따라오지 않는다. */
+
+.landing-hero {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 2rem;
+}
+
+/* 스플래시 월 — 우리가 실제로 판정하는 게임들의 아트만 쓴다(합성 스크립트:
+   docs/design/tools/build-splash-wall.py). 게임이 늘면 그 스크립트의 TILES에 줄을 추가하고 다시 돌린다. */
+.landing-hero-art {
+  position: absolute;
+  inset: 0;
+  background-image: url("/bg/splash-wall.jpg");
+  background-position: center top;
+  background-size: cover;
+}
+
+/* 글자 뒤에만 암막을 깐다 — 아트 전체를 누르면 원색이 죽는다(사용자 지시: "스플래시아트
+   원색이 좀더잘보이게"). 타원형 암막 + 아래로 잠기는 선형 페이드 두 겹. */
+.landing-hero-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      46% 82% at 50% 26%,
+      color-mix(in oklab, var(--bg) 86%, transparent),
+      color-mix(in oklab, var(--bg) 50%, transparent) 62%,
+      color-mix(in oklab, var(--bg) 14%, transparent) 100%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--bg) 50%, transparent) 0%,
+      color-mix(in oklab, var(--bg) 12%, transparent) 32%,
+      color-mix(in oklab, var(--bg) 62%, transparent) 74%,
+      color-mix(in oklab, var(--bg) 95%, transparent) 92%,
+      var(--bg) 100%
+    );
+}
+
+.landing-hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* 한글은 단어 중간에서 끊기면 읽기가 크게 나빠진다 — 히어로 문장에만 keep-all을 건다. */
+.landing-headline {
+  word-break: keep-all;
+  text-wrap: balance;
+  text-shadow: 0 2px 24px color-mix(in oklab, var(--bg) 85%, transparent);
+}
+
+.landing-lede {
+  word-break: keep-all;
+  text-shadow: 0 1px 14px color-mix(in oklab, var(--bg) 90%, transparent);
+}
+
+/* 게임 패널 — 키아트가 꽉 차고 아래에서 위로 어두워진다. 링크 전체가 히트 영역이다. */
+.landing-panel {
+  position: relative;
+  overflow: hidden;
+  min-height: 24rem;
+}
+
+.landing-panel-art {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.62;
+  transition: opacity 200ms ease, transform 300ms ease;
+}
+
+.landing-panel:hover .landing-panel-art,
+.landing-panel:focus-visible .landing-panel-art {
+  opacity: 0.78;
+  transform: scale(1.02);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-panel-art {
+    transition: none;
+  }
+  .landing-panel:hover .landing-panel-art,
+  .landing-panel:focus-visible .landing-panel-art {
+    transform: none;
+  }
+}
+
+.landing-panel-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--bg) 15%, transparent) 0%,
+    color-mix(in oklab, var(--bg) 92%, transparent) 74%,
+    color-mix(in oklab, var(--bg) 97%, transparent) 100%
+  );
+}

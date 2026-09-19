@@ -18,7 +18,7 @@
 // 본문 래퍼에 `flex-1`을 줘 "고지" 카드의 짧은 텍스트가 카드 하단에 눌리지 않고 자연스럽게
 // 채워지도록 했다(children 자체는 SectionCard가 감싸지 않으므로 각 소비처가 이 규약을 따름).
 
-import { isSignificantDelta } from "@/pipeline/shared/significance";
+import { isReportableRecord } from "@/pipeline/shared/reportable";
 import fs from "node:fs";
 import path from "node:path";
 import Container from "@/components/Container";
@@ -58,15 +58,17 @@ export default function MethodologyPage() {
   const deltas = pair ? loadDeltas(pair.from, pair.to) : null;
   const ddragonVersion = latestDdragonVersion();
 
-  // 2026-09-18(채점 라운드1 ST-5): 홈 타일 "유의 변화"와 **같은 술어**를 쓴다. 이전엔 여기만
+  // 2026-09-18(채점 라운드1 ST-5): 홈 타일 "유의한 관측"과 **같은 술어**를 쓴다. 이전엔 여기만
   // `q<α` 단독이라 홈 403 vs 방법론 410으로 두 페이지가 서로를 반박했다(표본 부족 7행이 q는
   // 통과하지만 승률 게이트에서 제외되는 차이).
+  // 2026-09-19: 홈이 `isSignificantDelta` → `isReportableRecord`로 바뀌었으므로 여기도 같이
+  // 옮긴다(효과크기 바닥 미달을 세지 않는다). 한쪽만 고치면 같은 결함이 반대 방향으로 재발한다.
   // 추정 원인 카드의 수치 — 리터럴로 적으면 재생성에 뒤처져 화면이 거짓을 말한다(독립 채점 K2-7).
   const llmStats = deltas ? computeLlmCauseStats(deltas.rows) : null;
   const dominant = llmStats ? dominantConfidence(llmStats) : null;
 
   const significantCount = deltas
-    ? deltas.rows.filter((row) => isSignificantDelta(row, deltas.meta.qAlpha ?? FDR_ALPHA)).length
+    ? deltas.rows.filter((row) => isReportableRecord(row, deltas.meta.qAlpha ?? FDR_ALPHA)).length
     : null;
 
   const steps = buildPipelineSteps({

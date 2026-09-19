@@ -94,7 +94,7 @@ export default function HeroSummary({ stats, action }: HeroSummaryProps) {
             유리가 꺼져 보였다 — 유리 패널 안의 상태 표현은 전부 반투명으로 통일한다. */}
         {/* 2026-09-18 라운드6: 대조표 칩 `unannounced`가 미공지+간접 영향을 함께 남긴다(어휘 통일) —
             타일이 세는 집합과 같은 칩으로 간다. */}
-        <Link href="/compare/#unannounced" className="p-5 transition-colors hover:bg-accent/10">
+        <Link href="/lol/compare/#unannounced" className="p-5 transition-colors hover:bg-accent/10">
           <strong className="block font-display text-3xl font-bold tabular-nums text-accent">
             {fmtInt(unannouncedCount)}
           </strong>

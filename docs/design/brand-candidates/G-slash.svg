@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <rect width="256" height="256" rx="58" fill="#050f1c"/>
+  <rect x="3" y="3" width="250" height="250" rx="55" fill="none" stroke="#c8a355" stroke-opacity="0.3" stroke-width="3"/>
+  <!-- 패치노트 줄 넷을 금색 균열이 가른다 -->
+  <rect x="48" y="66" width="120" height="18" rx="9" fill="#f0e6d2" fill-opacity="0.88"/>
+  <rect x="48" y="104" width="86" height="18" rx="9" fill="#f0e6d2" fill-opacity="0.62"/>
+  <rect x="48" y="142" width="104" height="18" rx="9" fill="#f0e6d2" fill-opacity="0.62"/>
+  <rect x="48" y="180" width="72" height="18" rx="9" fill="#f0e6d2" fill-opacity="0.4"/>
+  <path d="M196 40 L150 216" fill="none" stroke="#050f1c" stroke-width="34" stroke-linecap="round"/>
+  <path d="M196 40 L150 216" fill="none" stroke="#c8a355" stroke-width="15" stroke-linecap="round"/>
+</svg>

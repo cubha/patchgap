@@ -8,12 +8,12 @@
 //     1회"만 영구 재생했으나, 도그푸딩 중 이미 한 번이라도 본 브라우저는 새로고침해도 다시는
 //     재생되지 않는 것을 사용자가 결함으로 지적했다(원래 의도한 "최초 1회"가 아니라 "F5해도
 //     재생"이 실제로 필요한 동작이었다) — 아래 useIntroReveal 참고.
-//   LAYER 4(상세 스플래시) — /item/[id] 경로 + useAmbient().detailSplashUrl이 있을 때만.
+//   LAYER 4(상세 스플래시) — /lol/item/[id] 경로 + useAmbient().detailSplashUrl이 있을 때만.
 "use client";
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { gameFromPathname } from "@/lib/game";
+import { gameFromPathname, isGameHome, isItemDetailPath } from "@/lib/game";
 import { laneCameraTransform } from "@/lib/laneCamera";
 import { useAmbient } from "./AmbientContext";
 
@@ -52,7 +52,7 @@ function useReducedMotion(): boolean {
  * `introEnded`(아래 컴포넌트 본문)는 한 번 true가 되면 리셋되지 않는다 — 재생이 끝나면
  * 정지 이미지로 영구 전환되는 기존 동작은 그대로 유지해야 하므로, localStorage만 걷어내면
  * 새 분기 없이 자동으로 이 의미론이 된다: F5(하드 리로드, 컴포넌트 재마운트)마다 재생 ✅,
- * `/compare/` 등 딥링크 후 클라이언트 네비로 홈에 처음 들어와도 재생 ✅, 그 상태에서 홈↔다른
+ * `/lol/compare/` 등 딥링크 후 클라이언트 네비로 홈에 처음 들어와도 재생 ✅, 그 상태에서 홈↔다른
  * 페이지를 왕복해도(같은 마운트 생명주기 안이므로) 재생 안 함 ✅(1.7초 영상이 왕복마다
  * 반복되면 오히려 거슬린다). "매 홈 진입마다"까지 가려면 `introEnded`도 같이 리셋해야 하는데,
  * 그건 재생 종료 후 정지 이미지 유지라는 기존 동작과 충돌해 채택하지 않는다.
@@ -105,12 +105,17 @@ export default function AmbientBackground() {
   const { detailSplashUrl, introNonce } = useAmbient();
   const reducedMotion = useReducedMotion();
 
-  const game = gameFromPathname(pathname ?? "/");
+  // 2026-09-19: 경로 판정을 전부 game.ts로 옮겼다. 예전엔 여기서 `pathname === "/"`와
+  // `startsWith("/item/")`를 직접 봤는데, 루트가 랜딩으로 바뀌고 LoL이 `/lol` 접두를 받은 지금
+  // 그대로 두면 **랜딩에서 협곡 인트로가 재생되고** LoL 홈에서는 안 되는 정확한 반대가 된다.
+  const route = pathname ?? "/";
+  const game = gameFromPathname(route);
   const isPubg = game === "pubg";
-  const isHome = pathname === "/";
-  /** PUBG 브리핑 — LoL 홈(`/`)과 같은 자리이며 강하 인트로가 재생되는 유일한 라우트다. */
-  const isPubgHome = pathname === "/pubg/" || pathname === "/pubg";
-  const isItemDetail = pathname?.startsWith("/item/") ?? false;
+  /** 각 게임의 브리핑만 "홈"이다 — 랜딩은 자기 배경(스플래시 월)을 직접 갖는다. */
+  const isHome = game === "lol" && isGameHome(route);
+  /** PUBG 브리핑 — LoL 홈과 같은 자리이며 강하 인트로가 재생되는 유일한 라우트다. */
+  const isPubgHome = isPubg && isGameHome(route);
+  const isItemDetail = isItemDetailPath(route);
   const showDetailSplash = isItemDetail && detailSplashUrl !== null;
 
   // 라인 카메라(2026-09-13·6차 연속, 사용자 결정) — 라인 필터 선택에 따라 배경이 확대·이동하던
@@ -136,6 +141,12 @@ export default function AmbientBackground() {
   // **라인 카메라의 어포던스 자체는 마커 없이도 전달된다**: 라인 전환 시 상단 배너 밴드의
   // 픽셀이 22~28% 바뀌는 것을 실측했다(전체↔탑 22.8% / 전체↔원딜 27.2% / 탑↔원딜 28.2%).
   // 자산 public/bg/{baron,drake}.png는 되살릴 때를 위해 남겨둔다(합계 96KB).
+
+  // 랜딩(게임 없음)은 **자기 배경을 직접 갖는다**(스플래시 월, src/styles/landing.css). 전역
+  // 앰비언트는 게임 화면의 것이라 여기서 그리면 협곡 워시가 랜딩 전체에 녹색 캐스트를 씌운다
+  // (실측: 구현 직후 첫 렌더에서 그 상태였다). 게임이 정해지지 않은 화면에서는 아무것도 그리지
+  // 않는 것이 맞다 — 특정 게임의 아트를 기본값으로 삼으면 그 게임을 주장하는 셈이다.
+  if (game === null) return null;
 
   // PUBG는 협곡 스택(워시·카메라·인트로 영상) 대신 키아트 한 장으로 간다 — 자산도 구도도
   // 다른 사진이라 같은 레이어 구조에 끼워 넣으면 둘 다 망가진다(승인 시안 .hero-map 참고).
@@ -195,7 +206,7 @@ export default function AmbientBackground() {
       ) : null}
 
       {/* isHome 가드(2026-09-14) — introPlaying은 enabled(isHome&&!reducedMotion)가 true였던
-          순간 켜진 뒤 리셋되지 않으므로, 재생 도중 다른 라우트로 이동해도(예: /compare/) 이
+          순간 켜진 뒤 리셋되지 않으므로, 재생 도중 다른 라우트로 이동해도(예: /lol/compare/) 이
           레이어가 그대로 남아 배경 위에 얹힌다. isHome을 여기서도 확인해 홈을 벗어나면 즉시
           사라지게 한다(재생 중단 자체는 <video> 언마운트가 처리). */}
       {isHome && intro.active ? (

@@ -24,7 +24,7 @@
 // 2026-09-14(탭 분리) — "패치 내용"/"미공지 Gap" 탭 2개 추가(PLAN-home-tab-split-intro-fix-
 // 2026-09-14.md). `releaseStream.buildReleaseStream()`이 더 이상 두 그룹을 섞어 배치하지
 // 않으므로(단순 concat) 여기서 `group.kind`로 걸러 탭별 목록을 만든다. 탭 DOM/스타일은
-// `/compare/`의 `NoteNavigator.tsx`(패치노트 섹션 탭)를 그대로 재사용 — 사이트 안에 이미
+// `/lol/compare/`의 `NoteNavigator.tsx`(패치노트 섹션 탭)를 그대로 재사용 — 사이트 안에 이미
 // 있는 탭 패턴과 다른 시맨틱을 새로 만들지 않는다(role="tablist"/role="tab"/aria-selected,
 // `aria-controls`·`role="tabpanel"`은 그 전례도 안 쓰므로 여기서도 생략).
 // `panelSurfaceClass("glass")`를 스크롤 `<ul>`에서 비스크롤 `<section>` 래퍼로 옮겼다 — 골드
@@ -184,7 +184,7 @@ export default function ReleaseNoteStream({
   const miscTotal = tab === "content" ? miscSections.reduce((sum, s) => sum + s.notes.length, 0) : 0;
 
   return (
-    // NoteNavigator.tsx(/compare/)와 동일 골격 — <section>이 panel-surface-glass(레일+채움)를
+    // NoteNavigator.tsx(/lol/compare/)와 동일 골격 — <section>이 panel-surface-glass(레일+채움)를
     // 소유하고, 탭 행 아래 <ul>은 순수 스크롤 컨테이너(자체 표면 없음). 탭 행은 목록이 비어도
     // 항상 렌더되므로 빈 탭에서도 다른 탭으로 되돌아올 수 있다(2026-09-14 — 이전 early-return
     // 구조는 filtered.length===0일 때 패널 전체를 문구로 바꿔치기해 탭 자체가 사라졌다).

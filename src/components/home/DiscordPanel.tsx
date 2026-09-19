@@ -36,7 +36,7 @@ export default function DiscordPanel({ generatedAt }: DiscordPanelProps) {
           미공지 상위 항목과 이상 관측을 요약해 배치가 서버로 방송합니다.
         </p>
         <Link
-          href="/methodology/#discord"
+          href="/lol/methodology/#discord"
           className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-accent px-5 text-sm font-bold text-accent-on transition-colors hover:bg-accent-hover"
         >
           방송 규칙 보기 →

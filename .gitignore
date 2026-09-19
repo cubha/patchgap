@@ -52,3 +52,6 @@ scratch.md
 .mvp-state*.json
 /logs/
 /data/aggregated/deltas/*.notify.json
+
+# 랜딩 스플래시 월 합성용 원격 아트 캐시(재배포 방지 — 합성 결과만 커밋)
+docs/design/tools/.wall-cache/

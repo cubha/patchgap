@@ -154,6 +154,21 @@ describe("computeHeadline", () => {
     });
   });
 
+  // 2026-09-19 계약 변경(사용자 지적): M은 `isSignificantDelta`가 아니라 **표시 자격**
+  // (`isReportableRecord`)으로 센다. 실측 근거 — 26.17→26.18에서 M=403 중 321건(80%)이
+  // `below-threshold`(유의하지만 효과크기 바닥 미달)였고, 그 321건은 홈·대조표 어느 목록에도
+  // 렌더되지 않는다. 히어로가 자기 화면이 보여주지 않는 것을 세고 "유의한 관측"이라 부르던
+  // 상태였다. 이 테스트가 그 회귀를 막는다.
+  it("효과크기 바닥 미달은 M에서 제외한다 — 목록에 안 나오는 것을 세지 않는다", () => {
+    const rows = deltasFile([
+      // 유의 + 바닥 통과(pickRate 바닥 0.02, |delta|=0.02) → 센다.
+      delta({ id: "1", status: "unannounced", delta: 0.02, ci: [0.01, 0.03], q: 0.02 }),
+      // 유의하지만 바닥 미달(|delta|=0.005) → 세지 않는다. 상태도 below-threshold다.
+      delta({ id: "2", status: "below-threshold", delta: 0.005, ci: [0.004, 0.006], q: 0.01 }),
+    ]);
+    expect(computeHeadline(rows, null).statCount).toBe(1);
+  });
+
   it("자기쌍(26.17→26.17)과 동일한 형태(delta≈0, q=1)에서는 M=0이어야 한다", () => {
     const rows = deltasFile([
       delta({ id: "1", status: "announced-inconsistent", q: 1, ci: [-0.014, 0.014], delta: 0, matchedNoteIds: ["a"] }),
