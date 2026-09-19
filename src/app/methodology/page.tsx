@@ -23,6 +23,7 @@ import fs from "node:fs";
 import path from "node:path";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
+import { computeLlmCauseStats } from "@/components/methodology/llmStats";
 import { getDefaultPair, loadDeltas, loadNotes, loadSummary } from "@/lib/data";
 import { fmtKst } from "@/lib/format";
 import { EFFECT_SIZE_FLOORS, FDR_ALPHA, WIN_RATE_MIN_N } from "@/pipeline/aggregate/stats";
@@ -60,6 +61,9 @@ export default function MethodologyPage() {
   // 2026-09-18(채점 라운드1 ST-5): 홈 타일 "유의 변화"와 **같은 술어**를 쓴다. 이전엔 여기만
   // `q<α` 단독이라 홈 403 vs 방법론 410으로 두 페이지가 서로를 반박했다(표본 부족 7행이 q는
   // 통과하지만 승률 게이트에서 제외되는 차이).
+  // 추정 원인 카드의 수치 — 리터럴로 적으면 재생성에 뒤처져 화면이 거짓을 말한다(독립 채점 K2-7).
+  const llmStats = deltas ? computeLlmCauseStats(deltas.rows) : null;
+
   const significantCount = deltas
     ? deltas.rows.filter((row) => isSignificantDelta(row, deltas.meta.qAlpha ?? FDR_ALPHA)).length
     : null;
@@ -184,9 +188,16 @@ export default function MethodologyPage() {
                   <dd className="mt-1">
                     관측 변화의 상당수는 패치가 아니라 메타 이동·표본 구성 변화에서 옵니다. 그럴듯한 조항이 없을 때
                     지어내지 않는 것이 이 사이트의 규칙이라, 그런 경우는 &ldquo;설명할 조항을 찾지 못했습니다&rdquo;로
-                    끝냅니다. 실측(26.18): 대상 113건 중 원인을 못 찾은 것이 36건, 검증을 통과한 원인을 가진 것이
-                    77건이며 신뢰도는 낮음 191 · 보통 33 · 높음 3건입니다. <strong className="text-fg">낮음이
-                    대부분</strong>이라는 사실 자체가 이 추정의 한계를 말합니다.
+                    끝냅니다.{" "}
+                    {llmStats ? (
+                      <>
+                        실측({pair?.to ?? "최근 패치"}): 대상 {llmStats.attempted}건 중 원인을 못 찾은 것이{" "}
+                        {llmStats.withoutCause}건, 검증을 통과한 원인을 가진 것이 {llmStats.withVerifiedCause}건이며
+                        신뢰도는 낮음 {llmStats.confidence.low} · 보통 {llmStats.confidence.medium} · 높음{" "}
+                        {llmStats.confidence.high}건입니다.{" "}
+                        <strong className="text-fg">낮음이 대부분</strong>이라는 사실 자체가 이 추정의 한계를 말합니다.
+                      </>
+                    ) : null}
                   </dd>
                 </div>
               </dl>
@@ -196,6 +207,46 @@ export default function MethodologyPage() {
               </p>
             </div>
           </SectionCard>
+
+          {/* 디스코드 방송 규칙(2026-09-19, 독립 채점 K1-2): 홈·항목 상세의 "방송 규칙 보기 →"가
+              이 페이지로 오는데 정작 방송에 대한 서술이 0건이었다. 2026-09-14에 제거된 것은
+              **미리보기 목업**이고, 무엇이 언제 나가는지에 대한 서술은 방법론이 총망라해야 한다
+              (공통3). 목업을 되살리지 않고 규칙만 적는다. */}
+          <div id="discord">
+            <SectionCard eyebrow="알림" title="디스코드로 무엇이 나가나" variant="glass">
+              <div className="flex flex-col gap-3 p-5 text-sm leading-relaxed text-fg-2">
+                <p>
+                  브리핑은 <strong className="text-fg">배치가 보냅니다</strong>. 이 사이트는 정적 페이지라
+                  브라우저에서 아무것도 전송하지 않습니다 — 패치 수집·집계·판정이 끝난 뒤 CI가 한 번 보냅니다.
+                </p>
+                <dl className="grid grid-cols-1 gap-x-8 gap-y-3 md:grid-cols-2">
+                  <div>
+                    <dt className="font-display font-bold text-fg">보내는 것</dt>
+                    <dd className="mt-1">
+                      미공지 관측 상위 항목과 이상 관측(공지 방향과 반대로 움직인 관측) 상위 3건입니다.
+                      <strong className="text-fg"> 공지대로 움직인 관측은 보내지 않습니다</strong> — 패치노트를
+                      읽으면 아는 내용이기 때문입니다.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-display font-bold text-fg">보내지 않는 것</dt>
+                    <dd className="mt-1">
+                      표본 부족 · 바닥 미달 · 변화 없음으로 판정된 관측은 화면과 마찬가지로 방송에서도 빠집니다.
+                      그래서 건수가 적은 패치에는 짧은 브리핑이 갑니다.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-display font-bold text-fg">언제</dt>
+                    <dd className="mt-1">패치 수집이 끝난 뒤 판정 파이프라인 마지막 단계에서 1회. 실패해도 재전송하지 않습니다.</dd>
+                  </div>
+                  <div>
+                    <dt className="font-display font-bold text-fg">홈의 &ldquo;마지막 집계&rdquo;</dt>
+                    <dd className="mt-1">전송 시각이 아니라 이 판정 파일이 마지막으로 생성된 시각입니다.</dd>
+                  </div>
+                </dl>
+              </div>
+            </SectionCard>
+          </div>
 
           {/* 확장성의 증명 — HANDOFF-redesign-2026-09-10.md §4-4. 셀렉터가 아니라 어댑터
               매핑표로 "다른 게임에도 같은 판정 엔진을 쓸 수 있다"를 보인다. */}

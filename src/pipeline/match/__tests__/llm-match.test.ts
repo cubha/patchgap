@@ -435,19 +435,25 @@ describe("문장 위생 집계(2026-09-19 — 항목7 기계적 절반)", () => 
   // 프롬프트에 "한 문장은 80자 안팎"이 **이미 있는데** 실측 요약 113건 중 82건(72%)이 초과했고
   // 최대 132자였다. 문구를 더 적는 것으로는 안 되므로, 다음 실행이 **측정 가능**하도록 위반을 센다.
   // (프롬프트 v4 자체는 PROMPT_VERSION을 올려 캐시를 전량 무효화하므로 26.19 신규 실행에 묶는다.)
-  it("길이 초과와 완곡 종결을 센다", () => {
+  // 2026-09-19 **명세 변경**(독립 채점 K1-7): 상한 하나로 요약·원인을 같이 세면 프롬프트가
+  // 지시하는 값(요약 100자·원인 80자)과 계측이 어긋난다. 상수를 분리했으므로 이 테스트도
+  // 두 상한을 각각 확인한다 — 통과시키려고 고친 것이 아니라 세는 기준 자체가 바뀌었다.
+  it("요약 100자·원인 80자 상한을 각각 세고, 완곡 종결도 센다", () => {
     const stats = summarizeProseHygiene([
       { summary: "짧고 단정한 한 문장입니다.", causes: ["원인도 짧습니다."] },
       {
+        // 81자 요약은 상한(100자) 안이라 초과로 세지 않는다 — 옛 단일 상한(80자)에서는 셌다.
         summary: "가".repeat(81) + ".",
         causes: ["이 변화는 표본 변동일 가능성이 있습니다.", "영향이 있었을 수 있습니다."],
       },
+      { summary: "나".repeat(101) + ".", causes: ["다".repeat(81) + "."] },
     ]);
-    expect(stats.summaryCount).toBe(2);
+    expect(stats.summaryCount).toBe(3);
     expect(stats.summaryOverLength).toBe(1);
-    expect(stats.causeCount).toBe(3);
+    expect(stats.causeCount).toBe(4);
+    expect(stats.causeOverLength).toBe(1);
     expect(stats.causeHedged).toBe(2);
-    expect(stats.maxSummaryLength).toBeGreaterThan(80);
+    expect(stats.maxSummaryLength).toBeGreaterThan(100);
   });
 });
 

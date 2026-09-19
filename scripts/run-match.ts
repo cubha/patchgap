@@ -16,7 +16,8 @@ import { matchDeterministic } from "../src/pipeline/match/entity-match";
 import { applyVerdicts, indexNotesById, sortDeltas, writeDeltas } from "../src/pipeline/match/verdict";
 import {
   inferIndirectCandidates,
-  PROSE_MAX_CHARS,
+  CAUSE_MAX_CHARS,
+  SUMMARY_MAX_CHARS,
   type LlmMatchOptions,
   type LlmRunSummary,
 } from "../src/pipeline/match/llm-match";
@@ -210,9 +211,9 @@ export async function main(): Promise<void> {
   if (pipelineResult.llmSummary) {
     const s = pipelineResult.llmSummary;
     console.log(
-      `[run-match] 문장 위생: 요약 ${s.prose.summaryCount}건 중 ${PROSE_MAX_CHARS}자 초과 ` +
+      `[run-match] 문장 위생: 요약 ${s.prose.summaryCount}건 중 ${SUMMARY_MAX_CHARS}자 초과 ` +
         `${s.prose.summaryOverLength}건(최장 ${s.prose.maxSummaryLength}자) · 완곡 종결 ${s.prose.summaryHedged}건 / ` +
-        `원인 ${s.prose.causeCount}건 중 초과 ${s.prose.causeOverLength}건 · 완곡 ${s.prose.causeHedged}건`
+        `원인 ${s.prose.causeCount}건 중 ${CAUSE_MAX_CHARS}자 초과 ${s.prose.causeOverLength}건 · 완곡 ${s.prose.causeHedged}건`
     );
     console.log(
       `[run-match] LLM 2단: calls=${s.calls} cacheHits=${s.cacheHits} skipped=${s.skipped} ` +

@@ -71,6 +71,9 @@
 
 - `git diff data/aggregated/notes`가 `modeScope` 추가 줄 외 **0줄**.
 - 재매칭 후 `meta.llm.calls === 0`(캐시 100% 적중) — 아니면 중단.
+  **⚠️ 이 기준은 1차(모드 게이트만) 재매칭에만 적용된다.** 항목 7 근본해결(§4-2)은 후보 풀과
+  `PROMPT_VERSION`을 의도적으로 바꾸므로 캐시 전량 미스가 **정상**이다 — 최종 커밋 데이터의
+  `meta.llm.calls`는 120·110이고 이는 기준 위반이 아니라 §4-2 단계의 산출이다.
 - 재매칭 후 델타의 `matchedNoteIds`가 모드 노트를 가리키는 참조 **0건**(현재 739·845건).
 - `causes[].candidateNoteId`·`llm.summaryCites`가 모드 노트를 인용한 채 `verified:true`인 행 **0건**
   (현재 282·34건).

@@ -190,6 +190,13 @@ export default function ReleaseNoteStream({
         // 읽힌다(의도된 부수효과, panel.css 주석 참고). 2026-09-14부터 이 표면 클래스는
         // <ul>이 아니라 부모 <section>에 있다 — 탭 행도 같은 레일 아래 들어오게 하려는 것.
         <ul className="min-h-0 flex-1 overflow-y-auto">
+          {/* 2026-09-19: 라인 필터 결과가 0건인데 "기타 변경"이 있으면, 이전엔 위 빈 상태 분기가
+              걸리지 않아 **안내 없이 무관한 블록만** 남았다(사용자가 고른 라인에 대해 아무 말도
+              하지 않는 화면). 목록 머리에 한 줄로 말한다 — 기타 변경 줄에는 라인 축이 원리적으로
+              없으므로 그 블록은 그대로 둔다. */}
+          {filtered.length === 0 ? (
+            <li className="border-b border-border-soft px-5 py-3 text-sm text-muted">{EMPTY_MESSAGE[tab]}</li>
+          ) : null}
           {segmentStream(filtered).map((segment) =>
             segment.kind === "rows" ? (
               segment.entries.map((entry) => renderRow(entry))

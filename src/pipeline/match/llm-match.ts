@@ -341,8 +341,13 @@ const HEDGE_ENDINGS = [
   "듯합니다",
 ];
 
-/** 한 문장의 길이 상한(프롬프트 규칙 9의 "80자 안팎"을 기계가 세는 형태로 고정). */
-export const PROSE_MAX_CHARS = 80;
+/**
+ * 길이 상한 — **프롬프트 규칙 9와 같은 값을 쓴다.** 하나로 묶어 두었더니 요약을 80자 기준으로
+ * 세면서 프롬프트는 100자를 지시하는 어긋남이 생겼다(독립 채점 K1-7 지적: 집계 수치가 프롬프트
+ * 상한과 다른 것을 말한다). 규칙과 계측이 같은 숫자를 보게 분리한다.
+ */
+export const SUMMARY_MAX_CHARS = 100;
+export const CAUSE_MAX_CHARS = 80;
 
 export interface ProseHygieneStats {
   summaryCount: number;
@@ -383,13 +388,13 @@ export function summarizeProseHygiene(
   for (const entry of entries) {
     if (entry.summary !== null && entry.summary.length > 0) {
       stats.summaryCount += 1;
-      if (entry.summary.length > PROSE_MAX_CHARS) stats.summaryOverLength += 1;
+      if (entry.summary.length > SUMMARY_MAX_CHARS) stats.summaryOverLength += 1;
       if (isHedged(entry.summary)) stats.summaryHedged += 1;
       stats.maxSummaryLength = Math.max(stats.maxSummaryLength, entry.summary.length);
     }
     for (const cause of entry.causes) {
       stats.causeCount += 1;
-      if (cause.length > PROSE_MAX_CHARS) stats.causeOverLength += 1;
+      if (cause.length > CAUSE_MAX_CHARS) stats.causeOverLength += 1;
       if (isHedged(cause)) stats.causeHedged += 1;
     }
   }

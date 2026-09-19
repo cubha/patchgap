@@ -149,6 +149,20 @@ export default async function PubgMapPage({ params }: PageProps) {
           }
         />
 
+        {/* 2026-09-19 사용자 지적("근거가 전혀 사용자가 알아볼 수 없게되어있어")의 맵 쪽 대응.
+            무기 상세와 달리 맵에는 통계 판정 행이 없어 판정 근거 문단이 성립하지 않는다 —
+            대신 **이 숫자가 어디서 나왔는지**를 한 문장으로 말한다. 없는 판정을 있는 것처럼
+            서술하지 않는 쪽이 "무근거 문장은 회색" 원칙과 같은 계열의 정직이다. */}
+        <p className="text-sm leading-relaxed text-fg-2">
+          {delta
+            ? `이 수치는 Steam 전 지역·전 티어 매치 중 ${identity.koName}에서 진행된 ` +
+              `${(statBefore?.nMatches ?? 0).toLocaleString()}건(${maps.deltas.meta.from}) · ` +
+              `${(statAfter?.nMatches ?? 0).toLocaleString()}건(${maps.deltas.meta.to})을 집계한 것입니다. ` +
+              `${maps.deltas.meta.to} 패치노트에는 맵 항목이 없어 관측값만 표시합니다.`
+            : `이 수치는 Steam 전 지역·전 티어 매치 중 ${identity.koName}에서 진행된 ` +
+              `${shown.nMatches.toLocaleString()}건을 집계한 것입니다. 한쪽 구간에만 표본이 잡혀 두 패치를 비교하지 않았습니다.`}
+        </p>
+
         <SectionCard
           eyebrow="구성"
           title={`${identity.koName}에서 많이 줍는 총`}

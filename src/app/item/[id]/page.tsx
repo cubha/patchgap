@@ -223,7 +223,7 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
             </div>
             <div className="ml-auto">
               <Link
-                href="/methodology/"
+                href="/methodology/#discord"
                 className="inline-flex min-h-10 items-center justify-center rounded-md bg-accent px-5 text-sm font-bold text-accent-on hover:opacity-90"
               >
                 방송 규칙 보기 →
