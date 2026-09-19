@@ -37,7 +37,13 @@ h1 em{font-style:normal;color:var(--accent)}
 .summary span{color:var(--muted);font-size:var(--text-xs)}
 .summary .gap b{color:var(--accent)}
 /* ── 무드 패널 ── */
-.panels{display:flex;gap:4px;height:430px;padding:24px 24px 11px;max-width:1180px;margin:0 auto}
+/* 2026-09-19 사용자 지시: 게임 패널·다음 자리를 스플래시 월과 분리되도록 판넬 하나로 감싼다.
+   표면은 구현이 쓰는 .panel-surface-glass(상단 2px 골드 레일 + 유리 채움)와 같은 문법이다. */
+.panels-shell{position:relative;max-width:1180px;margin:0 auto 24px;border-radius:var(--radius-lg);overflow:hidden;
+  border:1px solid rgba(140,107,51,.28);background-color:rgba(10,22,38,.55);backdrop-filter:blur(10px) saturate(1.15);
+  background-image:linear-gradient(90deg,rgba(200,163,85,.9) 0%,rgba(200,163,85,.36) 45%,rgba(200,163,85,0) 100%);
+  background-repeat:no-repeat;background-size:100% 2px;background-position:0 0}
+.panels{display:flex;gap:4px;height:430px;padding:20px}
 .panel{position:relative;flex:1 1 0;border-radius:var(--radius-lg);overflow:hidden;text-decoration:none;color:inherit;
   border:1px solid var(--border-soft);transition:flex-grow .35s ease}
 .panel:first-child{flex-grow:1.55}
@@ -54,7 +60,7 @@ h1 em{font-style:normal;color:var(--accent)}
 .panel .metrics .g b{color:var(--accent)}
 .enter{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 16px;border-radius:var(--radius-pill);
   background:var(--accent);color:var(--accent-on);font-weight:700;font-size:13px;margin-top:16px}
-.panel.next{flex:0 0 190px;border-style:dashed;background:rgba(10,22,38,.45);display:flex;align-items:center;justify-content:center;text-align:center}
+.panel.next{flex:0 0 190px;border-style:dashed;background:rgba(14,26,42,.92);display:flex;align-items:center;justify-content:center;text-align:center}
 .panel.next .body{position:static;padding:20px}
 .panel.next h3.next-q{font-family:var(--font-mono);font-size:22px;line-height:1.25;letter-spacing:.12em;color:var(--accent);opacity:.85;margin:0 0 12px}
 .panel.next p{margin:0;color:var(--muted);font-size:var(--text-xs)}
@@ -88,6 +94,7 @@ footer{border-top:1px solid var(--border-soft);padding:16px 0 36px;color:var(--m
   </div>
 </div></div>
 
+<div class="panels-shell">
 <div class="panels">
   <a class="panel" href="/lol/">
     <i class="art" style="background-image:url('/public/bg/island.webp')"></i>
@@ -123,6 +130,7 @@ footer{border-top:1px solid var(--border-soft);padding:16px 0 36px;color:var(--m
       <p>패치노트를 내고<br>매치 API를 여는 게임이면<br>어댑터만 붙습니다</p>
     </div>
   </div>
+</div>
 </div>
 
 <section class="how wrap" id="how">

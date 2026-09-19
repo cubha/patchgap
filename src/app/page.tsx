@@ -86,70 +86,79 @@ export default function LandingPage() {
         </Container>
 
         <Container className="landing-hero-content pb-14">
-          <div className="grid gap-4 md:grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
-          {cards.map((card) => (
-            <Link
-              key={card.id}
-              href={card.href}
-              className="landing-panel group rounded-lg border border-border-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            >
-              <span
-                className="landing-panel-art"
-                style={{ backgroundImage: `url(${card.art})` }}
-                aria-hidden="true"
-              />
-              <span className="landing-panel-scrim" aria-hidden="true" />
-              <span className="relative z-[1] flex h-full flex-col justify-end p-5">
-                <span className="font-mono text-xs tracking-widest text-accent">
-                  {card.tag}
-                </span>
-                <span className="mt-1.5 font-display text-xl font-bold text-fg">{card.label}</span>
-                <span className="mt-1 font-mono text-xs text-fg-2">
-                  {card.pair.from} → {card.pair.to} · {card.sample}
-                </span>
-                <span className="mt-3.5 flex gap-4">
-                  <span>
-                    <strong className="block font-display text-lg font-bold tabular-nums text-fg">
-                      {fmtInt(card.announced)}
-                    </strong>
-                    <span className="text-xs text-muted">공지된 변화</span>
+          {/* 게임 패널과 다음 자리를 유리 판넬 하나로 감싼다(2026-09-19 사용자 지시) — 카드만
+              띄워 두면 카드 사이 틈으로 스플래시 월이 그대로 보여 **영역**이 배경과 분리되지
+              않는다(이전 라운드에서 카드를 불투명하게 만든 것으로는 카드 하나하나만 떠 보였다).
+              표면은 대조표·방법론 패널과 같은 것을 쓴다 — 랜딩만 다른 판넬 문법을 갖지 않도록
+              새 스타일을 만들지 않고 panelSurfaceClass("glass")를 그대로 부른다. */}
+          <section className={`${panelSurfaceClass("glass")} overflow-hidden rounded-lg p-5`}>
+            <div className="grid gap-4 md:grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
+              {cards.map((card) => (
+                <Link
+                  key={card.id}
+                  href={card.href}
+                  className="landing-panel group rounded-lg border border-border-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                >
+                  <span
+                    className="landing-panel-art"
+                    style={{ backgroundImage: `url(${card.art})` }}
+                    aria-hidden="true"
+                  />
+                  <span className="landing-panel-scrim" aria-hidden="true" />
+                  <span className="relative z-[1] flex h-full flex-col justify-end p-5">
+                    <span className="font-mono text-xs tracking-widest text-accent">
+                      {card.tag}
+                    </span>
+                    <span className="mt-1.5 font-display text-xl font-bold text-fg">{card.label}</span>
+                    <span className="mt-1 font-mono text-xs text-fg-2">
+                      {card.pair.from} → {card.pair.to} · {card.sample}
+                    </span>
+                    <span className="mt-3.5 flex gap-4">
+                      <span>
+                        <strong className="block font-display text-lg font-bold tabular-nums text-fg">
+                          {fmtInt(card.announced)}
+                        </strong>
+                        <span className="text-xs text-muted">공지된 변화</span>
+                      </span>
+                      <span>
+                        <strong className="block font-display text-lg font-bold tabular-nums text-fg">
+                          {fmtInt(card.significant)}
+                        </strong>
+                        <span className="text-xs text-muted">유의한 관측</span>
+                      </span>
+                      <span>
+                        <strong className="block font-display text-lg font-bold tabular-nums text-accent">
+                          {fmtInt(card.unannounced)}
+                        </strong>
+                        <span className="text-xs text-muted">미공지</span>
+                      </span>
+                    </span>
+                    <span className="mt-4 inline-flex h-9 w-fit items-center rounded-pill bg-accent px-4 text-xs font-bold text-accent-on">
+                      시작하기 →
+                    </span>
                   </span>
-                  <span>
-                    <strong className="block font-display text-lg font-bold tabular-nums text-fg">
-                      {fmtInt(card.significant)}
-                    </strong>
-                    <span className="text-xs text-muted">유의한 관측</span>
-                  </span>
-                  <span>
-                    <strong className="block font-display text-lg font-bold tabular-nums text-accent">
-                      {fmtInt(card.unannounced)}
-                    </strong>
-                    <span className="text-xs text-muted">미공지</span>
-                  </span>
-                </span>
-                <span className="mt-4 inline-flex h-9 w-fit items-center rounded-pill bg-accent px-4 text-xs font-bold text-accent-on">
-                  시작하기 →
-                </span>
-              </span>
-            </Link>
-          ))}
+                </Link>
+              ))}
 
-          {/* 열린 끝 — 다음 게임 자리. 문구는 사용자 지정("who is next? to be continue같은").
-              자기 키아트가 없으므로 뒤의 스플래시 월이 그대로 비친다 → 반투명 판(.landing-next)을
-              깔아 글자만 읽히게 하고, 빈자리라는 성격은 점선 테두리로 남긴다. */}
-          <div className="landing-next flex min-h-24 items-center justify-center rounded-lg border border-dashed border-border-soft p-6 text-center">
-            <div>
-              <p className="font-mono text-lg leading-snug tracking-widest text-accent/85">
-                WHO&rsquo;S
-                <br />
-                NEXT?
-              </p>
-              <p className="mt-3 text-xs text-muted">
-                패치노트를 내고 매치 API를 여는 게임이면 어댑터만 붙습니다
-              </p>
+              {/* 열린 끝 — 다음 게임 자리. 문구는 사용자 지정("who is next? to be continue같은").
+                  자기 키아트가 없으므로 판넬에 들어오기 전에는 뒤의 월이 그대로 비쳤고, 그래서
+                  자체 backdrop-filter를 걸고 있었다. 이제는 감싸는 판넬이 이미 유리라 여기서 또
+                  blur를 걸면 뒤가 두 번 뭉개진다 — 파이프라인 섹션의 STEP 카드와 같은
+                  `.card-surface`(중첩 카드 깊이)로 바꾸고, 빈자리라는 성격은 점선 테두리로 남긴다. */}
+              <div className="landing-next card-surface flex min-h-24 items-center justify-center rounded-lg border border-dashed border-border-soft p-6 text-center">
+                <div>
+                  <p className="font-mono text-lg leading-snug tracking-widest text-accent/85">
+                    WHO&rsquo;S
+                    <br />
+                    NEXT?
+                  </p>
+                  <p className="mt-3 text-xs text-muted">
+                    패치노트를 내고 매치 API를 여는 게임이면 어댑터만 붙습니다
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-          </div>
+          </section>
         </Container>
       </div>
 

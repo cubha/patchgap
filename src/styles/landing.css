@@ -120,16 +120,16 @@
   );
 }
 
-/* 패널이 아트 위에 떠 보이도록 — 테두리를 밝히고 그림자로 들어올린다. 카드 자체는 각 게임의
-   키아트를 배경으로 쓰므로(.landing-panel-art) 여기서는 부유감만 준다. */
+/* 카드에 약한 깊이만 준다(2026-09-19 사용자 지시로 축소) — 이전 값(0 24px 64px)은 카드가
+   스플래시 월 위에 직접 얹혀 있을 때 "떠 있음"을 혼자 만들어야 해서 컸다. 이제는 감싸는 유리
+   판넬이 그 역할을 하므로, 같은 세기를 유지하면 판넬 안에서 카드만 과장되게 솟아 보인다. */
 .landing-panel {
-  box-shadow: 0 24px 64px color-mix(in oklab, var(--bg) 72%, transparent);
+  box-shadow: 0 12px 32px color-mix(in oklab, var(--bg) 60%, transparent);
 }
 
-/* WHO'S NEXT 슬롯 — 자기 아트가 없으므로 뒤의 스플래시 월이 그대로 비친다. 반투명 판을
-   깔아 글자가 읽히게 하되, 빈자리라는 성격이 남도록 점선 테두리와 낮은 불투명도를 유지한다. */
+/* WHO'S NEXT 슬롯 — 채움은 `.card-surface`(panel.css, 중첩 카드 깊이)가 맡는다. 자체
+   backdrop-filter는 걷어냈다: 판넬이 이미 유리라 blur가 겹치면 뒤가 두 번 뭉개지고, 파이프라인
+   섹션의 STEP 카드도 유리 패널 안에서 같은 이유로 `.card-surface`만 쓴다. */
 .landing-next {
-  background: color-mix(in oklab, var(--surface) 62%, transparent);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 24px 64px color-mix(in oklab, var(--bg) 60%, transparent);
+  box-shadow: 0 12px 32px color-mix(in oklab, var(--bg) 50%, transparent);
 }
