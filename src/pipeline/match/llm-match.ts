@@ -33,7 +33,9 @@ export const DEFAULT_MAX_DELTAS = 120;
 // 호출 총 상한은 대상 수보다 **한 칸 위**에 둔다 — 아래에 두면 상한을 올려도 실제로는 이쪽이
 // 먼저 걸려서 "올렸는데 왜 그대로지"가 된다(이전 값 60은 maxDeltas 50보다 컸지만 지금 기준으론
 // 아니다). 이 값은 폭주 방지선이지 예산 정책이 아니다 — 예산 정책은 `--llm-max`가 소유한다.
-export const DEFAULT_MAX_TOTAL_CALLS = 130;
+// 2026-09-19 v5: 130 → 150. 길이 재요청이 같은 지갑에서 나가므로(델타당 최대 1회), 대상 120건에
+// 재요청 여지 30건을 더한다. 실측 위반은 120건 중 3건·110건 중 2건이라 여유가 충분하다.
+export const DEFAULT_MAX_TOTAL_CALLS = 150;
 
 const OutputSchema = z.object({
   causes: z.array(
@@ -49,7 +51,7 @@ const OutputSchema = z.object({
   summaryCites: z.array(z.string()),
 });
 
-type LlmOutput = z.infer<typeof OutputSchema>;
+export type LlmOutput = z.infer<typeof OutputSchema>;
 
 /** system 프롬프트에 넣는 후보 항목 축약 뷰 — 델타 인과 추론에 필요한 필드만. */
 type CandidateView = Pick<
@@ -126,9 +128,13 @@ const SYSTEM_INSTRUCTIONS = [
   "   쓰고 나서 글자 수를 세어 넘으면 줄이세요(수식어와 부연부터 버리고, 수치와 인과만 남깁니다).",
   "   후보가 없으면 summary는 '패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다' 한 문장으로",
   "   끝내세요 — 이유를 장황하게 나열하지 마세요.",
-  "10. 한 문장에 완곡 표현은 **하나만** 쓰세요. 추정이라는 사실은 confidence 필드가 이미 말하므로,",
-  "   '~로 보이며 ~할 가능성이 있습니다'처럼 겹쳐 쓰지 마세요. 근거가 분명하면 그대로 서술하고,",
-  "   불확실하면 무엇이 불확실한지를 한 번만 밝히세요.",
+  "10. 완곡 표현('~수 있습니다', '~로 보입니다', '~할 가능성이 있습니다')은 **confidence가 low인",
+  "   문장에만, 한 번만** 쓰세요. confidence가 high나 medium이면 관측된 인과를 그대로 단정해",
+  "   쓰세요 — 추정의 정도는 confidence 필드가 이미 말하므로 문장까지 흐리면 같은 말을 두 번",
+  "   하는 것이고, 읽는 사람은 어느 문장이 더 확실한지 구분할 수 없게 됩니다.",
+  "11. 그렇다고 확신을 만들어내지는 마세요. 단정할 수 없으면 confidence를 low로 내리고 완곡하게",
+  "   쓰거나, 근거가 없으면 그 원인을 아예 빼세요(규칙 3). 규칙 10은 **표현**을 정할 뿐",
+  "   근거의 강도를 올리라는 뜻이 아닙니다.",
 ].join("\n");
 
 /** 테스트가 규칙 문구를 직접 검사할 수 있게 노출한다(프롬프트는 산출물의 계약이다). */
@@ -208,7 +214,10 @@ export async function callLlmForDelta(
   client: Anthropic,
   model: string,
   delta: DeltaRecord,
-  candidates: readonly PatchNoteItem[]
+  candidates: readonly PatchNoteItem[],
+  /** 길이 재요청 문구(1회 한정). 있으면 사용자 메시지 뒤에 붙는다 — 시스템 프롬프트는 그대로라
+   * 캐시 프리픽스가 깨지지 않는다. */
+  repairNote?: string
 ): Promise<LlmCallResult> {
   const response = await client.messages.parse({
     model,
@@ -221,7 +230,12 @@ export async function callLlmForDelta(
         cache_control: { type: "ephemeral" },
       },
     ],
-    messages: [{ role: "user", content: buildUserPrompt(delta) }],
+    messages: [
+      {
+        role: "user",
+        content: repairNote === undefined ? buildUserPrompt(delta) : `${buildUserPrompt(delta)}\n\n${repairNote}`,
+      },
+    ],
     output_config: {
       effort: "medium",
       format: zodOutputFormat(OutputSchema),
@@ -349,6 +363,36 @@ const HEDGE_ENDINGS = [
 export const SUMMARY_MAX_CHARS = 100;
 export const CAUSE_MAX_CHARS = 80;
 
+/** 위생 집계 입력 — 완곡 표현의 정당성은 confidence에 달려 있으므로 텍스트만으로는 셀 수 없다. */
+export interface ProseCauseEntry {
+  text: string;
+  confidence: LlmCause["confidence"];
+}
+
+/** 상한을 넘긴 문장 수(요약 1 + 원인 n). 0이면 재요청하지 않는다. */
+export function countLengthViolations(parsed: LlmOutput): number {
+  const summaryOver = parsed.summary.length > SUMMARY_MAX_CHARS ? 1 : 0;
+  return summaryOver + parsed.causes.filter((cause) => cause.text.length > CAUSE_MAX_CHARS).length;
+}
+
+/**
+ * 길이 재요청 문구. **어느 문장이 몇 자인지 숫자로 알려준다** — v4에서 배운 것이 "어림수보다
+ * 숫자"였는데, 재요청은 그보다 한 걸음 더 나아가 *이 응답의* 실제 초과분을 짚어 줄 수 있다.
+ */
+export function buildLengthRepairNote(parsed: LlmOutput): string {
+  const lines: string[] = ["직전 답의 길이 상한 위반을 고쳐 **같은 내용으로** 다시 답하세요."];
+  if (parsed.summary.length > SUMMARY_MAX_CHARS) {
+    lines.push(`- summary가 ${parsed.summary.length}자입니다. ${SUMMARY_MAX_CHARS}자 이하로 줄이세요.`);
+  }
+  parsed.causes.forEach((cause, index) => {
+    if (cause.text.length > CAUSE_MAX_CHARS) {
+      lines.push(`- causes[${index}]가 ${cause.text.length}자입니다. ${CAUSE_MAX_CHARS}자 이하로 줄이세요.`);
+    }
+  });
+  lines.push("수치와 인과는 남기고 수식어·부연부터 버리세요. candidateNoteId와 confidence는 그대로 두세요.");
+  return lines.join("\n");
+}
+
 export interface ProseHygieneStats {
   summaryCount: number;
   summaryOverLength: number;
@@ -357,6 +401,12 @@ export interface ProseHygieneStats {
   causeCount: number;
   causeOverLength: number;
   causeHedged: number;
+  /**
+   * confidence가 high·medium인데 완곡 종결로 끝난 원인 문장 수(2026-09-19 v5). **이것이 항목7의
+   * 진짜 계측점이다** — 완곡 표현 자체는 low 문장에서 정당하므로 `causeHedged` 총량은 0이 목표가
+   * 아니다. 근거가 분명한 문장까지 흐린 경우만 결함이다.
+   */
+  causeHedgedConfident: number;
 }
 
 function isHedged(text: string): boolean {
@@ -365,16 +415,16 @@ function isHedged(text: string): boolean {
 }
 
 /**
- * 산출 문장의 길이·종결 위생을 집계한다(2026-09-19, 항목7의 기계적 절반).
+ * 산출 문장의 길이·종결 위생을 집계한다(2026-09-19, 항목7).
  *
- * 왜 집계만 하고 강제하지 않는가: 프롬프트에 "80자 안팎"이 **이미 있는데도** 실측 요약 113건 중
- * 82건(72%)이 초과했다 — 문구를 더 적는 것으로는 해결되지 않는다. 그렇다고 길이를 이유로 회색
- * 처리하면 근거 있는 문장을 숨기게 되어 프로젝트 원칙과 충돌하고, 프롬프트를 고치려면
- * PROMPT_VERSION을 올려야 하는데 그러면 캐시가 전량 무효가 되어 채점된 문장 전부가 비결정적으로
- * 교체된다. 그래서 이번 라운드는 **다음 실행이 측정 가능하도록 수치를 남기는 것**까지만 한다.
+ * 문구로는 닫히지 않는다는 것이 실측이다: "80자 안팎"이 프롬프트에 **있는데도** 요약 113건 중
+ * 82건(72%)이 초과했고, 숫자로 못박은 v4에서도 2~4%가 남았다. 그래서 v5는 레버를 바꿨다 —
+ * 길이는 호출부의 1회 한정 재요청(`needsLengthRepair`)이 닫고, 완곡 표현은 confidence와 묶어
+ * (프롬프트 규칙 10) 줄인다. 이 함수는 그 두 레버가 실제로 들었는지 **매 실행 측정**한다.
+ * 길이를 이유로 문장을 회색 처리하지는 않는다 — 근거 있는 문장을 숨기는 것이 더 나쁘다.
  */
 export function summarizeProseHygiene(
-  entries: readonly { summary: string | null; causes: readonly string[] }[]
+  entries: readonly { summary: string | null; causes: readonly ProseCauseEntry[] }[]
 ): ProseHygieneStats {
   const stats: ProseHygieneStats = {
     summaryCount: 0,
@@ -384,6 +434,7 @@ export function summarizeProseHygiene(
     causeCount: 0,
     causeOverLength: 0,
     causeHedged: 0,
+    causeHedgedConfident: 0,
   };
   for (const entry of entries) {
     if (entry.summary !== null && entry.summary.length > 0) {
@@ -394,8 +445,11 @@ export function summarizeProseHygiene(
     }
     for (const cause of entry.causes) {
       stats.causeCount += 1;
-      if (cause.length > CAUSE_MAX_CHARS) stats.causeOverLength += 1;
-      if (isHedged(cause)) stats.causeHedged += 1;
+      if (cause.text.length > CAUSE_MAX_CHARS) stats.causeOverLength += 1;
+      if (isHedged(cause.text)) {
+        stats.causeHedged += 1;
+        if (cause.confidence !== "low") stats.causeHedgedConfident += 1;
+      }
     }
   }
   return stats;
@@ -421,6 +475,9 @@ export interface LlmRunSummary {
   cacheHits: number;
   /** 예산/상한 초과로 아예 시도하지 못한 델타 수. */
   skipped: number;
+  /** 길이 상한 위반으로 1회 재요청한 델타 수(v5). `calls`에 이미 포함된다 — 별도 예산이 아니라
+   * 같은 지갑에서 나간다는 사실을 보이려고 따로 센다. */
+  lengthRepairs: number;
   usage: LlmUsageTotals;
 }
 
@@ -466,6 +523,7 @@ export async function inferIndirectCandidates(
     calls: 0,
     cacheHits: 0,
     skipped: 0,
+    lengthRepairs: 0,
     usage: emptyUsage(),
     prose: summarizeProseHygiene([]),
   };
@@ -504,7 +562,32 @@ export async function inferIndirectCandidates(
 
     try {
       summary.calls += 1;
-      const { parsed, usage } = await callLlmForDelta(client, model, delta, candidates);
+      const first = await callLlmForDelta(client, model, delta, candidates);
+      const usage = emptyUsage();
+      addUsage(usage, first.usage);
+      let parsed = first.parsed;
+
+      // 길이 재요청(v5, 1회 한정) — 프롬프트 문구로는 2~4%가 남는다는 것이 v4의 실측이다. 상한을
+      // 넘긴 응답에 대해서만 "몇 자인지"를 짚어 다시 묻고, **위반이 더 적은 쪽**을 택한다. 응답을
+      // 통째로 고르는 이유: summary와 summaryCites는 한 쌍이라 섞으면 인용이 문장과 어긋난다.
+      if (parsed !== null && countLengthViolations(parsed) > 0 && summary.calls < maxTotalCalls) {
+        summary.calls += 1;
+        summary.lengthRepairs += 1;
+        const repaired = await callLlmForDelta(
+          client,
+          model,
+          delta,
+          candidates,
+          buildLengthRepairNote(parsed)
+        );
+        addUsage(usage, repaired.usage);
+        if (repaired.parsed !== null && countLengthViolations(repaired.parsed) < countLengthViolations(parsed)) {
+          parsed = repaired.parsed;
+        }
+      }
+
+      // 재요청분까지 합산한 뒤 한 번에 올린다 — 캐시 파일에 적히는 usage와 세션 합계가 같은
+      // 값을 말하게 하려는 것이다(둘이 갈리면 나중에 어느 쪽이 맞는지 알 수 없다).
       addUsage(summary.usage, usage);
 
       if (parsed === null) {
@@ -556,7 +639,9 @@ export async function inferIndirectCandidates(
     merged.map((record) => ({
       summary:
         record.llm && !record.llm.skipped && record.llm.summaryVerified ? (record.llm.summary ?? null) : null,
-      causes: record.causes.filter((cause) => cause.verified).map((cause) => cause.text),
+      causes: record.causes
+        .filter((cause) => cause.verified)
+        .map((cause) => ({ text: cause.text, confidence: cause.confidence })),
     }))
   );
   return { deltas: merged, summary };

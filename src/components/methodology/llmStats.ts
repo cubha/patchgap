@@ -35,3 +35,24 @@ export function computeLlmCauseStats(rows: readonly DeltaRecord[]): LlmCauseStat
   }
   return stats;
 }
+
+/**
+ * 신뢰도 분포에서 **가장 많은 등급**을 고른다(2026-09-19 v5). 화면이 "낮음이 대부분"이라고 리터럴로
+ * 단언하고 있었는데, 그 문장은 프롬프트나 모델이 바뀌면 조용히 거짓이 된다 — 같은 라운드의
+ * 재생성에 화면이 뒤처졌던 K2-7과 정확히 같은 형태다. 동률이면 보수적으로 낮은 쪽을 고른다.
+ * 검증 통과 원인이 하나도 없으면 null(할 말이 없다).
+ */
+export function dominantConfidence(stats: LlmCauseStats): { label: string; count: number } | null {
+  const order: ReadonlyArray<readonly [keyof LlmCauseStats["confidence"], string]> = [
+    ["low", "낮음"],
+    ["medium", "보통"],
+    ["high", "높음"],
+  ];
+  let best: { label: string; count: number } | null = null;
+  for (const [key, label] of order) {
+    const count = stats.confidence[key];
+    if (count === 0) continue;
+    if (best === null || count > best.count) best = { label, count };
+  }
+  return best;
+}

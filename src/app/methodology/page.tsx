@@ -23,7 +23,7 @@ import fs from "node:fs";
 import path from "node:path";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
-import { computeLlmCauseStats } from "@/components/methodology/llmStats";
+import { computeLlmCauseStats, dominantConfidence } from "@/components/methodology/llmStats";
 import { getDefaultPair, loadDeltas, loadNotes, loadSummary } from "@/lib/data";
 import { fmtKst } from "@/lib/format";
 import { EFFECT_SIZE_FLOORS, FDR_ALPHA, WIN_RATE_MIN_N } from "@/pipeline/aggregate/stats";
@@ -63,6 +63,7 @@ export default function MethodologyPage() {
   // 통과하지만 승률 게이트에서 제외되는 차이).
   // 추정 원인 카드의 수치 — 리터럴로 적으면 재생성에 뒤처져 화면이 거짓을 말한다(독립 채점 K2-7).
   const llmStats = deltas ? computeLlmCauseStats(deltas.rows) : null;
+  const dominant = llmStats ? dominantConfidence(llmStats) : null;
 
   const significantCount = deltas
     ? deltas.rows.filter((row) => isSignificantDelta(row, deltas.meta.qAlpha ?? FDR_ALPHA)).length
@@ -195,7 +196,8 @@ export default function MethodologyPage() {
                         {llmStats.withoutCause}건, 검증을 통과한 원인을 가진 것이 {llmStats.withVerifiedCause}건이며
                         신뢰도는 낮음 {llmStats.confidence.low} · 보통 {llmStats.confidence.medium} · 높음{" "}
                         {llmStats.confidence.high}건입니다.{" "}
-                        <strong className="text-fg">낮음이 대부분</strong>이라는 사실 자체가 이 추정의 한계를 말합니다.
+                        가장 많은 등급은 <strong className="text-fg">{dominant?.label ?? "없음"}</strong>이며, 그
+                        분포 자체가 이 추정의 한계를 말합니다.
                       </>
                     ) : null}
                   </dd>

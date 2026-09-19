@@ -12,6 +12,8 @@ import {
   serializeCandidates,
   SYSTEM_INSTRUCTIONS_TEXT,
   summarizeProseHygiene,
+  countLengthViolations,
+  buildLengthRepairNote,
   verifyCauses,
   verifySummaryCites,
 } from "../llm-match";
@@ -431,22 +433,27 @@ describe("모드 노트 인용 기각(2026-09-19 근본수정)", () => {
   });
 });
 
-describe("문장 위생 집계(2026-09-19 — 항목7 기계적 절반)", () => {
+describe("문장 위생 집계(2026-09-19 — 항목7)", () => {
   // 프롬프트에 "한 문장은 80자 안팎"이 **이미 있는데** 실측 요약 113건 중 82건(72%)이 초과했고
-  // 최대 132자였다. 문구를 더 적는 것으로는 안 되므로, 다음 실행이 **측정 가능**하도록 위반을 센다.
-  // (프롬프트 v4 자체는 PROMPT_VERSION을 올려 캐시를 전량 무효화하므로 26.19 신규 실행에 묶는다.)
-  // 2026-09-19 **명세 변경**(독립 채점 K1-7): 상한 하나로 요약·원인을 같이 세면 프롬프트가
-  // 지시하는 값(요약 100자·원인 80자)과 계측이 어긋난다. 상수를 분리했으므로 이 테스트도
-  // 두 상한을 각각 확인한다 — 통과시키려고 고친 것이 아니라 세는 기준 자체가 바뀌었다.
+  // 최대 132자였다. 문구를 더 적는 것으로는 안 되므로 위반을 센다.
+  // 2026-09-19 **명세 변경 ①**(독립 채점 K1-7): 상한 하나로 요약·원인을 같이 세면 프롬프트가
+  // 지시하는 값(요약 100자·원인 80자)과 계측이 어긋난다. 상수를 분리했으므로 두 상한을 각각 본다.
+  // 2026-09-19 **명세 변경 ②**(v5, 이월 해소): 입력이 `string[]`에서 `{text, confidence}[]`로
+  // 바뀌었다. 완곡 표현은 confidence가 low인 문장에서는 **정당하므로**, 총량(causeHedged)만으로는
+  // 결함을 셀 수 없다 — 근거가 분명한데 흐린 문장(causeHedgedConfident)이 실제 계측점이다.
+  // 둘 다 통과시키려고 고친 것이 아니라 세는 기준 자체가 바뀐 경우다.
   it("요약 100자·원인 80자 상한을 각각 세고, 완곡 종결도 센다", () => {
     const stats = summarizeProseHygiene([
-      { summary: "짧고 단정한 한 문장입니다.", causes: ["원인도 짧습니다."] },
+      { summary: "짧고 단정한 한 문장입니다.", causes: [{ text: "원인도 짧습니다.", confidence: "high" }] },
       {
         // 81자 요약은 상한(100자) 안이라 초과로 세지 않는다 — 옛 단일 상한(80자)에서는 셌다.
         summary: "가".repeat(81) + ".",
-        causes: ["이 변화는 표본 변동일 가능성이 있습니다.", "영향이 있었을 수 있습니다."],
+        causes: [
+          { text: "이 변화는 표본 변동일 가능성이 있습니다.", confidence: "low" },
+          { text: "영향이 있었을 수 있습니다.", confidence: "high" },
+        ],
       },
-      { summary: "나".repeat(101) + ".", causes: ["다".repeat(81) + "."] },
+      { summary: "나".repeat(101) + ".", causes: [{ text: "다".repeat(81) + ".", confidence: "medium" }] },
     ]);
     expect(stats.summaryCount).toBe(3);
     expect(stats.summaryOverLength).toBe(1);
@@ -454,6 +461,49 @@ describe("문장 위생 집계(2026-09-19 — 항목7 기계적 절반)", () => 
     expect(stats.causeOverLength).toBe(1);
     expect(stats.causeHedged).toBe(2);
     expect(stats.maxSummaryLength).toBeGreaterThan(100);
+  });
+
+  it("완곡 표현은 low에서 정당하고, high·medium일 때만 결함으로 센다", () => {
+    const stats = summarizeProseHygiene([
+      {
+        summary: null,
+        causes: [
+          { text: "표본 변동일 가능성이 있습니다.", confidence: "low" }, // 정당
+          { text: "정글 경쟁에서 밀렸을 수 있습니다.", confidence: "high" }, // 결함
+          { text: "정글 경쟁에서 밀렸습니다.", confidence: "high" }, // 단정 — 목표 형태
+        ],
+      },
+    ]);
+    expect(stats.causeHedged).toBe(2);
+    expect(stats.causeHedgedConfident).toBe(1);
+  });
+});
+
+describe("길이 재요청(v5) — 문구가 아니라 호출부가 닫는다", () => {
+  // v4가 "80자 안팎"을 숫자로 바꿔 요약 초과를 72% → 2~4%로 줄였다. 남은 2~4%를 더 강한 문구로
+  // 0으로 만들려는 것은 이미 멈춘 레버를 다시 당기는 일이라, 위반한 응답에만 1회 되묻는다.
+  const out = (summary: string, causes: string[]) => ({
+    summary,
+    summaryCites: [],
+    causes: causes.map((text) => ({ text, candidateNoteId: null, confidence: "low" as const })),
+  });
+
+  it("상한 안이면 재요청하지 않는다(위반 0)", () => {
+    expect(countLengthViolations(out("짧은 요약입니다.", ["짧은 원인입니다."]))).toBe(0);
+  });
+
+  it("요약·원인 위반을 각각 센다", () => {
+    expect(countLengthViolations(out("가".repeat(101), ["나".repeat(81), "짧습니다."]))).toBe(2);
+  });
+
+  it("재요청 문구가 실제 글자 수와 상한을 함께 짚는다", () => {
+    const note = buildLengthRepairNote(out("가".repeat(110), ["나".repeat(90)]));
+    expect(note).toContain("110자");
+    expect(note).toContain("100자 이하");
+    expect(note).toContain("causes[0]");
+    expect(note).toContain("90자");
+    // 인용·신뢰도를 흔들면 검증 단계가 다른 것을 보게 된다 — 길이만 고치라고 못박는다.
+    expect(note).toContain("candidateNoteId");
   });
 });
 
@@ -476,19 +526,25 @@ describe("후보 풀 정화(2026-09-19 항목7 — 프롬프트 v4와 같은 실
   });
 });
 
-describe("프롬프트 v4 — 길이 상한과 종결 어미(2026-09-19 항목7)", () => {
-  it("글자 수 상한을 숫자로 못박고, 완곡 표현 중복을 금지한다", () => {
+describe("프롬프트 v5 — 길이 상한과 완곡 표현(2026-09-19 항목7)", () => {
+  it("글자 수 상한을 숫자로 못박는다", () => {
     // 규칙 9에 "80자 안팎"이 **이미 있었는데** 26.18 요약 102건 중 72건이 초과했다(최장 124자).
-    // 어림수("안팎")는 지켜지지 않으므로 숫자와 세는 방법을 준다. 완곡 자체는 추론 문장에서
-    // 정당하므로 금지하지 않고 **중복**만 막는다 — 금지하면 무근거 확신이 되어 회색 원칙과 충돌한다.
+    // 어림수("안팎")는 지켜지지 않으므로 숫자와 세는 방법을 준다.
     expect(SYSTEM_INSTRUCTIONS_TEXT).toContain("100자");
     expect(SYSTEM_INSTRUCTIONS_TEXT).toContain("80자");
-    expect(SYSTEM_INSTRUCTIONS_TEXT).toContain("완곡");
     expect(SYSTEM_INSTRUCTIONS_TEXT).not.toContain("80자 안팎");
+  });
+
+  it("완곡 표현을 confidence와 묶는다 — 금지도 방임도 아니다", () => {
+    // 완곡 자체는 추론 문장에서 정당하므로 금지하지 않는다(금지하면 무근거 확신이 되어 회색
+    // 원칙과 충돌한다). 대신 **어디에 쓰는지**를 정한다: low에만. 규칙 11이 그 반작용(단정하려고
+    // confidence를 올리는 것)을 막는다.
+    expect(SYSTEM_INSTRUCTIONS_TEXT).toContain("confidence가 low인");
+    expect(SYSTEM_INSTRUCTIONS_TEXT).toContain("confidence를 low로 내리고");
   });
 
   it("PROMPT_VERSION이 올라가 옛 캐시를 재사용하지 않는다", () => {
     // 프롬프트를 바꾸고 버전을 안 올리면, 캐시된 답이 그것을 만들지 않은 프롬프트에 귀속된다.
-    expect(PROMPT_VERSION).toBe("v4");
+    expect(PROMPT_VERSION).toBe("v5");
   });
 });

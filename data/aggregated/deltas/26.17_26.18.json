@@ -2,11 +2,11 @@
   "meta": {
     "from": "26.17",
     "to": "26.18",
-    "generatedAt": "2026-09-19T02:14:40.208Z",
+    "generatedAt": "2026-09-19T02:49:36.026Z",
     "n": 1951,
     "counts": {
-      "unannounced": 35,
-      "indirect-effect": 15,
+      "unannounced": 31,
+      "indirect-effect": 19,
       "announced-inconsistent": 60,
       "announced-consistent": 27,
       "below-threshold": 321,
@@ -15,106 +15,28 @@
     },
     "qAlpha": 0.1,
     "llm": {
-      "calls": 0,
-      "cacheHits": 110,
+      "calls": 112,
+      "cacheHits": 0,
       "skipped": 0,
       "usage": {
-        "inputTokens": 0,
-        "cacheReadInputTokens": 0,
-        "cacheCreationInputTokens": 0,
-        "outputTokens": 0
+        "inputTokens": 14395,
+        "cacheReadInputTokens": 684315,
+        "cacheCreationInputTokens": 6165,
+        "outputTokens": 55906
       },
       "prose": {
         "summaryCount": 110,
-        "summaryOverLength": 2,
-        "summaryHedged": 34,
-        "maxSummaryLength": 107,
-        "causeCount": 221,
+        "summaryOverLength": 0,
+        "summaryHedged": 20,
+        "maxSummaryLength": 99,
+        "causeCount": 189,
         "causeOverLength": 0,
-        "causeHedged": 92
+        "causeHedged": 86,
+        "causeHedgedConfident": 0
       }
     }
   },
   "rows": [
-    {
-      "id": "champion:MonkeyKing:JUNGLE:winRate",
-      "entityType": "champion",
-      "entityKey": "MonkeyKing",
-      "entityName": "오공",
-      "metric": "winRate",
-      "before": 0.5714285714285714,
-      "after": 0.4551971326164875,
-      "delta": -0.11623143881208392,
-      "ci": [
-        -0.20152891258189667,
-        -0.028330663519802998
-      ],
-      "n": {
-        "before": 224,
-        "after": 279
-      },
-      "q": 0.053279465460578046,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "비에고 레벨당 공격력 3.5→4 버프로 정글 상성·경쟁에서 오공이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "비에고 지속효과 회복량이 여러 스탯 계수로 확장돼 정글 교전 주도권이 옮겨졌습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "마스터 이 레벨당 방어력 4.5→5 증가로 오공의 초반 정글 압박 효율이 낮아졌습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "마스터 이 R 이동속도 40/50/60% 상향으로 정글 주도권 경쟁이 불리해졌습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "에코 Q 마나 소모 10 감소로 정글 클리어가 개선돼 오공 입지가 좁아졌습니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8375315960",
-          "KR_8375331914",
-          "KR_8375325119",
-          "KR_8375384286",
-          "KR_8375348841",
-          "KR_8375390582",
-          "KR_8375381894",
-          "KR_8375374352",
-          "KR_8375395387",
-          "KR_8375323540"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=62,scope=position,position=JUNGLE]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "오공 정글 승률이 57.1%→45.5%(-11.6%p)로 떨어졌지만 직접 조항은 없고, 비에고·마스터 이 등 경쟁 정글러 버프의 간접 여파로 보입니다.",
-        "summaryCites": [
-          "note:26.18:champion:viego:3477e7c5",
-          "note:26.18:champion:masteryi:c898ee27"
-        ],
-        "summaryVerified": true
-      }
-    },
     {
       "id": "champion:MonkeyKing:winRate",
       "entityType": "champion",
@@ -138,31 +60,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "비에고 레벨당 공격력 3.5→4 버프로 정글 경쟁에서 오공이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "비에고 지속효과 회복량이 공격력·체력 등에 비례해 확대돼 정글 주도권이 이동했습니다.",
+          "text": "비에고 기본 지속 효과 회복량과 공격력 성장 버프로 정글 경쟁에서 오공이 밀렸을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "마스터 이 레벨당 방어력 4.5→5 상향으로 오공의 정글 교전 우위가 줄었습니다.",
+          "text": "마스터 이 방어력 성장·R 이동 속도 버프가 정글 구도에서 오공의 입지를 좁혔을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "마스터 이 R 이동속도 5%p 상향으로 정글 동선·추격 경쟁에서 밀립니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "에코 Q 계수·마나 버프로 정글 대체재가 강해져 오공 픽 가치가 하락했습니다.",
+          "text": "에코 Q 계수·마나 버프로 정글 대안이 늘어 오공 선호도가 떨어졌을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
           "verified": true,
           "confidence": "low"
@@ -186,10 +96,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "오공 승률이 55.4%→44.5%(-10.8%p)로 급락했고, 직접 조항 없이 비에고·마스터 이 등 정글 경쟁자 상향의 여파로 추정됩니다.",
+        "summary": "오공 승률이 55.4%→44.5%(-10.8%p)로 급락했으나 직접 조항은 없고, 비에고·마스터 이·에코 등 정글 경쟁자 버프의 파급이 유력합니다.",
         "summaryCites": [
-          "note:26.18:champion:viego:3477e7c5",
-          "note:26.18:champion:masteryi:d392c3c6"
+          "note:26.18:champion:viego:caf9b23d",
+          "note:26.18:champion:masteryi:d392c3c6",
+          "note:26.18:champion:ekko:433f5bb2"
         ],
         "summaryVerified": true
       }
@@ -217,20 +128,8 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "자헨 Q2 피해량 상향으로 밴 표가 자헨 쪽으로 몰리며 카밀 밴이 밀려났을 수 있습니다.",
+          "text": "자헨 Q2 피해량이 30/60/90/120/150으로 상향돼 밴 우선순위가 그쪽으로 옮겨갔을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "비에고 공격력 성장 상향으로 정글 밴 우선순위가 이동한 영향으로 추정됩니다.",
-          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "마스터 이 궁극기 이동 속도 상향이 밴 표를 흡수했을 여지가 있습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
           "verified": true,
           "confidence": "low"
         }
@@ -253,7 +152,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카밀 직접 변경 없이 밴률이 19.9%→9.6%(-10.4%p)로 급락했는데, 자헨 Q2 상향 등 다른 챔피언 강화로 밴 우선순위가 이동한 결과로 보입니다.",
+        "summary": "카밀 밴률이 19.9%→9.6%(-10.4%p)로 급락했습니다. 직접 조항은 없고, 자헨 Q 상향에 따른 밴 대상 이동이 약한 단서입니다.",
         "summaryCites": [
           "note:26.18:champion:zaahen:bce84005"
         ],
@@ -283,20 +182,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "자헨 Q2 피해량이 25~125에서 30~150으로 상향돼 탑 라인 맞대결 부담이 커졌습니다.",
+          "text": "자헨 Q2 피해량이 25~125에서 30~150으로 올라 탑 라인전 상대로 불리해졌을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "비에고 지속 효과 회복량이 공격력·체력 계수로 확장돼 탑 갱킹·교전 생존력이 불리해졌습니다.",
+          "text": "비에고 공격력 성장 3.5→4와 지속 효과 회복 강화로 브루저 경쟁에서 밀린 영향.",
           "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "마스터 이 레벨당 방어력·궁극기 이동 속도 상향으로 탑 압박 빈도가 늘었습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
+          "text": "에코 Q 계수 60%→70%, 마나 10 감소로 탑 에코 선픽이 늘어난 여파.",
+          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
           "verified": true,
           "confidence": "low"
         }
@@ -319,82 +218,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "아트록스 탑 승률이 50.9%에서 40.8%로 -10.0%p 급락했으나 직접 조항은 없고, 자헨 Q2 피해량 상향 등 근접 대치 상대 강화가 영향을 준 것으로 보입니다.",
+        "summary": "아트록스 탑 승률이 50.9%→40.8%(-10.0%p)로 급락했으나 직접 조항은 없고, 자헨 Q2·비에고 성장 버프 등 탑 경쟁자 강화가 간접 요인으로 보입니다.",
         "summaryCites": [
-          "note:26.18:champion:zaahen:bce84005"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Pyke:UTILITY:winRate",
-      "entityType": "champion",
-      "entityKey": "Pyke",
-      "entityName": "파이크",
-      "metric": "winRate",
-      "before": 0.4310077519379845,
-      "after": 0.5303776683087028,
-      "delta": 0.09936991637071829,
-      "ci": [
-        0.04405334592408661,
-        0.15384523871050754
-      ],
-      "n": {
-        "before": 645,
-        "after": 609
-      },
-      "q": 0.0037190956482710483,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "경쟁 서포터 노틸러스가 공격력 61→58로 너프되며 파이크의 상대 입지가 개선됐습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "노틸러스 Q 후반 피해량 265→245 하향으로 탱커 서포터 픽 경쟁력이 낮아졌습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "바드 방어력 34+5→32+4.7 너프로 라인전형 서포터 구도가 파이크에 유리해졌습니다.",
-          "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "세라핀 E 쿨감 삭제(11초 고정)로 유틸 서포터 대체 픽 가치가 하락했습니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8375318678",
-          "KR_8375353973",
-          "KR_8375314950",
-          "KR_8375347493",
-          "KR_8375373250",
-          "KR_8375376355",
-          "KR_8375314942",
-          "KR_8375384286",
-          "KR_8375381460",
-          "KR_8375391363"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=555,scope=position,position=UTILITY]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "파이크 서포터 승률이 43.1%→53.0%(+9.9%p)로 급등했는데, 직접 조항은 없고 노틸러스 공격력·Q 너프 등 경쟁 서포터 하향이 간접 요인으로 보입니다.",
-        "summaryCites": [
-          "note:26.18:champion:nautilus:b6aff2b2",
-          "note:26.18:champion:nautilus:878378b8"
+          "note:26.18:champion:zaahen:bce84005",
+          "note:26.18:champion:viego:caf9b23d"
         ],
         "summaryVerified": true
       }
@@ -420,7 +247,20 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [],
+      "causes": [
+        {
+          "text": "신드라 W 쿨다운이 1초 늘며 미드 메이지 입지가 줄어, 키아나로 밴이 몰렸을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "카시오페아 Q 기본 피해량 하향으로 미드 경쟁자가 약해져 키아나 밴 우선순위가 올랐습니다.",
+          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8375326470",
@@ -439,8 +279,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "키아나 밴률이 42.4%에서 50.8%로 8.4%p 올랐으나, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
-        "summaryCites": [],
+        "summary": "키아나 밴률이 42.4%→50.8%(+8.4%p)로 올랐습니다. 직접 조항은 없고 신드라·카시오페아 너프로 인한 미드 밴 집중이 원인으로 보입니다.",
+        "summaryCites": [
+          "note:26.18:champion:syndra:cb99a266",
+          "note:26.18:champion:cassiopeia:91d07d6f"
+        ],
         "summaryVerified": true
       }
     },
@@ -510,7 +353,14 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [],
+      "causes": [
+        {
+          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간이 3초에서 4초로 늘어, 평타 기반 챔피언의 체감 강함이 밴 지표로 이어졌을 수 있습니다.",
+          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8375323215",
@@ -529,8 +379,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
-        "summaryCites": [],
+        "summary": "유나라 밴률이 5.5%→12.9%(+7.3%p)로 급등했으나 직접 조항은 없고, 구인수의 격노검 중첩 지속시간 4초 버프가 약한 연결 고리입니다.",
+        "summaryCites": [
+          "note:26.18:item:guinsoos-rageblade:f624219b"
+        ],
         "summaryVerified": true
       }
     },
@@ -557,20 +409,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "카사딘 Q 계수 80%로 상향돼 미드 밴 우선순위가 분산됐을 수 있습니다.",
+          "text": "자헨 Q2 피해량 상향으로 밴 슬롯이 신규 챔피언 쪽으로 이동했을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "카사딘 Q 계수 80% 상향으로 미드 밴 우선순위가 카사딘으로 옮겨간 영향.",
           "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "에코 Q 계수·마나 상향으로 미드 위협도가 올라 밴이 옮겨갔을 수 있습니다.",
+          "text": "에코 Q 계수·마나 개선으로 미드 견제 대상이 분산된 영향.",
           "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "비에고 지속효과 회복 대폭 강화로 밴 자원이 정글 쪽으로 쏠린 영향이 의심됩니다.",
-          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
           "verified": true,
           "confidence": "low"
         }
@@ -593,10 +445,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "조이 밴률이 26.2%→19.5%(-6.8%p)로 떨어졌습니다. 직접 변경은 없고 카사딘·에코 상향에 따른 미드 밴 분산이 원인으로 추정됩니다.",
+        "summary": "조이 밴률이 26.2%→19.5%(-6.8%p)로 떨어졌습니다. 직접 조항은 없고 카사딘·에코·자헨 상향으로 밴 슬롯이 분산된 영향으로 보입니다.",
         "summaryCites": [
           "note:26.18:champion:kassadin:d631af52",
-          "note:26.18:champion:ekko:433f5bb2"
+          "note:26.18:champion:ekko:433f5bb2",
+          "note:26.18:champion:zaahen:bce84005"
         ],
         "summaryVerified": true
       }
@@ -622,26 +475,7 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "마스터 이 궁극기 이동 속도 상향으로 밴 우선순위가 이동해 뽀삐 밴 슬롯이 줄었을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "비에고 지속 효과 회복량 상향으로 정글 밴 수요가 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "구인수의 격노검 중첩 지속 강화로 평타 딜러 밴이 늘며 뽀삐 밴이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375351249",
@@ -660,11 +494,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "뽀삐 밴률이 32.3%→25.7%(-6.6%p)로 떨어졌지만 직접 조항은 없고, 마스터 이·비에고 상향에 따른 밴 우선순위 이동이 유력합니다.",
-        "summaryCites": [
-          "note:26.18:champion:masteryi:c898ee27",
-          "note:26.18:champion:viego:caf9b23d"
-        ],
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -691,26 +522,14 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "카사딘 Q 주문력 계수 70%→80% 버프로 미드 라인전 대치 부담이 커졌습니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카사딘 R 기본 피해량 상향으로 후반 로밍·교전에서 탈리야가 밀릴 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d9a6b909",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "에코 Q 마나 소모 10 감소로 미드·정글 AP 경쟁자가 강해졌습니다.",
+          "text": "에코 Q 마나 소모 10 감소와 계수 상승으로 미드 라인전 압박이 커져 탈리야가 밀렸을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "에코 Q 귀환 피해 계수 60%→70% 상향이 미드 구도에 간접 압박을 줍니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
+          "text": "카사딘 Q 계수 70%→80%, R 기본 피해 상향으로 미드 경쟁 구도가 불리해진 영향으로 보입니다.",
+          "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
           "verified": true,
           "confidence": "low"
         }
@@ -733,78 +552,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "탈리야 승률이 54.5%→48.2%(-6.2%p)로 떨어졌으나 직접 조항은 없고, 카사딘·에코 미드 상향이 간접 요인으로 보입니다.",
+        "summary": "탈리야 직접 조정은 없었고, 승률이 54.5%→48.2%(-6.2%p)로 하락했습니다. 에코·카사딘 미드 버프에 따른 경쟁 압박이 유력한 간접 요인입니다.",
         "summaryCites": [
-          "note:26.18:champion:kassadin:d631af52",
-          "note:26.18:champion:ekko:433f5bb2"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Akali:banRate",
-      "entityType": "champion",
-      "entityKey": "Akali",
-      "entityName": "아칼리",
-      "metric": "banRate",
-      "before": 0.0994,
-      "after": 0.1522,
-      "delta": 0.0528,
-      "ci": [
-        0.043638413687006584,
-        0.06196989044117791
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "신드라 W 쿨다운 1초 증가 등 너프로 미드 AP 픽이 아칼리로 몰리며 밴 우선순위가 올랐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카시오페아 Q 기본 피해 10 감소 등 연쇄 너프로 경쟁 미드 암살/마법사 입지가 줄었습니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "세라핀 E 쿨다운이 전 구간 11초로 고정되며 미드 대항마가 약해졌습니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8375317739",
-          "KR_8375339732",
-          "KR_8375362373",
-          "KR_8375343301",
-          "KR_8375362768",
-          "KR_8375347493",
-          "KR_8375373250",
-          "KR_8375317879",
-          "KR_8375376355",
-          "KR_8375314942"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=84,scope=all]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "아칼리 직접 변경은 없으나 신드라·카시오페아·세라핀 등 미드 경쟁자 너프로 밴률이 9.9%→15.2%(+5.3%p) 오른 것으로 해석됩니다.",
-        "summaryCites": [
-          "note:26.18:champion:syndra:cb99a266",
-          "note:26.18:champion:cassiopeia:91d07d6f",
-          "note:26.18:champion:seraphine:4519a08c"
+          "note:26.18:champion:ekko:dfd6f002",
+          "note:26.18:champion:kassadin:d631af52"
         ],
         "summaryVerified": true
       }
@@ -832,14 +583,14 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "자헨 Q2 피해량 상향으로 밴 우선순위가 자헨 쪽으로 쏠렸을 수 있습니다.",
+          "text": "자헨 Q2 피해량 상향으로 밴 우선순위가 옮겨가며 이즈리얼 밴이 줄었을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "구인수 격노검 중첩 지속 3→4초 버프로 밴 대상이 다른 원딜로 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+          "text": "제리 W 계수 너프로 원거리 딜러 밴 구도가 재편된 여파로 보입니다.",
+          "candidateNoteId": "note:26.18:champion:zeri:e371a79d",
           "verified": true,
           "confidence": "low"
         }
@@ -862,7 +613,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "이즈리얼 밴률이 16.1%→11.1%(-5.1%p)로 떨어졌으나, 자헨 Q2 상향 등 밴 우선순위 이동 외에 직접 설명할 조항은 없습니다.",
+        "summary": "이즈리얼 밴률이 16.1%→11.1%(-5.1%p)로 떨어졌으나 직접 조항은 없고, 자헨 Q2 상향 등 밴 우선순위 이동이 원인일 수 있습니다.",
         "summaryCites": [
           "note:26.18:champion:zaahen:bce84005"
         ],
@@ -892,7 +643,7 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "구인수의 격노검 중첩 지속 3초→4초 버프로 온힛 원거리 딜러 선호가 커져 이즈리얼 지분이 밀린 것으로 보입니다.",
+          "text": "구인수의 격노검 중첩 지속 3→4초 버프로 평타형 원딜 선호가 커져 이즈리얼 수요가 밀렸을 수 있습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
@@ -916,7 +667,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "이즈리얼 픽률이 17.7%→13.0%(-4.7%p)로 떨어졌습니다. 구인수의 격노검 버프에 따른 원딜 선호 이동 외에 직접 설명할 조항은 없습니다.",
+        "summary": "이즈리얼 픽률이 17.7%→13.0%(-4.7%p)로 떨어졌고, 직접 조항은 없으며 구인수 격노검 버프에 따른 원딜 선호 이동이 유일한 단서입니다.",
         "summaryCites": [
           "note:26.18:item:guinsoos-rageblade:f624219b"
         ],
@@ -946,7 +697,7 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "구인수의 격노검 중첩 지속 3초→4초 버프로 평타형 원딜 선호가 커져 이즈리얼 수요가 밀렸을 수 있습니다.",
+          "text": "구인수의 격노검 중첩 지속시간 3초→4초 버프로 지속 딜 원딜 선호가 커져 이즈리얼이 밀렸을 수 있습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
@@ -970,7 +721,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "이즈리얼 픽률이 17.5%→12.8%(-4.7%p)로 떨어졌고, 구인수의 격노검 버프에 따른 평타 원딜 선호 이동이 유력한 간접 요인입니다.",
+        "summary": "이즈리얼 픽률이 17.5%→12.8%(-4.7%p)로 떨어졌지만, 구인수의 격노검 버프에 따른 원딜 선호 이동 외에는 설명할 조항이 없습니다.",
         "summaryCites": [
           "note:26.18:item:guinsoos-rageblade:f624219b"
         ],
@@ -1045,19 +796,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "비에고 공격력 성장 4로 상향, 정글 픽 경쟁에서 카밀 지분을 잠식했을 수 있습니다.",
+          "text": "비에고 공격력 성장 3.5→4 버프로 정글 브루저 선호가 옮겨갔을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "마스터 이 궁극기 이동 속도 40/50/60%로 상향되며 정글 선호도가 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+          "text": "마스터 이 방어력 성장 강화로 정글 픽 경쟁이 심해진 영향으로 보입니다.",
+          "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "자헨 Q2 피해량 30/60/90/120/150으로 상향, 탑·정글 픽 경쟁 심화 요인입니다.",
+          "text": "자헨 Q2 피해량 상향으로 상체 라인 픽 일부가 이동했을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
           "verified": true,
           "confidence": "low"
@@ -1081,11 +832,78 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카밀 직접 변경은 없고, 비에고·마스터 이·자헨 상향으로 정글·탑 경쟁이 세지며 픽률이 4.2%p 하락한 것으로 보입니다.",
+        "summary": "카밀 픽률이 18.0%→13.9%(-4.2%p)로 유의하게 하락했으나 직접 조항은 없고, 비에고·마스터 이 버프에 따른 정글 경쟁 심화가 원인일 수 있습니다.",
         "summaryCites": [
           "note:26.18:champion:viego:3477e7c5",
-          "note:26.18:champion:masteryi:c898ee27",
-          "note:26.18:champion:zaahen:bce84005"
+          "note:26.18:champion:masteryi:d392c3c6"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Pyke:banRate",
+      "entityType": "champion",
+      "entityKey": "Pyke",
+      "entityName": "파이크",
+      "metric": "banRate",
+      "before": 0.4621,
+      "after": 0.5035,
+      "delta": 0.04139999999999994,
+      "ci": [
+        0.02755221732481665,
+        0.05522532604408722
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "노틸러스 공격력 61→58, Q 피해량 너프로 상위 서포트 경쟁자가 빠지며 파이크 밴이 몰렸을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "세라핀 E 쿨타임이 최대 9초에서 11초로 고정되며 서포트 밴 우선순위가 파이크로 이동.",
+          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "바드 방어력 34→32(레벨당 5→4.7) 너프로 바텀 밴 표가 재분배.",
+          "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8375318678",
+          "KR_8375353973",
+          "KR_8375314950",
+          "KR_8375347493",
+          "KR_8375373250",
+          "KR_8375376355",
+          "KR_8375314942",
+          "KR_8375384286",
+          "KR_8375381460",
+          "KR_8375391363"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=555,scope=all]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "파이크 직접 변경은 없지만 노틸러스·세라핀·바드 등 서포트 너프로 밴 표가 몰리며 밴률이 46.2%→50.3%(+4.1%p) 상승한 것으로 보입니다.",
+        "summaryCites": [
+          "note:26.18:champion:nautilus:b6aff2b2",
+          "note:26.18:champion:seraphine:4519a08c",
+          "note:26.18:champion:bard:453ef7b4"
         ],
         "summaryVerified": true
       }
@@ -1119,14 +937,8 @@
           "confidence": "low"
         },
         {
-          "text": "비에고 지속 효과 회복 버프로 정글 밴 표가 분산됐을 수 있습니다.",
+          "text": "비에고 지속 효과 회복량 버프로 정글 밴 표가 분산된 영향으로 보입니다.",
           "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "자헨 Q2 피해량 상향으로 신규 밴 수요가 생겼을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
           "verified": true,
           "confidence": "low"
         }
@@ -1149,7 +961,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "니달리 밴률이 32.5%→28.7%(-3.7%p)로 떨어졌습니다. 직접 조항은 없고 마스터 이·비에고 버프로 밴 표가 분산된 영향으로 보입니다.",
+        "summary": "니달리 밴률이 32.5%→28.7%(-3.7%p)로 내렸습니다. 마스터 이·비에고 버프로 정글 밴 표가 옮겨간 영향으로 보입니다.",
         "summaryCites": [
           "note:26.18:champion:masteryi:c898ee27",
           "note:26.18:champion:viego:caf9b23d"
@@ -1180,20 +992,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "신드라 W 쿨타임 1초 증가 등 미드 메이지 너프로 사일러스 선호도와 밴이 올랐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카시오페아 R 주문력 계수 50%→75% 상향으로 훔친 궁의 위력이 커진 영향입니다.",
+          "text": "카시오페아 R 주문력 계수 50%→75% 상향으로 사일러스가 훔칠 궁의 가치가 올라갔을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:cassiopeia:8209fcaf",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "카사딘 R 기본 피해 상향 등 미드 경쟁자 변화로 밴 우선순위가 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d9a6b909",
+          "text": "신드라 W 쿨타임 1초 증가 등 미드 메이지 너프로 사일러스 선호도가 반사이익을 받은 것으로 보입니다.",
+          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "세라핀 E 쿨타임 고정 11초 너프도 미드 라인 대안 축소에 더해졌습니다.",
+          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "low"
         }
@@ -1216,9 +1028,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "사일러스 밴률이 13.3%→17.0%(+3.7%p)로 올랐습니다. 직접 조항은 없고, 카시오페아 R 계수 상향 등 훔칠 궁 가치 변화가 유력합니다.",
+        "summary": "사일러스 밴률이 13.3%→17.0%(+3.7%p)로 올랐습니다. 직접 조항은 없고, 신드라·세라핀 너프로 인한 미드 대안 축소가 원인으로 추정됩니다.",
         "summaryCites": [
-          "note:26.18:champion:cassiopeia:8209fcaf"
+          "note:26.18:champion:syndra:cb99a266",
+          "note:26.18:champion:seraphine:4519a08c"
         ],
         "summaryVerified": true
       }
@@ -1246,14 +1059,14 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "자헨 Q2 피해량 상향으로 밴 우선순위가 옮겨가 판테온 밴이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
+          "text": "마스터 이 궁극기 이동 속도 상향으로 밴 우선순위가 옮겨갔을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "마스터 이 궁극기 이동 속도 상향으로 밴 표가 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+          "text": "자헨 Q2 피해량 상향으로 밴 슬롯 경쟁이 심해졌을 여지가 있습니다.",
+          "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
           "verified": true,
           "confidence": "low"
         }
@@ -1276,10 +1089,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "판테온 밴률이 7.1%→3.6%(-3.5%p)로 떨어졌지만 직접 조항은 없고, 자헨·마스터 이 상향에 따른 밴 표 분산이 원인일 수 있습니다.",
+        "summary": "판테온 밴률이 7.1%→3.6%(-3.5%p)로 떨어졌지만 직접 조항은 없고, 마스터 이·자헨 상향에 따른 밴 우선순위 이동이 유력한 설명입니다.",
         "summaryCites": [
-          "note:26.18:champion:zaahen:bce84005",
-          "note:26.18:champion:masteryi:c898ee27"
+          "note:26.18:champion:masteryi:c898ee27",
+          "note:26.18:champion:zaahen:bce84005"
         ],
         "summaryVerified": true
       }
@@ -1307,7 +1120,7 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "자헨 Q2 피해량 상향으로 탑 근접 대결 구도가 바뀌며 올라프 선호가 밀렸을 수 있습니다.",
+          "text": "자헨 Q2 피해량 상향으로 탑 라인 경쟁 구도가 바뀌며 올라프 지분을 잠식했을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
           "verified": true,
           "confidence": "low"
@@ -1331,7 +1144,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "올라프 탑 픽률이 11.8%→8.7%(-3.2%p)로 떨어졌으나, 자헨 Q2 상향 외에는 이를 설명할 조항이 뚜렷하지 않습니다.",
+        "summary": "올라프 탑 픽률이 11.8%→8.7%(-3.2%p)로 떨어졌으나 직접 조항은 없고, 자헨 Q2 상향에 따른 탑 경쟁 변화가 유일한 단서입니다.",
         "summaryCites": [
           "note:26.18:champion:zaahen:bce84005"
         ],
@@ -1361,7 +1174,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "구인수의 격노검 중첩 지속시간 3초→4초로 공속 기반 근접 딜러의 지속 교전력이 올랐습니다.",
+          "text": "카시오페아 R 기본 피해 너프 등 미드 경쟁자 약화로 이렐리아 선호도가 올랐을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:cassiopeia:64976414",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "신드라 W 쿨다운 1초 증가로 미드 대항마가 줄며 이렐리아 밴 우선순위가 밀려 올라간 흐름.",
+          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "구인수 중첩 지속 3초→4초 버프가 공속 기반 근접 딜러 체감을 올린 영향으로 추정됩니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
@@ -1385,77 +1210,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "이렐리아 밴률이 15.6%→18.8%(+3.1%p)로 올랐으나 직접 조항은 없고, 구인수의 격노검 중첩 4초 연장 정도가 간접 요인입니다.",
+        "summary": "이렐리아 직접 조항은 없고, 밴률이 15.6%→18.8%(+3.1%p) 올랐습니다. 카시오페아·신드라 너프로 인한 미드 반사이익이 유력한 설명입니다.",
         "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Nidalee:pickRate",
-      "entityType": "champion",
-      "entityKey": "Nidalee",
-      "entityName": "니달리",
-      "metric": "pickRate",
-      "before": 0.156,
-      "after": 0.125,
-      "delta": -0.031,
-      "ci": [
-        -0.04062550273326939,
-        -0.02137573817230629
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "비에고 공격력 성장 3.5→4 버프로 정글 1픽 경쟁에서 니달리가 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "에코 Q 마나 소모 10 감소로 정글 수급이 편해져 대체 픽으로 흡수됐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "마스터 이 R 이동속도 5%p 상향 등 버프로 정글 픽 점유가 분산됐습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8375323215",
-          "KR_8375337615",
-          "KR_8375331571",
-          "KR_8375327276",
-          "KR_8375352329",
-          "KR_8375321889",
-          "KR_8375353176",
-          "KR_8375339732",
-          "KR_8375343628",
-          "KR_8375321892"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=76,scope=all]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "니달리 직접 변경은 없고, 비에고·에코·마스터 이 정글 버프로 픽이 분산되며 픽률이 3.1%p 하락한 것으로 보입니다.",
-        "summaryCites": [
-          "note:26.18:champion:viego:3477e7c5",
-          "note:26.18:champion:ekko:dfd6f002",
-          "note:26.18:champion:masteryi:c898ee27"
+          "note:26.18:champion:cassiopeia:64976414",
+          "note:26.18:champion:syndra:cb99a266"
         ],
         "summaryVerified": true
       }
@@ -1483,20 +1241,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "에코 Q 계수 상향으로 미드·정글 AP 자리 경쟁이 심해져 탈리야 지분이 밀렸을 수 있습니다.",
+          "text": "에코 Q 계수 60%→70% 버프로 미드·정글 경쟁에서 탈리야 자리를 잠식했을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "에코 Q 마나 소모 10 감소로 정글 클리어가 편해져 AP 정글 선택이 에코로 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
+          "text": "카사딘 Q 계수 70%→80% 버프가 미드 AP 픽 선호를 흡수한 것으로 보입니다.",
+          "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "카사딘 Q 계수 80% 상향으로 미드 AP 픽 경쟁에서 탈리야 수요가 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
+          "text": "카시오페아 Q 계수 65%→75% 등 조정으로 AP 미드 픽 구도가 재편됐습니다.",
+          "candidateNoteId": "note:26.18:champion:cassiopeia:957165bc",
           "verified": true,
           "confidence": "low"
         }
@@ -1519,78 +1277,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "탈리야 픽률이 9.6%→6.6%(-3.0%p)로 내렸습니다. 직접 조항은 없고 에코·카사딘 버프에 따른 미드·정글 AP 경쟁 심화가 유력합니다.",
-        "summaryCites": [
-          "note:26.18:champion:ekko:dfd6f002",
-          "note:26.18:champion:kassadin:d631af52"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Nidalee:JUNGLE:pickRate",
-      "entityType": "champion",
-      "entityKey": "Nidalee",
-      "entityName": "니달리",
-      "metric": "pickRate",
-      "before": 0.1517,
-      "after": 0.1219,
-      "delta": -0.029800000000000007,
-      "ci": [
-        -0.0393193911074373,
-        -0.020282559165285735
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "에코 Q 계수 60%→70% 상향으로 AP 정글 선택지가 니달리와 겹칩니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "비에고 레벨당 공격력 3.5→4 상향으로 정글 픽 경쟁이 심해졌습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "마스터 이 R 이동 속도 40/50/60% 상향으로 정글 점유율을 일부 흡수했습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8375323215",
-          "KR_8375337615",
-          "KR_8375331571",
-          "KR_8375327276",
-          "KR_8375352329",
-          "KR_8375321889",
-          "KR_8375353176",
-          "KR_8375339732",
-          "KR_8375343628",
-          "KR_8375321892"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=76,scope=position,position=JUNGLE]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "니달리 정글 픽률이 15.2%→12.2%(-3.0%p) 하락했고, 에코·비에고·마스터 이 정글 상향이 수요를 흡수한 영향으로 보입니다.",
+        "summary": "탈리야 픽률이 9.6%→6.6%(-3.0%p)로 떨어졌고, 에코·카사딘 계수 버프 등 미드 AP 경쟁 강화가 원인일 수 있습니다.",
         "summaryCites": [
           "note:26.18:champion:ekko:433f5bb2",
-          "note:26.18:champion:viego:3477e7c5",
-          "note:26.18:champion:masteryi:c898ee27"
+          "note:26.18:champion:kassadin:d631af52"
         ],
         "summaryVerified": true
       }
@@ -1635,7 +1325,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카이사 픽률이 23.8%에서 20.9%로 3.0%p 떨어졌으나(CI 전 구간 음수), 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+        "summary": "카이사 픽률이 23.8%에서 20.9%로 3.0%p 하락했으나, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -1708,31 +1398,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "에코 Q 계수 60%→70% 버프로 미드·정글 암살자 경쟁에서 키아나 지분이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "에코 Q 마나 소모 10 감소로 라인 유지력이 올라 같은 자리 픽을 흡수했을 수 있습니다.",
+          "text": "에코 Q 마나 소모 10 감소로 미드·정글 암살자 경쟁에서 키아나 수요가 밀렸을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "비에고 레벨당 공격력 3.5→4 상향으로 정글 암살자 선택이 비에고 쪽으로 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "비에고 지속 효과 회복량이 스탯 비례로 확대돼 정글 경쟁에서 우위를 얻었습니다.",
+          "text": "비에고 지속효과 회복이 공격력·주문력·공속·체력 계수로 확대돼 정글 픽이 비에고로 이동.",
           "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "카사딘 Q 계수 70%→80% 버프로 미드 암살자 픽 분산이 발생했을 수 있습니다.",
+          "text": "카사딘 Q 계수 70%→80% 버프로 미드 암살자 선택지가 분산.",
           "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
           "verified": true,
           "confidence": "low"
@@ -1756,10 +1434,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "키아나 픽률이 20.4%→17.8%(-2.6%p)로 내렸습니다. 직접 조항은 없고 에코·비에고 버프에 따른 경쟁 밀림이 유력합니다.",
+        "summary": "키아나 픽률 20.4%→17.8%(-2.6%p). 직접 조항은 없고 에코·카사딘·비에고 버프로 미드·정글 경쟁 픽이 분산된 영향으로 보입니다.",
         "summaryCites": [
-          "note:26.18:champion:ekko:433f5bb2",
-          "note:26.18:champion:viego:3477e7c5"
+          "note:26.18:champion:ekko:dfd6f002",
+          "note:26.18:champion:kassadin:d631af52",
+          "note:26.18:champion:viego:caf9b23d"
         ],
         "summaryVerified": true
       }
@@ -1785,14 +1464,7 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "구인수 중첩 지속시간 3초→4초 버프로 다른 평타 딜러 선택지가 늘어 카이사 픽이 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375336156",
@@ -1811,10 +1483,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카이사 픽률이 24.1%→21.5%(-2.6%p)로 떨어졌지만 직접 조항은 없고, 구인수 버프에 따른 원거리 딜러 선호 이동이 유력한 설명입니다.",
-        "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
-        ],
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -1841,19 +1511,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "카시오페아 R 기본 피해량 150/250/350→125/225/325 너프로 미드 메이지 지분이 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:64976414",
+          "text": "카시오페아 Q 기본 피해량이 10 낮아져 미드 경쟁 픽이 줄며 로크가 반사 이익을 얻었습니다.",
+          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "신드라 W 쿨다운 1초 증가 너프로 경쟁 미드 픽 수요가 분산됐을 수 있습니다.",
+          "text": "신드라 W 쿨타임이 1초 늘어난 너프로 미드 지분이 로크 쪽으로 이동했을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "세라핀 E 쿨다운이 전 구간 11초로 고정되며 밀려난 픽 수요를 흡수했을 수 있습니다.",
+          "text": "세라핀 E 쿨타임이 11초로 고정되며 밀린 수요가 로크로 흡수됐습니다.",
           "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "low"
@@ -1877,9 +1547,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "로크 직접 변경은 없지만 카시오페아 R·신드라 W 너프로 밀린 미드 수요가 흘러와 픽률이 11.4%→13.7%(+2.4%p) 오른 것으로 보입니다.",
+        "summary": "로크 픽률이 11.4%→13.7%(+2.4%p)로 올랐습니다. 직접 조항은 없고, 카시오페아·신드라 등 미드 경쟁 챔피언 너프의 반사 이익으로 보입니다.",
         "summaryCites": [
-          "note:26.18:champion:cassiopeia:64976414",
+          "note:26.18:champion:cassiopeia:91d07d6f",
           "note:26.18:champion:syndra:cb99a266"
         ],
         "summaryVerified": true
@@ -1908,14 +1578,8 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "자헨 Q2 피해량이 25~125에서 30~150으로 올라 탑 듀얼리스트 픽 경쟁에서 밀렸을 수 있습니다.",
+          "text": "자헨 Q2 피해량 상향으로 탑 근접 딜러 선호가 옮겨가 피오라 픽률이 밀렸을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "구인수의 격노검 중첩 지속시간 3초→4초 버프로 평타 딜러 선호가 이동했을 여지가 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
         }
@@ -1938,7 +1602,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "피오라 픽률이 7.8%에서 5.5%로 2.3%p 내렸지만 직접 조항은 없고, 자헨 Q2 강화 등 상단 경쟁 변화가 유력한 설명입니다.",
+        "summary": "피오라 직접 조항은 없으며, 자헨 Q2 피해량 상향(25~125→30~150)에 따른 탑 경쟁 심화가 픽률 -2.3%p의 유력한 배경입니다.",
         "summaryCites": [
           "note:26.18:champion:zaahen:bce84005"
         ],
@@ -1946,69 +1610,69 @@
       }
     },
     {
-      "id": "champion:Taliyah:JUNGLE:pickRate",
+      "id": "champion:TwistedFate:pickRate",
       "entityType": "champion",
-      "entityKey": "Taliyah",
-      "entityName": "탈리야",
+      "entityKey": "TwistedFate",
+      "entityName": "트위스티드 페이트",
       "metric": "pickRate",
-      "before": 0.0525,
-      "after": 0.0315,
-      "delta": -0.020999999999999998,
+      "before": 0.0853,
+      "after": 0.106,
+      "delta": 0.020699999999999996,
       "ci": [
-        -0.026586715872636495,
-        -0.015461827530078808
+        0.012553384481893429,
+        0.028856659400828308
       ],
       "n": {
         "before": 10000,
         "after": 10000
       },
-      "q": 0,
+      "q": 0.000009856437607182189,
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "비에고 지속효과 회복이 공격력·주문력·공속·체력에 비례하도록 강화돼 정글 경쟁이 심화됐습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+          "text": "신드라 W 쿨타임이 전 구간 1초 늘고 마나 수급도 깎여, 미드 대체 픽으로 트위스티드 페이트 수요가 늘었습니다.",
+          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "마스터 이 궁극기 이동 속도가 40/50/60%로 상향돼 정글 픽 파이를 잠식했습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+          "text": "카시오페아 Q 기본 피해가 10 감소해 라인전이 약해지면서 미드 AP 픽이 분산됐을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "에코 Q 계수 70%·마나 소모 10 감소로 정글 수급이 좋아져 대체 픽이 늘었습니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
+          "text": "세라핀 E 쿨타임이 최대 9초에서 11초로 고정되며 미드 경쟁자가 줄었습니다.",
+          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "low"
         }
       ],
       "evidence": {
         "matchIds": [
-          "KR_8375347592",
-          "KR_8375337921",
-          "KR_8375347389",
-          "KR_8375363038",
-          "KR_8375342205",
-          "KR_8375372629",
-          "KR_8375360646",
-          "KR_8375381021",
-          "KR_8375342091",
-          "KR_8375377624"
+          "KR_8375334165",
+          "KR_8375321889",
+          "KR_8375320127",
+          "KR_8375327145",
+          "KR_8375360378",
+          "KR_8375343301",
+          "KR_8375354658",
+          "KR_8375362397",
+          "KR_8375380267",
+          "KR_8375348253"
         ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=163,scope=position,position=JUNGLE]",
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=4,scope=all]",
         "noteAnchor": null
       },
       "llm": {
         "skipped": false,
-        "summary": "탈리야 정글 픽률이 5.3%→3.1%(-2.1%p)로 떨어졌는데, 비에고·마스터 이·에코 등 경쟁 정글러 상향의 반사 효과로 보입니다.",
+        "summary": "트위스티드 페이트 직접 변경은 없고, 신드라·카시오페아·세라핀 등 미드 AP 너프에 따른 반사 이득으로 픽률이 8.5%→10.6%(+2.1%p) 올랐습니다.",
         "summaryCites": [
-          "note:26.18:champion:viego:caf9b23d",
-          "note:26.18:champion:masteryi:c898ee27",
-          "note:26.18:champion:ekko:433f5bb2"
+          "note:26.18:champion:syndra:cb99a266",
+          "note:26.18:champion:cassiopeia:91d07d6f",
+          "note:26.18:champion:seraphine:4519a08c"
         ],
         "summaryVerified": true
       }
@@ -2036,14 +1700,14 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "노틸러스 기본 공격력 61→58, Q 피해량 너프로 초반 정글 경쟁자가 약해져 리 신 픽이 반사 이익을 얻었을 수 있습니다.",
+          "text": "노틸러스 공격력 61→58 너프로 정글 입지가 흔들려 리 신이 반사 이익을 봤을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "비에고·에코 등 정글 챔피언 버프로 정글 메타가 흔들리며 리 신 선호도가 함께 올랐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
+          "text": "노틸러스 Q 피해량 상위 레벨 너프가 초반 정글 경쟁 구도를 리 신 쪽으로 옮긴 것으로 보입니다.",
+          "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
           "verified": true,
           "confidence": "low"
         }
@@ -2066,25 +1730,26 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "리 신 픽률이 23.8%→25.8%(+2.0%p)로 올랐지만 직접 조항은 없고, 노틸러스 공격력 61→58 등 정글 경쟁 구도 변화가 유력한 간접 요인입니다.",
+        "summary": "리 신 픽률이 23.8%→25.8%(+2.0%p)로 올랐으나 직접 조항은 없고, 노틸러스 공격력·Q 너프에 따른 정글 경쟁 완화가 유력한 간접 요인입니다.",
         "summaryCites": [
-          "note:26.18:champion:nautilus:b6aff2b2"
+          "note:26.18:champion:nautilus:b6aff2b2",
+          "note:26.18:champion:nautilus:878378b8"
         ],
         "summaryVerified": true
       }
     },
     {
-      "id": "item:6698:adoptionRate",
+      "id": "item:6610:adoptionRate",
       "entityType": "item",
-      "entityKey": "6698",
-      "entityName": "불경한 히드라",
+      "entityKey": "6610",
+      "entityName": "갈라진 하늘",
       "metric": "adoptionRate",
-      "before": 0.02006,
-      "after": 0.02633,
-      "delta": 0.006269999999999998,
+      "before": 0.0358,
+      "after": 0.0239,
+      "delta": -0.011899999999999997,
       "ci": [
-        0.00495195933167045,
-        0.007591125609054493
+        -0.013393289970341322,
+        -0.010411028389701087
       ],
       "n": {
         "before": 100000,
@@ -2094,55 +1759,27 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "비에고 기본 지속 효과 회복량이 추가 공격력·체력까지 계수화돼 근접 AD 아이템 수요가 늘었습니다",
-          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "비에고 레벨당 공격력 3.5→4 상승으로 픽률이 오르며 히드라 채택이 함께 늘었을 수 있습니다",
-          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "자헨 Q2 피해량 상향으로 근접 AD 챔피언 표본이 늘어난 파급 효과",
-          "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "마스터 이 궁극기 이동 속도 상향에 따른 근접 딜러 픽 증가의 간접 영향",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
-          "KR_8375323215",
-          "KR_8375321889",
-          "KR_8375337921",
-          "KR_8375318369",
-          "KR_8375326366",
-          "KR_8375345676",
-          "KR_8375320127",
+          "KR_8375315960",
+          "KR_8375318678",
+          "KR_8375351249",
           "KR_8375343628",
-          "KR_8375362251",
-          "KR_8375353973"
+          "KR_8375363038",
+          "KR_8375361376",
+          "KR_8375322355",
+          "KR_8375325119",
+          "KR_8375362768",
+          "KR_8375360970"
         ],
-        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=6698]",
+        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=6610]",
         "noteAnchor": null
       },
       "llm": {
         "skipped": false,
-        "summary": "불경한 히드라 채택률이 2.0%→2.6%(+0.6%p) 올랐는데, 비에고 공격력 성장·지속 효과 회복 계수 상향 등 근접 AD 챔피언 강화의 파급으로 보입니다.",
-        "summaryCites": [
-          "note:26.18:champion:viego:3477e7c5",
-          "note:26.18:champion:viego:caf9b23d"
-        ],
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -2169,14 +1806,8 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초 버프로 공격 속도 기반 조합의 가치가 올라 향로 수요가 늘었을 수 있습니다.",
+          "text": "구인수의 격노검 중첩 지속시간이 3초→4초로 늘어 공속 온힛 원딜 선호가 커지면서, 이를 받쳐주는 불타는 향로 수요가 늘었을 수 있습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "마스터 이 궁극기 이동 속도 상향으로 공속·이속 지원형 아이템인 향로 픽이 동반 상승했을 여지가 있습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
           "verified": true,
           "confidence": "low"
         }
@@ -2199,9 +1830,83 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "불타는 향로 채택률이 1.6%→2.1%(+0.5%p)로 올랐으나 직접 조항은 없고, 구인수의 격노검 중첩 지속시간 4초 상향 등 공속 조합 강화가 간접 요인으로 추정됩니다.",
+        "summary": "불타는 향로 채택률이 1.6%→2.1%(+0.5%p)로 올랐고, 구인수의 격노검 중첩 4초 버프에 따른 공속 조합 선호가 유력한 간접 요인입니다.",
         "summaryCites": [
           "note:26.18:item:guinsoos-rageblade:f624219b"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:MonkeyKing:JUNGLE:winRate",
+      "entityType": "champion",
+      "entityKey": "MonkeyKing",
+      "entityName": "오공",
+      "metric": "winRate",
+      "before": 0.5714285714285714,
+      "after": 0.4551971326164875,
+      "delta": -0.11623143881208392,
+      "ci": [
+        -0.20152891258189667,
+        -0.028330663519802998
+      ],
+      "n": {
+        "before": 224,
+        "after": 279
+      },
+      "q": 0.053279465460578046,
+      "status": "indirect-effect",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "비에고 지속효과 회복량이 공격력·체력 계수로 확대돼 정글 우위가 오공에서 옮겨갔습니다.",
+          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "마스터 이 궁극기 이동 속도 40/50/60%로 상향, 정글 주도권 경쟁에서 오공이 밀립니다.",
+          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "에코 Q 마나 소모 10 감소로 정글 지속력이 올라 오공 픽 입지가 좁아졌습니다.",
+          "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "구인수 중첩 지속시간 4초 상향이 공속 정글러를 띄워 상대적으로 오공이 약화됐을 수 있습니다.",
+          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8375315960",
+          "KR_8375331914",
+          "KR_8375325119",
+          "KR_8375384286",
+          "KR_8375348841",
+          "KR_8375390582",
+          "KR_8375381894",
+          "KR_8375374352",
+          "KR_8375395387",
+          "KR_8375323540"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=62,scope=position,position=JUNGLE]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "오공 정글 승률이 57.1%→45.5%(-11.6%p)로 급락했습니다. 비에고·마스터 이·에코 정글 상향에 밀린 간접 여파입니다.",
+        "summaryCites": [
+          "note:26.18:champion:viego:caf9b23d",
+          "note:26.18:champion:masteryi:c898ee27",
+          "note:26.18:champion:ekko:dfd6f002"
         ],
         "summaryVerified": true
       }
@@ -2229,25 +1934,25 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "노틸러스 공격력 61→58로 하향되어 경쟁 서포트가 약해진 반사이익",
+          "text": "노틸러스 공격력 61→58로 하향되며 경쟁 서포트 입지가 줄어 파이크 픽 가치가 올랐습니다.",
           "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "노틸러스 Q 피해량 감소로 초반 교전력 하락, 파이크 대면 우위",
+          "text": "노틸러스 Q 피해량이 후반 265→245로 깎여 이니시 서포트 경쟁 구도가 파이크에 유리해졌습니다.",
           "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "세라핀 E 재사용 대기시간 11초 고정 너프로 서포트 경쟁권 약화",
+          "text": "세라핀 E 쿨타임이 9~11초에서 11초 고정으로 하향돼 서포트 대체 픽 수요가 파이크로 이동했습니다.",
           "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "바드 방어력 34→32(레벨당 5→4.7) 하향으로 로밍형 서포트 입지 축소",
+          "text": "바드 방어력 하향으로 로밍형 서포트 경쟁자가 약해진 반사이익일 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
           "verified": true,
           "confidence": "low"
@@ -2271,10 +1976,77 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "파이크 직접 조항은 없으나 노틸러스 공격력·Q 피해량 하향 등 서포트 경쟁자 너프가 겹치며 승률이 10.1%p 올랐습니다.",
+        "summary": "파이크 승률이 43.1%→53.2%(+10.1%p)로 급등했습니다. 직접 변경은 없고 노틸러스 공격력·Q 하향 등 경쟁 서포트 너프의 반사이익입니다.",
         "summaryCites": [
           "note:26.18:champion:nautilus:b6aff2b2",
           "note:26.18:champion:nautilus:878378b8"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Pyke:UTILITY:winRate",
+      "entityType": "champion",
+      "entityKey": "Pyke",
+      "entityName": "파이크",
+      "metric": "winRate",
+      "before": 0.4310077519379845,
+      "after": 0.5303776683087028,
+      "delta": 0.09936991637071829,
+      "ci": [
+        0.04405334592408661,
+        0.15384523871050754
+      ],
+      "n": {
+        "before": 645,
+        "after": 609
+      },
+      "q": 0.0037190956482710483,
+      "status": "indirect-effect",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "노틸러스 공격력 61→58, Q 피해량 하향으로 경쟁 서포터가 약화됐습니다.",
+          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "세라핀 E 쿨타임이 전 구간 11초로 고정되며 바텀 대치 구도가 파이크에 유리해졌습니다.",
+          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "바드 방어력 하향으로 로밍형 서포터 경쟁자가 줄었습니다.",
+          "candidateNoteId": null,
+          "verified": false,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8375318678",
+          "KR_8375353973",
+          "KR_8375314950",
+          "KR_8375347493",
+          "KR_8375373250",
+          "KR_8375376355",
+          "KR_8375314942",
+          "KR_8375384286",
+          "KR_8375381460",
+          "KR_8375391363"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=555,scope=position,position=UTILITY]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "파이크 직접 변경은 없고, 노틸러스 공격력·Q 너프와 세라핀 E 쿨타임 고정 등 경쟁 서포터 약화가 승률 9.9%p 상승의 배경입니다.",
+        "summaryCites": [
+          "note:26.18:champion:nautilus:b6aff2b2",
+          "note:26.18:champion:seraphine:4519a08c"
         ],
         "summaryVerified": true
       }
@@ -2302,20 +2074,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초로, 온힛 바루스의 중첩 유지가 쉬워졌습니다.",
+          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초 버프가 온힛 바루스 빌드의 지속 화력을 올렸습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "제리 W 계수 120%→100% 너프로 원거리 딜러 경쟁군이 약해져 바루스 선호가 올랐습니다.",
+          "text": "제리 W 피해량 계수가 총공격력 120%→100%로 하향되며 경쟁 원거리 딜러 입지가 줄었습니다.",
           "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "노틸러스 Q 피해량 너프로 바텀 라인전 압박이 줄어든 영향입니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+          "text": "세라핀 E 쿨다운이 전 구간 11초로 고정돼 바텀 상대 라인전 압박이 약해졌을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "low"
         }
@@ -2338,7 +2110,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "바루스 직접 조항은 없지만 구인수의 격노검 중첩 유지 1초 증가와 제리 W 너프가 겹치며 승률이 43.4%→51.8%로 올랐습니다.",
+        "summary": "바루스 승률 43.4%→51.8%(+8.3%p)는 직접 조항 없이, 구인수의 격노검 중첩 지속시간 3초→4초 버프와 제리 W 너프에 따른 반사 이익으로 해석됩니다.",
         "summaryCites": [
           "note:26.18:item:guinsoos-rageblade:f624219b",
           "note:26.18:champion:zeri:d0cacf0b"
@@ -2369,26 +2141,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "마스터 이 궁극기 이동 속도 상향으로 룰루와의 조합 가치가 올라 선제 밴 대상이 됐습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "마스터 이 레벨당 방어력 상향으로 생존력이 늘어 룰루 보호 조합의 위협도가 커졌습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "구인수 중첩 지속시간 4초로 평타 캐리가 강해지며 이를 키우는 룰루 선호도가 상승했습니다.",
+          "text": "구인수의 격노검 중첩 지속시간이 3초→4초로 늘며 온힛 원딜 캐리력이 올라, 이를 키우는 룰루의 밴 가치가 상승했습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "세라핀 E 쿨다운이 11초로 고정되며 유틸 서포터 선택지가 줄어 룰루로 밴이 몰렸을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "세라핀 E 쿨다운 고정 너프로 인챈터 선택지가 줄어 룰루에 밴이 몰렸습니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+          "text": "마스터 이 R 이동속도 버프로 룰루 동반 조합이 강해져 밴 표적이 됐습니다.",
+          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
           "verified": true,
           "confidence": "low"
         }
@@ -2407,14 +2173,80 @@
           "KR_8375343301"
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=117,scope=all]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi"
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-Guinsoos-Rageblade"
       },
       "llm": {
         "skipped": false,
-        "summary": "룰루 밴률이 6.6%→14.8%(+8.2%p)로 급등했습니다. 마스터 이 궁극기 이동 속도·방어력 상향에 따른 조합 견제가 유력합니다.",
+        "summary": "룰루 밴률 6.6%→14.8%(+8.2%p). 구인수의 격노검 중첩 4초 버프로 온힛 캐리 성장이 강해진 파급이 주된 요인입니다.",
         "summaryCites": [
-          "note:26.18:champion:masteryi:c898ee27",
-          "note:26.18:champion:masteryi:d392c3c6"
+          "note:26.18:item:guinsoos-rageblade:f624219b"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Akali:banRate",
+      "entityType": "champion",
+      "entityKey": "Akali",
+      "entityName": "아칼리",
+      "metric": "banRate",
+      "before": 0.0994,
+      "after": 0.1522,
+      "delta": 0.0528,
+      "ci": [
+        0.043638413687006584,
+        0.06196989044117791
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0,
+      "status": "indirect-effect",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "카시오페아 R 기본 피해량 150/250/350→125/225/325 너프로 미드 지분이 아칼리로 이동했습니다.",
+          "candidateNoteId": "note:26.18:champion:cassiopeia:64976414",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "신드라 W 재사용 대기시간 1초 증가로 미드 대항마가 약해지며 아칼리 견제 밴이 늘었습니다.",
+          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "세라핀 E 쿨다운이 11초로 고정되며 미드 억제력이 줄어 아칼리 밴 수요가 커졌습니다.",
+          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8375317739",
+          "KR_8375339732",
+          "KR_8375362373",
+          "KR_8375343301",
+          "KR_8375362768",
+          "KR_8375347493",
+          "KR_8375373250",
+          "KR_8375317879",
+          "KR_8375376355",
+          "KR_8375314942"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=84,scope=all]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "아칼리 직접 변경 없이 밴률 9.9%→15.2%(+5.3%p). 카시오페아 R·신드라 W 너프로 미드 경쟁자가 약해진 반사이익입니다.",
+        "summaryCites": [
+          "note:26.18:champion:cassiopeia:64976414",
+          "note:26.18:champion:syndra:cb99a266"
         ],
         "summaryVerified": true
       }
@@ -2442,19 +2274,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "노틸러스 공격력 61→58 및 Q 피해량 하향으로 서포터 지분이 유나라로 이동했을 수 있습니다.",
+          "text": "노틸러스 공격력이 61에서 58로 깎여 서포터 경쟁자가 약화됐고, 그 수요가 유나라로 이동했습니다.",
           "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "세라핀 E 쿨다운이 레벨 무관 11초로 고정되며 경쟁 서포터 입지가 약해졌습니다.",
+          "text": "세라핀 E 쿨타임이 최대 9초에서 11초로 고정돼 선호도가 내려가며 유나라 픽이 반사 이익을 봤습니다.",
           "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "바드 방어력 34+5→32+4.7 하향으로 서포터 선택지가 유나라 쪽으로 쏠렸습니다.",
+          "text": "바드 방어력이 34+레벨당 5에서 32+레벨당 4.7로 낮아져 서포터 선택지가 줄었습니다.",
           "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
           "verified": true,
           "confidence": "low"
@@ -2478,7 +2310,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "유나라 직접 변경은 없으나 노틸러스·세라핀·바드 서포터 하향의 반사 이익으로 픽률이 22.2%→27.2%(+5.0%p) 오른 것으로 해석됩니다.",
+        "summary": "유나라 직접 변경은 없지만 노틸러스·세라핀·바드 등 서포터 동반 너프로 반사 이익을 받아 픽률이 22.2%→27.2%(+5.0%p) 상승했습니다.",
         "summaryCites": [
           "note:26.18:champion:nautilus:b6aff2b2",
           "note:26.18:champion:seraphine:4519a08c",
@@ -2510,19 +2342,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "제리 W 피해량 계수가 총공격력 120%→100%로 하향되며 원딜 픽이 유나라로 이동했을 수 있습니다.",
+          "text": "제리 W 피해량 계수가 총공격력 120%에서 100%로 하향돼 원딜 자리 경쟁이 줄었습니다.",
           "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "제리 W 지형 관통 계수 180%→150% 하향으로 경쟁 원딜 입지가 줄었습니다.",
+          "text": "제리 W 지형 관통 피해 계수도 180%에서 150%로 낮아져 픽이 유나라로 이동했습니다.",
           "candidateNoteId": "note:26.18:champion:zeri:e371a79d",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "구인수의 격노검 중첩 지속시간 3초→4초 버프가 평타 기반 원딜 빌드 효율을 높였습니다.",
+          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간이 3초에서 4초로 늘어 평타 기반 빌드가 이득을 봤을 수 있습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
@@ -2546,10 +2378,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "유나라 직접 조항은 없으나, 제리 W 계수 하향(120%→100%)에 따른 원딜 픽 이동과 구인수 격노검 중첩 4초 버프가 픽률 5.0%p 상승의 배경으로 보입니다.",
+        "summary": "유나라 직접 조항은 없으나 제리 W 계수 하향(120%→100%, 관통 180%→150%)으로 원딜 수요가 옮겨가며 픽률이 5.0%p 올랐습니다.",
         "summaryCites": [
           "note:26.18:champion:zeri:d0cacf0b",
-          "note:26.18:item:guinsoos-rageblade:f624219b"
+          "note:26.18:champion:zeri:e371a79d"
         ],
         "summaryVerified": true
       }
@@ -2577,28 +2409,28 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "세라핀 E 쿨다운이 전 구간 11초로 고정 너프되며 인챈터 픽이 룰루로 이동했습니다.",
+          "text": "세라핀 E 쿨다운이 전 구간 11초로 고정되며 너프돼, 대체 서포터로 룰루 픽이 늘었습니다.",
           "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "노틸러스 Q 피해량 너프로 서포터 경쟁 구도가 약화됐습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+          "text": "노틸러스 공격력과 Q 피해량 너프로 상위 서포터 입지가 줄며 룰루가 반사 이익을 얻었습니다.",
+          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "바드 방어력이 32+레벨당 4.7로 하향돼 서포터 선택지 일부가 룰루로 흡수됐습니다.",
+          "text": "바드 방어력이 32+레벨당 4.7로 낮아져 서포터 선택지가 좁아진 영향입니다.",
           "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "구인수 들끓는 일격 중첩이 4초로 늘며 평타 하이퍼캐리 가치가 올라 룰루 수요가 증가했습니다.",
+          "text": "구인수 중첩 지속시간 4초 상향으로 평타 원딜이 강해져 룰루 조합 수요가 늘었을 수 있습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
-          "confidence": "medium"
+          "confidence": "low"
         }
       ],
       "evidence": {
@@ -2619,10 +2451,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "룰루 픽률이 15.0%→19.7%(+4.7%p)로 올랐습니다. 세라핀 E 쿨다운 11초 고정 너프와 구인수 중첩 4초 버프의 반사 효과로 보입니다.",
+        "summary": "룰루 픽률 15.0%→19.7%(+4.7%p)은 세라핀 E 쿨다운 고정, 노틸러스 공격력·Q 너프 등 경쟁 서포터 약화의 반사 이익입니다.",
         "summaryCites": [
           "note:26.18:champion:seraphine:4519a08c",
-          "note:26.18:item:guinsoos-rageblade:f624219b"
+          "note:26.18:champion:nautilus:b6aff2b2",
+          "note:26.18:champion:nautilus:878378b8"
         ],
         "summaryVerified": true
       }
@@ -2650,25 +2483,25 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "세라핀 E 재사용 대기시간이 11초로 고정 너프되며 인챈터 자리가 룰루로 이동한 것으로 보입니다.",
+          "text": "세라핀 E 쿨다운이 전 구간 11초로 고정되며 경쟁 서포터가 약화, 룰루로 수요가 이동했습니다.",
           "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "노틸러스 Q 피해량과 공격력 너프로 탱커 서포터 선호가 줄며 룰루 픽이 반사 이익을 얻었습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+          "text": "노틸러스 공격력 61→58과 Q 피해량 하향으로 탱커 서포터 입지가 줄었습니다.",
+          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "바드 방어력 너프로 상위 서포터 선택지가 줄어든 점이 룰루 픽률 상승에 기여했습니다.",
+          "text": "바드 방어력 34→32(레벨당 5→4.7) 하향도 서포터 경쟁군 약화에 보탭니다.",
           "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "구인수의 격노검 중첩 지속시간 4초 상향으로 공속 원딜이 늘어 룰루 시너지 수요가 커졌습니다.",
+          "text": "구인수의 격노검 중첩 지속시간 3초→4초로 공속 원딜이 강해져 룰루 조합 가치가 올랐습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
@@ -2692,84 +2525,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "룰루 픽률 14.6%→19.3%(+4.7%p)는 세라핀 E 너프와 노틸러스 Q·공격력 너프로 생긴 서포터 공백을 흡수한 결과로 보입니다.",
+        "summary": "룰루 픽률 14.6%→19.3%(+4.7%p)는 세라핀 E 쿨다운 고정, 노틸러스·바드 하향으로 경쟁 서포터가 약해진 반사이익입니다.",
         "summaryCites": [
           "note:26.18:champion:seraphine:4519a08c",
-          "note:26.18:champion:nautilus:878378b8",
-          "note:26.18:champion:nautilus:b6aff2b2"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Pyke:banRate",
-      "entityType": "champion",
-      "entityKey": "Pyke",
-      "entityName": "파이크",
-      "metric": "banRate",
-      "before": 0.4621,
-      "after": 0.5035,
-      "delta": 0.04139999999999994,
-      "ci": [
-        0.02755221732481665,
-        0.05522532604408722
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "노틸러스 공격력 61→58 너프로 상위 서포터가 밀리며 파이크 밴 수요가 커졌습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "노틸러스 Q 피해량 하향으로 서포트 밴 우선순위가 파이크로 이동했습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "세라핀 E 쿨다운 11초 고정 너프로 서포트 대체재가 줄었습니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "바드 방어력 하향으로 서포트 선택지가 좁아진 점도 밴률 상승에 기여했습니다.",
-          "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8375318678",
-          "KR_8375353973",
-          "KR_8375314950",
-          "KR_8375347493",
-          "KR_8375373250",
-          "KR_8375376355",
-          "KR_8375314942",
-          "KR_8375384286",
-          "KR_8375381460",
-          "KR_8375391363"
-        ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=555,scope=all]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "파이크 직접 변경은 없으나 노틸러스 공격력·Q 하향 등 서포트 너프로 밴률이 46.2%→50.3%(+4.1%p) 올랐습니다.",
-        "summaryCites": [
           "note:26.18:champion:nautilus:b6aff2b2",
-          "note:26.18:champion:nautilus:878378b8"
+          "note:26.18:champion:bard:453ef7b4"
         ],
         "summaryVerified": true
       }
@@ -2797,37 +2557,25 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "비에고 레벨당 공격력 3.5→4 상향으로 정글 픽 경쟁에서 올라프 지분이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "비에고 지속 효과 회복량이 공격력·주문력·공속·체력 계수로 확대돼 정글 선호도가 이동했습니다.",
+          "text": "비에고 군주의 지배 회복량이 추가 능력치 비례로 확대돼 정글 1티어 수요가 올라프를 밀어냈습니다.",
           "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "마스터 이 R 이동 속도 35/45/55%→40/50/60% 상향으로 정글 경쟁이 심화됐습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+          "text": "마스터 이가 레벨당 방어력 5로 상향돼 정글 픽 경쟁에서 올라프 지분을 잠식했습니다.",
+          "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "마스터 이 레벨당 방어력 4.5→5 상향이 초반 정글 안정성을 높여 픽을 흡수했습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "에코 Q 마나 소모 10 감소로 정글 지속력이 올라 올라프 수요를 나눠 가졌습니다.",
+          "text": "에코 Q 마나 소모 10 감소로 정글 수급이 편해져 올라프 대신 선택된 것으로 보입니다.",
           "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "구인수의 격노검 중첩 지속 3초→4초 상향이 공속 정글러 선호를 키웠습니다.",
+          "text": "구인수 중첩 지속시간 4초 상향이 평타 정글러 선호를 키워 올라프 수요를 분산시켰습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
@@ -2851,10 +2599,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "올라프 직접 조항은 없고, 비에고·마스터 이 등 정글 경쟁자 상향이 픽률 -3.3%p 하락의 유력 원인입니다.",
+        "summary": "올라프 픽률이 12.8%→9.5%(-3.3%p)로 떨어졌습니다. 직접 조항은 없고 비에고·마스터 이 버프로 정글 경쟁에서 밀린 결과입니다.",
         "summaryCites": [
-          "note:26.18:champion:viego:3477e7c5",
-          "note:26.18:champion:masteryi:c898ee27"
+          "note:26.18:champion:viego:caf9b23d",
+          "note:26.18:champion:masteryi:d392c3c6"
         ],
         "summaryVerified": true
       }
@@ -2882,32 +2630,26 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "노틸러스 Q 피해량 너프로 그랩형 서포트 수요가 블리츠크랭크로 이동했을 수 있습니다.",
+          "text": "노틸러스 Q 피해량 너프로 경쟁 그랩 서포터 입지가 줄면서 블리츠크랭크 선호도가 올랐습니다.",
           "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "노틸러스 기본 공격력 61→58 너프가 초반 라인전 위상을 낮췄습니다.",
+          "text": "노틸러스 기본 공격력 61→58 너프가 라인전 압박을 약화시켜 블리츠크랭크로의 수요 이동을 키웠습니다.",
           "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "세라핀 E 쿨다운 고정 11초 너프로 서포트 선택지가 좁아졌습니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "바드 방어력 너프로 유틸 서포트 입지가 줄어든 반사이익 가능성이 있습니다.",
+          "text": "바드 방어력 너프로 서포터 선택지가 좁아지며 블리츠크랭크 밴 우선순위가 올랐을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "제리 W 계수 너프로 바텀 구도가 바뀌며 그랩 견제 가치가 올라갔습니다.",
-          "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
+          "text": "세라핀 E 쿨다운 고정 너프도 서포터 구도를 바꿔 블리츠크랭크 체감 위협을 키웠습니다.",
+          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "low"
         }
@@ -2930,10 +2672,145 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "블리츠크랭크 밴률이 3.8%→7.1%로 올랐습니다. 노틸러스 Q 피해와 공격력 너프로 그랩 서포트 수요가 옮겨간 영향으로 보입니다.",
+        "summary": "블리츠크랭크 밴률이 3.8%→7.1%(+3.3%p)로 올랐습니다. 노틸러스 Q 피해량·기본 공격력 너프로 그랩 서포터 수요가 블리츠크랭크로 옮겨간 결과입니다.",
         "summaryCites": [
           "note:26.18:champion:nautilus:878378b8",
           "note:26.18:champion:nautilus:b6aff2b2"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Nidalee:pickRate",
+      "entityType": "champion",
+      "entityKey": "Nidalee",
+      "entityName": "니달리",
+      "metric": "pickRate",
+      "before": 0.156,
+      "after": 0.125,
+      "delta": -0.031,
+      "ci": [
+        -0.04062550273326939,
+        -0.02137573817230629
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0,
+      "status": "indirect-effect",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "비에고가 공격력 성장 3.5→4, 지속 효과 회복 강화로 정글 픽 경쟁에서 니달리 지분을 흡수했습니다.",
+          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "마스터 이가 방어력 성장 4.5→5, R 이동 속도 5%p 상향으로 정글 선호도가 올랐습니다.",
+          "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "에코 Q 마나 소모 10 감소와 계수 상향으로 정글 주도권이 늘어난 영향일 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8375323215",
+          "KR_8375337615",
+          "KR_8375331571",
+          "KR_8375327276",
+          "KR_8375352329",
+          "KR_8375321889",
+          "KR_8375353176",
+          "KR_8375339732",
+          "KR_8375343628",
+          "KR_8375321892"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=76,scope=all]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "니달리 픽률 -3.1%p는 직접 조항 없이, 비에고·마스터 이 등 경쟁 정글러 버프로 인한 픽 이동으로 설명됩니다.",
+        "summaryCites": [
+          "note:26.18:champion:viego:3477e7c5",
+          "note:26.18:champion:masteryi:d392c3c6"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Nidalee:JUNGLE:pickRate",
+      "entityType": "champion",
+      "entityKey": "Nidalee",
+      "entityName": "니달리",
+      "metric": "pickRate",
+      "before": 0.1517,
+      "after": 0.1219,
+      "delta": -0.029800000000000007,
+      "ci": [
+        -0.0393193911074373,
+        -0.020282559165285735
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0,
+      "status": "indirect-effect",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "비에고 지속 효과 회복량이 공격력·체력 등에 비례하도록 강화되며 정글 픽 지분을 흡수했습니다.",
+          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "마스터 이 R 이동 속도가 40/50/60%로 상향되어 정글 선택지 경쟁이 심해졌습니다.",
+          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "에코 Q 마나 소모가 10 줄어 정글 수급이 편해지면서 픽이 분산됐습니다.",
+          "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8375323215",
+          "KR_8375337615",
+          "KR_8375331571",
+          "KR_8375327276",
+          "KR_8375352329",
+          "KR_8375321889",
+          "KR_8375353176",
+          "KR_8375339732",
+          "KR_8375343628",
+          "KR_8375321892"
+        ],
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=76,scope=position,position=JUNGLE]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "니달리 직접 변경은 없고, 비에고·마스터 이·에코 정글 상향으로 픽이 분산되며 픽률이 15.2%→12.2%로 3.0%p 하락했습니다.",
+        "summaryCites": [
+          "note:26.18:champion:viego:caf9b23d",
+          "note:26.18:champion:masteryi:c898ee27",
+          "note:26.18:champion:ekko:dfd6f002"
         ],
         "summaryVerified": true
       }
@@ -2961,25 +2838,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "카시오페아 Q 기본 피해량 하향으로 미드 라인 지분이 줄며 대체 픽 수요가 로크로 이동했습니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "신드라 W 쿨타임 1초 증가 등 너프로 미드 메이지 선호도가 분산됐습니다.",
+          "text": "신드라 W 재사용 대기시간 1초 증가 등 너프로 미드 경쟁자가 줄며 로크 픽률이 반사 이득을 봤습니다.",
           "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "신드라 초월 분노 조각 마나 상한 하향으로 미드 대안 픽 수요가 늘었습니다.",
-          "candidateNoteId": "note:26.18:champion:syndra:5db255ef",
+          "text": "카시오페아 Q 기본 피해량 10 감소 등 초반 너프로 미드 지분이 로크 쪽으로 이동했습니다.",
+          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "세라핀 E 쿨타임 고정(11초) 너프로 미드 라인전 경쟁자가 줄었습니다.",
+          "text": "세라핀 E 쿨다운이 11초로 고정되며 밀려난 픽 일부가 로크로 흡수된 것으로 보입니다.",
           "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "low"
@@ -2999,14 +2870,14 @@
           "KR_8375361376"
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=805,scope=position,position=MIDDLE]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia"
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra"
       },
       "llm": {
         "skipped": false,
-        "summary": "로크 미드 픽률이 9.0%→11.6%(+2.6%p) 상승했고, 카시오페아·신드라 등 미드 메이지 너프에 따른 반사 이익으로 보입니다.",
+        "summary": "로크 직접 변경은 없고, 신드라 W 쿨다운 증가와 카시오페아 Q 피해량 너프로 미드 경쟁자가 약화되며 픽률이 2.6%p 올랐습니다.",
         "summaryCites": [
-          "note:26.18:champion:cassiopeia:91d07d6f",
-          "note:26.18:champion:syndra:cb99a266"
+          "note:26.18:champion:syndra:cb99a266",
+          "note:26.18:champion:cassiopeia:91d07d6f"
         ],
         "summaryVerified": true
       }
@@ -3034,26 +2905,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "제리 W 피해 계수가 120%→100%로 낮아져 바텀 원딜 수요가 루시안으로 이동했을 수 있습니다.",
+          "text": "제리 W 피해량 계수가 총공격력 120%→100%로 내려가 바텀 원딜 수요가 루시안으로 이동했습니다.",
           "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "제리 W 지형 관통 계수 180%→150% 너프로 경쟁 원딜 입지가 줄었습니다.",
+          "text": "제리 W 지형 관통 계수도 180%→150%로 하향되며 경쟁 원딜 입지가 줄었습니다.",
           "candidateNoteId": "note:26.18:champion:zeri:e371a79d",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "세라핀 E 쿨다운 고정 11초 너프로 바텀 조합 선택지가 바뀌었을 수 있습니다.",
+          "text": "세라핀 E 쿨다운이 전 구간 11초로 고정돼 바텀 구도가 바뀌며 루시안 픽이 늘었을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "구인수 격노검 중첩 지속 3초→4초 버프가 평타 기반 원딜 전반의 채택을 늘렸습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
         }
@@ -3076,7 +2941,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "루시안 직접 변경은 없지만, 제리 W 계수 너프(120%→100%, 관통 180%→150%)로 원딜 수요가 옮겨오며 픽률이 2.2%p 올랐습니다.",
+        "summary": "루시안 직접 변경은 없지만 제리 W 계수 너프(120%→100%, 관통 180%→150%)로 바텀 수요가 옮겨오며 픽률이 8.1%→10.3%로 올랐습니다.",
         "summaryCites": [
           "note:26.18:champion:zeri:d0cacf0b",
           "note:26.18:champion:zeri:e371a79d"
@@ -3107,20 +2972,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "제리 W 피해량 계수가 120%→100%로 내려가며 원딜 자리 일부가 루시안으로 이동했을 수 있습니다.",
+          "text": "제리 W 피해량 계수가 총공격력 120%→100%로 하향되며 원딜 경쟁 구도가 루시안 쪽으로 이동했습니다.",
           "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "제리 W 지형 관통 계수 180%→150% 너프로 경쟁 원딜 선호도가 낮아졌습니다.",
+          "text": "제리 W 지형 관통 계수 180%→150% 하향으로 제리 선호도가 빠진 자리를 루시안이 흡수했습니다.",
           "candidateNoteId": "note:26.18:champion:zeri:e371a79d",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "세라핀 E 쿨다운 고정 11초 너프로 봇 조합 구도가 바뀐 영향이 있습니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+          "text": "노틸러스 Q 피해량 하향으로 봇 라인 견제가 약해져 루시안의 초반 주도권이 커졌을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
           "verified": true,
           "confidence": "low"
         }
@@ -3143,93 +3008,98 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "루시안 픽률이 7.8%→10.0%(+2.1%p)로 올랐고, 제리 W 계수 너프로 원딜 수요가 옮겨온 영향으로 보입니다.",
+        "summary": "루시안 픽률이 7.8%→10.0%(+2.1%p)로 올랐습니다. 제리 W 계수 하향(120%→100%)에 따른 원딜 구도 이동이 주 요인입니다.",
         "summaryCites": [
-          "note:26.18:champion:zeri:d0cacf0b",
-          "note:26.18:champion:zeri:e371a79d"
+          "note:26.18:champion:zeri:d0cacf0b"
         ],
         "summaryVerified": true
       }
     },
     {
-      "id": "champion:TwistedFate:pickRate",
+      "id": "champion:Taliyah:JUNGLE:pickRate",
       "entityType": "champion",
-      "entityKey": "TwistedFate",
-      "entityName": "트위스티드 페이트",
+      "entityKey": "Taliyah",
+      "entityName": "탈리야",
       "metric": "pickRate",
-      "before": 0.0853,
-      "after": 0.106,
-      "delta": 0.020699999999999996,
+      "before": 0.0525,
+      "after": 0.0315,
+      "delta": -0.020999999999999998,
       "ci": [
-        0.012553384481893429,
-        0.028856659400828308
+        -0.026586715872636495,
+        -0.015461827530078808
       ],
       "n": {
         "before": 10000,
         "after": 10000
       },
-      "q": 0.000009856437607182189,
+      "q": 0,
       "status": "indirect-effect",
       "matchedNoteId": null,
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "신드라 W 쿨타임 1초 증가 등 너프로 미드 메이지 지분이 트위스티드 페이트로 이동",
-          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
+          "text": "에코 Q 계수 60%→70% 버프로 AP 정글 자리를 에코가 가져갔습니다.",
+          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "카시오페아 R 기본 피해 25 감소 등 중첩 너프로 미드 픽 일부가 대체 챔피언으로 분산",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:64976414",
+          "text": "에코 Q 마나 소모 10 감소로 정글 초반 지속력이 올라 탈리야와 직접 경쟁합니다.",
+          "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "세라핀 E 쿨타임이 전 구간 11초로 고정되며 미드 선택지에서 밀려남",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+          "text": "비에고 지속효과 회복량 확대로 정글 픽 쏠림이 생겼을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "마스터 이 R 이동속도 5%p 상향으로 정글 선택지가 분산됐습니다.",
+          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
           "verified": true,
           "confidence": "low"
         }
       ],
       "evidence": {
         "matchIds": [
-          "KR_8375334165",
-          "KR_8375321889",
-          "KR_8375320127",
-          "KR_8375327145",
-          "KR_8375360378",
-          "KR_8375343301",
-          "KR_8375354658",
-          "KR_8375362397",
-          "KR_8375380267",
-          "KR_8375348253"
+          "KR_8375347592",
+          "KR_8375337921",
+          "KR_8375347389",
+          "KR_8375363038",
+          "KR_8375342205",
+          "KR_8375372629",
+          "KR_8375360646",
+          "KR_8375381021",
+          "KR_8375342091",
+          "KR_8375377624"
         ],
-        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=4,scope=all]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra"
+        "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=163,scope=position,position=JUNGLE]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
       },
       "llm": {
         "skipped": false,
-        "summary": "트위스티드 페이트 직접 변경은 없고, 신드라 W 쿨타임 증가와 카시오페아 R 피해 감소 등 미드 메이지 너프의 반사 이익으로 픽률이 2.1%p 올랐습니다.",
+        "summary": "탈리야 정글 픽률 5.3%→3.1%(-2.1%p)는 직접 너프가 아니라 에코 Q 계수·마나 버프로 AP 정글 수요가 옮겨간 영향입니다.",
         "summaryCites": [
-          "note:26.18:champion:syndra:cb99a266",
-          "note:26.18:champion:cassiopeia:64976414"
+          "note:26.18:champion:ekko:433f5bb2",
+          "note:26.18:champion:ekko:dfd6f002"
         ],
         "summaryVerified": true
       }
     },
     {
-      "id": "item:6610:adoptionRate",
+      "id": "item:6698:adoptionRate",
       "entityType": "item",
-      "entityKey": "6610",
-      "entityName": "갈라진 하늘",
+      "entityKey": "6698",
+      "entityName": "불경한 히드라",
       "metric": "adoptionRate",
-      "before": 0.0358,
-      "after": 0.0239,
-      "delta": -0.011899999999999997,
+      "before": 0.02006,
+      "after": 0.02633,
+      "delta": 0.006269999999999998,
       "ci": [
-        -0.013393289970341322,
-        -0.010411028389701087
+        0.00495195933167045,
+        0.007591125609054493
       ],
       "n": {
         "before": 100000,
@@ -3241,51 +3111,46 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "구인수의 격노검 중첩 지속시간 3→4초 상향으로 공속 딜러 1코어가 옮겨간 영향",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+          "text": "비에고 패시브 회복이 추가 공격력·체력 계수로 확장돼 불경한 히드라 선택이 늘었습니다.",
+          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "비에고 패시브 회복이 공속·체력까지 계수화돼 회복 아이템 의존도가 낮아짐",
-          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+          "text": "비에고 공격력 성장 3.5→4 버프로 픽이 늘며 히드라 채택률을 밀어올렸습니다.",
+          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "마스터 이 R 이동속도 상향으로 공속·치명타 빌드 선호가 강해진 영향",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "노틸러스 공격력 61→58 하향으로 AD 기반 아이템 채택 유인이 줄어듦",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+          "text": "자헨 Q2 피해량 상향으로 근접 AD 코어인 불경한 히드라 수요가 늘었을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
           "verified": true,
           "confidence": "low"
         }
       ],
       "evidence": {
         "matchIds": [
-          "KR_8375315960",
-          "KR_8375318678",
-          "KR_8375351249",
+          "KR_8375323215",
+          "KR_8375321889",
+          "KR_8375337921",
+          "KR_8375318369",
+          "KR_8375326366",
+          "KR_8375345676",
+          "KR_8375320127",
           "KR_8375343628",
-          "KR_8375363038",
-          "KR_8375361376",
-          "KR_8375322355",
-          "KR_8375325119",
-          "KR_8375362768",
-          "KR_8375360970"
+          "KR_8375362251",
+          "KR_8375353973"
         ],
-        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=6610]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-Guinsoos-Rageblade"
+        "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=6698]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
       },
       "llm": {
         "skipped": false,
-        "summary": "갈라진 하늘 채택률이 3.6%→2.4%(-1.2%p)로 떨어졌습니다. 구인수의 격노검 중첩 4초 상향이 공속 빌드로 1코어 수요를 빼간 영향으로 보입니다.",
+        "summary": "불경한 히드라 채택률 2.0%→2.6%(+0.6%p)는 비에고 패시브 회복 계수 확장과 공격력 성장 버프의 파급 효과입니다.",
         "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
+          "note:26.18:champion:viego:caf9b23d",
+          "note:26.18:champion:viego:3477e7c5"
         ],
         "summaryVerified": true
       }
@@ -3316,25 +3181,19 @@
       ],
       "causes": [
         {
-          "text": "카사딘 Q 계수 70%→80% 버프로 미드 암살·스케일링 경쟁에서 에코가 밀렸을 수 있습니다.",
+          "text": "카사딘 Q 계수 70%→80% 강화로 미드 라인전 매치업이 불리해졌을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "카사딘 R 기본 피해 70/90/110→80/95/110 상향으로 에코의 중반 주도권이 약화됐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d9a6b909",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카시오페아 Q 계수 65%→75% 등 조정으로 미드 라인전 상성이 에코에 불리해졌을 소지가 있습니다.",
+          "text": "카시오페아 Q 계수 65%→75% 상향으로 주문력 미드 경쟁에서 밀린 영향입니다.",
           "candidateNoteId": "note:26.18:champion:cassiopeia:957165bc",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "비에고 지속효과 회복 강화로 정글 개입이 늘어 에코 미드의 생존이 어려워졌을 수 있습니다.",
+          "text": "비에고 지속 효과 회복 강화로 정글 개입이 늘어 에코 미드의 라인 주도권이 줄었습니다.",
           "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
           "verified": true,
           "confidence": "low"
@@ -3358,10 +3217,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "에코는 Q 계수·마나 버프를 받았음에도 승률이 57.4%→47.8%로 떨어졌는데, 카사딘 Q·R 상향 등 미드 경쟁자 강화가 유력한 배경입니다.",
+        "summary": "에코는 Q 계수·마나 상향을 받았는데도 미드 승률이 57.4%→47.8%로 떨어졌고, 카사딘·카시오페아 상향에 따른 미드 경쟁 심화가 유력합니다(CI 하한 -1.5%p).",
         "summaryCites": [
           "note:26.18:champion:kassadin:d631af52",
-          "note:26.18:champion:kassadin:d9a6b909"
+          "note:26.18:champion:cassiopeia:957165bc"
         ],
         "summaryVerified": true
       }
@@ -3392,9 +3251,15 @@
       ],
       "causes": [
         {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초로, 핵심 아이템을 쓰는 마스터 이 지속딜이 상승했습니다.",
+          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초 버프가 핵심 코어인 마스터 이의 지속 전투력을 올렸습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
+          "confidence": "high"
+        },
+        {
+          "text": "R 이동 속도 5%p 상향으로 갱킹·추격 성공률이 올라 승률 상승을 보탰습니다.",
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "medium"
         }
       ],
@@ -3416,9 +3281,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "마스터 이 정글 승률이 45.9%→54.4%(8.4%p) 상승했고, 구인수의 격노검 중첩 지속시간 4초 연장이 유력하나 CI가 0을 걸쳐 표본이 부족합니다.",
+        "summary": "마스터 이 정글 승률이 45.9%→54.4%(+8.4%p)로 올랐습니다. 구인수 중첩 4초 버프와 R 이속 상향이 주 동력이나, CI가 0을 포함해 표본 변동도 섞였습니다.",
         "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
+          "note:26.18:item:guinsoos-rageblade:f624219b",
+          "note:26.18:champion:masteryi:c898ee27"
         ],
         "summaryVerified": true
       }
@@ -3449,19 +3315,19 @@
       ],
       "causes": [
         {
-          "text": "비에고 레벨당 공격력 3.5→4 버프로 정글 대결 구도에서 에코가 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "마스터 이 방어력 성장 4.5→5 강화로 정글 교전 상성이 불리해졌을 수 있습니다.",
+          "text": "마스터 이 방어력 성장 상승으로 정글 경쟁에서 에코가 밀렸을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "카사딘 Q 계수 70%→80% 버프로 미드 라인 경쟁이 심해졌을 수 있습니다.",
+          "text": "비에고 지속 효과 회복 강화로 정글 픽 경쟁이 심화된 영향으로 보입니다.",
+          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "카사딘 Q 계수 상승으로 미드 에코의 입지가 좁아졌을 가능성이 있습니다.",
           "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
           "verified": true,
           "confidence": "low"
@@ -3485,10 +3351,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "에코는 Q 버프에도 승률이 53.1%→47.5%(-5.6%p)로 떨어졌고, 비에고·마스터 이 정글 버프에 따른 상성 악화와 표본 544→734 증가에 따른 숙련도 희석이 겹친 것으로 보입니다.",
+        "summary": "에코 Q 버프에도 승률 53.1%→47.5%(-5.6%p). 마스터 이·비에고 정글 버프에 밀린 영향으로 보입니다.",
         "summaryCites": [
-          "note:26.18:champion:viego:3477e7c5",
-          "note:26.18:champion:masteryi:d392c3c6"
+          "note:26.18:champion:masteryi:d392c3c6",
+          "note:26.18:champion:viego:caf9b23d"
         ],
         "summaryVerified": true
       }
@@ -3518,19 +3384,13 @@
       ],
       "causes": [
         {
-          "text": "경쟁 서포터 노틸러스가 공격력 61→58로 약화되며 세라핀 선호도가 반사 이익을 얻었습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "노틸러스 Q 피해량 하향으로 바텀 라인전 압박이 줄어 세라핀 생존·성과가 개선됐습니다.",
+          "text": "경쟁 서포터 노틸러스가 Q 피해량과 기본 공격력 너프를 받아 세라핀의 상대적 입지가 올랐습니다.",
           "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "바드 방어력 34→32(레벨당 5→4.7) 하향도 서포터 경쟁 구도를 세라핀에 유리하게 바꿨습니다.",
+          "text": "바드 방어력이 34+레벨당 5에서 32+레벨당 4.7로 내려가 서포터 경쟁군이 약화됐습니다.",
           "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
           "verified": true,
           "confidence": "low"
@@ -3554,10 +3414,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "세라핀 E 쿨다운 너프에도 승률이 47.2%→52.7%로 올랐는데, 95% CI가 0을 포함해 노틸러스·바드 하향에 따른 서포터 경쟁 완화로 설명됩니다.",
+        "summary": "세라핀은 E 쿨다운 너프에도 승률이 5.5%p 올랐는데, 노틸러스 Q·공격력 너프 등 경쟁 서포터 약화가 주 요인이며 CI가 0을 포함해 표본 변동도 섞였습니다.",
         "summaryCites": [
-          "note:26.18:champion:nautilus:b6aff2b2",
-          "note:26.18:champion:bard:453ef7b4"
+          "note:26.18:champion:nautilus:878378b8"
         ],
         "summaryVerified": true
       }
@@ -3588,19 +3447,13 @@
       ],
       "causes": [
         {
-          "text": "탑 대치 상대인 노틸러스의 기본 공격력 61→58 하향으로 라인전 우위가 커졌을 수 있습니다.",
+          "text": "노틸러스 기본 공격력 61→58 너프로 탑 라인 대치 상대가 약해진 영향일 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "노틸러스 Q 후반 피해량 265→245 하향으로 탑 맞라인 압박이 줄었습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "구인수의 격노검 중첩 지속 3초→4초 버프로 지속 전투형 빌드 효율이 올랐을 수 있습니다.",
+          "text": "구인수의 격노검 들끓는 일격 중첩 3초→4초 버프가 지속 평타 딜에 간접 이득을 줍니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
@@ -3624,10 +3477,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "자헨 탑 승률이 47.8%→53.0%(+5.2%p)로 올랐으나 95% CI가 0을 포함해 표본 변동일 수 있고, 노틸러스 하향이 보조 요인입니다.",
-        "summaryCites": [
-          "note:26.18:champion:nautilus:b6aff2b2"
-        ],
+        "summary": "자헨 탑 승률 47.8%→53.0%(+5.2%p)이나 95% CI가 [-3.5%p, 13.8%p]로 0을 포함해 유의하지 않습니다.",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -3657,26 +3508,20 @@
       ],
       "causes": [
         {
-          "text": "카사딘 Q 주문력 계수 70%→80% 버프로 미드 대치에서 신드라가 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카사딘 R 기본 피해량 상향으로 미드 경쟁 구도가 불리해졌을 수 있습니다.",
+          "text": "카사딘 R 기본 피해량 70/90/110→80/95/110 상향으로 미드 대치 구도에서 신드라가 불리해졌습니다.",
           "candidateNoteId": "note:26.18:champion:kassadin:d9a6b909",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "에코 Q 계수 60%→70% 상향으로 미드 상대 난도가 올라갔습니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
+          "text": "에코 Q 마나 소모 10 감소로 미드 라인전 주도권 경쟁이 심해졌습니다.",
+          "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "에코 Q 마나 소모 10 감소로 라인전 지속력이 늘어 신드라 주도권이 줄었습니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
+          "text": "카사딘 Q 주문력 계수 70%→80% 상향이 신드라 상대 라인전 압박을 키웠을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
           "verified": true,
           "confidence": "low"
         }
@@ -3699,10 +3544,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "신드라 승률이 52.3%→47.5%(-4.9%p)로 떨어졌고, 카사딘·에코 미드 상향이 경쟁 구도를 불리하게 만든 영향으로 보입니다.",
+        "summary": "신드라 미드 승률이 52.3%→47.5%(-4.9%p)로 하락했으며, 카사딘 Q·R 상향 등 미드 경쟁 챔피언 강화가 하락폭을 키웠습니다.",
         "summaryCites": [
           "note:26.18:champion:kassadin:d631af52",
-          "note:26.18:champion:ekko:433f5bb2"
+          "note:26.18:champion:kassadin:d9a6b909"
         ],
         "summaryVerified": true
       }
@@ -3733,10 +3578,16 @@
       ],
       "causes": [
         {
-          "text": "핵심 아이템 구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초로 지속 딜 유지력 상승",
+          "text": "핵심 아이템 구인수의 격노검 들끓는 일격 중첩 지속시간이 3초에서 4초로 늘어 지속 딜이 상승했습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
-          "confidence": "medium"
+          "confidence": "high"
+        },
+        {
+          "text": "비에고 공격력 성장 버프로 정글 경쟁 구도가 바뀐 영향일 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
+          "verified": true,
+          "confidence": "low"
         }
       ],
       "evidence": {
@@ -3757,7 +3608,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "마스터 이 승률 46.5%→50.7%(+4.2%p), 구인수의 격노검 중첩 지속 4초 상향이 영향으로 보이나 CI가 0을 포함해 확정은 어렵습니다.",
+        "summary": "마스터 이 승률 46.5%→50.7%(4.2%p)는 구인수의 격노검 중첩 지속시간 3초→4초 버프가 주 원인이며, CI가 0을 포함해 확정적이지는 않습니다.",
         "summaryCites": [
           "note:26.18:item:guinsoos-rageblade:f624219b"
         ],
@@ -3790,14 +3641,14 @@
       ],
       "causes": [
         {
-          "text": "구인수의 격노검 들끓는 일격 중첩 유지가 3초→4초로 늘어 비에고의 핵심 코어 효율이 상승했습니다.",
+          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간이 3초→4초로 늘어, 온힛 빌드 비에고의 지속 딜이 올랐을 수 있습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
-          "confidence": "medium"
+          "confidence": "low"
         },
         {
-          "text": "노틸러스 공격력 61→58 너프로 정글 초반 경합에서 비에고가 상대적 이득을 봤을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+          "text": "마스터 이 R 이동 속도 상향으로 정글 메타 구성이 바뀌며 비에고 픽 환경이 변했을 여지가 있습니다.",
+          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
           "verified": true,
           "confidence": "low"
         }
@@ -3820,7 +3671,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "비에고 정글 승률 42.8%→46.7%(+3.9%p)는 구인수의 격노검 중첩 4초 연장 효과가 겹친 결과로 보이나, CI가 0을 포함해 확정은 이릅니다.",
+        "summary": "비에고 정글 승률 42.8%→46.7%(+3.9%p)이나 95% CI가 0을 포함해 유의하지 않고, 구인수의 격노검 중첩 4초 상향 정도가 간접 요인입니다.",
         "summaryCites": [
           "note:26.18:item:guinsoos-rageblade:f624219b"
         ],
@@ -3853,20 +3704,14 @@
       ],
       "causes": [
         {
-          "text": "봇 파트너 제리의 W 계수 하향으로 라인전 화력이 줄어 서포터 노틸러스 승률에 영향을 줄 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
+          "text": "바드 방어력 하향으로 서포터 구도가 흔들리며 노틸러스 픽 환경이 바뀌었을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "비에고 공격력 성장 상향으로 정글 압박이 커져 노틸러스의 라인 주도권이 줄었을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "마스터 이 궁극기 이동 속도 상향으로 CC 후 추격 구도가 바뀐 점이 간접 요인일 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+          "text": "구인수의 격노검 중첩 지속 4초 상향으로 지속 딜 원딜이 강해져 라인전 주도권이 밀렸습니다.",
+          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
         }
@@ -3889,9 +3734,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "노틸러스 승률이 50.7%→47.3%(-3.3%p)로 떨어졌고, 제리 W 계수 하향 등 주변 챔피언 변화가 간접 요인으로 의심됩니다.",
+        "summary": "노틸러스 승률이 50.7%→47.3%(-3.3%p)로 하락했고, 바드 방어력 하향 등 서포터 환경 변화가 겹친 것으로 보입니다.",
         "summaryCites": [
-          "note:26.18:champion:zeri:d0cacf0b"
+          "note:26.18:champion:bard:453ef7b4"
         ],
         "summaryVerified": true
       }
@@ -3939,7 +3784,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summary": "노틸러스 서포터 승률이 50.6%→47.4%(-3.3%p, CI 상한 0.0%p)로 내려갔지만, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -3977,14 +3822,14 @@
       ],
       "causes": [
         {
-          "text": "카사딘 Q 계수 80% 상향으로 미드 AP 대결 구도가 불리해졌을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
+          "text": "에코 Q 계수·마나 개선으로 미드 경쟁이 강해져 카시오페아 픽 환경이 나빠졌을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "에코 Q 계수·마나 비용 개선으로 미드 경쟁 픽 강세가 커졌습니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
+          "text": "카사딘 Q 계수 70%→80% 상향으로 미드 대치 구도에서 카시오페아가 불리해진 영향으로 보입니다.",
+          "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
           "verified": true,
           "confidence": "low"
         }
@@ -4007,10 +3852,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카시오페아 승률 -3.1%p는 95% CI가 0을 포함해 유의하지 않으며, 카사딘·에코 미드 상향에 따른 경쟁 압박이 일부 작용한 정도입니다.",
+        "summary": "카시오페아 승률 -3.1%p는 CI가 0을 포함해 유의하지 않으며, 에코·카사딘 미드 상향에 따른 간접 압박 정도로 봅니다.",
         "summaryCites": [
-          "note:26.18:champion:kassadin:d631af52",
-          "note:26.18:champion:ekko:433f5bb2"
+          "note:26.18:champion:ekko:433f5bb2",
+          "note:26.18:champion:kassadin:d631af52"
         ],
         "summaryVerified": true
       }
@@ -4041,8 +3886,14 @@
       ],
       "causes": [
         {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초로 AD 지속딜 빌드가 간접 수혜했을 수 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+          "text": "95% CI가 -5.1~11.0%p로 0을 포함해, 3.0%p 상승은 표본 변동 범위 안입니다.",
+          "candidateNoteId": null,
+          "verified": false,
+          "confidence": "medium"
+        },
+        {
+          "text": "노틸러스 공격력 61→58 너프로 근접 맞대결 부담이 줄었을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
           "verified": true,
           "confidence": "low"
         }
@@ -4065,10 +3916,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "자헨 승률 48.9%→51.9%(+3.0%p)이나 95% CI [-5.1%p, 11.0%p]로 0을 포함해 표본 변동 범위이며, 구인수의 격노검 중첩 4초 연장이 간접 요인일 수 있습니다.",
-        "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
-        ],
+        "summary": "자헨 승률 48.9%→51.9%(+3.0%p)지만 CI가 -5.1~11.0%p로 0을 포함해 유의한 변화로 보기 어렵습니다.",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -4097,19 +3946,13 @@
       ],
       "causes": [
         {
-          "text": "노틸러스 Q 피해량·공격력 하향으로 서포터 구도에서 세라핀의 상대 입지가 개선됐습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+          "text": "카시오페아 E 강화 계수 55%→45% 너프로 경쟁 메이지가 약화된 반사이익으로 보입니다.",
+          "candidateNoteId": "note:26.18:champion:cassiopeia:620aea16",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "바드 방어력 하향 등 경쟁 서포터 약화가 세라핀 지표를 끌어올렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "신드라 W 쿨다운·마나 하향 등 미드 메이지 너프로 세라핀 미드 픽의 상대 가치가 상승.",
+          "text": "신드라 W 쿨타임 1초 증가 너프로 미드 경쟁 구도가 완화됐을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
           "verified": true,
           "confidence": "low"
@@ -4133,10 +3976,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "세라핀은 E 쿨다운 너프에도 승률이 3.0%p 올랐지만 CI가 0을 포함해 유의하지 않으며, 노틸러스·바드 등 경쟁 서포터 하향의 반사 이익으로 보입니다.",
+        "summary": "E 너프에도 승률 3.0%p 상승했으나 CI가 0을 포함해 유의하지 않으며, 카시오페아·신드라 너프에 따른 반사이익으로 보입니다.",
         "summaryCites": [
-          "note:26.18:champion:nautilus:b6aff2b2",
-          "note:26.18:champion:bard:453ef7b4"
+          "note:26.18:champion:cassiopeia:620aea16",
+          "note:26.18:champion:syndra:cb99a266"
         ],
         "summaryVerified": true
       }
@@ -4167,15 +4010,15 @@
       ],
       "causes": [
         {
-          "text": "구인수의 격노검 중첩 지속시간 3초→4초로, 이를 핵심으로 쓰는 비에고의 지속 딜이 상승했습니다.",
+          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초로, 이를 핵심으로 쓰는 비에고가 간접 수혜.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "마스터 이 방어력·R 이동속도 버프로 정글 구도가 흔들리며 비에고 픽 환경이 바뀌었을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
-          "verified": true,
+          "text": "군주의 지배 회복량이 추가 공격력·공속·체력에 비례하도록 확장돼 아이템 완성 후 생존력이 올랐습니다.",
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         }
       ],
@@ -4197,7 +4040,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "비에고 승률 44.1%→46.5%(+2.5%p)이나 CI가 0을 포함해 유의하지 않고, 구인수의 격노검 중첩 4초 연장이 상승에 기여했을 수 있습니다.",
+        "summary": "비에고 승률 44.1%→46.5%(+2.5%p)는 구인수의 격노검 중첩 4초 연장의 간접 수혜가 크며, CI가 0을 포함해 확정적이진 않습니다.",
         "summaryCites": [
           "note:26.18:item:guinsoos-rageblade:f624219b"
         ],
@@ -4229,7 +4072,14 @@
         "note:26.18:champion:zeri:e371a79d",
         "note:26.18:champion:zeri:3f709c34"
       ],
-      "causes": [],
+      "causes": [
+        {
+          "text": "구인수의 격노검 중첩 지속 3초→4초로 경쟁 원거리 딜러가 강해져 제리 입지가 밀렸을 수 있습니다.",
+          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8375326366",
@@ -4248,7 +4098,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summary": "제리 승률 -2.4%p는 95% CI [-6.6%p, 1.9%p]가 0을 포함해 통계적으로 유의하지 않은 변동입니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -4286,13 +4136,13 @@
       ],
       "causes": [
         {
-          "text": "카사딘 Q 계수 70%→80% 상향으로 미드 경쟁 구도가 강화됐습니다.",
+          "text": "카사딘 Q 계수 80%로 상향돼 미드 경쟁이 강화된 영향으로 보입니다.",
           "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "에코 Q 계수·마나 상향으로 미드 픽 경쟁이 늘었을 수 있습니다.",
+          "text": "에코 Q 계수 70%·마나 10 감소 버프로 미드 픽 경쟁이 늘었을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
           "verified": true,
           "confidence": "low"
@@ -4316,9 +4166,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카시오페아 미드 승률 -2.2%p는 CI가 [-8.0%p, 3.5%p]로 0을 포함해 유의하지 않고, 카사딘 Q 상향 등 미드 경쟁 변화가 겹친 수준입니다.",
+        "summary": "카시오페아 미드 승률 -2.2%p는 95% CI[-8.0, 3.5]가 0을 포함해 통계적으로 확정되지 않으며, 카사딘·에코 버프에 따른 미드 경쟁 변화가 일부 작용한 정도입니다.",
         "summaryCites": [
-          "note:26.18:champion:kassadin:d631af52"
+          "note:26.18:champion:kassadin:d631af52",
+          "note:26.18:champion:ekko:433f5bb2"
         ],
         "summaryVerified": true
       }
@@ -4350,10 +4201,10 @@
       ],
       "causes": [
         {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속 3→4초 버프가 제리 하락폭을 일부 상쇄했을 수 있습니다.",
+          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초 버프가 제리 W 너프를 일부 상쇄했습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         }
       ],
       "evidence": {
@@ -4374,7 +4225,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "제리 승률 56.4%→54.3%(-2.0%p)이나 CI가 0을 포함해 유의하지 않고, 구인수의 격노검 중첩 지속 4초 버프가 완충 요인으로 보입니다.",
+        "summary": "제리 승률 -2.0%p는 CI가 0을 포함해 유의하지 않으며, 구인수의 격노검 중첩 4초 버프가 W 너프를 상쇄했습니다.",
         "summaryCites": [
           "note:26.18:item:guinsoos-rageblade:f624219b"
         ],
@@ -4407,20 +4258,20 @@
       ],
       "causes": [
         {
-          "text": "노틸러스 공격력 61→58 너프로 상체 라인 경쟁 챔피언이 약화, 자헨 선택지가 반사 이득을 봤을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+          "text": "카시오페아 Q 기본 피해가 10 낮아져 미드 경쟁자가 약화되며 자헨 픽이 반사 이익을 얻었습니다.",
+          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "신드라 W 쿨타임 1초 증가 너프로 미드 메타 상위권이 밀려나며 자헨 픽 여유가 생겼습니다.",
+          "text": "신드라 W 쿨타임이 1초씩 늘어 미드 선호도가 내려간 자리를 자헨이 대체한 것으로 보입니다.",
           "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "카시오페아 Q 기본 피해 10 감소로 라인전 강자가 약화, 대체 픽 수요가 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
+          "text": "제리 W 계수가 120%에서 100%로 하향되며 딜러 픽 구도가 자헨 쪽으로 이동했습니다.",
+          "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
           "verified": true,
           "confidence": "low"
         }
@@ -4443,10 +4294,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "자헨 픽률이 2.4%→3.9%(+1.6%p)로 뚜렷이 올랐는데, 노틸러스·신드라 등 경쟁 챔피언 너프에 따른 반사 이득으로 보입니다.",
+        "summary": "자헨 픽률이 2.4%→3.9%(+1.6%p)로 올랐습니다. 카시오페아·신드라·제리 너프로 인한 경쟁 챔피언 이탈이 유력한 배경입니다.",
         "summaryCites": [
-          "note:26.18:champion:nautilus:b6aff2b2",
-          "note:26.18:champion:syndra:cb99a266"
+          "note:26.18:champion:cassiopeia:91d07d6f",
+          "note:26.18:champion:syndra:cb99a266",
+          "note:26.18:champion:zeri:d0cacf0b"
         ],
         "summaryVerified": true
       }
@@ -4477,20 +4329,20 @@
       ],
       "causes": [
         {
-          "text": "노틸러스 공격력 61→58 너프로 탑 라인 대체재가 줄며 자헨 선택이 늘었을 수 있습니다.",
+          "text": "노틸러스 기본 공격력이 61에서 58로 내려가 탑 라인전 경쟁자가 약해졌을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "노틸러스 Q 피해량 하향으로 탑 탱커 라인전 압박이 약해진 영향으로 보입니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+          "text": "카시오페아 지속 효과 이동 속도가 6~40%에서 5~36%로 하향돼 탑 AP 대체재 가치가 떨어졌습니다.",
+          "candidateNoteId": "note:26.18:champion:cassiopeia:a01d452d",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "구인수의 격노검 중첩 지속 3초→4초 버프가 온힛 빌드 탑 챔피언 선호를 키웠습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+          "text": "노틸러스 Q 후반 피해량이 265에서 245로 줄어 탑 픽 선호도가 분산됐습니다.",
+          "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
           "verified": true,
           "confidence": "low"
         }
@@ -4513,7 +4365,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "자헨 탑 픽률이 2.1%→3.3%(+1.2%p) 올랐는데, 노틸러스 공격력·Q 하향에 따른 탑 경쟁 완화가 유력한 간접 요인입니다.",
+        "summary": "자헨 탑 픽률이 2.1%→3.3%(+1.2%p)로 올랐고, 노틸러스 공격력·Q 하향 등 탑 경쟁 픽 약화가 반사이익으로 작용한 것으로 보입니다.",
         "summaryCites": [
           "note:26.18:champion:nautilus:b6aff2b2",
           "note:26.18:champion:nautilus:878378b8"
@@ -4547,19 +4399,19 @@
       ],
       "causes": [
         {
-          "text": "카사딘 Q 계수 70%→80% 상향으로 미드 AP 픽 경쟁에서 신드라 지분이 밀렸습니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
+          "text": "카사딘 Q 계수와 R 기본 피해 상향으로 미드 픽이 카사딘 쪽으로 분산됐습니다.",
+          "candidateNoteId": "note:26.18:champion:kassadin:d9a6b909",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "에코 Q 마나 소모 10 감소로 미드 라인전 안정성이 올라 픽이 분산됐습니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
+          "text": "에코 Q 계수 상향과 마나 소모 감소로 미드 라인 경쟁 픽이 늘었습니다.",
+          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "카시오페아 Q 계수 65%→75% 등 계수 재배분으로 미드 AP 선택지가 늘었습니다.",
+          "text": "카시오페아 Q·R 계수 상향으로 주문력 미드 수요 일부가 이동했을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:cassiopeia:957165bc",
           "verified": true,
           "confidence": "low"
@@ -4583,9 +4435,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "신드라 미드 픽률이 11.8%→10.7%(-1.0%p)로 하락했고, 카사딘 Q 계수 80% 상향 등 미드 AP 경쟁자 강화가 픽 분산 요인으로 보입니다.",
+        "summary": "신드라 미드 픽률이 11.8%→10.7%(-1.0%p) 하락했고, 카사딘·에코 상향으로 미드 픽 수요가 분산된 영향입니다.",
         "summaryCites": [
-          "note:26.18:champion:kassadin:d631af52"
+          "note:26.18:champion:kassadin:d9a6b909",
+          "note:26.18:champion:ekko:433f5bb2"
         ],
         "summaryVerified": true
       }
@@ -4614,7 +4467,20 @@
         "note:26.18:champion:nautilus:b6aff2b2",
         "note:26.18:champion:nautilus:878378b8"
       ],
-      "causes": [],
+      "causes": [
+        {
+          "text": "자헨 Q2 피해량 상향으로 밴 우선순위가 자헨 쪽으로 옮겨갔을 수 있습니다.",
+          "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "비에고 지속 효과 회복 상향으로 정글 밴 슬롯 경쟁이 심해진 영향으로 보입니다.",
+          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8375347592",
@@ -4633,8 +4499,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
+        "summary": "노틸러스 밴률 -0.7%p는 CI가 0을 포함해 유의하지 않으며, 자헨·비에고 상향에 밴 슬롯이 분산된 정도로 해석됩니다.",
+        "summaryCites": [
+          "note:26.18:champion:zaahen:bce84005",
+          "note:26.18:champion:viego:caf9b23d"
+        ],
         "summaryVerified": true
       }
     },
@@ -4664,16 +4533,10 @@
       ],
       "causes": [
         {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초로 마스터 이 핵심 코어의 딜 유지력이 상승했습니다.",
+          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3→4초 상향으로 핵심 코어 효율이 올라 픽률이 상승했습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "high"
-        },
-        {
-          "text": "비에고 공격력 성장 3.5→4 등 경쟁 정글러 강화로 정글 메타가 흔들린 영향도 일부 있습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
-          "verified": true,
-          "confidence": "low"
         }
       ],
       "evidence": {
@@ -4694,7 +4557,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "마스터 이 픽률이 2.4%→2.9%(+0.5%p) 올랐고, 핵심 아이템 구인수의 격노검 중첩 지속시간 3초→4초 버프가 주된 요인입니다.",
+        "summary": "마스터 이 픽률이 2.4%→2.9%(+0.5%p) 올랐습니다. 핵심템 구인수의 격노검 중첩 지속시간 3→4초 상향이 주된 동인입니다.",
         "summaryCites": [
           "note:26.18:item:guinsoos-rageblade:f624219b"
         ],
@@ -4727,19 +4590,19 @@
       ],
       "causes": [
         {
-          "text": "신드라 W 쿨다운 1초 증가 등 너프로 미드 선택지가 줄며 에코가 반사이익을 얻었습니다.",
+          "text": "신드라 W 쿨타임 1초 증가 등 너프로 미드 지분이 에코로 이동했습니다.",
           "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "카시오페아 Q 기본 피해 10 감소 등 라인전 약화로 미드 픽이 에코로 분산됐습니다.",
+          "text": "카시오페아 Q 기본 피해 10 감소로 초반 라인전이 약해져 대체 픽 수요가 늘었습니다.",
           "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "세라핀 E 쿨다운이 전 구간 11초로 고정되며 미드 경쟁 픽이 약화됐습니다.",
+          "text": "세라핀 E 쿨타임이 11초로 고정되며 미드 경쟁군이 약화됐습니다.",
           "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "low"
@@ -4763,7 +4626,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "에코 미드 픽률이 2.7%→3.2%(+0.5%p) 올랐고, 신드라 W 쿨다운 증가와 카시오페아 Q 피해 감소 등 경쟁 미드 너프의 반사이익으로 보입니다.",
+        "summary": "에코 미드 픽률이 2.7%→3.2%(+0.5%p) 상승했고, 신드라 W 쿨타임 증가와 카시오페아 Q 피해 감소 등 경쟁 미드 너프가 반사 수요를 만들었습니다.",
         "summaryCites": [
           "note:26.18:champion:syndra:cb99a266",
           "note:26.18:champion:cassiopeia:91d07d6f"
@@ -4796,16 +4659,22 @@
       ],
       "causes": [
         {
-          "text": "노틸러스 공격력 61→58, Q 피해량 너프로 서포터 자리 일부가 세라핀으로 이동했을 수 있습니다.",
+          "text": "노틸러스 공격력 61→58, Q 피해량 하향으로 서포터 경쟁자가 약화되며 세라핀 수요가 이동했습니다.",
           "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "바드 방어력 34→32(레벨당 5→4.7) 너프로 경쟁 서포터 입지가 줄었습니다.",
+          "text": "바드 방어력 34→32(레벨당 5→4.7) 너프도 서포터 픽 분배를 세라핀 쪽으로 밀었습니다.",
           "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
           "verified": true,
           "confidence": "low"
+        },
+        {
+          "text": "E 재사용 대기시간 고정 11초 너프는 픽률 하락 요인이지만, 0.4%p 변화는 CI에 0이 포함돼 유의하지 않습니다.",
+          "candidateNoteId": null,
+          "verified": false,
+          "confidence": "medium"
         }
       ],
       "evidence": {
@@ -4826,8 +4695,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "세라핀은 E 쿨다운 너프에도 픽률 3.4%→3.7%(+0.4%p)이나 CI가 0을 포함해 유의하지 않고, 노틸러스·바드 너프 반사이익 가능성이 있습니다.",
+        "summary": "세라핀 E 너프에도 픽률 3.4%→3.7%; 노틸러스·바드 등 경쟁 서포터 너프 영향이며 CI에 0이 포함돼 유의하지 않습니다.",
         "summaryCites": [
+          "note:26.18:champion:seraphine:4519a08c",
           "note:26.18:champion:nautilus:b6aff2b2",
           "note:26.18:champion:bard:453ef7b4"
         ],
@@ -4859,20 +4729,20 @@
       ],
       "causes": [
         {
-          "text": "신드라 W 쿨타임 1초 증가로 AP 미드 대안 수요가 세라핀으로 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "노틸러스 공격력 하향으로 서포트 구도가 바뀌며 세라핀 견제 밴이 늘었을 수 있습니다.",
+          "text": "노틸러스 공격력 61→58 너프로 서포터 경쟁자가 약화되며 세라핀 기용·견제가 늘었습니다.",
           "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "바드 방어력 하향 등 서포트 너프가 겹쳐 세라핀 선호도와 밴 우선순위가 올랐습니다.",
+          "text": "바드 방어력 34→32 너프로 서포터 선택지가 줄어 세라핀 밴 우선순위가 올랐을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "신드라 W 쿨타임 1초 증가 너프로 미드 메이지 수요가 세라핀 쪽으로 이동했습니다.",
+          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
           "verified": true,
           "confidence": "low"
         }
@@ -4895,9 +4765,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "세라핀은 E 쿨타임 너프에도 밴률이 0.4%→0.6%로 올랐는데, 신드라·노틸러스·바드 등 경쟁 챔피언 하향에 따른 반사 수요가 유력합니다.",
+        "summary": "세라핀은 E 쿨타임 고정 너프에도 밴률이 0.4%→0.6%로 올랐는데, 노틸러스·바드 등 경쟁 서포터 너프에 따른 반사 이익으로 보입니다.",
         "summaryCites": [
-          "note:26.18:champion:syndra:cb99a266",
           "note:26.18:champion:nautilus:b6aff2b2",
           "note:26.18:champion:bard:453ef7b4"
         ],
@@ -5002,7 +4871,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "자헨 정글 픽률이 0.1%에서 0.4%로 0.3%p 올랐으나, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -5033,10 +4902,10 @@
       ],
       "causes": [
         {
-          "text": "구인수의 격노검 중첩 지속 3초→4초로 온힛 정글 빌드가 강해져 체감 위협도가 올랐습니다.",
+          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간이 3초→4초로 늘어 비에고 코어 빌드가 강해졌습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         }
       ],
       "evidence": {
@@ -5057,7 +4926,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "비에고 밴률이 0.7%→0.9%로 0.2%p 올랐지만 CI 하한이 0%p라 미미하며, 구인수의 격노검 중첩 지속 4초 상향이 일부 기여했을 수 있습니다.",
+        "summary": "비에고 밴률 0.7%→0.9%(+0.2%p)는 코어 아이템 구인수의 격노검 중첩 지속시간 3초→4초 버프로 설명됩니다.",
         "summaryCites": [
           "note:26.18:item:guinsoos-rageblade:f624219b"
         ],
@@ -5089,7 +4958,7 @@
       ],
       "causes": [
         {
-          "text": "구인수의 격노검 중첩 지속 3초→4초 버프로 평타형 원딜 선호가 커져 세라핀 원딜 자리가 줄었을 수 있습니다.",
+          "text": "구인수의 격노검 중첩 지속시간 3초→4초 버프로 정통 AD 원딜의 입지가 커져 세라핀 원딜이 밀렸을 수 있습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
@@ -5113,7 +4982,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "세라핀 원딜 픽률이 0.8%→0.5%(-0.2%p)로 줄었고, 구인수 격노검 버프로 평타형 원딜 선호가 커진 영향이 의심됩니다.",
+        "summary": "세라핀 원딜 픽률이 0.8%→0.5%로 내려갔고, 구인수 격노검 버프로 AD 원딜이 강해진 영향이 의심됩니다.",
         "summaryCites": [
           "note:26.18:item:guinsoos-rageblade:f624219b"
         ],
@@ -5146,20 +5015,20 @@
       ],
       "causes": [
         {
-          "text": "신드라 W 쿨다운 1초 증가로 미드 주력 픽이 약화되며 대체 픽 수요가 생겼습니다.",
+          "text": "신드라 W 쿨타임 1초 증가 등 너프로 미드 AP 지분이 줄며 비에고 미드가 반사 이익을 얻었습니다.",
           "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "카시오페아 Q 기본 피해량 10 감소 등 라인전 약화로 미드 메타 공백이 발생했습니다.",
+          "text": "카시오페아 Q 기본 피해 10 감소 등 연속 너프로 미드 선택지가 빠졌습니다.",
           "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "세라핀 E 쿨다운 고정 11초 너프로 미드 AP 선호도가 분산됐습니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+          "text": "구인수의 격노검 중첩 지속시간 3초→4초 버프가 비에고 빌드 가치를 올렸을 수 있습니다.",
+          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
         }
@@ -5182,7 +5051,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "비에고 미드 픽률이 0.4%→0.7%로 올랐고, 신드라·카시오페아 등 미드 주력 챔피언 너프에 따른 반사이익으로 보입니다.",
+        "summary": "비에고 미드 픽률 0.4%→0.7%(+0.2%p)는 신드라 W 쿨타임 증가와 카시오페아 Q 피해 감소 등 미드 AP 너프의 반사 이익입니다.",
         "summaryCites": [
           "note:26.18:champion:syndra:cb99a266",
           "note:26.18:champion:cassiopeia:91d07d6f"
@@ -5217,7 +5086,7 @@
       ],
       "causes": [
         {
-          "text": "구인수의 격노검 중첩 지속시간 3초→4초로 평타 기반 원딜 가치가 올라 제리 선호가 유지됐을 수 있습니다.",
+          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초 버프가 제리 주력 빌드를 강화했습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
@@ -5241,8 +5110,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "제리는 W 너프에도 밴률이 0.7%→0.9%로 올랐지만 95% CI가 0을 포함해 통계적 의미는 약합니다.",
-        "summaryCites": [],
+        "summary": "제리 밴률 0.7%→0.9%(+0.2%p)는 CI가 0을 포함해 유의하지 않으며, 구인수의 격노검 버프가 W 너프를 일부 상쇄했을 수 있습니다.",
+        "summaryCites": [
+          "note:26.18:item:guinsoos-rageblade:f624219b"
+        ],
         "summaryVerified": true
       }
     },
@@ -5271,13 +5142,13 @@
       ],
       "causes": [
         {
-          "text": "경쟁 서포터 노틸러스의 공격력·Q 피해 하향으로 바텀 구도가 일부 이동했을 수 있습니다.",
+          "text": "경쟁 서포터 노틸러스의 공격력·Q 피해 하향이 바드 하락폭을 상쇄했을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "세라핀 E 쿨타임 고정 너프로 유틸 서포터 간 픽 분포가 바뀐 영향입니다.",
+          "text": "세라핀 E 쿨다운 고정 너프로 서포터 구도가 바뀌며 바드 승률이 유지된 영향으로 보입니다.",
           "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "low"
@@ -5301,7 +5172,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "바드 승률 -0.2%p는 CI [-4.2%p, 3.9%p]로 0을 포함해 사실상 변화 없음이며, 방어력 하향의 체감 영향은 미미합니다.",
+        "summary": "바드 승률 -0.2%p는 CI가 [-4.2%p, 3.9%p]로 넓어 방어력 너프 효과를 확인할 수 없는 노이즈 수준입니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -5329,20 +5200,7 @@
       "matchedNoteIds": [
         "note:26.18:champion:bard:453ef7b4"
       ],
-      "causes": [
-        {
-          "text": "노틸러스 공격력·Q 피해 하향으로 서포터 경쟁 구도가 바뀌며 바드 승률이 상쇄됐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "세라핀 E 쿨다운 고정 너프로 일부 픽이 이동했을 여지가 있습니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375345676",
@@ -5361,10 +5219,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "바드 승률 -0.2%p는 CI [-4.2%p, 3.9%p]로 노이즈 수준이며, 노틸러스 하향 등 서포터 경쟁 변화가 방어력 너프를 상쇄한 정도입니다.",
-        "summaryCites": [
-          "note:26.18:champion:nautilus:b6aff2b2"
-        ],
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -5393,20 +5249,14 @@
       ],
       "causes": [
         {
-          "text": "신드라 W 쿨타임 1초 증가로 미드 AP 대안 수요가 세라핀으로 일부 이동했을 수 있습니다.",
+          "text": "신드라 W 쿨타임 1초 증가 너프로 미드 경쟁자가 약화되며 세라핀이 반사 이익을 얻었을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "카시오페아 E 강화 계수 55%→45% 하향으로 AP 메이지 선호가 분산된 영향으로 보입니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:620aea16",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "노틸러스 공격력 61→58 하향으로 서포터 픽 구도가 바뀌며 세라핀 수요가 소폭 늘었습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+          "text": "카시오페아 Q 기본 피해량 하향으로 같은 AP 미드 픽 수요가 일부 이동한 영향으로 보입니다.",
+          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
           "verified": true,
           "confidence": "low"
         }
@@ -5429,10 +5279,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "세라핀 E 쿨타임 하향에도 픽률은 4.2%→4.3%(+0.2%p)로 올랐지만 CI가 0을 포함해 유의하지 않고, 신드라·카시오페아 하향에 따른 반사 수요가 겹친 정도입니다.",
+        "summary": "세라핀 E 쿨타임 너프에도 픽률은 4.2%→4.3%로 0.2%p 올랐지만 CI가 0을 포함해 유의하지 않고, 신드라·카시오페아 너프에 따른 반사 이익 수준입니다.",
         "summaryCites": [
           "note:26.18:champion:syndra:cb99a266",
-          "note:26.18:champion:cassiopeia:620aea16"
+          "note:26.18:champion:cassiopeia:91d07d6f"
         ],
         "summaryVerified": true
       }
@@ -5480,7 +5330,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -5511,19 +5361,19 @@
       ],
       "causes": [
         {
-          "text": "신드라 W 쿨타임 1초 증가로 미드 주류 AP가 약해지며 변칙 픽 여지가 생겼습니다.",
+          "text": "신드라 W 쿨타임 1초 증가로 미드 견제가 약해져 마스터 이 미드 시도가 늘었을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "카시오페아 Q 기본 피해 10 감소로 초반 미드 라인전 강자가 줄었습니다.",
+          "text": "카시오페아 Q 기본 피해 10 감소 등 미드 AP 너프가 틈새 픽 여지를 넓혔습니다.",
           "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "세라핀 E 쿨타임이 11초로 고정되며 미드 견제 챔피언 입지가 약화됐습니다.",
+          "text": "세라핀 E 쿨타임이 11초로 고정되며 미드 라인전 압박이 줄었습니다.",
           "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "low"
@@ -5547,7 +5397,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "마스터 이 미드 픽률이 0.1%p 올랐지만 표본이 매우 적고, 신드라·카시오페아 등 미드 AP 너프에 따른 변칙 픽 증가로 보입니다.",
+        "summary": "마스터 이 미드 픽률 0.1%p 상승은 CI 하한이 0%p라 노이즈 수준이며, 신드라·카시오페아 너프에 따른 틈새 픽 정도로 봅니다.",
         "summaryCites": [
           "note:26.18:champion:syndra:cb99a266",
           "note:26.18:champion:cassiopeia:91d07d6f"
@@ -5580,13 +5430,13 @@
       ],
       "causes": [
         {
-          "text": "주요 사용처인 제리의 W 계수가 120%→100%로 하향돼 버프 효과가 상쇄됐을 수 있습니다.",
+          "text": "주요 사용 챔피언 제리의 W 계수 너프가 구인수 버프 효과를 상쇄했을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "마스터 이 궁극기 이동 속도 상향은 채택률을 올릴 요인이지만 체감 폭이 작습니다.",
+          "text": "마스터 이 R 이동 속도 버프는 구인수 수요를 소폭 밀어올리는 방향으로 작용합니다.",
           "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
           "verified": true,
           "confidence": "low"
@@ -5610,7 +5460,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "중첩 지속 4초 상향에도 채택률은 -0.1%p로 사실상 변동 없으며, CI가 0을 포함해 유의하지 않고 제리 W 하향이 상쇄 요인입니다.",
+        "summary": "채택률 3.1%→3.1%(-0.1%p)로 95% CI [-0.2%p, 0.1%p]가 0을 포함해 사실상 무변화이며, 제리 W 너프가 버프 효과를 상쇄한 것으로 보입니다.",
         "summaryCites": [
           "note:26.18:champion:zeri:d0cacf0b"
         ],
@@ -5643,13 +5493,13 @@
       ],
       "causes": [
         {
-          "text": "세라핀 E 재사용 대기시간이 전 구간 11초로 고정돼 AP 서포터 수요 일부가 이동했을 수 있습니다.",
+          "text": "세라핀 E 쿨다운이 11초로 고정 너프되며 AP 서포터 수요가 신드라로 일부 옮겨갔을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "바드 방어력이 32+레벨당 4.7로 하향돼 서포터 선택지가 재편된 영향으로 보입니다.",
+          "text": "바드 방어력이 32+레벨당 4.7로 하향돼 서포터 풀 하단이 흔들렸습니다.",
           "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
           "verified": true,
           "confidence": "low"
@@ -5673,7 +5523,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "신드라 서포터 픽률 0.1%p 상승은 CI가 [-0.0%p, 0.2%p]로 0을 포함해 표본 노이즈 수준이며, 세라핀 E 너프로 인한 간접 반사 효과가 일부 작용했을 수 있습니다.",
+        "summary": "신드라 서포터 픽률 +0.1%p는 CI [-0.0%p, 0.2%p]로 유의하지 않은 변동이며, 세라핀 E 쿨다운 너프에 따른 AP 서포터 이동이 일부 영향일 수 있습니다.",
         "summaryCites": [
           "note:26.18:champion:seraphine:4519a08c"
         ],
@@ -5706,15 +5556,9 @@
       ],
       "causes": [
         {
-          "text": "W 재사용 대기시간 1초 증가로 미드 입지가 좁아지며 일부 장인이 탑으로 이동했을 수 있습니다.",
+          "text": "W 쿨다운 1초 증가로 미드 입지가 흔들리며 일부 사용자가 탑 시도로 옮겨갔을 수 있습니다.",
           "candidateNoteId": null,
           "verified": false,
-          "confidence": "low"
-        },
-        {
-          "text": "카시오페아·세라핀 등 미드 마법사 너프로 라인 경쟁 구도가 흔들린 여파로 볼 여지가 있습니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
-          "verified": true,
           "confidence": "low"
         }
       ],
@@ -5736,10 +5580,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "신드라 탑 픽률 0.1%→0.2%(+0.1%p)는 CI가 0을 포함한 표본 수준 변동으로, W 쿨다운 너프와 방향이 다릅니다.",
-        "summaryCites": [
-          "note:26.18:champion:syndra:cb99a266"
-        ],
+        "summary": "신드라 탑 픽률 0.1%p 상승은 CI [-0.0%p, 0.2%p]로 유의하지 않은 미미한 변동입니다.",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -5767,7 +5609,14 @@
         "note:26.18:champion:ekko:dfd6f002",
         "note:26.18:champion:ekko:433f5bb2"
       ],
-      "causes": [],
+      "causes": [
+        {
+          "text": "구인수의 격노검 중첩 지속시간 3초→4초로 정통 원딜이 강해져 에코 원딜이 밀렸을 수 있습니다.",
+          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8375326470",
@@ -5786,7 +5635,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "에코 원딜은 픽률 0.1% 수준의 극소 표본이며 변화폭 -0.1%p의 신뢰구간이 0을 포함해 통계적 잡음입니다.",
+        "summary": "에코 원딜 픽률 -0.1%p는 CI가 0을 포함하는 0.1%대 극소 표본 변동으로, 에코 Q 버프와 무관한 노이즈입니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -5817,20 +5666,14 @@
       ],
       "causes": [
         {
-          "text": "신드라 W 쿨다운 1초 증가 등 미드 주력 챔피언 약화로 자헨 미드 시도가 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카시오페아 Q 기본 피해 10 감소로 초반 미드 압박이 줄어든 점이 반사 이익일 수 있습니다.",
+          "text": "카시오페아 Q 기본 피해량 너프로 미드 경쟁자가 줄며 자헨 픽이 소폭 늘었을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "세라핀 E 쿨다운 고정(11초) 너프로 미드 경쟁군이 약화됐습니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+          "text": "신드라 W 쿨다운 1초 증가 너프가 미드 선택지를 좁혀 자헨 쪽 수요가 옮겨간 영향.",
+          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
           "verified": true,
           "confidence": "low"
         }
@@ -5853,10 +5696,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "자헨 미드 픽률 0.1%p 상승은 CI [-0.0%p, 0.2%p]로 유의하지 않으며, 신드라·카시오페아 등 미드 너프의 반사 효과 수준입니다.",
+        "summary": "자헨 미드 픽률 +0.1%p는 CI가 0을 포함해 노이즈 수준이며, 카시오페아·신드라 너프에 따른 반사 효과일 수 있습니다.",
         "summaryCites": [
-          "note:26.18:champion:syndra:cb99a266",
-          "note:26.18:champion:cassiopeia:91d07d6f"
+          "note:26.18:champion:cassiopeia:91d07d6f",
+          "note:26.18:champion:syndra:cb99a266"
         ],
         "summaryVerified": true
       }
@@ -5953,7 +5796,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -5984,7 +5827,7 @@
       ],
       "causes": [
         {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초 버프가 있었지만 픽률을 끌어올리진 못했습니다.",
+          "text": "구인수의 격노검 중첩 지속시간 3초→4초 상향이 픽률 하락을 상쇄했을 수 있습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
@@ -6008,7 +5851,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "마스터 이 버프에도 픽률은 2.2%로 사실상 제자리이며, -0.1%p는 CI [-0.5%p, 0.4%p] 안이라 유의하지 않습니다.",
+        "summary": "마스터 이 정글 픽률 2.2%로 변화 -0.1%p, CI [-0.5%p, 0.4%p]가 0을 포함해 통계적으로 유의하지 않습니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6039,7 +5882,19 @@
       ],
       "causes": [
         {
-          "text": "구인수의 격노검 중첩 유지 4초로 연장돼 공속 기반 원딜 비에고 실험 픽이 소폭 늘었을 수 있습니다.",
+          "text": "비에고 공격력 성장 3.5→4 버프로 원거리 딜러 자리 시험 픽이 소폭 늘었을 수 있습니다.",
+          "candidateNoteId": null,
+          "verified": false,
+          "confidence": "low"
+        },
+        {
+          "text": "군주의 지배 회복이 공격속도·체력까지 반영돼 원딜식 빌드 실험 유인이 생겼습니다.",
+          "candidateNoteId": null,
+          "verified": false,
+          "confidence": "low"
+        },
+        {
+          "text": "구인수의 격노검 중첩 유지 3초→4초 버프가 공속 빌드 비에고 시도를 거들었을 수 있습니다.",
           "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
           "verified": true,
           "confidence": "low"
@@ -6063,9 +5918,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "비에고 원딜 픽률 0.1%p 상승은 CI가 0을 포함해 노이즈 수준이며, 구인수의 격노검 중첩 4초 버프가 실험 픽을 자극했을 여지가 있습니다.",
+        "summary": "비에고 원딜 픽률은 0.0%→0.1%로 변화폭이 CI에 0이 포함될 만큼 미미하며, 공격력 성장·지속효과 버프에 따른 시험 픽 수준입니다.",
         "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
+          "note:26.18:champion:viego:3477e7c5",
+          "note:26.18:champion:viego:caf9b23d"
         ],
         "summaryVerified": true
       }
@@ -6161,7 +6017,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6209,7 +6065,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "노틸러스 미드 픽률은 0.0%에서 0.1%로 0.0%p 변동이며 신뢰구간이 0을 포함해 표본 노이즈 수준입니다.",
+        "summary": "노틸러스 미드 픽률은 0.0%→0.1%로 변화폭이 0.0%p이고 신뢰구간이 0을 포함해 통계적 노이즈 수준입니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6257,7 +6113,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "에코 밴률은 0.5%로 변동 없고 신뢰구간(±0.2%p)도 0을 포함해, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6305,7 +6161,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "노틸러스 탑 픽률은 변화 -0.0%p, 신뢰구간 [-0.1%p, 0.0%p]로 사실상 0에 가까워 통계적 잡음 수준이며, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6353,7 +6209,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "자헨 원딜 픽률 변화는 -0.0%p로 CI[-0.1%p, 0.0%p]가 0을 포함해 사실상 변동이 없습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6448,7 +6304,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6479,14 +6335,14 @@
       ],
       "causes": [
         {
-          "text": "비에고 공격력 성장 3.5→4 강화로 정글 선호가 쏠려 카사딘 정글 유입이 막혔을 수 있습니다.",
+          "text": "비에고 레벨당 공격력 3.5→4 버프로 정글 경쟁이 강해져 카사딘 정글 진입이 막혔을 수 있습니다.",
           "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "마스터 이 R 이동속도 40/50/60% 상향으로 정글 픽 경쟁에서 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+          "text": "에코 Q 계수·마나 버프로 AP 정글 수요가 에코 쪽으로 흡수된 영향으로 보입니다.",
+          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
           "verified": true,
           "confidence": "low"
         }
@@ -6509,10 +6365,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카사딘 정글 픽률은 0.0%p 변화에 CI [-0.0%p, 0.1%p]로 사실상 무변동이며, 비에고·마스터 이 정글 상향이 유입을 막았을 여지가 있습니다.",
+        "summary": "카사딘 정글 픽률은 0.0%p로 사실상 무변동이며, 비에고·에코 정글 버프가 AP 정글 수요를 가져간 것으로 보입니다.",
         "summaryCites": [
           "note:26.18:champion:viego:3477e7c5",
-          "note:26.18:champion:masteryi:c898ee27"
+          "note:26.18:champion:ekko:433f5bb2"
         ],
         "summaryVerified": true
       }
@@ -6615,7 +6471,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카시오페아 서포터 픽률은 0.0%→0.1%로 변화량이 신뢰구간(-0.1%p~0.1%p) 안에 들어가, 통계적 잡음 수준입니다.",
+        "summary": "카시오페아 서포터 픽률은 0.0%→0.1%로 사실상 변동이 없고 신뢰구간[-0.1%p, 0.1%p]이 0을 포함해, 패치 영향으로 볼 근거가 없습니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6663,7 +6519,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summary": "노틸러스 정글 픽률은 0.0%p 변동으로 사실상 그대로이며(CI [-0.0%p, 0.0%p]), 이 변화를 설명할 조항을 찾지 못했습니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6711,7 +6567,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summary": "노틸러스 원딜 픽률은 변화 0.0%p(CI -0.0~0.0%p)로 사실상 움직임이 없어, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6807,7 +6663,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "자헨 밴률은 0.1%로 변동 0.0%p이고 신뢰구간이 0을 포함해, 통계적으로 유의한 변화가 아닙니다.",
+        "summary": "자헨 밴률은 0.1%로 변동 없고 신뢰구간도 ±0.1%p라 유의한 변화가 아닙니다. 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }

@@ -2,11 +2,11 @@
   "meta": {
     "from": "26.16",
     "to": "26.17",
-    "generatedAt": "2026-09-19T02:14:50.769Z",
+    "generatedAt": "2026-09-19T03:09:29.192Z",
     "n": 1966,
     "counts": {
-      "unannounced": 17,
-      "indirect-effect": 20,
+      "unannounced": 15,
+      "indirect-effect": 22,
       "announced-inconsistent": 86,
       "announced-consistent": 30,
       "below-threshold": 262,
@@ -15,23 +15,24 @@
     },
     "qAlpha": 0.1,
     "llm": {
-      "calls": 0,
-      "cacheHits": 120,
+      "calls": 124,
+      "cacheHits": 0,
       "skipped": 0,
       "usage": {
-        "inputTokens": 0,
-        "cacheReadInputTokens": 0,
-        "cacheCreationInputTokens": 0,
-        "outputTokens": 0
+        "inputTokens": 16272,
+        "cacheReadInputTokens": 767151,
+        "cacheCreationInputTokens": 6237,
+        "outputTokens": 68118
       },
       "prose": {
         "summaryCount": 120,
-        "summaryOverLength": 3,
-        "summaryHedged": 46,
-        "maxSummaryLength": 110,
-        "causeCount": 245,
+        "summaryOverLength": 0,
+        "summaryHedged": 25,
+        "maxSummaryLength": 94,
+        "causeCount": 225,
         "causeOverLength": 0,
-        "causeHedged": 86
+        "causeHedged": 79,
+        "causeHedgedConfident": 0
       }
     }
   },
@@ -76,7 +77,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "로크 밴률이 47.3%에서 34.2%로 13.0%p 내렸지만, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -104,20 +105,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "나서스 기본 지속 생명력 흡수 12/18/24%→10/15/20% 너프로 럼블의 탑 맞대결 부담이 줄었습니다.",
+          "text": "나서스 기본 지속 효과 생명력 흡수가 12/18/24%에서 10/15/20%로 하향돼, 탑 라인전 상성이 럼블 쪽으로 기울었을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "제라스 Q 피해량과 체력 너프로 미드 AP 경쟁 구도가 럼블에 유리해졌습니다.",
+          "text": "제라스 Q 피해량과 체력 하향으로 미드 AP 경쟁자가 약해진 반사 이익이 있습니다.",
           "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "그레이브즈 Q 계수 너프로 정글 럼블 픽의 상대적 위상이 올랐습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:39e7c86f",
+          "text": "그레이브즈 Q 계수 하향으로 정글 압박이 줄어든 점이 럼블 라인 안정성에 유리하게 작용했습니다.",
+          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
           "verified": true,
           "confidence": "low"
         }
@@ -140,10 +141,76 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "럼블 직접 변경은 없으나 나서스 생명력 흡수 너프와 제라스 Q 너프 등 경쟁 픽 약화로 승률이 43.0%→52.9%(+9.9%p) 상승했습니다.",
+        "summary": "럼블 승률이 43.0%→52.9%(+9.9%p)로 급등했는데 직접 조항은 없고, 나서스 생흡 하향 등 주변 상성 변화가 유력합니다.",
         "summaryCites": [
-          "note:26.17:champion:nasus:0915ac64",
-          "note:26.17:champion:xerath:43a6f4aa"
+          "note:26.17:champion:nasus:0915ac64"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Rumble:TOP:winRate",
+      "entityType": "champion",
+      "entityKey": "Rumble",
+      "entityName": "럼블",
+      "metric": "winRate",
+      "before": 0.44212962962962965,
+      "after": 0.5358744394618834,
+      "delta": 0.09374480983225375,
+      "ci": [
+        0.027604548447914795,
+        0.15872878215385067
+      ],
+      "n": {
+        "before": 432,
+        "after": 446
+      },
+      "q": 0.037863796560213075,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "갈라진 하늘 공격력 45→40 너프로 AD 탑 브루저가 약해져 럼블의 라인전 부담이 줄었습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "갈라진 하늘 체력 450→400 너프로 근접 브루저 생존력이 낮아져 럼블 지속 견제가 통합니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "나서스 생명력 흡수 12/18/24%→10/15/20% 너프로 대표적 탑 맞수의 라인 유지력이 떨어졌습니다.",
+          "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8366970663",
+          "KR_8363699672",
+          "KR_8362440181",
+          "KR_8359101455",
+          "KR_8357538432",
+          "KR_8358997067",
+          "KR_8358817974",
+          "KR_8358772482",
+          "KR_8358504280",
+          "KR_8368614410"
+        ],
+        "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=68,scope=position,position=TOP]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "럼블 탑 승률이 44.2%→53.6%(+9.4%p)로 급등했고, 갈라진 하늘 너프와 나서스 생존력 하향에 따른 탑 구도 변화가 유력합니다.",
+        "summaryCites": [
+          "note:26.17:item:sundered-sky:0aec77fe",
+          "note:26.17:champion:nasus:0915ac64"
         ],
         "summaryVerified": true
       }
@@ -171,14 +238,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "녹턴 체력·방어력 너프로 돌진 챔프 픽이 줄며 대항마 뽀삐 밴 수요가 감소했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
+          "text": "이렐리아가 Q 계수·R 주문력 계수 등 대폭 버프를 받아 밴 우선순위를 가져갔을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "이렐리아·키아나 등 근접 딜러 버프로 밴 우선순위가 이동하며 뽀삐 밴이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+          "text": "야스오의 치명타 피해량 감소가 -10%에서 -5%로 완화되며 밴 표가 분산된 영향으로 보입니다.",
+          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "요네도 치명타 피해량 감소가 -5%로 완화돼 밴 대상 경쟁에서 뽀삐를 밀어낸 정황입니다.",
+          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
           "verified": true,
           "confidence": "low"
         }
@@ -201,83 +274,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "뽀삐 밴률이 40.4%→32.3%(-8.2%p)로 떨어졌지만 직접 조항은 없고, 이렐리아 등 버프 챔프로 밴 우선순위가 이동한 영향으로 보입니다.",
+        "summary": "뽀삐 밴률이 40.4%→32.3%(-8.2%p)로 떨어졌는데, 직접 변경 없이 이렐리아·야스오·요네 버프로 밴 표가 옮겨간 영향으로 보입니다.",
         "summaryCites": [
-          "note:26.17:champion:irelia:9035ffdc"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Yunara:pickRate",
-      "entityType": "champion",
-      "entityKey": "Yunara",
-      "entityName": "유나라",
-      "metric": "pickRate",
-      "before": 0.1603,
-      "after": 0.2217,
-      "delta": 0.06140000000000001,
-      "ci": [
-        0.050530616693699945,
-        0.07225686162007608
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "베인 W 고정 피해가 최대 체력의 6~10%에서 4~10%로 하향돼 원거리 딜러 픽이 유나라로 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "베인 Q 마나 소모가 초반 46까지 늘며 라인전이 약해져 대체 픽 수요가 커졌습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:fb0dfc8b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 상향돼 공속 기반 빌드의 체감 성능이 올랐습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "쓰레쉬 E 피해가 10 및 계수 10% 하향돼 바텀 조합 선택이 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:thresh:83ce59dd",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8367245341",
-          "KR_8363699672",
-          "KR_8363415877",
-          "KR_8362227218",
-          "KR_8360724805",
-          "KR_8360332325",
-          "KR_8358996569",
-          "KR_8369228656",
-          "KR_8368565160",
-          "KR_8368516384"
-        ],
-        "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=804,scope=all]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "유나라 픽률이 16.0%에서 22.2%로 6.1%p 올랐습니다. 직접 조항은 없고 베인 W·Q 너프와 폭풍갈퀴 공속 상향의 반사 효과로 추정됩니다.",
-        "summaryCites": [
-          "note:26.17:champion:vayne:1da6ddd1",
-          "note:26.17:champion:vayne:fb0dfc8b",
-          "note:26.17:item:stormrazor:0a1d6b43"
+          "note:26.17:champion:irelia:9035ffdc",
+          "note:26.17:champion:yasuo:66635940",
+          "note:26.17:champion:yone:c6a149c7"
         ],
         "summaryVerified": true
       }
@@ -305,26 +306,14 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "미드 원거리 견제 경쟁자인 제라스의 Q 피해량이 5 감소해 탈리야의 상대적 입지가 올라갔습니다.",
+          "text": "제라스 Q 피해량 및 체력 너프로 경쟁 포킹 메이지가 약해지며 탈리야가 반사이익을 얻었습니다.",
           "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "제라스 기본 체력이 596에서 575로 줄어 미드 라인전 구도가 탈리야에게 유리해졌습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:080e761c",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "그레이브즈 Q 계수 너프로 정글 경쟁군이 약화되며 탈리야 정글의 상대 승률이 올랐을 수 있습니다.",
+          "text": "그레이브즈 Q 계수 너프로 정글 경쟁 구도가 완화됐을 가능성이 있습니다.",
           "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "녹턴 체력·방어력 하향으로 정글 강자 층이 얇아진 점이 탈리야에게 반사 이익입니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
           "verified": true,
           "confidence": "low"
         }
@@ -347,138 +336,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "탈리야 승률이 48.7%에서 54.5%로 5.8%p 올랐고, 제라스 Q 피해·체력 하향 등 경쟁 챔피언 너프의 반사 이익으로 보입니다.",
+        "summary": "탈리야 승률이 48.7%→54.5%(+5.8%p)로 올랐습니다. 직접 변경 없이 제라스 너프에 따른 미드 반사이익으로 보입니다.",
         "summaryCites": [
-          "note:26.17:champion:xerath:43a6f4aa",
-          "note:26.17:champion:xerath:080e761c"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Nidalee:banRate",
-      "entityType": "champion",
-      "entityKey": "Nidalee",
-      "entityName": "니달리",
-      "metric": "banRate",
-      "before": 0.2796,
-      "after": 0.3246,
-      "delta": 0.044999999999999984,
-      "ci": [
-        0.03227937481280834,
-        0.05770074247060608
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "그레이브즈 Q 폭발 계수 너프로 정글 상위권이 비면서 니달리 선호·견제가 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "키아나 Q 몬스터 피해 175%→160% 너프로 정글 대안 축소가 니달리 밴 집중에 기여했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:qiyana:9d50d4d6",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8367245341",
-          "KR_8367128199",
-          "KR_8358647655",
-          "KR_8363586207",
-          "KR_8366064963",
-          "KR_8364876904",
-          "KR_8364774245",
-          "KR_8363780662",
-          "KR_8363570438",
-          "KR_8363381278"
-        ],
-        "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=76,scope=all]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "니달리 밴률이 28.0%→32.5%(+4.5%p)로 올랐습니다. 직접 조항은 없고 그레이브즈 Q 너프 등 정글 경쟁자 약화가 배경으로 추정됩니다.",
-        "summaryCites": [
-          "note:26.17:champion:graves:0bc5877b"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Lulu:pickRate",
-      "entityType": "champion",
-      "entityKey": "Lulu",
-      "entityName": "룰루",
-      "metric": "pickRate",
-      "before": 0.1058,
-      "after": 0.1497,
-      "delta": 0.043899999999999995,
-      "ci": [
-        0.03466760913637623,
-        0.05313844547290227
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "야스오 치명타 피해량 페널티가 -10%에서 -5%로 완화돼, 룰루와 묶이는 하이퍼캐리 조합 수요가 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "요네도 치명타 페널티가 -10%에서 -5%로 완화되며 보호형 서포터인 룰루 동반 픽이 늘어난 정황입니다.",
-          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 공속 원거리 딜러가 강해져 룰루 버프 가치가 커졌습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8367245341",
-          "KR_8363699672",
-          "KR_8363415877",
-          "KR_8362227218",
-          "KR_8360724805",
-          "KR_8360681283",
-          "KR_8358996569",
-          "KR_8357570754",
-          "KR_8368516384",
-          "KR_8365396085"
-        ],
-        "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=117,scope=all]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "룰루 직접 변경은 없고, 야스오·요네 치명타 페널티 완화와 폭풍갈퀴 공속 상향이 겹치며 픽률이 4.4%p 올랐을 수 있습니다.",
-        "summaryCites": [
-          "note:26.17:champion:yasuo:66635940",
-          "note:26.17:champion:yone:c6a149c7",
-          "note:26.17:item:stormrazor:0a1d6b43"
+          "note:26.17:champion:xerath:43a6f4aa"
         ],
         "summaryVerified": true
       }
@@ -506,14 +366,8 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 공속 기반 다른 원딜 선호가 커진 영향으로 보입니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 버프로 치명타형 원딜 선호가 커져 카이사 지분이 분산됐을 수 있습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "베인 W 고정 피해 하향 등 원딜 군 조정으로 바텀 픽 구도가 재편됐을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
           "verified": true,
           "confidence": "low"
         }
@@ -536,7 +390,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카이사 직접 변경은 없고, 폭풍갈퀴 공격 속도 상향(20%→25%)에 따른 원딜 선호 이동이 픽률 -3.9%p의 유력 배경입니다.",
+        "summary": "카이사 픽률이 27.7%→23.8%(-3.9%p)로 떨어졌고, 폭풍갈퀴 공격 속도 25% 버프에 따른 원딜 선택지 이동이 일부 요인으로 보입니다.",
         "summaryCites": [
           "note:26.17:item:stormrazor:0a1d6b43"
         ],
@@ -564,26 +418,7 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "야스오 치명타 피해 감소 페널티가 10%→5%로 완화돼 원거리 딜러 자리 경쟁이 세졌습니다.",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "요네도 치명타 피해 감소가 10%→5%로 완화돼 봇·미드 픽 점유를 잠식했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 치명타형 원딜 선호가 커졌습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8367245341",
@@ -602,12 +437,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카이사 직접 변경은 없으나, 야스오·요네 치명타 페널티 완화와 폭풍갈퀴 공속 상향이 겹쳐 픽률이 3.8%p 하락한 것으로 보입니다.",
-        "summaryCites": [
-          "note:26.17:champion:yasuo:66635940",
-          "note:26.17:champion:yone:c6a149c7",
-          "note:26.17:item:stormrazor:0a1d6b43"
-        ],
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -634,14 +465,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "르블랑 W 계수 상향으로 미드 밴 우선순위가 분산됐을 수 있습니다",
+          "text": "르블랑 W 계수가 주문력 80%→90%로 올라 미드 밴 우선순위를 가져갔을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "아우렐리온 솔 W 쿨감 버프로 미드 밴 표가 이동했을 수 있습니다",
-          "candidateNoteId": "note:26.17:champion:aurelionsol:30712737",
+          "text": "이렐리아 Q·R 계수 상향으로 밴 슬롯 경쟁이 심해져 빅토르 밴이 밀린 정황입니다.",
+          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "키아나 Q 피해량 상향도 미드 밴 표를 분산시키는 요인입니다.",
+          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
           "verified": true,
           "confidence": "low"
         }
@@ -664,10 +501,77 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "빅토르 직접 변경은 없고 밴률이 12.5%→9.1%(-3.3%p)로 하락했습니다. 르블랑·아우렐리온 솔 버프로 미드 밴 표가 분산된 영향으로 보입니다.",
+        "summary": "빅토르 직접 변경은 없고, 르블랑·이렐리아 상향으로 미드 밴 표가 분산되며 밴률이 12.5%→9.1%로 내려간 것으로 보입니다.",
         "summaryCites": [
           "note:26.17:champion:leblanc:887dc51f",
-          "note:26.17:champion:aurelionsol:30712737"
+          "note:26.17:champion:irelia:9035ffdc"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Ezreal:banRate",
+      "entityType": "champion",
+      "entityKey": "Ezreal",
+      "entityName": "이즈리얼",
+      "metric": "banRate",
+      "before": 0.1307,
+      "after": 0.161,
+      "delta": 0.030299999999999994,
+      "ci": [
+        0.020523747378919183,
+        0.040076412695131305
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "베인 W 고정 피해가 최대 체력 6~10%에서 4~10%로 하향돼 원거리 딜러 밴 우선순위가 이즈리얼로 옮겨간 것으로 보입니다.",
+          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "그레이브즈 Q 폭발 피해 계수 하향으로 경쟁 AD 챔피언 입지가 줄며 이즈리얼 기용·견제가 늘었습니다.",
+          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향이 이즈리얼 빌드 효율을 올려 밴 대상 가치를 높였습니다.",
+          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8366970663",
+          "KR_8363824812",
+          "KR_8363343835",
+          "KR_8362493327",
+          "KR_8362325214",
+          "KR_8362227218",
+          "KR_8360332325",
+          "KR_8358996569",
+          "KR_8358956900",
+          "KR_8358882973"
+        ],
+        "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=81,scope=all]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "이즈리얼 밴률이 13.1%→16.1%(+3.0%p)로 올랐고, 베인·그레이브즈 하향에 따른 원딜 우선순위 이동이 유력한 간접 요인입니다.",
+        "summaryCites": [
+          "note:26.17:champion:vayne:1da6ddd1",
+          "note:26.17:champion:graves:0bc5877b"
         ],
         "summaryVerified": true
       }
@@ -695,25 +599,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "르블랑 W 계수 80%→90% 상향으로 미드 AP 지분이 이동했을 수 있습니다.",
+          "text": "르블랑 W 피해량 주문력 계수가 80%에서 90%로 올라 미드 AP 픽이 르블랑으로 분산된 것으로 보입니다.",
           "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "아우렐리온 솔 W 쿨감·Q 마나 완화로 미드 대안이 늘었습니다.",
-          "candidateNoteId": "note:26.17:champion:aurelionsol:30712737",
+          "text": "아우렐리온 솔 Q 마나 소모 감소로 미드 스케일링 AP 대체재가 강화됐습니다.",
+          "candidateNoteId": "note:26.17:champion:aurelionsol:7b32ba55",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "이렐리아 Q·R·W 동시 상향으로 미드 픽 경쟁이 심화됐습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "키아나 Q 피해량 상향으로 미드 암살자 선호가 커졌습니다.",
+          "text": "키아나 Q 피해량 상향으로 미드 라인 경쟁 픽이 늘었습니다.",
           "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
           "verified": true,
           "confidence": "low"
@@ -737,12 +635,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "빅토르 직접 변경은 없고, 르블랑·이렐리아·아우렐리온 솔·키아나 미드 상향에 밀려 픽률이 14.1%→11.4%(-2.7%p)로 하락한 것으로 보입니다.",
+        "summary": "빅토르 픽률 14.1%→11.4%(-2.7%p). 직접 조항은 없고, 르블랑·아우렐리온 솔 등 미드 AP 상향에 밀린 분산으로 보입니다.",
         "summaryCites": [
           "note:26.17:champion:leblanc:887dc51f",
-          "note:26.17:champion:irelia:9035ffdc",
-          "note:26.17:champion:aurelionsol:30712737",
-          "note:26.17:champion:qiyana:5a6d587d"
+          "note:26.17:champion:aurelionsol:7b32ba55"
         ],
         "summaryVerified": true
       }
@@ -768,20 +664,7 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 버프로 정통 AD 원딜 선호가 커져 AP 봇 지분이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "르블랑 W 계수 80%→90% 등 AP 챔피언 버프로 AP 픽 수요가 다른 챔피언으로 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363817081",
@@ -800,10 +683,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "빅토르 원딜 픽률이 6.1%→3.4%(-2.6%p)로 급감했으나 직접 조항은 없고, 폭풍갈퀴 공속 25% 버프에 따른 AD 원딜 선호 회복이 유력한 간접 요인입니다.",
-        "summaryCites": [
-          "note:26.17:item:stormrazor:0a1d6b43"
-        ],
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -828,7 +709,20 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [],
+      "causes": [
+        {
+          "text": "갈라진 하늘 공격력 45→40 너프로 쉔의 핵심 아이템 가치가 떨어졌을 수 있습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "갈라진 하늘 체력 450→400 하향으로 쉔의 라인 유지력이 약해진 영향으로 보입니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8360332325",
@@ -847,8 +741,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "쉔 서포터 픽률이 6.8%에서 4.1%로 2.6%p 하락했으나(CI 전 구간 음수), 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
+        "summary": "쉔 서포터 픽률이 6.8%→4.1%(-2.6%p)로 떨어졌고, 직접 조항은 없으며 갈라진 하늘 공격력·체력 너프가 간접 요인일 수 있습니다.",
+        "summaryCites": [
+          "note:26.17:item:sundered-sky:0aec77fe",
+          "note:26.17:item:sundered-sky:4c4f025e"
+        ],
         "summaryVerified": true
       }
     },
@@ -873,20 +770,7 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "갈라진 하늘 공격력 45→40 너프로 근접 딜러형 서포터 판테온의 아이템 가치가 하락했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 너프로 초반 교전 생존력이 줄어 선호도가 떨어졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8369164782",
@@ -905,11 +789,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "판테온 서포터 픽률이 8.0%→5.6%(-2.4%p)로 떨어졌으나 직접 조항은 없고, 갈라진 하늘 공격력·체력 너프가 유력한 간접 요인입니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
-        ],
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -959,72 +840,6 @@
       }
     },
     {
-      "id": "item:3109:adoptionRate",
-      "entityType": "item",
-      "entityKey": "3109",
-      "entityName": "기사의 맹세",
-      "metric": "adoptionRate",
-      "before": 0.02289,
-      "after": 0.03035,
-      "delta": 0.007459999999999998,
-      "ci": [
-        0.00605052721764399,
-        0.008872581655883454
-      ],
-      "n": {
-        "before": 100000,
-        "after": 100000
-      },
-      "q": 0,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "갈라진 하늘이 체력 450→400으로 약해지며 다른 체력 아이템으로 수요가 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "쓰레쉬 E 피해량 너프로 딜형 대신 보호·유틸 빌드로 선회한 영향으로 보입니다.",
-          "candidateNoteId": "note:26.17:champion:thresh:83ce59dd",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "이렐리아 Q·R 계수 상향 등 AD 돌진 챔프 강세로 아군 보호 아이템 가치가 올랐습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8367128199",
-          "KR_8367044760",
-          "KR_8366970663",
-          "KR_8363572037",
-          "KR_8362440181",
-          "KR_8362325214",
-          "KR_8362227218",
-          "KR_8360724805",
-          "KR_8360457271",
-          "KR_8360218585"
-        ],
-        "aggregatePath": "data/aggregated/26.17/items.json#rows[itemId=3109]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "기사의 맹세 채택률이 2.3%→3.0%(+0.7%p)로 올랐습니다. 직접 변경은 없고 갈라진 하늘 체력 너프와 보호형 서폿 빌드 선회가 유력합니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:4c4f025e"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
       "id": "item:3504:adoptionRate",
       "entityType": "item",
       "entityKey": "3504",
@@ -1047,20 +862,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "쓰레쉬 E 피해량 너프로 딜링형 서포터 입지가 줄며 엔찬터 계열 빌드 비중이 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:thresh:83ce59dd",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 공속 중심 원딜 조합이 늘어 향로 시너지가 커졌습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 버프로 공속 중심 원딜 조합이 늘며 향로 수요가 붙은 것으로 보입니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "야스오 치명타 피해 감소 완화(-10%→-5%)로 평타 딜러 지원 아이템 수요가 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+          "text": "베인 공속 성장이 레벨당 3.3%→2.8%로 줄어 공속 보조 아이템 채택이 늘었을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:vayne:e3f52a3c",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "쓰레쉬 E 피해량 너프로 딜형 서포터 대신 지원형 빌드 비중이 이동했을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:thresh:83ce59dd",
           "verified": true,
           "confidence": "low"
         }
@@ -1083,9 +898,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "불타는 향로 채택률이 1.1%→1.6%(+0.4%p)로 올랐습니다. 직접 조항은 없고 쓰레쉬 E 너프와 폭풍갈퀴 공속 상향에 따른 서포터·공속 조합 변화로 추정됩니다.",
+        "summary": "불타는 향로 채택률이 1.1%→1.6%(+0.4%p)로 올랐습니다. 폭풍갈퀴 공속 25% 상향 등 공속 메타 이동이 원인으로 추정됩니다.",
         "summaryCites": [
-          "note:26.17:champion:thresh:83ce59dd",
           "note:26.17:item:stormrazor:0a1d6b43"
         ],
         "summaryVerified": true
@@ -1114,19 +928,25 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "이렐리아 Q 계수 70%→80%, R 주문력 계수 100% 상향으로 탑 대치 구도가 불리해졌습니다.",
+          "text": "이렐리아 Q 계수 70%→80% 등 전반 강화로 탑 라인 대치에서 애니비아가 밀립니다.",
           "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "초가스 E 기본 피해량 10 상향으로 탑 라인전 주도권 경쟁에서 밀립니다.",
+          "text": "이렐리아 R 주문력 계수 70%→100%로 딜교 폭이 커져 애니비아 탑 생존이 어려워졌습니다.",
+          "candidateNoteId": "note:26.17:champion:irelia:1f26947d",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "초가스 E 피해량 10 증가로 마법사 탑 상대 라인 압박이 강해졌습니다.",
           "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "트런들 W 공격 속도 최대 110%로 상향되어 탑 근접 압박이 강해졌습니다.",
+          "text": "트런들 W 공격 속도 최대 90%→110% 버프로 탑 근접 압박 챔피언이 늘었습니다.",
           "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
           "verified": true,
           "confidence": "low"
@@ -1150,9 +970,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "애니비아 탑 승률이 57.3%→44.4%(-12.8%p)로 급락했고, 이렐리아 Q 계수 80% 상향 등 탑 경쟁 챔피언 강화가 유력한 배경입니다.",
+        "summary": "애니비아 탑 승률이 57.3%→44.4%(-12.8%p)로 급락했습니다. 직접 변경은 없고 이렐리아 Q·R 계수 상향 등 탑 경쟁 챔피언 강화가 주요 요인입니다.",
         "summaryCites": [
-          "note:26.17:champion:irelia:9035ffdc"
+          "note:26.17:champion:irelia:9035ffdc",
+          "note:26.17:champion:irelia:1f26947d"
         ],
         "summaryVerified": true
       }
@@ -1180,19 +1001,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "카밀 핵심 아이템 갈라진 하늘 공격력 45→40 하향으로 체감 위협도가 낮아졌습니다.",
+          "text": "갈라진 하늘 공격력 45→40 너프로 카밀 주력 빌드의 위협도가 떨어져 밴 우선순위가 밀렸습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "갈라진 하늘 체력 450→400 하향으로 카밀의 생존·딜 균형이 약해졌습니다.",
+          "text": "갈라진 하늘 체력 450→400 너프가 겹쳐 카밀의 라인 생존력과 체감 강함이 동시에 하락했습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "이렐리아 Q 계수 상향 등 탑 경쟁자 강화로 밴 우선순위가 분산됐습니다.",
+          "text": "이렐리아 Q 계수 상향 등 탑 경쟁자 버프로 밴 자원이 분산됐을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
           "verified": true,
           "confidence": "low"
@@ -1216,74 +1037,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카밀 밴률이 31.6%→19.9%(-11.6%p)로 급락했는데, 갈라진 하늘 공격력·체력 동시 하향이 유력한 원인입니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Rumble:TOP:winRate",
-      "entityType": "champion",
-      "entityKey": "Rumble",
-      "entityName": "럼블",
-      "metric": "winRate",
-      "before": 0.44212962962962965,
-      "after": 0.5358744394618834,
-      "delta": 0.09374480983225375,
-      "ci": [
-        0.027604548447914795,
-        0.15872878215385067
-      ],
-      "n": {
-        "before": 432,
-        "after": 446
-      },
-      "q": 0.037863796560213075,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 탑 AD 브루저 라인전 압박이 줄었습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향으로 럼블이 상대 브루저를 녹이기 쉬워졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "나서스 생명력 흡수 하향으로 대표적 탑 카운터의 라인 유지력이 약화됐습니다.",
-          "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8366970663",
-          "KR_8363699672",
-          "KR_8362440181",
-          "KR_8359101455",
-          "KR_8357538432",
-          "KR_8358997067",
-          "KR_8358817974",
-          "KR_8358772482",
-          "KR_8358504280",
-          "KR_8368614410"
-        ],
-        "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=68,scope=position,position=TOP]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-Sundered-Sky"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "럼블 탑 승률이 44.2%→53.6%(+9.4%p)로 급등했는데, 갈라진 하늘 공격력·체력 하향에 따른 탑 브루저 약화가 유력한 배경입니다.",
+        "summary": "카밀 밴률이 31.6%→19.9%(-11.6%p)로 급락했습니다. 주력 아이템 갈라진 하늘의 공격력·체력 너프가 원인으로 보입니다.",
         "summaryCites": [
           "note:26.17:item:sundered-sky:0aec77fe",
           "note:26.17:item:sundered-sky:4c4f025e"
@@ -1314,26 +1068,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "베인 W 고정 피해가 최대 체력 6~10%에서 4~10%로 하향돼 원딜 수요가 유나라로 이동했을 수 있습니다.",
+          "text": "베인 W 고정 피해가 최대 체력의 6~10%에서 4~10%로 깎이며 원딜 지분이 유나라로 이동했습니다.",
           "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "베인 Q 마나 소모가 30에서 최대 46으로 늘어 라인전 부담이 커진 점도 픽 이탈 요인입니다.",
+          "text": "베인 Q 마나 소모가 레벨별 46까지 올라 초반 부담이 커진 점도 픽 이동을 거들었습니다.",
           "candidateNoteId": "note:26.17:champion:vayne:fb0dfc8b",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 상향돼 평타 기반 원딜의 체감 성능이 올랐습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 공속 기반 원딜 빌드 가치가 올랐습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "그레이브즈 Q 폭발 계수 하향으로 경쟁 원딜 파이가 줄었습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
           "verified": true,
           "confidence": "low"
         }
@@ -1356,10 +1104,75 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "유나라 픽률이 16.0%에서 22.2%로 6.2%p 올랐습니다. 베인 W 하향과 폭풍갈퀴 공속 25% 상향에 따른 원딜 수요 이동으로 보입니다.",
+        "summary": "유나라 픽률이 16.0%→22.2%(+6.2%p)로 급등했습니다. 베인 W 고정 피해 너프로 생긴 원딜 자리를 흡수한 결과입니다.",
         "summaryCites": [
-          "note:26.17:champion:vayne:1da6ddd1",
-          "note:26.17:item:stormrazor:0a1d6b43"
+          "note:26.17:champion:vayne:1da6ddd1"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Yunara:pickRate",
+      "entityType": "champion",
+      "entityKey": "Yunara",
+      "entityName": "유나라",
+      "metric": "pickRate",
+      "before": 0.1603,
+      "after": 0.2217,
+      "delta": 0.06140000000000001,
+      "ci": [
+        0.050530616693699945,
+        0.07225686162007608
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0,
+      "status": "indirect-effect",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "베인 W 고정 피해가 최대 체력 6~10%에서 4~10%로 깎이며 원딜 자리를 유나라가 대체했습니다.",
+          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "베인 Q 마나 소모가 30에서 최대 46으로 올라 라인전이 약해진 반사이익입니다.",
+          "candidateNoteId": "note:26.17:champion:vayne:fb0dfc8b",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 올라 평타 기반 원딜 빌드 가치가 상승했습니다.",
+          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8367245341",
+          "KR_8363699672",
+          "KR_8363415877",
+          "KR_8362227218",
+          "KR_8360724805",
+          "KR_8360332325",
+          "KR_8358996569",
+          "KR_8369228656",
+          "KR_8368565160",
+          "KR_8368516384"
+        ],
+        "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=804,scope=all]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "유나라 픽률이 16.0%에서 22.2%로 6.1%p 급등했는데, 베인 W 너프로 빈 원딜 자리를 흡수한 반사이익입니다.",
+        "summaryCites": [
+          "note:26.17:champion:vayne:1da6ddd1"
         ],
         "summaryVerified": true
       }
@@ -1387,19 +1200,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 제리의 초반 아이템 효율이 올랐습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 원거리 딜러 제리의 초중반 딜링이 강해졌습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "베인 W 고정 피해 하향으로 경쟁 원거리 딜러가 약화됐습니다.",
+          "text": "베인 W 고정 피해 6~10%→4~10% 너프로 경쟁 원딜이 약화되며 제리의 상대적 입지가 올랐습니다.",
           "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "베인 Q 마나 소모 증가로 라인전 주도권이 낮아져 원딜 구도가 제리에게 유리해졌습니다.",
+          "text": "베인 Q 마나 소모 30→46부터로 상향되어 라인전이 약해진 점도 제리에게 유리하게 작용합니다.",
           "candidateNoteId": "note:26.17:champion:vayne:fb0dfc8b",
           "verified": true,
           "confidence": "low"
@@ -1423,10 +1236,142 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "제리 승률이 50.7%→56.4%(+5.7%p) 올랐습니다. 폭풍갈퀴 공격 속도 25% 상향과 베인 너프에 따른 원딜 구도 변화가 유력합니다.",
+        "summary": "제리 승률 50.7%→56.4%(+5.7%p)는 폭풍갈퀴 공격 속도 25% 상향 수혜와 베인 너프에 따른 원딜 구도 변화로 설명됩니다.",
         "summaryCites": [
           "note:26.17:item:stormrazor:0a1d6b43",
           "note:26.17:champion:vayne:1da6ddd1"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Nidalee:banRate",
+      "entityType": "champion",
+      "entityKey": "Nidalee",
+      "entityName": "니달리",
+      "metric": "banRate",
+      "before": 0.2796,
+      "after": 0.3246,
+      "delta": 0.044999999999999984,
+      "ci": [
+        0.03227937481280834,
+        0.05770074247060608
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0,
+      "status": "indirect-effect",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "그레이브즈 Q 폭발 피해 계수 너프로 상위 AD 정글 입지가 줄며 니달리 우선순위가 올랐습니다.",
+          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "녹턴 방어력 38→36, 체력 655→640 너프로 정글 경쟁자가 약화됐습니다.",
+          "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "키아나 Q 몬스터 피해 175%→160%로 정글 채용이 줄며 니달리 수요가 커졌습니다.",
+          "candidateNoteId": "note:26.17:champion:qiyana:9d50d4d6",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8367245341",
+          "KR_8367128199",
+          "KR_8358647655",
+          "KR_8363586207",
+          "KR_8366064963",
+          "KR_8364876904",
+          "KR_8364774245",
+          "KR_8363780662",
+          "KR_8363570438",
+          "KR_8363381278"
+        ],
+        "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=76,scope=all]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "니달리 직접 변경은 없으나 그레이브즈 Q 계수 너프 등 정글 경쟁자 약화로 밴률이 4.5%p 올랐습니다.",
+        "summaryCites": [
+          "note:26.17:champion:graves:0bc5877b"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Lulu:pickRate",
+      "entityType": "champion",
+      "entityKey": "Lulu",
+      "entityName": "룰루",
+      "metric": "pickRate",
+      "before": 0.1058,
+      "after": 0.1497,
+      "delta": 0.043899999999999995,
+      "ci": [
+        0.03466760913637623,
+        0.05313844547290227
+      ],
+      "n": {
+        "before": 10000,
+        "after": 10000
+      },
+      "q": 0,
+      "status": "indirect-effect",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "쓰레쉬 E 사슬 채찍 피해량 너프로 상위 서포터 자리가 비면서 룰루 픽이 늘었습니다.",
+          "candidateNoteId": "note:26.17:champion:thresh:83ce59dd",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 공속 원딜이 힘을 받아, 공속을 얹어주는 룰루 수요가 커졌습니다.",
+          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "야스오 치명타 피해량 페널티 -10%→-5% 완화로 시너지가 좋은 룰루 동반 픽이 늘었을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8367245341",
+          "KR_8363699672",
+          "KR_8363415877",
+          "KR_8362227218",
+          "KR_8360724805",
+          "KR_8360681283",
+          "KR_8358996569",
+          "KR_8357570754",
+          "KR_8368516384",
+          "KR_8365396085"
+        ],
+        "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=117,scope=all]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-thresh"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "룰루 픽률이 10.6%→15.0%(+4.4%p) 올랐습니다. 쓰레쉬 E 너프로 서포터 구도가 바뀐 영향이 큽니다.",
+        "summaryCites": [
+          "note:26.17:champion:thresh:83ce59dd"
         ],
         "summaryVerified": true
       }
@@ -1454,14 +1399,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "쓰레쉬 E 피해량 너프로 상위 서포터 픽이 밀리며 룰루로 수요가 이동했습니다.",
+          "text": "쓰레쉬 E 피해량이 75→65(계수 70%→60%)로 너프되며 서포터 수요가 룰루로 이동했습니다.",
           "candidateNoteId": "note:26.17:champion:thresh:83ce59dd",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 공속 원거리 딜러가 늘며 룰루 조합 가치가 올랐습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 버프로 공속형 원딜이 강해져 룰루 조합 가치가 올랐습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "베인 W 고정 피해 너프로 원딜 구도가 바뀌며 룰루가 보조할 대체 캐리 선택이 늘었을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
           "verified": true,
           "confidence": "low"
         }
@@ -1484,7 +1435,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "룰루 픽률이 10.3%→14.6%(+4.3%p) 급등했습니다. 쓰레쉬 E 너프에 따른 서포터 수요 이동과 폭풍갈퀴 공속 상향이 유력한 배경입니다.",
+        "summary": "룰루 픽률이 10.3%→14.6%(+4.3%p) 상승했습니다. 쓰레쉬 E 너프로 인한 서포터 수요 이동과 폭풍갈퀴 공속 버프가 주 요인입니다.",
         "summaryCites": [
           "note:26.17:champion:thresh:83ce59dd",
           "note:26.17:item:stormrazor:0a1d6b43"
@@ -1515,26 +1466,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "베인 W 고정 피해가 최대 체력 6%→4%(1레벨)로 깎이며 원딜 지분이 제리로 이동했습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "베인 W 최소 피해량 10 감소로 원딜 픽 경쟁에서 제리가 반사이익을 얻었습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:02ad4f34",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향이 치명타 원딜 빌드 가치를 높였습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 공격 속도 기반 원딜인 제리의 초중반 템 효율이 올랐습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "그레이브즈 Q 계수 너프로 공격력 기반 경쟁 픽이 줄었습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+          "text": "베인 W 고정 피해가 최대 체력의 6%→4%(1레벨)로 깎이며 후반 캐리 지분이 제리로 이동했습니다.",
+          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "베인 Q 마나 소모량이 1레벨 30→46으로 늘어 라인전이 약해지자 원딜 선택지가 제리로 쏠렸습니다.",
+          "candidateNoteId": "note:26.17:champion:vayne:fb0dfc8b",
           "verified": true,
           "confidence": "low"
         }
@@ -1557,10 +1502,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "제리 픽률이 7.4%→10.6%(+3.2%p)로 올랐습니다. 베인 W 너프와 폭풍갈퀴 공격 속도 상향에 따른 원딜 구도 변화로 보입니다.",
+        "summary": "제리 픽률이 7.4%→10.6%(+3.2%p) 상승했고, 베인 W 고정 피해·Q 마나 너프로 원딜 수요가 옮겨간 영향이 큽니다.",
         "summaryCites": [
           "note:26.17:champion:vayne:1da6ddd1",
-          "note:26.17:item:stormrazor:0a1d6b43"
+          "note:26.17:champion:vayne:fb0dfc8b"
         ],
         "summaryVerified": true
       }
@@ -1588,26 +1533,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "베인 W 고정 피해가 최대 체력의 6~10%에서 4~10%로 하향돼 원거리 딜러 선호가 케이틀린으로 이동했습니다.",
+          "text": "베인 W 고정 피해가 최대 체력 6~10%에서 4~10%로 하향되며 원거리 딜러 선호가 케이틀린 쪽으로 쏠렸습니다.",
           "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "베인 Q 마나 소모가 30에서 최대 46으로 늘어 라인전 경쟁력이 떨어진 반사이익으로 보입니다.",
+          "text": "베인 Q 마나 소모가 30에서 최대 46으로 올라 초반 주도권이 약해진 반사 효과로 보입니다.",
           "candidateNoteId": "note:26.17:champion:vayne:fb0dfc8b",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 원거리 딜러 포킹 빌드 가치가 올랐습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향이 원거리 딜러 초반 견제력을 키웠습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "그레이브즈 Q 폭발 계수 하향으로 공격력 기반 경쟁 챔피언 입지가 줄었습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
           "verified": true,
           "confidence": "low"
         }
@@ -1630,10 +1569,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "케이틀린 밴률이 7.9%→11.1%(+3.2%p)로 올랐습니다. 베인 W 고정 피해·Q 마나 하향에 따른 바텀 메타 반사이익으로 보입니다.",
+        "summary": "케이틀린 밴률이 7.9%→11.1%(+3.2%p) 올랐습니다. 베인 W 고정 피해 하향으로 원딜 구도가 케이틀린에 유리해진 영향입니다.",
         "summaryCites": [
-          "note:26.17:champion:vayne:1da6ddd1",
-          "note:26.17:champion:vayne:fb0dfc8b"
+          "note:26.17:champion:vayne:1da6ddd1"
         ],
         "summaryVerified": true
       }
@@ -1661,19 +1599,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "베인 W 고정 피해가 최대 체력의 6~10%에서 4~10%로 하향돼 원거리 딜러 수요가 제리로 이동했습니다.",
+          "text": "베인 W 고정 피해가 최대 체력 6~10%에서 4~10%로 하향되며 원거리 딜러 수요가 제리로 이동했습니다.",
           "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "베인 W 최소 피해량이 10 감소해 초중반 경쟁력이 약화된 점도 제리 선호를 키웠습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:02ad4f34",
+          "text": "베인 Q 마나 소모가 30에서 최대 46으로 올라 라인전 부담이 커졌습니다.",
+          "candidateNoteId": "note:26.17:champion:vayne:fb0dfc8b",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 올라 평타 기반 제리의 빌드 효율이 상승했습니다.",
+          "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 올라 제리 빌드 효율이 개선됐을 수 있습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
@@ -1697,10 +1635,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "제리 픽률이 8.0%→11.1%(+3.1%p) 상승했습니다. 베인 W 하향과 폭풍갈퀴 공속 25% 버프가 원딜 선호를 제리 쪽으로 옮긴 것으로 판단됩니다.",
+        "summary": "제리 픽률이 8.0%→11.1%(+3.1%p) 상승했습니다. 베인 W 하향과 Q 마나 증가로 원딜 수요가 제리로 이동한 영향입니다.",
         "summaryCites": [
           "note:26.17:champion:vayne:1da6ddd1",
-          "note:26.17:item:stormrazor:0a1d6b43"
+          "note:26.17:champion:vayne:fb0dfc8b"
         ],
         "summaryVerified": true
       }
@@ -1728,26 +1666,26 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "그레이브즈 Q 폭발 계수 너프로 정글 지분이 줄며 탈론 정글이 반사이익을 봤을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+          "text": "제라스 Q 피해량과 체력이 깎이며 미드 경쟁 픽이 줄어 탈론 수요가 늘었습니다.",
+          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "녹턴 체력 655→640, 방어력 38→36 너프로 암살 정글 경쟁자가 약화됐습니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "야스오·요네 치명타 피해량 감소 폭 조정 등 미드 구도 변화로 탈론 선택지가 늘었습니다.",
+          "text": "야스오 치명타 피해 감소 너프로 미드 지분이 빠지며 탈론이 반사 이익을 얻었습니다.",
           "candidateNoteId": "note:26.17:champion:yasuo:66635940",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "제라스 Q 피해량과 체력 너프로 미드 견제형 픽이 줄어 탈론 진입이 수월해졌습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+          "text": "요네도 같은 치명타 너프를 받아 미드 라인 빈자리가 탈론 픽으로 흡수됐습니다.",
+          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "그레이브즈 Q 계수 너프로 정글 AD 선택지가 줄어 탈론 정글이 늘었을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
           "verified": true,
           "confidence": "low"
         }
@@ -1766,87 +1704,15 @@
           "KR_8358704159"
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=91,scope=all]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-xerath"
       },
       "llm": {
         "skipped": false,
-        "summary": "탈론 직접 변경은 없지만 그레이브즈 Q 너프와 녹턴 기본 능력치 하향으로 경쟁 정글이 약해지며 픽률이 3.1%p 올랐습니다.",
+        "summary": "탈론 픽률이 10.0%→13.0%(+3.1%p)로 올랐습니다. 제라스 Q 너프와 야스오·요네 치명타 피해 감소로 미드 경쟁 픽이 줄어든 반사 이익입니다.",
         "summaryCites": [
-          "note:26.17:champion:graves:0bc5877b",
-          "note:26.17:champion:nocturne:fd4d5d23"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Ezreal:banRate",
-      "entityType": "champion",
-      "entityKey": "Ezreal",
-      "entityName": "이즈리얼",
-      "metric": "banRate",
-      "before": 0.1307,
-      "after": 0.161,
-      "delta": 0.030299999999999994,
-      "ci": [
-        0.020523747378919183,
-        0.040076412695131305
-      ],
-      "n": {
-        "before": 10000,
-        "after": 10000
-      },
-      "q": 0,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "베인 W 고정 피해가 최대 체력 6%→4%로 하향되며 원딜 밴 우선순위가 이즈리얼로 이동했습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "그레이브즈 Q 폭발 계수 하향으로 AD 경쟁자가 줄어 이즈리얼 선호·견제가 커졌습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향이 원거리 딜러 빌드 가치를 올렸습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "베인 W 최소 피해량 하향으로 바텀 밴 수요가 이즈리얼 쪽으로 분산됐습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:02ad4f34",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8366970663",
-          "KR_8363824812",
-          "KR_8363343835",
-          "KR_8362493327",
-          "KR_8362325214",
-          "KR_8362227218",
-          "KR_8360332325",
-          "KR_8358996569",
-          "KR_8358956900",
-          "KR_8358882973"
-        ],
-        "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=81,scope=all]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "이즈리얼 밴률이 13.1%→16.1%(+3.0%p) 올랐습니다. 직접 변경은 없고 베인·그레이브즈 하향에 따른 원딜 밴 우선순위 이동으로 보입니다.",
-        "summaryCites": [
-          "note:26.17:champion:vayne:1da6ddd1",
-          "note:26.17:champion:graves:0bc5877b"
+          "note:26.17:champion:xerath:43a6f4aa",
+          "note:26.17:champion:yasuo:66635940",
+          "note:26.17:champion:yone:c6a149c7"
         ],
         "summaryVerified": true
       }
@@ -1874,19 +1740,25 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "그레이브즈 Q 폭발 피해 계수가 55~115%에서 45~105%로 하향돼 AD 정글 자리가 비었습니다.",
+          "text": "그레이브즈 Q 폭발 피해 추가 공격력 계수가 10%p 하향돼 AD 정글 수요가 탈론으로 이동했습니다.",
           "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "녹턴 기본 방어력 38→36, 체력 655→640 하향으로 암살자 정글 경쟁자가 줄었습니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
+          "text": "그레이브즈 Q 최초 피해 계수도 65%에서 55%로 내려가 초반 정글 주도권이 약해졌습니다.",
+          "candidateNoteId": "note:26.17:champion:graves:39e7c86f",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "키아나 Q 몬스터 피해 175%→160% 하향으로 정글 키아나 수요가 탈론으로 이동했을 수 있습니다.",
+          "text": "녹턴 방어력 38→36 너프로 경쟁 암살자 정글의 입지가 줄었습니다.",
+          "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "키아나 Q 몬스터 피해 175%→160% 하향으로 정글 키아나 대신 탈론이 선택될 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:qiyana:9d50d4d6",
           "verified": true,
           "confidence": "low"
@@ -1910,10 +1782,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "탈론 정글 픽률이 5.4%→7.9%(+2.5%p) 상승했는데, 그레이브즈 Q 계수·녹턴 기본 능력치 하향으로 AD 정글 자리가 비워진 영향으로 보입니다.",
+        "summary": "탈론 정글 픽률이 5.4%→7.9%(+2.5%p) 올랐습니다. 그레이브즈 Q 계수 연속 너프로 AD 정글 수요가 탈론으로 옮겨간 결과입니다.",
         "summaryCites": [
           "note:26.17:champion:graves:0bc5877b",
-          "note:26.17:champion:nocturne:9c41fff1"
+          "note:26.17:champion:graves:39e7c86f"
         ],
         "summaryVerified": true
       }
@@ -1941,26 +1813,26 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "핵심 아이템 갈라진 하늘 공격력 45→40 하향으로 자르반 4세 딜 기대치가 낮아졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향으로 자르반 4세 특유의 돌진 후 생존력이 약화됐습니다.",
+          "text": "갈라진 하늘 체력 450→400 너프로 이를 핵심으로 쓰던 자르반 4세의 선호도가 떨어졌습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "트런들 W 공격 속도 최대 110%로 상향되며 정글 경쟁 구도에서 픽을 잠식했습니다.",
+          "text": "갈라진 하늘 공격력 45→40 하향이 자르반 4세의 딜·생존 모두를 약화시켰습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "트런들 W 공격 속도 최대 90%→110% 버프로 정글 경쟁에서 밀렸을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "키아나 Q 피해량 상향으로 대체 다이브형 픽이 늘어난 영향으로 보입니다.",
-          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
+          "text": "초가스 E 피해량 10 상향으로 탱커형 정글 픽 수요가 분산됐습니다.",
+          "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
           "verified": true,
           "confidence": "low"
         }
@@ -1983,7 +1855,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "자르반 4세 픽률이 8.7%→6.6%(-2.2%p) 하락했고, 핵심 아이템 갈라진 하늘의 공격력·체력 동시 너프가 주요 원인으로 보입니다.",
+        "summary": "자르반 4세 직접 변경은 없지만, 핵심템 갈라진 하늘의 공격력·체력 동시 너프로 픽률이 8.7%→6.6%로 떨어졌습니다.",
         "summaryCites": [
           "note:26.17:item:sundered-sky:0aec77fe",
           "note:26.17:item:sundered-sky:4c4f025e"
@@ -2014,19 +1886,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 이를 애용하던 리 신의 코어 빌드 가치가 하락했습니다.",
+          "text": "리 신 주력 코어인 갈라진 하늘 공격력이 45에서 40으로 하향돼 정글 주도권이 약화됐습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "갈라진 하늘 체력 450→400 추가 하향이 리 신의 초반 교전 유지력을 떨어뜨렸습니다.",
+          "text": "갈라진 하늘 체력도 450에서 400으로 줄어 초반 교전 생존력이 떨어졌습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "트런들 W 공격 속도 최대 90→110% 상향으로 정글 픽 경쟁에서 지분을 뺏겼습니다.",
+          "text": "트런들 W 공격 속도가 최대 110%로 상향돼 정글 픽 경쟁에서 수요가 분산됐습니다.",
           "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
           "verified": true,
           "confidence": "low"
@@ -2050,7 +1922,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "리 신 픽률이 25.9%→23.8%(-2.1%p)로 내렸습니다. 직접 조항은 없고 갈라진 하늘 공격력·체력 하향이 유력합니다.",
+        "summary": "리 신 픽률이 25.9%→23.8%(-2.1%p)로 내렸습니다. 코어 아이템 갈라진 하늘의 공격력·체력 하향이 주요 원인입니다.",
         "summaryCites": [
           "note:26.17:item:sundered-sky:0aec77fe",
           "note:26.17:item:sundered-sky:4c4f025e"
@@ -2081,19 +1953,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "핵심 코어인 갈라진 하늘 공격력 45→40 하향으로 정글 딜링 효율이 떨어졌습니다.",
+          "text": "자르반 주력 아이템 갈라진 하늘 공격력 45→40 너프로 정글 자르반 빌드 가치가 하락했습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "갈라진 하늘 체력 450→400 하향으로 앞라인 유지력이 약해져 선호도가 낮아졌습니다.",
+          "text": "갈라진 하늘 체력 450→400 추가 너프로 탱키함이 줄어 선호도가 떨어졌습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "트런들 W 공격속도 최대 110%로 상향되며 정글 픽 경쟁에서 밀렸습니다.",
+          "text": "트런들 W 공격 속도 최대 90%→110% 버프로 정글 경쟁자가 강해진 영향일 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
           "verified": true,
           "confidence": "low"
@@ -2117,7 +1989,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "자르반 4세 정글 픽률이 8.2%→6.2%(-2.1%p) 하락했고, 코어 아이템 갈라진 하늘의 공격력·체력 하향이 주요 원인으로 보입니다.",
+        "summary": "자르반 직접 변경은 없으나 핵심 아이템 갈라진 하늘이 공격력 45→40, 체력 450→400으로 너프되며 픽률이 2.1%p 하락했습니다.",
         "summaryCites": [
           "note:26.17:item:sundered-sky:0aec77fe",
           "note:26.17:item:sundered-sky:4c4f025e"
@@ -2148,19 +2020,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 리 신의 주력 빌드 파워가 약화됐습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향이 겹쳐 초중반 교전 안정성이 떨어졌습니다.",
+          "text": "갈라진 하늘 체력 450→400 너프로 리 신의 핵심 빌드 가치가 떨어졌습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "트런들 W 공격 속도 최대 110%로 상향되며 정글 픽 경쟁에서 밀렸습니다.",
+          "text": "갈라진 하늘 공격력 45→40 하향이 리 신 코어 아이템 효율을 함께 낮췄습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "트런들 W 공격 속도 최대 90%→110% 버프로 정글 경쟁자에게 픽을 내줬을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
           "verified": true,
           "confidence": "low"
@@ -2184,7 +2056,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "리 신 정글 픽률이 25.6%→23.5%(-2.0%p)로 내려갔는데, 갈라진 하늘 공격력·체력 동시 하향이 빌드 파워를 깎은 영향으로 보입니다.",
+        "summary": "리 신 정글 픽률이 25.6%→23.5%(-2.0%p) 하락했습니다. 직접 조항은 없고 코어템 갈라진 하늘의 공격력·체력 동반 너프가 주원인입니다.",
         "summaryCites": [
           "note:26.17:item:sundered-sky:0aec77fe",
           "note:26.17:item:sundered-sky:4c4f025e"
@@ -2215,19 +2087,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "야스오의 치명타 피해량 감소 폭이 10%에서 5%로 완화되며 치명타·공속 빌드 가치가 올랐습니다.",
+          "text": "야스오 치명타 피해량 페널티가 -10%에서 -5%로 완화되며 루난을 코어로 쓰는 야스오 픽이 늘었습니다.",
           "candidateNoteId": "note:26.17:champion:yasuo:66635940",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "요네도 치명타 피해량 감소가 5%로 줄어, 루난을 쓰는 핵심 사용자층의 픽이 늘었습니다.",
+          "text": "요네도 치명타 피해량 페널티가 -10%에서 -5%로 완화돼 루난 중심 빌드 수요가 커졌습니다.",
           "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 공속 중심 조합 선호가 커졌습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 공속 빌드 전반이 강해진 영향일 수 있습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
@@ -2251,10 +2123,77 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "루난의 허리케인 채택률이 2.3%→3.2%(+0.9%p) 상승했고, 야스오·요네의 치명타 피해량 감소 완화(-10%→-5%)가 주요 배경으로 보입니다.",
+        "summary": "루난의 허리케인 채택률이 2.3%→3.2%(+0.9%p) 올랐습니다. 야스오·요네의 치명타 피해 페널티가 -10%→-5%로 완화된 여파입니다.",
         "summaryCites": [
           "note:26.17:champion:yasuo:66635940",
           "note:26.17:champion:yone:c6a149c7"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "item:3109:adoptionRate",
+      "entityType": "item",
+      "entityKey": "3109",
+      "entityName": "기사의 맹세",
+      "metric": "adoptionRate",
+      "before": 0.02289,
+      "after": 0.03035,
+      "delta": 0.007459999999999998,
+      "ci": [
+        0.00605052721764399,
+        0.008872581655883454
+      ],
+      "n": {
+        "before": 100000,
+        "after": 100000
+      },
+      "q": 0,
+      "status": "indirect-effect",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 탱키 지원 아이템 수요가 기사의 맹세로 이동했습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "야스오 치명타 피해량 페널티가 -10%에서 -5%로 완화되며, 이를 보호하는 기사의 맹세 수요가 늘었을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "요네도 치명타 페널티가 -5%로 완화돼 동반 서포터의 기사의 맹세 선택이 증가했습니다.",
+          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8367128199",
+          "KR_8367044760",
+          "KR_8366970663",
+          "KR_8363572037",
+          "KR_8362440181",
+          "KR_8362325214",
+          "KR_8362227218",
+          "KR_8360724805",
+          "KR_8360457271",
+          "KR_8360218585"
+        ],
+        "aggregatePath": "data/aggregated/26.17/items.json#rows[itemId=3109]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-Sundered-Sky"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "기사의 맹세 채택률이 2.3%→3.0%(+0.7%p)로 올랐습니다. 갈라진 하늘 공격력·체력 너프에 따른 수요 이동이 주원인입니다.",
+        "summaryCites": [
+          "note:26.17:item:sundered-sky:0aec77fe",
+          "note:26.17:item:sundered-sky:4c4f025e"
         ],
         "summaryVerified": true
       }
@@ -2282,25 +2221,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "야스오 치명타 피해량 감소가 -10%→-5%로 완화돼 치명타 아이템 가치가 올랐습니다.",
+          "text": "야스오 치명타 피해량 감소 폭이 -10%에서 -5%로 완화돼 치명타 아이템 가치가 올랐습니다.",
           "candidateNoteId": "note:26.17:champion:yasuo:66635940",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "요네도 치명타 피해량 감소 -5%로 완화되어 공속·치명타 빌드 선택이 늘었습니다.",
+          "text": "요네도 치명타 피해량 감소가 -5%로 완화되며 치명타 중심 빌드 채택이 늘었습니다.",
           "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25%로 공속 중심 빌드 경로가 전반적으로 강해졌습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 공격력 45→40 너프로 대체 아이템 수요가 유령 무희로 이동했을 수 있습니다.",
+          "text": "갈라진 하늘이 공격력 45→40으로 약화돼 근접 딜러 아이템 수요가 분산됐습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "low"
@@ -2324,7 +2257,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "유령 무희 채택률이 1.1%→1.6%(+0.5%p) 올랐는데, 야스오·요네의 치명타 피해량 감소가 -5%로 완화된 파급 효과로 보입니다.",
+        "summary": "야스오·요네의 치명타 피해량 감소가 -10%→-5%로 완화되며 유령 무희 채택률이 1.1%→1.6%로 0.5%p 올랐습니다.",
         "summaryCites": [
           "note:26.17:champion:yasuo:66635940",
           "note:26.17:champion:yone:c6a149c7"
@@ -2355,20 +2288,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 전사 아이템 수요가 대체 방어템으로 이동했을 수 있습니다.",
+          "text": "갈라진 하늘 공격력 45→40 너프로 근접 전사들의 1~2코어가 방어 아이템으로 이동했습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "갈라진 하늘 체력 450→400 하향으로 체력·방어 스탯 보완 구매가 늘었을 수 있습니다.",
+          "text": "갈라진 하늘 체력 450→400 하향으로 체력·방어력을 함께 주는 대체재 수요가 늘었습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "이렐리아 Q 계수 70%→80% 상향 등 AD 브루저 강세로 방어력 아이템 선택이 증가했습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 평타 딜러 압박이 커져 방어 아이템 수요가 늘었을 수 있습니다.",
+          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
         }
@@ -2391,7 +2324,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "망자의 갑옷 채택률이 0.6%→1.0%로 올랐습니다. 갈라진 하늘 공격력 45→40, 체력 450→400 하향에 따른 전사 아이템 대체 수요가 유력합니다.",
+        "summary": "망자의 갑옷 채택률이 0.6%→1.0%(+0.4%p) 상승했습니다. 갈라진 하늘의 공격력·체력 하향으로 전사 빌드가 이 아이템으로 옮겨간 영향입니다.",
         "summaryCites": [
           "note:26.17:item:sundered-sky:0aec77fe",
           "note:26.17:item:sundered-sky:4c4f025e"
@@ -2422,26 +2355,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "갈라진 하늘 체력 450→400 하향으로 전사 첫 아이템 수요가 강철심장으로 이동했습니다.",
+          "text": "갈라진 하늘 체력이 450에서 400으로 줄며 전사·탱커의 체력 아이템 선택이 강철심장으로 분산됐습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "갈라진 하늘 공격력 45→40 하향이 겹치며 대체재로서 강철심장 선호가 올랐습니다.",
+          "text": "갈라진 하늘 공격력이 45에서 40으로 하향돼 1코어 경쟁력이 떨어졌습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "초가스 E 피해량 10 상향으로 체력 중심 탱커 픽이 늘며 강철심장 채택을 밀어올렸습니다.",
+          "text": "초가스 E 기본 피해량 10 상승으로 체력 스택 챔피언 픽이 늘어난 영향이 있어 보입니다.",
           "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "트런들 W 공격속도 최대 110%로 상향되며 체력형 아이템 빌드 수요가 증가했습니다.",
-          "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
           "verified": true,
           "confidence": "low"
         }
@@ -2464,7 +2391,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "강철심장 채택률이 1.0%→1.3%(+0.3%p) 올랐는데, 갈라진 하늘 체력 450→400·공격력 45→40 하향에 따른 대체 구매로 보입니다.",
+        "summary": "강철심장 채택률이 1.0%에서 1.3%로 올랐습니다. 갈라진 하늘의 체력 450→400, 공격력 45→40 하향으로 체력 아이템 수요가 이동한 결과입니다.",
         "summaryCites": [
           "note:26.17:item:sundered-sky:4c4f025e",
           "note:26.17:item:sundered-sky:0aec77fe"
@@ -2498,20 +2425,14 @@
       ],
       "causes": [
         {
-          "text": "제라스 Q 피해·체력 너프로 미드 견제 챔피언이 약해지며 키아나 우선 밴이 늘었을 수 있습니다",
-          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "야스오 치명타 피해 감소 완화에도 미드 근접 딜러 구도가 흔들려 밴 우선순위가 이동했을 수 있습니다",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "그레이브즈 Q 계수 너프로 정글 강자가 빠지며 키아나 견제 밴이 집중됐을 수 있습니다",
+          "text": "그레이브즈 Q 폭발 피해 계수 하향으로 비워진 밴 슬롯이 키아나로 옮겨갔을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "제라스 Q 피해량과 체력 하향으로 미드 밴 우선순위가 재배치된 영향으로 보입니다.",
+          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
           "verified": true,
           "confidence": "low"
         }
@@ -2534,10 +2455,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "키아나 밴률이 26.8%→42.4%(+15.7%p)로 급등했습니다. 제라스·그레이브즈 너프로 경쟁 챔피언이 빠진 반사 효과로 추정됩니다.",
+        "summary": "키아나 밴률이 26.8%→42.4%(+15.7%p)로 급등했고, 그레이브즈·제라스 하향에 따른 밴 슬롯 이동이 일부 작용한 것으로 보입니다.",
         "summaryCites": [
-          "note:26.17:champion:xerath:43a6f4aa",
-          "note:26.17:champion:graves:0bc5877b"
+          "note:26.17:champion:graves:0bc5877b",
+          "note:26.17:champion:xerath:43a6f4aa"
         ],
         "summaryVerified": true
       }
@@ -2568,20 +2489,26 @@
       ],
       "causes": [
         {
-          "text": "트런들 W 공격 속도 30~110%로 상향돼 정글 경쟁 구도에서 녹턴 입지가 밀렸을 수 있습니다.",
+          "text": "갈라진 하늘 공격력 45→40 하향으로 이를 핵심 아이템으로 쓰는 녹턴의 딜이 줄었습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "갈라진 하늘 체력 450→400 하향이 겹쳐 녹턴의 생존력까지 함께 떨어졌습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "트런들 W 공격 속도 90%→110% 상향으로 정글 경쟁 구도가 불리해졌을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "초가스 E 기본 피해량 10 상향으로 근접 탱커 상대 난이도가 올랐을 수 있습니다.",
+          "text": "초가스 E 피해량 상향으로 상위 티어 정글·탑 매치업 부담이 커졌습니다.",
           "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 25%로 상향돼 경쟁 AD 챔피언들의 상대적 성능이 올랐습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
         }
@@ -2604,9 +2531,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "녹턴 승률이 48.9%→40.1%(-8.8%p)로 급락했으나 CI 하단이 0에 닿고 표본이 212판이라 과대 추정 소지가 있으며, 트런들 공속 상향 등 정글 경쟁 변화가 일부 작용했을 수 있습니다.",
+        "summary": "녹턴 승률 48.9%→40.1%(-8.8%p) 급락은 주력 아이템 갈라진 하늘의 공격력·체력 동시 하향 여파가 큽니다.",
         "summaryCites": [
-          "note:26.17:champion:trundle:85be03ea"
+          "note:26.17:item:sundered-sky:0aec77fe",
+          "note:26.17:item:sundered-sky:4c4f025e"
         ],
         "summaryVerified": true
       }
@@ -2636,26 +2564,20 @@
       ],
       "causes": [
         {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 나서스 주력 아이템 성능이 약화됐습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향으로 초반 라인 생존력이 함께 줄었습니다.",
+          "text": "갈라진 하늘 체력 450→400 너프로 나서스의 라인 유지력이 함께 떨어졌습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "이렐리아 Q 계수 70%→80% 상향으로 근접 미드 맞라인 압박이 커졌습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "키아나 Q 피해량 상향으로 미드 딜교환 열세가 심해졌습니다.",
-          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
+          "text": "갈라진 하늘 공격력 45→40 너프가 나서스 코어 아이템 파워를 낮췄을 수 있습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "이렐리아 Q 계수 70%→80% 버프로 미드 근접 맞대결 난이도가 올라갔습니다.",
+          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
           "verified": true,
           "confidence": "low"
         }
@@ -2678,10 +2600,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "나서스 미드 승률 49.2%→42.2%(-7.1%p)는 갈라진 하늘 공격력·체력 하향 여파로 보이나, CI가 0을 포함해 표본 변동도 섞여 있습니다.",
+        "summary": "나서스 미드 승률이 49.2%→42.2%(-7.1%p)로 떨어졌으나 CI가 0을 포함해 불확실하며, 갈라진 하늘 체력·공격력 너프가 지속력 하락에 겹친 것으로 보입니다.",
         "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
+          "note:26.17:item:sundered-sky:4c4f025e",
+          "note:26.17:item:sundered-sky:0aec77fe"
         ],
         "summaryVerified": true
       }
@@ -2711,16 +2633,22 @@
       ],
       "causes": [
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25%로 치명타 딜러 코어 강화, 야스오 체감 강도 상승",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 야스오 코어 빌드 파워가 올라 밴 우선순위가 상승했습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "요네도 치명타 피해량 페널티가 -10%→-5%로 완화돼 치명타 검사 계열 전반이 상향",
+          "text": "요네도 치명타 피해량 감소가 -10%→-5%로 완화돼 같은 계열 챔피언 전반의 체감 강도가 올랐습니다.",
           "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
           "verified": true,
           "confidence": "medium"
+        },
+        {
+          "text": "베인 W 고정 피해 너프로 탱커 견제력이 줄며 야스오의 상대 난도가 낮아졌을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+          "verified": true,
+          "confidence": "low"
         }
       ],
       "evidence": {
@@ -2741,7 +2669,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "야스오 밴률이 10.9%→16.1%(+5.2%p)로 급등했습니다. 치명타 페널티 완화가 사실상 상향이고, 폭풍갈퀴 공격 속도 25% 버프가 힘을 보탰습니다.",
+        "summary": "야스오 밴률이 10.9%→16.1%(+5.2%p)로 올랐습니다. 폭풍갈퀴 공격 속도 25% 상향이 코어 빌드를 강화한 영향입니다.",
         "summaryCites": [
           "note:26.17:item:stormrazor:0a1d6b43"
         ],
@@ -2776,20 +2704,20 @@
       ],
       "causes": [
         {
-          "text": "공격 속도 증가량이 2.35%에서 1.5%로 낮아져 계수 상향의 이득이 상쇄됐습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "medium"
+          "text": "아우렐리온 솔 W 쿨감 버프로 미드 경쟁 픽이 강해져 르블랑 상대 난도가 올랐습니다.",
+          "candidateNoteId": "note:26.17:champion:aurelionsol:30712737",
+          "verified": true,
+          "confidence": "low"
         },
         {
-          "text": "이렐리아 Q 계수 70%→80% 등 연속 버프로 미드 대치 구도가 불리해졌을 수 있습니다.",
+          "text": "이렐리아 Q 계수 70%→80% 버프로 근접 미드 상대 시 르블랑의 라인 우위가 줄었습니다.",
           "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "아우렐리온 솔 Q 마나 소모 감소로 미드 라인전 주도권 경쟁이 강해졌습니다.",
-          "candidateNoteId": "note:26.17:champion:aurelionsol:7b32ba55",
+          "text": "키아나 Q 피해량 버프로 암살자 미드 경쟁이 심화된 영향일 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
           "verified": true,
           "confidence": "low"
         }
@@ -2812,9 +2740,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "르블랑 승률 -5.1%p는 CI가 0을 포함해 확정적이지 않으며, 공격 속도 증가량 2.35%→1.5% 하향이 버프 효과를 상쇄한 것으로 보입니다.",
+        "summary": "르블랑 승률 -5.1%p는 CI가 0을 포함해 불확실하며, 아우렐리온 솔·이렐리아·키아나 버프로 미드 경쟁이 거세진 영향으로 보입니다.",
         "summaryCites": [
-          "note:26.17:champion:leblanc:606fc9c6"
+          "note:26.17:champion:aurelionsol:30712737",
+          "note:26.17:champion:irelia:9035ffdc",
+          "note:26.17:champion:qiyana:5a6d587d"
         ],
         "summaryVerified": true
       }
@@ -2844,26 +2774,26 @@
       ],
       "causes": [
         {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 요네 탑의 핵심 코어템 파워가 감소했습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향으로 라인전·한타 생존력이 함께 줄었습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "이렐리아 Q 계수 70%→80% 상향으로 탑 맞대결 구도가 불리해졌습니다.",
+          "text": "이렐리아 Q 계수 70%→80% 등 상향으로 탑 맞대결 난이도가 올라갔습니다.",
           "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "트런들 W 공격 속도 최대 90%→110% 상향으로 탑 경쟁 챔피언이 강해졌습니다.",
+          "text": "트런들 W 공격 속도 최대 90%→110%로 탑 근접 대치에서 요네가 밀립니다.",
           "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "초가스 E 기본 피해 10 상향으로 탑 라인전 카운터 픽이 강해졌습니다.",
+          "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 브루저형 빌드 가치가 내려갔습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "low"
         }
@@ -2886,10 +2816,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "요네 탑 승률이 51.7%→47.0%(-4.7%p)로 떨어졌으나 CI가 0을 포함하며, 갈라진 하늘 공격력·체력 하향이 유력한 원인입니다.",
+        "summary": "요네 탑 승률이 51.7%→47.0%(-4.7%p)로 떨어졌지만 CI가 0을 포함하며, 이렐리아·트런들 상향 등 탑 경쟁 픽 강화가 배경으로 보입니다.",
         "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
+          "note:26.17:champion:irelia:9035ffdc",
+          "note:26.17:champion:trundle:85be03ea"
         ],
         "summaryVerified": true
       }
@@ -2920,13 +2850,13 @@
       ],
       "causes": [
         {
-          "text": "제라스 Q 피해량 5 감소로 장거리 마법사 구도에서 아우렐리온 솔의 상대 우위가 커졌을 수 있습니다.",
+          "text": "제라스 Q 피해량과 체력 너프로 미드 포킹 AP 경쟁자가 약화된 영향일 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "제라스 기본 체력 596→575 너프로 미드 포킹 대치 구도가 완화됐을 수 있습니다.",
+          "text": "제라스 체력 596→575 너프로 장거리 마법사 구도에서 아우렐리온 솔이 반사이익을 얻은 듯합니다.",
           "candidateNoteId": "note:26.17:champion:xerath:080e761c",
           "verified": true,
           "confidence": "low"
@@ -2950,10 +2880,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "아우렐리온 솔 승률 4.7%p 상승은 95% CI가 [-4.2%p, 13.5%p]로 0을 포함해 표본 변동일 소지가 크며, 제라스 너프의 간접 반사이익 정도가 보조 근거입니다.",
+        "summary": "승률 4.7%p 상승했으나 CI가 -4.2~13.5%p로 0을 포함해 표본 변동 범위이며, 제라스 너프의 반사이익도 일부 작용한 것으로 보입니다.",
         "summaryCites": [
-          "note:26.17:champion:xerath:43a6f4aa",
-          "note:26.17:champion:xerath:080e761c"
+          "note:26.17:champion:xerath:43a6f4aa"
         ],
         "summaryVerified": true
       }
@@ -2984,22 +2913,22 @@
       ],
       "causes": [
         {
-          "text": "미드 경쟁자 제라스가 Q 피해량 5 감소로 약화되며 키아나 선택지가 늘었을 수 있습니다.",
+          "text": "야스오 치명타 피해량 감소 폭이 -10%에서 -5%로 조정되며 미드 경쟁 구도가 흔들렸습니다.",
+          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "요네도 같은 치명타 페널티 조정을 받아 미드 픽 분포가 키아나 쪽으로 이동했을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "제라스 Q 피해량과 체력 너프로 빠진 미드 지분을 키아나가 흡수했습니다.",
           "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
           "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "제라스 기본 체력 596→575 너프로 미드 구도에서 키아나 선호가 커졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:080e761c",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "그레이브즈 Q 계수 너프로 정글 AD 암살 역할 일부가 키아나로 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:39e7c86f",
-          "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         }
       ],
       "evidence": {
@@ -3020,9 +2949,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "키아나 픽률이 16.1%→20.4%(+4.4%p)로 올랐고, 제라스 체력·Q 너프 등 경쟁 챔피언 약화가 반사 이익을 준 것으로 보입니다.",
+        "summary": "키아나 픽률이 16.1%→20.4%(+4.4%p) 올랐습니다. 제라스 Q 피해량 너프 등 미드 경쟁군 약화가 주요 배경입니다.",
         "summaryCites": [
-          "note:26.17:champion:xerath:080e761c",
           "note:26.17:champion:xerath:43a6f4aa"
         ],
         "summaryVerified": true
@@ -3054,20 +2982,26 @@
       ],
       "causes": [
         {
-          "text": "경쟁 정글러 그레이브즈 Q 폭발 계수 너프로 정글 주도권 경쟁이 완화됐습니다.",
+          "text": "정글 최상위권 그레이브즈의 Q 폭발 피해 계수가 10%p 깎여 키아나가 상대적 이득을 봤습니다.",
           "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "녹턴 기본 체력 655→640 너프로 초반 정글 교전 상대가 약화됐습니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
+          "text": "그레이브즈 Q 최초 피해 계수도 65%→55%로 하락해 정글 경쟁 구도가 키아나에 유리해졌습니다.",
+          "candidateNoteId": "note:26.17:champion:graves:39e7c86f",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 브루저형 정글러가 약해졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+          "text": "녹턴 기본 방어력 38→36 너프로 동선 경쟁·초반 교전에서 키아나가 앞섭니다.",
+          "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "갈라진 하늘 체력 450→400 너프로 정글 브루저군이 약화됐습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
           "confidence": "low"
         }
@@ -3090,10 +3024,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "키아나 정글 승률이 51.2%→55.6%(+4.3%p)로 올랐는데, 몬스터 피해 너프에도 그레이브즈·녹턴 너프로 정글 경쟁자가 약화된 영향으로 보입니다.",
+        "summary": "키아나 정글 승률 51.2%→55.6%(+4.3%p)는 몬스터 피해 너프에도 그레이브즈 Q 계수 하향 등 경쟁 정글러 약화가 상쇄한 결과입니다.",
         "summaryCites": [
           "note:26.17:champion:graves:0bc5877b",
-          "note:26.17:champion:nocturne:fd4d5d23"
+          "note:26.17:champion:graves:39e7c86f"
         ],
         "summaryVerified": true
       }
@@ -3124,20 +3058,14 @@
       ],
       "causes": [
         {
-          "text": "제라스 Q 피해량과 체력이 깎이며 미드 경쟁 구도가 약해져 키아나가 반사이익을 얻었습니다.",
+          "text": "제라스 Q 피해량과 체력 너프로 미드 견제형 상대가 약해져 키아나가 반사이익을 얻은 것으로 보입니다.",
           "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "야스오 치명타 피해량 감소 폭 조정 등 미드 근접 딜러 지형 변화가 매치업에 영향을 줬습니다.",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "요네도 같은 치명타 조정 대상이라 키아나의 미드 대면 난도가 달라졌습니다.",
-          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
+          "text": "제라스 기본 체력 596→575 하락으로 키아나의 강한 폭발 딜 진입이 더 쉬워졌습니다.",
+          "candidateNoteId": "note:26.17:champion:xerath:080e761c",
           "verified": true,
           "confidence": "low"
         }
@@ -3160,9 +3088,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "키아나 미드 승률이 48.5%→52.7%(+4.2%p)로 올랐으나 CI가 -2.7~11.0%p로 넓어, 제라스 Q·체력 너프 등 미드 경쟁 약화가 일부 기여한 수준입니다.",
+        "summary": "키아나 미드 승률 48.5%→52.7%(+4.2%p)이나 95% CI가 0을 포함해 변동일 수 있고, 제라스 Q·체력 너프가 미드 구도상 간접 이득을 준 정도입니다.",
         "summaryCites": [
-          "note:26.17:champion:xerath:43a6f4aa"
+          "note:26.17:champion:xerath:43a6f4aa",
+          "note:26.17:champion:xerath:080e761c"
         ],
         "summaryVerified": true
       }
@@ -3193,20 +3122,20 @@
       ],
       "causes": [
         {
-          "text": "미드 경쟁자 제라스 체력 596→575로 감소해 키아나의 돌진 처형이 쉬워졌습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:080e761c",
+          "text": "정글 경쟁자 그레이브즈의 Q 폭발 피해 계수가 10% 하향돼 키아나 픽 가치가 올랐습니다.",
+          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "제라스 Q 피해량 하향으로 원거리 견제형 미드 상대가 약화됐습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+          "text": "녹턴이 기본 체력 655→640, 방어력 38→36으로 약화되며 정글 대결 구도가 키아나에 유리해졌습니다.",
+          "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "그레이브즈 Q 계수 너프로 초반 정글 교전 압박이 줄어 키아나 로밍 여건이 개선됐습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+          "text": "미드 상대 제라스가 체력 596→575, Q 피해 5 하향돼 키아나의 접근 암살이 쉬워졌습니다.",
+          "candidateNoteId": "note:26.17:champion:xerath:080e761c",
           "verified": true,
           "confidence": "low"
         }
@@ -3229,10 +3158,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "키아나 승률 51.3%→55.0%(+3.7%p). 제라스 체력 596→575와 Q 하향 등 미드 경쟁자 약화가 힘을 보탠 것으로 해석됩니다.",
+        "summary": "키아나 승률이 51.3%→55.0%(+3.7%p) 상승했고, 그레이브즈 Q 계수 하향 등 경쟁 챔피언 약화가 함께 작용했습니다.",
         "summaryCites": [
-          "note:26.17:champion:xerath:080e761c",
-          "note:26.17:champion:xerath:43a6f4aa"
+          "note:26.17:champion:graves:0bc5877b"
         ],
         "summaryVerified": true
       }
@@ -3263,32 +3191,26 @@
       ],
       "causes": [
         {
-          "text": "그레이브즈 Q 폭발 계수 너프로 AD 정글 상위픽이 빠지며 키아나가 반사 이익을 얻었습니다.",
+          "text": "그레이브즈 Q 폭발 피해 계수가 10%p 하향돼 AD 정글 자리가 비었고, 그 수요가 키아나로 이동했습니다.",
           "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "그레이브즈 Q 최초 피해 계수도 65%→55%로 하향돼 정글 파이가 재분배됐습니다.",
+          "text": "그레이브즈 Q 최초 피해 계수도 65%→55%로 낮아져 초반 정글 주도권이 약화됐습니다.",
           "candidateNoteId": "note:26.17:champion:graves:39e7c86f",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "녹턴 체력 655→640 등 기본 능력치 하향으로 암살 정글 경쟁자가 약화됐습니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "녹턴 방어력 38→36 하향이 정글 생존력을 떨어뜨려 픽 이동을 유발했습니다.",
+          "text": "녹턴 방어력 38→36 하향으로 암살형 정글 경쟁자가 줄었습니다.",
           "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향이 AD 딜러 빌드 효율을 올렸습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+          "text": "녹턴 체력 655→640 하향이 겹쳐 정글 픽 분포가 키아나 쪽으로 기울었을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
           "verified": true,
           "confidence": "low"
         }
@@ -3311,11 +3233,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "키아나 정글 픽률이 11.4%→15.0%(+3.6%p)로 올랐는데, 몬스터 피해 계수 하향에도 그레이브즈 Q 계수 너프와 녹턴 기본 능력치 하향으로 정글 경쟁자가 빠진 영향으로 보입니다.",
+        "summary": "키아나 정글 몬스터 피해 계수가 내려갔는데도 픽률이 11.4%→15.0%(+3.6%p) 올랐습니다. 그레이브즈 Q 계수 하향으로 생긴 AD 정글 공백이 주된 배경입니다.",
         "summaryCites": [
-          "note:26.17:champion:qiyana:9d50d4d6",
           "note:26.17:champion:graves:0bc5877b",
-          "note:26.17:champion:nocturne:fd4d5d23"
+          "note:26.17:champion:graves:39e7c86f"
         ],
         "summaryVerified": true
       }
@@ -3390,20 +3311,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:thresh:83ce59dd"
       ],
-      "causes": [
-        {
-          "text": "베인 W 고정 피해 하향으로 봇 구도가 바뀌며 유틸 서포터 선호가 커졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 공속 원딜이 늘며 보호형 서포터 수요가 올랐을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8368725194",
@@ -3422,10 +3330,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "쓰레쉬는 E 피해량 하향에도 픽률이 7.3%→10.5%(+3.3%p) 올랐고, 베인 하향 등 봇 구도 변화가 유력한 간접 요인입니다.",
-        "summaryCites": [
-          "note:26.17:champion:vayne:1da6ddd1"
-        ],
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -3452,7 +3358,14 @@
       "matchedNoteIds": [
         "note:26.17:champion:thresh:83ce59dd"
       ],
-      "causes": [],
+      "causes": [
+        {
+          "text": "폭풍갈퀴 공격 속도 20%→25% 버프로 공격적인 바텀 조합이 늘며 쓰레쉬 선호가 올랐을 수 있습니다.",
+          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8368725194",
@@ -3471,8 +3384,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
+        "summary": "쓰레쉬 E 피해량 너프에도 픽률이 7.3%→10.5%(+3.3%p) 상승했고, 폭풍갈퀴 공속 버프에 따른 바텀 메타 변화 외에 설명 조항이 없습니다.",
+        "summaryCites": [
+          "note:26.17:item:stormrazor:0a1d6b43"
+        ],
         "summaryVerified": true
       }
     },
@@ -3502,14 +3417,8 @@
       ],
       "causes": [
         {
-          "text": "녹턴 방어력 38→36, 체력 655→640 너프로 후방 다이브 압박이 줄어 제라스 생존에 유리합니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "그레이브즈 Q 폭발 계수 하향으로 정글 갱킹 위협이 약해져 제라스가 반사이익을 봤을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+          "text": "쓰레쉬 E 피해량 감소로 원거리 포킹 조합의 하위 서포터 압박이 줄어 제라스 생존이 쉬워졌을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:thresh:83ce59dd",
           "verified": true,
           "confidence": "low"
         }
@@ -3532,8 +3441,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "제라스는 체력·Q 피해 너프에도 승률 46.9%→50.0%로 올랐지만, 95% CI가 [-3.5%p, 9.7%p]로 0을 포함해 표본 변동 범위입니다.",
-        "summaryCites": [],
+        "summary": "제라스는 체력·Q 피해량 너프에도 승률이 46.9%→50.0%로 올랐지만, 95% CI가 [-3.5%p, 9.7%p]로 0을 포함해 표본 변동 범위입니다.",
+        "summaryCites": [
+          "note:26.17:champion:xerath:080e761c",
+          "note:26.17:champion:xerath:43a6f4aa"
+        ],
         "summaryVerified": true
       }
     },
@@ -3562,20 +3474,20 @@
       ],
       "causes": [
         {
-          "text": "이렐리아 Q·R 계수 상향으로 미드 맞라인 난도가 올라 야스오 승률을 눌렀을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "르블랑 W 계수 80%→90% 등 미드 경쟁 챔피언 강화가 상대적 입지를 낮췄습니다.",
-          "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 AD 근접 딜러 빌드 체급이 하락했습니다.",
+          "text": "갈라진 하늘 공격력 45→40 하향이 야스오 빌드 위력을 낮췄을 수 있습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "갈라진 하늘 체력 450→400 하향으로 야스오 중후반 생존력이 약해졌습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "요네도 같은 치명타 피해 감소 완화를 받아 미드 픽 경쟁이 심해졌습니다.",
+          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
           "verified": true,
           "confidence": "low"
         }
@@ -3598,10 +3510,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "야스오 미드 승률이 54.8%→51.7%로 3.1%p 내렸지만 CI가 [-8.6%p, +2.5%p]로 0을 포함해, 이렐리아·르블랑 등 미드 강화의 간접 영향 가능성만 있습니다.",
+        "summary": "야스오 미드 승률 -3.1%p는 CI가 0을 포함해 유의하지 않으며, 갈라진 하늘 공격력·체력 하향이 일부 영향으로 보입니다.",
         "summaryCites": [
-          "note:26.17:champion:irelia:9035ffdc",
-          "note:26.17:champion:leblanc:887dc51f"
+          "note:26.17:item:sundered-sky:0aec77fe",
+          "note:26.17:item:sundered-sky:4c4f025e"
         ],
         "summaryVerified": true
       }
@@ -3634,14 +3546,20 @@
       ],
       "causes": [
         {
-          "text": "이렐리아 Q 계수 70%→80% 등 강화로 미드 라인전 매치업이 불리해졌을 수 있습니다.",
+          "text": "이렐리아 Q 계수 70%→80%, R 계수 70%→100% 버프로 미드 맞라인이 불리해졌을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "키아나 Q 피해량 10 상향으로 암살자 미드 경쟁이 심화됐습니다.",
+          "text": "키아나 Q 피해량·계수 버프로 미드 암살자 경쟁 구도가 르블랑에 불리해진 영향으로 보입니다.",
           "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "아우렐리온 솔 Q 마나 소모 감소·W 쿨감 버프로 미드 라인전 대치 난도가 올라갔습니다.",
+          "candidateNoteId": "note:26.17:champion:aurelionsol:7b32ba55",
           "verified": true,
           "confidence": "low"
         }
@@ -3664,11 +3582,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "르블랑 미드 승률 -3.0%p는 CI [-11.1%p, 5.2%p]로 유의하지 않고, 이렐리아·키아나 등 미드 경쟁자 강화가 일부 작용했을 수 있습니다.",
-        "summaryCites": [
-          "note:26.17:champion:irelia:9035ffdc",
-          "note:26.17:champion:qiyana:5a6d587d"
-        ],
+        "summary": "르블랑 미드 승률 -3.0%p는 95% CI [-11.1%p, 5.2%p]가 0을 포함해 유의하지 않고, 표본이 239→359로 늘어 유입 희석 영향이 큽니다.",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -3697,20 +3612,20 @@
       ],
       "causes": [
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 요네의 치명타 아이템 빌드 효율이 올랐습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 치명타 빌드 요네의 초중반 딜이 올랐습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "제라스 Q 피해량과 체력 하향으로 미드 원거리 견제 대항군이 약화됐습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+          "text": "제라스 체력 596→575 너프로 미드 경쟁 구도가 요네에게 유리해졌을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:xerath:080e761c",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "르블랑 W 계수 상향은 반대 방향 요인으로, 미드 구도 변화의 일부만 설명합니다.",
-          "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
+          "text": "제라스 Q 피해량 하향도 미드 대치 구도를 요네 쪽으로 기울였을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
           "verified": true,
           "confidence": "low"
         }
@@ -3733,7 +3648,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "요네 미드 승률 48.1%→50.8%(2.8%p)이나 CI가 0을 포함해 유의하지 않고, 폭풍갈퀴 공격 속도 25% 상향이 보조 요인입니다.",
+        "summary": "요네 미드 승률 48.1%→50.8%(+2.8%p)는 폭풍갈퀴 공격 속도 25% 상향 수혜로 보이나, 95% CI가 0을 포함해 확정적이지 않습니다.",
         "summaryCites": [
           "note:26.17:item:stormrazor:0a1d6b43"
         ],
@@ -3765,20 +3680,26 @@
       ],
       "causes": [
         {
-          "text": "요네도 같은 치명타 피해 보정 완화를 받아, 숙련자 픽이 요네로 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 브루저형 빌드 효율이 떨어졌습니다.",
+          "text": "갈라진 하늘 공격력 45→40 하향으로 야스오의 검술 빌드 화력이 줄었습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "갈라진 하늘 체력 450→400 하향으로 교전 생존력이 감소했습니다.",
+          "text": "갈라진 하늘 체력 450→400 하향이 야스오의 교전 생존력을 깎았습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "이렐리아 Q 계수 70%→80% 상향으로 근접 라인 대결 구도가 불리해졌습니다.",
+          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "이렐리아 R 주문력 계수 70%→100%로 카운터 픽의 한타 폭발력이 커졌습니다.",
+          "candidateNoteId": "note:26.17:champion:irelia:1f26947d",
           "verified": true,
           "confidence": "low"
         }
@@ -3801,10 +3722,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "야스오 승률 52.8%→50.2%(-2.6%p)이나 95% CI[-6.9%p, +1.8%p]로 유의하지 않고, 갈라진 하늘 공격력·체력 하향이 일부 기여했을 수 있습니다.",
+        "summary": "야스오 승률이 52.8%→50.2%(-2.6%p)로 내렸지만 CI가 0을 포함해 유의하지 않고, 갈라진 하늘 하향과 이렐리아 상향이 일부 영향으로 보입니다.",
         "summaryCites": [
           "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
+          "note:26.17:champion:irelia:9035ffdc"
         ],
         "summaryVerified": true
       }
@@ -3834,13 +3755,13 @@
       ],
       "causes": [
         {
-          "text": "생명력 흡수 10/15/20%로 하향됐지만 체감이 작아 후반 캐리력 경계심이 유지됐을 수 있습니다.",
-          "candidateNoteId": null,
-          "verified": false,
+          "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 대체 탑 브루저 위협이 줄어 나서스 밴이 몰렸을 수 있습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+          "verified": true,
           "confidence": "low"
         },
         {
-          "text": "트런들 W 공격 속도 상향 등 탑 근접 메타 강화가 나서스 선호·밴 인식에 영향을 줬을 수 있습니다.",
+          "text": "트런들 W 공격속도 90→110% 버프로 탑 밴 구도가 흔들리며 나서스 밴 지분이 변동했습니다.",
           "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
           "verified": true,
           "confidence": "low"
@@ -3864,9 +3785,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "나서스는 생명력 흡수 하향에도 밴률이 11.2%→13.8%(+2.5%p)로 올랐고, 패치노트로 명확히 설명되지 않습니다.",
+        "summary": "나서스 밴률이 11.2%→13.8%(+2.5%p) 올랐지만 생명력 흡수 너프와 방향이 반대라, 갈라진 하늘 너프 등 탑 메타 변화가 간접 원인으로 보입니다.",
         "summaryCites": [
-          "note:26.17:champion:nasus:0915ac64"
+          "note:26.17:item:sundered-sky:0aec77fe"
         ],
         "summaryVerified": true
       }
@@ -3901,20 +3822,20 @@
       ],
       "causes": [
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25%로 베인의 평타 기반 빌드가 이득을 봤습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 탑 브루저 상대 구도가 완화됐습니다.",
+          "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 탑 브루저 상대가 약해졌을 수 있습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "나서스 생명력 흡수 12/18/24%→10/15/20% 너프로 탑 대치 상대가 약해졌습니다.",
+          "text": "나서스 생명력 흡수 12/18/24%→10/15/20% 너프로 탑 대치 구도가 베인에 유리해진 측면.",
           "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향이 베인 빌드 효율을 일부 보완.",
+          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
         }
@@ -3937,9 +3858,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "베인 탑 승률 46.9%→49.3%(+2.4%p)는 CI가 0을 포함하고 표본이 298판이라 유의하지 않으며, 폭풍갈퀴 공격 속도 버프 등 간접 요인이 거론됩니다.",
+        "summary": "베인 탑 승률 2.4%p 상승은 CI [-4.3%p, 9.1%p]와 표본 298판으로 유의하지 않으며, 갈라진 하늘 너프로 인한 탑 브루저 약화가 일부 작용했습니다.",
         "summaryCites": [
-          "note:26.17:item:stormrazor:0a1d6b43"
+          "note:26.17:item:sundered-sky:0aec77fe"
         ],
         "summaryVerified": true
       }
@@ -3969,26 +3890,20 @@
       ],
       "causes": [
         {
-          "text": "야스오 치명타 피해량 감소 폭 축소 너프로 탑 대치 구도가 나서스에 유리해졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "요네도 같은 치명타 너프를 받아 나서스가 상대하기 수월해졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 경쟁 탑 브루저들의 교전 압박이 약해졌습니다.",
+          "text": "갈라진 하늘 공격력 45→40 하향으로 탑 브루저 대치 압박이 줄어 나서스 성장이 수월해졌습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "갈라진 하늘 체력 450→400 하향이 상대 탑 라이너 생존력을 깎았습니다.",
+          "text": "갈라진 하늘 체력 450→400 하향으로 나서스 상대 탑 챔피언의 라인 유지력이 낮아졌습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "베인 W 고정 피해 하향으로 탑 베인 등 최대 체력 비례 카운터의 위협이 줄었습니다.",
+          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
           "verified": true,
           "confidence": "low"
         }
@@ -4011,10 +3926,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "나서스는 생명력 흡수 너프에도 승률이 48.6%→50.8%로 올랐지만 CI가 0을 포함해 유의하지 않으며, 야스오·요네 치명타 너프로 인한 탑 구도 변화가 배경으로 보입니다.",
+        "summary": "나서스는 생명력 흡수 하향에도 승률이 2.1%p 올랐는데, 갈라진 하늘 공격력·체력 동시 하향으로 탑 상대 압박이 줄어든 영향입니다.",
         "summaryCites": [
-          "note:26.17:champion:yasuo:66635940",
-          "note:26.17:champion:yone:c6a149c7"
+          "note:26.17:item:sundered-sky:0aec77fe",
+          "note:26.17:item:sundered-sky:4c4f025e"
         ],
         "summaryVerified": true
       }
@@ -4044,7 +3959,7 @@
       ],
       "causes": [
         {
-          "text": "바텀 파트너 베인의 W 고정 피해 너프로 쓰레쉬 조합의 라인전 마무리력이 약해졌을 수 있습니다.",
+          "text": "베인 W 고정 피해 너프로 바텀 듀오 화력이 줄어 쓰레쉬 승률도 함께 눌렸을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
           "verified": true,
           "confidence": "low"
@@ -4068,7 +3983,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "쓰레쉬 승률은 51.7%→49.9%(-1.9%p)지만 CI가 [-6.6%p, 2.9%p]로 0을 포함해 노이즈 범위이며, 베인 W 너프로 인한 조합 약화가 일부 영향일 수 있습니다.",
+        "summary": "쓰레쉬 승률 -1.9%p는 CI가 [-6.6%p, 2.9%p]로 0을 포함해 유의하지 않고, 바텀 듀오인 베인 W 너프 여파가 겹친 정도입니다.",
         "summaryCites": [
           "note:26.17:champion:vayne:1da6ddd1"
         ],
@@ -4100,14 +4015,14 @@
       ],
       "causes": [
         {
-          "text": "베인 W 고정 피해 하향으로 원딜 파트너 화력이 줄어 봇 라인 주도권이 약해졌을 수 있습니다.",
+          "text": "바텀 파트너 베인의 W 고정 피해 하향으로 쓰레쉬 조합의 라인전 마무리력이 약해졌을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "녹턴 체력·방어력 하향 등 정글 변화로 봇 갱 구도가 달라진 영향이 겹쳤을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 바텀 원딜 선호 구도가 바뀌며 쓰레쉬 시너지가 흔들렸을 여지가 있습니다.",
+          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
         }
@@ -4130,10 +4045,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "쓰레쉬 승률 -1.8%p는 95% CI [-6.5%p, 2.9%p]로 0을 포함해 노이즈 범위이며, 베인 W 하향에 따른 봇 파트너 약화가 일부 겹쳤을 수 있습니다.",
-        "summaryCites": [
-          "note:26.17:champion:vayne:1da6ddd1"
-        ],
+        "summary": "쓰레쉬 승률 -1.8%p는 95% CI가 [-6.5%p, 2.9%p]로 0을 포함해 통계적으로 유의하지 않은 변동입니다.",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -4163,20 +4076,14 @@
       ],
       "causes": [
         {
-          "text": "갈라진 하늘 공격력 45→40 너프로 이를 활용하던 그레이브즈 빌드 파워가 하락했습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 너프로 정글 교전 생존력이 함께 낮아졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "트런들 W 공격 속도 상향으로 정글 경쟁 구도가 바뀐 영향을 배제하기 어렵습니다.",
+          "text": "트런들 W 공격 속도 30/50/70/90/110%로 상향돼 정글 경쟁에서 밀렸을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 AD 정글 코어 빌드 효율이 낮아졌습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "low"
         }
@@ -4199,10 +4106,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "그레이브즈 승률 -1.7%p는 신뢰구간이 0을 포함해 유의하지 않으며, 갈라진 하늘 공격력·체력 너프가 일부 기여했을 수 있습니다.",
+        "summary": "그레이브즈 승률 -1.7%p는 CI[-5.8, 2.4]로 유의하지 않고, 트런들 공속 상향과 갈라진 하늘 너프가 간접 요인입니다.",
         "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
+          "note:26.17:champion:trundle:85be03ea",
+          "note:26.17:item:sundered-sky:0aec77fe"
         ],
         "summaryVerified": true
       }
@@ -4232,20 +4139,8 @@
       ],
       "causes": [
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25%로 야스오의 핵심 치명타 빌드 초반 힘이 올라갔습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 야스오의 초반 교전력이 올랐을 수 있습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 탑 브루저 상대 체급 격차가 줄었습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향도 맞상대 탑 라이너의 라인전 내구도를 낮춥니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
           "confidence": "low"
         }
@@ -4268,7 +4163,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "야스오 탑 승률 1.6%p 상승은 폭풍갈퀴 공격 속도 25% 상향 수혜로 볼 수 있으나, CI가 [-7.8%p, 11.1%p]라 유의하지 않습니다.",
+        "summary": "야스오(탑) 승률 49.1%→50.7%(+1.6%p)는 CI [-7.8%p, 11.1%p]로 유의하지 않으며, 폭풍갈퀴 공격 속도 25% 상향이 일부 기여 요인입니다.",
         "summaryCites": [
           "note:26.17:item:stormrazor:0a1d6b43"
         ],
@@ -4301,20 +4196,20 @@
       ],
       "causes": [
         {
-          "text": "트런들 W 공격 속도 30~90%→30~110% 버프로 정글 경쟁 구도가 바뀐 영향 추정",
-          "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 공격력 45→40 너프로 AD 정글 아이템 효율이 전반적으로 하락",
+          "text": "갈라진 하늘 공격력 45→40 하향으로 그레이브즈 주력 빌드 딜이 줄었습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "키아나 Q 몬스터 피해 175%→160% 등 정글 캠프 클리어 메타 변동",
-          "candidateNoteId": "note:26.17:champion:qiyana:9d50d4d6",
+          "text": "갈라진 하늘 체력 450→400 하향으로 정글 교전 생존력이 함께 떨어졌습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "트런들 W 공격 속도 최대 110%로 상향되어 정글 경쟁 구도가 불리해졌을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
           "verified": true,
           "confidence": "low"
         }
@@ -4337,9 +4232,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "그레이브즈 승률 -1.6%p는 신뢰구간이 [-5.7%p, 2.5%p]로 0을 포함해 유의하지 않으며, 트런들 W 버프 등 정글 경쟁 변화가 일부 작용했을 수 있습니다.",
+        "summary": "그레이브즈 정글 승률 -1.6%p는 갈라진 하늘 공격력·체력 동시 하향의 빌드 약화가 주원인이며, CI가 0을 포함해 변동폭은 제한적입니다.",
         "summaryCites": [
-          "note:26.17:champion:trundle:85be03ea"
+          "note:26.17:item:sundered-sky:0aec77fe",
+          "note:26.17:item:sundered-sky:4c4f025e"
         ],
         "summaryVerified": true
       }
@@ -4371,22 +4267,16 @@
       ],
       "causes": [
         {
-          "text": "이렐리아 핵심템 갈라진 하늘 공격력 45→40 하향으로 버프 효과가 상쇄됐습니다.",
+          "text": "갈라진 하늘 공격력 45→40 너프로 이렐리아 핵심 코어 성능이 떨어졌습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "갈라진 하늘 체력 450→400 하향으로 이렐리아의 교전 생존력이 낮아졌습니다.",
+          "text": "갈라진 하늘 체력 450→400 너프가 이렐리아 브루저 빌드의 생존력을 낮췄습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
           "confidence": "medium"
-        },
-        {
-          "text": "R 주문력 계수 버프는 AD 주력 빌드에서 체감이 적어 승률 반등으로 이어지지 않았습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "low"
         }
       ],
       "evidence": {
@@ -4407,7 +4297,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "이렐리아 승률 -1.3%p는 CI가 [-6.9, 4.2]로 통계적 유의성이 없고, 코어템 갈라진 하늘의 공격력·체력 하향이 버프를 상쇄한 것으로 보입니다.",
+        "summary": "이렐리아 버프에도 승률 -1.3%p인 건 코어템 갈라진 하늘 공격력·체력 너프 영향이며, CI가 ±6%p대라 유의하지 않습니다.",
         "summaryCites": [
           "note:26.17:item:sundered-sky:0aec77fe",
           "note:26.17:item:sundered-sky:4c4f025e"
@@ -4440,25 +4330,25 @@
       ],
       "causes": [
         {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 나서스 핵심 아이템 성능이 떨어졌습니다.",
+          "text": "나서스가 자주 올리는 갈라진 하늘의 공격력이 45에서 40으로 줄어 성장 후 딜이 약해졌습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
-          "confidence": "medium"
+          "confidence": "low"
         },
         {
-          "text": "갈라진 하늘 체력 450→400 하향으로 나서스의 탑 라인 생존력이 감소했습니다.",
+          "text": "갈라진 하늘 체력이 450에서 400으로 감소해 나서스의 라인 유지력이 낮아졌을 수 있습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
-          "confidence": "medium"
+          "confidence": "low"
         },
         {
-          "text": "트런들 W 공격 속도 최대 90%→110% 상향으로 탑 맞대결 열세가 커졌습니다.",
+          "text": "트런들 W 공격 속도가 최대 110%로 상향돼 탑 맞대결 구도가 나서스에게 불리해졌습니다.",
           "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "초가스 E 피해량 10 상향으로 탑 라인전 대치 상성이 불리해졌습니다.",
+          "text": "초가스 E 피해량이 10 상승해 탑 대치 상대로서 나서스를 더 강하게 압박합니다.",
           "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
           "verified": true,
           "confidence": "low"
@@ -4482,10 +4372,12 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "나서스 승률이 48.4%→47.5%로 0.9%p 내렸으나 신뢰구간이 넓어 유의하지 않으며, 갈라진 하늘 공격력·체력 하향이 간접 요인입니다.",
+        "summary": "나서스 승률 -0.9%p는 CI가 0을 포함해 통계적으로 뚜렷하지 않고, 갈라진 하늘 공격력·체력 너프와 트런들·초가스 탑 강화가 겹친 영향으로 보입니다.",
         "summaryCites": [
           "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
+          "note:26.17:item:sundered-sky:4c4f025e",
+          "note:26.17:champion:trundle:85be03ea",
+          "note:26.17:champion:chogath:44d563a2"
         ],
         "summaryVerified": true
       }
@@ -4516,20 +4408,14 @@
       ],
       "causes": [
         {
-          "text": "제라스 체력 575로 하향되며 미드 지분이 줄어, 키아나로 픽이 일부 이동했을 수 있습니다.",
+          "text": "제라스 체력 596→575 너프로 미드 라인 경쟁 챔피언 입지가 약화됐습니다.",
           "candidateNoteId": "note:26.17:champion:xerath:080e761c",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "제라스 Q 피해량 하향으로 미드 메타 상위권이 약화된 반사 효과로 추정됩니다.",
+          "text": "제라스 Q 피해량 하향으로 빠진 미드 지분이 키아나로 이동한 것으로 보입니다.",
           "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "야스오 치명타 피해 감소 폭 완화(-10%→-5%)로 미드 AD 구도가 바뀐 영향일 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
           "verified": true,
           "confidence": "low"
         }
@@ -4552,7 +4438,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "키아나 미드 픽률이 3.7%→4.5%(+0.8%p)로 올랐고, 제라스 체력·Q 하향에 따른 미드 반사 수요가 유력한 배경입니다.",
+        "summary": "키아나 미드 픽률이 3.7%→4.5%(+0.8%p) 상승했고, 제라스 체력·Q 피해량 너프로 생긴 미드 공백이 유입 경로로 보입니다.",
         "summaryCites": [
           "note:26.17:champion:xerath:080e761c",
           "note:26.17:champion:xerath:43a6f4aa"
@@ -4585,20 +4471,14 @@
       ],
       "causes": [
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25%로 치명타 빌드 요네의 초중반 위력이 올라 밴 대상이 됐습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 치명타 기반 요네의 초중반 위력이 올라 밴 대상이 됐습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "야스오도 치명타 피해 페널티가 -10%→-5%로 완화돼 낭인 계열 전반의 체감 강도가 올랐습니다.",
+          "text": "야스오도 치명타 피해량 감소 -10%→-5%로 완화돼 치명타 딜러 계열 전반의 선호도가 올랐습니다.",
           "candidateNoteId": "note:26.17:champion:yasuo:66635940",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "베인 W 고정 피해 너프로 대체 원거리 딜러 입지가 줄며 요네 픽·밴 비중이 반사 상승했습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
           "verified": true,
           "confidence": "low"
         }
@@ -4621,10 +4501,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "요네 밴률 5.1%→5.9%(+0.8%p)는 치명타 페널티 완화 기조와 폭풍갈퀴 공격 속도 25% 상향이 겹친 결과로 보입니다.",
+        "summary": "요네 밴률 5.1%→5.9%(+0.8%p)는 폭풍갈퀴 공격 속도 25% 상향 등 치명타 빌드 강화가 겹친 결과입니다.",
         "summaryCites": [
-          "note:26.17:item:stormrazor:0a1d6b43",
-          "note:26.17:champion:yasuo:66635940"
+          "note:26.17:item:stormrazor:0a1d6b43"
         ],
         "summaryVerified": true
       }
@@ -4654,20 +4533,14 @@
       ],
       "causes": [
         {
-          "text": "요네도 치명타 피해 감소 -10%→-5%로 같이 완화돼, 유사 챔프 수요가 요네로 분산됐을 수 있습니다",
+          "text": "요네도 치명타 피해량 감소가 -10%에서 -5%로 완화돼, 같은 유저층 픽이 요네로 분산됐을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "이렐리아 Q 계수 70%→80% 등 상향으로 미드·탑 근접 딜러 픽 경쟁에서 밀렸을 수 있습니다",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "키아나 Q 피해 상향(70~190→80~200)으로 미드 암살·근접 픽 수요를 일부 흡수",
-          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 다른 원거리 딜러 선호가 늘어난 영향으로 보입니다.",
+          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
         }
@@ -4690,10 +4563,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "야스오 픽률 -0.7%p는 95% CI[-1.6%p, 0.1%p]로 0을 포함해 통계적 잡음 범위이며, 이렐리아·키아나 상향에 따른 미드 경쟁 심화가 일부 작용했을 수 있습니다.",
+        "summary": "야스오 픽률 -0.7%p는 95% CI가 0을 포함해 유의하지 않으며, 요네의 동일 상향에 따른 픽 분산 정도만 추정됩니다.",
         "summaryCites": [
-          "note:26.17:champion:irelia:9035ffdc",
-          "note:26.17:champion:qiyana:5a6d587d"
+          "note:26.17:champion:yone:c6a149c7"
         ],
         "summaryVerified": true
       }
@@ -4723,14 +4595,8 @@
       ],
       "causes": [
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25%로 요네가 즐겨 쓰는 치명타 빌드 효율이 올랐습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 치명타 코어를 쓰는 요네의 선호도가 올랐습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "베인 W 고정 피해 하향으로 원거리 캐리 대체 픽 수요가 요네로 일부 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
           "verified": true,
           "confidence": "low"
         }
@@ -4753,7 +4619,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "요네 픽률 +0.5%p는 95% CI[-0.5%p, 1.5%p]로 통계적 유의성이 없고, 폭풍갈퀴 공격 속도 25% 상향이 보조 요인입니다.",
+        "summary": "요네 픽률 0.5%p 상승은 95% CI가 [-0.5%p, 1.5%p]로 0을 포함해 유의하지 않으며, 폭풍갈퀴 공격 속도 25% 상향이 소폭 기여했을 수 있습니다.",
         "summaryCites": [
           "note:26.17:item:stormrazor:0a1d6b43"
         ],
@@ -4785,20 +4651,20 @@
       ],
       "causes": [
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25%로 치명타 코어 효율이 올라 요네 선호도가 상승했을 수 있습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 요네의 핵심 치명타 빌드 효율이 올라갔습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "베인 W 고정 피해 너프로 탑 대체 픽이 줄며 요네 픽률이 반사 이익을 얻었을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+          "text": "갈라진 하늘 공격력 45→40 너프로 경쟁 탑 브루저가 약화돼 반사이익을 얻었습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "그레이브즈 Q 계수 너프로 AD 브루저 계열 수요가 요네 쪽으로 이동했을 여지가 있습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+          "text": "야스오도 같은 치명타 피해 감소 조정을 받아 두 검사 모두 픽 수요가 이동했습니다.",
+          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
           "verified": true,
           "confidence": "low"
         }
@@ -4821,7 +4687,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "요네 탑 픽률 0.5%p 상승은 CI가 0을 포함해 유의하지 않고, 폭풍갈퀴 공격 속도 25% 상향이 부분 요인일 수 있습니다.",
+        "summary": "요네 탑 픽률 5.5%→5.9%(CI가 0을 포함해 유의하지 않음)로, 폭풍갈퀴 공격 속도 25% 상향에 따른 빌드 효율 상승이 주요 배경입니다.",
         "summaryCites": [
           "note:26.17:item:stormrazor:0a1d6b43"
         ],
@@ -4853,20 +4719,14 @@
       ],
       "causes": [
         {
-          "text": "갈라진 하늘 공격력 45→40 너프로 요네 주력 빌드 파워가 소폭 하락했습니다.",
+          "text": "갈라진 하늘 공격력 45→40 하향이 요네 코어 빌드 딜을 약간 깎았을 수 있습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "갈라진 하늘 체력 450→400 너프가 요네의 생존력을 깎았습니다.",
+          "text": "갈라진 하늘 체력 450→400 하향으로 요네의 전투 지속력이 소폭 감소했을 수 있습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향은 반대로 요네 승률을 떠받쳤을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
         }
@@ -4889,7 +4749,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "요네 승률 -0.4%p는 CI가 0을 포함해 사실상 변화 없음이며, 갈라진 하늘 공격력·체력 너프가 상쇄 요인으로 보입니다.",
+        "summary": "요네 승률 -0.4%p는 CI [-3.8%p, 2.9%p]로 유의하지 않으며, 갈라진 하늘 공격력·체력 하향이 소폭 영향을 줬을 수 있습니다.",
         "summaryCites": [
           "note:26.17:item:sundered-sky:0aec77fe",
           "note:26.17:item:sundered-sky:4c4f025e"
@@ -4975,7 +4835,7 @@
       ],
       "causes": [
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향이 베인 빌드 손실을 일부 상쇄했을 수 있습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 버프가 베인의 하향을 일부 상쇄했을 수 있습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
@@ -4999,7 +4859,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "베인 승률은 47.8%→47.4%로 -0.4%p에 그쳤고 CI가 ±6%p대라 유의한 변화로 보기 어렵습니다. 폭풍갈퀴 공격 속도 상향이 완충 요인입니다.",
+        "summary": "베인 승률은 47.8%→47.4%로 -0.4%p지만 CI가 ±6%p대여서 유의하지 않고, 폭풍갈퀴 공격 속도 25% 버프가 하향을 일부 상쇄한 수준입니다.",
         "summaryCites": [
           "note:26.17:item:stormrazor:0a1d6b43"
         ],
@@ -5031,20 +4891,14 @@
       ],
       "causes": [
         {
-          "text": "나서스 기본 지속 효과 생명력 흡수가 12/18/24%에서 10/15/20%로 하향돼 탑 경쟁자가 약화됐습니다.",
+          "text": "나서스 생명력 흡수 10/15/20%로 하향돼 탑 스케일링 픽 수요가 트런들로 옮겨갔을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "녹턴 방어력이 38에서 36으로 낮아져 정글 경쟁 픽 수요가 분산됐을 수 있습니다.",
+          "text": "녹턴 방어력 36·체력 640 하향으로 정글 대안 선택지에서 트런들 지분이 늘어난 흐름으로 보입니다.",
           "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "초가스 E 피해량 상향으로 탱커 브루저 메타가 활성화된 영향으로 보입니다.",
-          "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
           "verified": true,
           "confidence": "low"
         }
@@ -5067,9 +4921,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "트런들 픽률이 1.0%→1.3%(+0.3%p, CI 하단 0.0%p)로 소폭 올랐고, 나서스 생명력 흡수 하향 등 경쟁 픽 약화가 배경으로 보입니다.",
+        "summary": "트런들 픽률 1.0%→1.3%(+0.3%p, CI 하한 0.0%p)는 나서스·녹턴 하향에 따른 탑·정글 대체 수요로 설명됩니다.",
         "summaryCites": [
-          "note:26.17:champion:nasus:0915ac64"
+          "note:26.17:champion:nasus:0915ac64",
+          "note:26.17:champion:nocturne:9c41fff1"
         ],
         "summaryVerified": true
       }
@@ -5099,19 +4954,19 @@
       ],
       "causes": [
         {
-          "text": "나서스 생명력 흡수 12/18/24%→10/15/20% 너프로 탑 탱커 수요가 초가스로 이동했을 수 있습니다.",
+          "text": "나서스 기본 지속 생명력 흡수가 10/15/20%로 하향돼 탑 스케일링 탱커 수요가 초가스로 이동했습니다.",
           "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 탑 브루저 입지가 줄며 반사이익을 봤을 수 있습니다.",
+          "text": "갈라진 하늘 공격력 45→40 하향으로 탑 브루저 빌드가 약화되며 반사이익을 봤습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "갈라진 하늘 체력 450→400 하향도 탑 싸움꾼 계열 약화 요인입니다.",
+          "text": "갈라진 하늘 체력 450→400 하향도 같은 방향으로 탑 브루저 선호도를 낮췄을 수 있습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
           "confidence": "low"
@@ -5135,7 +4990,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "초가스 탑 픽률 0.8%→1.2%(+0.3%p)는 나서스 생명력 흡수 너프와 갈라진 하늘 하향에 따른 탑 대체 픽 이동으로 보입니다.",
+        "summary": "초가스 탑 픽률이 0.8%→1.2%로 올랐습니다. 나서스 생명력 흡수 하향과 갈라진 하늘 약화로 탑 대체 수요가 흡수된 결과입니다.",
         "summaryCites": [
           "note:26.17:champion:nasus:0915ac64",
           "note:26.17:item:sundered-sky:0aec77fe"
@@ -5168,20 +5023,14 @@
       ],
       "causes": [
         {
-          "text": "이렐리아 Q 계수 70%→80% 등 버프로 미드 근접 딜러 선택지가 늘어 나서스 지분이 밀렸습니다.",
+          "text": "이렐리아 Q·R 계수 상향으로 미드 근접 딜탱 자리 경쟁이 심해져 나서스 픽이 밀렸을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "초가스 E 기본 피해 10 상향으로 미드 탱커 대안이 강해져 나서스 픽이 분산됐습니다.",
-          "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "르블랑 W 계수 80%→90% 버프로 미드 메타가 암살자 쪽으로 이동했습니다.",
-          "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
+          "text": "키아나 Q 피해량 상향이 미드 픽 분포를 흡수한 영향으로 보입니다.",
+          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
           "verified": true,
           "confidence": "low"
         }
@@ -5204,11 +5053,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "나서스 미드 픽률은 3.3%→2.9%(-0.3%p)지만 신뢰구간이 0을 포함해 유의하지 않고, 이렐리아·초가스 버프로 미드 대안이 늘어난 영향으로 보입니다.",
-        "summaryCites": [
-          "note:26.17:champion:irelia:9035ffdc",
-          "note:26.17:champion:chogath:44d563a2"
-        ],
+        "summary": "나서스 미드 픽률 -0.3%p는 95% CI [-0.8%p, 0.2%p]로 0을 포함해, 유의한 변화로 보기 어렵습니다.",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -5238,20 +5084,14 @@
       ],
       "causes": [
         {
-          "text": "베인 W 고정 피해가 최대 체력 6~10%에서 4~10%로 하향돼 하단 원딜 구도가 흔들렸습니다.",
+          "text": "베인 W 고정 피해가 최대 체력 6~10%에서 4~10%로 깎여 원딜 자리 일부가 대체 픽으로 넘어갔을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "그레이브즈 Q 계수 하향으로 AD 딜러 선호가 줄며 비주류 하단 픽 여지가 생겼습니다.",
+          "text": "그레이브즈 Q 폭발 계수 10%p 하락으로 AD 계열 픽 경쟁이 약해졌습니다.",
           "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 공격력 45→40 하향 등 AD 아이템 약화가 AP 하단 실험을 부추겼습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "low"
         }
@@ -5274,10 +5114,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "아우렐리온 솔 원딜 픽률이 0.9%→1.2%로 올랐지만 CI가 0을 포함해, 베인·그레이브즈 하향에 따른 하단 구도 변화의 파급으로 추정됩니다.",
+        "summary": "아우렐리온 솔 원딜 픽률 0.9%→1.2%(CI 0 포함)은 베인 W 너프 등 원딜 경쟁군 약화에 따른 반사 이익으로 보입니다.",
         "summaryCites": [
-          "note:26.17:champion:vayne:1da6ddd1",
-          "note:26.17:champion:graves:0bc5877b"
+          "note:26.17:champion:vayne:1da6ddd1"
         ],
         "summaryVerified": true
       }
@@ -5307,14 +5146,14 @@
       ],
       "causes": [
         {
-          "text": "갈라진 하늘 공격력 45→40 너프로 해당 아이템 활용 빌드의 가치가 하락했습니다.",
+          "text": "갈라진 하늘 공격력 45→40 너프로 야스오의 아이템 선택지 가치가 떨어졌을 수 있습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "요네도 동일한 치명타 피해량 감소 완화를 받아 픽 수요가 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
+          "text": "갈라진 하늘 체력 450→400 하향도 같은 맥락에서 선호도를 낮추는 요인입니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
           "confidence": "low"
         }
@@ -5337,9 +5176,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "야스오 원딜 픽률이 2.2%→1.9%(-0.3%p)로 내렸지만 신뢰구간이 0을 포함해 표본 변동 범위이며, 갈라진 하늘 너프가 일부 영향입니다.",
+        "summary": "야스오 원딜 픽률 -0.3%p는 신뢰구간이 [-0.6%p, 0.1%p]로 0을 포함해 유의하지 않으며, 갈라진 하늘 하향이 소폭 영향을 줬을 수 있습니다.",
         "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe"
+          "note:26.17:item:sundered-sky:0aec77fe",
+          "note:26.17:item:sundered-sky:4c4f025e"
         ],
         "summaryVerified": true
       }
@@ -5370,13 +5210,13 @@
       ],
       "causes": [
         {
-          "text": "제라스 Q 피해량·체력 너프로 장거리 AP 미드 경쟁자가 약해져 반사이익 가능성.",
+          "text": "제라스 Q 피해량 너프로 미드 경쟁자가 약화되며 아우렐리온 솔이 반사이득을 얻었을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "제라스 체력 575로 하향되며 미드 포킹 구도 일부가 아우렐리온 솔로 이동했을 수 있습니다.",
+          "text": "제라스 체력 596→575 너프로 장거리 포킹 미드 입지가 좁아진 영향입니다.",
           "candidateNoteId": "note:26.17:champion:xerath:080e761c",
           "verified": true,
           "confidence": "low"
@@ -5400,8 +5240,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "픽률 2.3%→2.5%(+0.2%p)지만 CI가 0을 포함해 유의하지 않으며, 제라스 너프에 따른 미드 반사이익 정도가 요인으로 보입니다.",
+        "summary": "제라스 체력·Q 너프로 미드 경쟁자가 줄며 픽률이 0.2%p 올랐으나, CI가 0을 걸쳐 유의하지 않습니다.",
         "summaryCites": [
+          "note:26.17:champion:xerath:080e761c",
           "note:26.17:champion:xerath:43a6f4aa"
         ],
         "summaryVerified": true
@@ -5432,16 +5273,10 @@
       ],
       "causes": [
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 치명타 딜러 빌드 가치가 올라 픽률을 지탱했을 수 있습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 치명타 빌드 요네의 초반 아이템 가치가 올랐습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
-        },
-        {
-          "text": "야스오도 동일한 치명타 피해량 너프를 받아 미드 대체재 이점이 없어 픽 이탈이 적었습니다.",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
-          "verified": true,
-          "confidence": "medium"
         }
       ],
       "evidence": {
@@ -5462,10 +5297,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "요네 미드 픽률 9.8%→10.1%(0.2%p)는 CI가 0을 포함해 유의하지 않고, 폭풍갈퀴 공격 속도 상향과 야스오 동일 너프가 픽률 유지를 도왔습니다.",
+        "summary": "요네 미드 픽률 9.8%→10.1%(0.2%p)는 CI가 0을 포함해 통계적 변화로 보기 어렵고, 폭풍갈퀴 공격 속도 상향이 소폭 영향을 줬을 수 있습니다.",
         "summaryCites": [
-          "note:26.17:item:stormrazor:0a1d6b43",
-          "note:26.17:champion:yasuo:66635940"
+          "note:26.17:item:stormrazor:0a1d6b43"
         ],
         "summaryVerified": true
       }
@@ -5495,14 +5329,14 @@
       ],
       "causes": [
         {
-          "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 야스오 계열 빌드 가치가 소폭 하락했습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+          "text": "요네도 치명타 피해량 감소가 -5%로 완화돼, 유사 픽 수요가 요네로 분산됐을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "요네도 동일한 치명타 피해 패널티 완화를 받아 미드 픽 수요가 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 버프는 야스오에 유리해 픽률 하락 요인으로 보기 어렵습니다.",
+          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
         }
@@ -5525,7 +5359,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "야스오 미드 픽률 -0.2%p는 95% CI [-0.9%p, 0.4%p]로 0을 포함해 유의하지 않으며, 같은 완화를 받은 요네로의 수요 분산이 일부 작용했을 수 있습니다.",
+        "summary": "야스오 미드 픽률 -0.2%p는 CI가 [-0.9%p, 0.4%p]로 0을 포함해 유의한 변화가 아니며, 요네 동일 완화로 수요 분산 여지가 있습니다.",
         "summaryCites": [
           "note:26.17:champion:yone:c6a149c7"
         ],
@@ -5557,14 +5391,14 @@
       ],
       "causes": [
         {
-          "text": "요네도 치명타 피해량 감소가 -10%에서 -5%로 완화돼 유사 픽 수요가 분산됐을 수 있습니다.",
+          "text": "요네도 치명타 피해량 감소가 -10%에서 -5%로 완화돼, 같은 탑 라인 수요를 나눠 가졌을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 탑 근접 딜러 아이템 환경이 약화됐습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+          "text": "이렐리아가 Q 계수 80%, R 주문력 계수 100%로 강화되며 탑 라인 선택지 경쟁이 심해졌습니다.",
+          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
           "verified": true,
           "confidence": "low"
         }
@@ -5587,9 +5421,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "야스오 탑 픽률 -0.2%p는 CI가 0을 포함해 유의하지 않으며, 요네의 동일 치명타 완화로 수요가 나뉜 영향으로 볼 수 있습니다.",
+        "summary": "야스오 탑 픽률 -0.2%p는 95% CI [-0.6%p, 0.2%p]로 0을 포함해 통계적 변화로 보기 어렵고, 이렐리아 강화로 인한 탑 경쟁이 일부 작용했습니다.",
         "summaryCites": [
-          "note:26.17:champion:yone:c6a149c7"
+          "note:26.17:champion:irelia:9035ffdc"
         ],
         "summaryVerified": true
       }
@@ -5619,14 +5453,14 @@
       ],
       "causes": [
         {
-          "text": "야스오도 같은 치명타 피해 감소 완화를 받아 유사 픽이 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+          "text": "갈라진 하늘 공격력 45→40 너프로 요네의 주력 빌드 가치가 낮아졌을 수 있습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "폭풍갈퀴 공격속도 20%→25% 상향으로 정통 원딜 선호도가 올라갔을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+          "text": "갈라진 하늘 체력 450→400 하향으로 원딜 라인 요네의 생존력이 떨어졌습니다.",
+          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
           "confidence": "low"
         }
@@ -5649,8 +5483,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "요네 원딜 픽률 -0.2%p는 95% CI가 [-0.5%p, 0.1%p]로 0을 포함해 유의한 변화로 보기 어렵습니다.",
-        "summaryCites": [],
+        "summary": "요네 원딜 픽률 -0.2%p는 95% CI [-0.5%p, 0.1%p]로 0을 포함해 유의하지 않으며, 갈라진 하늘 공격력·체력 너프가 약한 간접 요인입니다.",
+        "summaryCites": [
+          "note:26.17:item:sundered-sky:0aec77fe",
+          "note:26.17:item:sundered-sky:4c4f025e"
+        ],
         "summaryVerified": true
       }
     },
@@ -5696,7 +5533,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "트런들 서포터 픽률이 0.4%에서 0.1%로 -0.2%p 내렸으나, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -5726,20 +5563,26 @@
       ],
       "causes": [
         {
-          "text": "녹턴 체력 655→640 너프로 정글 경쟁자가 약화돼 트런들 픽이 반사 이득을 봤을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
+          "text": "녹턴이 방어력 38→36으로 약화되며 정글 지분이 트런들로 일부 이동했습니다.",
+          "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "그레이브즈 Q 폭발 계수 너프로 정글 픽 분산이 일어나 트런들 비중이 늘었을 수 있습니다.",
+          "text": "그레이브즈 Q 폭발 계수 너프로 정글 상위권이 빠지며 트런들 선택이 늘었습니다.",
           "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
           "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "키아나 Q 몬스터 피해 175%→160%로 정글 수행력이 떨어진 반사이익으로 보입니다.",
+          "candidateNoteId": "note:26.17:champion:qiyana:9d50d4d6",
+          "verified": true,
           "confidence": "low"
         },
         {
-          "text": "키아나 Q 몬스터 피해 175%→160% 너프로 정글 선택지가 줄어든 영향으로 보입니다.",
-          "candidateNoteId": "note:26.17:champion:qiyana:9d50d4d6",
+          "text": "폭풍갈퀴 공격 속도 20%→25%가 공속 기반 트런들 빌드 가치를 올렸습니다.",
+          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
         }
@@ -5762,9 +5605,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "트런들 정글 픽률이 0.3%→0.5%로 올랐으나 CI가 0을 포함해 약하며, 녹턴·그레이브즈 등 정글 너프의 반사 이득으로 보입니다.",
+        "summary": "트런들 정글 픽률이 0.3%→0.5%로 올랐고, 녹턴 체력·방어력 너프와 그레이브즈 Q 계수 너프로 생긴 정글 공백이 주된 배경입니다.",
         "summaryCites": [
-          "note:26.17:champion:nocturne:fd4d5d23",
+          "note:26.17:champion:nocturne:9c41fff1",
           "note:26.17:champion:graves:0bc5877b"
         ],
         "summaryVerified": true
@@ -5795,7 +5638,7 @@
       ],
       "causes": [
         {
-          "text": "폭풍갈퀴 공격 속도 20%→25%로 정통 원거리 딜러 선호가 커져 변칙 초가스 원딜이 밀렸을 수 있습니다.",
+          "text": "폭풍갈퀴 공격 속도 20%→25% 버프로 정석 원딜 구도가 강해져, 변칙 원딜 초가스 채택이 줄었을 수 있습니다.",
           "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
@@ -5819,7 +5662,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "초가스 원딜 픽률 0.2%→0.1%는 CI 상한이 0에 가까운 표본 노이즈 수준이며, 폭풍갈퀴 공격 속도 버프로 정통 원딜 선호가 커진 영향도 일부 있습니다.",
+        "summary": "초가스 원딜 픽률 0.2%→0.1%(-0.1%p)로, CI 상한이 0에 닿는 극소 표본 변동이며 폭풍갈퀴 버프로 인한 정석 원딜 선호 외에 설명 조항이 없습니다.",
         "summaryCites": [
           "note:26.17:item:stormrazor:0a1d6b43"
         ],
@@ -5850,20 +5693,7 @@
         "note:26.17:champion:nocturne:9c41fff1",
         "note:26.17:champion:nocturne:fd4d5d23"
       ],
-      "causes": [
-        {
-          "text": "제라스 체력 596→575 너프로 미드 포킹 챔피언 입지가 줄어 반사이익 여지가 있습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:080e761c",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "야스오·요네 치명타 피해 감소 완화로 미드 근접 딜러 구도가 흔들린 영향일 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8366198290",
@@ -5882,7 +5712,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "녹턴은 체력·방어력 너프에도 미드 픽률이 0.1%→0.2%로 올랐으나, CI 하한이 0.0%p인 극소 표본이라 노이즈일 수 있습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -5911,7 +5741,20 @@
         "note:26.17:champion:nocturne:9c41fff1",
         "note:26.17:champion:nocturne:fd4d5d23"
       ],
-      "causes": [],
+      "causes": [
+        {
+          "text": "탑 경쟁자 나서스의 생명력 흡수 너프로 탑 픽 분포가 소폭 이동했을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "야스오 치명타 피해량 감소 폭 조정 등 탑 상위픽 변동의 반사 효과로 보입니다.",
+          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8366198290",
@@ -5930,7 +5773,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "녹턴 탑 픽률 0.1%→0.2%(+0.1%p)는 신뢰구간이 0을 포함해 표본 변동 수준이며, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summary": "녹턴 탑 픽률 0.1%→0.2%(+0.1%p)는 CI[-0.0%p,0.2%p]가 0을 포함해 사실상 노이즈이며, 체력·방어력 너프와 방향만 어긋난 수준입니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -5961,20 +5804,20 @@
       ],
       "causes": [
         {
-          "text": "르블랑 W 계수 80%→90% 버프로 미드 AP 픽이 르블랑 쪽으로 분산됐을 수 있습니다.",
+          "text": "르블랑 W 피해량 계수 80%→90% 버프로 미드 픽이 몰리며 아우렐리온 솔 지분이 밀렸을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "키아나 Q 피해량 상향으로 미드 경쟁 픽이 늘어난 영향으로 보입니다.",
-          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
+          "text": "이렐리아 Q 계수 70%→80%, R 계수 70%→100% 버프로 미드 경쟁 픽이 늘었습니다.",
+          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "이렐리아 Q·R 계수 상향으로 미드 선호도가 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+          "text": "키아나 Q 피해량 상향으로 미드 암살자 선택지가 강화됐습니다.",
+          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
           "verified": true,
           "confidence": "low"
         }
@@ -5997,10 +5840,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "아우렐리온 솔 픽률 -0.1%p는 CI [-0.4%p, 0.2%p]로 통계적 노이즈 수준이며, 르블랑·키아나 미드 버프에 따른 분산 가능성이 있습니다.",
+        "summary": "아우렐리온 솔 W·Q 버프에도 픽률 -0.1%p로 CI[-0.4, 0.2]가 0을 포함해 유의하지 않으며, 르블랑·이렐리아 미드 버프의 경쟁 압박이 겹친 정도입니다.",
         "summaryCites": [
           "note:26.17:champion:leblanc:887dc51f",
-          "note:26.17:champion:qiyana:5a6d587d"
+          "note:26.17:champion:irelia:9035ffdc"
         ],
         "summaryVerified": true
       }
@@ -6033,7 +5876,26 @@
         "note:26.17:champion:vayne:1da6ddd1",
         "note:26.17:champion:vayne:02ad4f34"
       ],
-      "causes": [],
+      "causes": [
+        {
+          "text": "이렐리아 Q·W·R 계수 상향으로 미드 AD 브루저 수요가 옮겨갔을 수 있습니다.",
+          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "키아나 Q 피해량 80~200으로 상향되며 미드 AD 틈새 픽 경쟁에서 앞섰습니다.",
+          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "르블랑 W 계수 90% 상향으로 미드 선택지가 재편됐습니다.",
+          "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8358882973",
@@ -6052,8 +5914,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
+        "summary": "베인 미드 픽률 -0.1%p는 CI가 0을 포함해 유의성이 약하며, 이렐리아·키아나 상향에 따른 미드 틈새 픽 이탈로 보입니다.",
+        "summaryCites": [
+          "note:26.17:champion:irelia:9035ffdc",
+          "note:26.17:champion:qiyana:5a6d587d"
+        ],
         "summaryVerified": true
       }
     },
@@ -6083,21 +5948,15 @@
       ],
       "causes": [
         {
-          "text": "이렐리아 Q 계수 70%→80% 등 연속 버프로 탑 대체픽 수요가 이동했을 수 있습니다.",
+          "text": "이렐리아 Q 계수 70%→80% 등 상향으로 탑 근접 암살 픽 경쟁에서 밀렸을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "트런들 W 공격속도 90%→110% 버프로 탑 브루저 선호가 늘었을 수 있습니다.",
+          "text": "트런들 W 공격 속도 최대 90%→110% 상향으로 탑 선택지가 분산됐습니다.",
           "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
           "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "키아나 몬스터 피해 175%→160% 너프가 정글뿐 아니라 전반적 선호도를 낮췄을 수 있습니다.",
-          "candidateNoteId": null,
-          "verified": false,
           "confidence": "low"
         }
       ],
@@ -6119,7 +5978,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "키아나 탑 픽률 -0.1%p는 CI[-0.3, 0.2]로 유의하지 않으며, 이렐리아·트런들 버프에 따른 탑 픽 이동이 겹쳤을 수 있습니다.",
+        "summary": "키아나 탑 픽률 -0.1%p는 CI [-0.3%p, 0.2%p]로 유의하지 않은 변동이며, 이렐리아·트런들 상향에 따른 탑 경쟁 심화가 일부 영향일 수 있습니다.",
         "summaryCites": [
           "note:26.17:champion:irelia:9035ffdc",
           "note:26.17:champion:trundle:85be03ea"
@@ -6154,13 +6013,13 @@
       ],
       "causes": [
         {
-          "text": "이렐리아 핵심 아이템 갈라진 하늘 공격력 45→40 하향이 스킬 버프를 상쇄했을 수 있습니다.",
+          "text": "이렐리아 핵심템 갈라진 하늘 공격력 45→40 하향이 스킬 버프를 상쇄했습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "갈라진 하늘 체력 450→400 하향으로 탑 라인 생존력이 줄어 버프 체감이 희석됐습니다.",
+          "text": "갈라진 하늘 체력 450→400 하향으로 탑 라인 생존력이 줄어 이득이 희석됐습니다.",
           "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
           "verified": true,
           "confidence": "medium"
@@ -6184,7 +6043,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "이렐리아 승률은 51.6%로 변동이 없었고, 갈라진 하늘 공격력·체력 하향이 스킬 버프를 상쇄한 것으로 보입니다(CI ±6.8%p).",
+        "summary": "이렐리아 승률은 51.6%로 변동이 없었고, 갈라진 하늘 공격력·체력 하향이 스킬 버프를 상쇄했습니다.",
         "summaryCites": [
           "note:26.17:item:sundered-sky:0aec77fe",
           "note:26.17:item:sundered-sky:4c4f025e"
@@ -6235,7 +6094,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "녹턴 밴률은 1.1%→1.2%로 신뢰구간(-0.3~0.3%p) 안의 변동이라, 체력·방어력 너프에도 실질 변화는 없습니다.",
+        "summary": "밴률 변화가 0.0%p이고 신뢰구간도 ±0.3%p로 0을 포함해, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6383,7 +6242,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6461,20 +6320,14 @@
       ],
       "causes": [
         {
-          "text": "그레이브즈 Q 폭발 계수 너프로 정글 경쟁자가 약화되며 변칙 픽 여지가 생겼습니다.",
+          "text": "그레이브즈 Q 폭발 계수 너프로 정글 상위권이 빠지며 요네 정글 시도가 소폭 늘었을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "녹턴 기본 체력 655→640 너프로 AD 암살 정글 입지가 줄었습니다.",
+          "text": "녹턴 체력·방어력 하향도 정글 구도를 흔든 부수 요인입니다.",
           "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향이 평타 기반 정글 실험을 자극했습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
           "verified": true,
           "confidence": "low"
         }
@@ -6497,7 +6350,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "요네 정글 픽률은 0.0%→0.1%로 CI에 0이 포함된 노이즈 수준이며, 그레이브즈·녹턴 너프에 따른 반사 효과로 보입니다.",
+        "summary": "요네 정글 픽률 0.0%→0.1%(변화 0.0%p, CI에 0 포함)로 사실상 노이즈이며, 그레이브즈·녹턴 정글 하향의 반사 효과일 수 있습니다.",
         "summaryCites": [
           "note:26.17:champion:graves:0bc5877b",
           "note:26.17:champion:nocturne:fd4d5d23"
@@ -6548,7 +6401,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "그레이브즈 서포터 픽률은 0.0%p 변화로 신뢰구간(-0.0~0.1%p) 안의 잡음 수준이며, 표본이 희박해 패치 영향으로 볼 근거가 없습니다.",
+        "summary": "그레이브즈 서포터 픽률은 0.0%p 변화로 신뢰구간(-0.0~0.1%p)이 0을 포함해 사실상 변동이 없으며, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6595,7 +6448,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "트런들 밴률은 0.1%로 변동이 없고 신뢰구간도 [-0.1%p, 0.1%p]라 W 상향에도 밴 지표엔 영향이 없었습니다.",
+        "summary": "트런들 밴률은 0.1%로 변동 없고 신뢰구간도 ±0.1%p라, W 공격속도 상향에도 밴 지표는 반응하지 않은 통계적 무변화입니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6627,20 +6480,14 @@
       ],
       "causes": [
         {
-          "text": "르블랑 W 피해량 계수 80%→90% 버프로 미드 픽 수요가 분산돼 상승분이 상쇄됐을 수 있습니다.",
+          "text": "르블랑 W 계수 상향으로 미드 표가 분산돼 이렐리아 픽률이 정체됐을 수 있습니다.",
           "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "키아나 Q 피해량 상향으로 미드 암살자 선택지가 늘어난 점이 영향을 줬을 수 있습니다.",
+          "text": "키아나 Q 피해량 상향도 미드 선택지를 늘려 이렐리아 반등을 눌렀을 여지가 있습니다.",
           "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "아우렐리온 솔 Q 마나 소모 감소 등 미드 라인 경쟁 챔피언 버프가 겹쳤습니다.",
-          "candidateNoteId": "note:26.17:champion:aurelionsol:7b32ba55",
           "verified": true,
           "confidence": "low"
         }
@@ -6663,11 +6510,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "이렐리아 미드 픽률은 1.9%로 변동이 없고 CI(±0.4%p)도 0을 포함해, 르블랑·키아나 등 미드 경쟁 챔피언 버프가 상승분을 상쇄했을 수 있습니다.",
-        "summaryCites": [
-          "note:26.17:champion:leblanc:887dc51f",
-          "note:26.17:champion:qiyana:5a6d587d"
-        ],
+        "summary": "이렐리아 미드 픽률은 1.9%로 변동 -0.0%p, CI [-0.4%p, 0.4%p]라 사실상 무변동이며 버프 효과가 픽에 반영되지 않았습니다.",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -6809,7 +6653,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "그레이브즈 탑 픽률 변화는 -0.0%p로 신뢰구간이 0을 포함해 실질적 변동이 없습니다.",
+        "summary": "그레이브즈 탑 픽률은 -0.0%p로 신뢰구간이 0을 포함해 사실상 변동이 없습니다. 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6857,7 +6701,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "그레이브즈 미드 픽률은 0.0%p 변화에 95% 신뢰구간 [-0.0%p, 0.1%p]로 사실상 변동이 없어, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6909,7 +6753,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summary": "베인 정글 픽률은 0.0%에서 0.0%로 변화 -0.0%p, CI[-0.1%p, 0.0%p]로 사실상 무변화라 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -6956,7 +6800,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "나서스 서포터 픽률은 0.1%에서 0.0%로 변화폭이 사실상 0이고 신뢰구간이 0을 포함해 표본 노이즈 수준입니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -7004,7 +6848,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "아우렐리온 솔 밴률은 0.2%→0.3%로 사실상 변화 0.0%p이고 95% CI가 0을 포함해, 패치 영향으로 볼 근거가 없습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -7053,7 +6897,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "이렐리아 원딜 픽률은 0.1%로 변화 0.0%p, 신뢰구간도 0을 포함해 사실상 무변화이며 이를 설명할 조항을 찾지 못했습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -7100,7 +6944,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+        "summary": "탑 쓰레쉬 픽률은 변화 -0.0%p, CI [-0.1%p, 0.0%p]로 사실상 0이며 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -7147,7 +6991,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "야스오 정글 픽률은 변화 -0.0%p, 신뢰구간 [-0.1%p, 0.0%p]로 사실상 변동이 없어 표본 노이즈 수준입니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -7245,7 +7089,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summary": "이렐리아 서포터 픽률은 변화 -0.0%p, CI [-0.1%p, 0.0%p]로 사실상 0% 수준이라 패치노트에서 설명할 조항을 찾지 못했습니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -7293,7 +7137,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "아우렐리온 솔 정글 픽률은 0.0%로 사실상 변동이 없고(CI -0.0~0.1%p), 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -7341,7 +7185,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -7389,7 +7233,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+        "summary": "녹턴 서포터 픽률 변화는 -0.0%p로 신뢰구간이 0을 포함해 사실상 변동이 없습니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -7436,7 +7280,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "트런들 미드는 픽률이 0.0%대로 사실상 표본이 없고 변화 -0.0%p(95% CI -0.1~0.0%p)라 통계적 의미가 없습니다.",
+        "summary": "미드 트런들 픽률은 0.0%대로 변화폭이 -0.0%p(CI -0.1~0.0%p)에 그쳐, 이 변화를 설명할 패치 조항을 찾지 못했습니다.",
         "summaryCites": [],
         "summaryVerified": true
       }
@@ -7483,7 +7327,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "야스오 서포터 픽률 0.1%→0.0% 변화는 CI[-0.1%p,0.1%p] 안에 들어 유의하지 않으며, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+        "summary": "야스오 서포터 픽률은 0.1%→0.0%로 변화폭이 신뢰구간(-0.1%p~0.1%p) 안에 있어 통계적 노이즈이며, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
         "summaryVerified": true
       }
