@@ -71,13 +71,18 @@ describe("formatDeltaLine", () => {
 
 describe("buildBriefingEmbeds", () => {
   it("미공지 상위 topN만 선택하고 |delta| 순서를 그대로 신뢰한다(이미 정렬됐다고 가정)", () => {
+    // 엔티티를 전부 다르게 둔다(2026-09-20). 이전 fixture는 6행이 모두 같은 `entityKey`("Aatrox")
+    // 라 "미공지 6건"이 **엔티티 6개가 아니라 같은 챔피언의 6행**이었다 — 헤드라인이 엔티티 수를
+    // 세도록 바뀌자 1건으로 나왔다. 실제 파일에서 미공지 6행은 보통 서로 다른 엔티티이고,
+    // `unannounced`는 판정 엔진 정의상 효과크기 바닥을 이미 통과한 행이므로 delta도 바닥
+    // (pickRate 0.02) 위로 둔다.
     const rows = [
-      delta({ id: "a", status: "unannounced", delta: 0.09 }),
-      delta({ id: "b", status: "unannounced", delta: 0.07 }),
-      delta({ id: "c", status: "unannounced", delta: 0.05 }),
-      delta({ id: "d", status: "unannounced", delta: 0.03 }),
-      delta({ id: "e", status: "unannounced", delta: 0.02 }),
-      delta({ id: "f", status: "unannounced", delta: 0.01 }), // topN=5 밖
+      delta({ id: "a", entityKey: "Ahri", status: "unannounced", delta: 0.09 }),
+      delta({ id: "b", entityKey: "Bard", status: "unannounced", delta: 0.07 }),
+      delta({ id: "c", entityKey: "Camille", status: "unannounced", delta: 0.05 }),
+      delta({ id: "d", entityKey: "Darius", status: "unannounced", delta: 0.03 }),
+      delta({ id: "e", entityKey: "Ekko", status: "unannounced", delta: 0.025 }),
+      delta({ id: "f", entityKey: "Fiora", status: "unannounced", delta: 0.021 }), // topN=5 밖
     ];
     const [embed] = buildBriefingEmbeds(deltasFile(rows), { siteUrl: SITE, topN: 5 });
     expect(embed.fields).toHaveLength(5);

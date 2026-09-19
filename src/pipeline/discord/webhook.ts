@@ -6,7 +6,7 @@
 import type { DeltaRecord, DeltasFile, LlmCause } from "../types";
 import { fmtCiHalf, fmtDeltaInt, fmtDeltaSec, fmtInt, fmtKst, fmtPct, fmtPp, fmtSec, itemHref, metricKind, metricLabel, positionLabel } from "../../lib/format";
 import { displayStatus } from "../shared/display-status";
-import { isSignificantDelta } from "../shared/significance";
+import { countGapEntities, countReportable } from "../shared/headline";
 
 // ─── 디스코드 embed 제한(공식 API 제약, PLAN F6 "embed(≤10·6,000자)") ────────────────────────
 const MAX_EMBEDS = 10;
@@ -158,7 +158,13 @@ export function buildBriefingEmbeds(deltas: DeltasFile, options: BuildBriefingOp
   const inconsistentRows = deltas.rows.filter(
     (r) => displayStatus(r, qAlpha) === "announced-anomaly"
   );
-  const significantCount = deltas.rows.filter((r) => isSignificantDelta(r, qAlpha)).length;
+  // 헤드라인 두 수치는 **웹 히어로와 같은 모듈**이 센다(2026-09-20 실측 결함 수정).
+  // 이전엔 여기서 `isSignificantDelta`로 따로 셌고, 2026-09-19에 히어로만 `isReportableRecord`로
+  // 옮겨가면서 같은 패치를 두고 사이트는 62개·29건, 디스코드는 403개·31건을 말하게 됐다
+  // (403 중 321건은 어느 목록에도 렌더되지 않는 바닥 미달, 31 vs 29는 행 수 vs 엔티티 수).
+  // 디스코드 방을 공개하면 심사자가 두 수치를 나란히 보게 되므로, 세는 곳을 하나로 합쳤다.
+  const significantCount = countReportable(deltas.rows, qAlpha);
+  const gapEntityCount = countGapEntities(deltas.rows);
 
   const topUnannounced = unannouncedRows.slice(0, topN);
   const topInconsistent = inconsistentRows.slice(0, INCONSISTENT_EXTRA_COUNT);
@@ -170,7 +176,7 @@ export function buildBriefingEmbeds(deltas: DeltasFile, options: BuildBriefingOp
     options.noteCount != null
       ? `패치노트는 ${fmtInt(options.noteCount)}개 엔티티를 말했고, 통계는 ${fmtInt(significantCount)}개 변화를 말합니다`
       : `통계는 ${fmtInt(significantCount)}개 변화를 말합니다`;
-  let description = `${headline} · 미공지 ${fmtInt(unannouncedRows.length)}건`;
+  let description = `${headline} · 미공지 ${fmtInt(gapEntityCount)}건`;
   if (unannouncedRows.length === 0) {
     description += " · 게이트를 통과한 미공지 변화 없음";
   }

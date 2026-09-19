@@ -89,7 +89,10 @@ describe("셈이 닫힌다(최종 채점 K2-7)", () => {
     const fs = await import("node:fs");
     const path = await import("node:path");
     const dir = path.join(process.cwd(), "data", "aggregated", "deltas");
-    const files = fs.readdirSync(dir).filter((f) => f.endsWith(".json"));
+    // 파일명이 패치 쌍인 것만 — 같은 디렉터리에 `run-notify.ts`의 발송 수신증
+    // (`{from}_{to}.notify.json`)이 섞인다. `.json`으로만 거르면 디스코드를 실제로 한 번
+    // 보낸 순간 이 테스트가 깨진다(2026-09-20 실측, deltas-invariants.test.ts와 동일 원인).
+    const files = fs.readdirSync(dir).filter((f) => /^\d+\.\d+_\d+\.\d+\.json$/.test(f));
     expect(files.length).toBeGreaterThan(0);
     for (const file of files) {
       const parsed = JSON.parse(fs.readFileSync(path.join(dir, file), "utf8")) as { rows: DeltaRecord[] };

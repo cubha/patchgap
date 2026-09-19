@@ -12,6 +12,7 @@ import { isSignificantDelta } from "@/pipeline/shared/significance";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { FDR_ALPHA } from "@/pipeline/aggregate/stats";
 import { isGapStatus } from "@/pipeline/shared/status-order";
+import { countGapEntities, countReportable } from "@/pipeline/shared/headline";
 
 /** 패치노트 항목(section champion|item)을 "entity" 단위로 묶어 몇 개의 서로 다른 엔티티가
  * 언급됐는지 센다 — ST-08 `matchedNoteIds`가 같은 엔티티의 노트 여러 줄을 한 묶음으로 취급하는
@@ -109,15 +110,14 @@ export function computeHeadline(
   const noteEntityCount = countRelevantNoteEntities(notes);
   const noteItemCount = notes?.meta.itemCount ?? 0;
   const rows = deltas?.rows ?? [];
-  let statCount = 0;
-  // 미공지는 **엔티티 수**로 센다(라운드6 재판정 보완 4) — Gap 탭 카드·대조표 미공지 행·라인 분포 패널이
-  // 전부 엔티티 단위라, 관측 행 수(49)를 타일에 쓰면 카드 28개와 어긋났다.
-  const unannouncedEntities = new Set<string>();
-  for (const row of rows) {
-    if (isReportableRecord(row, qAlpha)) statCount++;
-    if (isGapStatus(row.status)) unannouncedEntities.add(`${row.entityType}:${row.entityKey}`);
-  }
-  return { noteEntityCount, noteItemCount, statCount, unannouncedCount: unannouncedEntities.size };
+  // 세는 규칙은 `pipeline/shared/headline.ts`가 소유한다(2026-09-20) — 여기서 직접 세면
+  // 디스코드 브리핑이 같은 수치를 따로 세는 상태로 되돌아간다(그렇게 해서 403 vs 62가 났다).
+  return {
+    noteEntityCount,
+    noteItemCount,
+    statCount: countReportable(rows, qAlpha),
+    unannouncedCount: countGapEntities(rows),
+  };
 }
 
 /** delta===null은 "측정 불가"에 가까운 취급으로 정렬 맨 뒤로 보낸다(ST-08 verdict.sortDeltas와
