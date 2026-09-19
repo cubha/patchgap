@@ -25,7 +25,13 @@ function loadPairs(): Pair[] {
   if (!fs.existsSync(deltasDir)) return [];
   return fs
     .readdirSync(deltasDir)
-    .filter((f) => f.endsWith(".json"))
+    // 같은 디렉터리에 **판정 산출물이 아닌 파일**이 섞인다 — `run-notify.ts`가 발송 후
+    // `{from}_{to}.notify.json`(수신증: sentAt·status·retries)을 여기에 쓴다(gitignore 대상).
+    // `.json`으로만 거르면 그것까지 DeltasFile로 읽어 `rows`가 undefined가 되고,
+    // **디스코드를 한 번이라도 실제 발송하면 이 게이트가 깨진다**(2026-09-20 실측: 브리핑을
+    // 실제로 보낸 직후 `Cannot read properties of undefined (reading 'filter')`). 파일명이
+    // 패치 쌍인 것만 본다 — 이 테스트가 말하는 "커밋된 판정 산출물"의 정의와 일치한다.
+    .filter((f) => /^\d+\.\d+_\d+\.\d+\.json$/.test(f))
     .map((file) => {
       const name = file.replace(/\.json$/, "");
       const to = name.split("_")[1];

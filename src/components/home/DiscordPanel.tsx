@@ -17,8 +17,16 @@
 // 밴드(y<873px) 밖(top≈1081px)이라 뒤에 비칠 지형은 없지만, 사용자가 요구한 건 "카메라
 // 노출 여부와 무관한 전면 통일"이라 예외를 두지 않는다 — ReleaseNoteStream.tsx 주석 참고.
 
+// 2026-09-20 사용자 지시("버튼을 실제 디스코드방에 들어가는 거로"): 공개 초대 링크가 있으면
+// 1차 버튼이 **그 방으로 들어가는 링크**가 된다. 브리핑이 배치로만 나가는 구조 때문에 방문자가
+// 전송을 직접 눌러 볼 수 없었고, 그래서 "결과를 확인할 길"이 방법론 설명뿐이었다 — 방을 열어
+// 실제 발송된 메시지를 보게 하는 쪽이 로그인·웹훅 연동을 새로 만드는 것보다 정확하고 싸다
+// (정적 사이트라 백엔드가 없고, 브라우저에서 임의 웹훅으로 쏘게 하면 오픈 릴레이가 된다).
+// 초대가 없으면(`DISCORD_INVITE_URL === null`) 예전처럼 방송 규칙 링크만 남긴다 — 죽은 링크 금지.
+
 import Link from "next/link";
 import { fmtKst } from "@/lib/format";
+import { DISCORD_INVITE_URL } from "@/lib/links";
 import SectionCard from "@/components/SectionCard";
 
 export interface DiscordPanelProps {
@@ -34,13 +42,30 @@ export default function DiscordPanel({ generatedAt }: DiscordPanelProps) {
       <div className="flex flex-col items-start gap-3 p-5">
         <p className="text-sm text-muted">
           미공지 상위 항목과 이상 관측을 요약해 배치가 서버로 방송합니다.
+          {DISCORD_INVITE_URL ? " 방은 읽기 전용으로 열려 있습니다." : null}
         </p>
-        <Link
-          href="/lol/methodology/#discord"
-          className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-accent px-5 text-sm font-bold text-accent-on transition-colors hover:bg-accent-hover"
-        >
-          방송 규칙 보기 →
-        </Link>
+        {DISCORD_INVITE_URL ? (
+          <>
+            <a
+              href={DISCORD_INVITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-accent px-5 text-sm font-bold text-accent-on transition-colors hover:bg-accent-hover"
+            >
+              디스코드 방 들어가기 →
+            </a>
+            <Link href="/lol/methodology/#discord" className="text-xs text-fg-2 underline">
+              무엇이 언제 나가나
+            </Link>
+          </>
+        ) : (
+          <Link
+            href="/lol/methodology/#discord"
+            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-accent px-5 text-sm font-bold text-accent-on transition-colors hover:bg-accent-hover"
+          >
+            방송 규칙 보기 →
+          </Link>
+        )}
         {generatedAt ? (
           <span className="text-xs text-muted">마지막 집계 {fmtKst(generatedAt)}</span>
         ) : null}
