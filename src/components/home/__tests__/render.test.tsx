@@ -145,7 +145,12 @@ describe("DiscordPanel — generatedAt 없음", () => {
   it("집계 시각 캡션을 생략한다", () => {
     const { container } = render(<DiscordPanel generatedAt={null} />);
     expect(container.textContent).not.toContain("마지막 집계");
-    expect(container.textContent).toContain("방송 규칙 보기");
+    // 방송 규칙으로 가는 링크는 **두 갈래 모두에서** 남는다 — 문구만 갈린다(초대가 있으면
+    // "무엇이 언제 나가나", 없으면 "방송 규칙 보기"). 여기서 문구 하나를 박으면 초대 상수를
+    // 켜고 끌 때마다 이 테스트가 깨진다(2026-09-20 실측). 갈래별 문구는 DiscordPanel.test.tsx가
+    // 모킹으로 따로 고정하므로, 이 파일은 "링크가 살아 있는가"만 본다.
+    const rules = Array.from(container.querySelectorAll("a")).map((a) => a.getAttribute("href"));
+    expect(rules.some((href) => href?.includes("#discord"))).toBe(true);
   });
 
   it("generatedAt이 있으면 KST로 포맷한 캡션을 렌더한다", () => {
