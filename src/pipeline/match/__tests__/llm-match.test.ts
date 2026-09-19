@@ -492,6 +492,14 @@ describe("명사형 종결 검출(최종 채점 K1-7)", () => {
     expect(isNounEnding("교전 주도권이 옮겨졌습니다")).toBe(false);
   });
 
+  it("말미 괄호주·따옴표를 벗기고 본다 — 오탐은 불필요한 재요청을 부른다", () => {
+    // 2026-09-19 최종 확인 지적: `.!?`만 벗기던 탓에 "…했습니다(26.18 기준)."이 명사형으로 잡혔다.
+    // 재요청은 근거를 건드릴 수 있는 경로라(mergeRepairedProse 주석) 오탐을 방치할 수 없다.
+    expect(isNounEnding("정글 상성에서 밀렸습니다(26.18 기준).")).toBe(false);
+    expect(isNounEnding('"베릴 스폰율 조정" 항목과 대조했습니다.')).toBe(false);
+    expect(isNounEnding("밴 우선순위가 이동(26.18).")).toBe(true);
+  });
+
   it("명사로 끝나면 위반이다", () => {
     expect(isNounEnding("브루저 경쟁에서 밀린 영향.")).toBe(true);
     expect(isNounEnding("서포트 밴 우선순위가 파이크로 이동.")).toBe(true);

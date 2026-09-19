@@ -466,7 +466,20 @@ export interface ProseHygieneStats {
  * 생길 수 있다). 결함은 230건 중 13건이므로 그 13건만 고치는 것이 옳다.
  */
 export function isNounEnding(text: string): boolean {
-  const trimmed = text.trim().replace(/[.!?\s]+$/, "");
+  // 말미 구두점에 닫는 괄호·따옴표까지 포함한다(2026-09-19 재판정 지적): 그전에는 `.!?`만 벗겨
+  // "…했습니다(26.18 기준)."처럼 괄호주로 끝나는 정상 문장을 명사형으로 잘못 셌다. 산출물에는
+  // 그런 요약이 1건 있었고 b24d22b에도 있었으므로 이번 회귀는 아니지만, 오탐은 **불필요한
+  // 재요청을 부른다** — 재요청이 근거를 건드릴 수 있다는 것을 이 라운드에 배웠으므로 그냥 둘 수 없다.
+  // 말미 구두점뿐 아니라 **말미 괄호주 전체**를 벗긴다. 구두점만 벗기면
+  // "…밀렸습니다(26.18 기준)."이 "…기준"으로 끝나 명사형으로 잡힌다.
+  let trimmed = text.trim();
+  for (;;) {
+    const next = trimmed
+      .replace(/[.!?。\s"'”’」』]+$/u, "")
+      .replace(/[(（[［][^()（）[\]［］]*[)）\]］]$/u, "");
+    if (next === trimmed) break;
+    trimmed = next;
+  }
   if (trimmed.length === 0) return false;
   return !/[다요]$/.test(trimmed);
 }

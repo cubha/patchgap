@@ -61,10 +61,29 @@ function tabForGroup(group: ReleaseStreamGroup): StreamTab {
 
 /** 이 그룹이 아이템을 다루는가 — 라인 필터가 무엇을 걷어냈는지 화면이 정확히 말하기 위한 판별.
  * 두 그룹 종류가 서로 다른 필드를 들고 있어 kind로 갈라 본다(새 분류 축을 만들지 않는다). */
-function isItemGroup(group: ReleaseStreamGroup): boolean {
+export function isItemGroup(group: ReleaseStreamGroup): boolean {
   return group.kind === "matched"
     ? group.notes.some((note) => note.section === "item")
     : group.deltas.some((delta) => delta.entityType === "item");
+}
+
+/**
+ * 지금 보고 있는 탭에서 **라인 선택 때문에 빠진 아이템**이 실제로 있는가.
+ *
+ * 순수 함수로 빼 둔 이유(2026-09-19 재판정 지적): 탭 스코프 누락은 현 데이터로는 수정 전후가
+ * 구별되지 않는다 — 두 탭 모두 아이템을 갖고 있어 우연히 같은 결과가 나온다. 그래서 통과가
+ * 코드 독해에만 기대고 회귀를 막을 자리가 비어 있었다. 픽스처로 고정할 수 있게 분리한다.
+ */
+export function hasLaneExcludedItemsIn(
+  entries: readonly ReleaseStreamEntry[],
+  selectedLane: LanePosition | "all",
+  tab: StreamTab
+): boolean {
+  if (selectedLane === "all") return false;
+  return entries.some(
+    (entry) =>
+      tabForGroup(entry.group) === tab && isItemGroup(entry.group) && !entry.lanes.includes(selectedLane)
+  );
 }
 
 export interface ReleaseStreamEntry {
@@ -137,18 +156,10 @@ export default function ReleaseNoteStream({
 
   /** 라인 선택 때문에 목록에서 빠진 **아이템**이 실제로 있는가 — 있을 때만 말한다(없는데 말하면
    * 그것도 거짓이다). 아이템은 `lanes`가 비어 있어 어떤 라인에도 속하지 않는다(lane.ts 계약). */
-  const hasLaneExcludedItems = useMemo(() => {
-    if (selectedLane === "all") return false;
-    // **탭 스코프까지 본다**(2026-09-19 재판정 지적): 지금 데이터는 두 탭 모두 아이템을 갖고 있어
-    // 우연히 가려졌지만, 한쪽 탭에만 아이템이 있는 패치가 오면 빠진 것이 없는 탭에서도 캡션이 떠
-    // 거짓이 된다. 캡션은 **이 탭에서 실제로 빠진 것**이 있을 때만 말한다.
-    return entries.some(
-      (entry) =>
-        tabForGroup(entry.group) === tab &&
-        isItemGroup(entry.group) &&
-        !entry.lanes.includes(selectedLane)
-    );
-  }, [entries, selectedLane, tab]);
+  const hasLaneExcludedItems = useMemo(
+    () => hasLaneExcludedItemsIn(entries, selectedLane, tab),
+    [entries, selectedLane, tab]
+  );
 
   const filtered = useMemo(
     () => laneFiltered.filter((entry) => tabForGroup(entry.group) === tab),
