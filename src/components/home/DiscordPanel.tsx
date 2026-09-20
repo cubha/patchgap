@@ -1,5 +1,5 @@
 // src/components/home/DiscordPanel.tsx
-// 사이드: 디스코드로 공유 — 프로토타입 `.discord-panel` 1:1(docs/design/prototype/01-briefing-home.html).
+// 사이드: 디스코드 공유받기 — 프로토타입 `.discord-panel` 1:1(docs/design/prototype/01-briefing-home.html).
 // 실제 전송은 배치 스크립트(scripts/run-notify.ts, ST-13 소유) 몫이라 버튼은 방법론 페이지로 가는
 // 링크일 뿐이다(ST-11 프롬프트 명시) — 정적 export라 서버 액션도 없다. 서버 컴포넌트.
 //
@@ -38,7 +38,7 @@ export interface DiscordPanelProps {
 
 export default function DiscordPanel({ generatedAt }: DiscordPanelProps) {
   return (
-    <SectionCard title="디스코드로 공유" variant="glass">
+    <SectionCard title="디스코드 공유받기" variant="glass">
       <div className="flex flex-col items-start gap-3 p-5">
         <p className="text-sm text-muted">
           미공지 상위 항목과 이상 관측을 요약해 배치가 서버로 방송합니다.

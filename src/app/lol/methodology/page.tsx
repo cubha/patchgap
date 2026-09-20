@@ -28,7 +28,6 @@ import { getDefaultPair, loadDeltas, loadNotes, loadSummary } from "@/lib/data";
 import { fmtKst } from "@/lib/format";
 import { EFFECT_SIZE_FLOORS, FDR_ALPHA, WIN_RATE_MIN_N } from "@/pipeline/aggregate/stats";
 import { countRelevantNoteEntities } from "@/pipeline/shared/notes-count";
-import AdapterMatrix from "@/components/methodology/AdapterMatrix";
 import GateGrid from "@/components/methodology/GateGrid";
 import PipelineDiagram from "@/components/methodology/PipelineDiagram";
 import StatusDefinitionTable from "@/components/methodology/StatusDefinitionTable";
@@ -256,12 +255,6 @@ export default function MethodologyPage() {
               </div>
             </SectionCard>
           </div>
-
-          {/* 확장성의 증명 — HANDOFF-redesign-2026-09-10.md §4-4. 셀렉터가 아니라 어댑터
-              매핑표로 "다른 게임에도 같은 판정 엔진을 쓸 수 있다"를 보인다. */}
-          <SectionCard eyebrow="확장성" title="어댑터 매핑표 (LoL ↔ PUBG)" variant="glass">
-            <AdapterMatrix />
-          </SectionCard>
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
             <div id="gates">
