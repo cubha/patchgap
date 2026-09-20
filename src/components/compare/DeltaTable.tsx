@@ -20,6 +20,7 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import type { DeltaRecord } from "@/pipeline/types";
+import type { LaneAxis } from "@/lib/lane";
 import { itemHref, metricLabel, positionLabel } from "@/lib/format";
 import EntityIcon from "@/components/EntityIcon";
 import LaneGlyph from "@/components/LaneGlyph";
@@ -35,9 +36,22 @@ export interface DeltaTableProps {
   focusKey: string | null;
 }
 
-/** 지표 셀 — `전 → 후` + `▲/▼ Δ`(+ 전체 보기에서 라인 행이 대표면 라인 태그). 색은 DeltaValue 관례. */
-function MetricCell({ cell, showLane }: { cell: EntityCell; showLane: boolean }) {
-  const record: DeltaRecord = cell.record;
+/**
+ * 관측 1건 — `[축] 전 → 후` + `▲/▼ Δ`. 색은 DeltaValue 관례.
+ *
+ * **축 라벨은 늘 붙는다**(2026-09-20 사용자 지적). 전에는 라인 행일 때만 작은 글리프를 달아서
+ * "표기 없음 = 전체"라는 암묵 규칙이 있었고, 그래서 전체 수치와 라인 한정 수치가 같은 종류의
+ * 숫자로 읽혔다. 라인 필터가 걸려 있을 때만 라벨을 뗀다 — 그때는 필터 칩이 이미 축을 말한다.
+ */
+function Observation({
+  record,
+  lane,
+  labelled,
+}: {
+  record: DeltaRecord;
+  lane: LaneAxis | null;
+  labelled: boolean;
+}) {
   const delta = record.delta ?? 0;
   const up = delta > 0;
   const kind = metricKind(record.metric);
@@ -47,21 +61,44 @@ function MetricCell({ cell, showLane }: { cell: EntityCell; showLane: boolean })
     <Link
       href={itemHref(record.id)}
       className="group/cell flex flex-col gap-0.5 rounded-sm px-1 py-0.5 hover:bg-accent/10"
-      aria-label={`${record.entityName} ${metricLabel(record.metric)} 상세`}
+      aria-label={`${record.entityName} ${lane && lane !== "all" ? `${positionLabel(lane)} ` : ""}${metricLabel(record.metric)} 상세`}
     >
-      <span className="text-xs text-muted">
+      {/* 값 쌍은 접히면 안 된다 — 좁은 열에서 "57.1% →/45.5%"로 쪼개지면 한 관측이 둘로 보인다. */}
+      <span className="whitespace-nowrap text-xs text-muted">
         {formatMetricValue(record.before, record.metric)} → {formatMetricValue(record.after, record.metric)}
       </span>
-      <span className={`font-bold ${up ? "text-success" : "text-danger"}`}>
-        {up ? "▲" : "▼"} {deltaText}
-      </span>
-      {showLane && cell.lane !== "all" ? (
-        <span className="flex items-center gap-1 whitespace-nowrap font-body text-xs text-muted">
-          <LaneGlyph lane={cell.lane} size={11} labelled />
-          {positionLabel(cell.lane)}
+      {/* 축 라벨은 **Δ 줄**에 붙인다 — 값 쌍 줄에 붙이면 폭을 두 배로 먹어 열이 무너진다(실측). */}
+      <span className="flex items-center gap-1 whitespace-nowrap">
+        {labelled ? (
+          lane === "all" ? (
+            <span className="font-body text-xs text-muted">전체</span>
+          ) : (
+            <span className="flex items-center gap-1 font-body text-xs text-muted">
+              <LaneGlyph lane={lane!} size={11} labelled />
+              {positionLabel(lane!)}
+            </span>
+          )
+        ) : null}
+        <span className={`font-bold ${up ? "text-success" : "text-danger"}`}>
+          {up ? "▲" : "▼"} {deltaText}
         </span>
-      ) : null}
+      </span>
     </Link>
+  );
+}
+
+/** 지표 셀 — 전체 관측과 라인 한정 관측을 **접지 않고** 축 순서대로 쌓는다. */
+function MetricCell({ cell, labelled }: { cell: EntityCell; labelled: boolean }) {
+  return (
+    <div className="flex flex-col gap-2">
+      {cell.overall ? (
+        <Observation record={cell.overall} lane="all" labelled={labelled} />
+      ) : labelled && cell.lane ? (
+        // 라인 한정 관측만 있는 칸 — 전체가 왜 비었는지 말한다(빈 셀의 `—`와 같은 어휘).
+        <span className="px-1 font-body text-xs text-muted">전체 —</span>
+      ) : null}
+      {cell.lane ? <Observation record={cell.lane.record} lane={cell.lane.lane} labelled={labelled} /> : null}
+    </div>
   );
 }
 
@@ -140,7 +177,7 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                     const cell = row.cells[metric];
                     return (
                       <td key={metric} className="px-3 py-2 align-middle">
-                        {cell ? <MetricCell cell={cell} showLane={row.lane === "all"} /> : <span className="px-1 text-muted">—</span>}
+                        {cell ? <MetricCell cell={cell} labelled={row.lane === "all"} /> : <span className="px-1 text-muted">—</span>}
                       </td>
                     );
                   })}

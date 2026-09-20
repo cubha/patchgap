@@ -94,16 +94,43 @@ describe("DeltaTable — 엔티티 1행·인라인 지표(사용자 L3)", () => 
     expect(cells[5]).toContain("공지");
   });
 
-  it("'전체'에서 position 행이 셀을 대표하면 라인 태그를 그린다", () => {
-    const laneRows = buildEntityRows(
-      [delta({ id: "champion:MonkeyKing:JUNGLE:winRate", entityKey: "MonkeyKing", entityName: "오공", metric: "winRate", delta: -0.1, before: 0.57, after: 0.47, ci: [-0.2, -0.03] })],
-      "all",
-      0.1
-    );
+  // ── 축 혼입 제거(2026-09-20 사용자 확정: "전체가 default, 유의미한 라인별지표가있을때만 추가로") ──
+  // 이전엔 전체 행과 라인 행이 한 자리를 놓고 경쟁해 진 쪽이 **사라졌고**(실측 16칸), 라인 행이
+  // 이기면 축 표시가 작은 글리프뿐이라 전체 수치처럼 읽혔다. 이제 셀이 둘을 나란히 든다.
+  const monkeyOverall = delta({ id: "champion:MonkeyKing:winRate", entityKey: "MonkeyKing", entityName: "오공", metric: "winRate", delta: -0.108, before: 0.554, after: 0.445, ci: [-0.18, -0.03] });
+  const monkeyJungle = delta({ id: "champion:MonkeyKing:JUNGLE:winRate", entityKey: "MonkeyKing", entityName: "오공", metric: "winRate", delta: -0.116, before: 0.571, after: 0.455, ci: [-0.2, -0.03] });
+
+  it("'전체'에서 전체 관측과 라인 관측을 함께 그리고 축을 각각 명시한다", () => {
+    const rows2 = buildEntityRows([monkeyOverall, monkeyJungle], "all", 0.1);
+    const { container } = render(<DeltaTable pair={null} rows={rows2} focusKey={null} />);
+    const cell = container.querySelector('tr[data-entity-key="champion:MonkeyKing"] td:nth-child(3)');
+    expect(cell).not.toBeNull();
+    // 둘 다 남는다 — 라인 수치가 더 이상 버려지지 않는다.
+    expect(cell!.textContent).toContain("▼ −10.8%p");
+    expect(cell!.textContent).toContain("▼ −11.6%p");
+    // 축이 각각 붙는다("표기 없으면 전체"라는 암묵 규칙을 없앤다).
+    expect(cell!.textContent).toContain("전체");
+    expect(cell!.textContent).toContain("정글");
+    expect(cell!.querySelector("svg")).not.toBeNull();
+  });
+
+  it("'전체'에서 전체 관측이 보고 가능하지 않으면 '전체 —'로 그 사실을 말한다", () => {
+    const laneRows = buildEntityRows([monkeyJungle], "all", 0.1);
     const { container } = render(<DeltaTable pair={null} rows={laneRows} focusKey={null} />);
-    const row = container.querySelector('tr[data-entity-key="champion:MonkeyKing"]');
-    expect(row?.textContent).toContain("정글");
-    expect(row?.querySelector("td:nth-child(3) svg")).not.toBeNull();
+    const cell = container.querySelector('tr[data-entity-key="champion:MonkeyKing"] td:nth-child(3)');
+    expect(cell!.textContent).toContain("전체 —");
+    expect(cell!.textContent).toContain("정글");
+    expect(cell!.querySelector("svg")).not.toBeNull();
+  });
+
+  // 라인 필터가 걸려 있으면 축 라벨을 떼고 그 라인 수치만 — 필터 칩이 이미 축을 말한다.
+  it("라인 필터에서는 축 라벨도 '전체 —'도 그리지 않는다", () => {
+    const rows2 = buildEntityRows([monkeyOverall, monkeyJungle], "JUNGLE", 0.1);
+    const { container } = render(<DeltaTable pair={null} rows={rows2} focusKey={null} />);
+    const cell = container.querySelector('tr[data-entity-key="champion:MonkeyKing"] td:nth-child(3)');
+    expect(cell!.textContent).toContain("▼ −11.6%p");
+    expect(cell!.textContent).not.toContain("전체");
+    expect(cell!.textContent).not.toContain("정글");
   });
 
   it("focusKey 행은 row-highlight로 강조된다", () => {
