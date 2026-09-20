@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
 import AdapterMatrix from "../AdapterMatrix";
 import { ADAPTER_MATRIX } from "../adapterMatrixData";
+import { GAMES, gameLabel } from "@/lib/game";
 
 describe("AdapterMatrix", () => {
   it("9개 계층(어댑터 8 + 판정 엔진)을 모두 렌더한다", () => {
@@ -29,23 +30,35 @@ describe("AdapterMatrix", () => {
     const { container } = render(<AdapterMatrix />);
     // 2026-09-18 명세 변경(ST-7): 개발자 메모 톤("실연결 완료 … 판정했다")을 사용자 문장으로 —
     // 사실(실제 수집·집계·판정)은 그대로 어서션한다.
-    expect(container.textContent).toContain("실제로 수집·집계·판정했습니다");
+    // 2026-09-20: "PUBG는 … 실제로 수집·집계·판정했습니다 / 결과 보기 →" 문단은 표가 랜딩으로
+    // 옮겨오며 뺐다(바로 위 게임 패널이 패치 쌍·표본·링크를 이미 보여주고, 한 게임만 이름으로
+    // 지목하는 문장이라 게임이 늘면 낡는다). 그 사실은 열 머리글이 계속 말하므로 거기서 단언한다.
+    const heads = [...container.querySelectorAll("thead th")].map((th) => th.textContent);
+    expect(heads.some((h) => h?.includes("실연결"))).toBe(true);
     expect(container.textContent).not.toContain("수집 수치: 0건");
     expect(container.textContent).toContain("판정 엔진");
     expect(container.textContent).toContain("게임 무관");
   });
 
-  it("PUBG 열 머리글이 실연결 구간을 명시한다", () => {
+  // 2026-09-20 명세 변경: 열이 GAMES 레지스트리에서 나온다. 머리글 이름도 gameLabel()이 주므로
+  // "PUBG"가 아니라 사이트 전체가 쓰는 "배틀그라운드"다 — 표만 다른 명칭을 쓰지 않게 한 것이다.
+  // 게임 이름을 테스트에 박지 않는 이유는 화면과 같다: 게임이 늘면 단언도 따라 늘어야 한다.
+  it("게임마다 열이 하나씩 생기고 머리글이 연결 상태를 명시한다", () => {
     const { container } = render(<AdapterMatrix />);
     const heads = [...container.querySelectorAll("thead th")].map((th) => th.textContent);
-    expect(heads).toContain("PUBG (실연결 · 42.3 ⇒ 43.1)");
+    // 계층 + 게임 수 + 어댑터 인터페이스
+    expect(heads).toHaveLength(GAMES.length + 2);
+    for (const game of GAMES) {
+      expect(heads.some((h) => h?.startsWith(gameLabel(game.id)))).toBe(true);
+    }
+    expect(heads.some((h) => h?.includes("실연결 · 42.3 ⇒ 43.1"))).toBe(true);
     expect(heads).not.toContain("PUBG (어댑터 확정 · 미연결)");
   });
 
-  it("4번째 열은 어댑터 인터페이스이고 8계층 전부 인터페이스 이름을 노출한다", () => {
+  it("마지막 열은 어댑터 인터페이스이고 8계층 전부 인터페이스 이름을 노출한다", () => {
     const { container } = render(<AdapterMatrix />);
     const heads = [...container.querySelectorAll("thead th")].map((th) => th.textContent);
-    expect(heads[3]).toBe("어댑터 인터페이스");
+    expect(heads[heads.length - 1]).toBe("어댑터 인터페이스");
     for (const iface of [
       "NoteSource.fetch()",
       "MatchSource.collect()",
@@ -66,8 +79,9 @@ describe("AdapterMatrix", () => {
     const last = rows[rows.length - 1];
     expect(last.textContent).toContain("판정 엔진");
     expect(last.textContent).toContain("고정");
-    // 게임 무관이므로 LoL 셀이 PUBG 열까지 가로지른다 — 셀 4개가 아니라 3개.
+    // 게임 무관이라 한 칸이 게임 열 전체를 가로지른다 — 계층 + 합친 칸 + 인터페이스 = 3.
     expect(last.querySelectorAll("td")).toHaveLength(3);
+    expect(last.querySelector("td[colspan]")?.getAttribute("colspan")).toBe(String(GAMES.length));
   });
 
   // 2026-09-16: 관측 소스 행이 "텔레메트리 … 무제한"이라 주장했으나 실호출로 반증됐다
@@ -77,7 +91,7 @@ describe("AdapterMatrix", () => {
   it("관측 소스 행은 무제한이라 주장하지 않고 실측 제약(10 RPM · 336h)을 명시한다", () => {
     const { container } = render(<AdapterMatrix />);
     const observ = ADAPTER_MATRIX.find((r) => r.layer === "관측 소스");
-    expect(observ?.pubg).not.toContain("무제한");
+    expect(observ?.byGame?.pubg).not.toContain("무제한");
     expect(container.textContent).toContain("10 RPM");
     expect(container.textContent).toContain("336");
   });

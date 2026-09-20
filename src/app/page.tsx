@@ -10,6 +10,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Container from "@/components/Container";
+import AdapterMatrix from "@/components/methodology/AdapterMatrix";
 import { panelSurfaceClass } from "@/lib/panelSurface";
 import { fmtInt } from "@/lib/format";
 import { landingCards, landingTotals } from "@/lib/landing";
@@ -171,6 +172,21 @@ export default function LandingPage() {
                 <p className="mt-1.5 text-sm text-fg-2">{item.body}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* 확장성의 증명 — HANDOFF-redesign-2026-09-10.md §4-4(셀렉터가 아니라 어댑터 매핑표).
+            2026-09-20 사용자 판단으로 LoL 방법론에서 여기로 옮겼다: "판정 엔진은 게임을 모른다"는
+            **게임 중립 주장**이라 어느 한 게임의 페이지에 두면 비대칭이 된다(LoL 방법론에서 왜
+            배틀그라운드 열을 보나). 랜딩은 이미 바로 위에서 "패치노트를 내고 매치 API를 여는
+            게임이면 어댑터만 붙습니다"라고 말하고 있고, 이 표가 그 문장의 증거다. */}
+        <section className="border-t border-border-soft py-9">
+          <h2 className="text-sm font-bold text-accent">확장성</h2>
+          <p className="mt-1.5 max-w-[60ch] text-sm text-fg-2">
+            게임을 바꿀 때 갈아끼우는 것은 어댑터뿐입니다. 판정 엔진은 그대로입니다.
+          </p>
+          <div className={`${panelSurfaceClass("glass")} mt-4 overflow-hidden rounded-lg`}>
+            <AdapterMatrix />
           </div>
         </section>
 

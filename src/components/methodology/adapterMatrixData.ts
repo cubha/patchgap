@@ -1,22 +1,30 @@
 // src/components/methodology/adapterMatrixData.ts
 // 어댑터 매핑표 — HANDOFF-redesign-2026-09-10.md §4-4 "확장성의 증명은 셀렉터가 아니라
-// 어댑터 매핑표". LoL↔PUBG 계층별 대응을 정적 데이터로 선언한다(순수 데이터, I/O 없음).
-// 2026-09-16부터 PUBG 열은 설계 제안이 아니라 실제 수집 결과를 가리킨다(/pubg/).
+// 어댑터 매핑표". 계층별 대응을 정적 데이터로 선언한다(순수 데이터, I/O 없음).
 //
-// PUBG 열은 "확인된 사실만" 적는다 — 이제 그 사실이 설계가 아니라 실측이다.
+// **게임을 박아 두지 않는다(2026-09-20 사용자 지시로 구조 변경)**: 이전 형태는 행마다
+// `lol`/`pubg` 필드를 직접 갖고 있어서, 세 번째 게임이 붙으면 타입부터 고쳐야 했다 — 이 표가
+// 증명하려는 것이 "게임이 늘어도 판정 엔진은 그대로"인데 정작 표 자신이 두 게임에 묶여 있었다.
+// 이제 셀을 `Record<GameId, string>`으로 들고, 렌더는 `GAMES` 레지스트리를 순회한다. GAMES에
+// 게임을 추가하면 **여기에도 칸을 채워야 타입이 통과한다**(랜딩 `LANDING_LOADERS`와 같은 장치).
 //
-// 2026-09-10 verify-impl 축B: 4번째 열이 "PUBG 상태"였으나 확정 시안은 **"어댑터 인터페이스"**
-// (NoteSource.fetch() … AssetSource.icon())를 요구한다 — 이 열이 없으면 "바뀌는 것은 어댑터
-// 8줄뿐"이라는 확장성 논증이 화면에서 사라진다. 상태(어댑터 확정·미연결)는 시안처럼 PUBG 열
-// **머리글**로 옮겼고(그 상태 문구는 2026-09-16 실연결로 갱신됐다), 관측 소스의 "API 실측
-// 완료"는 원래 셀 본문에 있으므로 정보 손실이 없다.
-// 판정 엔진도 표 밖 문단이 아니라 **마지막 행**으로 넣는다(시안: "마지막 행이 핵심입니다").
+// 표가 사는 곳도 LoL 방법론 → **랜딩**으로 옮겼다. "판정 엔진은 게임을 모른다"는 주장은 어느 한
+// 게임의 페이지가 아니라 게임 중립 표면에서 해야 하고, 랜딩이 이미 "패치노트를 내고 매치 API를
+// 여는 게임이면 어댑터만 붙습니다"라고 말하고 있다 — 이 표가 그 문장의 증거다.
+//
+// 각 칸은 "확인된 사실만" 적는다. 아직 연결하지 않은 제안은 `(설계)`를 앞에 붙인다.
+
+import type { GameId } from "@/lib/game";
 
 export interface AdapterMatrixRow {
   layer: string;
-  lol: string;
-  /** null이면 PUBG 열이 없는 행 — 판정 엔진처럼 게임 무관이라 lol 셀이 두 열을 가로지른다. */
-  pubg: string | null;
+  /**
+   * 게임별 셀. `null`이면 게임 무관 행이고 `shared`가 게임 열 전체를 가로지른다(판정 엔진).
+   * `Record`라 GAMES에 게임이 늘면 컴파일러가 누락을 잡는다 — 조용히 빈 칸이 생기지 않는다.
+   */
+  byGame: Record<GameId, string> | null;
+  /** `byGame`이 null인 행에서 게임 열 전체를 덮는 한 칸. */
+  shared?: string;
   /** 이 계층에서 게임별로 갈아끼우는 인터페이스. 판정 엔진은 갈아끼우지 않으므로 "고정". */
   iface: string;
 }
@@ -24,68 +32,68 @@ export interface AdapterMatrixRow {
 export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
   {
     layer: "선언 소스",
-    lol: "공식 패치노트 HTML — {스킬키} {스탯}: A ⇒ B",
-    pubg: "공식 패치노트 — 동일한 A ⇒ B 구조",
+    byGame: { lol: "공식 패치노트 HTML — {스킬키} {스탯}: A ⇒ B", pubg: "공식 패치노트 — 동일한 A ⇒ B 구조" },
     iface: "NoteSource.fetch()",
   },
   {
     layer: "관측 소스",
-    lol: "Riot Match-V5 · Timeline",
-    pubg: "PUBG Developer API — 실측 완료(2026-09-16) · 매치·텔레메트리 조회 리밋 없음 · 표본 API 10 RPM · 보존 336시간",
+    byGame: { lol: "Riot Match-V5 · Timeline", pubg: "PUBG Developer API — 실측 완료(2026-09-16) · 매치·텔레메트리 조회 리밋 없음 · 표본 API 10 RPM · 보존 336시간" },
     iface: "MatchSource.collect()",
   },
   {
     layer: "주 엔티티",
-    lol: "챔피언 (173)",
-    pubg: "무기 47종 · 맵 관측 7종(자산 9종) · 차량·소모품 미수집",
+    byGame: { lol: "챔피언 (173)", pubg: "무기 47종 · 맵 관측 7종(자산 9종) · 차량·소모품 미수집" },
     iface: "Entity{type,key,name}",
   },
   {
     layer: "공간 축",
-    lol: "라인 5종 (탑·정글·미드·원딜·서포터)",
-    pubg: "맵 (설계: 낙하 구역)",
+    byGame: { lol: "라인 5종 (탑·정글·미드·원딜·서포터)", pubg: "맵 (설계: 낙하 구역)" },
     iface: "Segment[]",
   },
   {
     layer: "채택률 지표",
-    lol: "픽률 · 밴률",
-    pubg: "무기 획득 점유율 (설계: 초반 교전 사용률)",
+    byGame: { lol: "픽률 · 밴률", pubg: "무기 획득 점유율 (설계: 초반 교전 사용률)" },
     iface: "Metric.adoption",
   },
   {
     layer: "성과 지표",
-    lol: "승률 (n≥200 게이트)",
-    pubg: "(설계) 순위 · 생존 시간",
+    byGame: { lol: "승률 (n≥200 게이트)", pubg: "(설계) 순위 · 생존 시간" },
     iface: "Metric.outcome",
   },
   {
     layer: "시계열 지표",
-    lol: "골드@10/14 · 첫 오브젝트 시각",
-    pubg: "(설계) 첫 교전 시각 · 자기장 단계별 생존",
+    byGame: { lol: "골드@10/14 · 첫 오브젝트 시각", pubg: "(설계) 첫 교전 시각 · 자기장 단계별 생존" },
     iface: "Metric.timeline",
   },
   {
     layer: "엔티티 자산",
-    lol: "Data Dragon (아이콘·스펠)",
-    pubg: "pubg/api-assets 공식 렌더(무기 38/47 · 맵 9/9)",
+    byGame: { lol: "Data Dragon (아이콘·스펠)", pubg: "pubg/api-assets 공식 렌더(무기 38/47 · 맵 9/9)" },
     iface: "AssetSource.icon()",
   },
   {
     layer: "판정 엔진",
-    lol: "게임 무관 — BH-FDR q<0.10 · Newcombe CI · 표본 게이트 · 짝짓기 · LLM 2단 인용검증",
-    pubg: null,
+    byGame: null,
+    shared: "게임 무관 — BH-FDR q<0.10 · Newcombe CI · 표본 게이트 · 짝짓기 · LLM 2단 인용검증",
     iface: "고정",
   },
 ] as const;
 
-/** PUBG 열 머리글의 상태 표기. 행마다 뱃지를 붙이던 것을 머리글 1회로 접었다(4번째 열을
+/**
+ * 게임 열 머리글에 붙는 연결 상태. 행마다 뱃지를 붙이던 것을 머리글 1회로 접었다(4번째 열을
  * 어댑터 인터페이스에 내줬기 때문).
  *
- * 2026-09-16: "어댑터 확정 · 미연결" → "실연결". 사용자 결정으로 SCOPE Won't가 해제되고
+ * 2026-09-16: PUBG가 "어댑터 확정 · 미연결" → "실연결". 사용자 결정으로 SCOPE Won't가 해제되고
  * 실제 수집·집계·판정이 붙었다(/pubg/). 데이터가 커밋된 뒤에도 "미연결"을 그대로 두면
- * 이번에 고친 "무제한"과 **정확히 같은 종류의 거짓 문장**이 된다 — PLAN §6-7이 예고한 함정. */
-export const PUBG_COLUMN_HEADER = "PUBG (실연결 · 42.3 ⇒ 43.1)";
+ * 이번에 고친 "무제한"과 **정확히 같은 종류의 거짓 문장**이 된다 — PLAN §6-7이 예고한 함정.
+ *
+ * 2026-09-20: `PUBG_COLUMN_HEADER` 단일 상수 → 게임별 Record. 머리글 이름은 여기서 짓지 않고
+ * `gameLabel()`이 준다 — 사이트 다른 곳과 명칭이 갈리지 않게 한다("PUBG" → "배틀그라운드").
+ */
+export const COLUMN_STATUS: Record<GameId, string> = {
+  lol: "연결됨",
+  pubg: "실연결 · 42.3 ⇒ 43.1",
+};
 
 /** 표 아래 강조 문단 — 시안 `.note-blocked`. 마지막 행(판정 엔진)이 왜 핵심인지 말한다. */
 export const JUDGMENT_ENGINE_NOTE =
-  "마지막 행이 핵심입니다 — 게임을 바꿀 때 달라지는 것은 어댑터 8줄이고 판정 엔진은 그대로입니다. PUBG 열에서 (설계) 표시가 붙은 칸은 아직 연결하지 않은 제안이고, 나머지는 실제로 연결된 값입니다.";
+  "마지막 행이 핵심입니다 — 게임을 바꿀 때 달라지는 것은 어댑터 8줄이고 판정 엔진은 그대로입니다. (설계) 표시가 붙은 칸은 아직 연결하지 않은 제안이고, 나머지는 실제로 연결된 값입니다.";
