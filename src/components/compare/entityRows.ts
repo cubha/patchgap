@@ -9,11 +9,14 @@
 // **규칙**
 // ① 챔피언·아이템만. 라인 골드·오브젝트·매치 평균은 홈 사이드(매치 평균)가 이미 말하고 이 표의
 //    열(밴·승·픽·채택)에 들어갈 자리가 없다.
-// ② 라인 축: 특정 라인은 그 라인의 position 행(4세그먼트)만. "전체"는 scope=all 행(3세그먼트)을 우선하되,
-//    그 지표의 all 행이 보고 가능하지 않으면 **보고 가능한 position 행 중 |Δ| 최대**를 대표로 쓰고 셀에
-//    라인을 표기한다(실측 26.18: 에코의 유일한 이상 관측은 미드 승률이라 all 행만 보면 표에서 사라지고,
-//    좌 내비 배지 "공지 · 이상 관측"과 표가 서로를 반박했다). 밴은 라인 무관이라 라인 선택 시 셀이 비고,
-//    아이템은 라인 축이 없어 "전체"에서만 나온다(HANDOFF §6 "라인별 밴률 컬럼을 만들지 말 것").
+// ② 라인 축(2026-09-20 개정): 특정 라인은 그 라인의 position 행(4세그먼트)만. **"전체"에서는 scope=all
+//    행과 position 행이 경쟁하지 않고 셀에 나란히 실린다** — 전체가 1급이고, 그 지표의 라인 행이
+//    보고 가능할 때만 라인이 추가된다(사용자: "전체가 default, 유의미한 라인별지표가있을때만 추가로").
+//    옛 규칙은 "all 우선, all이 보고 가능하지 않으면 position 중 |Δ| 최대가 대표"였는데 두 곳에서 깨졌다:
+//    전체가 이기면 라인 수치가 사라지고(실측 16칸), 라인이 이기면 축 표시가 작은 글리프뿐이라 전체
+//    수치처럼 읽혔다. 에코·아트록스 사례(유일한 이상 관측이 한 라인에만 있다)는 이제 `전체 —` + 라인
+//    관측으로 그려진다. 밴은 라인 무관이라 라인 선택 시 셀이 비고, 아이템은 라인 축이 없어 "전체"에서만
+//    나온다(HANDOFF §6 "라인별 밴률 컬럼을 만들지 말 것").
 // ③ 셀 = **보고 가능** 지표만: 노이즈 상태가 아니고(`isNoiseStatus`) 유의하며(`isSignificantDelta`)
 //    효과크기 바닥을 넘는(`meetsEffectFloor`) 행. 홈 카드 대표 관측(`selectReportableObservation`)과
 //    같은 잣대라 두 화면이 서로를 반박하지 않는다.
@@ -31,10 +34,39 @@ export { isReportableRecord };
 export const ENTITY_METRICS = ["banRate", "winRate", "pickRate", "adoptionRate"] as const;
 export type EntityMetric = (typeof ENTITY_METRICS)[number];
 
-/** 셀 1개 — 어느 라인 축의 행인지 함께 든다("all"이 아니면 셀에 라인 태그를 그린다). */
-export interface EntityCell {
+/** 라인 한정 관측 1건 — 어느 라인의 행인지 함께 든다. */
+export interface LaneObservation {
   record: DeltaRecord;
-  lane: LaneAxis;
+  lane: Exclude<LaneAxis, "all">;
+}
+
+/**
+ * 셀 1개 — **축을 접지 않는다**(2026-09-20 사용자 지적).
+ *
+ * 이전엔 지표당 행 하나만 남겨서 `전체` 행과 `라인` 행이 같은 자리를 놓고 경쟁했고, 이긴 쪽만
+ * 그렸다. 두 부작용이 있었다: ① 전체 행이 이기면 라인 수치가 **사라진다**(26.17→26.18 실측
+ * 16칸) ② 라인 행이 이기면 전체 수치처럼 **보인다** — 축 표시가 작은 글리프 하나뿐이라
+ * "오공 승률 ▼10.8%p"(전체)와 "아트록스 승률 ▼10.0%p ㅜ탑"(탑 한정)이 같은 종류의 숫자로
+ * 읽혔다. 둘은 모집단이 다른 별개 관측이다.
+ *
+ * 이제 둘을 나란히 든다. 한 지표에 라인 행이 둘 이상 보고 가능한 경우는 실측 0건이라(26.17→26.18)
+ * 칸이 세로로 길어질 일은 없고, 둘 이상이면 |Δ| 최대 하나만 대표로 든다.
+ */
+export interface EntityCell {
+  /** scope=all 행 — 보고 가능할 때만. 라인 필터가 걸려 있으면 항상 null(그 라인만 본다). */
+  overall: DeltaRecord | null;
+  /** 라인 한정 행 — 보고 가능한 것 중 |Δ| 최대. */
+  lane: LaneObservation | null;
+  /** 상세 링크·|Δ| 정렬이 쓰는 대표 — 전체 우선, 없으면 라인. */
+  representative: DeltaRecord;
+}
+
+/** 셀이 든 관측 전부 — 상태·|Δ| 계산은 그린 것만 본다(후보였다 밀린 행이 상태를 올리면 안 된다). */
+function cellRecords(cell: EntityCell): DeltaRecord[] {
+  const out: DeltaRecord[] = [];
+  if (cell.overall) out.push(cell.overall);
+  if (cell.lane) out.push(cell.lane.record);
+  return out;
 }
 
 export interface EntityCompareRow {
@@ -66,11 +98,23 @@ function laneOf(record: DeltaRecord): LaneAxis | null {
   return parseLaneAxis(record.id);
 }
 
-/** 같은 지표에 후보가 둘일 때 어느 쪽이 셀을 차지하는가 — all 행 우선, 그다음 |Δ|. */
-function betterCell(candidate: EntityCell, current: EntityCell): boolean {
-  if (candidate.lane === "all" && current.lane !== "all") return true;
-  if (candidate.lane !== "all" && current.lane === "all") return false;
-  return Math.abs(candidate.record.delta ?? 0) > Math.abs(current.record.delta ?? 0);
+/** 셀에 관측 1건을 축에 맞는 자리로 넣는다. 라인 자리가 이미 찼으면 |Δ| 큰 쪽이 남는다. */
+function placeInCell(cell: EntityCell, record: DeltaRecord, lane: LaneAxis): void {
+  if (lane === "all") {
+    cell.overall = record;
+  } else {
+    const current = cell.lane;
+    if (!current || Math.abs(record.delta ?? 0) > Math.abs(current.record.delta ?? 0)) {
+      cell.lane = { record, lane };
+    }
+  }
+  cell.representative = cell.overall ?? cell.lane!.record;
+}
+
+function newCell(record: DeltaRecord, lane: LaneAxis): EntityCell {
+  const cell: EntityCell = { overall: null, lane: null, representative: record };
+  placeInCell(cell, record, lane);
+  return cell;
 }
 
 export function buildEntityRows(
@@ -86,12 +130,12 @@ export function buildEntityRows(
     if (!isEntityMetric(record.metric)) continue;
     const recordLane = laneOf(record);
     if (recordLane === null) continue;
-    // 특정 라인: 그 라인의 행만. 전체: 모든 라인의 행이 후보(all 우선은 betterCell이 정한다).
+    // 특정 라인: 그 라인의 행만. 전체: 전체 행과 라인 행이 둘 다 후보이고 경쟁하지 않는다
+    // (각자 제 축 자리로 간다 — placeInCell).
     if (lane !== "all" && recordLane !== lane) continue;
     if (!isReportableRecord(record, qAlpha)) continue;
 
     const key = `${record.entityType}:${record.entityKey}`;
-    const cell: EntityCell = { record, lane: recordLane };
     const existing = byKey.get(key);
     if (!existing) {
       byKey.set(key, {
@@ -100,7 +144,7 @@ export function buildEntityRows(
         entityKey: record.entityKey,
         entityName: record.entityName,
         lane,
-        cells: { [record.metric]: cell },
+        cells: { [record.metric]: newCell(record, recordLane) },
         status: displayStatus(record, qAlpha),
         representative: record,
         matchedNoteIds: [...record.matchedNoteIds],
@@ -109,7 +153,8 @@ export function buildEntityRows(
       order.push(key);
     } else {
       const current = existing.cells[record.metric];
-      if (!current || betterCell(cell, current)) existing.cells[record.metric] = cell;
+      if (current) placeInCell(current, record, recordLane);
+      else existing.cells[record.metric] = newCell(record, recordLane);
       for (const id of record.matchedNoteIds) {
         if (!existing.matchedNoteIds.includes(id)) existing.matchedNoteIds.push(id);
       }
@@ -119,17 +164,17 @@ export function buildEntityRows(
   // 대표 상태·대표 델타·|Δ|는 **셀로 확정된 행**에서 계산한다(후보였다가 밀린 행이 상태를 올리면 안 된다).
   const out = order.map((key) => byKey.get(key)!);
   for (const row of out) {
-    const cells = Object.values(row.cells) as EntityCell[];
-    let status: DisplayStatus = displayStatus(cells[0].record, qAlpha);
-    let representative = cells[0].record;
+    const records = (Object.values(row.cells) as EntityCell[]).flatMap(cellRecords);
+    let status: DisplayStatus = displayStatus(records[0], qAlpha);
+    let representative = records[0];
     let maxAbs = Math.abs(representative.delta ?? 0);
-    for (const cell of cells) {
-      const shown = displayStatus(cell.record, qAlpha);
+    for (const record of records) {
+      const shown = displayStatus(record, qAlpha);
       if (DISPLAY_SORT_PRIORITY[shown] < DISPLAY_SORT_PRIORITY[status]) status = shown;
-      const abs = Math.abs(cell.record.delta ?? 0);
+      const abs = Math.abs(record.delta ?? 0);
       if (abs > maxAbs) {
         maxAbs = abs;
-        representative = cell.record;
+        representative = record;
       }
     }
     row.status = status;
