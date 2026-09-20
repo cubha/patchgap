@@ -177,7 +177,7 @@ export default function PubgPage() {
                 {unannounced.length === 0 ? (
                   <p className="p-5 text-sm text-muted">바닥을 넘는 미공지 변화가 없습니다.</p>
                 ) : (
-                  <ul className="flex flex-col divide-y divide-border-soft">
+                  <ul className={`flex flex-col divide-y divide-border-soft ${PANEL_SCROLL_BODY}`}>
                     {unannounced.map((row) => (
                       <li key={row.id} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-3">
                         <StatusBadge status={displayStatusOf(row.status)} />
@@ -224,7 +224,7 @@ export default function PubgPage() {
               variant="glass"
               action={<span className="font-mono text-xs text-muted">{maps.after.maps.length}종</span>}
             >
-              <ul className="grid gap-px bg-border-soft sm:grid-cols-2 lg:grid-cols-4">
+              <ul className={`grid gap-px bg-border-soft sm:grid-cols-2 lg:grid-cols-4 ${PANEL_SCROLL_BODY}`}>
                 {maps.after.maps.map((map) => {
                   const identity = mapIdentity(map.mapKey);
                   const delta = maps.deltas.rows.find((r) => r.mapKey === map.mapKey) ?? null;

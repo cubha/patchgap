@@ -16,6 +16,7 @@ import { TftFooter, TftUnavailable, deltaDisplay, formatMetricValue } from "@/co
 import { entityTypeLabel, isLowerBetter, metricLabel, statusLabel } from "@/lib/format";
 import { loadTft } from "@/lib/tftData";
 import type { DeltaRecord } from "@/pipeline/types";
+import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
 /** `unit:DA_18_Rakan` → `unit~DA_18_Rakan`. 경로에 `:`을 그대로 쓰지 않는다. */
 export function entitySlug(key: string): string {
@@ -166,7 +167,7 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
                 이 엔티티를 언급한 패치노트 항목이 없다. 위 관측은 <strong className="text-fg">미공지 변화</strong>다.
               </p>
             ) : (
-              <ul className="flex flex-col">
+              <ul className={`flex flex-col ${PANEL_SCROLL_BODY}`}>
                 {matchedNotes.map((n) => (
                   <li key={n.id} className="flex flex-col gap-1 border-t border-border-soft px-5 py-3">
                     <div className="flex flex-wrap items-center gap-2">
