@@ -49,6 +49,12 @@ export function notesFile(patch: PatchId, dataRoot: string = DATA_ROOT): string 
   return path.join(dataRoot, "aggregated", "notes", `${patch}.json`);
 }
 
+/** data/cache/notes/{patch}.html — 패치노트 원문 캐시(gitignore). 파서(fetchPatchNotesHtml)가
+ * 쓰고, 귀속 재매핑(scripts/run-remap-note-entities.ts)이 읽는다 — 경로를 두 곳에 적지 않는다. */
+export function notesCacheFile(patch: PatchId, dataRoot: string = DATA_ROOT): string {
+  return path.join(dataRoot, "cache", "notes", `${patch}.html`);
+}
+
 /** data/cache/llm/ — LLM 2단 짝짓기 캐시 디렉토리(gitignore). */
 export function llmCacheDir(dataRoot: string = DATA_ROOT): string {
   return path.join(dataRoot, "cache", "llm");

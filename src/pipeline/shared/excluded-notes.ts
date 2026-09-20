@@ -13,7 +13,13 @@
 import type { PatchNoteItem } from "../types";
 
 // scope-critic ST4 권고: "의회" 단독 매치는 미래의 "의회 공지" 같은 묶음을 오탐한다 — 투표와 결합된 형태만.
-const EXCLUDED_ENTITY_RE = /의회.*투표|투표\s*\d*\s*결과/;
+//
+// 2026-09-20 추가 좁힘(**결과**를 요구한다): 여기서 빼려는 것은 투표 *집계표*("1. 너무 짧다 - 1.87%")이지
+// 의회 기능 공지가 아니다. 파서의 엔티티 귀속이 고쳐지면서 26.17 「체계」의 기능 공지 묶음이 제 이름
+// "제1회 의회 투표"를 되찾았는데, 옛 규칙(`의회.*투표`)은 그것까지 잡아 **화면에서 3줄을 지웠다**
+// (투표 안건 · 투표 결과 확인 · 랭크 로딩 화면 테두리 삭제 — 전부 실제 패치 내용이다). 26.18의
+// 「의회 - 투표 1 결과」는 두 번째 대안이 그대로 잡는다.
+const EXCLUDED_ENTITY_RE = /의회.*투표.*결과|투표\s*\d*\s*결과/;
 
 export function isExcludedNote(note: Pick<PatchNoteItem, "entity">): boolean {
   return EXCLUDED_ENTITY_RE.test(note.entity);

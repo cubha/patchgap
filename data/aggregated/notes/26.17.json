@@ -1699,11 +1699,11 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.17:item:활력증진의-펜던트:3f4d7db5",
+      "id": "note:26.17:item:리글의-랜턴과-야생의-섬광:5d6fd60e",
       "patch": "26.17",
       "section": "item",
-      "entity": "활력증진의 펜던트",
-      "skill": "리글의 랜턴과 야생의 섬광",
+      "entity": "리글의 랜턴과 야생의 섬광",
+      "skill": null,
       "stat": "아이템 조합식",
       "before": "마드레드의 갈퀴손 + 흡혈의 낫",
       "after": "마드레드의 갈퀴손 + 곡궁. 총가격(2,000골드)은 전과 동일",
@@ -1714,11 +1714,11 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.17:item:활력증진의-펜던트:5400a762",
+      "id": "note:26.17:item:리글의-랜턴과-야생의-섬광:dcf62e9f",
       "patch": "26.17",
       "section": "item",
-      "entity": "활력증진의 펜던트",
-      "skill": "리글의 랜턴과 야생의 섬광",
+      "entity": "리글의 랜턴과 야생의 섬광",
+      "skill": null,
       "stat": "공격력",
       "before": "25",
       "after": "0",
@@ -1729,11 +1729,11 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.17:item:활력증진의-펜던트:8f360fb2",
+      "id": "note:26.17:item:리글의-랜턴과-야생의-섬광:f1115ba6",
       "patch": "26.17",
       "section": "item",
-      "entity": "활력증진의 펜던트",
-      "skill": "리글의 랜턴과 야생의 섬광",
+      "entity": "리글의 랜턴과 야생의 섬광",
+      "skill": null,
       "stat": "공격 속도",
       "before": "0%",
       "after": "30%",
@@ -1904,12 +1904,12 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.17:system:챔피언-변경:87a0a930",
+      "id": "note:26.17:system:제1회-의회-투표:be5be69f",
       "patch": "26.17",
       "section": "system",
       "subsection": "system",
-      "entity": "챔피언 변경",
-      "skill": "제1회 의회 투표",
+      "entity": "제1회 의회 투표",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -1920,12 +1920,12 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.17:system:챔피언-변경:87a0a930-2",
+      "id": "note:26.17:system:제1회-의회-투표:be5be69f-2",
       "patch": "26.17",
       "section": "system",
       "subsection": "system",
-      "entity": "챔피언 변경",
-      "skill": "제1회 의회 투표",
+      "entity": "제1회 의회 투표",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -1936,11 +1936,11 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.17:system:챔피언-변경:d3aad8fe",
+      "id": "note:26.17:system:제1회-의회-투표:d3aad8fe",
       "patch": "26.17",
       "section": "system",
       "subsection": "system",
-      "entity": "챔피언 변경",
+      "entity": "제1회 의회 투표",
       "skill": "랭크 게임 로딩 화면 테두리",
       "stat": null,
       "before": null,

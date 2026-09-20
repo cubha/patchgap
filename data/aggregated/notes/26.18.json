@@ -693,10 +693,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:3c1c56de",
+      "id": "note:26.18:champion:갈리오:3c1c56de",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "갈리오",
       "skill": "기본 지속 효과 - 룬 피부",
       "stat": null,
       "before": null,
@@ -708,10 +708,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:8d85408a",
+      "id": "note:26.18:champion:갈리오:8d85408a",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "갈리오",
       "skill": "Q - 단호한 일격",
       "stat": null,
       "before": null,
@@ -723,10 +723,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:ac0de268",
+      "id": "note:26.18:champion:갈리오:ac0de268",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "갈리오",
       "skill": "W - 방벽",
       "stat": null,
       "before": null,
@@ -738,10 +738,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:758023c0",
+      "id": "note:26.18:champion:갈리오:758023c0",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "갈리오",
       "skill": "E - 정의의 돌풍",
       "stat": null,
       "before": null,
@@ -753,10 +753,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:758023c0-2",
+      "id": "note:26.18:champion:갈리오:758023c0-2",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "갈리오",
       "skill": "E - 정의의 돌풍",
       "stat": null,
       "before": null,
@@ -768,10 +768,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:fa816596",
+      "id": "note:26.18:champion:갈리오:fa816596",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "갈리오",
       "skill": "R - 듀란드의 석상",
       "stat": null,
       "before": null,
@@ -783,10 +783,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:3889a54d",
+      "id": "note:26.18:champion:뽀삐:3889a54d",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "뽀삐",
       "skill": "기본 지속 효과 - 용맹한 전사",
       "stat": null,
       "before": null,
@@ -798,10 +798,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:3889a54d-2",
+      "id": "note:26.18:champion:뽀삐:3889a54d-2",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "뽀삐",
       "skill": "기본 지속 효과 - 용맹한 전사",
       "stat": null,
       "before": null,
@@ -813,10 +813,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:6cf0a04f",
+      "id": "note:26.18:champion:뽀삐:6cf0a04f",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "뽀삐",
       "skill": "Q - 파괴의 일격",
       "stat": null,
       "before": null,
@@ -828,10 +828,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:65334be6",
+      "id": "note:26.18:champion:뽀삐:65334be6",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "뽀삐",
       "skill": "W - 데마시아의 모범",
       "stat": null,
       "before": null,
@@ -843,10 +843,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:65334be6-2",
+      "id": "note:26.18:champion:뽀삐:65334be6-2",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "뽀삐",
       "skill": "W - 데마시아의 모범",
       "stat": null,
       "before": null,
@@ -858,10 +858,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:c5a4bf69",
+      "id": "note:26.18:champion:뽀삐:c5a4bf69",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "뽀삐",
       "skill": "E - 용감한 돌진",
       "stat": null,
       "before": null,
@@ -873,10 +873,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:98ec736c",
+      "id": "note:26.18:champion:뽀삐:98ec736c",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "뽀삐",
       "skill": "R - 외교관 면책 특권",
       "stat": null,
       "before": null,
@@ -888,10 +888,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:98ec736c-2",
+      "id": "note:26.18:champion:뽀삐:98ec736c-2",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "뽀삐",
       "skill": "R - 외교관 면책 특권",
       "stat": null,
       "before": null,
@@ -903,10 +903,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:98ec736c-3",
+      "id": "note:26.18:champion:뽀삐:98ec736c-3",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "뽀삐",
       "skill": "R - 외교관 면책 특권",
       "stat": null,
       "before": null,
@@ -918,10 +918,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:bf5d9696",
+      "id": "note:26.18:champion:쉬바나:bf5d9696",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "쉬바나",
       "skill": "기본 지속 효과 - 용족의 분노",
       "stat": null,
       "before": null,
@@ -933,10 +933,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:a7fb99f1",
+      "id": "note:26.18:champion:쉬바나:a7fb99f1",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "쉬바나",
       "skill": "Q - 두 번 물어뜯기",
       "stat": null,
       "before": null,
@@ -948,10 +948,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:a7fb99f1-2",
+      "id": "note:26.18:champion:쉬바나:a7fb99f1-2",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "쉬바나",
       "skill": "Q - 두 번 물어뜯기",
       "stat": null,
       "before": null,
@@ -963,10 +963,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:55ede34d",
+      "id": "note:26.18:champion:쉬바나:55ede34d",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "쉬바나",
       "skill": "W - 연소",
       "stat": null,
       "before": null,
@@ -978,10 +978,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:55ede34d-2",
+      "id": "note:26.18:champion:쉬바나:55ede34d-2",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "쉬바나",
       "skill": "W - 연소",
       "stat": null,
       "before": null,
@@ -993,10 +993,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:48ae7018",
+      "id": "note:26.18:champion:쉬바나:48ae7018",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "쉬바나",
       "skill": "E - 화염 숨결",
       "stat": null,
       "before": null,
@@ -1008,10 +1008,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:48ae7018-2",
+      "id": "note:26.18:champion:쉬바나:48ae7018-2",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "쉬바나",
       "skill": "E - 화염 숨결",
       "stat": null,
       "before": null,
@@ -1023,10 +1023,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:24bf2916",
+      "id": "note:26.18:champion:쉬바나:24bf2916",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "쉬바나",
       "skill": "R - 용의 강림",
       "stat": null,
       "before": null,
@@ -1038,10 +1038,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:24bf2916-2",
+      "id": "note:26.18:champion:쉬바나:24bf2916-2",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "쉬바나",
       "skill": "R - 용의 강림",
       "stat": null,
       "before": null,
@@ -1053,10 +1053,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:be03f26c",
+      "id": "note:26.18:champion:신-짜오:be03f26c",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "신 짜오",
       "skill": "기본 지속 효과 - 도전",
       "stat": null,
       "before": null,
@@ -1068,10 +1068,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:13b4ff5b",
+      "id": "note:26.18:champion:신-짜오:13b4ff5b",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "신 짜오",
       "skill": "Q - 삼조격",
       "stat": null,
       "before": null,
@@ -1083,10 +1083,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:eaf39cd9",
+      "id": "note:26.18:champion:신-짜오:eaf39cd9",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "신 짜오",
       "skill": "W - 전투의 외침",
       "stat": null,
       "before": null,
@@ -1098,10 +1098,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:eaf39cd9-2",
+      "id": "note:26.18:champion:신-짜오:eaf39cd9-2",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "신 짜오",
       "skill": "W - 전투의 외침",
       "stat": null,
       "before": null,
@@ -1113,10 +1113,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:9f5a7c71",
+      "id": "note:26.18:champion:신-짜오:9f5a7c71",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "신 짜오",
       "skill": "E - 대담한 돌격",
       "stat": null,
       "before": null,
@@ -1128,10 +1128,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:38d23539",
+      "id": "note:26.18:champion:신-짜오:38d23539",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "신 짜오",
       "skill": "R - 초승달 휩쓸기",
       "stat": null,
       "before": null,
@@ -1143,10 +1143,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:4320c6b0",
+      "id": "note:26.18:champion:애니비아:4320c6b0",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "애니비아",
       "skill": "Q - 냉기 폭발",
       "stat": "투사체 속도",
       "before": "950",
@@ -1158,10 +1158,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:54ac6e21",
+      "id": "note:26.18:champion:애니비아:54ac6e21",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "애니비아",
       "skill": "Q - 냉기 폭발",
       "stat": "수동 폭발 기절 지속시간",
       "before": "1초",
@@ -1173,10 +1173,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:8a13f058",
+      "id": "note:26.18:champion:애니비아:8a13f058",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "애니비아",
       "skill": "Q - 냉기 폭발",
       "stat": "수동 폭발 반경",
       "before": "230",
@@ -1188,10 +1188,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:1e7de4b9",
+      "id": "note:26.18:champion:애니비아:1e7de4b9",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "애니비아",
       "skill": "Q - 냉기 폭발",
       "stat": "재사용 최소 지연 시간",
       "before": "0초",
@@ -1203,10 +1203,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:a8027822",
+      "id": "note:26.18:champion:갱플랭크:a8027822",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "갱플랭크",
       "skill": "Q - 혀어어어업상",
       "stat": "처치 시 추가 골드",
       "before": "4/5/6/7/8",
@@ -1218,10 +1218,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:953f570f",
+      "id": "note:26.18:champion:갱플랭크:953f570f",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "갱플랭크",
       "skill": "E - 사기진작",
       "stat": "사용 시 공격력",
       "before": "12/19/26/33/40",
@@ -1233,10 +1233,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:771e99e7",
+      "id": "note:26.18:champion:갱플랭크:771e99e7",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "갱플랭크",
       "skill": "E - 사기진작",
       "stat": "사용 시 이동 속도",
       "before": "8/11/14/17/20%",
@@ -1248,10 +1248,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:5526f860",
+      "id": "note:26.18:champion:갱플랭크:5526f860",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "갱플랭크",
       "skill": "E - 사기진작",
       "stat": null,
       "before": null,
@@ -1263,10 +1263,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:912bf6b1",
+      "id": "note:26.18:champion:하이머딩거:912bf6b1",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "하이머딩거",
       "skill": "기본 능력치",
       "stat": "기본 체력 재생",
       "before": "4.5",
@@ -1278,10 +1278,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:e3c72b05",
+      "id": "note:26.18:champion:하이머딩거:e3c72b05",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "하이머딩거",
       "skill": "Q - H-28G 진화형 포탑",
       "stat": "기본 피해량",
       "before": "28/36/44/52/60",
@@ -1293,10 +1293,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:096eae9b",
+      "id": "note:26.18:champion:하이머딩거:096eae9b",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "하이머딩거",
       "skill": "W - 마법공학 초소형 로켓",
       "stat": "마나 소모량",
       "before": "65/85/105/125/145",
@@ -1308,10 +1308,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:a674baca",
+      "id": "note:26.18:champion:하이머딩거:a674baca",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "하이머딩거",
       "skill": "E - CH-1 충격 수류탄",
       "stat": "재사용 대기시간",
       "before": "14/13/12/11/10초",
@@ -1323,10 +1323,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:65b34081",
+      "id": "note:26.18:champion:하이머딩거:65b34081",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "하이머딩거",
       "skill": "E - CH-1 충격 수류탄",
       "stat": "스킬 사거리",
       "before": "920",
@@ -1338,10 +1338,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:ac5b4a4d",
+      "id": "note:26.18:champion:케일:ac5b4a4d",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "케일",
       "skill": "기본 지속 효과 - 신성한 열정",
       "stat": "주문력 획득량",
       "before": "추가 공격력의 30%",
@@ -1353,10 +1353,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:16150c0d",
+      "id": "note:26.18:champion:말자하:16150c0d",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "말자하",
       "skill": "기본 능력치",
       "stat": "공격 속도 증가량",
       "before": "1.36%",
@@ -1368,10 +1368,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:74f0cb92",
+      "id": "note:26.18:champion:말자하:74f0cb92",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "말자하",
       "skill": "기본 능력치",
       "stat": "공격 속도 계수",
       "before": "0.625",
@@ -1383,10 +1383,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:51a9e051",
+      "id": "note:26.18:champion:말자하:51a9e051",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "말자하",
       "skill": "기본 지속 효과 - 공허충 소환",
       "stat": "이동 속도",
       "before": "400",
@@ -1398,10 +1398,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:1e265a2f",
+      "id": "note:26.18:champion:말자하:1e265a2f",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "말자하",
       "skill": "기본 지속 효과 - 공허충 소환",
       "stat": "기본 공격 사용 프레임",
       "before": "12",
@@ -1413,10 +1413,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:57228db8",
+      "id": "note:26.18:champion:말자하:57228db8",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "말자하",
       "skill": "기본 지속 효과 - 공허충 소환",
       "stat": "처치 시 골드",
       "before": "2",
@@ -1428,10 +1428,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:7e8e4fab",
+      "id": "note:26.18:champion:말자하:7e8e4fab",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "말자하",
       "skill": "Q - 공허의 부름",
       "stat": "주문력 계수",
       "before": "80%",
@@ -1443,10 +1443,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:1d7650be",
+      "id": "note:26.18:champion:말자하:1d7650be",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "말자하",
       "skill": "R - 황천의 손아귀",
       "stat": null,
       "before": null,
@@ -1458,10 +1458,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:35b385b4",
+      "id": "note:26.18:champion:나서스:35b385b4",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "나서스",
       "skill": "Q - 흡수의 일격",
       "stat": null,
       "before": null,
@@ -1473,10 +1473,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:2b7d8ffc",
+      "id": "note:26.18:champion:나서스:2b7d8ffc",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "나서스",
       "skill": "W - 쇠약",
       "stat": "둔화 효과 증가 주기",
       "before": "0.5초",
@@ -1488,10 +1488,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:6a4cc57e",
+      "id": "note:26.18:champion:나서스:6a4cc57e",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "나서스",
       "skill": "W - 쇠약",
       "stat": null,
       "before": null,
@@ -1503,10 +1503,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:744cdab9",
+      "id": "note:26.18:champion:워윅:744cdab9",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "워윅",
       "skill": "기본 능력치",
       "stat": "공격 속도",
       "before": "0.644",
@@ -1518,10 +1518,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:624ce4d1",
+      "id": "note:26.18:champion:워윅:624ce4d1",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "워윅",
       "skill": "기본 지속 효과 - 끝없는 갈증",
       "stat": "기본 피해량",
       "before": "3~16, 선형적으로 증가",
@@ -1533,10 +1533,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:6ebea4b2",
+      "id": "note:26.18:champion:워윅:6ebea4b2",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "워윅",
       "skill": "W - 사냥 본능",
       "stat": "재사용 대기시간",
       "before": "24/22/20/18/16초",
@@ -1548,10 +1548,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:cb45f0a7",
+      "id": "note:26.18:champion:워윅:cb45f0a7",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "워윅",
       "skill": "R - 무한의 구속",
       "stat": "피해량",
       "before": "250/335/420 +추가 공격력의 200%",
@@ -1563,10 +1563,10 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:champion:피오라:9cff7f57",
+      "id": "note:26.18:champion:워윅:9cff7f57",
       "patch": "26.18",
       "section": "champion",
-      "entity": "피오라",
+      "entity": "워윅",
       "skill": "R - 무한의 구속",
       "stat": null,
       "before": null,
