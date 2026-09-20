@@ -16,6 +16,7 @@ import IconBox from "@/components/IconBox";
 import StatusBadge from "@/components/StatusBadge";
 import type { StreamEntityIcon } from "@/components/home/releaseStreamEntity";
 import { panelSurfaceClass } from "@/lib/panelSurface";
+import { PANEL_SPLIT_BODY, PANEL_SPLIT_COLUMN } from "@/lib/panelScroll";
 import {
   NAV_SECTIONS,
   filterNotesBySearch,
@@ -57,7 +58,7 @@ export default function NoteNavigator({
   const visible = groupNotesForNav(filterNotesBySearch(sectionFiltered, searchQuery));
 
   return (
-    <section className={`${panelSurfaceClass("glass")} overflow-hidden rounded-lg`}>
+    <section className={`${panelSurfaceClass("glass")} ${PANEL_SPLIT_COLUMN} overflow-hidden rounded-lg`}>
       <div className="panel-head-wash border-b border-border-soft px-5 py-5">
         <h2 className="font-display text-lg font-bold text-fg">패치노트 항목</h2>
       </div>
@@ -92,7 +93,8 @@ export default function NoteNavigator({
           className="min-h-9 w-full rounded-sm border border-border bg-surface-warm px-3 text-sm font-bold text-fg placeholder:font-normal placeholder:text-muted focus:border-accent focus:outline-none"
         />
       </div>
-      <ul className="max-h-[640px] overflow-y-auto py-3"> {/* design-lint-ignore: 프로토타입 .note-item-list{max-height:640px} 하드코딩값, 대응 토큰 없음 */}
+      {/* 높이·스크롤 규약은 `@/lib/panelScroll`이 소유한다 — 사본을 만들지 않는다. */}
+      <ul className={`${PANEL_SPLIT_BODY} py-3`}>
         {visible.length === 0 ? (
           <li className="px-5 py-4 text-sm text-muted">검색 결과가 없습니다</li>
         ) : (

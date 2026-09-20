@@ -28,6 +28,7 @@ import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
 import { publicMapPath } from "@/pipeline/pubg/asset-path";
 import { displayStatusOf } from "@/pipeline/shared/display-status";
 import ExternalLink from "@/components/ExternalLink";
+import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
 export const metadata: Metadata = {
   title: "PUBG 42.3 ⇒ 43.1 · patchgap",
@@ -113,7 +114,9 @@ export default function PubgPage() {
                   모든 수치는 매치당 총 획득 대비 <strong className="text-fg-2">점유율</strong> ·{" "}
                   {before.nMatches.toLocaleString()} → {after.nMatches.toLocaleString()}매치
                 </p>
-                <div className="overflow-x-auto">
+                {/* 섹션 높이를 고정하고 넘치면 **이 안에서** 스크롤한다 — 규약은 `@/lib/panelScroll`이
+                    소유한다(2026-09-20 사용자 지적: 항목이 폭발해 전체 스크롤이 폭발). */}
+                <div className={`overflow-x-auto ${PANEL_SCROLL_BODY}`}>
                   <table className="w-full border-collapse text-sm" style={{ minWidth: "var(--table-min)" }}>
                     <thead>
                       <tr className="border-b border-border text-left">

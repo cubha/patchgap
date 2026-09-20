@@ -23,6 +23,7 @@ import { displayStatusOf } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
 import type { DeltaRecord } from "@/pipeline/types";
+import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
 export const metadata = { title: "전략적 팀 전투 — patchgap" };
 
@@ -81,8 +82,10 @@ function DeltaTable({ rows, emptyText }: { rows: DeltaRecord[]; emptyText: strin
   if (rows.length === 0) {
     return <p className="px-5 py-8 text-center text-sm text-muted">{emptyText}</p>;
   }
+  // 섹션 높이를 고정하고 넘치면 **이 안에서** 스크롤한다 — 규약은 `@/lib/panelScroll`이
+  // 소유한다(2026-09-20 사용자 지적: 항목이 폭발해 전체 스크롤이 폭발).
   return (
-    <div className="overflow-x-auto">
+    <div className={`overflow-x-auto ${PANEL_SCROLL_BODY}`}>
       <table className="w-full border-collapse text-sm">
         <thead>
           <tr className="bg-surface">

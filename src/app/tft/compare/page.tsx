@@ -17,6 +17,7 @@ import { entityTypeLabel, isLowerBetter, metricLabel } from "@/lib/format";
 import { entitySlug } from "@/app/tft/unit/[key]/page";
 import { loadTft } from "@/lib/tftData";
 import type { DeltaMetric, MatchStatus } from "@/pipeline/types";
+import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
 export const metadata = { title: "TFT 대조표 — patchgap" };
 
@@ -90,7 +91,9 @@ export default function TftComparePage() {
             variant="glass"
             action={<span className="font-mono text-xs text-muted">{rows.length}종</span>}
           >
-            <div className="overflow-x-auto">
+            {/* 섹션 높이를 고정하고 넘치면 **이 안에서** 스크롤한다 — 규약은 `@/lib/panelScroll`이
+                소유한다(2026-09-20 사용자 지적: 항목이 폭발해 전체 스크롤이 폭발). */}
+            <div className={`overflow-x-auto ${PANEL_SCROLL_BODY}`}>
               <table className="w-full border-collapse text-sm">
                 <thead>
                   <tr className="bg-surface">
