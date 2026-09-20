@@ -23,7 +23,10 @@
     "pipeline:tft-notes": "tsx scripts/run-tft-notes.ts",
     "pipeline:tft-aggregate": "tsx scripts/run-tft-aggregate.ts",
     "pipeline:tft-match": "tsx scripts/run-tft-match.ts",
-    "pipeline:tft-determine": "tsx scripts/tft-determine.ts"
+    "pipeline:tft-determine": "tsx scripts/tft-determine.ts",
+    "pipeline:pubg-collect": "tsx scripts/run-pubg-collect.ts",
+    "pipeline:pubg-aggregate": "tsx scripts/run-pubg-aggregate.ts",
+    "pipeline:pubg-determine": "tsx scripts/pubg-determine.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.124.0",

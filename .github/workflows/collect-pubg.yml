@@ -1,0 +1,201 @@
+name: collect-pubg
+
+# PUBG 정기 수집 — 수집·축약(F1/F2) → 집계·판정(F4) → 디스코드 → 커밋·푸시.
+#
+# ─── 이 워크플로가 늦게 생긴 이유 ────────────────────────────────────────────────────
+#
+# 2026-09-20까지 PUBG는 **수집기가 TypeScript로 존재하지 않는 유일한 게임**이었다. 재현 스크립트가
+# Python(`docs/plan/provenance/2026-09-16-pubg-harvest/`)이라 SCOPE §3의 스택 고정(TypeScript/Node)
+# 밖이었고, 사람이 손으로 돌렸다. 그 축을 `src/pipeline/collect/pubg/`로 이식하면서 CI에 얹는다.
+# 이식본이 Python과 **같은 값을 내는지**는 실전 매치 1건 전수 비교(19개 필드 일치)와 크로스 언어
+# 골든 테스트가 고정한다(`collect/pubg/__tests__/telemetry-reduce.test.ts`).
+#
+# ─── ⏳ 336시간이 일정을 지배한다 ───────────────────────────────────────────────────
+#
+# 텔레메트리는 매치 생성 후 14일이면 CDN에서 사라진다. 비교 구간이 `patch-5 … patch+6`이므로
+# **수집 가능 구간은 `patch+7 … patch+9` 사흘뿐**이다(계산은 patch-calendar.ts 헤더). 그래서
+# 주 1회 고정 요일이 아니라 **매일** 돌고, `determine`이 그 사흘을 고른다. 놓치면 그 패치쌍은
+# 영영 만들 수 없다 — 다시 받을 방법이 없기 때문이다.
+#
+# ─── 패치노트는 수기 입력이다 ────────────────────────────────────────────────────────
+#
+# PUBG 공지에는 LoL·TFT 같은 구조화 마크업이 없어 파서가 없다. `notes-{to}.json`이 없으면
+# `determine`이 `notes_ready=false`를 내고 **수집만** 돈다(축약본은 캐시에 남는다). 노트를 넣은 뒤
+# `gh workflow run collect-pubg.yml -f force=true`로 집계를 마저 돌린다. 이 사실을 숨기지 않는 이유:
+# 조용히 스킵하면 "정기 수집이 돌고 있다"는 착각이 남는다.
+#
+# ─── ⚠️ concurrency 그룹을 collect.yml·collect-tft.yml과 공유한다 ──────────────────
+#
+# PUBG는 Riot 리밋을 나눠 쓰지 않으므로 **API 때문이 아니다**. 이유는 **git push**다 — 세 워크플로가
+# 전부 같은 브랜치에 `data/aggregated/**`를 커밋하므로, 동시에 끝나면 한쪽 push가 non-fast-forward로
+# 거부된다. 그 실패는 "수집은 됐는데 배포는 안 된" 상태를 남긴다.
+#
+# 필요 secrets: PUBG_API_KEY(필수) · DISCORD_WEBHOOK_URL_PUBG(선택) · DISCORD_ROLE_ID_PUBG(선택)
+# 필요 variables: PATCHGAP_SITE_URL
+
+on:
+  workflow_dispatch:
+    inputs:
+      per_day:
+        description: "날짜당 수집 매치 수(run-pubg-collect --per-day)"
+        required: false
+        default: "120"
+        type: string
+      force:
+        description: "true면 산출물이 이미 있어도, 보존창을 벗어났어도 재실행한다"
+        required: false
+        default: "false"
+        type: boolean
+
+  schedule:
+    # 매일 20:00 UTC(05:00 KST). LoL 21:00·TFT 21:00과 한 시간 띄워 동시 큐 진입을 줄인다.
+    - cron: "0 20 * * *"
+
+concurrency:
+  # 🔴 collect.yml:83 · collect-tft.yml과 동일해야 한다. 위 헤더 「concurrency」 절 참고.
+  group: patchgap-collect
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  collect-pubg:
+    runs-on: ubuntu-latest
+    # 텔레메트리가 매치당 16~30MB다. 10일 × 120건 = 1,200건이면 다운로드만 20GB 규모라
+    # 동시성 8로도 한 시간을 넘길 수 있다.
+    timeout-minutes: 180
+    env:
+      PUBG_API_KEY: ${{ secrets.PUBG_API_KEY }}
+      DISCORD_WEBHOOK_URL_PUBG: ${{ secrets.DISCORD_WEBHOOK_URL_PUBG }}
+      DISCORD_ROLE_ID_PUBG: ${{ secrets.DISCORD_ROLE_ID_PUBG }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # 판정 규칙은 `src/pipeline/collect/pubg/patch-calendar.ts`(순수 함수·단위 테스트)가 갖는다.
+      # 이 스텝은 그것을 부르는 얇은 진입점이다 — 실파일이라 tsc·eslint·vitest가 전부 본다.
+      - name: Determine patch pair (캘린더 + 보존창 + 중복 가드)
+        id: determine
+        env:
+          MANUAL_FORCE: ${{ github.event.inputs.force }}
+        run: npx tsx scripts/pubg-determine.ts
+
+      # 축약본은 매치당 ~3KB라 1,200건이 4MB다 — 캐시에 올려 두면 노트가 늦게 들어와도
+      # (위 헤더 참고) 다시 받지 않고 집계만 돌릴 수 있다. 원본 텔레메트리는 저장하지 않는다.
+      - name: Restore data/raw/pubg (축약본 재사용)
+        if: steps.determine.outputs.should_run == 'true'
+        uses: actions/cache@v4
+        with:
+          path: data/raw/pubg
+          key: patchgap-pubg-raw-${{ steps.determine.outputs.to }}-${{ github.run_id }}
+          restore-keys: |
+            patchgap-pubg-raw-${{ steps.determine.outputs.to }}-
+            patchgap-pubg-raw-
+
+      - name: Collect + reduce telemetry (F1/F2)
+        if: steps.determine.outputs.should_run == 'true'
+        env:
+          DAYS: ${{ steps.determine.outputs.days }}
+          PER_DAY: ${{ github.event.inputs.per_day || '120' }}
+        run: npx tsx scripts/run-pubg-collect.ts --days "$DAYS" --per-day "$PER_DAY"
+
+      # 표본 임계 가드 — LoL·TFT와 같은 자리·같은 이유다(2026-09-10 선례: 얇은 표본이 커밋·배포까지
+      # 나갔다). PUBG 단위는 **official 매치**다. 실측 기준선이 42.3=1,715 / 43.1=1,614이라
+      # 그 절반인 800을 하한으로 잡는다. 날짜·패치 라벨은 축약본 안에 있으므로 여기서 직접 센다.
+      - name: Sample size guard
+        id: sample_guard
+        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
+        env:
+          DAYS: ${{ steps.determine.outputs.days }}
+        run: |
+          # 날짜 목록은 workflow 입력이 아니라 determine 산출이지만, JS 리터럴에 꿰매지 않는
+          # 규약은 그대로 지킨다(collect.yml·collect-tft.yml과 같은 이유). process.env로 넘긴다.
+          COUNT='const fs=require("fs");const days=new Set(process.env.DAYS.split(","));
+          const dir="data/raw/pubg/telemetry-reduced";
+          let before=0, after=0;
+          for (const f of fs.readdirSync(dir)) {
+            const j=JSON.parse(fs.readFileSync(dir+"/"+f,"utf8"));
+            if (j.matchType!=="official" || !j.createdAt) continue;
+            if (!days.has(j.createdAt.slice(0,10))) continue;
+            if (j.patch===process.env.TEL_FROM) before++; else if (j.patch===process.env.TEL_TO) after++;
+          }
+          console.log(before+" "+after);'
+          read -r BEFORE AFTER < <(DAYS="$DAYS" TEL_FROM="pc-2018-42" TEL_TO="pc-2018-43" node -e "$COUNT")
+          echo "[sample_guard] official 매치 before=${BEFORE} after=${AFTER}"
+          if [ "$BEFORE" -lt 800 ] || [ "$AFTER" -lt 800 ]; then
+            echo "sample_ok=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::PUBG official 매치 표본 부족(800 미만) — 집계·브리핑·커밋을 보류한다. 축약본은 캐시에 남으므로 다음 실행이 이어 받는다."
+          else
+            echo "sample_ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Aggregate + verdict (F2/F4)
+        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true' && steps.sample_guard.outputs.sample_ok == 'true'
+        env:
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: npx tsx scripts/run-pubg-aggregate.ts --from "$PATCH_FROM" --to "$PATCH_TO"
+
+      - name: Discord briefing (PUBG 채널)
+        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true' && steps.sample_guard.outputs.sample_ok == 'true' && env.DISCORD_WEBHOOK_URL_PUBG != ''
+        env:
+          SITE_URL: ${{ vars.PATCHGAP_SITE_URL }}
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: |
+          set -e
+          SITE_ARGS=()
+          if [[ -n "${SITE_URL}" ]]; then
+            SITE_ARGS=(--site "${SITE_URL}")
+          fi
+          # `--game pubg`는 채널과 데이터 경로를 함께 고른다. run-notify가 deltas.json의
+          # meta.from/to가 인자와 다르면 **던진다** — 같은 내용이 재전송되는 것을 막는 가드다.
+          npx tsx scripts/run-notify.ts \
+            --from "$PATCH_FROM" \
+            --to "$PATCH_TO" \
+            --top 5 \
+            --game pubg \
+            "${SITE_ARGS[@]}"
+        continue-on-error: true
+
+      - name: Commit + push generated data
+        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true' && steps.sample_guard.outputs.sample_ok == 'true'
+        env:
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: |
+          git config user.name "patchgap-bot"
+          git config user.email "patchgap-bot@users.noreply.github.com"
+          # PUBG 네임스페이스만 건드린다 — LoL·TFT 산출물은 이 워크플로의 소관이 아니다.
+          # `data/raw/pubg`는 gitignore라 add 대상에 들어오지 않는다.
+          git add data/aggregated/pubg
+          if git diff --cached --quiet; then
+            echo "변경분 없음 — 커밋 생략"
+          else
+            git commit -m "chore(data): auto-collect pubg ${PATCH_FROM} -> ${PATCH_TO}
+
+            GitHub Actions collect-pubg.yml(run_id=${{ github.run_id }})가 생성."
+            # [skip ci]를 넣지 않는다 — Vercel이 이 커밋을 감지해 재빌드해야 한다.
+            git push
+          fi
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: collect-pubg-failure-logs-${{ github.run_id }}
+          path: |
+            logs/**
+            data/aggregated/pubg/**
+          if-no-files-found: ignore
+          retention-days: 14

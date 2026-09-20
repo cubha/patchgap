@@ -5,12 +5,21 @@
 // 파일 I/O는 이 계층에만 둔다(순수 집계는 src/pipeline/aggregate/pubg-weapons.ts,
 // 판정은 src/pipeline/match/pubg-delta.ts).
 //
+// 실행: npm run pipeline:pubg-aggregate [-- --from 42.3 --to 43.1] [--data-root DIR]
+//
+// **패치쌍과 비교 구간을 인자로 받는다**(2026-09-20). 그전에는 42.3/43.1 날짜가 이 파일에
+// 상수로 박혀 있어 다음 패치에서 사람이 코드를 고쳐야 했다 — 정기 수집을 CI에 얹을 수 없던
+// 이유 중 하나다. 날짜는 `collect/pubg/patch-calendar.ts`가 **산술로** 만든다(손으로 고른
+// 9/4~9/8·9/11~9/15과 같은 값이 나오는 것을 테스트가 고정한다).
+//
 // **네임스페이스를 pubg/ 로 분리한 이유**: data/aggregated/{patch}/ 아래에 두면 LoL 화면이
 // 오염된다 — src/lib/data.ts의 listPatches는 summary.json이 있는 디렉토리를 전부 패치로
 // 집계하고, PatchId 표기("{숫자}.{숫자}")상 "43.1"은 유효한 패치로 통과한다. 별도 디렉토리에
 // summary.json 없이 두면 두 게이트 어느 쪽에도 걸리지 않는다.
 import fs from "node:fs";
 import path from "node:path";
+import { comparisonWindows, PUBG_PATCH_WINDOWS } from "../src/pipeline/collect/pubg/patch-calendar";
+import { isMainModule, parseCliArgs } from "./shared/cli";
 import {
   aggregatePubgWeapons,
   isFirearm,
@@ -23,18 +32,46 @@ import { aggregatePubgMaps, buildPubgMapDeltas } from "../src/pipeline/aggregate
 import { buildPubgDeltas, type PubgNoteItem } from "../src/pipeline/match/pubg-delta";
 
 const ROOT = process.cwd();
-const RAW_DIR = path.join(ROOT, "data", "raw", "pubg", "telemetry-reduced");
-const OUT_DIR = path.join(ROOT, "data", "aggregated", "pubg");
 
-/**
- * 요일을 맞춘 비교 구간(PLAN §6-2). 42.3·43.1 양쪽 다 목~월 5일이다 — 주말 비중이 다르면
- * 플레이어 구성 차이가 패치 효과와 섞인다. 경계 2일(9/9~9/10)은 43.1 rollout 시차가
- * 미검증이라 양쪽 모두에서 제외한다(§6-3).
- */
-const WINDOW_BEFORE = new Set(["2026-09-04", "2026-09-05", "2026-09-06", "2026-09-07", "2026-09-08"]);
-const WINDOW_AFTER = new Set(["2026-09-11", "2026-09-12", "2026-09-13", "2026-09-14", "2026-09-15"]);
+interface CliArgs {
+  from: string;
+  to: string;
+  dataRoot: string;
+}
 
-function readReduced(): PubgReducedMatch[] {
+export function parseArgs(argv: string[]): CliArgs {
+  const latest = PUBG_PATCH_WINDOWS[PUBG_PATCH_WINDOWS.length - 1];
+  const previous = PUBG_PATCH_WINDOWS[PUBG_PATCH_WINDOWS.length - 2];
+  const raw = parseCliArgs("run-pubg-aggregate", argv, [
+    { name: "from", type: "patch", default: previous?.patch ?? "" },
+    { name: "to", type: "patch", default: latest?.patch ?? "" },
+    { name: "dataRoot", type: "string", default: "data" },
+  ]);
+  return { from: String(raw.from), to: String(raw.to), dataRoot: String(raw.dataRoot) };
+}
+
+/** 패치 표기 → 달력 항목. 달력에 없으면 **던진다**(조용히 빈 집계를 내지 않는다). */
+function windowOf(patch: string) {
+  const found = PUBG_PATCH_WINDOWS.find((w) => w.patch === patch);
+  if (!found) {
+    throw new Error(
+      `run-pubg-aggregate: 패치 ${patch}가 달력에 없다 — src/pipeline/collect/pubg/patch-calendar.ts의 ` +
+        `PUBG_PATCH_WINDOWS에 추가한다.`
+    );
+  }
+  return found;
+}
+
+/** `["2026-09-04", …, "2026-09-08"]` → `"9/4~9/8"`(커밋된 산출물의 label 표기 그대로). */
+function labelRange(days: readonly string[]): string {
+  const short = (day: string): string => {
+    const [, month, date] = day.split("-");
+    return `${Number(month)}/${Number(date)}`;
+  };
+  return `${short(days[0])}~${short(days[days.length - 1])}`;
+}
+
+function readReduced(RAW_DIR: string): PubgReducedMatch[] {
   if (!fs.existsSync(RAW_DIR)) {
     throw new Error(
       `TODO(run-pubg-aggregate): ${RAW_DIR} 가 없다. 텔레메트리 수집을 먼저 실행한다 ` +
@@ -115,14 +152,26 @@ function buildAccuracyComparison(
 }
 
 function main(): void {
-  const all = readReduced();
-  const beforeMatches = selectMatches(all, "pc-2018-42", WINDOW_BEFORE);
-  const afterMatches = selectMatches(all, "pc-2018-43", WINDOW_AFTER);
+  const args = parseArgs(process.argv.slice(2));
+  const RAW_DIR = path.join(ROOT, args.dataRoot, "raw", "pubg", "telemetry-reduced");
+  const OUT_DIR = path.join(ROOT, args.dataRoot, "aggregated", "pubg");
 
-  const before = aggregatePubgWeapons(beforeMatches, "42.3", "42.3 (9/4~9/8)");
-  const after = aggregatePubgWeapons(afterMatches, "43.1", "43.1 (9/11~9/15)");
+  const fromWindow = windowOf(args.from);
+  const toWindow = windowOf(args.to);
+  // 비교 구간은 **`to` 패치의 라이브 날짜 하나**에서 나온다 — before는 그 앞 5일, after는
+  // 경계 2일을 건너뛴 5일이다. 두 창이 정확히 7일 차이라 요일이 저절로 맞는다(PLAN §6-2).
+  const { before: beforeDays, after: afterDays } = comparisonWindows(toWindow.liveFrom);
+  const WINDOW_BEFORE = new Set(beforeDays);
+  const WINDOW_AFTER = new Set(afterDays);
 
-  const notesFile = path.join(OUT_DIR, "notes-43.1.json");
+  const all = readReduced(RAW_DIR);
+  const beforeMatches = selectMatches(all, fromWindow.telemetryPatch, WINDOW_BEFORE);
+  const afterMatches = selectMatches(all, toWindow.telemetryPatch, WINDOW_AFTER);
+
+  const before = aggregatePubgWeapons(beforeMatches, args.from, `${args.from} (${labelRange(beforeDays)})`);
+  const after = aggregatePubgWeapons(afterMatches, args.to, `${args.to} (${labelRange(afterDays)})`);
+
+  const notesFile = path.join(OUT_DIR, `notes-${args.to}.json`);
   const notes = (JSON.parse(fs.readFileSync(notesFile, "utf8")) as { items: PubgNoteItem[] }).items;
 
   const { rows, effectFloor, counts } = buildPubgDeltas(
@@ -136,13 +185,13 @@ function main(): void {
 
   // 맵 축(2026-09-17, ST-A3) — 무기 축과 **같은 전처리 산출물**(selectMatches 결과)을 쓴다.
   // 별도 수집·별도 필터가 없다는 뜻이고, 그래서 42.3 보존창(9/22 마감)과 무관하게 만들 수 있다.
-  const mapsBefore = aggregatePubgMaps(beforeMatches, "42.3", before.label);
-  const mapsAfter = aggregatePubgMaps(afterMatches, "43.1", after.label);
+  const mapsBefore = aggregatePubgMaps(beforeMatches, args.from, before.label);
+  const mapsAfter = aggregatePubgMaps(afterMatches, args.to, after.label);
   const mapDeltas = buildPubgMapDeltas(mapsBefore, mapsAfter);
 
   fs.mkdirSync(OUT_DIR, { recursive: true });
-  fs.writeFileSync(path.join(OUT_DIR, "weapons-42.3.json"), JSON.stringify(before, null, 2));
-  fs.writeFileSync(path.join(OUT_DIR, "weapons-43.1.json"), JSON.stringify(after, null, 2));
+  fs.writeFileSync(path.join(OUT_DIR, `weapons-${args.from}.json`), JSON.stringify(before, null, 2));
+  fs.writeFileSync(path.join(OUT_DIR, `weapons-${args.to}.json`), JSON.stringify(after, null, 2));
   // §8 반증표 재현 — 출하 축 아님(ST-4). 화면 "버린 축" 섹션의 근거 파일.
   fs.writeFileSync(
     path.join(OUT_DIR, "accuracy-comparison.json"),
@@ -164,8 +213,8 @@ function main(): void {
       {
         meta: {
           game: "pubg",
-          from: "42.3",
-          to: "43.1",
+          from: args.from,
+          to: args.to,
           generatedAt: new Date().toISOString(),
           n: rows.length,
           counts,
@@ -181,16 +230,16 @@ function main(): void {
     )
   );
 
-  fs.writeFileSync(path.join(OUT_DIR, "maps-42.3.json"), JSON.stringify(mapsBefore, null, 2));
-  fs.writeFileSync(path.join(OUT_DIR, "maps-43.1.json"), JSON.stringify(mapsAfter, null, 2));
+  fs.writeFileSync(path.join(OUT_DIR, `maps-${args.from}.json`), JSON.stringify(mapsBefore, null, 2));
+  fs.writeFileSync(path.join(OUT_DIR, `maps-${args.to}.json`), JSON.stringify(mapsAfter, null, 2));
   fs.writeFileSync(
     path.join(OUT_DIR, "map-deltas.json"),
     JSON.stringify(
       {
         meta: {
           game: "pubg",
-          from: "42.3",
-          to: "43.1",
+          from: args.from,
+          to: args.to,
           generatedAt: new Date().toISOString(),
           n: mapDeltas.rows.length,
           // 판정(MatchStatus)이 없는 이유 — 43.1 패치노트에 맵 항목이 0건이다. 짝지을 선언이
@@ -207,7 +256,7 @@ function main(): void {
   );
 
   const pct = (x: number, digits = 1) => `${(x * 100).toFixed(digits)}%`;
-  console.log(`[pubg] 42.3 ${before.nMatches}매치 / 43.1 ${after.nMatches}매치`);
+  console.log(`[pubg] ${args.from} ${before.nMatches}매치 / ${args.to} ${after.nMatches}매치`);
   console.log(
     `[pubg] 맵 ${mapsBefore.maps.length} → ${mapsAfter.maps.length}종 · 비교행 ${mapDeltas.rows.length}` +
       (mapDeltas.onlyBefore.length || mapDeltas.onlyAfter.length
@@ -237,4 +286,11 @@ function main(): void {
   }
 }
 
-main();
+if (isMainModule(import.meta.url)) {
+  try {
+    main();
+  } catch (error: unknown) {
+    console.error(`[pubg] 실패: ${error instanceof Error ? error.message : String(error)}`);
+    process.exit(1);
+  }
+}

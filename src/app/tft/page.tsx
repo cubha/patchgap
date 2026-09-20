@@ -16,13 +16,16 @@ import {
   deltaDisplay,
   formatMetricValue,
 } from "@/components/tft/shared";
+import { selectTftCauseRows } from "@/components/tft/causeRows";
+import { entitySlug } from "@/app/tft/unit/[key]/page";
+import Link from "next/link";
 import { panelSurfaceClass } from "@/lib/panelSurface";
 import { entityTypeLabel, metricLabel } from "@/lib/format";
 import { loadTft } from "@/lib/tftData";
 import { displayStatusOf } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
-import type { DeltaRecord } from "@/pipeline/types";
+import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
 export const metadata = { title: "전략적 팀 전투 — patchgap" };
@@ -109,6 +112,49 @@ function DeltaTable({ rows, emptyText }: { rows: DeltaRecord[]; emptyText: strin
   );
 }
 
+/** 원인 한 건 — 인용 노트가 실재할 때만 유색 링크. 무근거는 회색이고 링크를 걸지 않는다. */
+function CauseLine({ row, notesById }: { row: ReturnType<typeof selectTftCauseRows>[number]; notesById: Map<string, PatchNoteItem> }) {
+  const d = deltaDisplay(row.record.metric, row.record.delta ?? 0);
+  const top = row.causes[0] ?? null;
+  const note = top?.candidateNoteId ? notesById.get(top.candidateNoteId) : undefined;
+  return (
+    <li className="flex flex-col gap-1.5 border-t border-border-soft px-5 py-4">
+      <div className="flex flex-wrap items-center gap-2">
+        <Link
+          href={`/tft/unit/${entitySlug(`${row.record.entityType}:${row.record.entityKey}`)}/`}
+          className="font-display text-base font-bold text-fg hover:text-accent"
+        >
+          {row.record.entityName}
+        </Link>
+        <span className="font-mono text-xs uppercase tracking-wider text-muted">
+          {entityTypeLabel(row.record.entityType)}
+        </span>
+        <span className="font-mono text-xs text-muted">{metricLabel(row.record.metric)}</span>
+        <span className={`font-mono text-xs font-bold tabular-nums ${d.improved ? "text-success" : "text-danger"}`}>
+          {d.text}
+        </span>
+        <StatusBadge status={row.status} />
+      </div>
+      {/* 인용이 후보셋 밖이면 회색 — 판정문이 아니라 참고 문장으로 떨어뜨린다. */}
+      {row.summary ? (
+        <p className={`text-sm leading-relaxed ${row.summaryVerified ? "text-fg-2" : "text-muted"}`}>{row.summary}</p>
+      ) : null}
+      {top ? (
+        top.verified && note ? (
+          <ExternalLink
+            href={note.anchorUrl}
+            className={`w-fit text-xs hover:underline ${top.confidence === "low" ? "text-muted" : "text-accent"}`}
+          >
+            {top.text} <span aria-hidden="true">↗</span>
+          </ExternalLink>
+        ) : (
+          <span className="text-xs text-muted">{top.text}</span>
+        )
+      ) : null}
+    </li>
+  );
+}
+
 export default function TftPage() {
   const bundle = loadTft();
   if (!bundle) {
@@ -129,6 +175,9 @@ export default function TftPage() {
   // 시안 04-applied의 헤드라인 — 이 사이트가 무엇을 하는 곳인지 한 문장으로 말한다.
   // 숫자는 아래 3타일과 **같은 출처**를 쓴다(따로 세면 화면이 스스로를 반박한다).
   const noteEntities = new Set(notes.items.map((n) => n.entity)).size;
+  // 대조표와 **같은 자격·같은 정렬**로 고른 원인 목록(components/tft/causeRows.ts).
+  const causeRows = selectTftCauseRows(deltas.rows, deltas.meta.qAlpha, 8);
+  const notesById = new Map(notes.items.map((n) => [n.id, n] as const));
 
   return (
     <main>
@@ -199,6 +248,28 @@ export default function TftPage() {
             action={<span className="font-mono text-xs text-muted">{unannounced.length}건</span>}
           >
             <DeltaTable rows={topRows(unannounced, 15)} emptyText="미공지 변화가 없다." />
+          </SectionCard>
+
+          {/* 표가 "무엇이 움직였나"를 말했으면, 여기서 "왜 그랬을까"를 말한다 — 이 사이트의
+              목적이 수치 나열이 아니라 원인 추론이기 때문이다(2026-09-20 사용자 지적). 근거가
+              없는 문장은 회색으로 남기고 링크를 걸지 않는다. */}
+          <SectionCard
+            eyebrow="추정"
+            title="왜 그랬을까 — LLM이 짚은 원인"
+            variant="glass"
+            action={<span className="font-mono text-xs text-muted">{causeRows.length}건</span>}
+          >
+            {causeRows.length === 0 ? (
+              <p className="px-5 py-8 text-center text-sm text-muted">
+                LLM 2단이 원인 후보를 내놓은 관측이 없다. 없는 원인을 지어내지 않는다.
+              </p>
+            ) : (
+              <ul className={`flex flex-col ${PANEL_SCROLL_BODY}`}>
+                {causeRows.map((row) => (
+                  <CauseLine key={row.record.id} row={row} notesById={notesById} />
+                ))}
+              </ul>
+            )}
           </SectionCard>
 
           <TftSampleNotice boards={before.boards + after.boards} matches={matches} />

@@ -1,0 +1,51 @@
+{
+  "matchId": "50faa6d7-2ca6-4cd5-b1e0-1c523d28dcee",
+  "createdAt": "2026-09-15T23:26:49Z",
+  "map": "Savage_Main",
+  "gameMode": "solo-fpp",
+  "duration": 6339,
+  "patch": "pc-2018-43",
+  "matchType": "official",
+  "telMode": "solo-fpp",
+  "region": "as",
+  "nEvents": 119,
+  "nBots": 11,
+  "nHumans": 1,
+  "weaponPickup": {
+    "Item_Weapon_AK47_C": 1
+  },
+  "weaponKills": {
+    "WeapAUG_C": 2,
+    "WeapAK47_C": 2,
+    "WeapBerylM762_C": 1,
+    "WeapUZI_C": 1,
+    "WeapHK416_C": 1,
+    "WeapACE32_C": 1,
+    "WeapSCAR-L_C": 1,
+    "WeapMP5K_C": 1
+  },
+  "weaponDamageHits": {
+    "WeapHK416_C": 2,
+    "WeapAUG_C": 13,
+    "WeapAK47_C": 8,
+    "WeapMini14_C": 1,
+    "WeapBerylM762_C": 4
+  },
+  "weaponAttacks": {
+    "Item_Weapon_ACE32_C": 15,
+    "Item_Weapon_Mini14_C": 13
+  },
+  "vehicleDamageHits": {
+    "WeapMP5K_C": 1
+  },
+  "weaponDamageSum": {
+    "WeapHK416_C": 36.0,
+    "WeapAUG_C": 256.0,
+    "WeapAK47_C": 186.4,
+    "WeapMini14_C": 18.5,
+    "WeapBerylM762_C": 100.0
+  },
+  "vehicleDamageSum": {
+    "WeapMP5K_C": 22.8
+  }
+}
