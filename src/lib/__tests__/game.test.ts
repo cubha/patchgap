@@ -81,12 +81,14 @@ describe("gameHref", () => {
 
 describe("GAMES", () => {
   it("LoL을 먼저 노출한다 — 드롭다운·랜딩 패널의 첫 자리다", () => {
-    expect(GAMES.map((g) => g.id)).toEqual(["lol", "pubg"]);
+    // 2026-09-20 TFT 추가. 순서 자체가 계약이다(LoL 먼저) — 목록이 늘어도 첫 자리는 고정.
+    expect(GAMES.map((g) => g.id)).toEqual(["lol", "pubg", "tft"]);
   });
 
   it("드롭다운 라벨은 사용자가 말한 한국어 정식 명칭이다", () => {
     expect(gameLabel("lol")).toBe("리그 오브 레전드");
     expect(gameLabel("pubg")).toBe("배틀그라운드");
+    expect(gameLabel("tft")).toBe("전략적 팀 전투");
   });
 
   it("모든 게임이 접두를 갖는다 — 무접두 게임은 더 이상 없다(랜딩이 루트를 쓴다)", () => {

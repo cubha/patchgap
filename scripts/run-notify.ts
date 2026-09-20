@@ -8,6 +8,7 @@ import path from "node:path";
 import { z } from "zod";
 import { DATA_ROOT, aggregatedDir, deltasFile, notesFile } from "../src/pipeline/shared/paths";
 import { buildBriefingEmbeds, sendWebhook } from "../src/pipeline/discord/webhook";
+import { isNotifyGameId, mentionPayload, resolveDiscordTarget, type NotifyGameId } from "../src/pipeline/discord/targets";
 import { countRelevantNoteEntities } from "../src/pipeline/shared/notes-count";
 import type { DeltasFile, PatchId, PatchNoteItem } from "../src/pipeline/types";
 import { isMainModule, parseCliArgs } from "./shared/cli";
@@ -29,6 +30,8 @@ export interface RunNotifyArgs {
   top: number;
   site: string;
   dryRun: boolean;
+  /** 어느 게임 채널로 보낼지. 웹훅 URL이 채널에 묶여 있어 이 값이 곧 채널 선택이다. */
+  game: NotifyGameId;
 }
 
 export function parseArgs(argv: string[]): RunNotifyArgs {
@@ -38,6 +41,7 @@ export function parseArgs(argv: string[]): RunNotifyArgs {
     { name: "top", type: "number", default: 5 },
     { name: "site", type: "string", default: DEFAULT_SITE_URL },
     { name: "dryRun", type: "boolean", default: false },
+    { name: "game", type: "string", default: "lol" },
   ]);
 
   const top = raw.top as number;
@@ -55,7 +59,12 @@ export function parseArgs(argv: string[]): RunNotifyArgs {
     throw new Error(`run-notify: --site 값은 http(s):// 스킴이 필요합니다: "${site}"`);
   }
 
-  return { from: raw.from as string, to: raw.to as string, top, site, dryRun: raw.dryRun as boolean };
+  const game = String(raw.game);
+  if (!isNotifyGameId(game)) {
+    throw new Error(`run-notify: 알 수 없는 --game "${game}" (lol|pubg|tft)`);
+  }
+
+  return { from: raw.from as string, to: raw.to as string, top, site, dryRun: raw.dryRun as boolean, game };
 }
 
 /**
@@ -120,12 +129,60 @@ export function loadMatchCount(patch: PatchId, dataRoot: string = DATA_ROOT): nu
   return typeof parsed.data?.matches === "number" ? parsed.data.matches : null;
 }
 
-/** data/aggregated/deltas/{from}_{to}.notify.json — 전송 결과 로그. 웹훅 URL은 절대 담지 않는다. */
-function notifyLogFile(from: PatchId, to: PatchId, dataRoot: string): string {
-  return path.join(dataRoot, "aggregated", "deltas", `${from}_${to}.notify.json`);
+/**
+ * 게임별 델타·부가수치 소스. **경로만 다르고 형태는 같다** — `buildBriefingEmbeds`가 meta에서
+ * 읽는 것은 `from`·`to`·`qAlpha`·`generatedAt` 넷뿐이고 TFT 산출물에도 전부 있다. 그래서
+ * 임베드 빌더를 게임별로 나누지 않는다(나누면 브리핑 문구가 게임마다 갈린다).
+ *
+ * PUBG는 아직 없다 — 그쪽 산출물은 `DeltaRecord`가 아니라 자체 행 타입이라 임베드 빌더를
+ * 그대로 못 쓴다. 지어내지 않고 미지원으로 둔다.
+ */
+function loadGameSource(
+  game: NotifyGameId,
+  from: PatchId,
+  to: PatchId,
+  dataRoot: string
+): { deltas: DeltasFile; noteCount: number | null; matchCounts: { from: number | null; to: number | null } } {
+  if (game === "lol") {
+    return {
+      deltas: loadDeltasFile(from, to, dataRoot),
+      noteCount: loadNoteCount(to, dataRoot),
+      matchCounts: { from: loadMatchCount(from, dataRoot), to: loadMatchCount(to, dataRoot) },
+    };
+  }
+  if (game === "tft") {
+    const file = path.join(dataRoot, "aggregated", "tft", `deltas-${from}-${to}.json`);
+    if (!fs.existsSync(file)) {
+      throw new Error(`run-notify: ${file} 없음 — 먼저 실행: npm run pipeline:tft-match -- --from ${from} --to ${to}`);
+    }
+    const deltas = JSON.parse(fs.readFileSync(file, "utf8")) as DeltasFile & {
+      meta: { noteCount?: number; matches?: { before?: number; after?: number } };
+    };
+    return {
+      deltas,
+      noteCount: typeof deltas.meta.noteCount === "number" ? deltas.meta.noteCount : null,
+      matchCounts: { from: deltas.meta.matches?.before ?? null, to: deltas.meta.matches?.after ?? null },
+    };
+  }
+  throw new Error(
+    `run-notify: ${game} 브리핑은 아직 지원하지 않는다 — 그 게임의 산출물은 DeltaRecord 형태가 아니라 ` +
+      `임베드 빌더를 그대로 쓸 수 없다.`
+  );
+}
+
+/**
+ * 전송 결과 로그. 웹훅 URL은 절대 담지 않는다.
+ * **게임별로 갈라 둔다** — 안 그러면 TFT 18.1→18.2 로그가 LoL의 `aggregated/deltas/`에 떨어져
+ * 그 폴더가 LoL 산출물이라는 전제가 조용히 깨진다(실측으로 한 번 그렇게 떨어뜨렸다).
+ */
+function notifyLogFile(game: NotifyGameId, from: PatchId, to: PatchId, dataRoot: string): string {
+  const dir = game === "lol" ? ["aggregated", "deltas"] : ["aggregated", game];
+  return path.join(dataRoot, ...dir, `${from}_${to}.notify.json`);
 }
 
 interface NotifyLog {
+  /** 어느 게임 채널로 갔나. 로그만 보고 채널을 역추적할 수 있어야 한다. */
+  game: NotifyGameId;
   from: PatchId;
   to: PatchId;
   sentAt: string;
@@ -134,7 +191,7 @@ interface NotifyLog {
 }
 
 function writeNotifyLog(log: NotifyLog, dataRoot: string): string {
-  const file = notifyLogFile(log.from, log.to, dataRoot);
+  const file = notifyLogFile(log.game, log.from, log.to, dataRoot);
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, `${JSON.stringify(log, null, 2)}\n`, "utf8");
   return file;
@@ -181,9 +238,7 @@ export interface RunNotifyResult {
  */
 export async function runNotify(args: RunNotifyArgs, deps: RunNotifyDeps = {}): Promise<RunNotifyResult> {
   const dataRoot = deps.dataRoot ?? DATA_ROOT;
-  const deltas = loadDeltasFile(args.from, args.to, dataRoot);
-  const noteCount = loadNoteCount(args.to, dataRoot);
-  const matchCounts = { from: loadMatchCount(args.from, dataRoot), to: loadMatchCount(args.to, dataRoot) };
+  const { deltas, noteCount, matchCounts } = loadGameSource(args.game, args.from, args.to, dataRoot);
 
   const embeds = buildBriefingEmbeds(deltas, {
     siteUrl: args.site,
@@ -199,14 +254,21 @@ export async function runNotify(args: RunNotifyArgs, deps: RunNotifyDeps = {}): 
 
   if (args.dryRun) {
     console.log(JSON.stringify(payload, null, 2));
-    console.log("[run-notify] --dry-run — 전송 생략");
+    // 어느 채널로 갈지는 **게임 이름만** 찍는다. 대상 해석(resolveDiscordTarget)은 환경변수를
+    // 읽으므로 여기서 부르면 "--dry-run은 어떤 환경변수도 없이 동작한다"는 이 분기의 보장이
+    // 깨진다. 게임은 CLI 인자라 env 없이 알 수 있고, 채널 오발송을 막는 데는 그것으로 충분하다.
+    console.log(`[run-notify] --dry-run — 전송 생략 (대상 게임: ${args.game})`);
     return { dryRun: true, embeds };
   }
 
-  const webhookUrl = loadDiscordWebhookUrl(deps.env ?? process.env);
-  const result = await sendWebhook(webhookUrl, payload, deps.fetchImpl ? { fetchImpl: deps.fetchImpl } : undefined);
+  const target = resolveDiscordTarget(args.game, deps.env ?? process.env);
+  // 역할 멘션은 `allowed_mentions`와 짝이어야 실제 핑이 간다(targets.ts 헤더 참고).
+  const sent = { ...payload, ...mentionPayload(target) };
+  console.log(`[run-notify] 대상: ${args.game} 채널${target.roleId ? ` · 역할 멘션 <@&${target.roleId}>` : " · 멘션 없음"}`);
+  const result = await sendWebhook(target.webhookUrl, sent, deps.fetchImpl ? { fetchImpl: deps.fetchImpl } : undefined);
   const logFile = writeNotifyLog(
     {
+      game: args.game,
       from: args.from,
       to: args.to,
       sentAt: new Date().toISOString(),

@@ -43,6 +43,24 @@
   근거·제약·게이트는 `docs/plan/PLAN-pubg-gate-2026-09-16.md`. 단 **출하 게이트 유지** — PUBG에서
   근거 딸린 판정이 1건도 서지 않으면 탭을 링크하지 않고 방법론의 "미연결" 표기를 그대로 둔다.
   게임 스위처 통합(전역 UI 개편)은 **여전히 Won't** — 9/20 전 착수 금지.
+- ~~**TFT(전략적 팀 전투) 어댑터**~~
+  → **2026-09-20 사용자 결정으로 Won't 해제**. 3번째 게임으로 실구현했다. 근거·제약·게이트는
+  `docs/plan/PLAN-tft-adapter-2026-09-20.md`. PUBG와 같은 **출하 게이트 유지** — 집계가 없으면
+  `getTftChrome()`이 null을 돌려주고 드롭다운에서 빠진다.
+  **착수 조건(실측으로 드러난 것)**: ① Riot 개발자 계정의 제품 등록에 TFT가 포함돼야 한다 —
+  기존 PATCHDRIFT 제품(LoL 전용)의 키는 TFT 엔드포인트 전부에 403을 돌려준다(kr·na1·euw1·jp1
+  4개 지역 확인, 2026-09-20). 개발 키(24h)로는 열린다.
+  ② 정기 수집을 붙이려면 **TFT를 별도 제품으로 등록**해 개별 승인을 받아야 한다.
+  ~~`EDIT APP`으로 기존 제품에 TFT API를 추가~~ → **2026-09-20 정정**: 승인된 제품의
+  Product Description은 읽기 전용이고(승인받은 내용 자체다), Riot 문서가 "If you are working on
+  multiple projects, you should register each one separately and each one needs to be individually
+  approved for a separate production API key"라고 명시한다(developer.riotgames.com/docs/portal).
+  ③ 별도 제품이면 **키도 별도**라 rate limit이 분리된다 — 앞서 우려한 LoL 크론과의 예산 충돌은
+  그 경우 발생하지 않는다. 반대로 한 키를 공유하게 되면 리밋이 키 단위이므로 순차 배치가 전제다
+  (리미터 인스턴스는 아직 공유하지 않는다).
+  **Riot terms 재확인(2026-09-20)**: TFT는 아레나가 아니므로 「아레나 Augments 승률 금지」 조항에
+  걸리지 않는다. 다만 **TFT 증강(augment) 통계는 애초에 만들 수 없다** — API 응답에 그 필드가
+  없다(참가자 400명 전원 부재 실측). 유료화·재판매 금지, 런타임 호출 0은 그대로 적용된다.
 - 실시간/런타임 API 호출, 사용자 계정·로그인, 서버 DB
 - 아레나·무작위 총력전 모드 통계(terms: 아레나 Augments 승률 금지)
 - 자체 모델 학습, 승률 예측
@@ -65,6 +83,13 @@
 | 알림 | `fetch` Discord Webhook | discord.js | 의존 0, embed 제한만 준수 |
 | 배포·모니터링 | **Vercel**(정적) + **UptimeRobot** 5분 | Cloudflare Pages | 무료·자격요건 상시 작동 |
 | 테스트·품질 | vitest + eslint + tsc + verify.sh(spec 규칙) | jest | 하네스 표준 |
+
+> **TFT 추가 (2026-09-20)**: 수집은 `tft-league-v1`(challenger/grandmaster/master) →
+> `tft-match-v1`(by-puuid ids → match). 엔티티 사전은 Data Dragon
+> `tft-champion`·`tft-trait`·`tft-item`을 **현행 세트로 걸러** 쓴다(안 거르면 「12골드」 같은
+> 표시명이 엔티티로 잡힌다). 패치노트는 `teamfighttactics.leagueoflegends.com`(도메인이 다르고
+> `-notes` 접미가 없다). **새 런타임 의존성 0** — 기존 fetch·bottleneck·cheerio만 쓴다.
+> 패치 구분은 버전이 아니라 **노트 발행 시각 창**이다(`game_version`이 비어 있다).
 
 ## 4. 리스크 & 선행 과제
 - **D+1 게이트(9/6, 구현과 병행)**: 실매치 1건으로 `info.gameVersion` 포맷·`startTime` 파라미터·`challenges` 골드 필드 존재 확인 → F1 컷 규칙 확정

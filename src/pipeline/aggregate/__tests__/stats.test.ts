@@ -321,7 +321,7 @@ describe("meetsEffectFloor — 단위는 비율(0~1)이지 %p(1~100)가 아니�
     expect(meetsEffectFloor("goldAt10", 0, 6000)).toBe(false);
   });
 
-  it("EFFECT_SIZE_FLOORS는 DeltaMetric 8종을 전수 커버한다", () => {
+  it("EFFECT_SIZE_FLOORS는 DeltaMetric 11종을 전수 커버한다", () => {
     expect(Object.keys(EFFECT_SIZE_FLOORS).sort()).toEqual(
       [
         "pickRate",
@@ -330,6 +330,9 @@ describe("meetsEffectFloor — 단위는 비율(0~1)이지 %p(1~100)가 아니�
         "adoptionRate",
         "goldAt10",
         "goldAt14",
+        "top4Rate",
+        "playRate",
+        "avgPlacement",
         "firstSec",
         "avgDurationSec",
       ].sort()
@@ -378,5 +381,27 @@ describe("meetsEffectFloor — 연속 지표(라인 골드·오브젝트 시각�
   it("avgDurationSec: 60초 미만 변화는 미달, 60초 이상은 통과", () => {
     expect(meetsEffectFloor("avgDurationSec", 12.95, 1470)).toBe(false);
     expect(meetsEffectFloor("avgDurationSec", 61, 1470)).toBe(true);
+  });
+});
+
+describe("TFT 지표 바닥 (2026-09-20 추가)", () => {
+  it("top4Rate는 winRate와 같은 절대 바닥 — 둘 다 기저 50%인 이항 지표다", () => {
+    expect(EFFECT_SIZE_FLOORS.top4Rate).toEqual(EFFECT_SIZE_FLOORS.winRate);
+  });
+
+  it("playRate는 상대 바닥 — 유닛 등장률은 기저가 지표마다 크게 달라 절대 %p가 무의미하다", () => {
+    expect(EFFECT_SIZE_FLOORS.playRate.kind).toBe("relative");
+    // 저기저 잡음 차단(adoptionRate와 같은 장치).
+    expect(EFFECT_SIZE_FLOORS.playRate.minBase).toBeGreaterThan(0);
+  });
+
+  it("저기저 유닛의 미미한 등장률 변화는 바닥에 걸린다", () => {
+    expect(meetsEffectFloor("playRate", 0.001, 0.004)).toBe(false);
+  });
+
+  it("평균 등수는 절대 바닥 — 1~8 고정 범위라 %가 아니라 등수로 읽는다", () => {
+    expect(EFFECT_SIZE_FLOORS.avgPlacement.kind).toBe("absolute");
+    expect(meetsEffectFloor("avgPlacement", 0.05, 4.5)).toBe(false);
+    expect(meetsEffectFloor("avgPlacement", 0.3, 4.5)).toBe(true);
   });
 });

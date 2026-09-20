@@ -13,7 +13,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { gameFromPathname, isGameHome, isItemDetailPath } from "@/lib/game";
+import { gameFromPathname, isGameHome, isItemDetailPath, type GameId } from "@/lib/game";
 import { laneCameraTransform } from "@/lib/laneCamera";
 import { useAmbient } from "./AmbientContext";
 
@@ -74,7 +74,7 @@ function useReducedMotion(): boolean {
  * 2. **한 세션에서 한 번만 재생됐다.** 홈 → 대조표 → 홈으로 돌아와도 재생되지 않았다(실측).
  *    브리핑 라우트를 벗어나면 `endedToken`을 비워, 재진입이 곧 새 재생이 되게 한다.
  */
-function useIntroRun(game: "lol" | "pubg" | null, nonce: number, reducedMotion: boolean) {
+function useIntroRun(game: GameId | null, nonce: number, reducedMotion: boolean) {
   const runToken = game === null ? null : `${game}:${nonce}`;
   const [activeToken, setActiveToken] = useState<string | null>(null);
 
@@ -111,10 +111,13 @@ export default function AmbientBackground() {
   const route = pathname ?? "/";
   const game = gameFromPathname(route);
   const isPubg = game === "pubg";
+  const isTft = game === "tft";
   /** 각 게임의 브리핑만 "홈"이다 — 랜딩은 자기 배경(스플래시 월)을 직접 갖는다. */
   const isHome = game === "lol" && isGameHome(route);
   /** PUBG 브리핑 — LoL 홈과 같은 자리이며 강하 인트로가 재생되는 유일한 라우트다. */
   const isPubgHome = isPubg && isGameHome(route);
+  /** TFT 브리핑 — 수렴 인트로가 재생되는 유일한 라우트. */
+  const isTftHome = isTft && isGameHome(route);
   const isItemDetail = isItemDetailPath(route);
   const showDetailSplash = isItemDetail && detailSplashUrl !== null;
 
@@ -125,9 +128,10 @@ export default function AmbientBackground() {
   const { tx, ty, scale } = laneCameraTransform();
 
   // 인트로를 소유하는 라우트는 두 게임의 **브리핑**뿐이다(LoL `/` · PUBG `/pubg/`).
-  const introGame = isHome ? "lol" : isPubgHome ? "pubg" : null;
+  const introGame: GameId | null = isHome ? "lol" : isPubgHome ? "pubg" : isTftHome ? "tft" : null;
   const intro = useIntroRun(introGame, introNonce, reducedMotion);
   const pubgDescending = isPubgHome && intro.active;
+  const tftConverging = isTftHome && intro.active;
 
   // 마커(바론/드래곤 둥지)는 2026-09-12 /verify-impl 실측으로 **제거**했다.
   // 시안 v5에서 마커가 보였던 것은 그 데모의 리스트가 라인 필터로 짧아지면서 아래 지형이
@@ -158,6 +162,23 @@ export default function AmbientBackground() {
         <div
           key={intro.runToken ?? "static"}
           className={`ambient-pubg-art${pubgDescending ? " is-descending" : ""}`}
+          onAnimationEnd={intro.markEnded}
+        />
+        <div className="ambient-glow" />
+        <div className="ambient-scrim" />
+        <div className="ambient-grain" />
+      </div>
+    );
+  }
+
+  // TFT도 가로로 긴 키아트 한 장이라 **PUBG와 같은 모양**이다(협곡 스택 아님). 다른 것은
+  // 마스크 높이·광원 위치·인트로 이름뿐이고, 그 셋은 전부 ambient.css가 갖는다.
+  if (isTft) {
+    return (
+      <div className="ambient-root" aria-hidden="true">
+        <div
+          key={intro.runToken ?? "static"}
+          className={`ambient-tft-art${tftConverging ? " is-converging" : ""}`}
           onAnimationEnd={intro.markEnded}
         />
         <div className="ambient-glow" />

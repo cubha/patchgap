@@ -18,7 +18,11 @@
     "pipeline:all": "npm run pipeline:collect -- --patch $PATCH_TO && npm run pipeline:timeline -- --patch $PATCH_TO && npm run pipeline:aggregate -- --patch $PATCH_TO && npm run pipeline:ddragon && npm run pipeline:match -- --from $PATCH_FROM --to $PATCH_TO && npm run build",
     "pipeline:timeline": "tsx scripts/run-timeline.ts",
     "pipeline:migrate-notes": "tsx scripts/run-migrate-notes.ts",
-    "pipeline:remap-notes": "tsx scripts/run-remap-note-entities.ts"
+    "pipeline:remap-notes": "tsx scripts/run-remap-note-entities.ts",
+    "pipeline:tft-collect": "tsx scripts/run-tft-collect.ts",
+    "pipeline:tft-notes": "tsx scripts/run-tft-notes.ts",
+    "pipeline:tft-aggregate": "tsx scripts/run-tft-aggregate.ts",
+    "pipeline:tft-match": "tsx scripts/run-tft-match.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.124.0",

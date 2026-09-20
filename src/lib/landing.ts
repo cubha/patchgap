@@ -15,6 +15,8 @@
 import "server-only";
 import { computeHeadline } from "@/components/home/logic";
 import { isReportable, loadPubg } from "./pubgData";
+import { loadTft } from "./tftData";
+import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { getDefaultPair, listPatches, loadDeltas, loadNotes, loadSummary } from "./data";
 import { fmtInt } from "./format";
 import { GAMES, sectionHref, type GameId } from "./game";
@@ -98,6 +100,26 @@ function pubgSummary(): LandingSummary | null {
   };
 }
 
+function tftSummary(): LandingSummary | null {
+  const bundle = loadTft();
+  if (!bundle) return null;
+  const { deltas, before, after, notes } = bundle;
+  // **LoL과 같은 술어를 쓴다** — PUBG가 상태만 보는 `isReportable`을 쓰는 것은 그쪽
+  // `classify()`가 유의성·바닥을 이미 상태에 접어 넣었기 때문이고, TFT는 `DeltaRecord`를
+  // 그대로 내므로 4조건 술어가 맞다.
+  const reportable = deltas.rows.filter((row) => isReportableRecord(row, deltas.meta.qAlpha));
+  const matches = before.matches + after.matches;
+
+  return {
+    pair: { from: deltas.meta.from, to: deltas.meta.to },
+    sample: `KR · Master+ · ${fmtInt(matches)}매치`,
+    announced: notes.items.length,
+    significant: reportable.length,
+    unannounced: reportable.filter((row) => row.status === "unannounced").length,
+    matches,
+  };
+}
+
 /**
  * 게임 → 요약 로더. **이 Record가 누락 차단 장치다** — GAMES에 게임을 추가하면 여기에도
  * 항목을 넣어야 타입이 통과한다.
@@ -105,6 +127,7 @@ function pubgSummary(): LandingSummary | null {
 export const LANDING_LOADERS: Record<GameId, LandingLoader> = {
   lol: lolSummary,
   pubg: pubgSummary,
+  tft: tftSummary,
 };
 
 /** GAMES 순서대로, 데이터가 있는 게임만. 빌드 타임 fs 호출이라 서버에서만 부른다. */

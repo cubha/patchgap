@@ -94,6 +94,19 @@ jobs:
       RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      # 게임별 채널 분리(2026-09-20). 웹훅 URL은 **채널 하나에 묶여 있어** 채널을 나누는 유일한
+      # 방법이 URL을 나누는 것이다. `run-notify.ts --game`이 이 이름 규칙으로 고른다
+      # (src/pipeline/discord/targets.ts). LoL만 레거시 DISCORD_WEBHOOK_URL로 폴백한다 —
+      # 전 게임 폴백으로 두면 PUBG·TFT 브리핑이 LoL 채널로 나가 분리 목적이 깨진다.
+      DISCORD_WEBHOOK_URL_LOL: ${{ secrets.DISCORD_WEBHOOK_URL_LOL }}
+      DISCORD_WEBHOOK_URL_PUBG: ${{ secrets.DISCORD_WEBHOOK_URL_PUBG }}
+      DISCORD_WEBHOOK_URL_TFT: ${{ secrets.DISCORD_WEBHOOK_URL_TFT }}
+      # 역할 멘션(선택). 미설정이면 멘션 없이 embed만 나간다 — 채널 분리는 *읽을 때* 안 섞이게
+      # 해줄 뿐이고, 디스코드는 채널 글에 기본 알림을 주지 않는다. "내가 보는 게임만 받는다"가
+      # 되려면 이 값이 있어야 한다.
+      DISCORD_ROLE_ID_LOL: ${{ secrets.DISCORD_ROLE_ID_LOL }}
+      DISCORD_ROLE_ID_PUBG: ${{ secrets.DISCORD_ROLE_ID_PUBG }}
+      DISCORD_ROLE_ID_TFT: ${{ secrets.DISCORD_ROLE_ID_TFT }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -322,6 +335,7 @@ jobs:
             --from "$PATCH_FROM" \
             --to "$PATCH_TO" \
             --top 5 \
+            --game lol \
             "${SITE_ARGS[@]}"
         continue-on-error: true
 
