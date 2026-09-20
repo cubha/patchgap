@@ -169,20 +169,19 @@ export default function Header({ chrome }: HeaderProps) {
   const snapshotCaption = current?.snapshotCaption ?? null;
 
   // 랜딩(게임 없음)은 크롬을 거의 갖지 않는다 — 확정 시안 05-landing-B.html은 브랜드 한 줄이
-  // 전부다. 게임 드롭다운·내비·패치쌍·표본 칩·스냅샷 캡션은 **어느 게임 안에 있는지**를 전제로
+  // 전부다. 2026-09-20 사용자 판단으로 "어떻게 판정하나"(#how) 앵커도 뺐다: 한 화면 안에서
+  // 조금만 내리면 나오는 섹션이라 링크가 데려다줄 거리가 없고, 랜딩의 유일한 행동은 게임
+  // 패널의 "시작하기"여야 한다 — 크롬에 선택지를 하나 더 두면 그 행동이 흐려진다. 게임 드롭다운·내비·패치쌍·표본 칩·스냅샷 캡션은 **어느 게임 안에 있는지**를 전제로
   // 하는 컨트롤이라, 게임이 정해지지 않은 화면에서 그리면 LoL을 임의로 주장하게 된다
   // (이 파일 위 주석이 경고한 "실제 보고 있는 쌍과 다른 숫자를 주장"과 같은 결함군).
   if (game === null) {
     return (
       <header ref={headerRef} className="glass-chrome sticky top-0 z-20 border-b">
-        <Container className="flex items-center justify-between gap-6 py-3">
+        <Container className="flex items-center py-3">
           <Link href="/" className="flex min-h-8 items-center gap-2">
             <BrandMark />
             <span className="font-display text-lg font-bold tracking-tight text-fg">patchgap</span>
           </Link>
-          <a href="#how" className="text-xs text-fg-2 hover:text-fg">
-            어떻게 판정하나
-          </a>
         </Container>
       </header>
     );
