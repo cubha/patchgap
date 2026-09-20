@@ -64,6 +64,24 @@ h1 em{font-style:normal;color:var(--accent)}
 .panel.next .body{position:static;padding:20px}
 .panel.next h3.next-q{font-family:var(--font-mono);font-size:22px;line-height:1.25;letter-spacing:.12em;color:var(--accent);opacity:.85;margin:0 0 12px}
 .panel.next p{margin:0;color:var(--muted);font-size:var(--text-xs)}
+/* ── 확장성(어댑터 매핑표) ── */
+/* 2026-09-20: LoL 방법론에 있던 표를 여기로 옮겼다. "판정 엔진은 게임을 모른다"는 게임 중립
+   주장이라 어느 한 게임의 페이지에 두면 비대칭이 된다. 위의 WHO'S NEXT 문구("어댑터만 붙습니다")의
+   증거가 이 표다. 열은 게임 수만큼 늘어난다. */
+.ext{border-top:1px solid var(--border-soft);padding:32px 0 8px}
+.ext h4{margin:0 0 4px;font-size:13px;color:var(--accent)}
+.ext .lede2{margin:0 0 16px;color:var(--fg-2);font-size:13px;max-width:60ch}
+.ext .shell{border:1px solid rgba(140,107,51,.28);border-radius:var(--radius-lg);overflow:hidden;
+  background-color:rgba(10,22,38,.55);
+  background-image:linear-gradient(90deg,rgba(200,163,85,.9) 0%,rgba(200,163,85,.36) 45%,rgba(200,163,85,0) 100%);
+  background-repeat:no-repeat;background-size:100% 2px;background-position:0 0}
+.ext .scroll{overflow-x:auto}
+.matrix{width:100%;border-collapse:collapse;font-size:13px}
+.matrix th{text-align:left;font-size:var(--text-xs);color:var(--muted);font-weight:700;padding:12px 20px;border-bottom:1px solid var(--border-soft)}
+.matrix td{padding:16px 20px;border-bottom:1px solid var(--border-soft);vertical-align:top;color:var(--fg-2)}
+.matrix td.layer{color:var(--fg);font-weight:700}
+.matrix td.iface{white-space:nowrap;font-family:var(--font-mono);font-size:var(--text-xs);font-weight:700;color:var(--accent)}
+.ext .note{margin:0;padding:16px 20px 20px;color:var(--muted);font-size:var(--text-xs)}
 /* ── 하단 ── */
 .how{border-top:1px solid var(--border-soft);margin-top:24px;padding:32px 0 56px}
 .how .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
@@ -138,6 +156,38 @@ footer{border-top:1px solid var(--border-soft);padding:16px 0 36px;color:var(--m
     <div><h4>수집</h4><p>패치 라이브 구간의 매치를 전량 수집하고, 표본이 모자란 지표는 판정하지 않습니다.</p></div>
     <div><h4>판정</h4><p>Wilson·Newcombe 신뢰구간과 BH-FDR로 거짓양성을 통제한 뒤 패치노트 항목과 짝을 맞춥니다.</p></div>
     <div><h4>근거</h4><p>모든 판정문에 원천 링크가 붙습니다. 근거가 없으면 회색으로 남기고 지어내지 않습니다.</p></div>
+  </div>
+</section>
+
+<section class="ext wrap">
+  <h4>확장성</h4>
+  <p class="lede2">게임을 바꿀 때 갈아끼우는 것은 어댑터뿐입니다. 판정 엔진은 그대로입니다.</p>
+  <div class="shell">
+    <div class="scroll">
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>파이프라인 계층</th>
+            <th>리그 오브 레전드 (연결됨)</th>
+            <th>배틀그라운드 (실연결 · 42.3 ⇒ 43.1)</th>
+            <th>어댑터 인터페이스</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="layer">선언 소스</td><td>공식 패치노트 HTML — {스킬키} {스탯}: A ⇒ B</td><td>공식 패치노트 — 동일한 A ⇒ B 구조</td><td class="iface">NoteSource.fetch()</td></tr>
+          <tr><td class="layer">관측 소스</td><td>Riot Match-V5 · Timeline</td><td>PUBG Developer API — 실측 완료(2026-09-16) · 매치·텔레메트리 조회 리밋 없음 · 표본 API 10 RPM · 보존 336시간</td><td class="iface">MatchSource.collect()</td></tr>
+          <tr><td class="layer">주 엔티티</td><td>챔피언 (173)</td><td>무기 47종 · 맵 관측 7종(자산 9종) · 차량·소모품 미수집</td><td class="iface">Entity{type,key,name}</td></tr>
+          <tr><td class="layer">공간 축</td><td>라인 5종 (탑·정글·미드·원딜·서포터)</td><td>맵 (설계: 낙하 구역)</td><td class="iface">Segment[]</td></tr>
+          <tr><td class="layer">채택률 지표</td><td>픽률 · 밴률</td><td>무기 획득 점유율 (설계: 초반 교전 사용률)</td><td class="iface">Metric.adoption</td></tr>
+          <tr><td class="layer">성과 지표</td><td>승률 (n≥200 게이트)</td><td>(설계) 순위 · 생존 시간</td><td class="iface">Metric.outcome</td></tr>
+          <tr><td class="layer">시계열 지표</td><td>골드@10/14 · 첫 오브젝트 시각</td><td>(설계) 첫 교전 시각 · 자기장 단계별 생존</td><td class="iface">Metric.timeline</td></tr>
+          <tr><td class="layer">엔티티 자산</td><td>Data Dragon (아이콘·스펠)</td><td>pubg/api-assets 공식 렌더(무기 38/47 · 맵 9/9)</td><td class="iface">AssetSource.icon()</td></tr>
+          <!-- 게임 무관 행 — 한 칸이 게임 열 전체를 가로지른다. 표의 모양으로 "이 계층은 갈아끼우지 않는다"를 말한다. -->
+          <tr><td class="layer">판정 엔진</td><td colspan="2">게임 무관 — BH-FDR q&lt;0.10 · Newcombe CI · 표본 게이트 · 짝짓기 · LLM 2단 인용검증</td><td class="iface">고정</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">마지막 행이 핵심입니다 — 게임을 바꿀 때 달라지는 것은 어댑터 8줄이고 판정 엔진은 그대로입니다. (설계) 표시가 붙은 칸은 아직 연결하지 않은 제안이고, 나머지는 실제로 연결된 값입니다.</p>
   </div>
 </section>
 
