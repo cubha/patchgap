@@ -117,9 +117,13 @@ jobs:
         if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
         env:
           DAYS: ${{ steps.determine.outputs.days }}
+          TEL_FROM: ${{ steps.determine.outputs.telemetry_from }}
+          TEL_TO: ${{ steps.determine.outputs.telemetry_to }}
         run: |
           # 날짜 목록은 workflow 입력이 아니라 determine 산출이지만, JS 리터럴에 꿰매지 않는
           # 규약은 그대로 지킨다(collect.yml·collect-tft.yml과 같은 이유). process.env로 넘긴다.
+          # 텔레메트리 라벨도 determine이 준다 — 여기 박아 두면 다음 패치에서 이 한 줄만
+          # 갱신을 놓쳐 표본이 조용히 0/0으로 세어지고 가드가 항상 막는다(2026-09-21 지적).
           COUNT='const fs=require("fs");const days=new Set(process.env.DAYS.split(","));
           const dir="data/raw/pubg/telemetry-reduced";
           let before=0, after=0;
@@ -130,7 +134,7 @@ jobs:
             if (j.patch===process.env.TEL_FROM) before++; else if (j.patch===process.env.TEL_TO) after++;
           }
           console.log(before+" "+after);'
-          read -r BEFORE AFTER < <(DAYS="$DAYS" TEL_FROM="pc-2018-42" TEL_TO="pc-2018-43" node -e "$COUNT")
+          read -r BEFORE AFTER < <(node -e "$COUNT")
           echo "[sample_guard] official 매치 before=${BEFORE} after=${AFTER}"
           if [ "$BEFORE" -lt 800 ] || [ "$AFTER" -lt 800 ]; then
             echo "sample_ok=false" >> "$GITHUB_OUTPUT"

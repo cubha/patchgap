@@ -97,6 +97,10 @@ export function main(): void {
     notes_ready: notesReady ? "true" : "false",
     from: decision.from,
     to: decision.to,
+    // 텔레메트리 라벨(`pc-2018-43`)도 내보낸다 — 워크플로의 표본 가드가 이 값으로 센다.
+    // 워크플로에 박아 두면 다음 패치에서 그 한 줄만 갱신을 놓쳐 표본이 조용히 0으로 세어진다.
+    telemetry_from: decision.telemetryFrom ?? "",
+    telemetry_to: decision.telemetryTo ?? "",
     days: [...decision.before, ...decision.after].join(","),
   });
 }

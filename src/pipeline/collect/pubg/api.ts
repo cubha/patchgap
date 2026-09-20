@@ -24,6 +24,26 @@ export const SAMPLES_INTERVAL_MS = 7_000;
 /** 텔레메트리 보존창 — 이보다 오래된 매치는 CDN에서 404다. */
 export const TELEMETRY_RETENTION_HOURS = 336;
 
+/**
+ * 텔레메트리 CDN 호스트 허용 목록.
+ *
+ * **왜 필요한가**(2026-09-21 security-auditor 지적): `telemetry()`가 받는 URL은 우리가 만든 것이
+ * 아니라 `/matches/{id}` 응답이 준 것이다. 그 응답은 인증된 1st-party API에서 TLS로 오지만,
+ * 공격자가 조작할 수 없다는 것이 **호스트를 확인하지 않아도 된다는 뜻은 아니다** — 응답이
+ * 예상 밖 호스트를 가리키면 그대로 따라간다. 여기서 막는다.
+ */
+const TELEMETRY_HOSTS: readonly string[] = ["telemetry-cdn.pubg.com"];
+
+export function isAllowedTelemetryHost(url: string): boolean {
+  try {
+    const { protocol, hostname } = new URL(url);
+    if (protocol !== "https:") return false;
+    return TELEMETRY_HOSTS.includes(hostname);
+  } catch {
+    return false;
+  }
+}
+
 export interface PubgApiOptions {
   apiKey: string;
   /** 플랫폼 샤드. 이 프로젝트는 steam만 본다(표본 정의에 그렇게 적혀 있다). */
@@ -81,11 +101,18 @@ export class PubgApi {
    * 429는 `Retry-After`를 지켜 재시도하고, 그 외 5xx·네트워크 오류는 지수 대기로 재시도한다.
    * 404·400은 **재시도하지 않는다** — 그 매치가 없다는 사실이지 일시 오류가 아니다.
    */
-  private async request(url: string, extraHeaders: Record<string, string> = {}, retries = 4): Promise<Response | null> {
+  private async request(
+    url: string,
+    extraHeaders: Record<string, string> = {},
+    retries = 4,
+    /** false면 `Authorization`을 붙이지 않는다 — 텔레메트리 CDN이 그 경우다(인증 불필요). */
+    authenticated = true
+  ): Promise<Response | null> {
     for (let attempt = 0; attempt < retries; attempt += 1) {
       let res: Response;
       try {
-        res = await this.fetchImpl(url, { headers: { ...this.headers(), ...extraHeaders } });
+        const headers = authenticated ? { ...this.headers(), ...extraHeaders } : { ...extraHeaders };
+        res = await this.fetchImpl(url, { headers });
       } catch {
         await this.sleepImpl(2_000 * (attempt + 1));
         continue;
@@ -132,9 +159,15 @@ export class PubgApi {
    * 텔레메트리 이벤트 배열. gzip으로 오는데 `Accept-Encoding: identity`를 줘도 CDN이 gzip 본문을
    * 그대로 주는 경우가 있어 **양쪽을 다 처리한다**(Python 원본이 gzip.decompress를 무조건 걸던
    * 자리다 — fetch는 투명 해제를 하기도 해서 무조건 풀면 깨진다).
+   *
+   * **API 키를 붙이지 않는다**(2026-09-21). CDN은 인증을 요구하지 않는데 헤더만 따라가면,
+   * `/samples`·`/matches`와 **다른 호스트**로 자격증명이 나가는 셈이다. 호스트도 함께 확인한다.
    */
   async telemetry(url: string): Promise<TelemetryEvent[] | null> {
-    const res = await this.request(url, { "Accept-Encoding": "identity" });
+    if (!isAllowedTelemetryHost(url)) {
+      throw new Error(`PubgApi.telemetry: 허용되지 않은 텔레메트리 호스트 — ${new URL(url).hostname}`);
+    }
+    const res = await this.request(url, { "Accept-Encoding": "identity" }, 4, false);
     if (!res) return null;
     const buffer = Buffer.from(await res.arrayBuffer());
     let text: string;
