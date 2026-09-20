@@ -13,19 +13,16 @@
 import "dotenv/config";
 
 import { createTftClient, type TftTier } from "../src/pipeline/collect/tft-client";
-import { crawlTft, type TftPatchWindow } from "../src/pipeline/collect/tft-crawler";
+import { crawlTft } from "../src/pipeline/collect/tft-crawler";
+import { TFT_PATCH_WINDOWS as PATCH_WINDOWS } from "../src/pipeline/collect/tft-patch-calendar";
 import { isMainModule, parseCliArgs } from "./shared/cli";
 
 const VALID_TIERS: readonly TftTier[] = ["challenger", "grandmaster", "master"];
 
-/**
- * 패치 창 — 공식 패치노트 발행 시각(2026-09-20 실측).
- * 새 패치가 나오면 여기 한 줄을 추가한다. `endMs: null`이 "지금 라이브"다.
- */
-export const TFT_PATCH_WINDOWS: readonly TftPatchWindow[] = [
-  { patch: "18.1", startMs: Date.parse("2026-08-25T18:00:00Z"), endMs: Date.parse("2026-09-09T18:00:00Z") },
-  { patch: "18.2", startMs: Date.parse("2026-09-09T18:00:00Z"), endMs: null },
-];
+// 패치 창 상수는 `src/pipeline/collect/tft-patch-calendar.ts`가 소유한다(2026-09-20 승격).
+// **워크플로 `determine` 스텝이 같은 상수를 읽어야** 하는데, 스크립트 안에 있으면 CI가 규칙을
+// 다시 적게 되고 두 곳이 조용히 갈라진다. 기존 import 경로를 깨지 않으려고 여기서 재수출한다.
+export { TFT_PATCH_WINDOWS } from "../src/pipeline/collect/tft-patch-calendar";
 
 interface CliArgs {
   target: number;
@@ -113,7 +110,7 @@ async function main(): Promise<void> {
   try {
     const result = await crawlTft({
       client,
-      windows: TFT_PATCH_WINDOWS,
+      windows: PATCH_WINDOWS,
       targetPerPatch: target,
       tiers: args.tiers,
       seedLimit,
