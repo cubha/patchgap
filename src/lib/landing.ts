@@ -17,6 +17,7 @@ import { computeHeadline } from "@/components/home/logic";
 import { isReportable, loadPubg } from "./pubgData";
 import { loadTft } from "./tftData";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
+import { isGapStatus } from "@/pipeline/shared/status-order";
 import { getDefaultPair, listPatches, loadDeltas, loadNotes, loadSummary } from "./data";
 import { fmtInt } from "./format";
 import { GAMES, sectionHref, type GameId } from "./game";
@@ -95,7 +96,11 @@ function pubgSummary(): LandingSummary | null {
     sample: `Steam · 전 지역 · ${fmtInt(matches)}매치`,
     announced: notes.length,
     significant: reportable.length,
-    unannounced: reportable.filter((row) => row.status === "unannounced").length,
+    // **`status === "unannounced"`로 세지 않는다**(2026-09-20). 미공지의 정의는
+    // `isGapStatus` 하나가 갖는다 — `unannounced` + `indirect-effect`(원인이 규명됐는가만
+    // 다를 뿐 같은 뿌리). 원시 status로 세면 화면(`displayStatusOf`)과 랜딩이 같은 것을 두고
+    // 다른 수를 말하게 되고, 그게 이 저장소가 반복해서 고쳐 온 결함군이다.
+    unannounced: reportable.filter((row) => isGapStatus(row.status)).length,
     matches,
   };
 }
@@ -115,7 +120,9 @@ function tftSummary(): LandingSummary | null {
     sample: `KR · Master+ · ${fmtInt(matches)}매치`,
     announced: notes.items.length,
     significant: reportable.length,
-    unannounced: reportable.filter((row) => row.status === "unannounced").length,
+    // TFT는 LLM 2단·3단을 돌므로 `indirect-effect`가 실제로 생긴다(2026-09-20) — 원시 status로
+    // 세면 랜딩 카드가 TFT 홈 타일보다 **적게** 말한다. 정의는 `isGapStatus`가 소유한다.
+    unannounced: reportable.filter((row) => isGapStatus(row.status)).length,
     matches,
   };
 }

@@ -21,9 +21,17 @@ import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
 export const metadata = { title: "TFT 대조표 — patchgap" };
 
-/** 이 엔티티 행의 지표들에 붙은 LLM 원인 후보 총수. */
+/**
+ * 이 엔티티 행의 지표들에 붙은 **검증된** LLM 원인 후보 수.
+ *
+ * 미검증(`verified: false`)까지 세면 안 된다 — 상세 화면은 그것을 회색 "인용 노트 없음"으로
+ * 떨어뜨리는데, 여기서 같이 세면 강조색 링크가 "읽을 게 있다"고 말한 뒤 회색만 보여 준다.
+ */
 function causeCountOf(row: TftEntityRow): number {
-  return TFT_METRICS.reduce((sum, metric) => sum + (row.cells[metric]?.causes.length ?? 0), 0);
+  return TFT_METRICS.reduce(
+    (sum, metric) => sum + (row.cells[metric]?.causes.filter((c) => c.verified).length ?? 0),
+    0
+  );
 }
 
 function MetricCell({ row, metric }: { row: TftEntityRow; metric: DeltaMetric }) {
