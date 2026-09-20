@@ -352,3 +352,36 @@ describe("게임별 채널 분리 (2026-09-20)", () => {
   });
 
 });
+
+describe("PUBG 브리핑 — 낡은 산출물을 조용히 재전송하지 않는다 (2026-09-20)", () => {
+  let tmpDir: string;
+
+  beforeEach(() => {
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "patchgap-run-notify-pubg-"));
+    const dir = path.join(tmpDir, "aggregated", "pubg");
+    fs.mkdirSync(dir, { recursive: true });
+    // PUBG 산출물은 패치쌍별 파일이 아니라 `deltas.json` **하나**다 — 파이프라인이 한 쌍만
+    // 만든다. 그래서 인자가 어긋나도 파일은 늘 존재하고, 검사가 없으면 매 호출이 같은 내용을
+    // 보낸다(CI에 붙였을 때 "매주 같은 브리핑 재전송"으로 나타나는 실패다).
+    fs.writeFileSync(
+      path.join(dir, "deltas.json"),
+      JSON.stringify({ meta: { from: "42.3", to: "43.1", generatedAt: "2026-09-17T12:53:51.715Z" }, rows: [] })
+    );
+  });
+
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+  it("**인자와 산출물의 패치쌍이 다르면 전송 전에 죽는다**", async () => {
+    const args = { from: "43.1", to: "44.1", top: 5, site: "https://x.test", dryRun: true, game: "pubg" as const };
+    await expect(runNotify(args, { dataRoot: tmpDir, env: {} })).rejects.toThrow(/42\.3 → 43\.1/);
+  });
+
+  it("일치하면 정상 진행한다 — dry-run은 환경변수 없이 돈다", async () => {
+    const args = { from: "42.3", to: "43.1", top: 5, site: "https://x.test", dryRun: true, game: "pubg" as const };
+    const result = await runNotify(args, { dataRoot: tmpDir, env: {} });
+    expect(result.dryRun).toBe(true);
+    expect(result.embeds[0].title).toBe("patchgap · 42.3 → 43.1");
+  });
+});
