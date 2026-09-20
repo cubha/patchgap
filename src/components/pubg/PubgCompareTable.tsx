@@ -22,6 +22,7 @@ import { isReportable } from "@/pipeline/shared/pubg-status";
 import { weaponHref } from "@/lib/pubgRoutes";
 import type { PubgDeltaRow } from "@/pipeline/match/pubg-delta";
 import { displayStatusOf } from "@/pipeline/shared/display-status";
+import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
 const FILTERS = [
   { key: "all", label: "전체" },
@@ -87,7 +88,8 @@ export default function PubgCompareTable({ rows }: PubgCompareTableProps) {
         </label>
       </div>
 
-      <div className="overflow-x-auto">
+      {/* 무기 수가 늘어도 페이지가 아니라 이 안에서 스크롤한다(@/lib/panelScroll). */}
+      <div className={`overflow-x-auto ${PANEL_SCROLL_BODY}`}>
         <table className="w-full border-collapse text-sm" style={{ minWidth: "var(--table-min)" }}>
           <thead>
             <tr className="border-b border-border text-left">
