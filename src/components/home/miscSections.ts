@@ -89,6 +89,10 @@ function normalizeLabel(text: string): string {
  *
  * 진짜 기준은 개수가 아니라 **그 이름이 카테고리 라벨과 같은 말인가**다. 포함 관계면 중복이므로
  * 숨기고("버그 수정 및 편의성 개선" ⊃ "버그 수정"), 아니면 보여준다(「게임 모드(클래식)」의 "피오라").
+ *
+ * 2026-09-20 후속: 위의 "피오라 65줄 하나"는 **파서 결함**이기도 했다(클래식 챔피언 12명이 한
+ * 블록에 있어 전원이 첫 이름에 귀속됐다 — patchnotes-parser.ts `startsNewEntity`). 그쪽을 고쳐
+ * 지금은 엔티티가 12개지만, 이 함수의 규칙은 그대로 옳다 — 개수는 원래 기준이 아니었다.
  */
 export function showsEntityHeading(categoryLabel: string, entity: string): boolean {
   const label = normalizeLabel(categoryLabel);

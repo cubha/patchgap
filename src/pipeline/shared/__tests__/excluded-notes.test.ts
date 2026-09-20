@@ -34,6 +34,14 @@ describe("isExcludedNote", () => {
     expect(isExcludedNote(note({ entity: "의회 - 투표 2 결과" }))).toBe(true);
   });
 
+  // 2026-09-20: 빼려는 것은 투표 **집계표**이지 의회 기능 공지가 아니다. 파서의 엔티티 귀속이
+  // 고쳐지며 26.17 「체계」 묶음이 제 이름("제1회 의회 투표")을 되찾았는데, 옛 규칙은 그 3줄
+  // (투표 안건·투표 결과 확인·랭크 테두리 삭제 — 전부 실제 패치 내용)까지 화면에서 지웠다.
+  it("의회 기능 공지(결과 집계가 아닌 묶음)는 제외하지 않는다", () => {
+    expect(isExcludedNote(note({ entity: "제1회 의회 투표" }))).toBe(false);
+    expect(isExcludedNote(note({ entity: "의회" }))).toBe(false);
+  });
+
   it("챔피언·아이템·다른 섹션 묶음은 제외하지 않는다", () => {
     expect(isExcludedNote(note({ entity: "피오라" }))).toBe(false);
     expect(isExcludedNote(note({ entity: "버그 수정", section: "system" }))).toBe(false);

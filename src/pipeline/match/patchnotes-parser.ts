@@ -81,7 +81,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import type { PatchId, PatchNoteItem, PatchNoteSection } from "../types";
-import { DATA_ROOT } from "../shared/paths";
+import { notesCacheFile } from "../shared/paths";
 
 /** 낮을수록 좋은 스탯 — 값이 늘면 nerf, 줄면 buff로 반전한다(그 외 스탯은 늘면 buff). */
 const LOWER_IS_BETTER_KEYWORDS = ["재사용 대기시간", "마나 소모", "기력 소모", "피해 감소", "비용"];
@@ -131,8 +131,11 @@ export async function fetchPatchNotesHtml(
 ): Promise<FetchedPatchNotes> {
   const locale = options.locale ?? "ko-kr";
   const sourceUrl = buildPatchNotesUrl(patch, locale);
-  const cacheDir = options.cacheDir ?? path.join(DATA_ROOT, "cache", "notes");
-  const cacheFile = path.join(cacheDir, `${patch}.html`);
+  const cacheFile =
+    options.cacheDir === undefined
+      ? notesCacheFile(patch)
+      : path.join(options.cacheDir, `${patch}.html`);
+  const cacheDir = path.dirname(cacheFile);
 
   if (!options.force && fs.existsSync(cacheFile)) {
     return { html: fs.readFileSync(cacheFile, "utf8"), sourceUrl, fromCache: true };
@@ -387,6 +390,31 @@ function isNarrativeStrong($: cheerio.CheerioAPI, node: AnyNode): boolean {
 }
 
 /**
+ * 이 라벨이 **새 엔티티를 여는가** — 바로 뒤에 자기 소개 문단(`blockquote.context`)이 붙어 있으면
+ * 그렇다(2026-09-20 사용자 지적: 클래식 목록에서 피오라 뒤의 챔피언이 전부 사라졌다).
+ *
+ * **무엇이 깨져 있었나**: `h3.change-title`이 없는 블록(클래식·아레나)은 라벨 순서만으로 엔티티를
+ * 잡는데, 규칙이 "첫 라벨 = 엔티티, 그 뒤는 전부 스킬"이었다. 26.16·26.17은 챔피언 1명당
+ * `div.content-border`가 하나씩이라 이 규칙이 우연히 맞았지만, **26.18은 클래식 챔피언 12명이 한
+ * 블록에 들어 있다**(실측: 라벨 56개짜리 블록 1개). 그래서 첫 챔피언 피오라만 엔티티가 되고
+ * 갈리오·뽀삐·쉬바나·신 짜오·애니비아·갱플랭크·하이머딩거·케일·말자하·나서스·워윅은 **이름이
+ * `currentSkill`에 들어갔다가 다음 라벨("기본 지속 효과 - …")에 덮여 사라졌다** — 65줄 전체가
+ * "피오라"로 귀속됐고 화면에는 소유자 없는 스킬 줄만 남았다.
+ *
+ * **왜 blockquote인가**: 26.16/26.17/26.18 클래식 구간 전수 확인 결과, 엔티티 라벨은 **예외 없이**
+ * 바로 뒤에 소개/사유 문단을 달고 있고 스킬 라벨은 **하나도** 달고 있지 않다. `<hr class="divider">`
+ * 선행 여부도 후보였지만 26.16에서는 스킬 라벨 앞에도 붙어 판별력이 없었다(실측). 라벨 이름
+ * 패턴("Q -"/"기본 능력치" …)으로 가르는 방법은 라이엇 작명에 의존해 다음 패치에 조용히 깨진다.
+ *
+ * `h3.change-title`이 있는 표준 블록(챔피언·아이템 섹션)에는 적용하지 않는다 — 거기선 엔티티가
+ * h3로 확정돼 있고, 그 앵커(`entityAnchorId`)가 블록 전체에 걸려 있기 때문이다.
+ */
+function startsNewEntity($: cheerio.CheerioAPI, node: AnyNode): boolean {
+  const host = node.type === "tag" && node.name === "strong" ? $(node).parent() : $(node);
+  return host.next().is("blockquote.context");
+}
+
+/**
  * 컨텐츠 블록 1개(div.content-border 등)를 파싱한다. 챔피언/아이템/룬처럼 `h3.change-title`이
  * 있는 표준 블록과, 클래식/아레나처럼 `h4`/`p>strong` 라벨만 있는 블록을 하나의 순회로 통합
  * 처리한다 — 상단 파일 주석의 마크업 관찰 참고. `blockquote` 내부(서술 문단)는 라벨/스탯 탐색에서
@@ -432,7 +460,9 @@ function parseNoteBlock(
 
       const label = $(node).text().trim();
       if (label.length === 0) return;
-      if (entity === null && classicCategoryFor(label) !== null) {
+      // 새 엔티티가 시작되는가 — 라벨이 자기 소개 문단(blockquote.context)을 데리고 있으면 그렇다.
+      const opensEntity = h3.length === 0 && startsNewEntity($, node);
+      if ((entity === null || opensEntity) && classicCategoryFor(label) !== null) {
         // 클래식/아레나 섹션의 범주 라벨("챔피언"/"아이템"/"룬 및 진척도"/"체계" 등)은 엔티티
         // 자체가 아니다 — 건너뛴다. `classicCategoryFor`를 재사용해 인식 범위를 한 곳에 고정한다
         // (전에는 "챔피언"/"아이템"만 걸러 "룬 및 진척도"/"체계" 라벨 자체가 엔티티로 오인되고
@@ -440,8 +470,9 @@ function parseNoteBlock(
         return;
       }
       lastLabelAnchorId = $(node).attr("id") ?? null;
-      if (entity === null) {
+      if (entity === null || opensEntity) {
         entity = label;
+        currentSkill = null; // 앞 엔티티의 마지막 스킬이 새 엔티티의 첫 줄로 새지 않게 한다.
       } else {
         currentSkill = label;
       }

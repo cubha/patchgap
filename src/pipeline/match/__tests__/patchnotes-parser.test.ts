@@ -102,9 +102,14 @@ describe("parsePatchNotes — 26.17 fixture 실측 항목 검증", () => {
     expect(champions.has("트위치")).toBe(true);
   });
 
-  it("아이템 수가 26.17 실측(정규 2종 + 클래식 재분류 1종 = 3종) 그대로다", () => {
+  // 2026-09-20 명세 변경: 「리글의 랜턴과 야생의 섬광」은 클래식 아이템 블록에서 "활력증진의 펜던트"
+  // 뒤에 자기 소개 문단을 달고 나오는 **별개 아이템**인데, 한 블록에 엔티티가 여럿일 때 첫 엔티티에
+  // 전부 붙던 결함 때문에 3줄이 펜던트의 스킬로 들어가 있었다(아래 "한 블록 안의 엔티티 경계" 참고).
+  it("아이템 수가 26.17 실측(정규 2종 + 클래식 재분류 2종 = 4종) 그대로다", () => {
     const items = new Set(result.items.filter((i) => i.section === "item").map((i) => i.entity));
-    expect(items).toEqual(new Set(["폭풍갈퀴", "갈라진 하늘", "활력증진의 펜던트"]));
+    expect(items).toEqual(
+      new Set(["폭풍갈퀴", "갈라진 하늘", "활력증진의 펜던트", "리글의 랜턴과 야생의 섬광"])
+    );
   });
 
   it("클래식 섹션의 룬/체계 그룹은 system 섹션에 subsection으로 표기된다", () => {
@@ -472,5 +477,71 @@ describe("모르는 섹션의 안전한 기본값 — 새 모드가 SR 짝짓기
   it("실제 패치 3종 파싱은 예외 없이 끝난다(교차 단언이 정상 데이터를 막지 않는다)", () => {
     expect(() => parsePatchNotes(FIXTURE_16, { patch: "26.16", sourceUrl: SOURCE_URL_16 })).not.toThrow();
     expect(() => parsePatchNotes(FIXTURE_17, { patch: "26.17", sourceUrl: SOURCE_URL_17 })).not.toThrow();
+  });
+});
+
+// ── 한 블록에 엔티티가 여럿일 때(2026-09-20 사용자 지적) ─────────────────────────────────────
+// 실측 결함: 26.18 「클래식」은 챔피언 12명이 `div.content-border` **한 블록**에 들어 있는데,
+// 파서가 "첫 라벨 = 엔티티, 그 뒤는 전부 스킬"로 읽어 65줄 전부를 첫 챔피언 "피오라"에 귀속시켰다.
+// 갈리오·뽀삐 … 이름은 `currentSkill`에 담겼다가 다음 라벨에 덮여 **어디에도 남지 않았다** —
+// 화면에는 소유자 없는 스킬 줄만 떴다. 엔티티 경계는 자기 소개 문단(blockquote.context)이 준다.
+const MULTI_ENTITY_HTML = [
+  '<div id="patch-notes-container">',
+  '<header class="header-primary"><h2 id="patch-classic">클래식</h2></header>',
+  '<div class="content-border"><div class="white-stone accent-before"><div>',
+  '<blockquote class="blockquote context"><p>클래식 세 번째 패치입니다.</p></blockquote>',
+  '<h4 class="change-detail-title">챔피언</h4>',
+  "<p><strong>피오라</strong></p>",
+  '<blockquote class="blockquote context"><p>클래식 피오라가 돌아왔습니다.</p></blockquote>',
+  "<p><strong>Q - 찌르기</strong></p>",
+  "<ul><li>피오라가 돌진합니다.</li></ul>",
+  '<hr class="divider">',
+  "<p><strong>갈리오</strong></p>",
+  '<blockquote class="blockquote context"><p>클래식 갈리오입니다.</p></blockquote>',
+  "<p><strong>기본 지속 효과 - 룬 피부</strong></p>",
+  "<ul><li>갈리오는 주문력을 얻습니다.</li></ul>",
+  "<p><br><strong>W - 방벽</strong></p>",
+  "<ul><li><strong>방어력</strong>: 10 ⇒ <strong>20</strong></li></ul>",
+  "</div></div></div>",
+  "</div>",
+].join("");
+
+describe("parsePatchNotes — 한 블록 안의 엔티티 경계", () => {
+  const parsed = parsePatchNotes(MULTI_ENTITY_HTML, {
+    patch: "26.18",
+    sourceUrl: "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/",
+  });
+
+  it("소개 문단을 데리고 나온 라벨이 새 엔티티를 연다 — 두 번째 챔피언 줄이 첫 챔피언에 붙지 않는다", () => {
+    expect(parsed.items.map((i) => i.entity)).toEqual(["피오라", "갈리오", "갈리오"]);
+  });
+
+  it("엔티티가 바뀌면 직전 스킬이 새 엔티티의 첫 줄로 새지 않는다", () => {
+    const gallio = parsed.items.filter((i) => i.entity === "갈리오");
+    expect(gallio.map((i) => i.skill)).toEqual(["기본 지속 효과 - 룬 피부", "W - 방벽"]);
+    expect(parsed.items.some((i) => i.skill === "갈리오")).toBe(false);
+  });
+
+  it("범주 라벨(챔피언)은 엔티티가 되지 않는다", () => {
+    expect(parsed.items.some((i) => i.entity === "챔피언")).toBe(false);
+  });
+
+  it("h3로 엔티티가 확정된 표준 블록에는 적용하지 않는다 — 블록 안 소개 문단이 엔티티를 빼앗지 않는다", () => {
+    const $ = cheerio.load(FIXTURE_17);
+    const container = $("#patch-notes-container");
+    const block = container.find("h3.change-title#patch-aurelionsol").closest(".content-border");
+    block.before(
+      $(
+        '<div class="content-border"><div class="patch-change-block white-stone accent-before"><div>' +
+          '<h3 class="change-title" id="patch-h3-owner">h3 소유자</h3>' +
+          "<p><strong>가짜 엔티티</strong></p>" +
+          '<blockquote class="blockquote context"><p>소개 문단처럼 생긴 문단.</p></blockquote>' +
+          "<ul><li><strong>피해량</strong>: 10 ⇒ <strong>20</strong></li></ul>" +
+          "</div></div></div>"
+      )
+    );
+    const result = parsePatchNotes($.html(), { patch: "26.17", sourceUrl: SOURCE_URL_17 });
+    expect(result.items.some((i) => i.entity === "가짜 엔티티")).toBe(false);
+    expect(result.items.find((i) => i.entity === "h3 소유자")?.skill).toBe("가짜 엔티티");
   });
 });
