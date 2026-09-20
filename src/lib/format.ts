@@ -117,7 +117,7 @@ export function statusLabel(status: string): string {
 /** DeltaRecord.metric(문자열 키) → 한글 라벨. 알려지지 않은 metric은 원본 문자열을 그대로
  * 반환한다(ST-08 산출 metric 어휘가 아직 확정되지 않았으므로 목록은 문서화된 사례 위주). */
 /**
- * `DeltaMetric` 8종 전수 라벨(2026-09-05 리팩토링 — `types.ts`의 `DeltaMetric` 유니온을 키로
+ * `DeltaMetric` 11종 전수 라벨(2026-09-05 리팩토링 — `types.ts`의 `DeltaMetric` 유니온을 키로
  * 삼아 pipeline·web 양쪽이 이 하나만 참조한다. 이전엔 챔피언/아이템/라인 5종만 채워져 있었고
  * "firstSec"(오브젝트 첫 획득 시각, 실제 생산되는 값)은 `discord/webhook.ts`가 로컬로
  * "첫 처치 시각"을 따로 매핑했다 — 여기 흡수). */
@@ -130,13 +130,16 @@ const METRIC_LABELS: Record<DeltaMetric, string> = {
   goldAt14: "골드@14",
   firstSec: "첫 처치 시각",
   avgDurationSec: "경기 시간",
+  top4Rate: "순방률",
+  playRate: "등장률",
+  avgPlacement: "평균 등수",
 };
 
 export function metricLabel(metric: string): string {
   return METRIC_LABELS[metric as DeltaMetric] ?? metric;
 }
 
-/** `DeltaEntityType` 5종 → 한글 라벨. 항목상세 브레드크럼("대조표 › 챔피언 › 노틸러스")이
+/** `DeltaEntityType` 7종 → 한글 라벨. 항목상세 브레드크럼("대조표 › 챔피언 › 노틸러스")이
  * 쓴다(2026-09-12 /verify-impl 보완 — 원시안 2종 모두 브레드크럼을 그렸는데 구현에 없었다).
  * 대조표 좌 내비의 섹션 탭 라벨(`compare/logic.ts` NAV_SECTIONS)과 어휘를 맞춘다 — 다만 그쪽은
  * 3탭(champion/item/system)만 다루는 별개 축이라 키 집합이 달라 합치지 않았다. */
@@ -146,6 +149,8 @@ const ENTITY_TYPE_LABELS: Record<DeltaEntityType, string> = {
   objective: "오브젝트",
   lane: "라인",
   summary: "매치 평균",
+  unit: "유닛",
+  trait: "특성",
 };
 
 export function entityTypeLabel(entityType: string): string {
@@ -162,7 +167,7 @@ export function entityTypeLabel(entityType: string): string {
  * 의도적으로 이 함수를 쓰지 않는다 — 알려지지 않은 metric까지 "gold"로 안전하게 받는 별도 계약이라
  * 통합하면 그 계약이 깨진다.
  */
-export const METRIC_KIND: Record<DeltaMetric, "pp" | "seconds" | "gold"> = {
+export const METRIC_KIND: Record<DeltaMetric, "pp" | "seconds" | "gold" | "placement"> = {
   pickRate: "pp",
   banRate: "pp",
   winRate: "pp",
@@ -171,10 +176,23 @@ export const METRIC_KIND: Record<DeltaMetric, "pp" | "seconds" | "gold"> = {
   goldAt14: "gold",
   firstSec: "seconds",
   avgDurationSec: "seconds",
+  // TFT(2026-09-20). 순방률·등장률은 비율이라 기존 "pp"에 그대로 붙는다.
+  top4Rate: "pp",
+  playRate: "pp",
+  // 평균 등수만 새 종류다 — 1~8 고정 범위의 **순위**라 %p도 초도 골드도 아니고,
+  // 유일하게 **작을수록 개선**이라 화살표 방향까지 반대다(소비처가 그것을 알아야 한다).
+  avgPlacement: "placement",
 };
 
-export function metricKind(metric: DeltaMetric): "pp" | "seconds" | "gold" {
+export type MetricKind = (typeof METRIC_KIND)[DeltaMetric];
+
+export function metricKind(metric: DeltaMetric): MetricKind {
   return METRIC_KIND[metric];
+}
+
+/** 값이 **작을수록 개선**인 지표. 평균 등수가 유일하다 — 화살표·색을 뒤집는 소비처가 쓴다. */
+export function isLowerBetter(metric: DeltaMetric): boolean {
+  return metric === "avgPlacement";
 }
 
 /** LanePosition(+빈 문자열 "미배정") → 한글 라벨. 알려지지 않은 값은 원본을 반환한다. */

@@ -278,7 +278,7 @@ describe("run-notify: runNotify (전송 경로 포함 — 임시 dataRoot로 격
     await expect(runNotify(args, { dataRoot: tmpDir, env: {} })).rejects.toThrow(/DISCORD_WEBHOOK_URL/);
   });
 
-  it("전송 성공(204) → notify.json이 {from,to,sentAt,status,retries} 스키마로 생성되고 웹훅 URL은 담기지 않는다", async () => {
+  it("전송 성공(204) → notify.json이 {game,from,to,sentAt,status,retries} 스키마로 생성되고 웹훅 URL은 담기지 않는다", async () => {
     writeMinimalDeltas("26.16", "26.17");
     const args = parseArgs(["--from", "26.16", "--to", "26.17"]);
     const fakeUrl = "https://discord.com/api/webhooks/999/super-secret-token";
@@ -304,11 +304,51 @@ describe("run-notify: runNotify (전송 경로 포함 — 임시 dataRoot로 격
     expect(fs.existsSync(logFile)).toBe(true);
     const raw = fs.readFileSync(logFile, "utf8");
     const log = JSON.parse(raw) as Record<string, unknown>;
-    expect(Object.keys(log).sort()).toEqual(["from", "retries", "sentAt", "status", "to"]);
-    expect(log).toMatchObject({ from: "26.16", to: "26.17", status: 204, retries: 0 });
+    // 2026-09-20 게임별 채널 분리로 `game`이 추가됐다 — 로그만 보고 어느 채널로 갔는지
+    // 역추적할 수 있어야 한다(그러지 못하면 오발송을 사후에 확인할 방법이 없다).
+    expect(Object.keys(log).sort()).toEqual(["from", "game", "retries", "sentAt", "status", "to"]);
+    expect(log).toMatchObject({ game: "lol", from: "26.16", to: "26.17", status: 204, retries: 0 });
     expect(typeof log.sentAt).toBe("string");
     // 웹훅 URL(비밀)이 로그 파일에 절대 담기지 않아야 한다.
     expect(raw).not.toContain(fakeUrl);
     expect(raw).not.toContain("super-secret-token");
   });
+
+  it("**알림 로그가 게임별 폴더로 갈린다** — 안 그러면 TFT 로그가 LoL 산출물 폴더에 떨어진다", async () => {
+    const dir = path.join(tmpDir, "aggregated", "tft");
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(
+      path.join(dir, "deltas-18.1-18.2.json"),
+      JSON.stringify({
+        meta: { from: "18.1", to: "18.2", qAlpha: 0.1, generatedAt: "2026-09-20T00:00:00Z", noteCount: 3, matches: { before: 10, after: 20 } },
+        rows: [],
+      }),
+      "utf8"
+    );
+    const args = parseArgs(["--from", "18.1", "--to", "18.2", "--game", "tft"]);
+    const result = await runNotify(args, {
+      dataRoot: tmpDir,
+      env: { DISCORD_WEBHOOK_URL_TFT: "https://discord.com/api/webhooks/1/tft-token" },
+      fetchImpl: vi.fn().mockResolvedValue(new Response(null, { status: 204 })),
+    });
+    expect(result.send?.logFile).toBe(path.join(tmpDir, "aggregated", "tft", "18.1_18.2.notify.json"));
+    // LoL 폴더는 건드리지 않는다.
+    expect(fs.existsSync(path.join(tmpDir, "aggregated", "deltas", "18.1_18.2.notify.json"))).toBe(false);
+  });
+});
+
+describe("게임별 채널 분리 (2026-09-20)", () => {
+  it("--game 기본값은 lol — 기존 크론이 그대로 돈다", () => {
+    const a = parseArgs(["--from", "26.17", "--to", "26.18"]);
+    expect(a.game).toBe("lol");
+  });
+
+  it("알 수 없는 게임은 파싱 시점에 막는다 — 전송 직전까지 미루면 오타를 늦게 안다", () => {
+    expect(() => parseArgs(["--from", "26.17", "--to", "26.18", "--game", "valorant"])).toThrow(/lol\|pubg\|tft/);
+  });
+
+  it("--game tft를 받는다", () => {
+    expect(parseArgs(["--from", "18.1", "--to", "18.2", "--game", "tft"]).game).toBe("tft");
+  });
+
 });

@@ -169,10 +169,16 @@ function backoffMs(attempt: number): number {
   return BASE_BACKOFF_MS * 2 ** attempt;
 }
 
-function maskedUrl(url: string): string {
-  // API 키는 헤더로만 전달하므로 URL엔 원래 포함되지 않는다 — 방어적으로 query string만 제거해 로그를 짧게 유지.
-  const idx = url.indexOf("?");
-  return idx === -1 ? url : url.slice(0, idx);
+export function maskedUrl(url: string): string {
+  // API 키는 헤더로만 전달하므로 URL엔 원래 포함되지 않는다 — 쿼리스트링을 떼어 로그를 짧게 유지한다.
+  //
+  // **경로의 puuid도 가린다**(2026-09-20 security-auditor 지적). `/by-puuid/{puuid}/ids`는
+  // 쿼리가 아니라 **경로**라 `?` 자르기로는 안 지워진다. 이 URL은 429/5xx 재시도 소진 시
+  // 예외 메시지에 실리고, 그 예외는 CI 로그로 나가 실패 시 아티팩트로 업로드된다 —
+  // 즉 특정 플레이어의 puuid가 공개 로그에 남을 수 있었다. puuid는 이 프로젝트가 PII로
+  // 취급하는 값이다(집계 산출물에서도 전수 배제한다).
+  const withoutQuery = url.indexOf("?") === -1 ? url : url.slice(0, url.indexOf("?"));
+  return withoutQuery.replace(/\/by-puuid\/[^/]+/g, "/by-puuid/***");
 }
 
 export function createRiotClient(options: RiotClientOptions): RiotClient {

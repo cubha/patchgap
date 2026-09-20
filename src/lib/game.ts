@@ -21,7 +21,7 @@
 // 이 null이 이 파일의 핵심 계약이다 — 랜딩에서 게임 테마·라인 카메라·인트로·활성 탭이 전부
 // 꺼져야 하는데, 예전처럼 "모르면 LoL"로 떨어뜨리면 랜딩이 LoL 화면처럼 굴게 된다.
 
-export type GameId = "lol" | "pubg";
+export type GameId = "lol" | "pubg" | "tft";
 
 export interface GameDef {
   id: GameId;
@@ -50,6 +50,13 @@ export const GAMES: readonly GameDef[] = [
     prefix: "/pubg",
     tag: "PUBG: BATTLEGROUNDS",
     art: "/bg/pubg-key-art.webp",
+  },
+  {
+    id: "tft",
+    label: "전략적 팀 전투",
+    prefix: "/tft",
+    tag: "TEAMFIGHT TACTICS",
+    art: "/bg/tft-key-art.webp",
   },
 ] as const;
 

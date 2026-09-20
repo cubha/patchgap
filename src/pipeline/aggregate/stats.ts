@@ -226,6 +226,17 @@ export const EFFECT_SIZE_FLOORS: Record<DeltaMetric, EffectFloor> = {
   goldAt14: { kind: "relative", value: 0.03 },
   firstSec: { kind: "absolute", value: 30 },
   avgDurationSec: { kind: "absolute", value: 60 },
+  // ── TFT (2026-09-20) ──────────────────────────────────────────────────────
+  // top4Rate: 8인 전투에서 상위 4등은 **정의상 기저 50%**다. winRate와 분포가 같으므로
+  // 같은 절대 바닥을 쓴다 — 다른 값을 고르려면 근거가 따로 있어야 하는데, 없다.
+  top4Rate: { kind: "absolute", value: 0.02 },
+  // playRate: 유닛 등장률은 기저가 지표마다 수십 배 차이 난다(코어 유닛 60% vs 틈새 3%).
+  // 절대 %p를 쓰면 저기저 유닛은 절대 안 걸리고 고기저 유닛만 걸린다 — adoptionRate와 같은
+  // 이유로 상대 바닥 + 저기저 차단(minBase)을 쓴다.
+  playRate: { kind: "relative", value: 0.25, minBase: 0.01 },
+  // avgPlacement: 값이 1~8 고정 범위라 상대 변화가 의미를 못 만든다(4.50→4.60은 2.2%인데
+  // 실제로는 꽤 큰 이동이다). 0.15등은 8인 전투에서 한 판 걸러 한 계단이 밀리는 정도다.
+  avgPlacement: { kind: "absolute", value: 0.15 },
 };
 
 /**

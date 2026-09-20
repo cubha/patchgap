@@ -235,7 +235,7 @@ function computeNumericDirection(stat: string | null, before: string, after: str
 }
 
 /** blockquote 서술 요약에서 "상향"/"하향" 중 한쪽만 발견되면 그 방향을 힌트로 쓴다(둘 다/둘 다 아니면 null). */
-function detectKeywordHint(contextText: string | null): "buff" | "nerf" | null {
+export function detectKeywordHint(contextText: string | null): "buff" | "nerf" | null {
   if (!contextText) return null;
   const hasBuff = contextText.includes("상향");
   const hasNerf = contextText.includes("하향");
@@ -244,7 +244,7 @@ function detectKeywordHint(contextText: string | null): "buff" | "nerf" | null {
   return null;
 }
 
-function resolveDirection(
+export function resolveDirection(
   stat: string | null,
   before: string | null,
   after: string | null,
@@ -258,14 +258,14 @@ function resolveDirection(
   return keywordHint ?? "adjust";
 }
 
-function parseStatLine(text: string): { stat: string; before: string; after: string } | null {
+export function parseStatLine(text: string): { stat: string; before: string; after: string } | null {
   if (!text.includes(ARROW)) return null;
   const match = STAT_LINE_PATTERN.exec(text);
   if (!match) return null;
   return { stat: match[1].trim(), before: match[2].trim(), after: match[3].trim() };
 }
 
-function slugify(input: string): string {
+export function slugify(input: string): string {
   const cleaned = input
     .trim()
     .toLowerCase()
@@ -283,7 +283,7 @@ function entitySlugFrom(anchorId: string | null, entity: string): string {
  * id 안정성(라운드 2): 문서상 위치가 아니라 내용(skill/stat/before/after)의 해시로 id를 만든다 —
  * 패치노트가 정정 재배포되어 앞쪽에 항목이 추가/삭제돼도 나머지 항목의 id가 밀리지 않는다.
  */
-function contentHash(skill: string | null, stat: string | null, before: string | null, after: string | null): string {
+export function contentHash(skill: string | null, stat: string | null, before: string | null, after: string | null): string {
   const normalized = `${skill ?? ""}|${stat ?? ""}|${before ?? ""}|${after ?? ""}`;
   return crypto.createHash("sha256").update(normalized, "utf8").digest("hex").slice(0, 8);
 }

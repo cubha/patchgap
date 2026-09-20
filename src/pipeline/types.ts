@@ -79,6 +79,50 @@ export interface MatchSlim {
   teams: TeamSlim[];
 }
 
+// ─── TFT (2026-09-20) ───────────────────────────────────────────────────────
+// 실응답을 보고 정의했다 — 문서 추정이 아니다(`data/raw/tft/*.jsonl` 표본 기준).
+// 관측된 `info` 키: endOfGameResult · gameCreation · game_datetime · game_length ·
+// game_version(항상 "TFT Unreal Version ?.?.?.?" — **쓸 수 없다**) · mapId · participants ·
+// product_id · queueId/queue_id · tft_game_type · tft_set_core_name · tft_set_number.
+
+/** TFT 참가자 1명 — 한 판의 최종 보드와 성적. */
+export interface TftParticipantSlim {
+  puuid: string;
+  /** 1~8. **작을수록 좋다.** */
+  placement: number;
+  level: number;
+  lastRound: number;
+  timeEliminatedSec: number;
+  goldLeft: number;
+  /** 최종 보드의 유닛 키(`character_id`, 예: "DA_18_Rakan"). PvE 몬스터는 걸러진 뒤다. */
+  unitIds: string[];
+  /** 유닛에 장착된 아이템 키. 유닛 순서와 무관하게 평탄화한다(아이템 등장률만 쓴다). */
+  itemIds: string[];
+  /** **활성화된** 특성만. `style`이 0이면 조건 미달이라 보드에 있어도 발동하지 않았다. */
+  traits: TftTraitSlim[];
+}
+
+export interface TftTraitSlim {
+  /** 특성 키(예: "DA_18_Blackthorn"). */
+  name: string;
+  /** 현재 단계(1=브론즈…). 0은 미발동이라 슬림에 담지 않는다. */
+  tier: number;
+  /** 그 특성을 만족시킨 유닛 수. */
+  numUnits: number;
+}
+
+/** TFT 매치 1건(JSONL 1줄 = 이것 1개). */
+export interface TftMatchSlim {
+  matchId: string;
+  /** 패치 라벨(예: "18.2") — `game_version`이 비어 있어 **수집 시각 창**으로 정한 값이다. */
+  patch: string;
+  gameDatetimeMs: number;
+  gameLengthSec: number;
+  queueId: number;
+  setNumber: number;
+  participants: TftParticipantSlim[];
+}
+
 /** 라인 하나(블루/레드 한쪽)의 10분·14분 시점 골드 스냅샷. 표본에 해당 시점 프레임이 없으면 null. */
 export interface LaneGoldSnapshot {
   goldAt10: number | null;
@@ -335,7 +379,17 @@ export interface LlmCause {
 
 /** DeltaRecord.id가 가리키는 엔티티 종류. `"summary"`는 패치 단위 매치 평균 지표(ST-08 신규
  * — `summary:avgDurationSec` 등 PatchSummary 파생 델타)를 가리킨다. */
-export type DeltaEntityType = "champion" | "item" | "objective" | "lane" | "summary";
+export type DeltaEntityType =
+  | "champion"
+  | "item"
+  | "objective"
+  | "lane"
+  | "summary"
+  // ── TFT (2026-09-20) ──
+  /** TFT 유닛. LoL 챔피언과 다른 축이다 — 한 보드에 여러 개가 동시에 선다(제로섬 아님). */
+  | "unit"
+  /** TFT 특성(시너지). */
+  | "trait";
 
 /**
  * `DeltaRecord.metric` 유니온 — `src/pipeline/match/delta.ts`(buildDeltas)가 실제로 생산하는
@@ -352,7 +406,17 @@ export type DeltaMetric =
   | "goldAt10"
   | "goldAt14"
   | "firstSec"
-  | "avgDurationSec";
+  | "avgDurationSec"
+  // ── TFT (2026-09-20) ────────────────────────────────────────────────────
+  // **키 추가는 기존 8종의 값을 바꾸지 않는다** — 그래서 커밋된 LoL·PUBG 판정 산출물과
+  // LLM 캐시 키(candidateSetHash)에 영향이 없다. `EFFECT_SIZE_FLOORS`가 전수 Record라
+  // 여기 추가하면 바닥도 함께 정하지 않으면 tsc가 막는다.
+  /** 상위 4등 안에 든 비율. 8인 전투라 기저가 50%인 이항 지표 — winRate와 같은 성질이다. */
+  | "top4Rate"
+  /** 유닛·특성이 등장한 참가자 비율(TFT의 채택 축). */
+  | "playRate"
+  /** 평균 등수(1~8, 낮을수록 좋다). 유일하게 **작을수록 개선**인 지표다. */
+  | "avgPlacement";
 
 /** 판정에 첨부하는 원천 증거 — 모든 판정문은 이 링크를 가져야 한다(무근거=null 필드로 표시). */
 export interface DeltaEvidence {

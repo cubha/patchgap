@@ -7,6 +7,7 @@ import GameRoot from "@/components/GameRoot";
 import Header, { type GameChrome } from "@/components/Header";
 import type { GameId } from "@/lib/game";
 import { loadPubg } from "@/lib/pubgData";
+import { loadTft } from "@/lib/tftData";
 import { getDefaultPair, listPatchPairs, listPatches, loadSummary } from "@/lib/data";
 import { fmtKst } from "@/lib/format";
 import "./globals.css";
@@ -96,10 +97,33 @@ function getPubgChrome(): GameChrome | null {
   };
 }
 
+/**
+ * TFT 크롬 — PUBG와 같은 출하 게이트. 집계가 없으면 null이고 드롭다운에서 빠진다.
+ *
+ * 표본 칩이 LoL과 같은 어휘인 이유: TFT도 `tft-league-v1` 챌린저~마스터 래더에서 시드를
+ * 뽑고 KR 플랫폼만 조회한다. 다만 **표본 단위가 매치가 아니라 보드(참가자)**라 크롬의
+ * n은 매치 수를 쓰되, 화면의 등장률 분모가 보드임을 방법론에서 밝힌다.
+ */
+function getTftChrome(): GameChrome | null {
+  const bundle = loadTft();
+  if (!bundle) return null;
+  const pair = { from: bundle.deltas.meta.from, to: bundle.deltas.meta.to };
+  return {
+    pairs: [pair],
+    currentPair: pair,
+    nBefore: bundle.before.matches,
+    nAfter: bundle.after.matches,
+    aggregatedAt: bundle.deltas.meta.generatedAt,
+    sampleChips: ["KR", "Master+", "랭크"],
+    snapshotCaption: fmtKst(bundle.deltas.meta.generatedAt),
+  };
+}
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   const chrome: Record<GameId, GameChrome | null> = {
     lol: getLolChrome(),
     pubg: getPubgChrome(),
+    tft: getTftChrome(),
   };
   return (
     <html
