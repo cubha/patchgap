@@ -18,6 +18,7 @@ import LaneFilter from "@/components/LaneFilter";
 import type { StreamEntityIcon } from "@/components/home/releaseStreamEntity";
 import type { LaneAxis } from "@/lib/lane";
 import { panelSurfaceClass } from "@/lib/panelSurface";
+import { PANEL_SPLIT_COLUMN, PANEL_SPLIT_HEIGHT } from "@/lib/panelScroll";
 import StatusFilterChips from "./StatusFilterChips";
 import NoteNavigator from "./NoteNavigator";
 import DeltaTable from "./DeltaTable";
@@ -100,7 +101,11 @@ export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons
         </Container>
       </div>
       <Container className="py-8">
-        <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[320px_1fr]">
+        {/* `items-start`를 뺐다(2026-09-20 사용자 지적 "좌우 섹션 높이 안 맞음"). 그것이
+            두 열을 각자 내용 높이로 만들어 아래 끝이 어긋났다 — 실측 좌 809px / 우 773px.
+            행 높이를 고정하고(PANEL_SPLIT_HEIGHT) 각 패널이 채우게 해야 맞는다. 모바일은
+            단일 열 적층이라 이 높이를 걸지 않는다(`lg:`). */}
+        <div className={`grid grid-cols-1 gap-6 lg:grid-cols-[320px_1fr] ${PANEL_SPLIT_HEIGHT}`}>
           <NoteNavigator
             notes={notes}
             rows={rows}
@@ -119,7 +124,7 @@ export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons
             }}
             icons={noteIcons}
           />
-          <section className={`${panelSurfaceClass("glass")} overflow-hidden rounded-lg`}>
+          <section className={`${panelSurfaceClass("glass")} ${PANEL_SPLIT_COLUMN} overflow-hidden rounded-lg`}>
             <div className="panel-head-wash flex items-center justify-between gap-4 border-b border-border-soft px-5 py-5">
               <div>
                 <span className="block text-xs font-bold text-muted">선언 ↔ 관측</span>

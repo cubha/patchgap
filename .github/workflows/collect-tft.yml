@@ -1,0 +1,223 @@
+name: collect-tft
+
+# TFT 정기 수집 — 수집(F1) → 패치노트(F3) → 집계(F2) → 판정(F4) → 디스코드 → 커밋·푸시.
+#
+# ─── 왜 `collect.yml`(LoL)과 **별도 파일**인가 ───────────────────────────────────────────
+#
+# ① **폭발 반경.** `collect.yml`의 9/24 실행은 예선 심사 기간(9/21~10/5) 중 무인으로 돌고,
+#    그 잡의 `Commit + push` 스텝이 `data/aggregated`를 직접 쓴다. 사이트 다운은 대회
+#    자격요건 위반이다. 새 파일은 그 경로에 위험을 0으로 둔다.
+# ② **패치 축이 다르다.** LoL은 `PATCH_CALENDAR`(26.x), TFT는 `TFT_PATCH_WINDOWS`(18.x).
+#    `determine` 스텝을 공유하면 어느 한쪽이 반드시 틀린다.
+#
+# ─── ⚠️ concurrency 그룹은 `collect.yml`과 **반드시 같아야 한다** ──────────────────────
+#
+# 리밋은 **키 단위**다. `src/pipeline/collect/tft-client.ts` 헤더 실측 기록:
+#   "여기 붙인 20/1s ∧ 100/120s는 riot-client.ts(LoL)와 같은 예산을 나눠 쓴다.
+#    두 파이프라인을 동시에 돌리면 합계가 리밋을 넘어 양쪽 모두 429를 맞는다. 순차 실행이 전제다."
+# 그리고 TFT 18.3 예상일이 **2026-09-24**로 LoL 26.19와 같은 날이다(18.1 8/25 → 18.2 9/9, 15일 주기).
+# 아래 `group:`이 `collect.yml`의 것과 **한 글자라도 다르면** 두 워크플로가 독립 큐가 되어
+# 같은 날 동시 실행 → 양쪽 429. 고칠 때 반드시 두 파일을 함께 본다.
+#
+# ─── 키 ─────────────────────────────────────────────────────────────────────────────
+#
+# **`RIOT_API_KEY`가 아니다.** 승인된 LoL 제품 키(PATCHDRIFT)는 TFT 엔드포인트 전부에 403을
+# 준다(2026-09-20 실측: 같은 키가 LoL 200 / TFT 403). TFT는 `RIOT_TFT_API_KEY`를 따로 받는다.
+# 제품 승인 전에는 그 키가 **24시간짜리 개발 키**라 매일 만료된다 — 그래서 `determine`이
+# 프리플라이트로 401/403을 먼저 판별하고 **깨끗이 스킵**한다(빨간 X를 남기지 않는다).
+# 승인되면 키가 영구화되고 이 워크플로는 손대지 않아도 그날부터 돈다.
+#
+# 필요 secrets: RIOT_TFT_API_KEY(필수) · ANTHROPIC_API_KEY(미사용 — TFT는 LLM 2단이 없다)
+#               DISCORD_WEBHOOK_URL_TFT(선택 — 없으면 브리핑 스텝을 건너뜀)
+#               DISCORD_ROLE_ID_TFT(선택 — 없으면 멘션 없이 embed만)
+# 필요 variables: PATCHGAP_SITE_URL
+
+on:
+  workflow_dispatch:
+    inputs:
+      patch:
+        description: "수집할 TFT 패치 ID(예: 18.2). 비우면 TFT_PATCH_WINDOWS로 자동 판정한다."
+        required: false
+        type: string
+      target:
+        description: "패치당 매치 수집 목표(run-tft-collect --target)"
+        required: false
+        default: "2500"
+        type: string
+      force:
+        description: "true면 산출물이 이미 있어도, 표본 대기 중이어도 재실행한다"
+        required: false
+        default: "false"
+        type: boolean
+
+  schedule:
+    # **매일 21:00 UTC(06:00 KST).** LoL처럼 주 1회 고정 요일을 쓰지 않는 이유: TFT 패치는
+    # 요일이 일정하지 않다(18.1 화 18:00Z · 18.2 수 18:00Z, 실측). 대신 `determine`이 싸다
+    # (API 호출 1회 + 파일 존재 확인) — 조건이 아니면 그 자리에서 no-op으로 끝난다.
+    # 실제 수집 발화는 캘린더의 표본 대기(TFT_MIN_LIVE_DAYS=7)가 정한다.
+    - cron: "0 21 * * *"
+
+concurrency:
+  # 🔴 collect.yml:83과 동일해야 한다. 위 헤더 「concurrency」 절 참고.
+  group: patchgap-collect
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  collect-tft:
+    runs-on: ubuntu-latest
+    # LoL(350분)보다 짧다 — TFT는 타임라인·LLM 2단이 없고 표본도 1/4 규모다(2,500 vs 10,000).
+    timeout-minutes: 120
+    env:
+      RIOT_TFT_API_KEY: ${{ secrets.RIOT_TFT_API_KEY }}
+      RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
+      DISCORD_WEBHOOK_URL_TFT: ${{ secrets.DISCORD_WEBHOOK_URL_TFT }}
+      DISCORD_ROLE_ID_TFT: ${{ secrets.DISCORD_ROLE_ID_TFT }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # 판정 규칙은 `src/pipeline/collect/tft-patch-calendar.ts`(순수 함수·단위 테스트),
+      # 권한은 `tft-preflight.ts`가 갖는다. 이 스텝은 그 둘을 부르는 얇은 진입점일 뿐이다.
+      # LoL처럼 heredoc으로 임시 .ts를 만들지 않는다 — 그러면 tsc·eslint·vitest 어느 게이트도
+      # 그 코드를 보지 못한다(수집 실행 여부를 정하는 코드가 검증 밖에 있게 된다).
+      - name: Determine patch (프리플라이트 + 캘린더 + 중복 가드)
+        id: determine
+        env:
+          MANUAL_PATCH: ${{ github.event.inputs.patch }}
+          MANUAL_FORCE: ${{ github.event.inputs.force }}
+        run: npx tsx scripts/tft-determine.ts
+
+      - name: Restore data/raw/tft (재개용 — 이미 받은 매치는 다시 받지 않는다)
+        if: steps.determine.outputs.should_run == 'true'
+        uses: actions/cache@v4
+        with:
+          path: data/raw/tft
+          key: patchgap-tft-raw-${{ steps.determine.outputs.to }}-${{ github.run_id }}
+          restore-keys: |
+            patchgap-tft-raw-${{ steps.determine.outputs.to }}-
+            patchgap-tft-raw-
+
+      - name: Collect matches (F1)
+        if: steps.determine.outputs.should_run == 'true'
+        env:
+          # 크롤러는 TFT_PATCH_WINDOWS 전 구간을 한 번에 돈다(from·to를 따로 받지 않는다) —
+          # `ids-seen.txt`가 이미 본 id를 걸러 재방문 비용을 0으로 만든다.
+          RIOT_API_KEY: ${{ secrets.RIOT_TFT_API_KEY }}
+          TARGET: ${{ github.event.inputs.target || '2500' }}
+        run: npx tsx scripts/run-tft-collect.ts --target "$TARGET"
+
+      - name: Fetch + parse patch notes (F3)
+        if: steps.determine.outputs.should_run == 'true'
+        env:
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: |
+          # 키가 필요 없다(공개 웹페이지 + Data Dragon). 양쪽 패치를 다 받는다 —
+          # from 쪽 노트가 없으면 판정이 짝을 못 짓는다.
+          npx tsx scripts/run-tft-notes.ts --patch "$PATCH_FROM"
+          npx tsx scripts/run-tft-notes.ts --patch "$PATCH_TO"
+
+      - name: Aggregate boards (F2)
+        if: steps.determine.outputs.should_run == 'true'
+        env:
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: |
+          npx tsx scripts/run-tft-aggregate.ts --patch "$PATCH_FROM"
+          npx tsx scripts/run-tft-aggregate.ts --patch "$PATCH_TO"
+
+      # 표본 임계 가드 — LoL `sample_guard`와 같은 자리·같은 이유다(2026-09-10 선례: cron이
+      # 얇은 표본으로 떨어졌고 그게 커밋·배포까지 나갔다). TFT 단위는 **보드(참가자)**다:
+      # 한 매치가 8보드이고 엔티티 판정 하한이 TFT_MIN_BOARDS=200이다. 실측 기준선은
+      # 18.1 = 17,856보드 / 18.2 = 19,968보드라, 그 절반인 8,000을 하한으로 잡는다.
+      - name: Sample size guard
+        id: sample_guard
+        if: steps.determine.outputs.should_run == 'true'
+        env:
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: |
+          # 패치 ID를 JS 리터럴에 꿰매지 않는다 — workflow_dispatch 수동 입력에서 유래할 수 있어
+          # 따옴표가 섞이면 이 잡의 시크릿·contents:write 컨텍스트에서 임의 코드가 돈다
+          # (collect.yml이 security-auditor 지적으로 같은 처리를 한다). process.env로 넘긴다.
+          BOARDS='const fs=require("fs");const p=process.env.P;console.log(JSON.parse(fs.readFileSync("data/aggregated/tft/boards-"+p+".json","utf8")).boards);'
+          BEFORE=$(P="$PATCH_FROM" node -e "$BOARDS")
+          AFTER=$(P="$PATCH_TO" node -e "$BOARDS")
+          echo "[sample_guard] boards ${PATCH_FROM}=${BEFORE} ${PATCH_TO}=${AFTER}"
+          if [ "$BEFORE" -lt 8000 ] || [ "$AFTER" -lt 8000 ]; then
+            echo "sample_ok=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::TFT 보드 표본 부족(8,000 미만) — 판정·브리핑·커밋을 보류한다. 재수집: gh workflow run collect-tft.yml -f force=true"
+          else
+            echo "sample_ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Match + verdict (F4)
+        if: steps.determine.outputs.should_run == 'true' && steps.sample_guard.outputs.sample_ok != 'false'
+        env:
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: npx tsx scripts/run-tft-match.ts --from "$PATCH_FROM" --to "$PATCH_TO"
+
+      - name: Discord briefing (TFT 채널)
+        if: steps.determine.outputs.should_run == 'true' && steps.sample_guard.outputs.sample_ok != 'false' && env.DISCORD_WEBHOOK_URL_TFT != ''
+        env:
+          SITE_URL: ${{ vars.PATCHGAP_SITE_URL }}
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: |
+          set -e
+          SITE_ARGS=()
+          if [[ -n "${SITE_URL}" ]]; then
+            SITE_ARGS=(--site "${SITE_URL}")
+          fi
+          # `--game tft`는 채널과 **데이터 경로를 함께** 고른다(scripts/run-notify.ts loadGameSource).
+          npx tsx scripts/run-notify.ts \
+            --from "$PATCH_FROM" \
+            --to "$PATCH_TO" \
+            --top 5 \
+            --game tft \
+            "${SITE_ARGS[@]}"
+        continue-on-error: true
+
+      - name: Commit + push generated data
+        if: steps.determine.outputs.should_run == 'true' && steps.sample_guard.outputs.sample_ok != 'false'
+        env:
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: |
+          git config user.name "patchgap-bot"
+          git config user.email "patchgap-bot@users.noreply.github.com"
+          # TFT 네임스페이스만 건드린다 — LoL·PUBG 산출물은 이 워크플로의 소관이 아니다.
+          git add data/aggregated/tft
+          if git diff --cached --quiet; then
+            echo "변경분 없음 — 커밋 생략"
+          else
+            git commit -m "chore(data): auto-collect tft ${PATCH_FROM} -> ${PATCH_TO}
+
+            GitHub Actions collect-tft.yml(run_id=${{ github.run_id }})가 생성."
+            # [skip ci]를 넣지 않는다 — Vercel이 이 커밋을 감지해 재빌드해야 한다.
+            git push
+          fi
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: collect-tft-failure-logs-${{ github.run_id }}
+          path: |
+            logs/**
+            data/aggregated/tft/**
+          if-no-files-found: ignore
+          retention-days: 14

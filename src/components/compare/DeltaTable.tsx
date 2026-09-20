@@ -20,6 +20,7 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import type { DeltaRecord } from "@/pipeline/types";
+import { PANEL_SPLIT_BODY } from "@/lib/panelScroll";
 import type { LaneAxis } from "@/lib/lane";
 import { itemHref, metricLabel, positionLabel } from "@/lib/format";
 import EntityIcon from "@/components/EntityIcon";
@@ -131,7 +132,7 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
     "sticky top-0 z-10 whitespace-nowrap bg-surface px-4 py-3 text-left shadow-[inset_0_-1px_0_var(--border-soft)] font-body text-xs font-bold text-muted";
 
   return (
-    <div ref={scrollerRef} className="max-h-[640px] overflow-auto"> {/* design-lint-ignore: 프로토타입 .note-item-list{max-height:640px}와 동일 규약(NoteNavigator.tsx 참고), 대응 토큰 없음 */}
+    <div ref={scrollerRef} className={PANEL_SPLIT_BODY}>
       <table className="w-full border-collapse font-mono text-sm tabular-nums">
         <thead ref={theadRef}>
           <tr>
