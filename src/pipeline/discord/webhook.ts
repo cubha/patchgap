@@ -144,7 +144,6 @@ function buildFooterText(
  * 행을 앞에서부터 자르는 것만으로 "상위 N건"을 얻는다.
  */
 export function buildBriefingEmbeds(deltas: DeltasFile, options: BuildBriefingOptions): DiscordEmbed[] {
-  const topN = options.topN ?? DEFAULT_TOP_N;
   const { from, to, qAlpha, generatedAt } = deltas.meta;
 
   const unannouncedRows = deltas.rows.filter((r) => r.status === "unannounced");
@@ -166,8 +165,53 @@ export function buildBriefingEmbeds(deltas: DeltasFile, options: BuildBriefingOp
   const significantCount = countReportable(deltas.rows, qAlpha);
   const gapEntityCount = countGapEntities(deltas.rows);
 
+  return assembleBriefing<DeltaRecord>(
+    {
+      from,
+      to,
+      generatedAt,
+      unannounced: unannouncedRows,
+      anomalies: inconsistentRows,
+      significantCount,
+      gapEntityCount,
+      buildField,
+    },
+    options
+  );
+}
+
+/**
+ * 게임마다 다른 것만 담는 봉투. **문구·예산·필드 상한·오버플로 표기는 담기지 않는다** —
+ * 그것들은 `assembleBriefing`이 소유하고, 그래서 게임이 늘어도 브리핑이 서로 다른 말을 하지 않는다
+ * (`loadGameSource` 주석의 "임베드 빌더를 게임별로 나누지 않는다"와 같은 이유).
+ *
+ * 타입을 `DeltaRecord`로 고정하지 않는 이유는 PUBG다 — 그쪽 행은 `delta`·`ci`·`q`가 아니라
+ * `relChange`·`relCi`를 갖고 유의성은 `classify()`가 이미 status에 접어넣었다. 억지로 `DeltaRecord`
+ * 모양으로 바꾸면 없는 `q`를 지어내야 하고, `relChange`(비율)가 `delta`(%p) 자리에 들어가 화면과
+ * 다른 숫자를 방송하게 된다.
+ */
+export interface BriefingSource<T> {
+  from: string;
+  to: string;
+  generatedAt: string;
+  /** 미공지 섹션 후보 — 이미 정렬된 순서를 전제한다(앞에서부터 자른다). */
+  unannounced: readonly T[];
+  /** "공지 · 이상 관측" 섹션 후보. */
+  anomalies: readonly T[];
+  /** 헤드라인 "통계는 M개 변화를 말합니다"의 M — 화면과 **같은 술어로** 센 값이어야 한다. */
+  significantCount: number;
+  /** 헤드라인 "미공지 N건"의 N — 행이 아니라 엔티티 수. */
+  gapEntityCount: number;
+  buildField(row: T, siteUrl: string, inconsistent: boolean): DiscordEmbedField;
+}
+
+/** 봉투 → embed 1개. 게임 무관 — 여기에 게임 이름이 등장하면 분리가 실패한 것이다. */
+export function assembleBriefing<T>(source: BriefingSource<T>, options: BuildBriefingOptions): DiscordEmbed[] {
+  const topN = options.topN ?? DEFAULT_TOP_N;
+  const { from, to, generatedAt, unannounced: unannouncedRows, significantCount, gapEntityCount } = source;
+
   const topUnannounced = unannouncedRows.slice(0, topN);
-  const topInconsistent = inconsistentRows.slice(0, INCONSISTENT_EXTRA_COUNT);
+  const topInconsistent = source.anomalies.slice(0, INCONSISTENT_EXTRA_COUNT);
 
   // ST-11(홈 화면 HeroSummary) "패치노트는 N항목을 말했고, 통계는 M개 변화를 말합니다"와 문구를
   // 통일한다(코디네이터 후속 지시, 2026-09-05) — noteCount 없으면(파일 부재) 첫 절을 생략한다
@@ -185,8 +229,8 @@ export function buildBriefingEmbeds(deltas: DeltasFile, options: BuildBriefingOp
   const footerText = buildFooterText(options.matchCounts, generatedAt);
 
   const candidateFields = [
-    ...topUnannounced.map((d) => buildField(d, options.siteUrl, false)),
-    ...topInconsistent.map((d) => buildField(d, options.siteUrl, true)),
+    ...topUnannounced.map((d) => source.buildField(d, options.siteUrl, false)),
+    ...topInconsistent.map((d) => source.buildField(d, options.siteUrl, true)),
   ];
 
   // 필드를 채우기 전에 "…외 k건" 접미사용 예산을 먼저 떼어둔다(advisor 지적 — 다 채운 뒤에 뒤늦게

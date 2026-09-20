@@ -7,7 +7,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { z } from "zod";
 import { DATA_ROOT, aggregatedDir, deltasFile, notesFile } from "../src/pipeline/shared/paths";
-import { buildBriefingEmbeds, sendWebhook } from "../src/pipeline/discord/webhook";
+import { buildBriefingEmbeds, sendWebhook, type DiscordEmbed } from "../src/pipeline/discord/webhook";
+import { buildPubgBriefingEmbeds, type PubgBriefingSourceFile } from "../src/pipeline/discord/pubg-briefing";
 import { isNotifyGameId, mentionPayload, resolveDiscordTarget, type NotifyGameId } from "../src/pipeline/discord/targets";
 import { countRelevantNoteEntities } from "../src/pipeline/shared/notes-count";
 import type { DeltasFile, PatchId, PatchNoteItem } from "../src/pipeline/types";
@@ -130,27 +131,34 @@ export function loadMatchCount(patch: PatchId, dataRoot: string = DATA_ROOT): nu
 }
 
 /**
- * 게임별 델타·부가수치 소스. **경로만 다르고 형태는 같다** — `buildBriefingEmbeds`가 meta에서
- * 읽는 것은 `from`·`to`·`qAlpha`·`generatedAt` 넷뿐이고 TFT 산출물에도 전부 있다. 그래서
- * 임베드 빌더를 게임별로 나누지 않는다(나누면 브리핑 문구가 게임마다 갈린다).
+ * 게임별 브리핑 소스. **반환값은 데이터가 아니라 "임베드를 만드는 방법"이다** — 게임마다
+ * 행 타입이 달라서다(PUBG는 `DeltaRecord`가 아니라 `relChange`/`relCi`를 가진 자체 행이고
+ * 유의성은 `classify()`가 이미 status에 접어넣었다). 데이터만 돌려주고 호출부에서 빌더를
+ * 고르게 하면 그 분기가 전송 흐름 한가운데 생기고, 게임이 늘 때마다 거기가 또 갈라진다.
  *
- * PUBG는 아직 없다 — 그쪽 산출물은 `DeltaRecord`가 아니라 자체 행 타입이라 임베드 빌더를
- * 그대로 못 쓴다. 지어내지 않고 미지원으로 둔다.
+ * 문구·예산·필드 상한은 세 게임이 공유한다 — `discord/webhook.ts`의 `assembleBriefing`이
+ * 그것을 소유하고, 여기서 갈리는 것은 **어떤 행을 고르고 어떻게 한 줄로 쓰는가**뿐이다.
  */
+interface GameBriefingSource {
+  buildEmbeds(options: { siteUrl: string; topN: number }): DiscordEmbed[];
+}
+
 function loadGameSource(
   game: NotifyGameId,
   from: PatchId,
   to: PatchId,
   dataRoot: string
-): { deltas: DeltasFile; noteCount: number | null; matchCounts: { from: number | null; to: number | null } } {
+): GameBriefingSource {
   if (game === "lol") {
-    return {
-      deltas: loadDeltasFile(from, to, dataRoot),
-      noteCount: loadNoteCount(to, dataRoot),
-      matchCounts: { from: loadMatchCount(from, dataRoot), to: loadMatchCount(to, dataRoot) },
-    };
+    const deltas = loadDeltasFile(from, to, dataRoot);
+    const noteCount = loadNoteCount(to, dataRoot);
+    const matchCounts = { from: loadMatchCount(from, dataRoot), to: loadMatchCount(to, dataRoot) };
+    return { buildEmbeds: (o) => buildBriefingEmbeds(deltas, { ...o, noteCount, matchCounts }) };
   }
+
   if (game === "tft") {
+    // TFT 산출물도 `DeltaRecord`라 LoL 빌더를 그대로 쓴다 — `buildBriefingEmbeds`가 meta에서
+    // 읽는 것은 `from`·`to`·`qAlpha`·`generatedAt` 넷뿐이고 TFT에도 전부 있다.
     const file = path.join(dataRoot, "aggregated", "tft", `deltas-${from}-${to}.json`);
     if (!fs.existsSync(file)) {
       throw new Error(`run-notify: ${file} 없음 — 먼저 실행: npm run pipeline:tft-match -- --from ${from} --to ${to}`);
@@ -158,16 +166,48 @@ function loadGameSource(
     const deltas = JSON.parse(fs.readFileSync(file, "utf8")) as DeltasFile & {
       meta: { noteCount?: number; matches?: { before?: number; after?: number } };
     };
-    return {
-      deltas,
-      noteCount: typeof deltas.meta.noteCount === "number" ? deltas.meta.noteCount : null,
-      matchCounts: { from: deltas.meta.matches?.before ?? null, to: deltas.meta.matches?.after ?? null },
-    };
+    const noteCount = typeof deltas.meta.noteCount === "number" ? deltas.meta.noteCount : null;
+    const matchCounts = { from: deltas.meta.matches?.before ?? null, to: deltas.meta.matches?.after ?? null };
+    return { buildEmbeds: (o) => buildBriefingEmbeds(deltas, { ...o, noteCount, matchCounts }) };
   }
-  throw new Error(
-    `run-notify: ${game} 브리핑은 아직 지원하지 않는다 — 그 게임의 산출물은 DeltaRecord 형태가 아니라 ` +
-      `임베드 빌더를 그대로 쓸 수 없다.`
-  );
+
+  // ── PUBG ────────────────────────────────────────────────────────────────────
+  // 산출물이 **패치쌍별 파일이 아니라 `deltas.json` 하나**다(파이프라인이 한 쌍만 만든다).
+  // 그래서 `--from/--to`가 파일 안의 쌍과 다르면 **조용히 낡은 브리핑을 보내게 된다** —
+  // 그 침묵이 정확히 이 스크립트가 피해야 하는 실패다(CI가 매주 같은 걸 재전송하는 형태로
+  // 나타난다). 일치하지 않으면 보내지 않고 즉시 죽는다.
+  const file = path.join(dataRoot, "aggregated", "pubg", "deltas.json");
+  if (!fs.existsSync(file)) {
+    throw new Error(`run-notify: ${file} 없음 — PUBG 집계·판정 산출물이 없다`);
+  }
+  const deltas = JSON.parse(fs.readFileSync(file, "utf8")) as PubgBriefingSourceFile;
+  if (deltas.meta.from !== from || deltas.meta.to !== to) {
+    throw new Error(
+      `run-notify: PUBG 산출물은 ${deltas.meta.from} → ${deltas.meta.to}인데 --from ${from} --to ${to}가 들어왔다. ` +
+        `낡은 브리핑을 보내지 않으려고 중단한다 — 인자를 맞추거나 파이프라인을 다시 돌린다.`
+    );
+  }
+  const notesFile = path.join(dataRoot, "aggregated", "pubg", `notes-${to}.json`);
+  const noteCount = fs.existsSync(notesFile)
+    ? new Set(
+        (JSON.parse(fs.readFileSync(notesFile, "utf8")) as { items?: { weaponKeys?: string[] }[] }).items?.flatMap(
+          (i) => i.weaponKeys ?? []
+        ) ?? []
+      ).size
+    : null;
+  const matchCounts = {
+    from: loadPubgMatchCount(from, dataRoot),
+    to: loadPubgMatchCount(to, dataRoot),
+  };
+  return { buildEmbeds: (o) => buildPubgBriefingEmbeds(deltas, { ...o, noteCount, matchCounts }) };
+}
+
+/** PUBG footer "n=/"용 매치 수 — `weapons-{patch}.json`의 `nMatches`. 없으면 null(지어내지 않음). */
+function loadPubgMatchCount(patch: PatchId, dataRoot: string): number | null {
+  const file = path.join(dataRoot, "aggregated", "pubg", `weapons-${patch}.json`);
+  if (!fs.existsSync(file)) return null;
+  const parsed = JSON.parse(fs.readFileSync(file, "utf8")) as { nMatches?: number };
+  return typeof parsed.nMatches === "number" ? parsed.nMatches : null;
 }
 
 /**
@@ -201,7 +241,7 @@ function writeNotifyLog(log: NotifyLog, dataRoot: string): string {
  * 문자수를 계산한다 — `JSON.stringify(embeds).length`는 따옴표·콤마·이스케이프까지 포함해
  * 부풀려진 숫자라 6,000자 상한과 직접 비교할 수 없다(로그 확인용 숫자가 실제 제한과 다른 값이면
  * 오해를 부른다). */
-function countEmbedChars(embeds: ReturnType<typeof buildBriefingEmbeds>): number {
+function countEmbedChars(embeds: readonly DiscordEmbed[]): number {
   return embeds.reduce(
     (sum, e) =>
       sum +
@@ -224,7 +264,7 @@ export interface RunNotifyDeps {
 
 export interface RunNotifyResult {
   dryRun: boolean;
-  embeds: ReturnType<typeof buildBriefingEmbeds>;
+  embeds: DiscordEmbed[];
   /** dry-run이면 undefined(전송 자체를 안 함). */
   send?: { status: number; retries: number; logFile: string };
 }
@@ -238,14 +278,8 @@ export interface RunNotifyResult {
  */
 export async function runNotify(args: RunNotifyArgs, deps: RunNotifyDeps = {}): Promise<RunNotifyResult> {
   const dataRoot = deps.dataRoot ?? DATA_ROOT;
-  const { deltas, noteCount, matchCounts } = loadGameSource(args.game, args.from, args.to, dataRoot);
-
-  const embeds = buildBriefingEmbeds(deltas, {
-    siteUrl: args.site,
-    topN: args.top,
-    noteCount,
-    matchCounts,
-  });
+  const source = loadGameSource(args.game, args.from, args.to, dataRoot);
+  const embeds = source.buildEmbeds({ siteUrl: args.site, topN: args.top });
   const payload = { username: "patchgap", embeds };
 
   console.log(
