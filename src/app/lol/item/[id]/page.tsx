@@ -32,7 +32,7 @@ import { entityTypeLabel, fmtInt, itemIdFromSlug, itemSlug } from "@/lib/format"
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import { loadDdragonSafe } from "@/pipeline/match/ddragon";
 import AmbientDetailSplash from "@/components/item/AmbientDetailSplash";
-import CausesPanel from "@/components/item/CausesPanel";
+import CausesPanel from "@/components/causes/CausesPanel";
 import ItemChart from "@/components/item/ItemChart";
 import NoteContrastPanel from "@/components/item/NoteContrastPanel";
 import SourceMatchesPanel from "@/components/item/SourceMatchesPanel";

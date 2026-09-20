@@ -93,7 +93,10 @@ export default function LandingPage() {
               표면은 대조표·방법론 패널과 같은 것을 쓴다 — 랜딩만 다른 판넬 문법을 갖지 않도록
               새 스타일을 만들지 않고 panelSurfaceClass("glass")를 그대로 부른다. */}
           <section className={`${panelSurfaceClass("glass")} overflow-hidden rounded-lg p-5`}>
-            <div className="grid gap-4 md:grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
+            {/* 가로 레일 — 규약은 `src/styles/landing.css`의 `.landing-rail`이 소유한다.
+                게임이 몇 개가 되든 **이 영역의 크기는 변하지 않고** 안에서 가로로 스크롤한다
+                (2026-09-19 이전 auto-fit 그리드는 5장째부터 줄이 늘었다). */}
+            <div className="landing-rail" role="region" aria-label="분석 중인 게임">
               {cards.map((card) => (
                 <Link
                   key={card.id}

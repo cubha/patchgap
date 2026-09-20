@@ -7,10 +7,8 @@ import {
   callLlmForDelta,
   candidateSetHash,
   inferIndirectCandidates,
-  coreCandidatesOf,
   PROMPT_VERSION,
   serializeCandidates,
-  SYSTEM_INSTRUCTIONS_TEXT,
   summarizeProseHygiene,
   countProseViolations,
   buildProseRepairNote,
@@ -19,6 +17,7 @@ import {
   verifyCauses,
   verifySummaryCites,
 } from "../llm-match";
+import { lolLlmProfile, SYSTEM_INSTRUCTIONS_TEXT } from "../llm-profile-lol";
 import type { DdragonChampion, DdragonData, DdragonItem } from "../ddragon";
 import type { DeltaRecord, PatchNoteItem } from "../../types";
 
@@ -139,7 +138,7 @@ describe("verifyCauses", () => {
       [{ candidateNoteId: "n2", text: "간접 영향 추정", confidence: "medium" }],
       candidates,
       d,
-      ddragon
+      lolLlmProfile(ddragon)
     );
     expect(result[0]).toEqual({ candidateNoteId: "n2", text: "간접 영향 추정", verified: true, confidence: "medium" });
   });
@@ -151,7 +150,7 @@ describe("verifyCauses", () => {
       [{ candidateNoteId: "n999", text: "존재하지 않는 노트", confidence: "low" }],
       candidates,
       d,
-      ddragon
+      lolLlmProfile(ddragon)
     );
     expect(result[0]).toEqual({ candidateNoteId: null, text: "존재하지 않는 노트", verified: false, confidence: "low" });
   });
@@ -162,7 +161,7 @@ describe("verifyCauses", () => {
       [{ candidateNoteId: null, text: "근거 부족", confidence: "low" }],
       candidates,
       delta({}),
-      ddragon
+      lolLlmProfile(ddragon)
     );
     expect(result[0].verified).toBe(false);
     expect(result[0].candidateNoteId).toBeNull();
@@ -175,7 +174,7 @@ describe("verifyCauses", () => {
       [{ candidateNoteId: "n1", text: "직접 변경(자기참조)", confidence: "high" }],
       candidates,
       d,
-      ddragon
+      lolLlmProfile(ddragon)
     );
     expect(result[0].verified).toBe(false);
     expect(result[0].candidateNoteId).toBeNull();
@@ -187,15 +186,15 @@ describe("verifySummaryCites", () => {
   const candidates = [note({ id: "n1" }), note({ id: "n2" })];
 
   it("인용한 id가 모두 후보셋에 존재하면 true", () => {
-    expect(verifySummaryCites(["n1", "n2"], candidates)).toBe(true);
+    expect(verifySummaryCites(["n1", "n2"], candidates, lolLlmProfile(makeDdragon()))).toBe(true);
   });
 
   it("빈 배열(델타 수치만 근거)은 항상 true", () => {
-    expect(verifySummaryCites([], candidates)).toBe(true);
+    expect(verifySummaryCites([], candidates, lolLlmProfile(makeDdragon()))).toBe(true);
   });
 
   it("존재하지 않는 id가 하나라도 섞이면 false", () => {
-    expect(verifySummaryCites(["n1", "n999"], candidates)).toBe(false);
+    expect(verifySummaryCites(["n1", "n999"], candidates, lolLlmProfile(makeDdragon()))).toBe(false);
   });
 });
 
@@ -205,7 +204,7 @@ describe("callLlmForDelta", () => {
       fakeResponse({ causes: [], summary: "요약", summaryCites: [] }, { cache_creation_input_tokens: 500 })
     );
     const client = fakeClient(parseFn);
-    const result = await callLlmForDelta(client, "claude-sonnet-5", delta({}), [note({})]);
+    const result = await callLlmForDelta(client, "claude-sonnet-5", lolLlmProfile(makeDdragon()), delta({}), [note({})]);
 
     expect(parseFn).toHaveBeenCalledTimes(1);
     expect(result.parsed).toEqual({ causes: [], summary: "요약", summaryCites: [] });
@@ -220,7 +219,7 @@ describe("callLlmForDelta", () => {
   it("parsed_output이 null이면 그대로 null을 반환한다(스키마 파싱 실패)", async () => {
     const parseFn = vi.fn().mockResolvedValue(fakeResponse(null));
     const client = fakeClient(parseFn);
-    const result = await callLlmForDelta(client, "claude-sonnet-5", delta({}), [note({})]);
+    const result = await callLlmForDelta(client, "claude-sonnet-5", lolLlmProfile(makeDdragon()), delta({}), [note({})]);
     expect(result.parsed).toBeNull();
   });
 });
@@ -245,7 +244,7 @@ describe("inferIndirectCandidates", () => {
       delta({ id: "d3", status: "announced-consistent" }),
       delta({ id: "d4", status: "announced-inconsistent" }),
     ];
-    const result = await inferIndirectCandidates(deltas, [note({})], makeDdragon(), {
+    const result = await inferIndirectCandidates(deltas, [note({})], lolLlmProfile(makeDdragon()), {
       client,
       cacheDir: tmpCacheDir,
     });
@@ -259,12 +258,12 @@ describe("inferIndirectCandidates", () => {
     const deltas = [delta({ id: "d1", status: "unannounced" })];
     const notes = [note({})];
 
-    const first = await inferIndirectCandidates(deltas, notes, makeDdragon(), { client, cacheDir: tmpCacheDir });
+    const first = await inferIndirectCandidates(deltas, notes, lolLlmProfile(makeDdragon()), { client, cacheDir: tmpCacheDir });
     expect(first.summary.calls).toBe(1);
     expect(first.summary.cacheHits).toBe(0);
 
     parseFn.mockClear();
-    const second = await inferIndirectCandidates(deltas, notes, makeDdragon(), { client, cacheDir: tmpCacheDir });
+    const second = await inferIndirectCandidates(deltas, notes, lolLlmProfile(makeDdragon()), { client, cacheDir: tmpCacheDir });
     expect(parseFn).not.toHaveBeenCalled();
     expect(second.summary.calls).toBe(0);
     expect(second.summary.cacheHits).toBe(1);
@@ -279,7 +278,7 @@ describe("inferIndirectCandidates", () => {
       delta({ id: "d2", status: "unannounced" }),
       delta({ id: "d3", status: "unannounced" }),
     ];
-    const result = await inferIndirectCandidates(deltas, [note({})], makeDdragon(), {
+    const result = await inferIndirectCandidates(deltas, [note({})], lolLlmProfile(makeDdragon()), {
       client,
       cacheDir: tmpCacheDir,
       maxTotalCalls: 1,
@@ -300,7 +299,7 @@ describe("inferIndirectCandidates", () => {
       delta({ id: "d1", status: "unannounced" }),
       delta({ id: "d2", status: "unannounced" }),
     ];
-    const result = await inferIndirectCandidates(deltas, [note({})], makeDdragon(), {
+    const result = await inferIndirectCandidates(deltas, [note({})], lolLlmProfile(makeDdragon()), {
       client,
       cacheDir: tmpCacheDir,
       maxDeltas: 1,
@@ -313,7 +312,7 @@ describe("inferIndirectCandidates", () => {
     const parseFn = vi.fn().mockResolvedValue(fakeResponse(null));
     const client = fakeClient(parseFn);
     const deltas = [delta({ id: "d1", status: "unannounced" })];
-    const result = await inferIndirectCandidates(deltas, [note({})], makeDdragon(), {
+    const result = await inferIndirectCandidates(deltas, [note({})], lolLlmProfile(makeDdragon()), {
       client,
       cacheDir: tmpCacheDir,
     });
@@ -326,7 +325,7 @@ describe("inferIndirectCandidates", () => {
     const parseFn = vi.fn().mockRejectedValue(rateLimitError);
     const client = fakeClient(parseFn);
     const deltas = [delta({ id: "d1", status: "unannounced" })];
-    const result = await inferIndirectCandidates(deltas, [note({})], makeDdragon(), {
+    const result = await inferIndirectCandidates(deltas, [note({})], lolLlmProfile(makeDdragon()), {
       client,
       cacheDir: tmpCacheDir,
     });
@@ -339,7 +338,7 @@ describe("inferIndirectCandidates", () => {
     const parseFn = vi.fn().mockRejectedValue(apiError);
     const client = fakeClient(parseFn);
     const deltas = [delta({ id: "d1", status: "unannounced" })];
-    const result = await inferIndirectCandidates(deltas, [note({})], makeDdragon(), {
+    const result = await inferIndirectCandidates(deltas, [note({})], lolLlmProfile(makeDdragon()), {
       client,
       cacheDir: tmpCacheDir,
     });
@@ -361,7 +360,7 @@ describe("inferIndirectCandidates", () => {
     );
     const client = fakeClient(parseFn);
     const deltas = [delta({ id: "d1", status: "unannounced", entityKey: "Aatrox" })];
-    const result = await inferIndirectCandidates(deltas, notes, makeDdragon(), {
+    const result = await inferIndirectCandidates(deltas, notes, lolLlmProfile(makeDdragon()), {
       client,
       cacheDir: tmpCacheDir,
     });
@@ -384,7 +383,7 @@ describe("inferIndirectCandidates", () => {
     );
     const client = fakeClient(parseFn);
     const deltas = [delta({ id: "d1", status: "unannounced" })];
-    const result = await inferIndirectCandidates(deltas, notes, makeDdragon(), {
+    const result = await inferIndirectCandidates(deltas, notes, lolLlmProfile(makeDdragon()), {
       client,
       cacheDir: tmpCacheDir,
     });
@@ -407,7 +406,7 @@ describe("모드 노트 인용 기각(2026-09-19 근본수정)", () => {
       [{ candidateNoteId: "note:mode:classic:1", text: "클래식 피오라 상향의 여파", confidence: "low" }],
       [modeNote],
       delta({ id: "champion:Olaf:pickRate", entityKey: "Olaf" }),
-      ddragon
+      lolLlmProfile(ddragon)
     );
     expect(causes[0].verified).toBe(false);
     expect(causes[0].candidateNoteId).toBeNull();
@@ -420,7 +419,7 @@ describe("모드 노트 인용 기각(2026-09-19 근본수정)", () => {
       [{ candidateNoteId: "note:core:1", text: "그레이브즈 상향의 여파", confidence: "medium" }],
       [coreNote],
       delta({ id: "champion:Olaf:pickRate", entityKey: "Olaf" }),
-      ddragon
+      lolLlmProfile(ddragon)
     );
     expect(causes[0].verified).toBe(true);
     expect(causes[0].candidateNoteId).toBe("note:core:1");
@@ -429,9 +428,9 @@ describe("모드 노트 인용 기각(2026-09-19 근본수정)", () => {
   it("요약이 모드 노트를 인용하면 summaryVerified가 false다", () => {
     const modeNote = note({ id: "note:mode:aram:1", modeScope: "aram" });
     const coreNote = note({ id: "note:core:2" });
-    expect(verifySummaryCites(["note:mode:aram:1"], [modeNote, coreNote])).toBe(false);
-    expect(verifySummaryCites(["note:core:2"], [modeNote, coreNote])).toBe(true);
-    expect(verifySummaryCites([], [modeNote])).toBe(true);
+    expect(verifySummaryCites(["note:mode:aram:1"], [modeNote, coreNote], lolLlmProfile(makeDdragon()))).toBe(false);
+    expect(verifySummaryCites(["note:core:2"], [modeNote, coreNote], lolLlmProfile(makeDdragon()))).toBe(true);
+    expect(verifySummaryCites([], [modeNote], lolLlmProfile(makeDdragon()))).toBe(true);
   });
 });
 
@@ -619,14 +618,14 @@ describe("후보 풀 정화(2026-09-19 항목7 — 프롬프트 v4와 같은 실
   it("serializeCandidates에 넘기기 전에 모드 노트를 걷어낸다", () => {
     const core = note({ id: "core-1" });
     const classic = note({ id: "classic-1", modeScope: "classic", anchorUrl: "https://x/#patch-classic" });
-    const serialized = serializeCandidates(coreCandidatesOf([core, classic]));
+    const serialized = serializeCandidates(lolLlmProfile(makeDdragon()).candidatesOf([core, classic]));
     expect(serialized).toContain("core-1");
     expect(serialized).not.toContain("classic-1");
   });
 
   it("전부 모드 노트면 후보는 빈 배열이다(그 패치엔 인용할 SR 조항이 없다)", () => {
     const classic = note({ id: "classic-1", modeScope: "classic", anchorUrl: "https://x/#patch-classic" });
-    expect(coreCandidatesOf([classic])).toEqual([]);
+    expect(lolLlmProfile(makeDdragon()).candidatesOf([classic])).toEqual([]);
   });
 });
 

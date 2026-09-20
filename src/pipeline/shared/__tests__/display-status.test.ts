@@ -8,8 +8,9 @@
 // 노이즈 3종(`below-threshold`·`insufficient-sample`·`no-change`)은 키를 그대로 통과시키되
 // 화면은 `isNoiseStatus`로 **표시하지 않는다**(사용자 C1 "아예 보여주지 않도록").
 import { describe, expect, it } from "vitest";
-import type { DeltaRecord } from "../../types";
+import type { DeltaRecord, MatchStatus } from "../../types";
 import { DISPLAY_SORT_PRIORITY, displayStatus, displayStatusOf, isNoiseStatus } from "../display-status";
+import { isGapStatus } from "../status-order";
 
 function delta(overrides: Partial<DeltaRecord>): DeltaRecord {
   return {
@@ -102,5 +103,35 @@ describe("DISPLAY_SORT_PRIORITY", () => {
     expect(p["below-threshold"]).toBeLessThan(p["insufficient-sample"]);
     expect(p["insufficient-sample"]).toBeLessThan(p["no-change"]);
     expect(p["no-change"]).toBeLessThan(p.unpaired);
+  });
+});
+
+// ── 2026-09-20: "미공지"를 세는 두 술어가 **같은 집합**을 가리키는지 ────────────────────
+//
+// 왜 필요한가: 화면은 `displayStatusOf(...) === "unannounced"`로 거르고, 헤드라인·랜딩은
+// `isGapStatus(...)`로 센다. 둘이 갈리면 같은 패치를 두고 **랜딩 카드와 홈 타일이 다른 수**를
+// 말한다 — 이 저장소가 반복해서 고쳐 온 결함군이다(headline.ts 헤더의 62 vs 403 사례).
+//
+// 이 불변식은 TFT에 LLM 2단·3단을 붙이면서 **실제로 위험해졌다**: 그전에는 `indirect-effect`
+// 행이 TFT에 하나도 없어 두 술어가 자명하게 일치했다.
+describe("미공지 술어 일치 — displayStatusOf vs isGapStatus", () => {
+  it("모든 MatchStatus에서 같은 답을 낸다", () => {
+    const ALL: MatchStatus[] = [
+      "announced-consistent",
+      "announced-inconsistent",
+      "unannounced",
+      "indirect-effect",
+      "below-threshold",
+      "insufficient-sample",
+      "no-change",
+    ];
+    for (const status of ALL) {
+      expect(isGapStatus(status), `status=${status}`).toBe(displayStatusOf(status) === "unannounced");
+    }
+  });
+
+  it("indirect-effect는 미공지에 포함된다(원인이 규명됐는가만 다를 뿐 같은 뿌리)", () => {
+    expect(displayStatusOf("indirect-effect")).toBe("unannounced");
+    expect(isGapStatus("indirect-effect")).toBe(true);
   });
 });

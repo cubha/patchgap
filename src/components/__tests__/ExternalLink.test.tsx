@@ -9,7 +9,7 @@
 import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
 import ExternalLink from "../ExternalLink";
-import CausesPanel from "../item/CausesPanel";
+import CausesPanel from "../causes/CausesPanel";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 
 describe("ExternalLink", () => {

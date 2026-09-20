@@ -1,4 +1,4 @@
-// src/components/item/causeOrder.ts
+// src/components/causes/causeOrder.ts
 // 상세 "추정 원인(LLM)" 표시 순서(2026-09-18 라운드6, 사용자 L5 "추정원인의 신뢰도낮음은 최하단으로").
 // 순수 함수 — 파이프라인 산출(`DeltaRecord.causes`)은 LLM 응답 순서 그대로라 low가 앞에 오고
 // medium이 뒤에 있는 행이 실재한다(home/logic.ts `representativeCause` 주석). 화면은 읽는 사람이

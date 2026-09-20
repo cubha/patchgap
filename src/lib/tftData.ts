@@ -8,7 +8,7 @@ import "server-only";
 import fs from "node:fs";
 import path from "node:path";
 
-import type { DeltaRecord, MatchStatus, PatchNoteItem } from "@/pipeline/types";
+import type { DeltaRecord, DeltasRunLlmMeta, MatchStatus, PatchNoteItem } from "@/pipeline/types";
 import type { NamedStat } from "@/pipeline/match/tft-delta";
 
 const TFT_DIR = path.join(process.cwd(), "data", "aggregated", "tft");
@@ -36,6 +36,8 @@ export interface TftDeltasFile {
     matches: { before: number; after: number };
     noteCount: number;
     counts: Partial<Record<MatchStatus, number>>;
+    /** 2단 LLM 실행 요약. `--no-llm`이거나 키가 없으면 없다 — LoL `DeltasFileMeta.llm`과 같은 모양. */
+    llm?: DeltasRunLlmMeta;
   };
   rows: DeltaRecord[];
 }

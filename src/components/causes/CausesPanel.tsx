@@ -1,5 +1,8 @@
-// src/components/item/CausesPanel.tsx
-// 항목 상세 "추정 원인(LLM)"(ST-12 ⑤) — causes[]와 llm.summary를 표시한다. 서버 컴포넌트(순수
+// src/components/causes/CausesPanel.tsx
+// "추정 원인(LLM)" 패널 — causes[]와 llm.summary를 표시한다. **게임을 모른다**(2026-09-20에
+// `components/item/`에서 옮겼다: TFT 상세도 같은 패널을 쓰는데 경로가 LoL 아이템 상세를
+// 가리키고 있으면 다음 게임이 또 복사본을 만든다 — 이 저장소가 반복해 고쳐 온 술어 복제다).
+// 원래 자리는 항목 상세(ST-12 ⑤)였다. 서버 컴포넌트(순수
 // JSX, 상태 없음). 검증된 원인만 유색 링크로 노출하고(candidateNoteId → notes(to) 원문 앵커),
 // 미검증은 회색 "근거 미확인" — 무근거 문장 회색 원칙(UX-BRIEF §7) 그대로 적용.
 

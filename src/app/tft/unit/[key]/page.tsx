@@ -7,6 +7,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import CausesPanel from "@/components/causes/CausesPanel";
 import Container from "@/components/Container";
 import ExternalLink from "@/components/ExternalLink";
 import SectionCard from "@/components/SectionCard";
@@ -15,7 +16,7 @@ import { TFT_METRICS, buildTftEntityRows, effectStrength } from "@/components/tf
 import { TftFooter, TftUnavailable, deltaDisplay, formatMetricValue } from "@/components/tft/shared";
 import { entityTypeLabel, isLowerBetter, metricLabel, statusLabel } from "@/lib/format";
 import { loadTft } from "@/lib/tftData";
-import type { DeltaRecord } from "@/pipeline/types";
+import type { DeltaMetric, DeltaRecord } from "@/pipeline/types";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
 /** `unit:DA_18_Rakan` → `unit~DA_18_Rakan`. 경로에 `:`을 그대로 쓰지 않는다. */
@@ -118,6 +119,16 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
   // 이 엔티티에 걸린 패치노트 — 이름 정확일치(판정과 같은 규칙).
   const matchedNotes = notes.items.filter((n) => n.entity === row.name);
 
+  // 추정 원인은 **지표마다** 따로 물었다(LLM 2단은 델타 단위로 호출된다) — 등장률이 움직인
+  // 이유와 평균 등수가 움직인 이유가 같으리라는 보장이 없으므로 합치지 않고 지표별로 보인다.
+  // `llm`이 없는 지표는 애초에 2단 대상이 아니었다(1단에서 노트와 짝지어졌거나 미공지·
+  // 공지-불일치가 아니었다) — 그 사실을 빈칸이 아니라 문장으로 말한다.
+  const notesById = new Map(notes.items.map((n) => [n.id, n] as const));
+  const causeBlocks = TFT_METRICS.map((metric) => ({ metric, record: row.cells[metric] })).filter(
+    (entry): entry is { metric: DeltaMetric; record: DeltaRecord } =>
+      entry.record !== undefined && entry.record.llm !== undefined
+  );
+
   return (
     <main>
       <Container>
@@ -154,6 +165,39 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
                 );
               })}
             </div>
+          </SectionCard>
+
+          {/* 이 사이트의 목적이 여기 있다 — 수치만 나열하지 않고 **왜 그랬는지**를 말한다.
+              2026-09-20 이전 TFT 상세에는 이 카드가 아예 없었다(파이프라인이 2단을 돌지 않아
+              causes가 전부 비어 있었고, 화면은 "무근거는 회색" 규칙대로 조용히 생략했다). */}
+          <SectionCard
+            eyebrow="원인"
+            title="추정 원인(LLM)"
+            variant="glass"
+            action={<span className="font-mono text-xs text-muted">{causeBlocks.length}개 지표</span>}
+          >
+            {causeBlocks.length === 0 ? (
+              <p className="px-5 py-8 text-center text-sm text-muted">
+                이 엔티티의 관측은 LLM 2단 대상이 아니었다 — 패치노트와 짝지어졌거나(공지-일치),
+                판정이 미공지·공지-불일치가 아니다. 없는 원인을 지어내지 않는다.
+              </p>
+            ) : (
+              <div className={`flex flex-col ${PANEL_SCROLL_BODY}`}>
+                {causeBlocks.map(({ metric, record }) => (
+                  <div key={metric} className="border-t border-border-soft first:border-t-0">
+                    <div className="px-5 pt-4 font-mono text-xs font-bold tracking-wider text-muted uppercase">
+                      {metricLabel(metric)}
+                    </div>
+                    <CausesPanel
+                      causes={record.causes}
+                      llm={record.llm}
+                      notesById={notesById}
+                      generatedAt={deltas.meta.generatedAt}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </SectionCard>
 
           <SectionCard

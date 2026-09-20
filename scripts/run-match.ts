@@ -10,6 +10,7 @@ import path from "node:path";
 import { fetchPatchNotesHtml, parsePatchNotes } from "../src/pipeline/match/patchnotes-parser";
 import { notesFile } from "../src/pipeline/shared/paths";
 import { loadDdragon } from "../src/pipeline/match/ddragon";
+import { lolLlmProfile } from "../src/pipeline/match/llm-profile-lol";
 import { buildDeltas, carryOverMatchIds, loadAggregatedPatch, type AggregatedPatch } from "../src/pipeline/match/delta";
 import type { DdragonData } from "../src/pipeline/match/ddragon";
 import { matchDeterministic } from "../src/pipeline/match/entity-match";
@@ -152,7 +153,7 @@ export async function runMatchPipeline(params: RunMatchPipelineParams): Promise<
   let llmSummary: LlmRunSummary | undefined;
   let indirectEffectCount = 0;
   if (!params.noLlm) {
-    const result = await inferIndirectCandidates(deltas, params.notes, params.ddragon, {
+    const result = await inferIndirectCandidates(deltas, params.notes, lolLlmProfile(params.ddragon), {
       maxDeltas: params.llmMax,
       ...params.llmOptions,
     });

@@ -17,6 +17,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { inferIndirectCandidates, LLM_MODEL } from "../src/pipeline/match/llm-match";
 import { loadDdragonSafe } from "../src/pipeline/match/ddragon";
+import { lolLlmProfile } from "../src/pipeline/match/llm-profile-lol";
 import type { DeltaRecord, DeltasFile, PatchNoteItem } from "../src/pipeline/types";
 
 const ROOT = process.cwd();
@@ -43,7 +44,7 @@ async function runOne(
   notes: PatchNoteItem[],
   ddragon: ReturnType<typeof loadDdragonSafe>
 ): Promise<Outcome> {
-  const result = await inferIndirectCandidates(targets, notes, ddragon, {
+  const result = await inferIndirectCandidates(targets, notes, lolLlmProfile(ddragon), {
     model,
     maxDeltas: targets.length,
     maxTotalCalls: targets.length,

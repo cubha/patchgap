@@ -27,7 +27,10 @@ name: collect-tft
 # 프리플라이트로 401/403을 먼저 판별하고 **깨끗이 스킵**한다(빨간 X를 남기지 않는다).
 # 승인되면 키가 영구화되고 이 워크플로는 손대지 않아도 그날부터 돈다.
 #
-# 필요 secrets: RIOT_TFT_API_KEY(필수) · ANTHROPIC_API_KEY(미사용 — TFT는 LLM 2단이 없다)
+# 필요 secrets: RIOT_TFT_API_KEY(필수) · ANTHROPIC_API_KEY(2026-09-20부터 필수 — TFT도 LLM 2단을
+# 돈다). 키가 없으면 `run-tft-match.ts`가 **죽지 않고** 2단을 생략하고 그 사실을 로그에 남긴다
+# (causes가 빈 채로 산출되고 화면은 회색). 잡을 빨갛게 만들지 않는 쪽을 고른 이유: 예선 심사
+# 기간에 반복되는 빨간 X는 진짜 실패를 가린다.
 #               DISCORD_WEBHOOK_URL_TFT(선택 — 없으면 브리핑 스텝을 건너뜀)
 #               DISCORD_ROLE_ID_TFT(선택 — 없으면 멘션 없이 embed만)
 # 필요 variables: PATCHGAP_SITE_URL
@@ -73,6 +76,7 @@ jobs:
     env:
       RIOT_TFT_API_KEY: ${{ secrets.RIOT_TFT_API_KEY }}
       RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       DISCORD_WEBHOOK_URL_TFT: ${{ secrets.DISCORD_WEBHOOK_URL_TFT }}
       DISCORD_ROLE_ID_TFT: ${{ secrets.DISCORD_ROLE_ID_TFT }}
     steps:

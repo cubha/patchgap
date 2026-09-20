@@ -21,6 +21,19 @@ import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
 export const metadata = { title: "TFT 대조표 — patchgap" };
 
+/**
+ * 이 엔티티 행의 지표들에 붙은 **검증된** LLM 원인 후보 수.
+ *
+ * 미검증(`verified: false`)까지 세면 안 된다 — 상세 화면은 그것을 회색 "인용 노트 없음"으로
+ * 떨어뜨리는데, 여기서 같이 세면 강조색 링크가 "읽을 게 있다"고 말한 뒤 회색만 보여 준다.
+ */
+function causeCountOf(row: TftEntityRow): number {
+  return TFT_METRICS.reduce(
+    (sum, metric) => sum + (row.cells[metric]?.causes.filter((c) => c.verified).length ?? 0),
+    0
+  );
+}
+
 function MetricCell({ row, metric }: { row: TftEntityRow; metric: DeltaMetric }) {
   const record = row.cells[metric];
   if (!record) {
@@ -140,17 +153,30 @@ export default function TftComparePage() {
                         <StatusBadge status={row.status} />
                       </td>
                       <td className="px-4 py-3">
-                        {row.noteAnchor ? (
-                          <ExternalLink
-                            href={row.noteAnchor}
-                            className="font-mono text-xs text-accent hover:underline"
-                          >
-                            원문 ↗
-                          </ExternalLink>
-                        ) : (
-                          // 무근거 회색 — 지어낸 근거를 만들지 않는다.
-                          <span className="font-mono text-xs text-muted">—</span>
-                        )}
+                        <div className="flex flex-col gap-1">
+                          {row.noteAnchor ? (
+                            <ExternalLink
+                              href={row.noteAnchor}
+                              className="font-mono text-xs text-accent hover:underline"
+                            >
+                              원문 ↗
+                            </ExternalLink>
+                          ) : (
+                            // 무근거 회색 — 지어낸 근거를 만들지 않는다.
+                            <span className="font-mono text-xs text-muted">—</span>
+                          )}
+                          {/* 원인 **문장**은 표에 넣지 않는다 — 표의 축은 지표 × 엔티티이고,
+                              산문을 칸에 밀어넣으면 행 높이가 제각각이 된다. 대신 "있다"는
+                              사실만 알리고 읽을 자리(상세)로 보낸다. */}
+                          {causeCountOf(row) > 0 ? (
+                            <Link
+                              href={`/tft/unit/${entitySlug(row.key)}/`}
+                              className="font-mono text-xs text-accent hover:underline"
+                            >
+                              추정 원인 {causeCountOf(row)}
+                            </Link>
+                          ) : null}
+                        </div>
                       </td>
                     </tr>
                   ))}
