@@ -165,6 +165,21 @@ if [ -n "$TARGET_FILES" ]; then
         ;;
     esac
 
+    # 4c) 외부 링크 새 창 단일 소유 — ExternalLink.tsx만 target="_blank"를 만든다
+    # (2026-09-20). 라운드6에서 "패치노트 원문은 새 창으로"를 네 군데에 손으로 붙였는데 같은
+    # 화면의 형제 패널(CausesPanel) 하나가 빠져 사용자가 같은 요구를 두 번 말해야 했다 —
+    # 규칙이 복제돼 있으면 반드시 하나가 빠진다. 소유자를 하나로 두고 그 밖을 여기서 막는다.
+    case "$file" in
+      */ExternalLink.tsx|*/__tests__/*) ;;
+      *.tsx)
+        if grep -nE 'target=(\x27|")_blank(\x27|")' "$file" 2>/dev/null \
+            | grep -v '^[0-9]*:[[:space:]]*//' | grep -q .; then
+          fail "[외부 링크] 새 창 링크는 ExternalLink(components/ExternalLink.tsx) 경유 필요: $file"
+          FAIL_COUNT=$((FAIL_COUNT + 1))
+        fi
+        ;;
+    esac
+
     # 4) 디자인 토큰 Ground Truth 하드코딩 검사 (docs/design/DESIGN-TOKENS.md 존재 시)
     if [ "$DESIGN_TOKENS_GT" = true ]; then
       case "$file" in

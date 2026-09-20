@@ -6,6 +6,7 @@
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import { fmtKst } from "@/lib/format";
 import { sortCauses } from "./causeOrder";
+import ExternalLink from "@/components/ExternalLink";
 
 export interface CausesPanelProps {
   causes: DeltaRecord["causes"];
@@ -42,12 +43,12 @@ export default function CausesPanel({ causes, llm, notesById, generatedAt }: Cau
                 {/* 2026-09-18(ST-2): `low`는 인용 노트가 실재해도(verified) 회색으로 둔다 —
                     "검증 ✓"가 "믿을 만함"으로 읽히던 것을 신뢰도 라벨로 바꿨다. */}
                 {cause.verified && candidate ? (
-                  <a
+                  <ExternalLink
                     href={candidate.anchorUrl}
                     className={`text-sm hover:underline ${cause.confidence === "low" ? "text-muted" : "text-accent"}`}
                   >
-                    {cause.text}
-                  </a>
+                    {cause.text} <span aria-hidden="true">↗</span>
+                  </ExternalLink>
                 ) : (
                   <span className="text-sm text-muted">{cause.text}</span>
                 )}

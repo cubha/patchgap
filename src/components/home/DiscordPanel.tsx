@@ -28,6 +28,7 @@ import Link from "next/link";
 import { fmtKst } from "@/lib/format";
 import { DISCORD_INVITE_URL } from "@/lib/links";
 import SectionCard from "@/components/SectionCard";
+import ExternalLink from "@/components/ExternalLink";
 
 export interface DiscordPanelProps {
   /** deltas.meta.generatedAt(ISO) — "마지막 전송 시각"이 아니라 이 델타 파일이 마지막으로
@@ -46,14 +47,12 @@ export default function DiscordPanel({ generatedAt }: DiscordPanelProps) {
         </p>
         {DISCORD_INVITE_URL ? (
           <>
-            <a
+            <ExternalLink
               href={DISCORD_INVITE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
               className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-accent px-5 text-sm font-bold text-accent-on transition-colors hover:bg-accent-hover"
             >
               디스코드 방 들어가기 →
-            </a>
+            </ExternalLink>
             <Link href="/lol/methodology/#discord" className="text-xs text-fg-2 underline">
               무엇이 언제 나가나
             </Link>
