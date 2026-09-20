@@ -27,6 +27,7 @@ import { mapHref, weaponHref } from "@/lib/pubgRoutes";
 import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
 import { publicMapPath } from "@/pipeline/pubg/asset-path";
 import { displayStatusOf } from "@/pipeline/shared/display-status";
+import ExternalLink from "@/components/ExternalLink";
 
 export const metadata: Metadata = {
   title: "PUBG 42.3 ⇒ 43.1 · patchgap",
@@ -156,9 +157,9 @@ export default function PubgPage() {
                 </div>
                 {noteSource ? (
                   <div className="border-t border-border-soft px-5 py-3">
-                    <a className="text-sm font-bold text-accent hover:underline" href={noteSource} target="_blank" rel="noreferrer">
+                    <ExternalLink className="text-sm font-bold text-accent hover:underline" href={noteSource}>
                       패치노트 원문 보기 ↗
-                    </a>
+                    </ExternalLink>
                   </div>
                 ) : null}
               </SectionCard>

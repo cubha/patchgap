@@ -50,6 +50,7 @@ import { buildNoteVerdict, formatQ, selectEntityObservation, selectReportableObs
 import type { IndirectEffectEntry } from "./indirectEffects";
 import type { ReleaseStreamGroup } from "./releaseStream";
 import type { StreamEntityIcon } from "./releaseStreamEntity";
+import ExternalLink from "@/components/ExternalLink";
 
 export interface ReleaseNoteRowProps {
   group: ReleaseStreamGroup;
@@ -177,14 +178,9 @@ function CauseChain({ entry, href }: { entry: IndirectEffectEntry; href: string 
               [{causeSection ? (SECTION_LABELS[causeSection] ?? causeSection) : "노트"}]
             </span>
             {causeAnchor ? (
-              <a
-                href={causeAnchor}
-                target="_blank"
-                rel="noreferrer"
-                className="font-bold text-accent hover:underline"
-              >
+              <ExternalLink href={causeAnchor} className="font-bold text-accent hover:underline">
                 {causeEntity}
-              </a>
+              </ExternalLink>
             ) : (
               <span className="font-bold text-fg">{causeEntity}</span>
             )}

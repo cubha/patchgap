@@ -4,12 +4,13 @@
 // 2026-09-18 라운드6(사용자 L5): "각 항목마다 패치노트 원문보기 link가 보임. 패치노트 내용 전부 표시하고
 // 하단에 링크는 한번만 (링크도 이동이 아닌 신규창열기)". 이전엔 줄마다 인용 + 링크가 반복돼(에코 2줄,
 // 피오라는 65줄) 링크가 본문보다 많았다. 지금은 같은 스킬의 줄을 소제목 아래 모으고, 원문 링크는 카드
-// 하단에 **1개**(`target="_blank" rel="noreferrer"`)만 둔다. 앵커는 첫 줄의 것을 쓴다 — 같은 엔티티의
+// 하단에 **1개**(`ExternalLink` — 새 창)만 둔다. 앵커는 첫 줄의 것을 쓴다 — 같은 엔티티의
 // 줄은 같은 h3 앵커를 공유한다(파서 계약). 앵커 정밀도 캡션(섹션/페이지 앵커)은 링크 옆 1회.
 // 짝 없음: "{to} 패치노트에 {엔티티} 항목 없음" + 인접(other/system) 항목이 있으면 참고로 + 그 앵커 1개.
 
 import type { PatchNoteItem } from "@/pipeline/types";
 import type { NoteContrastResult } from "./noteContrast";
+import ExternalLink from "@/components/ExternalLink";
 
 export interface NoteContrastPanelProps {
   result: NoteContrastResult;
@@ -41,9 +42,9 @@ function groupBySkill(items: readonly PatchNoteItem[]): SkillBlock[] {
 function SourceLink({ href, caption }: { href: string; caption?: string | null }) {
   return (
     <div className="mt-auto flex items-center gap-2 border-t border-border-soft px-5 py-3">
-      <a href={href} target="_blank" rel="noreferrer" className="text-sm font-bold text-accent hover:underline">
+      <ExternalLink href={href} className="text-sm font-bold text-accent hover:underline">
         패치노트 원문 보기 ↗
-      </a>
+      </ExternalLink>
       {caption ? <span className="text-xs text-muted">({caption})</span> : null}
     </div>
   );

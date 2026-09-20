@@ -17,6 +17,7 @@ import { displayStatusOf } from "@/pipeline/shared/display-status";
 import { weaponKeyFromSlug, weaponSlug } from "@/lib/pubgRoutes";
 import { publicWeaponPath } from "@/pipeline/pubg/asset-path";
 import { weaponCategoryLabel } from "@/pipeline/aggregate/pubg-weapon-key";
+import ExternalLink from "@/components/ExternalLink";
 
 interface PageProps {
   params: Promise<{ key: string }>;
@@ -190,14 +191,12 @@ export default async function PubgWeaponPage({ params }: PageProps) {
                 판정 규칙 보기 →
               </Link>
               {row?.evidence.noteAnchor ? (
-                <a
+                <ExternalLink
                   className="text-xs font-bold text-accent underline-offset-2 hover:underline"
                   href={row.evidence.noteAnchor}
-                  target="_blank"
-                  rel="noreferrer"
                 >
                   패치노트 원문 보기 ↗
-                </a>
+                </ExternalLink>
               ) : null}
             </div>
 
