@@ -20,6 +20,7 @@
     "pipeline:migrate-notes": "tsx scripts/run-migrate-notes.ts",
     "pipeline:remap-notes": "tsx scripts/run-remap-note-entities.ts",
     "pipeline:tft-collect": "tsx scripts/run-tft-collect.ts",
+    "pipeline:cdragon": "tsx scripts/run-cdragon.ts",
     "pipeline:tft-notes": "tsx scripts/run-tft-notes.ts",
     "pipeline:tft-aggregate": "tsx scripts/run-tft-aggregate.ts",
     "pipeline:tft-match": "tsx scripts/run-tft-match.ts",

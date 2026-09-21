@@ -10,6 +10,7 @@
 import { describe, expect, it } from "vitest";
 
 import { extractTftSnapshot } from "../cdragon";
+import { branchOfDdragonVersion, cdragonUrl, parseArgs } from "../../../../scripts/run-cdragon";
 
 const RAW = {
   sets: {
@@ -20,7 +21,8 @@ const RAW = {
           apiName: "TFT_BlueGolem",
           name: "골렘",
           cost: 1,
-          stats: { armor: 40, hp: 600 },
+          // `null` 스탯은 PvE 몬스터에 실제로 있다(협곡 바위 게 `hp`).
+          stats: { armor: 40, hp: 600, range: null },
           ability: { name: "골렘의 강타", variables: [{ name: "Damage", value: [100, 300] }] },
         },
         {
@@ -62,6 +64,13 @@ describe("extractTftSnapshot — 커밋된 스냅숏의 모양을 재현한다",
     });
   });
 
+  it("★ 값이 `null`인 스탯은 키째 버린다 — 남기면 diff가 허위 변경을 낸다", () => {
+    // `diffValueMap`은 **한쪽에만 있는 키도 변경**으로 읽는다. `null`을 담아 두면 다음 패치에
+    // 값이 들어오는 순간 "없음 → 600"이 되어 잠수함으로 잡힌다. 실측 근거: 커밋된 스냅숏의
+    // `TFT9_SLIME_Crab`에 `hp`가 아예 없는데 원본에는 `"hp": null`이 있다.
+    expect(out.units.TFT_BlueGolem.stats).not.toHaveProperty("range");
+  });
+
   it("스킬 변수가 없으면 빈 객체 — 키 자체를 빼지 않는다", () => {
     expect(out.units.DA_Brambleback18.ability).toEqual({});
   });
@@ -76,5 +85,32 @@ describe("extractTftSnapshot — 커밋된 스냅숏의 모양을 재현한다",
 
   it("없는 세트를 요구하면 조용히 빈 스냅숏을 내지 않고 던진다", () => {
     expect(() => extractTftSnapshot(RAW, 19)).toThrow(/Set 19/);
+  });
+});
+
+describe("run-cdragon — 버전 라벨과 URL", () => {
+  it("DDragon 최신에서 브랜치 라벨을 만든다 — 16.18.1 → 16.18", () => {
+    expect(branchOfDdragonVersion("16.18.1")).toBe("16.18");
+  });
+
+  it("읽을 수 없으면 던진다", () => {
+    expect(() => branchOfDdragonVersion("16")).toThrow(/버전 형식/);
+  });
+
+  it("미러 경로를 만든다", () => {
+    expect(cdragonUrl("16.18", "ko_kr")).toBe(
+      "https://raw.communitydragon.org/16.18/cdragon/tft/ko_kr.json"
+    );
+  });
+
+  it("★ --version은 디렉터리 이름이 되므로 형식을 강제한다", () => {
+    // `parseCliArgs`의 `patch` 타입이 존재하는 이유와 같다 — 임의 문자열이 경로 조합으로
+    // 흘러들면 GH Actions 컨텍스트에서 그대로 파일 경로가 된다.
+    expect(() => parseArgs(["--patch", "18.2", "--version", "../../etc"])).toThrow(/--version/);
+    expect(parseArgs(["--patch", "18.2", "--version", "16.18"]).version).toBe("16.18");
+  });
+
+  it("버전을 안 주면 빈 문자열 — 실행 시 DDragon 최신으로 채운다", () => {
+    expect(parseArgs(["--patch", "18.2"]).version).toBe("");
   });
 });
