@@ -12,6 +12,7 @@ import ExternalLink from "@/components/ExternalLink";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
 import { TFT_METRICS, tftEntityRows, type TftEntityRow } from "@/components/tft/entityRows";
+import SubmarineCell from "@/components/gamedata/SubmarineCell";
 import { loadGameDataDiff } from "@/lib/gamedata";
 import { TftFooter, TftSampleNotice, TftUnavailable, deltaDisplay, formatMetricValue } from "@/components/tft/shared";
 import { entityTypeLabel, isLowerBetter, metricLabel } from "@/lib/format";
@@ -74,6 +75,9 @@ export default function TftComparePage() {
   // 수치 축(F9) — 지표 축 게이트를 못 넘긴 잠수함도 행으로 올린다. 상세 라우트
   // (`tft/unit/[key]`)와 **같은 진입점**을 써야 링크와 경로가 갈라지지 않는다(2026-09-21 실측 404).
   const rows = tftEntityRows(deltas, loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to)?.changes ?? []);
+  // 수치 축 열은 이 패치쌍에 잠수함이 있을 때만 만든다 — 0건인 쌍에서 열 전체가 `—`가 되는 것을
+  // 막는다. 0건 증명은 홈 `SubmarineSection`이 맡는다(중복 금지).
+  const showSubmarine = rows.some((row) => row.submarineChanges.length > 0);
   const counts = deltas.meta.counts;
   const bucket = (status: MatchStatus): number => counts[status] ?? 0;
   const shownDeltas = rows.reduce((sum, r) => sum + Object.keys(r.cells).length, 0);
@@ -125,7 +129,10 @@ export default function TftComparePage() {
                         {isLowerBetter(m) ? <span className="ml-1 font-normal">(낮을수록 좋음)</span> : null}
                       </th>
                     ))}
-                    {["판정", "근거"].map((h) => (
+                    {/* 「바뀐 것」 — 수치 축(F9). 지표 열이 "지표가 어떻게 움직였나"를 말하면
+                        이 열은 "게임사가 무엇을 바꿨나"를 말한다. 배지만 찍고 값을 안 보여 주던
+                        결함의 수정(2026-09-21 사용자 지적, PLAN ST-9 누락분). */}
+                    {(showSubmarine ? ["바뀐 것", "판정", "근거"] : ["판정", "근거"]).map((h) => (
                       <th
                         key={h}
                         className="whitespace-nowrap px-4 py-3 text-left font-body text-xs font-bold text-muted shadow-[inset_0_-1px_0_var(--border-soft)]"
@@ -152,6 +159,11 @@ export default function TftComparePage() {
                           <MetricCell row={row} metric={m} />
                         </td>
                       ))}
+                      {showSubmarine ? (
+                        <td className="px-4 py-3">
+                          <SubmarineCell changes={row.submarineChanges} />
+                        </td>
+                      ) : null}
                       <td className="px-4 py-3">
                         <StatusBadge status={row.status} />
                       </td>

@@ -26,6 +26,7 @@ import { itemHref, metricLabel, positionLabel } from "@/lib/format";
 import EntityIcon from "@/components/EntityIcon";
 import LaneGlyph from "@/components/LaneGlyph";
 import StatusBadge from "@/components/StatusBadge";
+import SubmarineCell from "@/components/gamedata/SubmarineCell";
 import { formatMetricValue, metricKind } from "@/components/home/logic";
 import { fmtPp } from "@/lib/format";
 import { ENTITY_METRICS, type EntityCell, type EntityCompareRow, type EntityMetric } from "./entityRows";
@@ -104,6 +105,9 @@ function MetricCell({ cell, labelled }: { cell: EntityCell; labelled: boolean })
 }
 
 export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
+  // 수치 축 열은 **이 패치쌍에 잠수함이 있을 때만** 만든다. 26.17→26.18처럼 0건인 쌍에서는
+  // 열 전체가 `—`가 되는데, 0건 증명은 홈 `SubmarineSection`이 이미 맡고 있다(중복 금지).
+  const showSubmarine = rows.some((row) => row.submarineChanges.length > 0);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const theadRef = useRef<HTMLTableSectionElement>(null);
 
@@ -145,6 +149,14 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                 {metricLabel(metric)}
               </th>
             ))}
+            {/* 「바뀐 것」 — 수치 축(F9). 지표 열은 "지표가 어떻게 움직였나"를, 이 열은
+                "게임사가 무엇을 바꿨나"를 말한다. LoL은 잠수함 전용 행에 상세가 없으므로
+                (그 엔티티엔 델타가 0건이다) **표에서 값을 끝까지 말해야** 한다. */}
+            {showSubmarine ? (
+              <th scope="col" className={thBase}>
+                바뀐 것
+              </th>
+            ) : null}
             <th scope="col" className={thBase}>
               상태
             </th>
@@ -153,7 +165,10 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
         <tbody>
           {rows.length === 0 ? (
             <tr>
-              <td colSpan={ENTITY_METRICS.length + 2} className="px-4 py-8 text-center font-body text-sm text-muted">
+              <td
+                colSpan={ENTITY_METRICS.length + (showSubmarine ? 3 : 2)}
+                className="px-4 py-8 text-center font-body text-sm text-muted"
+              >
                 표시할 델타가 없습니다
               </td>
             </tr>
@@ -188,6 +203,11 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                       </td>
                     );
                   })}
+                  {showSubmarine ? (
+                    <td className="px-3 py-2 align-middle font-body">
+                      <SubmarineCell changes={row.submarineChanges} />
+                    </td>
+                  ) : null}
                   <td className="px-4 py-3 font-body">
                     <StatusBadge status={row.status} />
                   </td>

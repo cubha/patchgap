@@ -1,4 +1,4 @@
-// src/components/gamedata/__tests__/submarineCell.test.ts
+// src/components/gamedata/__tests__/submarineText.test.ts
 // RED 먼저 — 대조표 「바뀐 것」 열의 텍스트 규칙(PLAN ST-9가 요구했으나 만들어지지 않은 항목).
 //
 // 이 함수가 **직접 `gameDataValue`를 부르는 것**이 설계의 핵심이다. 호출부가 원본 float를
@@ -6,7 +6,7 @@
 // 막히고 표시 축에서는 아무도 안 막아 프로덕션에 나갔던 적이 있다(2026-09-21, 커밋 2f1fe9e).
 import { describe, it, expect } from "vitest";
 
-import { submarineCellText } from "../submarineCell";
+import { submarineCellText } from "../submarineText";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 
 function change(over: Partial<GameDataChange>): GameDataChange {
