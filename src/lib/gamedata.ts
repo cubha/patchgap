@@ -9,6 +9,7 @@ import path from "node:path";
 import { DATA_ROOT } from "@/pipeline/shared/paths";
 import type { GameDataChange, GameDataDiffFile } from "@/pipeline/gamedata/types";
 import { isSubmarineChange } from "@/pipeline/gamedata/types";
+import { buildSubmarineIndexFromChanges, type SubmarineEntity } from "@/pipeline/gamedata/submarine";
 
 export function gameDataDiffFile(game: string, from: string, to: string, dataRoot = DATA_ROOT): string {
   return path.join(dataRoot, "aggregated", "gamedata", game, `${from}_${to}.json`);
@@ -29,15 +30,23 @@ export function loadGameDataDiff(
 export interface SubmarineSummary {
   /** 노트에 없는 수치 변경 — 이게 잠수함 패치다. */
   readonly submarines: GameDataDiffFile["changes"];
-  /** 검출된 수치 변경 전체(공지된 것 포함). "N건 중 M건" 문장의 분모. */
+  /**
+   * **대상 단위** 묶음(2026-09-21 사용자 지시). 화면이 세는 단위는 값이 아니라 **대상**이다 —
+   * "대상 27종 · 값 33개"처럼 둘을 나란히 쓰면 어느 쪽이 발견의 크기인지 헷갈린다.
+   * 대상별 값 개수는 그 대상의 **행 안에서** 말한다(표는 "외 N건", 상세는 전부 나열).
+   */
+  readonly entities: readonly SubmarineEntity[];
+  /** 검출된 수치 변경 전체(공지된 것 포함). 0건 증명 문장의 분모. */
   readonly changeCount: number;
   readonly source: GameDataDiffFile["meta"]["source"];
 }
 
 export function summarizeGameData(file: GameDataDiffFile | null): SubmarineSummary | null {
   if (!file) return null;
+  const submarines = file.changes.filter(isSubmarineChange);
   return {
-    submarines: file.changes.filter(isSubmarineChange),
+    submarines,
+    entities: buildSubmarineIndexFromChanges(submarines).entities(),
     changeCount: file.meta.changeCount,
     source: file.meta.source,
   };

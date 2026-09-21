@@ -166,7 +166,7 @@ export default function Home() {
                 patch={pair?.to ?? null}
                 qAlpha={deltas?.meta.qAlpha}
                 contentCount={contentLineCount}
-                gapCount={headline.unannouncedCount + (submarine?.submarines.length ?? 0)}
+                gapCount={headline.unannouncedCount + (submarine?.entities.length ?? 0)}
                 causes={indirectCauses}
                 skinPreviews={skinPreviews}
                 miscSections={miscSections}
@@ -176,7 +176,7 @@ export default function Home() {
                    상세 링크를 걸지 않는 이유: LoL 잠수함 전용 엔티티(폭풍갈퀴)는 델타가
                    0건이라 `/lol/item/[id]` 라우트가 없다 — 없는 링크를 만들지 않는다. */
                 gapLead={submarine ? <SubmarineSection summary={submarine} /> : undefined}
-                submarineCount={submarine?.submarines.length ?? 0}
+                submarineCount={submarine?.entities.length ?? 0}
               />
             }
             right={

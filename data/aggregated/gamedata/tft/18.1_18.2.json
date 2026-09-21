@@ -8,9 +8,9 @@
       "from": "16.17",
       "to": "16.18"
     },
-    "generatedAt": "2026-09-21T02:03:30.258Z",
+    "generatedAt": "2026-09-21T09:55:38.050Z",
     "changeCount": 44,
-    "submarineCount": 37
+    "submarineCount": 33
   },
   "changes": [
     {
@@ -346,7 +346,7 @@
       "entityKey": "DA_18_BackrowStar",
       "entityName": "후방의 핵심",
       "entityType": "item",
-      "field": "효과 ASMultiplier",
+      "field": "효과 공격 속도",
       "fieldPath": "effects.ASMultiplier",
       "before": 0.75,
       "after": 0.8500000238418579,
@@ -358,7 +358,7 @@
       "entityKey": "DA_18_FOURcing",
       "entityName": "4단계 집중",
       "entityType": "item",
-      "field": "효과 Health",
+      "field": "효과 체력",
       "fieldPath": "effects.Health",
       "before": 120,
       "after": 100,
@@ -370,7 +370,7 @@
       "entityKey": "DA_18_ProlificPower",
       "entityName": "풍성한 힘",
       "entityType": "item",
-      "field": "효과 ADAP",
+      "field": "효과 공격력·주문력",
       "fieldPath": "effects.ADAP",
       "before": 0.07999999821186066,
       "after": 0.03999999910593033,
@@ -382,7 +382,7 @@
       "entityKey": "DA_18_SolarTraitAugment",
       "entityName": "태양의 부름을 받은 자",
       "entityType": "item",
-      "field": "효과 FlatHealth",
+      "field": "효과 체력",
       "fieldPath": "effects.FlatHealth",
       "before": 60,
       "after": 70,
@@ -394,7 +394,7 @@
       "entityKey": "DA_18_VerdantVitality",
       "entityName": "신록의 활력",
       "entityType": "item",
-      "field": "효과 HealthAmount",
+      "field": "효과 체력",
       "fieldPath": "effects.HealthAmount",
       "before": 100,
       "after": 50,
@@ -406,7 +406,7 @@
       "entityKey": "DA_AbandonShip18",
       "entityName": "배를 버려라",
       "entityType": "item",
-      "field": "효과 Rerolls",
+      "field": "효과 새로고침",
       "fieldPath": "effects.Rerolls",
       "before": 10,
       "after": 8,
@@ -418,19 +418,21 @@
       "entityKey": "DA_BaronsLair",
       "entityName": "남작의 소굴",
       "entityType": "item",
-      "field": "효과 Stats",
+      "field": "효과 능력치",
       "fieldPath": "effects.Stats",
       "before": 0.05000000074505806,
       "after": 0.03999999910593033,
       "relChange": -0.20000002980232195,
-      "matchedNoteIds": []
+      "matchedNoteIds": [
+        "note:tft:18.2:system:남작의-소굴:d8e514e5"
+      ]
     },
     {
       "id": "gdc:tft:18.2:DA_BeggarsWisp18:effects.Gold",
       "entityKey": "DA_BeggarsWisp18",
       "entityName": "부랑자의 수호령",
       "entityType": "item",
-      "field": "효과 Gold",
+      "field": "효과 골드",
       "fieldPath": "effects.Gold",
       "before": 4,
       "after": 3,
@@ -442,7 +444,7 @@
       "entityKey": "DA_BlackthornTraitAugment",
       "entityName": "아이템 추출",
       "entityType": "item",
-      "field": "효과 NumComponents",
+      "field": "효과 조합 아이템 수",
       "fieldPath": "effects.NumComponents",
       "before": 3,
       "after": 4,
@@ -454,19 +456,21 @@
       "entityKey": "DA_GoldDestinyPlus",
       "entityName": "금빛 운명+",
       "entityType": "item",
-      "field": "효과 Gold",
+      "field": "효과 골드",
       "fieldPath": "effects.Gold",
       "before": 6,
       "after": 5,
       "relChange": -0.16666666666666666,
-      "matchedNoteIds": []
+      "matchedNoteIds": [
+        "note:tft:18.2:system:금빛-운명:c07f6e42"
+      ]
     },
     {
       "id": "gdc:tft:18.2:DA_Ironwood18:effects.DamageReduction",
       "entityKey": "DA_Ironwood18",
       "entityName": "강철나무",
       "entityType": "item",
-      "field": "효과 DamageReduction",
+      "field": "효과 피해 감소",
       "fieldPath": "effects.DamageReduction",
       "before": 0.11999999731779099,
       "after": 0.14000000059604645,
@@ -478,7 +482,7 @@
       "entityKey": "DA_KillersRegret18",
       "entityName": "살인자의 후회",
       "entityType": "item",
-      "field": "효과 StunDuration",
+      "field": "효과 기절 지속시간",
       "fieldPath": "effects.StunDuration",
       "before": 1.25,
       "after": 1.5,
@@ -490,7 +494,7 @@
       "entityKey": "DA_NestingAnvils",
       "entityName": "마트료시카 모루",
       "entityType": "item",
-      "field": "효과 Gold",
+      "field": "효과 골드",
       "fieldPath": "effects.Gold",
       "before": 8,
       "after": 4,
@@ -502,7 +506,7 @@
       "entityKey": "DA_NestingAnvilsPlus",
       "entityName": "마트료시카 모루+",
       "entityType": "item",
-      "field": "효과 Gold",
+      "field": "효과 골드",
       "fieldPath": "effects.Gold",
       "before": 12,
       "after": 8,
@@ -514,19 +518,21 @@
       "entityKey": "DA_PrismaticDestinyPlus",
       "entityName": "프리즘 운명+",
       "entityType": "item",
-      "field": "효과 Gold",
+      "field": "효과 골드",
       "fieldPath": "effects.Gold",
       "before": 10,
       "after": 7,
       "relChange": -0.3,
-      "matchedNoteIds": []
+      "matchedNoteIds": [
+        "note:tft:18.2:system:프리즘-운명:f32724bb"
+      ]
     },
     {
       "id": "gdc:tft:18.2:DA_Snacktime18:effects.ExecuteThreshold",
       "entityKey": "DA_Snacktime18",
       "entityName": "간식 시간!",
       "entityType": "item",
-      "field": "효과 ExecuteThreshold",
+      "field": "효과 처형 기준",
       "fieldPath": "effects.ExecuteThreshold",
       "before": 0.15000000596046448,
       "after": 0.1599999964237213,
@@ -538,19 +544,21 @@
       "entityKey": "DA_TheGoldenDragon",
       "entityName": "황금 드래곤",
       "entityType": "item",
-      "field": "효과 BonusDurability",
+      "field": "효과 내구력",
       "fieldPath": "effects.BonusDurability",
       "before": 0.20000000298023224,
       "after": 0.15000000596046448,
       "relChange": -0.24999998137354879,
-      "matchedNoteIds": []
+      "matchedNoteIds": [
+        "note:tft:18.2:system:황금-드래곤:bc4605bd"
+      ]
     },
     {
       "id": "gdc:tft:18.2:DA_TheGoldenDragon:effects.BonusHealth",
       "entityKey": "DA_TheGoldenDragon",
       "entityName": "황금 드래곤",
       "entityType": "item",
-      "field": "효과 BonusHealth",
+      "field": "효과 추가 체력",
       "fieldPath": "effects.BonusHealth",
       "before": 700,
       "after": 600,

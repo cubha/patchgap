@@ -238,7 +238,7 @@ export default function TftPage() {
               증거 등급이다(통계가 "움직였다"고 말하는 것과 게임사 파일이 "바꿨다"고 말하는 것). */}
           <TftBriefingTabs
             contentCount={announced.length}
-            gapCount={unannounced.length + (submarine?.submarines.length ?? 0)}
+            gapCount={unannounced.length + (submarine?.entities.length ?? 0)}
             content={
               <SectionCard
                 eyebrow="대조"

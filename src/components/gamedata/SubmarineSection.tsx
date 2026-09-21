@@ -7,7 +7,8 @@
 import Link from "next/link";
 
 import SectionCard from "@/components/SectionCard";
-import { gameDataValue, statusLabel } from "@/lib/format";
+import { statusLabel } from "@/lib/format";
+import { submarineCellText } from "./submarineText";
 import type { SubmarineSummary } from "@/lib/gamedata";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 
@@ -38,7 +39,7 @@ export interface SubmarineSectionProps {
 }
 
 export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionProps) {
-  const { submarines, changeCount, source } = summary;
+  const { entities, changeCount, source } = summary;
 
   return (
     <SectionCard
@@ -46,12 +47,12 @@ export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionPr
       title="패치노트에 없는 수치 변경"
       variant="glass"
       action={
-        <span className="font-mono text-xs text-muted">
-          수치 변경 {changeCount}건 중 {submarines.length}건
-        </span>
+        // **대상 수로 센다**(2026-09-21 사용자 지시). 대상 수와 값 수를 나란히 쓰면 어느 쪽이
+        // 발견의 크기인지 헷갈린다 — 값 개수는 그 대상의 행 안에서 말한다.
+        <span className="font-mono text-xs text-muted">대상 {entities.length}종</span>
       }
     >
-      {submarines.length === 0 ? (
+      {entities.length === 0 ? (
         <div className="p-5">
           <p className="text-sm text-fg-2">
             {changeCount === 0 ? (
@@ -71,35 +72,40 @@ export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionPr
         </div>
       ) : (
         <ul>
-          {submarines.map((change) => (
-            <li
-              key={change.id}
-              className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-border-soft px-5 py-3 last:border-b-0"
-            >
-              {(() => {
-                const href = hrefOf?.(change) ?? null;
-                return href ? (
+          {entities.map((entity) => {
+            // 한 대상 = 한 행. 값이 여럿이면 첫 건 + "외 N건"이고, 전부는 상세에서 본다 —
+            // 대조표 「바뀐 것」 칸과 **같은 규칙·같은 함수**를 쓴다(두 화면이 다르게 세면 안 된다).
+            const cell = submarineCellText(entity.changes)!;
+            const first = entity.changes[0];
+            const href = hrefOf?.(first) ?? null;
+            return (
+              <li
+                key={`${entity.entityType}:${entity.entityKey}`}
+                className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-border-soft px-5 py-3 last:border-b-0"
+              >
+                {href ? (
                   <Link href={href} className="text-sm font-bold text-fg hover:text-accent hover:underline">
-                    {change.entityName} →
+                    {entity.entityName} →
                   </Link>
                 ) : (
-                  <span className="text-sm font-bold text-fg">{change.entityName}</span>
-                );
-              })()}
-              <span className="rounded-pill bg-accent px-2 py-0.5 text-[0.65rem] font-bold text-accent-on">
-                {statusLabel("submarine")}
-              </span>
-              <span className="font-mono text-sm tabular-nums text-fg-2">
-                {change.field} <span className="text-muted">{gameDataValue(change.before)}</span> →{" "}
-                <span className="text-fg">{gameDataValue(change.after)}</span>
-              </span>
-              {formatRel(change.relChange) ? (
-                <span className="font-mono text-xs tabular-nums text-muted">
-                  {formatRel(change.relChange)}
+                  <span className="text-sm font-bold text-fg">{entity.entityName}</span>
+                )}
+                <span className="rounded-pill bg-accent px-2 py-0.5 text-[0.65rem] font-bold text-accent-on">
+                  {statusLabel("submarine")}
                 </span>
-              ) : null}
-            </li>
-          ))}
+                <span className="font-mono text-sm tabular-nums text-fg-2">
+                  {cell.field} <span className="text-muted">{cell.before}</span> →{" "}
+                  <span className="text-fg">{cell.after}</span>
+                </span>
+                {formatRel(first.relChange) ? (
+                  <span className="font-mono text-xs tabular-nums text-muted">{formatRel(first.relChange)}</span>
+                ) : null}
+                {cell.rest > 0 ? (
+                  <span className="font-mono text-xs text-muted">외 {cell.rest}건</span>
+                ) : null}
+              </li>
+            );
+          })}
         </ul>
       )}
       <p className="border-t border-border-soft px-5 py-2 font-mono text-[0.65rem] text-muted">

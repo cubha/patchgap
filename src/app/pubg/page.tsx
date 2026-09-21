@@ -115,7 +115,7 @@ export default function PubgPage() {
           {/* 공지 대조가 기본 탭, 미공지가 두 번째 탭(2026-09-17 사용자 지시 — 홈과 같은 순서). */}
           <PubgBriefingTabs
             contentCount={announced.length}
-            gapCount={unannounced.length + (submarine?.submarines.length ?? 0)}
+            gapCount={unannounced.length + (submarine?.entities.length ?? 0)}
             content={
               <SectionCard
                 eyebrow="대조"

@@ -69,10 +69,21 @@ describe("diffTft — 18.1 → 18.2 회귀 (실측 고정)", () => {
     expect([yi!.before, yi!.after]).toEqual([60, 55]);
   });
 
-  it("18.1 → 18.2 잠수함은 37건이다 (유닛 19 · 아이템 18)", () => {
-    expect(submarines).toHaveLength(37);
+  // **기준선 갱신(2026-09-21)**: 이전 고정값은 37(유닛 19 · 아이템 18)이었다. 사용자 지적으로
+  // 패치노트 원문을 전수 대조해 **오탐 4건**(금빛 운명+·프리즘 운명+ 골드, 남작의 소굴 능력치,
+  // 황금 드래곤 내구력 — 전부 노트가 값까지 똑같이 공지한 것)을 찾았고, 아이템 효과 사전으로
+  // 그 4건이 공지 쪽으로 옮겨갔다. 테스트를 통과시키려고 숫자를 낮춘 것이 아니라 **판정이
+  // 실제로 더 정확해져서** 낮아진 것이다 — 근거는 `docs/plan/VERIFY-tft-submarine-2026-09-21.md`.
+  it("18.1 → 18.2 잠수함은 33건이다 (유닛 19 · 아이템 14)", () => {
+    expect(submarines).toHaveLength(33);
     expect(submarines.filter((c) => c.entityType === "unit")).toHaveLength(19);
-    expect(submarines.filter((c) => c.entityType === "item")).toHaveLength(18);
+    expect(submarines.filter((c) => c.entityType === "item")).toHaveLength(14);
+  });
+
+  it("★ 대상 수와 값 수는 다르다 — 화면은 대상 수로 말한다", () => {
+    const entities = new Set(submarines.map((c) => `${c.entityType}:${c.entityKey}`));
+    expect(entities.size).toBe(27);
+    expect(submarines.length).toBeGreaterThan(entities.size);
   });
 
   it("부동소수점 잡음은 변경이 아니다 — 0.039999961 → 0.039999962 같은 것", () => {
@@ -112,7 +123,7 @@ describe("diffTft — 아이템 효과는 한국어 낱말로 노트를 찾는�
     ["프리즘 운명+", "effects.Gold", "골드 제공: 10골드 ⇒ 7골드"],
     ["남작의 소굴", "effects.Stats", "능력치 부여: 5% ⇒ 4%"],
     ["황금 드래곤", "effects.BonusDurability", "내구력: 20% ⇒ 15%"],
-  ])("★ %s %s — 노트가 「%s」로 공지했으므로 잠수함이 아니다", (name, path, _note) => {
+  ])("★ %s %s — 노트가 「%s」로 공지했으므로 잠수함이 아니다", (name, path) => {
     expect(any(name, path)).toBeDefined();
     expect(sub(name, path)).toBeUndefined();
   });
