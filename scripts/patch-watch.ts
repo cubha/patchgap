@@ -43,6 +43,10 @@ function notice(message: string): void {
   console.log(process.env.GITHUB_ACTIONS ? `::notice::${message}` : `[notice] ${message}`);
 }
 
+function warn(message: string): void {
+  console.log(process.env.GITHUB_ACTIONS ? `::warning::${message}` : `[warning] ${message}`);
+}
+
 /** 후보 URL이 존재하면 그 페이지 HTML. 없으면 null. 200/404는 파싱할 것이 없다. */
 async function fetchNotesIfPublished(url: string): Promise<string | null> {
   const res = await fetch(url, { headers: { "User-Agent": UA }, redirect: "follow" });
@@ -121,7 +125,9 @@ async function watchTft(dataRoot: string, dryRun: boolean): Promise<boolean> {
 async function watchPubg(dataRoot: string, dryRun: boolean): Promise<boolean> {
   const apiKey = (process.env.PUBG_API_KEY ?? "").trim();
   if (!apiKey) {
-    log("pubg: PUBG_API_KEY 미설정 — 건너뛴다");
+    // 경고로 남긴다 — 키가 없으면 PUBG는 **영원히** 새 패치를 못 찾는데, 로그 한 줄로 끝내면
+    // 그 사실이 초록불 뒤에 숨는다(이 저장소가 PUBG 수집에서 이미 겪은 실패 모드다).
+    warn("pubg: PUBG_API_KEY 미설정 — PUBG는 새 패치를 탐지할 수 없다");
     return false;
   }
   const windows = loadPubgWindows(dataRoot);
@@ -131,6 +137,16 @@ async function watchPubg(dataRoot: string, dryRun: boolean): Promise<boolean> {
   const api = new PubgApi({ apiKey });
   const today = kstDateOf(new Date().toISOString());
   const ids = await api.sampleMatchIds(new Date(Date.now() - 86_400_000).toISOString().slice(0, 10));
+  // **표본을 못 받은 것과 "변화 없음"은 다르다.** `PubgApi.request`는 재시도를 소진하면 조용히
+  // null을 돌려주므로(키 오류·쿼터·장애가 전부 같은 모양이다) 여기서 갈라 주지 않으면
+  // "확인하지 못했다"가 "새 패치 없다"로 읽힌다 — 실측으로 밟았다(2026-09-21: 시크릿이 잘못
+  // 등록돼 CI에서만 표본이 0건이었는데 로그는 「판단 보류」 한 줄이었고 잡은 초록이었다).
+  if (ids.length === 0) {
+    throw new Error(
+      "patch-watch: pubg 표본을 받지 못했다(/samples 응답 없음) — PUBG_API_KEY·쿼터·API 상태를 확인하라. " +
+        "이것은 '새 패치 없음'이 아니라 '확인하지 못함'이다"
+    );
+  }
   for (const id of ids.slice(0, 5)) {
     const match = await api.match(id);
     if (!match) continue;
@@ -155,7 +171,10 @@ async function watchPubg(dataRoot: string, dryRun: boolean): Promise<boolean> {
     appendOverlay("pubg", { patch, telemetryPatch: label, liveFrom: today }, dataRoot);
     return true;
   }
-  log("pubg: 표본에서 라벨을 읽지 못했다 — 이번 실행은 판단 보류");
+  // 표본은 받았는데 다섯 건 전부 라벨을 못 읽었다 — 텔레메트리 CDN 일시 오류 쪽이다.
+  // 이건 던지지 않는다(하루치 실패로 감시자를 빨갛게 만들면 진짜 실패가 묻힌다). 다만
+  // 위 "표본 0건"과 달리 **경고로** 남겨 연속으로 뜨는지 보이게 한다.
+  warn("pubg: 표본 5건에서 텔레메트리 라벨을 읽지 못했다 — 이번 실행은 판단 보류(연속되면 조사하라)");
   return false;
 }
 
