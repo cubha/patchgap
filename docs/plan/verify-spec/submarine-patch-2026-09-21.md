@@ -72,3 +72,25 @@
   - **결정적 증거**: 기존 커밋 축약본으로 `run-pubg-aggregate`를 재실행한 결과
     `weapons-42.3.json`·`weapons-43.1.json`이 **바이트 동일**했다. `accuracy-comparison`·
     `deltas`·`map-deltas`는 `generatedAt`만 달랐고(판정 내용 동일) 제약대로 복원했다.
+
+### 축A(acceptance-critic) 판정 반영
+
+- **V3 반영 — 죽은 코드였다.** `buildSubmarineIndex`·`displayStatusWithGameData`를 ST-8에서
+  만들어 놓고 **어디서도 호출하지 않았다**(테스트만 덮고 있었다). 섹션이 파일을 직접 읽는 구조라
+  동작은 했지만, "된 것처럼 보이는 미배선"은 조용한 빈 값 반환과 같은 종류의 잘못이다.
+  대조표(`buildEntityRows`)에 색인을 넘겨 행 상태를 덮도록 배선했다 —
+  `EntityCompareRow.key`가 이미 `${entityType}:${entityKey}`라 색인 키와 같은 형식이었다.
+  클라이언트 컴포넌트라 색인(메서드 보유)을 직렬화할 수 없어 **평문 배열을 넘기고 클라이언트에서
+  색인을 만든다**(`buildSubmarineIndexFromChanges`).
+  - 남긴 경계: 델타가 **아예 없는** 엔티티는 대조표에 행이 생기지 않는다. 그 표는 "지표가 움직인
+    것들의 표"이고, 델타 없는 잠수함을 억지로 끼우면 표의 의미가 무너진다. 그런 건은 홈의
+    `SubmarineSection`이 맡는다 — 누락이 아니라 **의도된 분업**이다.
+- **A8 ❓ 해소(증거 공급).** `git diff --stat e614f93..HEAD -- verdict.ts pubg-delta.ts types.ts
+  aggregate/stats.ts` → **빈 출력**. 네 파일에서 `submarine` 문자열 **0건**. `MatchStatus` 7종 유지.
+- **A9 ❓ 해소(증거 공급).** `verify.sh --full` — Spec·tsc·ESLint·단위 테스트·빌드·design-lint
+  전 항목 통과(2회: 배선 전·후).
+- **A5(TFT) ⚠️ 유지** — 축A도 "정당한 보류"로 판정했다. D1이 사용자 결정이고 SCOPE를 무단으로
+  앞질러 갱신하지 않았다. PLAN §8 문면상 미충족인 것은 맞으므로 표기를 바꾸지 않는다.
+- **A6(PUBG) ⚠️ 유지** — 알고리즘·회귀는 고정됐으나 실 산출물은 90건 샘플(무기 48종)이고 PLAN이
+  적은 규모(45건×2창·52종)와 다르다. 전량 재축약은 텔레메트리 7,217건 재수신(≈9GB)이 필요해
+  이번 라운드에서 하지 않는다. 다음 수집이 격자를 포함해 만들므로 그때 닫힌다.

@@ -24,6 +24,8 @@ import NoteNavigator from "./NoteNavigator";
 import DeltaTable from "./DeltaTable";
 import CoverageBar from "./CoverageBar";
 import FocusToast from "./FocusToast";
+import { buildSubmarineIndexFromChanges } from "@/pipeline/gamedata/submarine";
+import type { GameDataChange } from "@/pipeline/gamedata/types";
 import { buildEntityRows } from "./entityRows";
 import { STATUS_FILTERS, filterByStatus, type CoverageStats, type NoteEntityGroup } from "./logic";
 
@@ -36,9 +38,22 @@ export interface CompareExplorerProps {
   noteIcons?: Record<string, StreamEntityIcon>;
   /** deltas.meta.qAlpha — 표시 상태 판정에 쓴다. */
   qAlpha?: number;
+  /**
+   * 수치 축(F9) — 패치노트에 없는 원본 수치 변경. **평문 배열로 받는다**: 색인은 메서드를 가져
+   * 서버→클라이언트 직렬화가 안 되므로 여기서 만든다.
+   */
+  gameDataChanges?: readonly GameDataChange[];
 }
 
-export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons = {}, qAlpha }: CompareExplorerProps) {
+export default function CompareExplorer({
+  pair,
+  notes,
+  rows,
+  coverage,
+  noteIcons = {},
+  qAlpha,
+  gameDataChanges = [],
+}: CompareExplorerProps) {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [laneFilter, setLaneFilter] = useState<LaneAxis>("all");
   const [activeSection, setActiveSection] = useState<PatchNoteSection>("champion");
@@ -58,9 +73,14 @@ export default function CompareExplorer({ pair, notes, rows, coverage, noteIcons
     }
   }, []);
 
+  const submarine = useMemo(
+    () => buildSubmarineIndexFromChanges(gameDataChanges),
+    [gameDataChanges]
+  );
+
   const entityRows = useMemo(
-    () => buildEntityRows(filterByStatus(rows, statusFilter, qAlpha), laneFilter, qAlpha),
-    [rows, statusFilter, laneFilter, qAlpha]
+    () => buildEntityRows(filterByStatus(rows, statusFilter, qAlpha), laneFilter, qAlpha, submarine),
+    [rows, statusFilter, laneFilter, qAlpha, submarine]
   );
 
   // 선택한 묶음 → 표 행. 줄 id 교집합이 우선이고, 없으면 아이콘 해석 키(ddragon)로 한 번 더 찾는다.

@@ -79,8 +79,15 @@ describe("buildEntityRows — 수치 축 얹기", () => {
   });
 
   it("entityType이 다르면 다른 엔티티다 — 아이템 3095와 챔피언 3095는 별개", () => {
-    const [row] = buildEntityRows([delta({ entityType: "champion" })], "all", undefined, index);
+    // 챔피언 행은 `id`에서 라인 축을 읽는다(laneOf) — 실제 포맷을 쓴다.
+    const [row] = buildEntityRows(
+      [delta({ entityType: "champion", id: "champion:3095:winRate", metric: "winRate" })],
+      "all",
+      undefined,
+      index
+    );
     expect(row.status).toBe("unannounced");
+    expect(row.submarineChanges).toEqual([]);
   });
 
   it("잠수함 행이 미공지 행보다 앞에 온다", () => {

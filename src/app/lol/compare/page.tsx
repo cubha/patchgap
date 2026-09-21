@@ -7,6 +7,7 @@
 // CompareExplorer('use client')로 위임한다.
 
 import { loadDdragonSafe } from "@/pipeline/match/ddragon";
+import { loadGameDataDiff } from "@/lib/gamedata";
 import CompareExplorer from "@/components/compare/CompareExplorer";
 import { computeCoverage } from "@/components/compare/logic";
 import { resolveEntityIconBySection, type StreamEntityIcon } from "@/components/home/releaseStreamEntity";
@@ -16,6 +17,10 @@ export default function ComparePage() {
   const pair = getDefaultPair();
 
   const deltas = pair ? loadDeltas(pair.from, pair.to) : null;
+  // 수치 축(F9) — 대조표 행에 잠수함 배지를 얹는다. 없으면 빈 배열이라 표는 그대로다.
+  const gameDataChanges = pair
+    ? (loadGameDataDiff("lol", pair.from, pair.to)?.changes ?? [])
+    : [];
   const notes = pair ? loadNotes(pair.to) : null;
   const ddragon = loadDdragonSafe();
 
@@ -37,6 +42,7 @@ export default function ComparePage() {
           coverage={coverage}
           noteIcons={noteIcons}
           qAlpha={deltas?.meta.qAlpha}
+          gameDataChanges={gameDataChanges}
         />
       </main>
     </div>

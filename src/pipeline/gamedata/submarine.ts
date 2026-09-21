@@ -28,25 +28,36 @@ function keyOf(entityType: string, entityKey: string): string {
   return `${entityType}:${entityKey}`;
 }
 
-/** 여러 게임의 diff 파일을 한 색인으로. **공지된 변경은 담지 않는다.** */
-export function buildSubmarineIndex(files: readonly GameDataDiffFile[]): SubmarineIndex {
+/**
+ * 변경 목록에서 색인을 만든다. **공지된 변경은 담지 않는다.**
+ *
+ * 파일이 아니라 배열을 받는 형태가 따로 있는 이유: 대조표(`CompareExplorer`)는 클라이언트
+ * 컴포넌트라 서버가 **메서드를 가진 색인을 넘길 수 없다**(직렬화 불가). 평문 배열만 건너가고
+ * 색인은 클라이언트에서 만든다.
+ */
+export function buildSubmarineIndexFromChanges(
+  changes: readonly GameDataChange[]
+): SubmarineIndex {
   const byEntity = new Map<string, GameDataChange[]>();
   let count = 0;
-  for (const file of files) {
-    for (const change of file.changes) {
-      if (!isSubmarineChange(change)) continue;
-      count += 1;
-      const k = keyOf(change.entityType, change.entityKey);
-      const list = byEntity.get(k);
-      if (list) list.push(change);
-      else byEntity.set(k, [change]);
-    }
+  for (const change of changes) {
+    if (!isSubmarineChange(change)) continue;
+    count += 1;
+    const k = keyOf(change.entityType, change.entityKey);
+    const list = byEntity.get(k);
+    if (list) list.push(change);
+    else byEntity.set(k, [change]);
   }
   return {
     count,
     changesOf: (entityType, entityKey) => byEntity.get(keyOf(entityType, entityKey)) ?? [],
     has: (entityType, entityKey) => byEntity.has(keyOf(entityType, entityKey)),
   };
+}
+
+/** 여러 게임의 diff 파일을 한 색인으로. */
+export function buildSubmarineIndex(files: readonly GameDataDiffFile[]): SubmarineIndex {
+  return buildSubmarineIndexFromChanges(files.flatMap((file) => file.changes));
 }
 
 /**
