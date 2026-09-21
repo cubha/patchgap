@@ -1,0 +1,99 @@
+== SYNTH real×1.03 cells=191 D min 0.017 p5 0.125 p25 0.287 p50 0.419 max 0.753
+   low D=0.017 shift=-2 i0=0.261 ib=0.277 WeapPanzerFaust100M1_C NonSpecific n=245/225
+   low D=0.046 shift=+8 i0=0.706 ib=0.751 WeapSaiga12_C LegShot n=4772/4486
+   low D=0.071 shift=+9 i0=0.287 ib=0.358 WeapDP12_C LegShot n=270/217
+   low D=0.071 shift=+7 i0=0.636 ib=0.707 WeapSaiga12_C PelvisShot n=2690/2494
+   low D=0.073 shift=+7 i0=0.610 ib=0.683 WeapSaiga12_C HeadShot n=2745/2789
+   low D=0.081 shift=+7 i0=0.422 ib=0.503 WeapSawnoff_C LegShot n=621/485
+   low D=0.107 shift=+7 i0=0.348 ib=0.455 WeapSawnoff_C PelvisShot n=337/312
+   low D=0.112 shift=+7 i0=0.639 ib=0.751 WeapMk12_C LegShot n=5640/9256
+== SYNTH null42×1.03 cells=200 D min 0.027 p5 0.126 p25 0.292 p50 0.426 max 0.967
+   low D=0.027 shift=+8 i0=0.682 ib=0.709 WeapSaiga12_C LegShot n=2469/2303
+   low D=0.038 shift=+7 i0=0.561 ib=0.600 WeapSaiga12_C PelvisShot n=1314/1376
+   low D=0.086 shift=+7 i0=0.190 ib=0.276 WeapSawnoff_C HeadShot n=217/197
+   low D=0.095 shift=+7 i0=0.239 ib=0.333 WeapDP12_C TorsoShot n=197/277
+   low D=0.100 shift=+7 i0=0.345 ib=0.445 WeapSawnoff_C LegShot n=305/316
+   low D=0.101 shift=+7 i0=0.511 ib=0.611 WeapSaiga12_C HeadShot n=1410/1335
+   low D=0.104 shift=+7 i0=0.266 ib=0.370 WeapDP12_C ArmShot n=216/237
+   low D=0.113 shift=+8 i0=0.467 ib=0.580 WeapMP9_C TorsoShot n=610/621
+== SYNTH real×0.97 cells=191 D min 0.030 p5 0.143 p25 0.291 p50 0.418 max 0.757
+   low D=0.030 shift=-6 i0=0.328 ib=0.358 WeapDP12_C LegShot n=270/217
+   low D=0.032 shift=-7 i0=0.719 ib=0.751 WeapSaiga12_C LegShot n=4772/4486
+   low D=0.073 shift=-8 i0=0.610 ib=0.683 WeapSaiga12_C HeadShot n=2745/2789
+   low D=0.077 shift=-8 i0=0.627 ib=0.704 WeapSaiga12_C PelvisShot n=2690/2494
+   low D=0.078 shift=-17 i0=0.199 ib=0.277 WeapPanzerFaust100M1_C NonSpecific n=245/225
+   low D=0.090 shift=-8 i0=0.415 ib=0.505 WeapSawnoff_C LegShot n=621/485
+   low D=0.127 shift=-8 i0=0.664 ib=0.791 WeapSaiga12_C ArmShot n=10039/10327
+   low D=0.130 shift=-8 i0=0.335 ib=0.465 WeapDP12_C ArmShot n=453/309
+== SYNTH null42×0.97 cells=200 D min 0.041 p5 0.133 p25 0.285 p50 0.422 max 0.967
+   low D=0.041 shift=-7 i0=0.666 ib=0.707 WeapSaiga12_C LegShot n=2469/2303
+   low D=0.064 shift=-8 i0=0.276 ib=0.341 WeapDP12_C TorsoShot n=197/277
+   low D=0.071 shift=-8 i0=0.528 ib=0.599 WeapSaiga12_C PelvisShot n=1314/1376
+   low D=0.090 shift=-8 i0=0.518 ib=0.607 WeapSaiga12_C HeadShot n=1410/1335
+   low D=0.118 shift=-8 i0=0.252 ib=0.370 WeapDP12_C ArmShot n=216/237
+   low D=0.124 shift=-8 i0=0.518 ib=0.641 WeapDragunov_C HeadShot n=1210/1202
+   low D=0.124 shift=-8 i0=0.613 ib=0.737 WeapSaiga12_C ArmShot n=5372/4667
+   low D=0.125 shift=-8 i0=0.320 ib=0.445 WeapSawnoff_C LegShot n=305/316
+== SYNTH real×1.1 cells=191 D min 0.037 p5 0.185 p25 0.351 p50 0.517 max 0.846
+   low D=0.037 shift=+42 i0=0.239 ib=0.275 WeapPanzerFaust100M1_C NonSpecific n=245/225
+   low D=0.059 shift=+25 i0=0.280 ib=0.339 WeapDP12_C LegShot n=270/217
+   low D=0.067 shift=+24 i0=0.697 ib=0.764 WeapSaiga12_C LegShot n=4772/4486
+   low D=0.081 shift=+24 i0=0.606 ib=0.687 WeapSaiga12_C PelvisShot n=2690/2494
+   low D=0.085 shift=+24 i0=0.689 ib=0.774 WeapSaiga12_C TorsoShot n=8208/8456
+   low D=0.093 shift=+23 i0=0.578 ib=0.672 WeapSaiga12_C HeadShot n=2745/2789
+   low D=0.112 shift=+24 i0=0.373 ib=0.484 WeapDP12_C TorsoShot n=474/374
+   low D=0.140 shift=+23 i0=0.376 ib=0.516 WeapSawnoff_C LegShot n=621/485
+== SYNTH null42×1.1 cells=200 D min 0.045 p5 0.183 p25 0.355 p50 0.517 max 0.967
+   low D=0.045 shift=+24 i0=0.312 ib=0.356 WeapDP12_C TorsoShot n=197/277
+   low D=0.059 shift=+23 i0=0.525 ib=0.584 WeapSaiga12_C PelvisShot n=1314/1376
+   low D=0.072 shift=+24 i0=0.643 ib=0.715 WeapSaiga12_C TorsoShot n=4288/3920
+   low D=0.087 shift=+24 i0=0.627 ib=0.715 WeapSaiga12_C LegShot n=2469/2303
+   low D=0.090 shift=+23 i0=0.320 ib=0.410 WeapSawnoff_C LegShot n=305/316
+   low D=0.098 shift=+23 i0=0.508 ib=0.606 WeapSaiga12_C HeadShot n=1410/1335
+   low D=0.119 shift=+24 i0=0.443 ib=0.562 WeapMP9_C TorsoShot n=610/621
+   low D=0.119 shift=+24 i0=0.229 ib=0.348 WeapSawnoff_C PelvisShot n=171/166
+== SYNTH real×1.015 cells=191 D min 0.024 p5 0.082 p25 0.251 p50 0.374 max 0.811
+   low D=0.024 shift=+4 i0=0.726 ib=0.750 WeapSaiga12_C LegShot n=4772/4486
+   low D=0.039 shift=+5 i0=0.310 ib=0.348 WeapDP12_C LegShot n=270/217
+   low D=0.045 shift=+4 i0=0.637 ib=0.682 WeapSaiga12_C PelvisShot n=2690/2494
+   low D=0.052 shift=+3 i0=0.615 ib=0.667 WeapSaiga12_C HeadShot n=2745/2789
+   low D=0.062 shift=+3 i0=0.449 ib=0.511 WeapSawnoff_C LegShot n=621/485
+   low D=0.063 shift=+4 i0=0.798 ib=0.861 WeapMk12_C TorsoShot n=15407/17197
+   low D=0.064 shift=+4 i0=0.681 ib=0.745 WeapMk12_C LegShot n=5640/9256
+   low D=0.077 shift=+3 i0=0.706 ib=0.782 WeapMk12_C ArmShot n=2633/2730
+== SYNTH null42×1.015 cells=200 D min 0.028 p5 0.093 p25 0.265 p50 0.391 max 0.968
+   low D=0.028 shift=+4 i0=0.296 ib=0.324 WeapDP12_C ArmShot n=216/237
+   low D=0.036 shift=+3 i0=0.547 ib=0.583 WeapSaiga12_C PelvisShot n=1314/1376
+   low D=0.037 shift=+4 i0=0.668 ib=0.705 WeapSaiga12_C LegShot n=2469/2303
+   low D=0.064 shift=+4 i0=0.760 ib=0.824 WeapMk12_C TorsoShot n=8061/7346
+   low D=0.076 shift=+4 i0=0.660 ib=0.736 WeapMk12_C HeadShot n=2038/1879
+   low D=0.078 shift=+3 i0=0.346 ib=0.423 WeapSawnoff_C LegShot n=305/316
+   low D=0.083 shift=+4 i0=0.259 ib=0.342 WeapSawnoff_C PelvisShot n=171/166
+   low D=0.083 shift=+3 i0=0.657 ib=0.740 WeapMk12_C ArmShot n=1388/1245
+== NULL42 cells=200 D min 0.000 p5 0.000 p25 0.000 p50 0.000 max 0.021
+   low D=0.000 shift=+0 i0=0.338 ib=0.338 WeapDP12_C TorsoShot n=197/277
+   low D=0.000 shift=+0 i0=0.348 ib=0.348 WeapSawnoff_C PelvisShot n=171/166
+   low D=0.000 shift=+0 i0=0.359 ib=0.359 WeapSawnoff_C HeadShot n=217/197
+   low D=0.000 shift=+0 i0=0.377 ib=0.377 WeapDP12_C ArmShot n=216/237
+   low D=0.000 shift=+0 i0=0.453 ib=0.453 WeapSawnoff_C LegShot n=305/316
+   low D=0.000 shift=+0 i0=0.485 ib=0.485 WeapWin94_C TorsoShot n=202/215
+   low D=0.000 shift=+0 i0=0.507 ib=0.507 WeapFamasG2_C HeadShot n=184/200
+   low D=0.000 shift=+0 i0=0.513 ib=0.513 WeapJS9_C TorsoShot n=156/168
+== NULL43 cells=181 D min 0.000 p5 0.000 p25 0.000 p50 0.000 max 0.000
+   low D=0.000 shift=+0 i0=0.296 ib=0.296 WeapDP12_C ArmShot n=157/152
+   low D=0.000 shift=+0 i0=0.300 ib=0.300 WeapSawnoff_C PelvisShot n=150/162
+   low D=0.000 shift=+0 i0=0.322 ib=0.322 WeapDP12_C TorsoShot n=204/170
+   low D=0.000 shift=+0 i0=0.374 ib=0.374 WeapSawnoff_C LegShot n=245/240
+   low D=0.000 shift=+0 i0=0.431 ib=0.431 WeapSawnoff_C HeadShot n=209/225
+   low D=0.000 shift=+0 i0=0.445 ib=0.445 WeapJS9_C HeadShot n=143/155
+   low D=0.000 shift=+0 i0=0.484 ib=0.484 WeapWin94_C TorsoShot n=194/295
+   low D=0.000 shift=+0 i0=0.489 ib=0.489 WeapMk14_C HeadShot n=297/218
+== REAL cells=191 D min 0.000 p5 0.000 p25 0.000 p50 0.000 max 0.027
+   low D=0.000 shift=+0 i0=0.447 ib=0.447 WeapG18_C TorsoShot n=211/240
+   low D=0.000 shift=+0 i0=0.459 ib=0.459 WeapSawnoff_C PelvisShot n=337/312
+   low D=0.000 shift=+0 i0=0.469 ib=0.469 WeapM9_C HeadShot n=197/184
+   low D=0.000 shift=+0 i0=0.484 ib=0.484 WeapDP12_C TorsoShot n=474/374
+   low D=0.000 shift=+0 i0=0.495 ib=0.495 WeapDP12_C ArmShot n=453/309
+   low D=0.000 shift=+0 i0=0.530 ib=0.530 WeapSawnoff_C LegShot n=621/485
+   low D=0.000 shift=+0 i0=0.545 ib=0.545 WeapWin94_C HeadShot n=157/192
+   low D=0.000 shift=+0 i0=0.563 ib=0.563 WeapM9_C PelvisShot n=142/145

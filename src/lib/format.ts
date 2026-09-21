@@ -96,6 +96,9 @@ export function fmtKst(iso: string): string {
  * 어디에도 남기지 않는다. 알려지지 않은 값은 크래시 대신 원본 문자열을 그대로 반환한다.
  */
 const STATUS_LABELS: Record<DisplayStatus | MatchStatus, string> = {
+  // 수치 축(2026-09-21) — 통칭을 쓴다. 게이머가 실제로 쓰는 말이라 인지 비용이 0이고,
+  // 정확한 정의("패치노트에 없는 원본 수치 변경")는 방법론과 상세가 말한다.
+  submarine: "잠수함 패치",
   announced: "공지",
   "announced-anomaly": "공지 · 이상 관측",
   unannounced: "미공지",

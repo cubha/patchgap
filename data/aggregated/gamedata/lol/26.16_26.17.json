@@ -1,0 +1,256 @@
+{
+  "meta": {
+    "game": "lol",
+    "from": "26.16",
+    "to": "26.17",
+    "source": {
+      "kind": "ddragon",
+      "from": "16.16.1",
+      "to": "16.17.1"
+    },
+    "generatedAt": "2026-09-21T01:08:44.416Z",
+    "changeCount": 17,
+    "submarineCount": 1
+  },
+  "changes": [
+    {
+      "id": "gdc:lol:26.17:AurelionSol:spells.0.costBurn",
+      "entityKey": "AurelionSol",
+      "entityName": "아우렐리온 솔",
+      "entityType": "champion",
+      "field": "Q 소모량",
+      "fieldPath": "spells.0.costBurn",
+      "before": "35/40/45/50/55",
+      "after": "30/35/40/45/50",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.17:champion:aurelionsol:7b32ba55"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:AurelionSol:spells.1.cooldownBurn",
+      "entityKey": "AurelionSol",
+      "entityName": "아우렐리온 솔",
+      "entityType": "champion",
+      "field": "W 재사용 대기시간",
+      "fieldPath": "spells.1.cooldownBurn",
+      "before": "22/20.5/19/17.5/16",
+      "after": "22/20/18/16/14",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.17:champion:aurelionsol:30712737"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:Leblanc:stats.attackspeedperlevel",
+      "entityKey": "Leblanc",
+      "entityName": "르블랑",
+      "entityType": "champion",
+      "field": "기본 공격 속도 증가량",
+      "fieldPath": "stats.attackspeedperlevel",
+      "before": 2.35,
+      "after": 1.5,
+      "relChange": -0.3617021276595745,
+      "matchedNoteIds": [
+        "note:26.17:champion:leblanc:1875009c",
+        "note:26.17:champion:leblanc:606fc9c6"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:Nocturne:stats.armor",
+      "entityKey": "Nocturne",
+      "entityName": "녹턴",
+      "entityType": "champion",
+      "field": "기본 방어력",
+      "fieldPath": "stats.armor",
+      "before": 38,
+      "after": 36,
+      "relChange": -0.05263157894736842,
+      "matchedNoteIds": [
+        "note:26.17:champion:nocturne:9c41fff1"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:Nocturne:stats.hp",
+      "entityKey": "Nocturne",
+      "entityName": "녹턴",
+      "entityType": "champion",
+      "field": "기본 체력",
+      "fieldPath": "stats.hp",
+      "before": 655,
+      "after": 640,
+      "relChange": -0.022900763358778626,
+      "matchedNoteIds": [
+        "note:26.17:champion:nocturne:fd4d5d23"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:Vayne:stats.attackspeedperlevel",
+      "entityKey": "Vayne",
+      "entityName": "베인",
+      "entityType": "champion",
+      "field": "기본 공격 속도 증가량",
+      "fieldPath": "stats.attackspeedperlevel",
+      "before": 3.3,
+      "after": 2.8,
+      "relChange": -0.15151515151515152,
+      "matchedNoteIds": [
+        "note:26.17:champion:vayne:e3f52a3c"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:Vayne:stats.hp",
+      "entityKey": "Vayne",
+      "entityName": "베인",
+      "entityType": "champion",
+      "field": "기본 체력",
+      "fieldPath": "stats.hp",
+      "before": 550,
+      "after": 580,
+      "relChange": 0.05454545454545454,
+      "matchedNoteIds": [
+        "note:26.17:champion:vayne:528f94c2",
+        "note:26.17:champion:vayne:39451b7a"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:Vayne:stats.hpperlevel",
+      "entityKey": "Vayne",
+      "entityName": "베인",
+      "entityType": "champion",
+      "field": "기본 체력 증가량",
+      "fieldPath": "stats.hpperlevel",
+      "before": 103,
+      "after": 98,
+      "relChange": -0.04854368932038835,
+      "matchedNoteIds": [
+        "note:26.17:champion:vayne:528f94c2",
+        "note:26.17:champion:vayne:39451b7a"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:Vayne:stats.hpregen",
+      "entityKey": "Vayne",
+      "entityName": "베인",
+      "entityType": "champion",
+      "field": "기본 체력 재생",
+      "fieldPath": "stats.hpregen",
+      "before": 3.5,
+      "after": 4,
+      "relChange": 0.14285714285714285,
+      "matchedNoteIds": [
+        "note:26.17:champion:vayne:39451b7a"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:Vayne:stats.hpregenperlevel",
+      "entityKey": "Vayne",
+      "entityName": "베인",
+      "entityType": "champion",
+      "field": "기본 체력 재생 증가량",
+      "fieldPath": "stats.hpregenperlevel",
+      "before": 0.55,
+      "after": 0.5,
+      "relChange": -0.09090909090909098,
+      "matchedNoteIds": [
+        "note:26.17:champion:vayne:39451b7a"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:Vayne:spells.0.costBurn",
+      "entityKey": "Vayne",
+      "entityName": "베인",
+      "entityType": "champion",
+      "field": "Q 소모량",
+      "fieldPath": "spells.0.costBurn",
+      "before": "30",
+      "after": "46/42/38/34/30",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.17:champion:vayne:fb0dfc8b"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:Xerath:stats.hp",
+      "entityKey": "Xerath",
+      "entityName": "제라스",
+      "entityType": "champion",
+      "field": "기본 체력",
+      "fieldPath": "stats.hp",
+      "before": 596,
+      "after": 575,
+      "relChange": -0.03523489932885906,
+      "matchedNoteIds": [
+        "note:26.17:champion:xerath:080e761c"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:Xerath:spells.0.effect.1",
+      "entityKey": "Xerath",
+      "entityName": "제라스",
+      "entityType": "champion",
+      "field": "Q 수치",
+      "fieldPath": "spells.0.effect.1",
+      "before": "75/115/155/195/235",
+      "after": "70/110/150/190/230",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.17:champion:xerath:43a6f4aa"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:3095:gold.total",
+      "entityKey": "3095",
+      "entityName": "폭풍갈퀴",
+      "entityType": "item",
+      "field": "가격",
+      "fieldPath": "gold.total",
+      "before": 3000,
+      "after": 3200,
+      "relChange": 0.06666666666666667,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:lol:26.17:3095:stats.PercentAttackSpeedMod",
+      "entityKey": "3095",
+      "entityName": "폭풍갈퀴",
+      "entityType": "item",
+      "field": "공격 속도",
+      "fieldPath": "stats.PercentAttackSpeedMod",
+      "before": 0.2,
+      "after": 0.25,
+      "relChange": 0.24999999999999994,
+      "matchedNoteIds": [
+        "note:26.17:item:stormrazor:0a1d6b43"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:6610:stats.FlatHPPoolMod",
+      "entityKey": "6610",
+      "entityName": "갈라진 하늘",
+      "entityType": "item",
+      "field": "체력",
+      "fieldPath": "stats.FlatHPPoolMod",
+      "before": 450,
+      "after": 400,
+      "relChange": -0.1111111111111111,
+      "matchedNoteIds": [
+        "note:26.17:item:sundered-sky:4c4f025e"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.17:6610:stats.FlatPhysicalDamageMod",
+      "entityKey": "6610",
+      "entityName": "갈라진 하늘",
+      "entityType": "item",
+      "field": "공격력",
+      "fieldPath": "stats.FlatPhysicalDamageMod",
+      "before": 45,
+      "after": 40,
+      "relChange": -0.1111111111111111,
+      "matchedNoteIds": [
+        "note:26.17:item:sundered-sky:0aec77fe"
+      ]
+    }
+  ]
+}

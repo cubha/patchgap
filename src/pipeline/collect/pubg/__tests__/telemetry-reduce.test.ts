@@ -40,9 +40,35 @@ describe("PUBG 텔레메트리 축약 — Python 원본과 동일", () => {
     const actual = reduceTelemetry(MATCH_ID, ATTRIBUTES, events) as unknown as Record<string, unknown>;
 
     // 키 집합부터 본다 — 필드가 하나 빠지면 집계가 조용히 0으로 읽는다.
-    expect(Object.keys(actual).sort()).toEqual(Object.keys(expected).sort());
+    //
+    // Python 원본에 없는 필드는 **여기 이름을 적은 것만** 통과한다(2026-09-21 ST-6). 누락을 막는
+    // 원래 강도는 그대로고, 선언 없는 추가도 함께 막는다 — 골든의 의미는 "무엇이 들어 있는지
+    // 전부 안다"이지 "Python과 글자까지 같다"가 아니다.
+    const TS_ONLY_FIELDS = ["damageGrid"]; // 잠수함 패치 검출(F9)용 피해 격자 — Python 원본엔 없다
+    expect(Object.keys(actual).sort()).toEqual([...Object.keys(expected), ...TS_ONLY_FIELDS].sort());
     for (const key of Object.keys(expected)) {
       expect(actual[key], `필드 ${key}`).toEqual(expected[key]);
+    }
+  });
+
+  it("피해 격자는 부위별로 표본·최대치·최빈값을 담는다 (ST-6)", () => {
+    const events = JSON.parse(
+      fs.readFileSync(path.join(FIXTURES, "telemetry-sample.json"), "utf8")
+    ) as TelemetryEvent[];
+    const { damageGrid } = reduceTelemetry(MATCH_ID, ATTRIBUTES, events);
+
+    for (const [weapon, reasons] of Object.entries(damageGrid)) {
+      expect(weapon.startsWith("Weap"), `무기 키 ${weapon}`).toBe(true);
+      for (const [reason, cell] of Object.entries(reasons)) {
+        expect(cell.n, `${weapon}/${reason} 표본`).toBeGreaterThan(0);
+        expect(cell.max, `${weapon}/${reason} 최대치`).toBeGreaterThan(0);
+        expect(cell.top.length, `${weapon}/${reason} 최빈`).toBeLessThanOrEqual(8);
+        // 최빈값은 빈도 내림차순 — 병합(mergeGrids)이 이 순서를 신뢰한다.
+        const counts = cell.top.map(([, c]) => c);
+        expect([...counts].sort((a, b) => b - a)).toEqual(counts);
+        // 격자 값은 전부 최대치 이하다.
+        for (const [value] of cell.top) expect(value).toBeLessThanOrEqual(cell.max);
+      }
     }
   });
 

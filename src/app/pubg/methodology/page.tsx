@@ -211,7 +211,8 @@ export default function PubgMethodologyPage() {
             <div className="p-5">
               <p className="text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
                 브리핑·대조표·무기 상세는 <strong className="text-fg">판정이 선 무기</strong>만 보여줍니다. 아래 세 상태는 판정
-                파일에 남되 화면에는 올리지 않습니다.
+                파일에 남되 화면에는 올리지 않습니다. 예외는 수치 축의 잠수함 패치입니다 — 지표 판정이 아래 어느
+                상태여도 전부 보여 주고, 배지는 <StatusBadge status="submarine" className="align-middle" />로 지표 판정을 덮습니다.
               </p>
               <ul className="mt-3 flex flex-col gap-2 text-sm">
                 <li className="flex flex-wrap items-baseline gap-2">
@@ -231,6 +232,41 @@ export default function PubgMethodologyPage() {
                   </span>
                 </li>
               </ul>
+            </div>
+          </SectionCard>
+
+          {/* 수치 축(2026-09-21, F9) — 위 카드는 전부 획득 점유율이라는 **지표**의 통계 추론이다. 이 카드만
+              성질이 다르다: 피해값이 실제로 바뀌었는가를 경기 로그에서 직접 읽는다. LoL·TFT 방법론의 같은
+              카드와 판정 기준이 같고(게이트와 무관하게 전량 노출 · 배지 1종), 소스만 다르다. */}
+          <SectionCard eyebrow="수치 축" title="잠수함 패치는 어떻게 찾나" variant="glass">
+            <div className="flex flex-col gap-3 p-5 text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
+              <p>
+                &ldquo;미공지&rdquo;는 두 종류입니다. <strong className="text-fg">지표 축</strong>은 위 표의 획득
+                점유율이 움직였는데 짝지을 패치노트가 없는 경우로, 통계가 근거입니다.{" "}
+                <strong className="text-fg">수치 축</strong>은 무기의 피해량 같은 원본 값이 실제로 바뀌었는데
+                패치노트에 없는 경우이고, 통칭 잠수함 패치입니다. 잠수함은 표본 부족·바닥 미달 게이트와
+                무관하게 전부 보여 주고, 배지도 따로 둡니다 — 세 게임이 같은 규칙입니다.
+              </p>
+              <p>
+                PUBG는 게임사가 수치 파일을 배포하지 않습니다. 대신 피격 이벤트의 피해값이{" "}
+                <span className="font-mono text-xs">기본 피해량 × 부위 배율 × 방어구 계수 × 거리 감쇠</span>의
+                곱이라, 기본 피해량이나 부위 배율이 바뀌면 그 부위의 피해 분포 전체가 같은 비율로 옮겨갑니다.
+                방어구·거리 구성이 바뀌면 분포의 빈도는 달라져도 값의 위치는 그대로입니다. 그래서 부위별로
+                패치 전후 분포를 겹쳐 놓고 <strong className="text-fg">통째로 밀었을 때 겹침이 얼마나
+                늘어나는가</strong>만 봅니다. 값 하나(최대치·최빈값)를 보는 방식은 이상치와 꼬리값에 흔들려
+                다섯 번 틀렸고, 전부 폐기했습니다.
+              </p>
+              <p className="text-muted">
+                임계는 같은 패치를 무작위로 반반 나눈 무변화 대조군에서 정했습니다(대조군 최대 이득 0.021 대
+                임계 0.10). 부위별 120회 미만 피격은 판정하지 않습니다. 산탄총과 발사기는 펠릿 합산·폭발
+                감쇠 때문에 분포가 연속이라 작은 변경을 놓칠 수 있습니다 — 놓칠 수는 있어도 지어내지는 않습니다.
+                거리 감쇠 곡선만 바뀐 변경은 이 검정의 대상 밖입니다.
+              </p>
+              <p className="text-muted">
+                잡힌 변경은 그 무기의 <strong className="text-fg-2">피해량</strong>을 말한 패치노트 항목이 있는지
+                찾고, 없으면 잠수함입니다. 같은 무기의 반동·조준 전환·차량 피해 배수 항목은 피해량을 설명하지
+                않으므로 알리바이가 되지 않습니다.
+              </p>
             </div>
           </SectionCard>
 

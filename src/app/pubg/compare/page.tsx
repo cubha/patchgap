@@ -8,6 +8,8 @@ import SectionCard from "@/components/SectionCard";
 import PubgCompareTable from "@/components/pubg/PubgCompareTable";
 import { PubgFooter, PubgPageHeader, PubgUnavailable } from "@/components/pubg/shared";
 import { isReportable, loadPubg } from "@/lib/pubgData";
+import SubmarineSection from "@/components/gamedata/SubmarineSection";
+import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 
 export const metadata: Metadata = {
   title: "PUBG 대조표 · patchgap",
@@ -28,6 +30,7 @@ export default function PubgComparePage() {
 
   const { deltas, before, after } = bundle;
   const judged = deltas.rows.filter((row) => isReportable(row.status)).length;
+  const submarine = summarizeGameData(loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to));
 
   return (
     <main>
@@ -53,9 +56,17 @@ export default function PubgComparePage() {
             }
           >
             <div className="p-5">
-              <PubgCompareTable rows={deltas.rows} />
+              <PubgCompareTable
+                rows={deltas.rows}
+                submarineKeys={submarine?.submarines.map((change) => change.entityKey) ?? []}
+              />
             </div>
           </SectionCard>
+
+          {/* 수치 축(2026-09-21) — LoL·TFT 대조표는 지표가 여럿이라 잠수함을 **행으로** 끼워
+              넣지만, 이 표는 지표가 `pickupShare` 하나뿐이라 빈 점유율 행은 표를 망가뜨린다.
+              그래서 같은 섹션을 표 아래에 둔다 — 전량이 보인다는 요구는 그대로 지킨다. */}
+          {submarine ? <SubmarineSection summary={submarine} /> : null}
 
           <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
         </div>

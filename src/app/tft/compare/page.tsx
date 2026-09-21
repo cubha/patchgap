@@ -12,6 +12,8 @@ import ExternalLink from "@/components/ExternalLink";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
 import { TFT_METRICS, buildTftEntityRows, type TftEntityRow } from "@/components/tft/entityRows";
+import { buildSubmarineIndexFromChanges } from "@/pipeline/gamedata/submarine";
+import { loadGameDataDiff } from "@/lib/gamedata";
 import { TftFooter, TftSampleNotice, TftUnavailable, deltaDisplay, formatMetricValue } from "@/components/tft/shared";
 import { entityTypeLabel, isLowerBetter, metricLabel } from "@/lib/format";
 import { entitySlug } from "@/app/tft/unit/[key]/page";
@@ -70,7 +72,11 @@ export default function TftComparePage() {
   }
 
   const { deltas, before, after, notes } = bundle;
-  const rows = buildTftEntityRows(deltas.rows, deltas.meta.qAlpha);
+  // 수치 축(F9) — 지표 축 게이트를 못 넘긴 잠수함도 행으로 올린다.
+  const submarine = buildSubmarineIndexFromChanges(
+    loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to)?.changes ?? []
+  );
+  const rows = buildTftEntityRows(deltas.rows, deltas.meta.qAlpha, submarine);
   const counts = deltas.meta.counts;
   const bucket = (status: MatchStatus): number => counts[status] ?? 0;
   const shownDeltas = rows.reduce((sum, r) => sum + Object.keys(r.cells).length, 0);

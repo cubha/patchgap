@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "game": "lol",
+    "from": "26.17",
+    "to": "26.18",
+    "source": {
+      "kind": "ddragon",
+      "from": "16.17.1",
+      "to": "16.18.1"
+    },
+    "generatedAt": "2026-09-21T01:08:54.319Z",
+    "changeCount": 9,
+    "submarineCount": 0
+  },
+  "changes": [
+    {
+      "id": "gdc:lol:26.18:Bard:stats.armor",
+      "entityKey": "Bard",
+      "entityName": "바드",
+      "entityType": "champion",
+      "field": "기본 방어력",
+      "fieldPath": "stats.armor",
+      "before": 34,
+      "after": 32,
+      "relChange": -0.058823529411764705,
+      "matchedNoteIds": [
+        "note:26.18:champion:bard:453ef7b4"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.18:Bard:stats.armorperlevel",
+      "entityKey": "Bard",
+      "entityName": "바드",
+      "entityType": "champion",
+      "field": "기본 방어력 증가량",
+      "fieldPath": "stats.armorperlevel",
+      "before": 5,
+      "after": 4.7,
+      "relChange": -0.05999999999999996,
+      "matchedNoteIds": [
+        "note:26.18:champion:bard:453ef7b4"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.18:Cassiopeia:spells.0.effect.1",
+      "entityKey": "Cassiopeia",
+      "entityName": "카시오페아",
+      "entityType": "champion",
+      "field": "Q 수치",
+      "fieldPath": "spells.0.effect.1",
+      "before": "75/110/145/180/215",
+      "after": "65/100/135/170/205",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.18:champion:cassiopeia:91d07d6f",
+        "note:26.18:champion:cassiopeia:957165bc"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.18:Cassiopeia:spells.2.costBurn",
+      "entityKey": "Cassiopeia",
+      "entityName": "카시오페아",
+      "entityType": "champion",
+      "field": "E 소모량",
+      "fieldPath": "spells.2.costBurn",
+      "before": "40",
+      "after": "45",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.18:champion:cassiopeia:571817a6"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.18:Ekko:spells.0.costBurn",
+      "entityKey": "Ekko",
+      "entityName": "에코",
+      "entityType": "champion",
+      "field": "Q 소모량",
+      "fieldPath": "spells.0.costBurn",
+      "before": "50/60/70/80/90",
+      "after": "40/50/60/70/80",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.18:champion:ekko:dfd6f002"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.18:MasterYi:stats.armorperlevel",
+      "entityKey": "MasterYi",
+      "entityName": "마스터 이",
+      "entityType": "champion",
+      "field": "기본 방어력 증가량",
+      "fieldPath": "stats.armorperlevel",
+      "before": 4.5,
+      "after": 5,
+      "relChange": 0.1111111111111111,
+      "matchedNoteIds": [
+        "note:26.18:champion:masteryi:d392c3c6"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.18:Nautilus:stats.attackdamage",
+      "entityKey": "Nautilus",
+      "entityName": "노틸러스",
+      "entityType": "champion",
+      "field": "기본 공격력",
+      "fieldPath": "stats.attackdamage",
+      "before": 61,
+      "after": 58,
+      "relChange": -0.04918032786885246,
+      "matchedNoteIds": [
+        "note:26.18:champion:nautilus:b6aff2b2"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.18:Seraphine:spells.2.cooldownBurn",
+      "entityKey": "Seraphine",
+      "entityName": "세라핀",
+      "entityType": "champion",
+      "field": "E 재사용 대기시간",
+      "fieldPath": "spells.2.cooldownBurn",
+      "before": "11/10.5/10/9.5/9",
+      "after": "11",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.18:champion:seraphine:4519a08c"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.18:Syndra:spells.1.cooldownBurn",
+      "entityKey": "Syndra",
+      "entityName": "신드라",
+      "entityType": "champion",
+      "field": "W 재사용 대기시간",
+      "fieldPath": "spells.1.cooldownBurn",
+      "before": "12/11/10/9/8",
+      "after": "13/12/11/10/9",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.18:champion:syndra:cb99a266"
+      ]
+    }
+  ]
+}

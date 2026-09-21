@@ -14,6 +14,8 @@ import SideMatchAverages from "@/components/home/SideMatchAverages";
 import DiscordPanel from "@/components/home/DiscordPanel";
 import LaneGapPanel from "@/components/home/LaneGapPanel";
 import StreamColumnLayout from "@/components/home/StreamColumnLayout";
+import SubmarineSection from "@/components/gamedata/SubmarineSection";
+import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import type { CosmeticSkinItem } from "@/components/home/CosmeticSkinPreview";
 import { computeHeadline, isGapStatus } from "@/components/home/logic";
 import { isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
@@ -49,6 +51,8 @@ export default function Home() {
   const pair = getDefaultPair();
 
   const deltas = pair ? loadDeltas(pair.from, pair.to) : null;
+  // 잠수함 패치(F9) — 판정 산출물과 별도 파일이고, 없으면 섹션이 통째로 빠진다.
+  const submarine = pair ? summarizeGameData(loadGameDataDiff("lol", pair.from, pair.to)) : null;
   const notesTo = pair ? loadNotes(pair.to) : null;
   const summaryTo = pair ? loadSummary(pair.to) : null;
   const summaryFrom = pair ? loadSummary(pair.from) : null;
@@ -181,6 +185,16 @@ export default function Home() {
               </>
             }
           />
+
+          {/* 수치 축(2026-09-21) — 위 스트림은 **지표가 움직였나**를 말하고, 여기는 **게임사가
+              무엇을 바꿨나**를 말한다. 두 축은 직교하므로 섹션을 따로 둔다(사용자 확정:
+              "레이아웃이 달라진게아니라 상태가 추가된거잖아"). 산출물이 없는 쌍에서는 통째로
+              빠진다 — 없는 것을 있는 척하지 않는다. */}
+          {submarine ? (
+            <div className="pb-9">
+              <SubmarineSection summary={submarine} />
+            </div>
+          ) : null}
         </Container>
       </main>
     </div>

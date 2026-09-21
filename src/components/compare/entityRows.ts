@@ -26,6 +26,8 @@ import type { DeltaEntityType, DeltaRecord } from "@/pipeline/types";
 import { type LaneAxis, parseLaneAxis } from "@/lib/lane";
 import { DISPLAY_SORT_PRIORITY, displayStatus, type DisplayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
+import { submarineOnlyEntities, type SubmarineIndex } from "@/pipeline/gamedata/submarine";
+import type { GameDataChange } from "@/pipeline/gamedata/types";
 
 // 술어는 shared에 있다(홈과 같은 잣대) — 기존 호출부·테스트를 위해 여기서 재export한다.
 export { isReportableRecord };
@@ -81,8 +83,22 @@ export interface EntityCompareRow {
   cells: Partial<Record<EntityMetric, EntityCell>>;
   /** 셀 중 최우선 표시 키. */
   status: DisplayStatus;
-  /** |Δ| 최대 보고 셀 — 상세 링크·강조에 쓴다. */
-  representative: DeltaRecord;
+  /**
+   * |Δ| 최대 보고 셀 — 상세 링크·강조에 쓴다.
+   *
+   * **`null`일 수 있다**(2026-09-21): 잠수함 전용 행은 관측이 하나도 없다. 그런 행은 상세로
+   * 갈 자리가 없으므로 이름을 링크 없이 그린다 — 없는 링크를 만들지 않는다.
+   */
+  representative: DeltaRecord | null;
+  /**
+   * 이 엔티티의 **원본 수치 변경 중 패치노트에 없는 것**(2026-09-21). 비어 있으면 수치 축에서는
+   * 할 말이 없다는 뜻이다.
+   *
+   * 지표 축(`status`)과 직교한다 — 승률이 안 움직였어도 여기 값이 있으면 잠수함 패치다. 다만
+   * **이 표는 "지표가 움직인 것들의 표"**라서, 델타가 아예 없는 엔티티는 여기 행이 생기지 않는다.
+   * 그런 건은 홈의 잠수함 섹션이 맡는다(`SubmarineSection`) — 표의 의미를 지키기 위한 경계다.
+   */
+  submarineChanges: readonly GameDataChange[];
   /** 셀들의 matchedNoteIds 합집합 — 좌 내비 선택과의 연결. */
   matchedNoteIds: string[];
   maxAbsDelta: number;
@@ -120,7 +136,9 @@ function newCell(record: DeltaRecord, lane: LaneAxis): EntityCell {
 export function buildEntityRows(
   rows: readonly DeltaRecord[],
   lane: LaneAxis,
-  qAlpha?: number
+  qAlpha?: number,
+  /** 수치 축 색인. 주면 해당 엔티티의 상태를 `submarine`으로 덮는다(증거 등급이 더 높다). */
+  submarine?: SubmarineIndex
 ): EntityCompareRow[] {
   const order: string[] = [];
   const byKey = new Map<string, EntityCompareRow>();
@@ -147,6 +165,7 @@ export function buildEntityRows(
         cells: { [record.metric]: newCell(record, recordLane) },
         status: displayStatus(record, qAlpha),
         representative: record,
+        submarineChanges: [],
         matchedNoteIds: [...record.matchedNoteIds],
         maxAbsDelta: Math.abs(record.delta ?? 0),
       });
@@ -177,9 +196,35 @@ export function buildEntityRows(
         representative = record;
       }
     }
-    row.status = status;
+    // 수치 축이 지표 축을 덮는다 — 통계가 "움직였다"고 말하는 것과 게임사 데이터가 "바꿨다"고
+    // 말하는 것은 증거 등급이 다르다(display-status.ts DISPLAY_SORT_PRIORITY 헤더 참고).
+    const changes = submarine?.changesOf(row.entityType, row.entityKey) ?? [];
+    row.submarineChanges = changes;
+    row.status = changes.length > 0 ? "submarine" : status;
     row.representative = representative;
     row.maxAbsDelta = maxAbs;
+  }
+
+  // 지표 축 게이트를 **통과하지 못한** 잠수함 엔티티도 행을 만든다(2026-09-21 사용자 지시).
+  // 표본 부족·바닥 미달·무변화는 지표 축의 규율이지 수치 축의 규율이 아니다 — 패치노트에 없는
+  // 수치 변경은 그 자체로 발견이고, 지표가 안 움직였다는 사실이 그것을 약화시키지 않는다.
+  if (submarine) {
+    for (const entity of submarineOnlyEntities(submarine, new Set(out.map((r) => r.key)))) {
+      if (entity.entityType !== "champion" && entity.entityType !== "item") continue;
+      out.push({
+        key: `${entity.entityType}:${entity.entityKey}`,
+        entityType: entity.entityType,
+        entityKey: entity.entityKey,
+        entityName: entity.entityName,
+        lane,
+        cells: {},
+        status: "submarine",
+        representative: null,
+        submarineChanges: entity.changes,
+        matchedNoteIds: [],
+        maxAbsDelta: 0,
+      });
+    }
   }
 
   return out.sort(

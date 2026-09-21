@@ -68,9 +68,13 @@ export default function HeroSummary({ stats, action }: HeroSummaryProps) {
           패치노트가 말한 것 vs 통계가 말하는 것
         </p>
         <h1 className="ambient-hero-headline mt-2 max-w-3xl break-keep text-2xl font-bold leading-tight text-fg">
-          패치노트는 <strong className="font-mono tabular-nums">{fmtInt(noteEntityCount)}</strong>개
+          {/* 두 숫자를 accent로 든다(2026-09-21 사용자 지시 — 세 게임 히어로 통일). 이 문장이
+              히어로의 전부이므로 "패치가 말한 수"와 "통계가 말한 수"가 한눈에 대비돼야 한다. */}
+          패치노트는{" "}
+          <strong className="font-mono tabular-nums text-accent">{fmtInt(noteEntityCount)}</strong>개
           챔피언·아이템을 바꿨다고 말했고, 통계는{" "}
-          <strong className="font-mono tabular-nums">{fmtInt(statCount)}</strong>개 변화를 말합니다
+          <strong className="font-mono tabular-nums text-accent">{fmtInt(statCount)}</strong>개 변화를
+          말합니다
         </h1>
         {/* 계산 방법 설명 문장("패치 전후 … 유의한 변화만 셉니다")은 방법론으로 옮겼다(재판정 보완 6, C3). */}
         {/* 인트로 재생 버튼은 2026-09-18 라운드6(사용자 C4 "인트로재생 버튼 제거")에 뺐다. `action`

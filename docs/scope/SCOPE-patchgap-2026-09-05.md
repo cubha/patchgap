@@ -77,6 +77,7 @@
 | 통계 | 자체 구현(Wilson·Newcombe·Beta-binomial 축소·BH-FDR) | simple-statistics | 함수 4개 수준, 판정 로직 투명성 |
 | 패치노트 파서 | **cheerio** | linkedom | ko-kr·en-us 정적 HTML 실측 |
 | 엔티티 ID | Data Dragon(champion·item JSON) 한글명↔key 매핑 | 수동 테이블 | 공식 정적 데이터, 패치별 버전 |
+| **원본 수치 대조**(F9, 2026-09-21 사용자 승인) | **Data Dragon**(LoL: `champion.json`·`item.json`·챔피언별 `spells`) + **Community Dragon**(TFT: `cdragon/tft/{locale}.json` — 버전 경로 `/{patch}/` 사용) | 공식 TFT 수치 소스 **없음** | **런타임 의존성 0**(빌드 타임 `fetch`만, npm 패키지 추가 없음). DDragon의 `tft-champion.json`은 이름·아이콘·cost뿐이라 **수치가 아예 없다**(실측) — 유닛 `stats`·`ability.variables`를 주는 곳은 Community Dragon뿐이고 대안이 존재하지 않는다. 비공식 미러이므로 ① 빌드 타임에만 호출 ② 응답에서 **수치 필드만** 추출해 `data/cdragon/{version}/`에 커밋(재현성 확보, 미러가 사라져도 과거 판정은 남는다) ③ 실패해도 그 게임의 F9만 빠지고 나머지 파이프라인은 그대로 |
 | LLM 짝짓기·요약 | **Claude API — Opus 5** (`claude-opus-5`; ~~Sonnet 5~~ → 2026-09-18 사용자 확정 상향. 근거: 동일 델타 12건 A/B에서 간접 원인 탐지 Opus 12/12 vs Sonnet 1/12(`docs/plan/LLM-AB-2026-09-17.md`), Gap 원인 커버리지 20%가 심사 축 "AI 활용 적절성"의 직접 감점. 저신뢰(low) 후보는 화면에서 회색 "가능성" 문장으로만 표시해 무근거 회색 원칙 유지; 배치 1회 상한·캐시 우선·폴백) | Sonnet 5 / Haiku 4.5 | 요구사항 3 "자체 에이전트 파이프라인", AI 활용 적절성 |
 | 프론트 | **Next.js 16 App Router `output:'export'`** + Tailwind + recharts | Astro | 완전 정적·Vercel 무료·하네스 스킬(ui-plan/design-lint) 경험치 |
 | 배치 실행 | 로컬(초기·도그푸딩) → **GitHub Actions cron + workflow_dispatch**(9/19~) | Vercel Cron | 6h job·무료, Vercel Cron은 60~300s |
@@ -90,6 +91,12 @@
 > 표시명이 엔티티로 잡힌다). 패치노트는 `teamfighttactics.leagueoflegends.com`(도메인이 다르고
 > `-notes` 접미가 없다). **새 런타임 의존성 0** — 기존 fetch·bottleneck·cheerio만 쓴다.
 > 패치 구분은 버전이 아니라 **노트 발행 시각 창**이다(`game_version`이 비어 있다).
+
+> **잠수함 패치 검출 F9 추가 (2026-09-21)**: 기존 F1~F4는 "지표가 어떻게 움직였나"(통계 추론)만
+> 본다. F9는 게임사가 배포한 **원본 수치**를 패치 간 대조해 "무엇이 실제로 바뀌었나"(문서 대조)를
+> 본다 — 두 축은 직교하고 산출물도 `data/aggregated/gamedata/**`로 분리한다. `MatchStatus`는
+> 무수정이며 `DisplayStatus` 표시 계층에서만 갈라진다. PUBG는 수치 파일이 없어 텔레메트리 피격
+> 이벤트의 **피해 격자**(선언값의 직접 관측)를 읽는다 — 새 의존성 0.
 
 ## 4. 리스크 & 선행 과제
 - **D+1 게이트(9/6, 구현과 병행)**: 실매치 1건으로 `info.gameVersion` 포맷·`startTime` 파라미터·`challenges` 골드 필드 존재 확인 → F1 컷 규칙 확정
