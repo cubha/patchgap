@@ -46,8 +46,18 @@ export const BOUNDARY_DAYS = 2;
 /** 수집 가능 구간의 시작·끝(패치일로부터 며칠째인가). 위 헤더의 336시간 계산 결과다. */
 export const HARVEST_EARLIEST_DAY = WINDOW_DAYS + BOUNDARY_DAYS; // patch+7
 export const HARVEST_LATEST_DAY = 9;
-/** 이 일수를 넘도록 새 패치가 안 들어오면 달력이 낡은 것으로 본다(주기 4~5주의 두 배). */
-export const STALE_AFTER_DAYS = 70;
+/**
+ * 이 일수를 넘도록 새 패치가 안 들어오면 달력이 낡은 것으로 본다.
+ *
+ * 70 → **35**(2026-09-21). 70일은 주기(27~35일 실측)의 두 배라 **너무 늦게 운다** — 43.1(9/9)
+ * 기준 11/18에 우는데, 다음 패치의 수집 창(`patch+7 … patch+9`)은 10월 중순에 이미 닫힌다.
+ * 놓친 패치쌍은 텔레메트리 336시간 보존 때문에 **영영 못 만든다**.
+ *
+ * PUBG는 감시자(`patch-watch.yml`)가 **탐지할 수 없는 유일한 게임**이라(텔레메트리 라벨이
+ * 메이저까지만 담고 공지 사이트는 SPA라 404도 200을 준다) 이 경보가 사람에게 가는 유일한 신호다.
+ * 관측 최대 간격(35일)에 맞춰, 그보다 길어지면 곧바로 말하게 한다.
+ */
+export const STALE_AFTER_DAYS = 35;
 
 const DAY_MS = 86_400_000;
 

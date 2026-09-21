@@ -28,6 +28,7 @@ import {
   type DamageGrid,
   type PubgNoteLike,
 } from "../src/pipeline/gamedata/pubg";
+import { comparisonWindows } from "../src/pipeline/collect/pubg/patch-calendar";
 import { loadPubgWindows } from "./shared/calendar";
 import { diffTft, type CdragonSnapshot } from "../src/pipeline/gamedata/tft";
 import { isSubmarineChange, type GameDataDiffFile } from "../src/pipeline/gamedata/types";
@@ -77,15 +78,30 @@ function loadNotes(dataRoot: string, game: string, patch: string): NoteLike[] {
 interface ReducedMatchFile {
   readonly patch?: string | null;
   readonly matchType?: string | null;
+  readonly createdAt?: string | null;
   readonly damageGrid?: DamageGrid;
+}
+
+/** `2026-09-04 … 2026-09-08` 꼴 한 줄 라벨. */
+function labelOf(days: readonly string[]): string {
+  return days.length === 0 ? "(없음)" : `${days[0]} … ${days[days.length - 1]}`;
 }
 
 /** 부위별 최소 히트 — 못 채우면 판정하지 않는다(`insufficient-sample`과 같은 규율). */
 const PUBG_MIN_HITS = 120;
 
 /**
- * PUBG는 게임사가 수치 파일을 내지 않으므로 축약본의 **피해 격자**를 읽는다. 격자가 없는 축약본은
- * ST-6 이전에 만들어진 것이라 건너뛴다 — 조용히 0으로 세지 않고 아래에서 수를 보고한다.
+ * PUBG는 게임사가 수치 파일을 내지 않으므로 축약본의 **피해 격자**를 읽는다.
+ *
+ * **비교 구간을 라벨이 아니라 날짜로 가른다**(2026-09-21 정정). 전에는 텔레메트리 라벨
+ * (`pc-2018-43`)로만 묶었는데 그러면 두 가지가 틀어진다:
+ * ① 라벨은 **메이저만** 담아 43.1 → 43.2 같은 마이너 쌍이 한 무더기로 붕괴한다(언제나 0건).
+ * ② 라벨만 쓰면 창 밖 매치까지 들어와 **요일 정렬이 깨진다** — 두 창을 정확히 7일 차이로
+ *    잡아 둔 이유가 그것인데(주말 비중 차이가 패치 효과와 섞인다, `comparisonWindows`),
+ *    수치 축만 그 규율 밖에 있었다(실측: 42.3→43.1에서 5,079건 중 **788건이 창 밖**).
+ *
+ * 판정 축(`run-pubg-aggregate`의 `selectMatches`)이 이미 「라벨 AND 날짜」로 거른다 —
+ * 같은 규율로 맞춘 것이지 새 규칙을 만든 것이 아니다.
  */
 async function runPubg(dataRoot: string, from: string, to: string): Promise<void> {
   const dir = join(dataRoot, "raw", "pubg", "telemetry-reduced");
@@ -93,51 +109,62 @@ async function runPubg(dataRoot: string, from: string, to: string): Promise<void
 
   // 축약본의 `patch`는 텔레메트리 라벨(`pc-2018-43`)이고 인자는 표기(`43.1`)다 — 캘린더가 그
   // 대응을 소유한다(`PubgPatchWindow.telemetryPatch`). 여기서 따로 문자열을 만들지 않는다.
-  const telemetryLabel = (patch: string): string => {
-    const window = loadPubgWindows(dataRoot).find((w) => w.patch === patch);
-    if (!window) throw new Error(`run-gamedata-diff: PUBG 패치 '${patch}'가 캘린더에 없다`);
-    return window.telemetryPatch;
+  const windows = loadPubgWindows(dataRoot);
+  const windowOf = (patch: string) => {
+    const found = windows.find((w) => w.patch === patch);
+    if (!found) throw new Error(`run-gamedata-diff: PUBG 패치 '${patch}'가 캘린더에 없다`);
+    return found;
   };
-  const labelFrom = telemetryLabel(from);
-  const labelTo = telemetryLabel(to);
-  // **같은 라벨이면 대조가 성립하지 않는다.** PUBG 텔레메트리 라벨은 **메이저만** 담는다
-  // (실측: 42.3·43.1 → `pc-2018-42`·`pc-2018-43`). 즉 43.1 → 43.2 같은 마이너 쌍은 두 창이
-  // 같은 라벨이 되고, 아래 `grids` 객체는 계산된 키가 겹쳐 **항목이 하나로 붕괴**한다 —
-  // before·after가 같은 배열을 가리켜 `compareGrids`가 언제나 0건을 낸다. 조용한 0건은
-  // 화면에서 "잠수함 없음"과 구분되지 않으므로 여기서 던진다(`assertVersionPair`와 같은 규율).
-  if (labelFrom === labelTo) {
-    throw new Error(
-      `run-gamedata-diff: pubg ${from}·${to}가 같은 텔레메트리 라벨(${labelFrom})이다 — ` +
-        "마이너 패치는 텔레메트리로 구분되지 않아 대조할 수 없다(메이저 쌍만 가능하다)"
-    );
-  }
+  const fromWindow = windowOf(from);
+  const toWindow = windowOf(to);
 
-  const grids: Record<string, DamageGrid[]> = { [labelFrom]: [], [labelTo]: [] };
-  let withGrid = 0;
+  // 비교 구간은 **`to` 패치의 라이브 날짜 하나**에서 나온다(판정 축과 같은 함수).
+  const { before: beforeDays, after: afterDays } = comparisonWindows(toWindow.liveFrom);
+  const BEFORE = new Set(beforeDays);
+  const AFTER = new Set(afterDays);
+
+  const beforeGrids: DamageGrid[] = [];
+  const afterGrids: DamageGrid[] = [];
   let withoutGrid = 0;
+  let outsideWindow = 0;
   for (const file of readdirSync(dir)) {
     if (!file.endsWith(".json")) continue;
     const m = readJson<ReducedMatchFile>(join(dir, file));
     if (m.matchType !== "official") continue;
-    const patch = m.patch ?? "";
-    if (!(patch in grids)) continue;
+    const day = (m.createdAt ?? "").slice(0, 10);
+    const inBefore = m.patch === fromWindow.telemetryPatch && BEFORE.has(day);
+    const inAfter = m.patch === toWindow.telemetryPatch && AFTER.has(day);
+    if (!inBefore && !inAfter) {
+      outsideWindow += 1;
+      continue;
+    }
     if (!m.damageGrid) {
       withoutGrid += 1;
       continue;
     }
-    withGrid += 1;
-    grids[patch].push(m.damageGrid);
+    (inBefore ? beforeGrids : afterGrids).push(m.damageGrid);
   }
+  const withGrid = beforeGrids.length + afterGrids.length;
 
   console.log(
-    `[gamedata] pubg ${from} → ${to} · 격자 보유 축약본 ${withGrid}건 · 미보유 ${withoutGrid}건`
+    `[gamedata] pubg ${from} → ${to} · 비교 구간 ${labelOf(beforeDays)} vs ${labelOf(afterDays)}`
+  );
+  console.log(
+    `[gamedata] 격자 보유 축약본 ${withGrid}건(before ${beforeGrids.length} · after ${afterGrids.length})` +
+      ` · 미보유 ${withoutGrid}건 · 창 밖 ${outsideWindow}건`
   );
   if (withoutGrid > 0) {
     console.log("[gamedata] ::warning:: 격자 없는 축약본은 ST-6 이전 생성분이다 — 재수집이 필요하다");
   }
+  if (withGrid === 0) {
+    throw new Error(
+      `run-gamedata-diff: pubg ${from}→${to} 비교 구간에 격자를 가진 official 매치가 0건이다 — ` +
+        "수집 구간이나 캘린더 날짜를 확인하라(조용한 0건은 '변화 없음'과 구분되지 않는다)"
+    );
+  }
 
-  const before = mergeGrids(grids[labelFrom]);
-  const after = mergeGrids(grids[labelTo]);
+  const before = mergeGrids(beforeGrids);
+  const after = mergeGrids(afterGrids);
   const shifts = compareGrids(before, after, { minHits: PUBG_MIN_HITS });
   // PUBG 노트는 `entity`가 없고 `weaponKeys`를 갖는다 — 펴지 않으면 전부 잠수함으로 읽힌다.
   const notes = expandPubgNotes(

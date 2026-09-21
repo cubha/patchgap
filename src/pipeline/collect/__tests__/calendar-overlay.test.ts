@@ -109,12 +109,14 @@ describe("mergePubgWindows — 텔레메트리 라벨까지 검사한다", () =>
     expect(merged.map((w) => w.patch)).toEqual(["42.3", "43.1", "44.1"]);
   });
 
-  it("★ 직전과 같은 라벨은 거부한다 — 마이너 쌍은 격자가 붕괴해 0건을 낸다", () => {
-    expect(() =>
-      mergePubgWindows(base, [
-        { patch: "43.2", telemetryPatch: "pc-2018-43", liveFrom: "2026-10-08" },
-      ])
-    ).toThrow(/라벨/);
+  // 2026-09-21 명세 변경: 전에는 같은 라벨을 **거부**했다(마이너 쌍이 격자를 붕괴시켰으므로).
+  // `runPubg`가 비교 구간을 날짜로 가르도록 고쳐지면서 그 전제가 사라졌다 — 판정 축이 이미
+  // 쓰던 「라벨 AND 날짜」와 같은 규율이다. 이제 43.1 → 43.2가 성립하므로 받는다.
+  it("★ 직전과 같은 라벨(마이너 쌍)도 받는다 — 비교 구간은 날짜가 가른다", () => {
+    const merged = mergePubgWindows(base, [
+      { patch: "43.2", telemetryPatch: "pc-2018-43", liveFrom: "2026-10-08" },
+    ]);
+    expect(merged.map((w) => w.patch)).toEqual(["42.3", "43.1", "43.2"]);
   });
 
   it("라벨 형식이 아니면 거부한다", () => {
