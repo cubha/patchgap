@@ -10,6 +10,8 @@ import Link from "next/link";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
+import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
+import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import PubgDetailSplash, { type PubgDetailStat } from "@/components/pubg/PubgDetailSplash";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { isReportable, loadPubg, loadPubgAssets } from "@/lib/pubgData";
@@ -82,6 +84,11 @@ export default async function PubgWeaponPage({ params }: PageProps) {
 
   const row = deltas.rows.find((r) => r.weaponKey === weaponKey) ?? null;
   const note = row?.matchedNoteId ? (notes.find((n) => n.id === row.matchedNoteId) ?? null) : null;
+
+  // 수치 축(F9) — PUBG는 게임사가 수치 파일을 배포하지 않아 텔레메트리 피해 격자를 대조한다.
+  const gameData = loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to);
+  const submarineChanges = submarineChangesFor(gameData, "weapon", weaponKey);
+  const mismatchChanges = noteMismatchChangesFor(gameData, "weapon", weaponKey);
 
   // 자산 유무를 **빌드 타임에** 판정한다 — 없는 무기가 실제로 9종 있다(RPD 포함).
   const assets = loadPubgAssets();
@@ -162,6 +169,52 @@ export default async function PubgWeaponPage({ params }: PageProps) {
             )
           }
         />
+
+        {/* B안(2026-09-21 사용자 확정) — 세 게임이 같은 자리에 같은 제목을 쓴다. PUBG 상세에는
+            선언 카드가 없었고 노트가 판정 줄에만 있었다 — 두 구획을 가지려면 카드가 필요하다.
+            근거 카드 **위**에 둔다: "무엇이 바뀌었나"가 "어떻게 판정했나"보다 먼저다. */}
+        <SectionCard
+          eyebrow="선언 대조"
+          title="패치노트 대조"
+          variant="glass"
+          action={
+            <span className="font-mono text-xs text-muted">
+              말한 것 {note ? 1 : 0} · 말하지 않은 것 {submarineChanges.length}
+              {mismatchChanges.length > 0 ? ` · 값이 다른 것 ${mismatchChanges.length}` : ""}
+            </span>
+          }
+        >
+          <div className="flex items-center gap-2 px-5 pt-4 pb-2">
+            <span className="h-1.5 w-1.5 rounded-pill bg-muted" aria-hidden="true" />
+            <h3 className="font-body text-xs font-bold tracking-wide text-muted">패치노트가 말한 것</h3>
+          </div>
+          {note ? (
+            <div className="flex flex-col gap-1 px-5 pb-4">
+              <span className="text-sm text-fg-2">{note.summary}</span>
+              {row?.evidence.noteAnchor ? (
+                <ExternalLink
+                  href={row.evidence.noteAnchor}
+                  className="w-fit font-mono text-xs text-accent hover:underline"
+                >
+                  원문 ↗
+                </ExternalLink>
+              ) : null}
+            </div>
+          ) : (
+            <p className="px-5 pb-4 text-sm text-muted">
+              {deltas.meta.to} 패치노트에 이 무기를 언급한 항목이 없습니다.
+            </p>
+          )}
+
+          <div className="border-t border-border-soft" />
+
+          <SubmarineDetailBlock
+            changes={submarineChanges}
+            mismatchChanges={mismatchChanges}
+            source={gameData?.meta.source ?? null}
+            notePatch={deltas.meta.to}
+          />
+        </SectionCard>
 
         <SectionCard eyebrow="근거" title="이렇게 판정했습니다" variant="glass">
           <div className="flex flex-col gap-4 p-5 text-sm">

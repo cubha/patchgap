@@ -130,14 +130,29 @@ jobs:
           TARGET: ${{ github.event.inputs.target || '2500' }}
         run: npx tsx scripts/run-tft-collect.ts --target "$TARGET"
 
+      # 수치 스냅숏(F9)이 **노트 파싱보다 먼저**다. 노트 파서가 대상 사전을 이 파일에서 보강하기
+      # 때문이다 — DDragon `tft-champion.json`에는 덩굴정령·어미 부리·수호령류가 아예 없어서,
+      # 보강 없이 돌리면 노트 179줄 중 60줄(34%)이 대상 미해소로 버려진다(2026-09-21 실측).
+      # `run-tft-notes`는 같은 세트 스냅숏이 없으면 **던진다** — 조용히 34% 틀린 채 초록으로
+      # 지나가지 않게 하려는 것이고, 이 스텝이 그 전제를 매 패치 충족시킨다.
+      - name: Fetch TFT value snapshot (F9 · Community Dragon)
+        if: steps.determine.outputs.should_run == 'true'
+        env:
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: |
+          # 키가 필요 없다(공개 미러). 버전을 주지 않으면 DDragon 최신의 major.minor를 쓴다 —
+          # cron은 지금 라이브인 패치를 받으므로 그것이 곧 이 패치의 게임 버전이다.
+          # from 쪽 스냅숏은 **지난 실행이 이미 커밋해 뒀다**(DDragon과 같은 모델).
+          npx tsx scripts/run-cdragon.ts --patch "$PATCH_TO"
+
       - name: Fetch + parse patch notes (F3)
         if: steps.determine.outputs.should_run == 'true'
         env:
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
         run: |
-          # 키가 필요 없다(공개 웹페이지 + Data Dragon). 양쪽 패치를 다 받는다 —
-          # from 쪽 노트가 없으면 판정이 짝을 못 짓는다.
+          # 키가 필요 없다(공개 웹페이지 + Data Dragon + 위 스텝이 받은 CDragon 스냅숏).
+          # 양쪽 패치를 다 받는다 — from 쪽 노트가 없으면 판정이 짝을 못 짓는다.
           npx tsx scripts/run-tft-notes.ts --patch "$PATCH_FROM"
           npx tsx scripts/run-tft-notes.ts --patch "$PATCH_TO"
 
@@ -187,6 +202,24 @@ jobs:
           PATCH_TO: ${{ steps.determine.outputs.to }}
         run: npx tsx scripts/run-tft-match.ts --from "$PATCH_FROM" --to "$PATCH_TO"
 
+      # 수치 축(F9) — 위 스텝이 받아 둔 CDragon 스냅숏을 **전 패치 것과 대조**해 노트에 없는 변경을
+      # 찾는다. 지표 축(Match + verdict)과 직교하고 산출물도 섞지 않는다(`data/aggregated/gamedata/tft`).
+      #
+      # 노트 뒤에 두는 이유는 입력 때문이다 — `notes-{to}.json`이 있어야 "노트에 있었나"를 판정한다.
+      # `continue-on-error`는 LoL과 같은 이유다: 잠수함은 있으면 더 보여주는 축이라 수집·판정·
+      # 커밋을 막을 이유가 없다. 버전 인자는 주지 않는다(직전 쌍 산출물 + 방금 받은 스냅숏에서 해소).
+      - name: Detect submarine patches (F9)
+        if: steps.determine.outputs.should_run == 'true' && steps.sample_guard.outputs.sample_ok != 'false'
+        env:
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: |
+          npx tsx scripts/run-gamedata-diff.ts \
+            --game tft \
+            --from "$PATCH_FROM" \
+            --to "$PATCH_TO"
+        continue-on-error: true
+
       - name: Discord briefing (TFT 채널)
         if: steps.determine.outputs.should_run == 'true' && steps.sample_guard.outputs.sample_ok != 'false' && env.HAS_DISCORD_TFT == 'true'
         env:
@@ -219,7 +252,9 @@ jobs:
           git config user.name "patchgap-bot"
           git config user.email "patchgap-bot@users.noreply.github.com"
           # TFT 네임스페이스만 건드린다 — LoL·PUBG 산출물은 이 워크플로의 소관이 아니다.
-          git add data/aggregated/tft
+          # `data/cdragon`은 TFT 전용 수치 스냅숏이라 같이 커밋한다 — 커밋하지 않으면 다음 패치의
+          # "전 버전" 스냅숏이 사라져 수치 축이 대조할 짝을 잃는다(버전당 316KB).
+          git add data/aggregated/tft data/aggregated/gamedata/tft data/cdragon
           if git diff --cached --quiet; then
             echo "변경분 없음 — 커밋 생략"
           else

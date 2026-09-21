@@ -8,6 +8,14 @@
 // 사용:
 //   npm run pipeline:gamedata-diff -- --game lol --from 26.16 --to 26.17 \
 //     --version-from 16.16.1 --version-to 16.17.1
+//
+// **버전 인자는 선택이다**(2026-09-21, F9를 cron에 올리면서). 안 주면 저장소에서 찾는다:
+//   versionFrom = 이미 커밋된 산출물에 적힌 그 패치의 버전   (지난 실행이 적어 두고 갔다)
+//   versionTo   = 같은 규칙, 없으면 앞 스텝이 방금 받아 둔 가장 새 스냅숏
+// 기록을 디스크 최신보다 **먼저** 보는 이유는 재실행이다 — `force`로 지난 패치를 다시 돌리면
+// "가장 새 스냅숏"은 오늘의 최신이지 그 패치의 것이 아니다.
+// cron은 "지금 라이브인 패치"만 알고 게임 버전은 모르기 때문이다. 규칙은
+// `src/pipeline/gamedata/snapshot-version.ts`, 디스크 접근은 `scripts/shared/snapshot-version.ts`.
 
 import { mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -20,11 +28,17 @@ import {
   type DamageGrid,
   type PubgNoteLike,
 } from "../src/pipeline/gamedata/pubg";
-import { PUBG_PATCH_WINDOWS } from "../src/pipeline/collect/pubg/patch-calendar";
+import { loadPubgWindows } from "./shared/calendar";
 import { diffTft, type CdragonSnapshot } from "../src/pipeline/gamedata/tft";
 import { isSubmarineChange, type GameDataDiffFile } from "../src/pipeline/gamedata/types";
 import type { NoteLike } from "../src/pipeline/gamedata/note-link";
 import { isMainModule, parseCliArgs } from "./shared/cli";
+import {
+  recordedVersionOf,
+  resolveCdragonVersion,
+  resolveDdragonVersion,
+  resolvePreviousSnapshotVersion,
+} from "./shared/snapshot-version";
 
 interface DdragonListFile {
   readonly data: Record<string, unknown>;
@@ -80,12 +94,23 @@ async function runPubg(dataRoot: string, from: string, to: string): Promise<void
   // 축약본의 `patch`는 텔레메트리 라벨(`pc-2018-43`)이고 인자는 표기(`43.1`)다 — 캘린더가 그
   // 대응을 소유한다(`PubgPatchWindow.telemetryPatch`). 여기서 따로 문자열을 만들지 않는다.
   const telemetryLabel = (patch: string): string => {
-    const window = PUBG_PATCH_WINDOWS.find((w) => w.patch === patch);
+    const window = loadPubgWindows(dataRoot).find((w) => w.patch === patch);
     if (!window) throw new Error(`run-gamedata-diff: PUBG 패치 '${patch}'가 캘린더에 없다`);
     return window.telemetryPatch;
   };
   const labelFrom = telemetryLabel(from);
   const labelTo = telemetryLabel(to);
+  // **같은 라벨이면 대조가 성립하지 않는다.** PUBG 텔레메트리 라벨은 **메이저만** 담는다
+  // (실측: 42.3·43.1 → `pc-2018-42`·`pc-2018-43`). 즉 43.1 → 43.2 같은 마이너 쌍은 두 창이
+  // 같은 라벨이 되고, 아래 `grids` 객체는 계산된 키가 겹쳐 **항목이 하나로 붕괴**한다 —
+  // before·after가 같은 배열을 가리켜 `compareGrids`가 언제나 0건을 낸다. 조용한 0건은
+  // 화면에서 "잠수함 없음"과 구분되지 않으므로 여기서 던진다(`assertVersionPair`와 같은 규율).
+  if (labelFrom === labelTo) {
+    throw new Error(
+      `run-gamedata-diff: pubg ${from}·${to}가 같은 텔레메트리 라벨(${labelFrom})이다 — ` +
+        "마이너 패치는 텔레메트리로 구분되지 않아 대조할 수 없다(메이저 쌍만 가능하다)"
+    );
+  }
 
   const grids: Record<string, DamageGrid[]> = { [labelFrom]: [], [labelTo]: [] };
   let withGrid = 0;
@@ -185,6 +210,20 @@ function runTft(dataRoot: string, from: string, to: string, vFrom: string, vTo: 
   });
 }
 
+/**
+ * 두 버전이 같으면 대조할 것이 없다. **조용히 0건으로 넘기지 않는다** — 그 화면은 "잠수함 없음"과
+ * 구분되지 않는다. cron에서 이 상황은 보통 하나뿐이다: 패치는 라이브인데 DDragon·CDragon이
+ * 아직 그 버전을 안 냈다(앞 스텝이 전 버전을 최신으로 집었다).
+ */
+function assertVersionPair(game: string, from: string, to: string): void {
+  if (from === to) {
+    throw new Error(
+      `run-gamedata-diff: ${game} 전/후 버전이 같다(${from}) — ` +
+        "스냅숏이 아직 이번 패치 버전으로 갱신되지 않았다. 잠시 뒤 다시 돌리거나 --version-to로 직접 준다"
+    );
+  }
+}
+
 function writeDiff(dataRoot: string, file: GameDataDiffFile): void {
   const out = join(dataRoot, "aggregated", "gamedata", file.meta.game, `${file.meta.from}_${file.meta.to}.json`);
   mkdirSync(dirname(out), { recursive: true });
@@ -212,11 +251,12 @@ async function main(): Promise<void> {
     return;
   }
   if (game === "tft") {
-    const vFrom = String(args.versionFrom ?? "");
-    const vTo = String(args.versionTo ?? "");
-    if (!vFrom || !vTo) {
-      throw new Error("run-gamedata-diff: TFT는 --version-from/--version-to(Community Dragon 버전)가 필요하다");
-    }
+    const vFrom = String(args.versionFrom ?? "") || resolvePreviousSnapshotVersion(dataRoot, "tft", from);
+    const vTo =
+      String(args.versionTo ?? "") ||
+      recordedVersionOf(dataRoot, "tft", to) ||
+      resolveCdragonVersion(dataRoot, to);
+    assertVersionPair("tft", vFrom, vTo);
     runTft(dataRoot, from, to, vFrom, vTo);
     return;
   }
@@ -224,11 +264,12 @@ async function main(): Promise<void> {
     throw new Error(`TODO(gamedata): '${game}' 어댑터 미구현 — 현재 'lol'·'tft'·'pubg'만 지원한다`);
   }
 
-  const versionFrom = String(args.versionFrom ?? "");
-  const versionTo = String(args.versionTo ?? "");
-  if (!versionFrom || !versionTo) {
-    throw new Error("run-gamedata-diff: --version-from/--version-to가 필요하다(DDragon 버전)");
-  }
+  const versionFrom = String(args.versionFrom ?? "") || resolvePreviousSnapshotVersion(dataRoot, "lol", from);
+  const versionTo =
+    String(args.versionTo ?? "") ||
+    recordedVersionOf(dataRoot, "lol", to) ||
+    resolveDdragonVersion(dataRoot);
+  assertVersionPair("lol", versionFrom, versionTo);
 
   const before = loadDdragon(dataRoot, versionFrom);
   const after = loadDdragon(dataRoot, versionTo);

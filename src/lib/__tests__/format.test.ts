@@ -13,7 +13,7 @@ import {
   itemSlug,
   metricLabel,
   positionLabel,
-  statusLabel,
+  statusLabel,  gameDataValue,
 } from "../format";
 
 describe("fmtPct", () => {
@@ -205,5 +205,30 @@ describe("itemSlug / itemIdFromSlug / itemHref", () => {
   // 하나를 거치므로 함께 따라온다(webhook.ts의 `${siteUrl}${itemHref(id)}`).
   it("itemHref는 '/lol/item/{slug}/' 형태를 반환한다", () => {
     expect(itemHref("champion:Trundle:pickRate")).toBe("/lol/item/champion~Trundle~pickRate/");
+  });
+});
+
+// 2026-09-21 — 수치 축(F9) 표시. 프로덕션 실측으로 걸린 결함이다: TFT 홈 잠수함 목록에
+// 드레이븐 공격 속도가 `0.800000011920929 -> 0.8500000238418579`로 렌더되고 있었다.
+describe("gameDataValue — float32 잡음은 표시에서 걸러진다", () => {
+  it("Community Dragon float32 잡음을 접는다", () => {
+    expect(gameDataValue(0.800000011920929)).toBe("0.8");
+    expect(gameDataValue(0.8500000238418579)).toBe("0.85");
+    expect(gameDataValue(0.07999999821186066)).toBe("0.08");
+    expect(gameDataValue(0.03999999910593033)).toBe("0.04");
+    expect(gameDataValue(0.11999999731779099)).toBe("0.12");
+  });
+
+  it("실제 수치는 그대로 둔다 — 잡음 제거가 값을 바꾸면 안 된다", () => {
+    expect(gameDataValue(850)).toBe("850");
+    expect(gameDataValue(3000)).toBe("3000");
+    expect(gameDataValue(26.46)).toBe("26.46");
+    expect(gameDataValue(0)).toBe("0");
+  });
+
+  it("값이 없는 자리와 문자열 값은 건드리지 않는다", () => {
+    // 한쪽에만 있는 필드(신규·삭제)는 `null`이다 — 0으로 적으면 거짓이 된다.
+    expect(gameDataValue(null)).toBe("없음");
+    expect(gameDataValue("18/20/22")).toBe("18/20/22");
   });
 });

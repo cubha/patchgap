@@ -14,6 +14,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { determineTftRun } from "../src/pipeline/collect/tft-patch-calendar";
+import { loadTftWindows } from "./shared/calendar";
 import { runTftPreflight } from "../src/pipeline/collect/tft-preflight";
 import { isMainModule } from "./shared/cli";
 
@@ -86,13 +87,15 @@ export async function main(): Promise<void> {
 
   // ② 캘린더 판정. 산출물 존재 확인만 여기서 하고(파일 I/O) 규칙은 순수 함수가 갖는다.
   const nowMs = Date.now();
-  const probe = determineTftRun({ nowMs, hasOutputs: false, manualPatch, force });
+  // 캘린더도 같은 dataRoot에서 읽는다(산출물과 어긋나지 않게).
+  const windows = loadTftWindows(dataRoot);
+  const probe = determineTftRun({ nowMs, hasOutputs: false, manualPatch, force }, windows);
   const hasOutputs =
     probe.from !== null &&
     probe.to !== null &&
     fs.existsSync(path.join(dataRoot, "aggregated", "tft", `deltas-${probe.from}-${probe.to}.json`));
 
-  const decision = determineTftRun({ nowMs, hasOutputs, manualPatch, force });
+  const decision = determineTftRun({ nowMs, hasOutputs, manualPatch, force }, windows);
   console.log(`[tft-determine] ${decision.reason}`);
 
   if (decision.staleCalendar) {

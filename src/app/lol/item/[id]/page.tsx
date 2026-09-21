@@ -26,6 +26,8 @@ import EntityIcon from "@/components/EntityIcon";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
 import { detailRouteIds } from "@/lib/detailRoutes";
+import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
+import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import { displayStatus, isNoiseStatus } from "@/pipeline/shared/display-status";
 import { listPatchPairs, loadChampions, loadDeltas, loadItems, loadNotes, type PatchPair } from "@/lib/data";
 import { entityTypeLabel, fmtInt, itemIdFromSlug, itemSlug } from "@/lib/format";
@@ -171,6 +173,10 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
   );
   const chartData = buildChartData(delta, pair.from, pair.to, suppressDelta, storedCi);
   const noteContrast = resolveNoteContrast(delta, notes, pair.to);
+  // 수치 축(F9) — 이 엔티티에서 **게임사가 바꿨는데 말하지 않은 것**. 지표 축(위 판정)과 직교한다.
+  const gameData = loadGameDataDiff("lol", pair.from, pair.to);
+  const submarineChanges = submarineChangesFor(gameData, delta.entityType, delta.entityKey);
+  const mismatchChanges = noteMismatchChangesFor(gameData, delta.entityType, delta.entityKey);
   const rawDeltas = readDeltasRaw(pair);
   const hash = rawDeltas ? snapshotHash(rawDeltas) : null;
   const splashUrl = championSplashUrl(delta);
@@ -254,8 +260,18 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
               스케일) + 내부 스크롤이라 원천 매치 ID 수나 원인 개수에 따라 옆 카드가 늘어나지 않는다(이전엔
               grid stretch + flex-1로 서로 높이를 맞추느라 매 항목 레이아웃이 달랐다). */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <SectionCard eyebrow="선언 대조" title="패치노트 대조" className="flex h-80 flex-col">
+            {/* B안(2026-09-21) — 이 카드는 이미 「패치노트 대조」다. 그 안에 두 번째 구획
+                「패치노트가 말하지 않은 것」을 넣어 세 게임 어휘를 맞춘다. 고정 높이를
+                `min-h-80`으로 바꾼 이유: 잠수함이 여러 건이면 카드가 자라야 값이 안 잘린다. */}
+            <SectionCard eyebrow="선언 대조" title="패치노트 대조" className="flex min-h-80 flex-col">
               <NoteContrastPanel result={noteContrast} />
+              <div className="border-t border-border-soft" />
+              <SubmarineDetailBlock
+                changes={submarineChanges}
+                mismatchChanges={mismatchChanges}
+                source={gameData?.meta.source ?? null}
+                notePatch={pair.to}
+              />
             </SectionCard>
             <SectionCard eyebrow="원인" title="추정 원인(LLM)" className="flex h-80 flex-col">
               <CausesPanel causes={delta.causes} llm={delta.llm} notesById={notesById} generatedAt={generatedAt} />

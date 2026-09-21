@@ -12,8 +12,12 @@
 import type { TftPatchWindow } from "./tft-crawler";
 
 /**
- * 패치 창 — 공식 패치노트 발행 시각(2026-09-20 실측).
- * `endMs: null`이 "지금 라이브"다. **새 패치가 나오면 여기 한 줄을 추가한다.**
+ * 패치 창 — 공식 패치노트 발행 시각(2026-09-20 실측). `endMs: null`이 "지금 라이브"다.
+ *
+ * 2026-09-21부터 새 패치는 감시자(`patch-watch.yml`)가 `data/patch-calendar/tft.json`에 적고,
+ * 소비자는 둘을 합친 `loadTftWindows()`를 본다 — **이 상수는 더 이상 전체 목록이 아니다**.
+ * 위 헤더가 "궁극적 해법"이라 적어 둔 자동 발견이 그것이다(다만 인덱스를 크롤링하지 않고
+ * 다음 후보 URL의 존재와 `datePublished`만 본다).
  */
 export const TFT_PATCH_WINDOWS: readonly TftPatchWindow[] = [
   { patch: "18.1", startMs: Date.parse("2026-08-25T18:00:00Z"), endMs: Date.parse("2026-09-09T18:00:00Z") },

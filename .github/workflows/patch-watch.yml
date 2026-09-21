@@ -1,0 +1,109 @@
+name: patch-watch
+
+# 패치 감시자 — 새 패치가 나왔는지 매일 보고, 나왔으면 캘린더 오버레이에 한 줄 적어 커밋한다.
+#
+# ─── 왜 수집 워크플로 **밖**인가 ────────────────────────────────────────────────────
+#
+# 이 잡은 저장소에 자동으로 커밋을 만드는 유일한 자동화다. 오작동의 대가가 크므로 세 수집
+# 경로와 물리적으로 분리한다 — 감시자가 틀려도 수집·판정·배포는 안 다치고, 롤백은
+# `data/patch-calendar/*.json`을 비우는 것이다(봇이 TypeScript를 쓰지 않는 이유).
+#
+# ─── 왜 19:00 UTC인가 ──────────────────────────────────────────────────────────────
+#
+# 관측한 패치 발행이 **18:00 UTC**다(26.18 `datePublished` = 2026-09-09T18:00:00Z, TFT 18.2도
+# 같은 시각). 한 시간 뒤에 보면 그날 것을 잡는다. 그리고 `collect.yml`이 00:00 UTC라 **다섯
+# 시간 뒤**에 그 항목을 보고 돈다 — 발행 당일 밤에 탐지되고 다음 날 아침 KST에 수집된다.
+#
+# ─── continue-on-error를 걸지 않는다 ───────────────────────────────────────────────
+#
+# 감시자의 실패 모드는 **침묵**이다(캘린더가 안 채워지면 수집이 초록불로 아무것도 안 한다).
+# 조용히 넘어가면 그 침묵이 두 겹이 된다. 빨갛게 보여야 한다.
+#
+# 필요 secrets: PUBG_API_KEY(선택 — 없으면 PUBG만 건너뛴다). LoL·TFT는 공개 웹페이지라 키가 없다.
+
+on:
+  workflow_dispatch:
+    inputs:
+      game:
+        description: "all | lol | tft | pubg"
+        required: false
+        default: "all"
+        type: string
+      dry_run:
+        description: "true면 탐지만 하고 오버레이를 쓰지 않는다"
+        required: false
+        default: "false"
+        type: boolean
+
+  schedule:
+    - cron: "0 19 * * *"
+
+concurrency:
+  # 🔴 collect.yml·collect-tft.yml·collect-pubg.yml과 동일해야 한다 — 같은 브랜치에 push한다.
+  group: patchgap-collect
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Detect new patches
+        id: watch
+        env:
+          PUBG_API_KEY: ${{ secrets.PUBG_API_KEY }}
+          GAME: ${{ github.event.inputs.game || 'all' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          ARGS=(--game "$GAME")
+          if [ "$DRY_RUN" = "true" ]; then ARGS+=(--dry-run); fi
+          npx tsx scripts/patch-watch.ts "${ARGS[@]}"
+
+      # 봇이 쓴 값이 실제로 파이프라인을 통과하는지 **커밋 전에** 확인한다. 오버레이는 병합
+      # 규칙을 이미 통과했지만(단조·형식·라벨), 그 값이 타입·테스트까지 무사한지는 별개다.
+      - name: Validate before commit
+        if: steps.watch.outputs.changed == 'true'
+        run: |
+          npx tsc --noEmit
+          npx vitest run src/pipeline/collect
+
+      - name: Commit + push calendar overlay
+        if: steps.watch.outputs.changed == 'true'
+        run: |
+          git config user.name "patchgap-bot"
+          git config user.email "patchgap-bot@users.noreply.github.com"
+          # 오버레이만 건드린다 — 이 잡은 수집 산출물을 쓰지 않는다.
+          git add data/patch-calendar
+          if git diff --cached --quiet; then
+            echo "변경분 없음 — 커밋 생략"
+          else
+            git commit -m "chore(calendar): 새 패치 감지 — 캘린더 오버레이 갱신
+
+            GitHub Actions patch-watch.yml(run_id=${{ github.run_id }})가 생성.
+            탐지 근거는 패치노트 datePublished(추측한 날짜가 아니다)."
+            git push
+          fi
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: patch-watch-failure-${{ github.run_id }}
+          path: data/patch-calendar/**
+          if-no-files-found: ignore
+          retention-days: 14

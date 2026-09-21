@@ -11,7 +11,12 @@
 import { EFFECT_SIZE_FLOORS } from "@/pipeline/aggregate/stats";
 import { displayStatus, DISPLAY_SORT_PRIORITY, type DisplayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
-import { submarineOnlyEntities, type SubmarineIndex } from "@/pipeline/gamedata/submarine";
+import {
+  buildNoteMismatchIndexFromChanges,
+  buildSubmarineIndexFromChanges,
+  submarineOnlyEntities,
+  type SubmarineIndex,
+} from "@/pipeline/gamedata/submarine";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 import type { DeltaEntityType, DeltaMetric, DeltaRecord } from "@/pipeline/types";
 
@@ -32,6 +37,8 @@ export interface TftEntityRow {
   noteAnchor: string | null;
   /** 이 엔티티의 원본 수치 변경 중 패치노트에 없는 것. 비면 수치 축에서는 할 말이 없다. */
   submarineChanges: readonly GameDataChange[];
+  /** 노트가 말했는데 **값이 어긋난** 변경. 잠수함과 배타적이지 않다(필드가 다르면 둘 다 있다). */
+  mismatchChanges: readonly GameDataChange[];
 }
 
 /**
@@ -55,7 +62,9 @@ export function buildTftEntityRows(
   rows: readonly DeltaRecord[],
   qAlpha?: number,
   /** 수치 축 색인. 지표 축 게이트를 못 넘긴 잠수함도 **행을 만든다**(2026-09-21 사용자 지시). */
-  submarine?: SubmarineIndex
+  submarine?: SubmarineIndex,
+  /** 「공지값 불일치」 색인. 같은 규칙으로 행을 만든다 — 실측 2건은 델타 행이 아예 없다. */
+  mismatch?: SubmarineIndex
 ): TftEntityRow[] {
   const byEntity = new Map<string, TftEntityRow>();
 
@@ -78,6 +87,7 @@ export function buildTftEntityRows(
         strength,
         noteAnchor: record.evidence.noteAnchor,
         submarineChanges: [],
+        mismatchChanges: [],
       });
       continue;
     }
@@ -90,6 +100,39 @@ export function buildTftEntityRows(
   // 수치 축을 얹는다. 지표 축 게이트(표본 부족·바닥 미달·무변화)는 **지표 축에만** 건다 —
   // 패치노트에 없는 수치 변경은 지표가 안 움직여도 발견이다(2026-09-21 사용자 지시).
   // 실측: TFT 18.1→18.2 잠수함 37건 중 26건이 델타 행을 갖지 않는다.
+  const blank = (
+    entityType: string,
+    entityKey: string,
+    entityName: string,
+    status: TftEntityRow["status"]
+  ): TftEntityRow => ({
+    key: `${entityType}:${entityKey}`,
+    name: entityName,
+    entityType: entityType as TftEntityRow["entityType"],
+    cells: {},
+    status,
+    strength: 0,
+    noteAnchor: null,
+    submarineChanges: [],
+    mismatchChanges: [],
+  });
+
+  // 「공지값 불일치」를 먼저 얹는다 — 잠수함이 나중에 와야 같은 엔티티에서 배지를 이긴다
+  // (말하지 않은 것이 말했는데 틀린 것보다 앞선다, `DISPLAY_SORT_PRIORITY`).
+  if (mismatch) {
+    for (const row of byEntity.values()) {
+      const changes = mismatch.changesOf(row.entityType, row.key.split(":")[1] ?? "");
+      if (changes.length === 0) continue;
+      row.mismatchChanges = changes;
+      row.status = "note-mismatch";
+    }
+    for (const entity of submarineOnlyEntities(mismatch, new Set(byEntity.keys()))) {
+      const row = blank(entity.entityType, entity.entityKey, entity.entityName, "note-mismatch");
+      row.mismatchChanges = entity.changes;
+      byEntity.set(row.key, row);
+    }
+  }
+
   if (submarine) {
     for (const row of byEntity.values()) {
       const changes = submarine.changesOf(row.entityType, row.key.split(":")[1] ?? "");
@@ -98,17 +141,9 @@ export function buildTftEntityRows(
       row.status = "submarine";
     }
     for (const entity of submarineOnlyEntities(submarine, new Set(byEntity.keys()))) {
-      const key = `${entity.entityType}:${entity.entityKey}`;
-      byEntity.set(key, {
-        key,
-        name: entity.entityName,
-        entityType: entity.entityType as TftEntityRow["entityType"],
-        cells: {},
-        status: "submarine",
-        strength: 0,
-        noteAnchor: null,
-        submarineChanges: entity.changes,
-      });
+      const row = blank(entity.entityType, entity.entityKey, entity.entityName, "submarine");
+      row.submarineChanges = entity.changes;
+      byEntity.set(row.key, row);
     }
   }
 
@@ -117,5 +152,29 @@ export function buildTftEntityRows(
       DISPLAY_SORT_PRIORITY[a.status] - DISPLAY_SORT_PRIORITY[z.status] ||
       z.strength - a.strength ||
       a.name.localeCompare(z.name)
+  );
+}
+
+/**
+ * 대조표·상세·경로 생성이 **같은 행 집합**을 보게 하는 단일 진입점.
+ *
+ * 왜 따로 만드는가(2026-09-21 실측 결함): 대조표는 `buildTftEntityRows(rows, qAlpha, submarine)`로
+ * 잠수함 전용 행까지 만들어 이름에 링크를 걸었는데, `generateStaticParams`는 같은 함수를
+ * **submarine 인자 없이** 불렀다. 링크는 있고 경로는 없다 — `output:'export'`에서 곧 404다
+ * (실측: `unit~DA_18_ElderDragon`·`item~DA_18_BackrowStar`·`unit~DA_18_Sentry` 전부 404,
+ * TFT 21건). 호출부가 셋(`generateStaticParams`·`generateMetadata`·`TftUnitPage`)이라
+ * 인자를 하나씩 채우는 수정은 다음에 또 갈라진다 — **인자를 못 빠뜨리는 형태**로 바꾼다.
+ *
+ * 순수 함수다(파일 I/O 없음) — 로더는 호출부가 소유하고, 여기는 조립만 한다.
+ */
+export function tftEntityRows(
+  deltas: { readonly rows: readonly DeltaRecord[]; readonly meta: { readonly qAlpha?: number } },
+  changes: readonly GameDataChange[]
+): TftEntityRow[] {
+  return buildTftEntityRows(
+    deltas.rows,
+    deltas.meta.qAlpha,
+    buildSubmarineIndexFromChanges(changes),
+    buildNoteMismatchIndexFromChanges(changes)
   );
 }

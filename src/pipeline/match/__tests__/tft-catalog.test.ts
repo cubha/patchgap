@@ -1,6 +1,12 @@
 import { describe, it, expect } from "vitest";
 
-import { isCurrentSetKey, selectCurrentSetNames, setNumberOfPatch, fetchTftCatalog } from "../tft-catalog";
+import {
+  cdragonSetNames,
+  fetchTftCatalog,
+  isCurrentSetKey,
+  selectCurrentSetNames,
+  setNumberOfPatch,
+} from "../tft-catalog";
 
 describe("setNumberOfPatch", () => {
   it("패치 주번호가 곧 세트 번호다", () => {
@@ -79,5 +85,67 @@ describe("fetchTftCatalog", () => {
   it("실패를 삼키지 않는다", async () => {
     const fake: typeof fetch = async () => new Response("nope", { status: 503 });
     await expect(fetchTftCatalog({ patch: "18.2", version: "16.18.1", fetchImpl: fake })).rejects.toThrow(/503/);
+  });
+});
+
+// 2026-09-21 — DDragon `tft-champion.json`에 **덩굴정령·어미 부리가 아예 없어서** 그 두 줄이
+// 「대상 미해소」로 버려졌고, 잠수함 판정이 그만큼 틀렸다(`docs/plan/VERIFY-tft-submarine-2026-09-21.md` §3).
+// CDragon 추출본에는 둘 다 `DA_Brambleback18`·`DA_CrimsonRaptor18`로 있다 — 카탈로그를 보강한다.
+describe("cdragonSetNames — CDragon 추출본으로 카탈로그를 보강한다", () => {
+  const snapshot = {
+    set: "TFTSet18",
+    units: {
+      DA_Brambleback18: { name: "덩굴정령" },
+      DA_CrimsonRaptor18: { name: "어미 부리" },
+      TFT_BlueGolem: { name: "골렘" },
+      DA_18_NoName: {},
+    },
+    items: {
+      DA_18_YordleSpirit: { name: "요들 수호령" },
+      TFT17_MarketOffering_1star4cost_Eve: { name: "4단계" },
+      DA_TheGoldenDragon: { name: "황금 드래곤" },
+    },
+  };
+
+  it("현행 세트 이름만 뽑는다", () => {
+    expect(cdragonSetNames(snapshot, 18)).toEqual({
+      units: ["덩굴정령", "어미 부리"],
+      items: ["요들 수호령", "황금 드래곤"],
+    });
+  });
+
+  it("★ 철 지난 세트의 표시명 「4단계」를 들이지 않는다 — DDragon에서 이미 겪은 오탐이다", () => {
+    expect(cdragonSetNames(snapshot, 18).items).not.toContain("4단계");
+  });
+
+  it("세트가 패치와 어긋나면 조용히 쓰지 않고 던진다", () => {
+    expect(() => cdragonSetNames({ ...snapshot, set: "TFTSet17" }, 18)).toThrow(/세트/);
+  });
+});
+
+describe("fetchTftCatalog — CDragon 보강", () => {
+  const fake: typeof fetch = async () =>
+    new Response(JSON.stringify({ data: { DA_18_X: { name: "카직스" } } }), { status: 200 });
+
+  it("유닛·아이템에 CDragon 이름을 더하되 중복은 만들지 않는다", async () => {
+    const catalog = await fetchTftCatalog({
+      patch: "18.2",
+      version: "16.18.1",
+      fetchImpl: fake,
+      cdragon: {
+        set: "TFTSet18",
+        units: { DA_Brambleback18: { name: "덩굴정령" }, DA_Kha18: { name: "카직스" } },
+        items: { DA_18_YordleSpirit: { name: "요들 수호령" } },
+      },
+    });
+    expect(catalog.units).toEqual(["카직스", "덩굴정령"]);
+    expect(catalog.items).toEqual(["카직스", "요들 수호령"]);
+    // 특성·증강은 CDragon 추출본에 없다 — 손대지 않는다.
+    expect(catalog.traits).toEqual(["카직스"]);
+  });
+
+  it("주지 않으면 기존 동작 그대로다", async () => {
+    const catalog = await fetchTftCatalog({ patch: "18.2", version: "16.18.1", fetchImpl: fake });
+    expect(catalog.units).toEqual(["카직스"]);
   });
 });

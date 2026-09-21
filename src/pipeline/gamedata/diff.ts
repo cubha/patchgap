@@ -3,6 +3,7 @@
 //
 // 순수 함수만 둔다(aggregate/* 와 같은 규율) — fetch·fs는 어댑터와 스크립트의 몫이다.
 
+import type { NoteValueMismatch } from "./note-link";
 import type { GameDataChange } from "./types";
 
 /** 값 하나. 숫자이거나 레벨별 배열 문자열(`"75/115/155"`)이거나 없음. */
@@ -65,6 +66,8 @@ export interface BuildChangeInput {
   readonly before: GameDataValue;
   readonly after: GameDataValue;
   readonly matchedNoteIds: readonly string[];
+  /** 노트가 말했는데 값이 어긋난 경우에만 준다(`noteValueMismatch`의 산출). */
+  readonly noteMismatch?: NoteValueMismatch | null;
 }
 
 export function buildChange(input: BuildChangeInput): GameDataChange {
@@ -79,5 +82,7 @@ export function buildChange(input: BuildChangeInput): GameDataChange {
     after: input.after,
     relChange: relativeChange(input.before, input.after),
     matchedNoteIds: [...input.matchedNoteIds],
+    // 없으면 키를 두지 않는다 — 산출물 수백 행이 `null`로 채워지면 커밋 diff가 읽히지 않는다.
+    ...(input.noteMismatch ? { noteMismatch: input.noteMismatch } : {}),
   };
 }

@@ -1,6 +1,6 @@
 // scripts/run-tft-notes.ts
 // TFT 패치노트 수집·파싱 진입점 — **키가 필요 없다**(공개 웹페이지 + Data Dragon).
-// 실행: npm run pipeline:tft-notes -- --patch 18.2 [--data-root DIR] [--no-cache]
+// 실행: npm run pipeline:tft-notes -- --patch 18.2 [--cdragon-version 16.18] [--data-root DIR] [--no-cache]
 //
 // 산출: data/aggregated/tft/notes-{patch}.json  ·  캐시: data/cache/tft-notes/{patch}.html
 //
@@ -12,9 +12,10 @@ import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";
 
-import { fetchTftCatalog } from "../src/pipeline/match/tft-catalog";
+import { fetchTftCatalog, type CdragonNameFile } from "../src/pipeline/match/tft-catalog";
 import { parseTftPatchNotes } from "../src/pipeline/match/tft-notes-parser";
 import { isMainModule, parseCliArgs } from "./shared/cli";
+import { resolveCdragonVersion } from "./shared/snapshot-version";
 
 const USER_AGENT = "Mozilla/5.0 (compatible; patchgap/1.0; +https://patchgap.vercel.app)";
 
@@ -40,6 +41,7 @@ interface CliArgs {
   patch: string;
   dataRoot: string;
   noCache: boolean;
+  cdragonVersion: string;
 }
 
 export function parseArgs(argv: string[]): CliArgs {
@@ -47,9 +49,25 @@ export function parseArgs(argv: string[]): CliArgs {
     { name: "patch", type: "patch", required: true },
     { name: "dataRoot", type: "string", default: "data" },
     { name: "noCache", type: "boolean", default: false },
+    { name: "cdragonVersion", type: "string", default: "" },
   ]);
-  return { patch: String(raw.patch), dataRoot: String(raw.dataRoot), noCache: raw.noCache === true };
+  return {
+    patch: String(raw.patch),
+    dataRoot: String(raw.dataRoot),
+    noCache: raw.noCache === true,
+    cdragonVersion: String(raw.cdragonVersion),
+  };
 }
+
+/**
+ * 이 패치의 세트에 해당하는 CDragon 추출본 버전 — 규칙은 `scripts/shared/snapshot-version.ts`가
+ * 소유한다(같은 질문을 `run-gamedata-diff`도 하기 때문에 한 곳에 뒀다).
+ *
+ * 왜 자동으로 고르나: TFT 패치 번호(18.2)와 CDragon 버전(16.18)의 대응은 규칙이 아니라 사실이라
+ * 계산할 수 없다. 그렇다고 인자를 필수로 두면 cron(`collect-tft.yml`)이 패치마다 그 대응을
+ * 알아야 하는데, 그 지식이 어디에도 없다. 그래서 **스냅숏이 스스로 밝히는 세트**(`set` 필드)로
+ * 고르고, 고른 것을 로그에 남긴다.
+ */
 
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
@@ -70,9 +88,21 @@ async function main(): Promise<void> {
     console.log(`[tft-notes] 캐시 저장: ${cacheFile} (${html.length}B)`);
   }
 
-  const catalog = await fetchTftCatalog({ patch: args.patch });
+  // CDragon 추출본은 **선택이 아니다**(2026-09-21). DDragon `tft-champion.json`에 덩굴정령·
+  // 어미 부리·수호령류가 아예 없어 노트 179줄 중 60줄(34%)이 대상 미해소로 버려졌고, 그 줄이
+  // 말한 수치 변경이 잠수함으로 잘못 잡혔다 — 근거: `docs/plan/VERIFY-tft-submarine-2026-09-21.md`.
+  // 없으면 **던진다.** 조용히 DDragon만으로 돌면 판정이 34% 틀린 채 초록으로 지나간다.
+  const version = args.cdragonVersion || resolveCdragonVersion(args.dataRoot, args.patch);
+  const cdragonFile = path.join(args.dataRoot, "cdragon", version, "tft.json");
+  if (!fs.existsSync(cdragonFile)) {
+    throw new Error(`CDragon 추출본이 없다: ${cdragonFile} — 먼저 수치 스냅숏이 필요하다`);
+  }
+  const cdragon = JSON.parse(fs.readFileSync(cdragonFile, "utf8")) as CdragonNameFile;
+
+  const catalog = await fetchTftCatalog({ patch: args.patch, cdragon });
   console.log(
-    `[tft-notes] 사전(Set ${args.patch.split(".")[0]}): 유닛 ${catalog.units.length} · 특성 ${catalog.traits.length} · ` +
+    `[tft-notes] 사전(Set ${args.patch.split(".")[0]} · DDragon + CDragon ${version}): ` +
+      `유닛 ${catalog.units.length} · 특성 ${catalog.traits.length} · ` +
       `증강 ${catalog.augments.length} · 아이템 ${catalog.items.length}`
   );
 

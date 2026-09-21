@@ -13,7 +13,12 @@
 
 import type { DeltaRecord } from "../types";
 import { displayStatus, type DisplayStatus } from "../shared/display-status";
-import { isSubmarineChange, type GameDataChange, type GameDataDiffFile } from "./types";
+import {
+  isNoteMismatchChange,
+  isSubmarineChange,
+  type GameDataChange,
+  type GameDataDiffFile,
+} from "./types";
 
 export interface SubmarineEntity {
   readonly entityType: string;
@@ -47,10 +52,30 @@ function keyOf(entityType: string, entityKey: string): string {
 export function buildSubmarineIndexFromChanges(
   changes: readonly GameDataChange[]
 ): SubmarineIndex {
+  return buildIndex(changes, isSubmarineChange);
+}
+
+/**
+ * **공지값 불일치** 색인 — 노트가 같은 항목을 말했는데 값이 다른 변경(2026-09-21).
+ *
+ * 잠수함과 **같은 모양·다른 술어**다. 화면 규칙도 같다: 지표 축 게이트와 무관하게 전량 노출하고,
+ * 델타 행이 없으면 행을 새로 만든다. 실측 근거가 정확히 그 경우다 — 덩굴정령·어미 부리는 PvE
+ * 몬스터라 플레이어 보드 델타가 **0건**이다. 이 색인이 없으면 두 발견이 화면에서 통째로 사라진다.
+ */
+export function buildNoteMismatchIndexFromChanges(
+  changes: readonly GameDataChange[]
+): SubmarineIndex {
+  return buildIndex(changes, isNoteMismatchChange);
+}
+
+function buildIndex(
+  changes: readonly GameDataChange[],
+  include: (change: GameDataChange) => boolean
+): SubmarineIndex {
   const byEntity = new Map<string, GameDataChange[]>();
   let count = 0;
   for (const change of changes) {
-    if (!isSubmarineChange(change)) continue;
+    if (!include(change)) continue;
     count += 1;
     const k = keyOf(change.entityType, change.entityKey);
     const list = byEntity.get(k);
@@ -81,6 +106,9 @@ export function buildSubmarineIndexFromChanges(
  *
  * 실측 근거: TFT 18.1→18.2의 잠수함 37건 중 **26건이 델타 행을 갖지 않는다**(강철나무·마트료시카
  * 모루 등 아이템 21종). 게이트를 그대로 두면 표가 그 26건을 한 번도 말하지 않는다.
+ *
+ * 색인의 술어와 무관하다 — 「공지값 불일치」 색인에도 그대로 쓴다(같은 이유, 더 극단적인 실측:
+ * 덩굴정령·어미 부리는 델타 행이 **0건**이다).
  */
 export function submarineOnlyEntities(
   index: SubmarineIndex,

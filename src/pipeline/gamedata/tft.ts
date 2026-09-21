@@ -11,7 +11,7 @@
 // 수십 건 허위로 생긴다.
 
 import { buildChange, type GameDataValue } from "./diff";
-import { linkNotes, type NoteLike } from "./note-link";
+import { linkedNotes, noteValueMismatch, type NoteLike } from "./note-link";
 import type { GameDataChange } from "./types";
 
 export interface CdragonUnit {
@@ -77,6 +77,42 @@ const UNIT_STAT_LABELS: Record<string, readonly [string, readonly string[]]> = {
   range: ["사거리", ["사거리"]],
 };
 
+/**
+ * CDragon 효과 키 → 화면 라벨과 **노트 검색 낱말**.
+ *
+ * 왜 필요한가(2026-09-21 실측, 사용자 지적으로 전수 대조): 이전엔 `fieldKeywords`에 CDragon
+ * 영문 키(`Gold`·`Stats`·`BonusDurability`)를 그대로 넘겼다. 패치노트는 한국어로 「골드 제공」·
+ * 「능력치 부여」·「내구력」이라 쓰므로 **영원히 짝이 안 맞고**, 아이템·증강 변경이 전부
+ * 자동으로 잠수함이 됐다. 원문 대조에서 확인된 오탐 4건이 전부 이 경로였다:
+ *   금빛 운명+ Gold 6→5   ↔ 「금빛 운명+ 골드 제공: 6골드 ⇒ 5골드」
+ *   프리즘 운명+ Gold 10→7 ↔ 「프리즘 운명+ 골드 제공: 10골드 ⇒ 7골드」
+ *   남작의 소굴 Stats 5%→4% ↔ 「남작의 소굴 능력치 부여: 5% ⇒ 4%」
+ *   황금 드래곤 BonusDurability 20%→15% ↔ 「황금 드래곤 내구력: 20% ⇒ 15%」
+ *
+ * 유닛 스킬 변수는 같은 문제를 `entityMatchSuffices`로 이미 피하고 있었다 — 아이템 효과에만
+ * 안 걸려 있었다. 효과 키는 스킬 변수와 달리 **수가 적고 뜻이 분명해서** 사전을 만들 수 있다
+ * (실측 18.1→18.2에서 14종). 사전에 없는 키는 낱말을 지어내지 않고 아래 폴백으로 간다.
+ *
+ * 라벨을 함께 두는 이유: 이 값이 화면에 그대로 나간다 — 사전 이전에는 상세 화면이
+ * 「효과 ASMultiplier」처럼 **영문 변수명을 사용자에게 보여주고** 있었다.
+ */
+const ITEM_EFFECT_TERMS: Record<string, { readonly label: string; readonly keywords: readonly string[] }> = {
+  ADAP: { label: "공격력·주문력", keywords: ["공격력", "주문력"] },
+  ASMultiplier: { label: "공격 속도", keywords: ["공격 속도"] },
+  BonusDurability: { label: "내구력", keywords: ["내구력"] },
+  BonusHealth: { label: "추가 체력", keywords: ["추가 체력"] },
+  DamageReduction: { label: "피해 감소", keywords: ["피해 감소", "피해량 감소"] },
+  ExecuteThreshold: { label: "처형 기준", keywords: ["처형"] },
+  FlatHealth: { label: "체력", keywords: ["체력"] },
+  Gold: { label: "골드", keywords: ["골드"] },
+  Health: { label: "체력", keywords: ["체력"] },
+  HealthAmount: { label: "체력", keywords: ["체력"] },
+  NumComponents: { label: "조합 아이템 수", keywords: ["조합 아이템"] },
+  Rerolls: { label: "새로고침", keywords: ["새로고침", "리롤"] },
+  Stats: { label: "능력치", keywords: ["능력치"] },
+  StunDuration: { label: "기절 지속시간", keywords: ["기절"] },
+};
+
 export function diffTft(
   before: CdragonSnapshot,
   after: CdragonSnapshot,
@@ -95,6 +131,7 @@ export function diffTft(
     a: GameDataValue,
     keywords: readonly string[]
   ) => {
+    const linked = linkedNotes({ entityName, fieldKeywords: keywords }, notes);
     out.push(
       buildChange({
         game: "tft",
@@ -106,7 +143,8 @@ export function diffTft(
         fieldPath,
         before: b,
         after: a,
-        matchedNoteIds: linkNotes({ entityName, fieldKeywords: keywords }, notes),
+        matchedNoteIds: linked.map((l) => l.note.id),
+        noteMismatch: noteValueMismatch(linked, b, a),
       })
     );
   };
@@ -152,10 +190,12 @@ export function diffTft(
           fieldPath: `ability.${varName}`,
           before: a,
           after: b,
-          matchedNoteIds: linkNotes(
+          // `entityMatchSuffices` 경로는 노트가 이 수치를 뭐라 부르는지 모른다는 뜻이라
+          // 값을 견줄 수 없다 — 불일치 판정도 하지 않는다(`noteValueMismatch` 규약).
+          matchedNoteIds: linkedNotes(
             { entityName: name, fieldKeywords: [], entityMatchSuffices: true },
             notes
-          ),
+          ).map((l) => l.note.id),
         })
       );
     }
@@ -173,7 +213,34 @@ export function diffTft(
       const b = next.effects[effect];
       if (typeof a !== "number" || typeof b !== "number") continue;
       if (sameNumber(a, b)) continue;
-      push(key, name, "item", `효과 ${effect}`, `effects.${effect}`, a, b, [effect]);
+      const term = ITEM_EFFECT_TERMS[effect];
+      const field = `효과 ${term?.label ?? effect}`;
+      const fieldPath = `effects.${effect}`;
+      if (term) {
+        push(key, name, "item", field, fieldPath, a, b, term.keywords);
+        continue;
+      }
+      // 사전에 없는 키 — 노트가 이 수치를 뭐라 부르는지 알 수 없으므로 낱말을 지어내지 않고
+      // 엔티티 언급을 알리바이로 받는다(유닛 스킬 변수와 같은 규약, 보수적으로 덜 찾는 쪽).
+      out.push(
+        buildChange({
+          game: "tft",
+          patch,
+          entityKey: key,
+          entityName: name,
+          entityType: "item",
+          field,
+          fieldPath,
+          before: a,
+          after: b,
+          // `entityMatchSuffices` 경로는 노트가 이 수치를 뭐라 부르는지 모른다는 뜻이라
+          // 값을 견줄 수 없다 — 불일치 판정도 하지 않는다(`noteValueMismatch` 규약).
+          matchedNoteIds: linkedNotes(
+            { entityName: name, fieldKeywords: [], entityMatchSuffices: true },
+            notes
+          ).map((l) => l.note.id),
+        })
+      );
     }
   }
 

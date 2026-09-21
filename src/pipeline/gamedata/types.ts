@@ -12,6 +12,8 @@
 // 방어구계수 × 거리감쇠`의 곱이라 이산값이고, **격자 위치는 방어구·거리 구성이 바뀌어도
 // 움직이지 않는다**(평균은 움직인다 — 그래서 평균을 쓰지 않는다).
 
+import type { NoteValueMismatch } from "./note-link";
+
 /** 어디서 읽었는지. 화면이 근거 링크를 만들 때 쓴다. */
 export interface GameDataSource {
   /** `"ddragon"` | `"cdragon"` | `"telemetry-grid"` */
@@ -42,6 +44,13 @@ export interface GameDataChange {
   readonly relChange: number | null;
   /** 이 변경을 말한 패치노트 항목. 비어 있으면 **잠수함 패치**. */
   readonly matchedNoteIds: readonly string[];
+  /**
+   * 노트가 같은 항목을 말했는데 **값이 다를 때만** 채워진다(`noteValueMismatch`).
+   *
+   * 잠수함(말하지 않음)과도, 공지(말했고 맞음)와도 다른 **세 번째 자리**다. 없는 경우 키 자체를
+   * 두지 않는다 — 산출물 대부분이 `null`로 채워지면 커밋 diff가 읽히지 않는다.
+   */
+  readonly noteMismatch?: NoteValueMismatch;
 }
 
 export interface GameDataDiffFile {
@@ -62,4 +71,12 @@ export interface GameDataDiffFile {
 /** 노트 짝이 없으면 잠수함 패치다. 이 술어가 정의의 **단일 소스**. */
 export function isSubmarineChange(change: GameDataChange): boolean {
   return change.matchedNoteIds.length === 0;
+}
+
+/**
+ * 공지는 됐는데 **적힌 값이 실제와 다른** 변경. 잠수함과 **배타적**이다 — 불일치는 짝이 있어야
+ * 성립하고, 잠수함은 짝이 없어야 성립한다.
+ */
+export function isNoteMismatchChange(change: GameDataChange): boolean {
+  return change.noteMismatch !== undefined;
 }

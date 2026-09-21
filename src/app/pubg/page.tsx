@@ -18,7 +18,7 @@ import Link from "next/link";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { gameDataEntityCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import StatusBadge from "@/components/StatusBadge";
 import { PubgFooter, PubgPageHeader, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import PubgBriefingTabs from "@/components/pubg/PubgBriefingTabs";
@@ -115,7 +115,7 @@ export default function PubgPage() {
           {/* 공지 대조가 기본 탭, 미공지가 두 번째 탭(2026-09-17 사용자 지시 — 홈과 같은 순서). */}
           <PubgBriefingTabs
             contentCount={announced.length}
-            gapCount={unannounced.length}
+            gapCount={unannounced.length + gameDataEntityCount(submarine)}
             content={
               <SectionCard
                 eyebrow="대조"
@@ -183,8 +183,14 @@ export default function PubgPage() {
               </SectionCard>
             }
             gap={
+              // 미공지 Gap은 **두 갈래**다(2026-09-21): 위가 수치 축(게임사가 무엇을 바꿨나),
+              // 아래가 지표 축(공지에 없는데 움직였나). 위계의 근거는 증거 등급이다.
+              <div className="flex flex-col gap-6">
+              {submarine ? (
+                <SubmarineSection summary={submarine} hrefOf={(change) => weaponHref(change.entityKey)} />
+              ) : null}
               <SectionCard
-                eyebrow="발견"
+                eyebrow="발견 · 지표 축"
                 title="공지에 없는데 움직였다"
                 variant="glass"
                 action={<span className="font-mono text-xs text-muted">{unannounced.length}건</span>}
@@ -218,6 +224,7 @@ export default function PubgPage() {
                   </ul>
                 )}
               </SectionCard>
+              </div>
             }
           />
 
@@ -282,10 +289,6 @@ export default function PubgPage() {
               </ul>
             </SectionCard>
           ) : null}
-
-          {/* 수치 축(2026-09-21) — LoL·TFT와 **같은 컴포넌트**다(게임을 모른다). PUBG는 게임사가
-              수치 파일을 내지 않아 텔레메트리 피해 격자에서 읽는다. 산출물이 없으면 빠진다. */}
-          {submarine ? <SubmarineSection summary={submarine} /> : null}
 
           <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
         </div>

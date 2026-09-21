@@ -1,6 +1,12 @@
 // ST-3 RED — 수치 변경 ↔ 패치노트 대조. 실측 26.17에서 걸린 두 오탐을 계약으로 못박는다.
 import { describe, it, expect } from "vitest";
-import { entityMatches, linkNotes, type NoteLike } from "../note-link";
+import {
+  entityMatches,
+  linkNotes,
+  linkedNotes,
+  noteValueMismatch,
+  type NoteLike,
+} from "../note-link";
 
 const NOTES_2617: NoteLike[] = [
   // 실측: data/aggregated/notes/26.17.json
@@ -135,5 +141,105 @@ describe("linkNotes — 필드 단위 대조", () => {
 
   it("노트에 엔티티가 아예 없으면 빈 배열 — 잠수함", () => {
     expect(linkNotes({ entityName: "장로 드래곤", fieldKeywords: ["공격력"] }, NOTES_2617)).toEqual([]);
+  });
+});
+
+// 2026-09-21 — 카탈로그 보강(CDragon)으로 덩굴정령·어미 부리 줄이 해소되자, **짝이 생겼다는
+// 이유만으로 공지 처리**되어 실제 불일치가 화면에서 사라질 상황이 됐다. 오탐이 **보이지 않는**
+// 오탐으로 바뀌는 셈이라 지금이 더 나쁘다. 그래서 세 번째 상태를 둔다 — 「공지값 불일치」.
+//
+// 값 대조는 **노트가 그 필드를 이름으로 말한 경우(`via: "keyword"`)에만** 한다. 나머지 경로
+// (재작업·스킬·엔티티 언급)는 노트가 이 수치를 뭐라 부르는지 모른다는 뜻이라 값을 견줄 수 없다.
+describe("noteValueMismatch — 공지했는데 값이 다르다", () => {
+  const note = (id: string, stat: string, before: string | null, after: string | null): NoteLike => ({
+    id,
+    entity: "덩굴정령",
+    skill: null,
+    stat,
+    before,
+    after,
+  });
+
+  const linkOf = (n: NoteLike, keywords: readonly string[]) =>
+    linkedNotes({ entityName: "덩굴정령", fieldKeywords: keywords }, [n]);
+
+  it("★ 실측 — 덩굴정령 공격력: 게임은 110→115인데 노트는 115⇒120이라 적었다", () => {
+    const linked = linkOf(note("n1", "기본 공격력", "115", "120"), ["공격력"]);
+    expect(noteValueMismatch(linked, 110, 115)).toEqual({
+      noteId: "n1",
+      noteBefore: "115",
+      noteAfter: "120",
+    });
+  });
+
+  it("★ 실측 — 어미 부리: after만 맞고 before가 어긋나도 불일치다", () => {
+    const linked = linkOf(note("n2", "기본 공격력", "50", "55"), ["공격력"]);
+    expect(noteValueMismatch(linked, 60, 55)?.noteId).toBe("n2");
+  });
+
+  it("값이 정확히 같으면 불일치가 아니다", () => {
+    const linked = linkOf(note("n3", "기본 공격력", "30", "40"), ["공격력"]);
+    expect(noteValueMismatch(linked, 30, 40)).toBeNull();
+  });
+
+  it("단위 표기(골드·%)는 값이 아니다 — 4골드 ⇒ 3골드는 4 → 3과 같다", () => {
+    const linked = linkOf(note("n4", "가격", "4골드", "3골드"), ["가격"]);
+    expect(noteValueMismatch(linked, 4, 3)).toBeNull();
+  });
+
+  it("%로 적힌 노트는 비율 값과 견준다 — 20% ⇒ 15%는 0.2 → 0.15와 같다", () => {
+    const linked = linkOf(note("n5", "내구력", "20%", "15%"), ["내구력"]);
+    expect(noteValueMismatch(linked, 0.2, 0.15)).toBeNull();
+  });
+
+  it("★ %인데 게임 값도 퍼센트 단위면 그것도 같다 — 크기로 단위를 추측하지 않는다", () => {
+    // 배수형 필드(`critMultiplier` 1.4)를 노트가 「140%」로 적을 수 있다. "1 이하면 비율"로
+    // 단위를 추측하면 이 짝이 거짓 불일치로 찍힌다 — 「공지값 불일치」는 *패치노트가 틀렸다*는
+    // 주장이라 잠수함보다 강한 발언이고, 애매하면 같다고 보는 쪽이 옳다.
+    const linked = linkOf(note("n5b", "치명타 배수", "140%", "150%"), ["치명타"]);
+    expect(noteValueMismatch(linked, 140, 150)).toBeNull();
+  });
+
+  it("★ 레벨별 배열은 견주지 않는다 — 어느 레벨을 대표로 삼을지는 이 층이 정할 문제가 아니다", () => {
+    const linked = linkOf(note("n6", "스킬 피해량", "공격력 20/30/48", "공격력 22/33/48"), ["피해량"]);
+    expect(noteValueMismatch(linked, 20, 22)).toBeNull();
+  });
+
+  it("★ 숫자가 둘 이상 섞인 표현도 견주지 않는다 — 「15 + 주문력 30%」", () => {
+    const linked = linkOf(note("n7", "방어력 무시", "15 + 주문력 30%", "20 + 주문력 25%"), ["방어력"]);
+    expect(noteValueMismatch(linked, 15, 20)).toBeNull();
+  });
+
+  it("★ 값이 맞는 노트가 하나라도 있으면 불일치가 아니다 — 같은 필드를 두 줄이 말할 수 있다", () => {
+    const linked = linkedNotes({ entityName: "덩굴정령", fieldKeywords: ["공격력"] }, [
+      note("n8", "기본 공격력", "999", "888"),
+      note("n9", "기본 공격력", "110", "115"),
+    ]);
+    expect(noteValueMismatch(linked, 110, 115)).toBeNull();
+  });
+
+  it("★ 엔티티 언급만으로 걸린 노트는 값을 견주지 않는다 — 그 노트가 이 수치를 말한 게 아니다", () => {
+    const linked = linkedNotes(
+      { entityName: "덩굴정령", fieldKeywords: [], entityMatchSuffices: true },
+      [note("n10", "기본 공격력", "115", "120")]
+    );
+    expect(linked.map((l) => l.via)).toEqual(["entity"]);
+    expect(noteValueMismatch(linked, 110, 115)).toBeNull();
+  });
+
+  it("★ 재작업 노트도 값을 견주지 않는다 — 개편은 수치 전부를 갈아엎는다", () => {
+    const linked = linkOf(note("n11", "아이템 조합식", "1", "2"), ["공격력"]);
+    expect(linked.map((l) => l.via)).toEqual(["rework"]);
+    expect(noteValueMismatch(linked, 110, 115)).toBeNull();
+  });
+
+  it("게임 값이 배열 문자열이면 견주지 않는다", () => {
+    const linked = linkOf(note("n12", "기본 공격력", "115", "120"), ["공격력"]);
+    expect(noteValueMismatch(linked, "110/120", "115/125")).toBeNull();
+  });
+
+  it("linkNotes는 linkedNotes의 id 목록과 같다 — 두 경로가 갈라지면 판정이 갈라진다", () => {
+    const input = { entityName: "폭풍갈퀴", fieldKeywords: ["공격 속도"] };
+    expect(linkNotes(input, NOTES_2617)).toEqual(linkedNotes(input, NOTES_2617).map((l) => l.note.id));
   });
 });

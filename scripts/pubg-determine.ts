@@ -21,6 +21,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { determinePubgRun } from "../src/pipeline/collect/pubg/patch-calendar";
+import { loadPubgWindows } from "./shared/calendar";
 import { isMainModule } from "./shared/cli";
 
 function emit(values: Record<string, string>): void {
@@ -52,7 +53,10 @@ export function main(): void {
   }
 
   // 산출물 존재 확인만 여기서 한다(파일 I/O) — 어떤 쌍인지는 캘린더가 정한다.
-  const probe = determinePubgRun({ nowMs: Date.now(), outputsExist: false, force });
+  // 캘린더도 **같은 dataRoot**에서 읽는다 — 산출물만 옮기고 캘린더는 기본 경로에서 읽으면
+  // 테스트·모사에서 두 쪽이 다른 세계를 본다.
+  const windows = loadPubgWindows(dataRoot);
+  const probe = determinePubgRun({ nowMs: Date.now(), outputsExist: false, force }, windows);
   const deltasFile = path.join(dataRoot, "aggregated", "pubg", "deltas.json");
   let outputsExist = false;
   if (probe.to !== null && fs.existsSync(deltasFile)) {
@@ -66,7 +70,7 @@ export function main(): void {
     }
   }
 
-  const decision = determinePubgRun({ nowMs: Date.now(), outputsExist, force });
+  const decision = determinePubgRun({ nowMs: Date.now(), outputsExist, force }, windows);
   console.log(`[pubg-determine] ${decision.reason}`);
 
   if (decision.staleCalendar) {

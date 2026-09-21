@@ -17,9 +17,11 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import FilterPill from "@/components/FilterPill";
 import StatusBadge from "@/components/StatusBadge";
+import SubmarineCell from "@/components/gamedata/SubmarineCell";
 import { signedPct } from "@/components/pubg/shared";
 import { isReportable, pubgDisplayStatus } from "@/pipeline/shared/pubg-status";
 import { weaponHref } from "@/lib/pubgRoutes";
+import type { GameDataChange } from "@/pipeline/gamedata/types";
 import type { PubgDeltaRow } from "@/pipeline/match/pubg-delta";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
@@ -40,33 +42,56 @@ function matches(row: PubgDeltaRow, key: string, submarine: boolean): boolean {
 
 export interface PubgCompareTableProps {
   rows: PubgDeltaRow[];
-  /** 수치 축(F9)에서 잠수함 변경이 잡힌 무기의 정준키. 그 행은 배지가 `submarine`으로 덮인다. */
-  submarineKeys?: readonly string[];
+  /**
+   * 수치 축(F9)에서 잡힌 **잠수함 변경 그 자체**(2026-09-21). 이전엔 정준키 배열만 받아서
+   * 배지는 덮을 수 있었지만 **무엇이 바뀌었는지 말할 수 없었다** — 그게 사용자가 짚은 결함이다.
+   * 서버가 넘기는 평문 배열이라 클라이언트 경계를 그대로 건넌다(색인은 여기서 만든다).
+   */
+  submarineChanges?: readonly GameDataChange[];
+  /** 노트가 말했는데 값이 어긋난 변경(2026-09-21). 잠수함과 같은 칸에 그린다. */
+  mismatchChanges?: readonly GameDataChange[];
 }
 
-export default function PubgCompareTable({ rows, submarineKeys = [] }: PubgCompareTableProps) {
+export default function PubgCompareTable({
+  rows,
+  submarineChanges = [],
+  mismatchChanges = [],
+}: PubgCompareTableProps) {
   const [filter, setFilter] = useState<string>("all");
   const [sort, setSort] = useState<SortKey>("effect");
-  const submarineSet = useMemo(() => new Set(submarineKeys), [submarineKeys]);
+  const byEntityKey = (changes: readonly GameDataChange[]): Map<string, GameDataChange[]> => {
+    const map = new Map<string, GameDataChange[]>();
+    for (const change of changes) {
+      const list = map.get(change.entityKey);
+      if (list) list.push(change);
+      else map.set(change.entityKey, [change]);
+    }
+    return map;
+  };
+  const submarineByKey = useMemo(() => byEntityKey(submarineChanges), [submarineChanges]);
+  const mismatchByKey = useMemo(() => byEntityKey(mismatchChanges), [mismatchChanges]);
+  // 수치 축 열은 이 패치쌍에 잠수함이 있을 때만 만든다 — 42.3→43.1처럼 0건인 쌍에서 열 전체가
+  // `—`가 되는 것을 막는다. 0건 증명은 홈 `SubmarineSection`이 맡는다(중복 금지).
+  const showSubmarine = submarineByKey.size > 0 || mismatchByKey.size > 0;
 
   // 노이즈 상태(바닥 미달·변화 없음·표본 부족)는 이 표에 없다(C1).
   const judged = useMemo(() => rows.filter((row) => isReportable(row.status)), [rows]);
 
   const visible = useMemo(() => {
-    const filtered = judged.filter((row) => matches(row, filter, submarineSet.has(row.weaponKey)));
+    const filtered = judged.filter((row) => matches(row, filter, submarineByKey.has(row.weaponKey)));
     const sorted = [...filtered];
     if (sort === "effect") sorted.sort((a, b) => Math.abs(b.relChange ?? 0) - Math.abs(a.relChange ?? 0));
     else if (sort === "share") sorted.sort((a, b) => (b.after ?? 0) - (a.after ?? 0));
     else sorted.sort((a, b) => a.weaponName.localeCompare(b.weaponName));
     return sorted;
-  }, [judged, filter, sort, submarineSet]);
+  }, [judged, filter, sort, submarineByKey]);
 
   const counts = useMemo(() => {
     const out: Record<string, number> = {};
     for (const f of FILTERS)
-      out[f.key] = judged.filter((row) => matches(row, f.key, submarineSet.has(row.weaponKey))).length;
+      out[f.key] = judged.filter((row) => matches(row, f.key, submarineByKey.has(row.weaponKey))).length;
     return out;
-  }, [judged, submarineSet]);
+  }, [judged, submarineByKey]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -103,6 +128,9 @@ export default function PubgCompareTable({ rows, submarineKeys = [] }: PubgCompa
               <th className="py-2 pr-3 text-right font-mono text-xs font-bold text-muted">변화</th>
               <th className="py-2 pr-3 text-right font-mono text-xs font-bold text-muted">95% CI</th>
               <th className="py-2 pr-3 text-right font-mono text-xs font-bold text-muted">n (전→후)</th>
+              {showSubmarine ? (
+                <th className="py-2 pr-3 font-mono text-xs font-bold text-muted">바뀐 것</th>
+              ) : null}
               <th className="py-2 pr-1 font-mono text-xs font-bold text-muted">판정</th>
             </tr>
           </thead>
@@ -134,8 +162,16 @@ export default function PubgCompareTable({ rows, submarineKeys = [] }: PubgCompa
                 <td className="py-2.5 pr-3 text-right font-mono text-xs tabular-nums text-muted">
                   {row.n.before.toLocaleString()}→{row.n.after.toLocaleString()}
                 </td>
+                {showSubmarine ? (
+                  <td className="py-2.5 pr-3">
+                    <SubmarineCell
+                      changes={submarineByKey.get(row.weaponKey) ?? []}
+                      mismatchChanges={mismatchByKey.get(row.weaponKey) ?? []}
+                    />
+                  </td>
+                ) : null}
                 <td className="py-2.5 pr-1">
-                  <StatusBadge status={pubgDisplayStatus(row.status, submarineSet.has(row.weaponKey))} />
+                  <StatusBadge status={pubgDisplayStatus(row.status, submarineByKey.has(row.weaponKey))} />
                 </td>
               </tr>
             ))}

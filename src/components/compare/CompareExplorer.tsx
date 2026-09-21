@@ -24,7 +24,10 @@ import NoteNavigator from "./NoteNavigator";
 import DeltaTable from "./DeltaTable";
 import CoverageBar from "./CoverageBar";
 import FocusToast from "./FocusToast";
-import { buildSubmarineIndexFromChanges } from "@/pipeline/gamedata/submarine";
+import {
+  buildNoteMismatchIndexFromChanges,
+  buildSubmarineIndexFromChanges,
+} from "@/pipeline/gamedata/submarine";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 import { buildEntityRows } from "./entityRows";
 import { STATUS_FILTERS, filterByStatus, type CoverageStats, type NoteEntityGroup } from "./logic";
@@ -77,10 +80,21 @@ export default function CompareExplorer({
     () => buildSubmarineIndexFromChanges(gameDataChanges),
     [gameDataChanges]
   );
+  const mismatch = useMemo(
+    () => buildNoteMismatchIndexFromChanges(gameDataChanges),
+    [gameDataChanges]
+  );
 
   const entityRows = useMemo(
-    () => buildEntityRows(filterByStatus(rows, statusFilter, qAlpha), laneFilter, qAlpha, submarine),
-    [rows, statusFilter, laneFilter, qAlpha, submarine]
+    () =>
+      buildEntityRows(
+        filterByStatus(rows, statusFilter, qAlpha),
+        laneFilter,
+        qAlpha,
+        submarine,
+        mismatch
+      ),
+    [rows, statusFilter, laneFilter, qAlpha, submarine, mismatch]
   );
 
   // 선택한 묶음 → 표 행. 줄 id 교집합이 우선이고, 없으면 아이콘 해석 키(ddragon)로 한 번 더 찾는다.

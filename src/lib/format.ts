@@ -59,6 +59,27 @@ export function fmtInt(n: number): string {
   return new Intl.NumberFormat("en-US").format(Math.round(n));
 }
 
+/**
+ * 게임 데이터 **원본 수치**(수치 축 F9)의 표시 형식.
+ *
+ * Community Dragon은 값을 float32로 내보내므로 JSON에 `0.800000011920929`·`0.07999999821186066`
+ * 같은 잡음이 그대로 남는다. **비교**는 `tft.ts`의 `sameNumber()`가 상대 오차 1e-6으로 이미
+ * 흡수하지만 **표시는 아무도 걸러 주지 않았다** — 2026-09-21 프로덕션 실측에서 TFT 홈 잠수함
+ * 목록이 드레이븐 공격 속도를 `0.800000011920929 → 0.8500000238418579`로 렌더하고 있었다.
+ *
+ * 유효숫자 6자리로 접는다. float32의 유효숫자가 7자리 남짓이라 6자리면 잡음만 사라지고 실제
+ * 수치(850·3000·26.46)는 손대지 않는다. **반올림은 표시에서만 한다** — 산출물 JSON은 게임사가
+ * 낸 값 그대로 두어야 다음 패치와 대조할 때 기준이 흔들리지 않는다.
+ *
+ * `null`은 한쪽 패치에만 있던 필드다(신규·삭제). 0으로 적으면 거짓이 되므로 "없음"으로 말한다.
+ */
+export function gameDataValue(value: number | string | null): string {
+  if (value === null) return "없음";
+  if (typeof value === "string") return value;
+  if (!Number.isFinite(value)) return String(value);
+  return String(Number(value.toPrecision(6)));
+}
+
 /** 부호 포함 정수(골드 델타 등). fmtDeltaInt(320) => "+320", fmtDeltaInt(-85) => "−85". */
 export function fmtDeltaInt(n: number): string {
   return `${sign(n)}${fmtInt(Math.abs(n))}`;
@@ -99,6 +120,9 @@ const STATUS_LABELS: Record<DisplayStatus | MatchStatus, string> = {
   // 수치 축(2026-09-21) — 통칭을 쓴다. 게이머가 실제로 쓰는 말이라 인지 비용이 0이고,
   // 정확한 정의("패치노트에 없는 원본 수치 변경")는 방법론과 상세가 말한다.
   submarine: "잠수함 패치",
+  // 노트가 같은 항목을 말했는데 **적힌 값이 실제와 다르다**. 잠수함(말하지 않음)과도, 공지(말했고
+  // 맞음)와도 다른 세 번째 자리라 배지를 따로 둔다 — 하나로 뭉치면 둘 중 어느 쪽이든 거짓말이 된다.
+  "note-mismatch": "공지값 불일치",
   announced: "공지",
   "announced-anomaly": "공지 · 이상 관측",
   unannounced: "미공지",

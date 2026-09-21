@@ -18,7 +18,8 @@
 // summary.json 없이 두면 두 게이트 어느 쪽에도 걸리지 않는다.
 import fs from "node:fs";
 import path from "node:path";
-import { comparisonWindows, PUBG_PATCH_WINDOWS } from "../src/pipeline/collect/pubg/patch-calendar";
+import { comparisonWindows } from "../src/pipeline/collect/pubg/patch-calendar";
+import { loadPubgWindows } from "./shared/calendar";
 import { isMainModule, parseCliArgs } from "./shared/cli";
 import {
   aggregatePubgWeapons,
@@ -40,8 +41,9 @@ interface CliArgs {
 }
 
 export function parseArgs(argv: string[]): CliArgs {
-  const latest = PUBG_PATCH_WINDOWS[PUBG_PATCH_WINDOWS.length - 1];
-  const previous = PUBG_PATCH_WINDOWS[PUBG_PATCH_WINDOWS.length - 2];
+  const windows = loadPubgWindows();
+  const latest = windows[windows.length - 1];
+  const previous = windows[windows.length - 2];
   const raw = parseCliArgs("run-pubg-aggregate", argv, [
     { name: "from", type: "patch", default: previous?.patch ?? "" },
     { name: "to", type: "patch", default: latest?.patch ?? "" },
@@ -52,7 +54,7 @@ export function parseArgs(argv: string[]): CliArgs {
 
 /** 패치 표기 → 달력 항목. 달력에 없으면 **던진다**(조용히 빈 집계를 내지 않는다). */
 function windowOf(patch: string) {
-  const found = PUBG_PATCH_WINDOWS.find((w) => w.patch === patch);
+  const found = loadPubgWindows().find((w) => w.patch === patch);
   if (!found) {
     throw new Error(
       `run-pubg-aggregate: 패치 ${patch}가 달력에 없다 — src/pipeline/collect/pubg/patch-calendar.ts의 ` +

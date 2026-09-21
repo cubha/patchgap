@@ -233,6 +233,13 @@ export default function MethodologyPage() {
                 <strong className="text-fg">지표가 하나도 안 움직여도 발견입니다</strong> —
                 바꿨는데 효과가 없었던 변경도 바뀐 것은 사실이기 때문입니다.
               </p>
+              <p>
+                짝이 있어도 끝이 아닙니다. 패치노트가 <strong className="text-fg">같은 항목을 말했는데 적힌
+                값이 실제와 다른</strong> 경우가 있어서, 그것만 따로 「공지값 불일치」로 부릅니다. 말하지 않은
+                것도, 말한 대로 한 것도 아니라 둘 중 어느 쪽에 넣어도 거짓말이 됩니다. 값을 견줄 수 있을 때만
+                견줍니다 — 레벨별 배열(<span className="font-mono">75/115/155</span>)이나 합성 표현은 어느 쪽을
+                대표로 삼을지 정할 근거가 없으므로 견주지 않습니다.
+              </p>
               <p className="text-muted">
                 증거가 다르므로 위계도 다릅니다. 잠수함 패치는 미공지·간접 영향보다 위에 옵니다.
               </p>
