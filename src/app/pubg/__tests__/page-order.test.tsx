@@ -3,8 +3,12 @@
 //   타일 → 패치 내용 탭 → 대조 표(단위 캡션) → 무기별 상세 그리드 → 맵.
 // 표본·기저·게이트 카드는 방법론으로 옮겨 이 화면에 **없어야** 하고, 다른 게임과의 비교 문구도 없어야
 // 한다. 무기 상세 진입 링크는 전 무기(47종) 존재.
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { render } from "@testing-library/react";
+
+// 페이지가 `@/lib/gamedata`(수치 축 로더)를 거쳐 "server-only"를 side-effect import한다 — 실제
+// 패키지는 jsdom에서 무조건 throw하므로 빈 모듈로 바꾼다(`src/lib/__tests__/data.test.ts`와 같은 규약).
+vi.mock("server-only", () => ({}));
 import PubgPage from "../page";
 import PubgMethodologyPage from "../methodology/page";
 import PubgComparePage from "../compare/page";

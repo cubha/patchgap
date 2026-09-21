@@ -56,7 +56,10 @@ export default function PubgComparePage() {
             }
           >
             <div className="p-5">
-              <PubgCompareTable rows={deltas.rows} />
+              <PubgCompareTable
+                rows={deltas.rows}
+                submarineKeys={submarine?.submarines.map((change) => change.entityKey) ?? []}
+              />
             </div>
           </SectionCard>
 

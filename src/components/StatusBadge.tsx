@@ -19,6 +19,9 @@ const STATUS_CLASSES: Record<string, string> = {
   announced: "border-border text-fg-2",
   "announced-anomaly": "border-danger text-danger",
   unannounced: "border-accent text-accent",
+  // 수치 축(F9) — 세 게임 공통. 지표 축 미공지(테두리 accent)와 구분되게 **채운다**: 통계가 아니라
+  // 게임 데이터가 증명한 변경이라는 뜻(SubmarineSection의 pill과 같은 색).
+  submarine: "border-accent bg-accent text-accent-on",
   unpaired: "border-border-soft text-muted",
   // raw MatchStatus → 같은 색
   "announced-consistent": "border-border text-fg-2",

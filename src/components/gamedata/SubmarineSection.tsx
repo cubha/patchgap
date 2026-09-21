@@ -8,6 +8,13 @@ import SectionCard from "@/components/SectionCard";
 import { statusLabel } from "@/lib/format";
 import type { SubmarineSummary } from "@/lib/gamedata";
 
+/** 대조 원본의 사람용 이름 — 게임마다 소스가 다르다는 사실을 화면이 그대로 말한다. */
+const SOURCE_LABELS: Record<string, string> = {
+  ddragon: "Data Dragon",
+  cdragon: "Community Dragon",
+  "telemetry-grid": "텔레메트리 피해 격자",
+};
+
 function formatValue(value: number | string | null): string {
   if (value === null) return "없음";
   return typeof value === "number" ? String(value) : value;
@@ -36,9 +43,15 @@ export default function SubmarineSection({ summary }: { summary: SubmarineSummar
       {submarines.length === 0 ? (
         <div className="p-5">
           <p className="text-sm text-fg-2">
-            이번 패치에는 없습니다 — 게임 데이터에서 찾은 수치 변경{" "}
-            <strong className="font-mono text-fg">{changeCount}건</strong>이 모두 패치노트에
-            있었습니다.
+            {changeCount === 0 ? (
+              <>이번 패치에는 없습니다 — 대조한 원본 수치 가운데 바뀐 것이 없었습니다.</>
+            ) : (
+              <>
+                이번 패치에는 없습니다 — 게임 데이터에서 찾은 수치 변경{" "}
+                <strong className="font-mono text-fg">{changeCount}건</strong>이 모두 패치노트에
+                있었습니다.
+              </>
+            )}
           </p>
           <p className="mt-2 text-xs text-muted">
             다른 항목의 &ldquo;없음&rdquo;과 다릅니다. 통계로 못 찾았다는 뜻이 아니라, 원본 수치를
@@ -70,7 +83,7 @@ export default function SubmarineSection({ summary }: { summary: SubmarineSummar
         </ul>
       )}
       <p className="border-t border-border-soft px-5 py-2 font-mono text-[0.65rem] text-muted">
-        대조 원본: {source.kind} {source.from} → {source.to}
+        대조 원본: {SOURCE_LABELS[source.kind] ?? source.kind} {source.from} → {source.to}
       </p>
     </SectionCard>
   );

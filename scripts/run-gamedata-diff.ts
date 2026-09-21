@@ -14,9 +14,11 @@ import { dirname, join } from "node:path";
 import { diffLol, type DdragonSnapshot } from "../src/pipeline/gamedata/lol";
 import {
   compareGrids,
+  expandPubgNotes,
   gridToChanges,
   mergeGrids,
   type DamageGrid,
+  type PubgNoteLike,
 } from "../src/pipeline/gamedata/pubg";
 import { PUBG_PATCH_WINDOWS } from "../src/pipeline/collect/pubg/patch-calendar";
 import { diffTft, type CdragonSnapshot } from "../src/pipeline/gamedata/tft";
@@ -112,7 +114,10 @@ async function runPubg(dataRoot: string, from: string, to: string): Promise<void
   const before = mergeGrids(grids[labelFrom]);
   const after = mergeGrids(grids[labelTo]);
   const shifts = compareGrids(before, after, { minHits: PUBG_MIN_HITS });
-  const notes = loadNotes(dataRoot, "pubg", to);
+  // PUBG 노트는 `entity`가 없고 `weaponKeys`를 갖는다 — 펴지 않으면 전부 잠수함으로 읽힌다.
+  const notes = expandPubgNotes(
+    readJson<{ items?: PubgNoteLike[] }>(join(dataRoot, "aggregated", "pubg", `notes-${to}.json`)).items ?? []
+  );
   const changes = gridToChanges(shifts, notes, to);
   const submarines = changes.filter(isSubmarineChange);
 
@@ -120,6 +125,12 @@ async function runPubg(dataRoot: string, from: string, to: string): Promise<void
   console.log(
     `[gamedata] 무기 ${weaponsCompared}종 비교 · 격자 이동 ${shifts.length}건 · 그중 노트에 없는 것 ${submarines.length}건`
   );
+  for (const s of shifts) {
+    const name = `${s.weapon} ${s.reason}`;
+    console.log(
+      `[gamedata]   ${name}: ${s.before} → ${s.after} (×${s.shiftRatio.toFixed(3)} · 겹침 ${s.overlapBefore.toFixed(2)} → ${s.overlapAfter.toFixed(2)} · n ${s.nBefore}/${s.nAfter})`
+    );
+  }
   for (const s of submarines) {
     console.log(`[gamedata]   ★ ${s.entityName} ${s.field}: ${s.before} → ${s.after}`);
   }

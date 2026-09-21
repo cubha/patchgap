@@ -18,10 +18,9 @@ import { useMemo, useState } from "react";
 import FilterPill from "@/components/FilterPill";
 import StatusBadge from "@/components/StatusBadge";
 import { signedPct } from "@/components/pubg/shared";
-import { isReportable } from "@/pipeline/shared/pubg-status";
+import { isReportable, pubgDisplayStatus } from "@/pipeline/shared/pubg-status";
 import { weaponHref } from "@/lib/pubgRoutes";
 import type { PubgDeltaRow } from "@/pipeline/match/pubg-delta";
-import { displayStatusOf } from "@/pipeline/shared/display-status";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
 const FILTERS = [
@@ -32,37 +31,42 @@ const FILTERS = [
 
 type SortKey = "effect" | "share" | "name";
 
-function matches(row: PubgDeltaRow, key: string): boolean {
+function matches(row: PubgDeltaRow, key: string, submarine: boolean): boolean {
   if (key === "all") return true;
-  if (key === "announced") return row.status.startsWith("announced-");
-  return row.status === key;
+  // 잠수함은 수치 축 미공지다 — "미공지" 칩에 함께 든다(지표 축 미공지와 배지로만 갈린다).
+  if (key === "announced") return !submarine && row.status.startsWith("announced-");
+  return submarine || row.status === key;
 }
 
 export interface PubgCompareTableProps {
   rows: PubgDeltaRow[];
+  /** 수치 축(F9)에서 잠수함 변경이 잡힌 무기의 정준키. 그 행은 배지가 `submarine`으로 덮인다. */
+  submarineKeys?: readonly string[];
 }
 
-export default function PubgCompareTable({ rows }: PubgCompareTableProps) {
+export default function PubgCompareTable({ rows, submarineKeys = [] }: PubgCompareTableProps) {
   const [filter, setFilter] = useState<string>("all");
   const [sort, setSort] = useState<SortKey>("effect");
+  const submarineSet = useMemo(() => new Set(submarineKeys), [submarineKeys]);
 
   // 노이즈 상태(바닥 미달·변화 없음·표본 부족)는 이 표에 없다(C1).
   const judged = useMemo(() => rows.filter((row) => isReportable(row.status)), [rows]);
 
   const visible = useMemo(() => {
-    const filtered = judged.filter((row) => matches(row, filter));
+    const filtered = judged.filter((row) => matches(row, filter, submarineSet.has(row.weaponKey)));
     const sorted = [...filtered];
     if (sort === "effect") sorted.sort((a, b) => Math.abs(b.relChange ?? 0) - Math.abs(a.relChange ?? 0));
     else if (sort === "share") sorted.sort((a, b) => (b.after ?? 0) - (a.after ?? 0));
     else sorted.sort((a, b) => a.weaponName.localeCompare(b.weaponName));
     return sorted;
-  }, [judged, filter, sort]);
+  }, [judged, filter, sort, submarineSet]);
 
   const counts = useMemo(() => {
     const out: Record<string, number> = {};
-    for (const f of FILTERS) out[f.key] = judged.filter((row) => matches(row, f.key)).length;
+    for (const f of FILTERS)
+      out[f.key] = judged.filter((row) => matches(row, f.key, submarineSet.has(row.weaponKey))).length;
     return out;
-  }, [judged]);
+  }, [judged, submarineSet]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -131,7 +135,7 @@ export default function PubgCompareTable({ rows }: PubgCompareTableProps) {
                   {row.n.before.toLocaleString()}→{row.n.after.toLocaleString()}
                 </td>
                 <td className="py-2.5 pr-1">
-                  <StatusBadge status={displayStatusOf(row.status)} />
+                  <StatusBadge status={pubgDisplayStatus(row.status, submarineSet.has(row.weaponKey))} />
                 </td>
               </tr>
             ))}

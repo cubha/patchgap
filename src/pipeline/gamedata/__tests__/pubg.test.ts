@@ -50,9 +50,11 @@ function resampled(cell: GridCell, seed: number): GridCell {
 }
 
 const OPTS = { minHits: 120 } as const;
-const AK = fixture.ak47Torso as { before: GridCell; after: GridCell };
-const DP12 = fixture.dp12Leg as { before: GridCell; after: GridCell };
-const UMP = fixture.umpTorso as { before: GridCell; after: GridCell };
+// JSON 모듈은 튜플을 `number[][]`로 넓혀 읽는다 — 픽스처는 리듀서 산출 그대로라 [값, 횟수] 2원소다.
+type CellPair = { before: GridCell; after: GridCell };
+const AK = fixture.ak47Torso as unknown as CellPair;
+const DP12 = fixture.dp12Leg as unknown as CellPair;
+const UMP = fixture.umpTorso as unknown as CellPair;
 
 describe("mergeGrids", () => {
   it("매치별 격자를 합치면 표본은 더해지고 최대치는 최대가 된다", () => {
@@ -191,14 +193,15 @@ describe("gridToChanges", () => {
     expect(changes).toHaveLength(1);
     expect(isSubmarineChange(changes[0])).toBe(true);
     expect(changes[0].entityType).toBe("weapon");
-    expect(changes[0].entityKey).toBe("WeapFNFal_C");
-    expect(changes[0].entityName).toBe("FNFal");
+    // 판정표(`PubgDeltaRow.weaponKey`)와 같은 정준키·표기명 — 격자 키 `WeapFNFal_C`가 아니다.
+    expect(changes[0].entityKey).toBe("Item_Weapon_FNFal_C");
+    expect(changes[0].entityName).toBe("SLR");
   });
 
   it("노트가 그 무기의 피해량을 말하면 공지다", () => {
     const changes = gridToChanges(
       shifts,
-      [{ id: "note:fnfal", entity: "FNFal", skill: null, stat: "기본 피해량" }],
+      [{ id: "note:fnfal", entity: "SLR", skill: null, stat: "기본 피해량" }],
       "43.1"
     );
     expect(isSubmarineChange(changes[0])).toBe(false);
@@ -208,8 +211,8 @@ describe("gridToChanges", () => {
     const changes = gridToChanges(
       shifts,
       [
-        { id: "note:fnfal-recoil", entity: "FNFal", skill: null, stat: "반동 제어" },
-        { id: "note:fnfal-vehicle", entity: "FNFal", skill: null, stat: "차량 피해 배수" },
+        { id: "note:fnfal-recoil", entity: "SLR", skill: null, stat: "반동 제어" },
+        { id: "note:fnfal-vehicle", entity: "SLR", skill: null, stat: "차량 피해 배수" },
       ],
       "43.1"
     );

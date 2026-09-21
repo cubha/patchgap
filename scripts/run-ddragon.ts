@@ -279,9 +279,23 @@ async function syncSpellIcons(
   }
 }
 
-/** 챔피언 상세 JSON의 필요한 부분만 — 전체 스키마를 타이핑하지 않는다(우리가 쓰는 건 skins뿐). */
+/** 챔피언 상세 JSON의 필요한 부분만 — 전체 스키마를 타이핑하지 않는다(쓰는 건 skins·spells뿐). */
 interface ChampionDetailResponse {
-  data: Record<string, { id: string; name: string; skins?: { num: number; name: string }[] }>;
+  data: Record<
+    string,
+    {
+      id: string;
+      name: string;
+      skins?: { num: number; name: string }[];
+      /** 스킬 수치 — 잠수함 패치 검출(F9)의 입력. 2026-09-21 이전에는 받고 버렸다. */
+      spells?: {
+        cooldownBurn?: string;
+        costBurn?: string;
+        rangeBurn?: string;
+        effectBurn?: (string | null)[];
+      }[];
+    }
+  >;
 }
 
 /**

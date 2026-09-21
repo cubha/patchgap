@@ -140,6 +140,30 @@ export default function TftMethodologyPage() {
             </dl>
           </SectionCard>
 
+          {/* 수치 축(2026-09-21, F9) — LoL·PUBG 방법론의 같은 카드. 판정 기준은 세 게임이 같고(게이트와
+              무관하게 전량 노출 · 배지 1종), 소스만 다르다 — TFT는 Community Dragon 수치 추출본. */}
+          <SectionCard eyebrow="수치 축" title="잠수함 패치는 어떻게 찾나" variant="glass">
+            <div className="flex flex-col gap-3 p-5 text-sm leading-relaxed text-fg-2">
+              <p>
+                &ldquo;미공지&rdquo;는 두 종류입니다. <strong className="text-fg">지표 축</strong>은 순방률·등장률·
+                평균 등수가 움직였는데 짝지을 패치노트가 없는 경우로, 통계가 근거입니다.{" "}
+                <strong className="text-fg">수치 축</strong>은 유닛 체력·스킬 피해·아이템 능력치 같은 원본 값이
+                실제로 바뀌었는데 패치노트에 없는 경우이고, 통칭 잠수함 패치입니다.
+              </p>
+              <p>
+                수치 축은 추론하지 않습니다. 게임 클라이언트의 수치 데이터(Community Dragon 추출본)를 패치 간
+                그대로 대조하고, 바뀐 값마다 그것을 말한 패치노트 항목이 있는지 찾습니다. 짝이 없으면
+                잠수함입니다. <strong className="text-fg">지표가 하나도 안 움직여도 발견입니다</strong> —
+                그래서 표본 부족·바닥 미달 게이트와 무관하게 전부 보여 주고, 배지도 따로 둡니다.
+              </p>
+              <p className="text-muted">
+                증거가 다르므로 위계도 다릅니다. 잠수함 패치는 미공지·간접 영향보다 위에 옵니다. 스킬 변수는
+                자리의 의미가 공개되지 않아, 그 유닛을 언급한 패치노트가 하나라도 있으면 공지로 봅니다 —
+                근거 없이 잠수함이라 부르지 않기 위해 덜 찾는 쪽을 고른 것입니다.
+              </p>
+            </div>
+          </SectionCard>
+
           <p className="text-xs leading-relaxed text-muted">
             패치노트 원문:{" "}
             <ExternalLink href={notes.sourceUrl} className="text-accent hover:underline">

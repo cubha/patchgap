@@ -9,7 +9,7 @@
 //    대한 내용은 방법론 메뉴에 총망라"(C3). 브리핑에 남는 방법 서술은 표 머리의 단위 1줄뿐이다.
 //  - 무기 상세 진입 그리드(`PubgWeaponGrid`)를 신설했다 — 판정된 무기만 링크가 있던 것이 P1의 원인이었다.
 //  - 이 화면의 사용자 문구에서 다른 게임과의 비교 서술을 전부 뺐다(P2).
-//  - 배지는 표시 키(`displayStatusOf`)로 — 공지 / 공지 · 이상 관측 / 미공지(C5).
+//  - 배지는 표시 키(`pubgDisplayStatus`)로 — 공지 / 공지 · 이상 관측 / 미공지(C5) / 잠수함 패치(F9).
 //
 // 이 게임은 판정 축이 하나뿐이다(무기 획득 점유율). 43.1 밸런스 항목 중 텔레메트리로 분리되는 축이
 // 그것뿐이었고, 명중률 축은 반증됐다(PLAN-pubg-gate-2026-09-16 §8) — 그 사실은 방법론이 말한다.
@@ -28,7 +28,7 @@ import { loadPubg, loadPubgAssets, loadPubgMaps, isReportable } from "@/lib/pubg
 import { mapHref, weaponHref } from "@/lib/pubgRoutes";
 import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
 import { publicMapPath } from "@/pipeline/pubg/asset-path";
-import { displayStatusOf } from "@/pipeline/shared/display-status";
+import { pubgDisplayStatus } from "@/pipeline/shared/pubg-status";
 import ExternalLink from "@/components/ExternalLink";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
@@ -58,6 +58,7 @@ export default function PubgPage() {
   const reportable = deltas.rows.filter((row) => isReportable(row.status));
   // 수치 축(F9) — 산출물이 없으면 섹션이 통째로 빠진다. 세 게임이 같은 컴포넌트를 쓴다.
   const submarine = summarizeGameData(loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to));
+  const submarineKeys = new Set(submarine?.submarines.map((change) => change.entityKey) ?? []);
   const unannounced = reportable.filter((row) => row.status === "unannounced");
   const announced = reportable.filter((row) => row.status !== "unannounced");
   // 표 아래 원문 링크 1개 — 모든 공지 행이 같은 패치노트 페이지를 가리킨다(43.1 노트는 5항목 1페이지).
@@ -164,7 +165,7 @@ export default function PubgPage() {
                               [{signedPct(row.relCi[0])}, {signedPct(row.relCi[1])}]
                             </td>
                             <td className="py-3 pr-5">
-                              <StatusBadge status={displayStatusOf(row.status)} />
+                              <StatusBadge status={pubgDisplayStatus(row.status, submarineKeys.has(row.weaponKey))} />
                             </td>
                           </tr>
                         );
@@ -194,7 +195,7 @@ export default function PubgPage() {
                   <ul className={`flex flex-col divide-y divide-border-soft ${PANEL_SCROLL_BODY}`}>
                     {unannounced.map((row) => (
                       <li key={row.id} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 py-3">
-                        <StatusBadge status={displayStatusOf(row.status)} />
+                        <StatusBadge status={pubgDisplayStatus(row.status, submarineKeys.has(row.weaponKey))} />
                         <Link
                           href={weaponHref(row.weaponKey)}
                           className="font-display font-bold text-fg underline-offset-4 hover:text-accent hover:underline"
