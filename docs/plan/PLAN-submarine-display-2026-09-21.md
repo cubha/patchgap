@@ -71,7 +71,7 @@
 | ID | 내용 | 대상 파일 |
 |---|---|---|
 | **ST-1** `[TDD]` | **TFT 상세 경로 확장** — `buildTftEntityRows`에 submarine 색인을 물려 잠수함 전용 엔티티도 경로·메타·본문을 갖게 한다. 호출부가 **3곳**이다(`generateStaticParams`·`generateMetadata`·`TftUnitPage`) — 하나만 고치면 빌드는 초록인데 본문이 "보고할 관측이 없는 엔티티다"로 뜬다 | `src/app/tft/unit/[key]/page.tsx` · `src/components/tft/__tests__/entityRows.test.ts` |
-| **ST-2** `[TDD]` | **「바뀐 것」 셀 텍스트 순수 함수** — `첫 건 + 외 N건`. **`gameDataValue`를 함수 안에서 호출**해 호출부가 원본 float를 넘길 방법을 없앤다(float32 잡음 재발 차단) | `src/components/gamedata/submarineCell.ts` (신설) + `__tests__` |
+| **ST-2** `[TDD]` | **「바뀐 것」 셀 텍스트 순수 함수** — `첫 건 + 외 N건`. **`gameDataValue`를 함수 안에서 호출**해 호출부가 원본 float를 넘길 방법을 없앤다(float32 잡음 재발 차단) | `src/components/gamedata/submarineText.ts` (신설, 최초 이름 `submarineCell.ts` — 컴포넌트 `SubmarineCell.tsx`와 대소문자만 다른 충돌로 개명) + `__tests__` |
 | **ST-3** | **대조표 3종에 「바뀐 것」 열** 렌더 | `src/components/compare/DeltaTable.tsx` · `src/app/tft/compare/page.tsx` · `src/components/pubg/PubgCompareTable.tsx` |
 | **ST-4** | **「패치노트가 말하지 않은 것」 공용 구획** 컴포넌트 — 세 게임이 각자 카드에 꽂는다(포맷은 달라도 판정 기준은 같다) | `src/components/gamedata/SubmarineDetailBlock.tsx` (신설) |
 | **ST-5** | **B안 — TFT 상세** 선언 카드를 「패치노트 대조」로, 두 구획 | `src/app/tft/unit/[key]/page.tsx` |
@@ -107,3 +107,22 @@ ST-9를 마지막에 두는 이유: `tft/page.tsx`의 가장 큰 구조 변경�
 - 축B(화면): **"이 행이 어떤 수치의 변경인지 화면만 보고 아는가"** — 화면마다.
   「B안이 적용됐는가」로 쓰지 않는다(그건 또 속성이다).
 - 축A(코드): PLAN ST-9의 세 항목을 **원문 그대로** — 「바뀐 것」 열 · 배지 · 로더.
+
+## 구현 후 실측 (2026-09-21)
+
+- TFT 상세 라우트 **114건** 생성(이전 93건). `unit~DA_18_ElderDragon`·`item~DA_18_BackrowStar`·
+  `unit~DA_18_Sentry` 전부 200이고 본문에 「패치노트가 말하지 않은 것」 3건(`공격력 110 → 125` 등)이 있다.
+- TFT 대조표에 「바뀐 것」 열이 렌더된다. 드레이븐은 `공격 속도 0.8 → 0.85 외 1건` —
+  float32 잡음(`0.800000011920929`)이 산출물 HTML 어디에도 없다.
+- 홈 탭 배지: TFT `패치 내용 49 / 미공지 Gap 126`(= 지표 축 89 + 수치 축 37),
+  PUBG `2 / 5`, LoL `146 / 29`. 세 게임 모두 Gap 탭 안에서 수치 축이 지표 축 위에 온다.
+- `bash verify.sh --full` 전 항목 통과. `data/` 산출물 diff **0건**.
+
+### 알아둘 것 — LoL 수치 축은 현재 화면에서 안 보인다
+
+LoL 잠수함 1건(`폭풍갈퀴 가격 3000→3200`)은 쌍 `26.16_26.17`에 있는데, 홈·대조표는
+`getDefaultPair()`(= 최신 = `26.17_26.18`)만 그린다. 그 쌍의 잠수함은 0건이다.
+그래서 LoL의 「바뀐 것」 열과 상세 구획은 **구조만 서 있고 현재 데이터로는 비어 있다**
+(0건 문장은 그대로 나온다). 다음 패치에서 LoL 잠수함이 잡히면 코드 수정 없이 보인다.
+이것은 이번 작업의 누락이 아니라 **패치쌍 선택 규칙의 성질**이며, 바꾸려면 홈·대조표에
+쌍 선택을 넣는 별개 작업이 필요하다(범위 밖).
