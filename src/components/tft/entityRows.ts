@@ -11,7 +11,11 @@
 import { EFFECT_SIZE_FLOORS } from "@/pipeline/aggregate/stats";
 import { displayStatus, DISPLAY_SORT_PRIORITY, type DisplayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
-import { submarineOnlyEntities, type SubmarineIndex } from "@/pipeline/gamedata/submarine";
+import {
+  buildSubmarineIndexFromChanges,
+  submarineOnlyEntities,
+  type SubmarineIndex,
+} from "@/pipeline/gamedata/submarine";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 import type { DeltaEntityType, DeltaMetric, DeltaRecord } from "@/pipeline/types";
 
@@ -118,4 +122,23 @@ export function buildTftEntityRows(
       z.strength - a.strength ||
       a.name.localeCompare(z.name)
   );
+}
+
+/**
+ * 대조표·상세·경로 생성이 **같은 행 집합**을 보게 하는 단일 진입점.
+ *
+ * 왜 따로 만드는가(2026-09-21 실측 결함): 대조표는 `buildTftEntityRows(rows, qAlpha, submarine)`로
+ * 잠수함 전용 행까지 만들어 이름에 링크를 걸었는데, `generateStaticParams`는 같은 함수를
+ * **submarine 인자 없이** 불렀다. 링크는 있고 경로는 없다 — `output:'export'`에서 곧 404다
+ * (실측: `unit~DA_18_ElderDragon`·`item~DA_18_BackrowStar`·`unit~DA_18_Sentry` 전부 404,
+ * TFT 21건). 호출부가 셋(`generateStaticParams`·`generateMetadata`·`TftUnitPage`)이라
+ * 인자를 하나씩 채우는 수정은 다음에 또 갈라진다 — **인자를 못 빠뜨리는 형태**로 바꾼다.
+ *
+ * 순수 함수다(파일 I/O 없음) — 로더는 호출부가 소유하고, 여기는 조립만 한다.
+ */
+export function tftEntityRows(
+  deltas: { readonly rows: readonly DeltaRecord[]; readonly meta: { readonly qAlpha?: number } },
+  changes: readonly GameDataChange[]
+): TftEntityRow[] {
+  return buildTftEntityRows(deltas.rows, deltas.meta.qAlpha, buildSubmarineIndexFromChanges(changes));
 }

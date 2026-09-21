@@ -12,10 +12,11 @@ import Container from "@/components/Container";
 import ExternalLink from "@/components/ExternalLink";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
-import { TFT_METRICS, buildTftEntityRows, effectStrength } from "@/components/tft/entityRows";
+import { TFT_METRICS, effectStrength, tftEntityRows } from "@/components/tft/entityRows";
 import { TftFooter, TftUnavailable, deltaDisplay, formatMetricValue } from "@/components/tft/shared";
 import { entityTypeLabel, isLowerBetter, metricLabel, statusLabel } from "@/lib/format";
-import { loadTft } from "@/lib/tftData";
+import { loadGameDataDiff } from "@/lib/gamedata";
+import { loadTft, type TftBundle } from "@/lib/tftData";
 import type { DeltaMetric, DeltaRecord } from "@/pipeline/types";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
@@ -28,10 +29,23 @@ function unslug(slug: string): string {
   return slug.replace(/~/g, ":");
 }
 
+/**
+ * 이 라우트가 보는 행 집합 — **대조표와 같은 것**이어야 한다.
+ *
+ * 2026-09-21 실측 결함: 대조표는 잠수함 전용 엔티티까지 행으로 만들어 이름에 링크를 걸었는데
+ * 여기 `generateStaticParams`는 수치 축 없이 행을 만들어 그 링크가 전부 404였다
+ * (`unit~DA_18_ElderDragon`·`item~DA_18_BackrowStar`·`unit~DA_18_Sentry`, TFT 21건).
+ * 호출부가 셋이라 인자를 하나씩 채우면 다음에 또 갈라진다 — 한 함수로 묶는다.
+ */
+function rowsOf(bundle: TftBundle) {
+  const changes = loadGameDataDiff("tft", bundle.deltas.meta.from, bundle.deltas.meta.to)?.changes ?? [];
+  return tftEntityRows(bundle.deltas, changes);
+}
+
 export function generateStaticParams(): Array<{ key: string }> {
   const bundle = loadTft();
   if (!bundle) return [{ key: "_placeholder" }];
-  const rows = buildTftEntityRows(bundle.deltas.rows, bundle.deltas.meta.qAlpha);
+  const rows = rowsOf(bundle);
   if (rows.length === 0) return [{ key: "_placeholder" }];
   return rows.map((r) => ({ key: entitySlug(r.key) }));
 }
@@ -39,9 +53,7 @@ export function generateStaticParams(): Array<{ key: string }> {
 export async function generateMetadata({ params }: { params: Promise<{ key: string }> }): Promise<Metadata> {
   const { key } = await params;
   const bundle = loadTft();
-  const row = bundle
-    ? buildTftEntityRows(bundle.deltas.rows, bundle.deltas.meta.qAlpha).find((r) => r.key === unslug(key))
-    : undefined;
+  const row = bundle ? rowsOf(bundle).find((r) => r.key === unslug(key)) : undefined;
   return { title: row ? `${row.name} — TFT · patchgap` : "TFT 상세 — patchgap" };
 }
 
@@ -95,7 +107,7 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
   }
 
   const { deltas, notes } = bundle;
-  const rows = buildTftEntityRows(deltas.rows, deltas.meta.qAlpha);
+  const rows = rowsOf(bundle);
   const row = rows.find((r) => r.key === unslug(key));
 
   if (!row) {

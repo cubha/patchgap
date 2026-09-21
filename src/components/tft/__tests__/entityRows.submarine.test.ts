@@ -50,7 +50,8 @@ function change(entityKey: string, entityName: string, field: string): GameDataC
 }
 
 const DELTAS = {
-  rows: [rec("DA_18_KhaZix", "playRate", 0.05, "unannounced")],
+  // playRate 바닥은 상대 0.25 — 0.5 → 0.7(+40%)이라야 보고 자격을 얻는다.
+  rows: [rec("DA_18_KhaZix", "playRate", 0.2, "unannounced")],
   meta: { qAlpha: 0.1 },
 };
 

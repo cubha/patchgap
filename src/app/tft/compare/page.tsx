@@ -11,8 +11,7 @@ import Container from "@/components/Container";
 import ExternalLink from "@/components/ExternalLink";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
-import { TFT_METRICS, buildTftEntityRows, type TftEntityRow } from "@/components/tft/entityRows";
-import { buildSubmarineIndexFromChanges } from "@/pipeline/gamedata/submarine";
+import { TFT_METRICS, tftEntityRows, type TftEntityRow } from "@/components/tft/entityRows";
 import { loadGameDataDiff } from "@/lib/gamedata";
 import { TftFooter, TftSampleNotice, TftUnavailable, deltaDisplay, formatMetricValue } from "@/components/tft/shared";
 import { entityTypeLabel, isLowerBetter, metricLabel } from "@/lib/format";
@@ -72,11 +71,9 @@ export default function TftComparePage() {
   }
 
   const { deltas, before, after, notes } = bundle;
-  // 수치 축(F9) — 지표 축 게이트를 못 넘긴 잠수함도 행으로 올린다.
-  const submarine = buildSubmarineIndexFromChanges(
-    loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to)?.changes ?? []
-  );
-  const rows = buildTftEntityRows(deltas.rows, deltas.meta.qAlpha, submarine);
+  // 수치 축(F9) — 지표 축 게이트를 못 넘긴 잠수함도 행으로 올린다. 상세 라우트
+  // (`tft/unit/[key]`)와 **같은 진입점**을 써야 링크와 경로가 갈라지지 않는다(2026-09-21 실측 404).
+  const rows = tftEntityRows(deltas, loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to)?.changes ?? []);
   const counts = deltas.meta.counts;
   const bucket = (status: MatchStatus): number => counts[status] ?? 0;
   const shownDeltas = rows.reduce((sum, r) => sum + Object.keys(r.cells).length, 0);
