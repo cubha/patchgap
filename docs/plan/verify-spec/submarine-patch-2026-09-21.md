@@ -53,3 +53,22 @@
 - **화면은 LoL 홈에만 붙였다.** TFT/PUBG 홈은 산출물이 생긴 뒤에 같은 컴포넌트로 붙인다.
 - **`isReportableRecord` 우회 경로는 아직 화면에 없다.** 섹션이 `gamedata` 파일을 직접 읽으므로
   지표 없는 변경도 나오지만, PLAN이 말한 "델타 행에 배지를 얹는다"는 미구현이다.
+
+## Phase 3 판정 반영 (2026-09-21)
+
+### 반영함
+- **`REWORK_KEYWORDS` 테스트 부족**(scope-critic, `DECISION_CHANGED: yes`) — 상수에 낱말 6개가
+  있는데 테스트는 `"조합식"` 하나만 덮고 있었다. `it.each`로 **전수 고정**하고, 재작업 특례가
+  스킬 키를 무시한다는 규칙도 함께 박았다(개편은 스킬 전체를 갈아엎으므로). 21/21.
+
+### 무시함 — 사유
+- **`damageGrid`를 선택 필드로 바꾸라**(scope-critic, `DECISION_CHANGED: yes`). 근거는
+  "기존 축약본 7,217건에 그 필드가 없어 읽을 때 깨진다"였다. **실측으로 반증됐다**:
+  - 필수인 것은 **생산자**(`reduceTelemetry`)의 반환 타입이고, 그건 항상 그 필드를 만들므로 옳다.
+  - **소비자**는 둘 다 안전하다 — `run-pubg-aggregate.ts:84`가 캐스팅하는 `PubgReducedMatch`
+    (`aggregate/pubg-weapons.ts:18`)에는 `damageGrid`가 **아예 없다**(추가 필드는 무시된다).
+    `run-gamedata-diff.ts`의 `ReducedMatchFile`은 이미 `damageGrid?:` 선택이고 미보유 건수를
+    `::warning::`으로 보고한다.
+  - **결정적 증거**: 기존 커밋 축약본으로 `run-pubg-aggregate`를 재실행한 결과
+    `weapons-42.3.json`·`weapons-43.1.json`이 **바이트 동일**했다. `accuracy-comparison`·
+    `deltas`·`map-deltas`는 `generatedAt`만 달랐고(판정 내용 동일) 제약대로 복원했다.

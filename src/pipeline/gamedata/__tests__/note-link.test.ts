@@ -29,6 +29,33 @@ describe("entityMatches — 복합 엔티티명", () => {
   });
 });
 
+describe("linkNotes — 재작업 노트 특례 (REWORK_KEYWORDS 전수)", () => {
+  // scope-critic 지적(2026-09-21): 상수에 6개 낱말이 있는데 테스트는 "조합식" 하나만 덮고
+  // 있었다. 나머지는 추정이므로 **전부 고정**한다 — 넓으면 잠수함을 놓치고, 좁으면 재작업을
+  // 잠수함으로 오판한다. 목록을 늘릴 때 여기가 같이 늘어야 한다.
+  const REWORK_PHRASES = ["아이템 조합식", "재작업", "능력 개편", "리워크", "신규 아이템", "삭제"];
+
+  it.each(REWORK_PHRASES)("'%s' 노트는 그 엔티티의 수치 변경 전부를 설명한다", (phrase) => {
+    const notes: NoteLike[] = [{ id: "n1", entity: "테스트 아이템", skill: null, stat: phrase }];
+    // 필드 낱말이 전혀 안 맞는데도 걸려야 한다 — 그게 이 특례의 요점이다.
+    expect(linkNotes({ entityName: "테스트 아이템", fieldKeywords: ["공격력"] }, notes)).toEqual([
+      "n1",
+    ]);
+  });
+
+  it("재작업 낱말이 아니면 필드가 맞아야만 걸린다", () => {
+    const notes: NoteLike[] = [{ id: "n1", entity: "테스트 아이템", skill: null, stat: "체력" }];
+    expect(linkNotes({ entityName: "테스트 아이템", fieldKeywords: ["공격력"] }, notes)).toEqual([]);
+  });
+
+  it("재작업 특례는 스킬 키도 무시한다 — 개편은 스킬 전체를 갈아엎는다", () => {
+    const notes: NoteLike[] = [{ id: "n1", entity: "테스트 챔피언", skill: "능력 개편", stat: null }];
+    expect(
+      linkNotes({ entityName: "테스트 챔피언", fieldKeywords: [], skillKey: "R" }, notes)
+    ).toEqual(["n1"]);
+  });
+});
+
 describe("linkNotes — 필드 단위 대조", () => {
   it("★ 폭풍갈퀴 공격 속도는 공지됐다", () => {
     const ids = linkNotes({ entityName: "폭풍갈퀴", fieldKeywords: ["공격 속도"] }, NOTES_2617);
