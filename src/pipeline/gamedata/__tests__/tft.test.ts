@@ -69,21 +69,41 @@ describe("diffTft — 18.1 → 18.2 회귀 (실측 고정)", () => {
     expect([yi!.before, yi!.after]).toEqual([60, 55]);
   });
 
-  // **기준선 갱신(2026-09-21)**: 이전 고정값은 37(유닛 19 · 아이템 18)이었다. 사용자 지적으로
-  // 패치노트 원문을 전수 대조해 **오탐 4건**(금빛 운명+·프리즘 운명+ 골드, 남작의 소굴 능력치,
-  // 황금 드래곤 내구력 — 전부 노트가 값까지 똑같이 공지한 것)을 찾았고, 아이템 효과 사전으로
-  // 그 4건이 공지 쪽으로 옮겨갔다. 테스트를 통과시키려고 숫자를 낮춘 것이 아니라 **판정이
-  // 실제로 더 정확해져서** 낮아진 것이다 — 근거는 `docs/plan/VERIFY-tft-submarine-2026-09-21.md`.
-  it("18.1 → 18.2 잠수함은 33건이다 (유닛 19 · 아이템 14)", () => {
-    expect(submarines).toHaveLength(33);
-    expect(submarines.filter((c) => c.entityType === "unit")).toHaveLength(19);
+  // **기준선 갱신 2회(2026-09-21)** — 둘 다 판정이 *더 정확해져서* 줄었다. 테스트를 통과시키려고
+  // 숫자를 낮춘 것이 아니다. 근거는 전부 `docs/plan/VERIFY-tft-submarine-2026-09-21.md`.
+  //   37 → 33 : 아이템 효과 짝짓기가 CDragon **영문 키**를 한국어 노트에서 찾고 있었다.
+  //             오탐 4건(금빛 운명+·프리즘 운명+ 골드, 남작의 소굴 능력치, 황금 드래곤 내구력).
+  //   33 → 31 : 노트 카탈로그를 CDragon으로 보강해 미해소가 60 → 16줄로 줄었고, 덩굴정령·
+  //             어미 부리 공격력 2건이 **잠수함이 아니라 「값 불일치」**임이 드러났다.
+  //             이 둘은 사라진 것이 아니라 아래 `noteMismatch` 축으로 옮겨갔다.
+  it("18.1 → 18.2 잠수함은 31건이다 (유닛 17 · 아이템 14)", () => {
+    expect(submarines).toHaveLength(31);
+    expect(submarines.filter((c) => c.entityType === "unit")).toHaveLength(17);
     expect(submarines.filter((c) => c.entityType === "item")).toHaveLength(14);
   });
 
   it("★ 대상 수와 값 수는 다르다 — 화면은 대상 수로 말한다", () => {
     const entities = new Set(submarines.map((c) => `${c.entityType}:${c.entityKey}`));
-    expect(entities.size).toBe(27);
+    expect(entities.size).toBe(25);
     expect(submarines.length).toBeGreaterThan(entities.size);
+  });
+
+  // 카탈로그 보강의 **진짜 값**은 미해소 숫자가 아니라 이 둘이다. 노트가 같은 항목을 말했는데
+  // 값이 다르다 — 잠수함으로 세면 틀리고, 그냥 공지로 처리하면 **화면에서 사라진다**.
+  it("★ 덩굴정령·어미 부리는 잠수함이 아니라 「값 불일치」다", () => {
+    const mismatches = changes.filter((c) => c.noteMismatch);
+    expect(mismatches.map((c) => `${c.entityName} ${c.field}`)).toEqual([
+      "덩굴정령 공격력",
+      "어미 부리 공격력",
+    ]);
+
+    const bramble = mismatches.find((c) => c.entityName === "덩굴정령")!;
+    expect([bramble.before, bramble.after]).toEqual([110, 115]);
+    expect([bramble.noteMismatch!.noteBefore, bramble.noteMismatch!.noteAfter]).toEqual(["115", "120"]);
+
+    // 잠수함과 배타적이다 — 짝이 있어야 불일치가 성립한다.
+    expect(mismatches.every((c) => c.matchedNoteIds.length > 0)).toBe(true);
+    expect(submarines.some((c) => c.noteMismatch)).toBe(false);
   });
 
   it("부동소수점 잡음은 변경이 아니다 — 0.039999961 → 0.039999962 같은 것", () => {

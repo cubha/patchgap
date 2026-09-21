@@ -83,12 +83,64 @@ export function selectCurrentSetNames(file: DdFile, setNumber: number): string[]
   return [...names].sort();
 }
 
+/**
+ * Community Dragon 추출본의 최소 모양 — `data/cdragon/{version}/tft.json`(수치 축이 쓰는 그 파일).
+ * 이름만 읽는다. 수치는 `src/pipeline/gamedata/tft.ts`의 몫이다.
+ */
+export interface CdragonNameFile {
+  readonly set: string;
+  readonly units: Record<string, { readonly name?: string }>;
+  readonly items: Record<string, { readonly name?: string }>;
+}
+
+/**
+ * CDragon 추출본에서 **현행 세트** 표시명만 뽑는다.
+ *
+ * 왜 필요한가(2026-09-21 실측): DDragon `tft-champion.json`에는 덩굴정령·어미 부리·수호령류가
+ * **아예 없다**(카직스는 있다). 그래서 파서가 그 줄들을 「대상 미해소」로 버렸고 — 노트 179줄 중
+ * 60줄(34%) — 그 줄이 말한 수치 변경이 잠수함으로 잘못 잡혔다.
+ * 근거: `docs/plan/VERIFY-tft-submarine-2026-09-21.md` §3·§5.
+ *
+ * 세트 필터는 `isCurrentSetKey` **그대로** 쓴다. CDragon도 역대 전 세트를 담기 때문에
+ * (아이템 2,719개) 거르지 않으면 옛 세트 `TFT17_MarketOffering_1star4cost_Eve`의 표시명
+ * 「4단계」가 엔티티로 잡힌다 — DDragon에서 이미 겪은 「12골드」 오탐과 같은 종류다.
+ */
+export function cdragonSetNames(
+  file: CdragonNameFile,
+  setNumber: number
+): { units: string[]; items: string[] } {
+  // 스냅숏의 세트와 패치의 세트가 어긋나면 **조용히 옛 이름을 섞지 않고** 던진다 —
+  // 이 함수가 존재하는 이유 자체가 카탈로그가 조용히 틀렸던 사건이다.
+  if (file.set !== `TFTSet${setNumber}`) {
+    throw new Error(`CDragon 추출본의 세트가 패치와 어긋난다: ${file.set} ≠ TFTSet${setNumber}`);
+  }
+  const pick = (rec: Record<string, { readonly name?: string }>): string[] => {
+    const out: string[] = [];
+    const seen = new Set<string>();
+    for (const [key, entry] of Object.entries(rec)) {
+      if (!isCurrentSetKey(key, setNumber)) continue;
+      const name = entry.name?.trim();
+      if (!name || seen.has(name)) continue;
+      seen.add(name);
+      out.push(name);
+    }
+    return out;
+  };
+  return { units: pick(file.units), items: pick(file.items) };
+}
+
 export interface FetchTftCatalogOptions {
   patch: string;
   /** DDragon 버전. 생략하면 versions.json의 최신을 쓴다. */
   version?: string;
   locale?: string;
   fetchImpl?: typeof fetch;
+  /**
+   * CDragon 추출본. 주면 유닛·아이템 이름을 **더한다**(DDragon 이름은 그대로 둔다 — 두 출처의
+   * 표기가 다를 수 있고, 기존에 붙던 이름이 떨어지면 커밋된 노트 id가 통째로 바뀐다).
+   * 특성·증강은 추출본에 없으므로 손대지 않는다.
+   */
+  cdragon?: CdragonNameFile;
 }
 
 async function fetchDd(
@@ -159,10 +211,15 @@ export async function fetchTftCatalog(options: FetchTftCatalogOptions): Promise<
 
   const out: Record<string, string[]> = {};
   for (const [field, names] of entries) out[field] = names;
+
+  // 보강은 **덧셈만** 한다 — 기존 이름을 지우면 이미 커밋된 노트 id가 전부 바뀐다.
+  const extra = options.cdragon ? cdragonSetNames(options.cdragon, setNumber) : { units: [], items: [] };
+  const merge = (base: string[], add: string[]): string[] => [...new Set([...base, ...add])];
+
   return {
-    units: out.units ?? [],
+    units: merge(out.units ?? [], extra.units),
     traits: out.traits ?? [],
     augments: out.augments ?? [],
-    items: out.items ?? [],
+    items: merge(out.items ?? [], extra.items),
   };
 }

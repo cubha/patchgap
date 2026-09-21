@@ -13,7 +13,7 @@
 // 말하는 것이 이 프로젝트에서 더 큰 잘못이다.
 
 import { buildChange, diffValueMap, type GameDataValue } from "./diff";
-import { linkNotes, type NoteLike } from "./note-link";
+import { linkedNotes, noteValueMismatch, type NoteLike } from "./note-link";
 import type { GameDataChange } from "./types";
 
 /** 소환사의 협곡. `item.json`의 `maps` 키. */
@@ -132,6 +132,7 @@ export function diffLol(
     keywords: readonly string[],
     skillKey?: string
   ) => {
+    const linked = linkedNotes({ entityName, fieldKeywords: keywords, skillKey }, notes);
     out.push(
       buildChange({
         game: "lol",
@@ -143,7 +144,8 @@ export function diffLol(
         fieldPath,
         before: b,
         after: a,
-        matchedNoteIds: linkNotes({ entityName, fieldKeywords: keywords, skillKey }, notes),
+        matchedNoteIds: linked.map((l) => l.note.id),
+        noteMismatch: noteValueMismatch(linked, b, a),
       })
     );
   };

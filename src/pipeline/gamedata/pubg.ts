@@ -24,7 +24,7 @@
 import { canonicalWeaponKey } from "../aggregate/pubg-weapon-key";
 import { weaponDisplayName } from "../aggregate/pubg-weapons";
 import { buildChange } from "./diff";
-import { linkNotes, type NoteLike } from "./note-link";
+import { linkedNotes, noteValueMismatch, type NoteLike } from "./note-link";
 import type { GameDataChange } from "./types";
 
 /** 한 (무기, 부위)의 격자 요약. `top`은 최빈값 상위 `TOP_VALUES_KEPT`개. */
@@ -253,6 +253,7 @@ export function gridToChanges(
   return shifts.map((shift) => {
     const { entityKey, entityName } = pubgEntity(shift.weapon);
     const label = REASON_LABELS[shift.reason] ?? `${shift.reason} 피해량`;
+    const linked = linkedNotes({ entityName, fieldKeywords: ["피해량", "데미지"] }, notes);
     return buildChange({
       game: "pubg",
       patch,
@@ -266,7 +267,8 @@ export function gridToChanges(
       // **"피해량"만 받는다.** 43.1 노트가 말한 LMG 변경은 반동·조준 전환·스폰율·차량 피해 배수라
       // 플레이어 피해 격자를 설명하지 않는다 — 같은 무기가 언급됐다는 이유로 공지 처리하면 그것이
       // 알리바이가 된다. "차량 피해 배수"는 "피해량"을 포함하지 않으므로 걸리지 않는다.
-      matchedNoteIds: linkNotes({ entityName, fieldKeywords: ["피해량", "데미지"] }, notes),
+      matchedNoteIds: linked.map((l) => l.note.id),
+      noteMismatch: noteValueMismatch(linked, shift.before, shift.after),
     });
   });
 }

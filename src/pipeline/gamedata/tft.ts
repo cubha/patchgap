@@ -11,7 +11,7 @@
 // 수십 건 허위로 생긴다.
 
 import { buildChange, type GameDataValue } from "./diff";
-import { linkNotes, type NoteLike } from "./note-link";
+import { linkedNotes, noteValueMismatch, type NoteLike } from "./note-link";
 import type { GameDataChange } from "./types";
 
 export interface CdragonUnit {
@@ -131,6 +131,7 @@ export function diffTft(
     a: GameDataValue,
     keywords: readonly string[]
   ) => {
+    const linked = linkedNotes({ entityName, fieldKeywords: keywords }, notes);
     out.push(
       buildChange({
         game: "tft",
@@ -142,7 +143,8 @@ export function diffTft(
         fieldPath,
         before: b,
         after: a,
-        matchedNoteIds: linkNotes({ entityName, fieldKeywords: keywords }, notes),
+        matchedNoteIds: linked.map((l) => l.note.id),
+        noteMismatch: noteValueMismatch(linked, b, a),
       })
     );
   };
@@ -188,10 +190,12 @@ export function diffTft(
           fieldPath: `ability.${varName}`,
           before: a,
           after: b,
-          matchedNoteIds: linkNotes(
+          // `entityMatchSuffices` 경로는 노트가 이 수치를 뭐라 부르는지 모른다는 뜻이라
+          // 값을 견줄 수 없다 — 불일치 판정도 하지 않는다(`noteValueMismatch` 규약).
+          matchedNoteIds: linkedNotes(
             { entityName: name, fieldKeywords: [], entityMatchSuffices: true },
             notes
-          ),
+          ).map((l) => l.note.id),
         })
       );
     }
@@ -229,10 +233,12 @@ export function diffTft(
           fieldPath,
           before: a,
           after: b,
-          matchedNoteIds: linkNotes(
+          // `entityMatchSuffices` 경로는 노트가 이 수치를 뭐라 부르는지 모른다는 뜻이라
+          // 값을 견줄 수 없다 — 불일치 판정도 하지 않는다(`noteValueMismatch` 규약).
+          matchedNoteIds: linkedNotes(
             { entityName: name, fieldKeywords: [], entityMatchSuffices: true },
             notes
-          ),
+          ).map((l) => l.note.id),
         })
       );
     }

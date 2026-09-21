@@ -8,9 +8,9 @@
       "from": "16.17",
       "to": "16.18"
     },
-    "generatedAt": "2026-09-21T09:55:38.050Z",
+    "generatedAt": "2026-09-21T10:32:31.560Z",
     "changeCount": 44,
-    "submarineCount": 33
+    "submarineCount": 31
   },
   "changes": [
     {
@@ -291,7 +291,17 @@
       "before": 110,
       "after": 115,
       "relChange": 0.045454545454545456,
-      "matchedNoteIds": []
+      "matchedNoteIds": [
+        "note:tft:18.2:champion:덩굴정령:321bfc23",
+        "note:tft:18.2:champion:덩굴정령:6ebb4a52",
+        "note:tft:18.2:champion:덩굴정령:56e1c4af",
+        "note:tft:18.2:champion:덩굴정령:c9acbf01"
+      ],
+      "noteMismatch": {
+        "noteId": "note:tft:18.2:champion:덩굴정령:321bfc23",
+        "noteBefore": "115",
+        "noteAfter": "120"
+      }
     },
     {
       "id": "gdc:tft:18.2:DA_CrimsonRaptor18:stats.damage",
@@ -303,7 +313,15 @@
       "before": 60,
       "after": 55,
       "relChange": -0.08333333333333333,
-      "matchedNoteIds": []
+      "matchedNoteIds": [
+        "note:tft:18.2:champion:어미-부리:5ac178d8",
+        "note:tft:18.2:champion:어미-부리:81ef7d2d"
+      ],
+      "noteMismatch": {
+        "noteId": "note:tft:18.2:champion:어미-부리:5ac178d8",
+        "noteBefore": "50",
+        "noteAfter": "55"
+      }
     },
     {
       "id": "gdc:tft:18.2:DA_Draven18:stats.attackSpeed",

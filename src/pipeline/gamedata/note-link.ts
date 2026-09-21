@@ -16,6 +16,9 @@ export interface NoteLike {
   readonly entity: string | null;
   readonly skill?: string | null;
   readonly stat?: string | null;
+  /** 노트가 **적은** 값. 있으면 실제 수치와 견줄 수 있다(`noteValueMismatch`). */
+  readonly before?: string | null;
+  readonly after?: string | null;
 }
 
 /**
@@ -60,20 +63,27 @@ export interface LinkNotesInput {
   readonly entityMatchSuffices?: boolean;
 }
 
+/** 어떤 경로로 걸렸나. `"keyword"`만이 **노트가 이 필드를 이름으로 말했다**는 뜻이다. */
+export type NoteLinkVia = "rework" | "skill" | "entity" | "keyword";
+
+export interface LinkedNote {
+  readonly note: NoteLike;
+  readonly via: NoteLinkVia;
+}
+
 /**
- * 이 변경을 말한 노트 id 목록. **비어 있으면 잠수함 패치다.**
- *
- * 순서는 입력 노트 순서를 따른다 — 산출물이 실행마다 흔들리면 커밋 diff가 의미를 잃는다.
+ * 걸린 노트를 **경로와 함께** 돌려준다. 순서는 입력 노트 순서를 따른다 — 산출물이 실행마다
+ * 흔들리면 커밋 diff가 의미를 잃는다.
  */
-export function linkNotes(input: LinkNotesInput, notes: readonly NoteLike[]): string[] {
-  const out: string[] = [];
+export function linkedNotes(input: LinkNotesInput, notes: readonly NoteLike[]): LinkedNote[] {
+  const out: LinkedNote[] = [];
   for (const note of notes) {
     if (!entityMatches(input.entityName, note.entity)) continue;
     const text = `${note.skill ?? ""} ${note.stat ?? ""}`.trim();
 
     // 재작업 노트는 그 엔티티의 수치 변경 전부를 설명한다(위 헤더 ①의 반대 극단).
     if (REWORK_KEYWORDS.some((k) => text.includes(k))) {
-      out.push(note.id);
+      out.push({ note, via: "rework" });
       continue;
     }
 
@@ -85,14 +95,90 @@ export function linkNotes(input: LinkNotesInput, notes: readonly NoteLike[]): st
     // 알려주지 않아(effect[1]이 피해량인지 슬로우인지 모른다) 필드 낱말을 만들 수 없다.
     // 그 스킬을 언급한 노트가 하나라도 있으면 공지로 본다 — 보수적으로 틀리는 쪽을 고른다.
     if (input.entityMatchSuffices) {
-      out.push(note.id);
+      out.push({ note, via: "entity" });
       continue;
     }
     if (input.fieldKeywords.length === 0) {
-      if (input.skillKey) out.push(note.id);
+      if (input.skillKey) out.push({ note, via: "skill" });
       continue;
     }
-    if (input.fieldKeywords.some((k) => text.includes(k))) out.push(note.id);
+    if (input.fieldKeywords.some((k) => text.includes(k))) out.push({ note, via: "keyword" });
   }
   return out;
+}
+
+/**
+ * 이 변경을 말한 노트 id 목록. **비어 있으면 잠수함 패치다.**
+ *
+ * 순서는 입력 노트 순서를 따른다 — 산출물이 실행마다 흔들리면 커밋 diff가 의미를 잃는다.
+ */
+export function linkNotes(input: LinkNotesInput, notes: readonly NoteLike[]): string[] {
+  return linkedNotes(input, notes).map((linked) => linked.note.id);
+}
+
+/**
+ * 노트가 **같은 항목을 말했는데 값이 다르다**. 잠수함(말하지 않음)과 공지(말했고 맞음) 사이의
+ * 세 번째 자리다.
+ *
+ * 왜 필요한가(2026-09-21 실측): 노트 카탈로그를 보강해 덩굴정령 줄이 해소되자, 짝이 생겼다는
+ * 이유만으로 「공지됨」이 되어 *실제 불일치*가 화면에서 사라질 상황이 됐다 — 게임 파일은
+ * 110 → 115인데 노트는 「115 ⇒ 120」이라 적었다. 보이는 오탐이 **보이지 않는** 오탐으로 바뀌는
+ * 것이라 지금보다 나쁘다. 근거: `docs/plan/VERIFY-tft-submarine-2026-09-21.md` §3.
+ */
+export interface NoteValueMismatch {
+  readonly noteId: string;
+  readonly noteBefore: string;
+  readonly noteAfter: string;
+}
+
+/** `1,000%` → `1000`. 숫자 토큰이 **정확히 하나**일 때만 값으로 본다. */
+function soleNumber(raw: string): { value: number; percent: boolean } | null {
+  const text = raw.replace(/,/g, "");
+  const tokens = text.match(/-?\d+(?:\.\d+)?/g);
+  if (!tokens || tokens.length !== 1) return null;
+  const value = Number(tokens[0]);
+  if (!Number.isFinite(value)) return null;
+  return { value, percent: text.includes("%") };
+}
+
+/**
+ * 노트 표기와 게임 값이 같은가.
+ *
+ * `%`로 적힌 노트는 비율 값과 견준다(「20% ⇒ 15%」 ↔ `0.2 → 0.15`). 게임 값이 1을 넘으면
+ * 이미 퍼센트 단위로 적힌 것이므로 그대로 본다.
+ */
+function sameValue(noteText: string, game: number): boolean {
+  const parsed = soleNumber(noteText);
+  if (parsed === null) return false;
+  const scaled = parsed.percent && Math.abs(game) <= 1 ? game * 100 : game;
+  const scale = Math.max(Math.abs(parsed.value), Math.abs(scaled));
+  if (scale === 0) return parsed.value === scaled;
+  return Math.abs(parsed.value - scaled) / scale < 1e-6;
+}
+
+/**
+ * 걸린 노트 중 **값이 어긋난 것**. 없으면 `null`.
+ *
+ * 견줄 수 있는 것만 견준다 — 노트가 그 필드를 **이름으로 말한 경우**(`via: "keyword"`)이고,
+ * 양쪽 다 숫자 토큰 하나로 읽히는 표기일 때뿐이다. 레벨별 배열(`20/30/48`)이나 합성 표현
+ * (`15 + 주문력 30%`)은 어느 쪽을 대표로 삼을지 이 층이 정할 문제가 아니므로 건너뛴다.
+ * 값이 맞는 노트가 하나라도 있으면 불일치가 아니다 — 같은 필드를 여러 줄이 말할 수 있다.
+ */
+export function noteValueMismatch(
+  linked: readonly LinkedNote[],
+  before: number | string | null,
+  after: number | string | null
+): NoteValueMismatch | null {
+  if (typeof before !== "number" || typeof after !== "number") return null;
+  let candidate: NoteValueMismatch | null = null;
+  for (const { note, via } of linked) {
+    if (via !== "keyword") continue;
+    const noteBefore = note.before ?? null;
+    const noteAfter = note.after ?? null;
+    if (noteBefore === null || noteAfter === null) continue;
+    if (soleNumber(noteBefore) === null || soleNumber(noteAfter) === null) continue;
+    if (sameValue(noteBefore, before) && sameValue(noteAfter, after)) return null;
+    candidate ??= { noteId: note.id, noteBefore, noteAfter };
+  }
+  return candidate;
 }
