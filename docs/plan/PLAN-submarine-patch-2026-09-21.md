@@ -116,19 +116,30 @@
 | D2 | **PUBG를 넣을지** — 증거 등급이 B라 A와 섞이면 "증명"의 신뢰가 희석될 수 있다 | 넣되 등급을 화면에 명시 |
 | D3 | **과거 패치 소급** — `data/ddragon`에 16.17.1·16.18.1만 있어 지금은 26.17→26.18 한 쌍만 가능. CDN에 과거 버전이 남아 있어 받으면 26.16도 됨 | 26.16 버전 받아 두 쌍 확보 |
 
-## 6. SubTask
+## 6. SubTask · 라우팅 (2026-09-21 확정 · `--tdd --auto`)
+
+**라우팅: 전량 `[S]`** — `[P]` 후보가 4개 미만이다. ST-1이 ST-2·3·5의 타입 소스이고 전부 **같은 신규
+디렉토리**(`src/pipeline/gamedata/`)에 들어가 worktree merge가 충돌한다.
+전제: git ✅ / `verify.sh` ✅(`--ts-only` 지원) / gbc 미설치(브리지 스킵).
 
 | # | 내용 | 파일 | TDD |
 |---|---|---|---|
-| ST-1 | 타입 + 순수 diff 엔진 (게임 무관) | `src/pipeline/gamedata/types.ts`·`diff.ts` | **[TDD]** |
-| ST-2 | LoL 어댑터 — champion/item diff + 개별 champion JSON 스킬 수치 | `src/pipeline/gamedata/lol.ts` | **[TDD]** |
-| ST-3 | `run-ddragon.ts`에 개별 챔피언 JSON **보존** 추가(현재 받고 버림) | `scripts/run-ddragon.ts` | |
-| ST-4 | TFT 어댑터 — Community Dragon fetch + 유닛/아이템 수치 diff | `src/pipeline/gamedata/tft.ts` | **[TDD]** |
-| ST-5 | PUBG 어댑터 — 축약본 → 무기별 평균 피해, 공통 모드 제거 잔차 | `src/pipeline/gamedata/pubg.ts` | **[TDD]** |
-| ST-6 | 노트 대조 — 엔티티 정규화 재사용 + 필드↔한국어 지표 사전 | `src/pipeline/gamedata/note-link.ts` | **[TDD]** |
+| ST-1 | 타입 + 게임 무관 diff 엔진 | `src/pipeline/gamedata/{types,diff}.ts` | **[TDD]** |
+| ST-2 | LoL 어댑터 — champion/item diff + **`maps["11"]` 모드 게이트** | `src/pipeline/gamedata/lol.ts` | **[TDD]** |
+| ST-3 | 노트 대조 — 부분 문자열·복합 엔티티(`"A와 B"`) | `src/pipeline/gamedata/note-link.ts` | **[TDD]** |
+| ST-4 | 개별 챔피언 JSON **보존**(현재 받고 버림) | `scripts/run-ddragon.ts` | |
+| ST-5 | PUBG 피해 격자 추출·비교(부위별 최소 120히트) | `src/pipeline/gamedata/pubg.ts` | **[TDD]** |
+| ST-6 | 리듀서에 격자 보존 필드 추가 | `src/pipeline/collect/pubg/telemetry-reduce.ts` | |
 | ST-7 | 진입점 + npm 스크립트 | `scripts/run-gamedata-diff.ts` | |
-| ST-8 | 화면 — 델타 상세·대조표에 증거 줄, 방법론에 축 설명 | `src/components/gamedata/*`·각 상세 페이지 | |
-| ST-9 | SCOPE §3 갱신(D1 승인 시) + 방법론 문서 | `docs/scope/SCOPE-*.md`·`docs/design/UX-BRIEF.md` | |
+| ST-8 | `DisplayStatus`에 `submarine` 추가 + 정렬 위계 | `src/pipeline/shared/{display-status,submarine}.ts` | **[TDD]** |
+| ST-9 | 화면 — 「바뀐 것」 열 · 배지 · 로더 | `src/components/**` · `src/lib/**` | |
+| ST-10 | TFT 어댑터 (Community Dragon) — **D1 승인 대기, 보류** | `src/pipeline/gamedata/tft.ts` | **[TDD]** |
+| ST-11 | 문서 — UX-BRIEF·방법론 (D1 승인 시 SCOPE §3) | `docs/**` | |
+
+**핵심 구현 결정**: 잠수함은 `MatchStatus`가 아니라 **`DisplayStatus` 확장**이다
+(`src/pipeline/shared/display-status.ts:31`). `DISPLAY_SORT_PRIORITY`가
+`Record<DisplayStatus, number>` exhaustive 타입이라 키를 더하면 **tsc가 라벨·배지·정의표의 누락처를
+전부 컴파일 타임에 잡는다** — 이 저장소가 `status-order.ts` 헤더에 적어 둔 SSOT 장치를 그대로 쓴다.
 
 ## 7. 산출물 계약
 
