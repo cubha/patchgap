@@ -14,7 +14,7 @@
 // 세 게임이 이 함수를 공유하되 **렌더는 각자 한다** — 사용자 확정(2026-09-21): "게임별로
 // 넘어오는포멧도다르고 정보도 상이하니 판정기준만 동일하게하라는말이야".
 import { gameDataValue } from "@/lib/format";
-import type { GameDataChange } from "@/pipeline/gamedata/types";
+import type { GameDataChange, GameDataSource } from "@/pipeline/gamedata/types";
 
 export interface SubmarineCell {
   /** 사람이 읽는 필드명(`"공격력"`·`"가격"`). */
@@ -96,4 +96,38 @@ export function mismatchCellLines(changes: readonly GameDataChange[]): readonly 
     });
   }
   return out;
+}
+
+/** 대조 원본의 사람용 이름 — 게임마다 소스가 다르다는 사실을 화면이 그대로 말한다. */
+const SOURCE_LABELS: Record<string, string> = {
+  ddragon: "Data Dragon",
+  cdragon: "Community Dragon",
+  "telemetry-grid": "텔레메트리 피해 격자",
+};
+
+/** 출처 줄이 함께 말해야 하는 **패치 쌍**. 버전 라벨과 다른 축이다. */
+export interface SourcePatchPair {
+  readonly from: string;
+  readonly to: string;
+}
+
+/**
+ * 「대조 원본」 한 줄 — **버전 라벨과 패치 번호를 함께** 말한다.
+ *
+ * 왜(2026-09-21 사용자 지적, 원문: "공지값 불일치 관측이 16.17 → 16.18 이라는거야? 지금
+ * 패치버전이 18.1 → 18.2 인데?"): 게임사가 배포하는 원본 수치는 **클라이언트 버전**으로 이름이
+ * 붙고, 화면 상단의 패치 번호는 그것과 다른 축이다 — TFT 18.2 ↔ CDragon 16.18,
+ * LoL 26.18 ↔ DDragon 16.18.1(그 대응은 계산이 아니라 사실이라
+ * `src/pipeline/gamedata/snapshot-version.ts`가 소유한다). 둘을 잇는 말이 한 글자도 없으면
+ * 읽는 쪽은 "엉뚱한 패치의 데이터로 판정했다"로 읽는다 — 근거의 신뢰성이 이 사이트의 주장
+ * 전체인데 출처 줄이 그걸 깎고 있었다.
+ *
+ * 두 축이 **같은 게임에서는 덧붙이지 않는다**(PUBG는 게임사 수치 파일이 없어 텔레메트리 격자를
+ * 읽고, 그 라벨이 곧 패치 번호다). "42.3 → 43.1 (패치 42.3 → 43.1 시점)"은 같은 말을 두 번
+ * 하는 것이고, 같은 말이 두 번 나오면 독자는 둘 중 하나를 다른 뜻으로 읽는다.
+ */
+export function sourceLineText(source: GameDataSource, patch?: SourcePatchPair | null): string {
+  const head = `${SOURCE_LABELS[source.kind] ?? source.kind} ${source.from} → ${source.to}`;
+  if (!patch || (patch.from === source.from && patch.to === source.to)) return head;
+  return `${head} (패치 ${patch.from} → ${patch.to} 시점)`;
 }

@@ -48,6 +48,12 @@ export interface SubmarineSummary {
   /** 검출된 수치 변경 전체(공지된 것 포함). 0건 증명 문장의 분모. */
   readonly changeCount: number;
   readonly source: GameDataDiffFile["meta"]["source"];
+  /**
+   * 이 산출물이 대조한 **패치 쌍**. 출처 줄이 버전 라벨과 함께 말해야 한다 — 게임 데이터는
+   * 클라이언트 버전(16.18)으로 배포되고 화면 상단의 패치 번호(18.2)는 다른 축이라, 둘을 잇는
+   * 말이 없으면 "엉뚱한 패치로 판정했다"로 읽힌다(`sourceLineText`).
+   */
+  readonly patch: Pick<GameDataDiffFile["meta"], "from" | "to">;
 }
 
 export function summarizeGameData(file: GameDataDiffFile | null): SubmarineSummary | null {
@@ -59,6 +65,7 @@ export function summarizeGameData(file: GameDataDiffFile | null): SubmarineSumma
     mismatches: buildNoteMismatchIndexFromChanges(file.changes).entities(),
     changeCount: file.meta.changeCount,
     source: file.meta.source,
+    patch: { from: file.meta.from, to: file.meta.to },
   };
 }
 
