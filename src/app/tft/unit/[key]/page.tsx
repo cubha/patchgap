@@ -12,6 +12,7 @@ import Container from "@/components/Container";
 import ExternalLink from "@/components/ExternalLink";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
+import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { TFT_METRICS, effectStrength, tftEntityRows } from "@/components/tft/entityRows";
 import { TftFooter, TftUnavailable, deltaDisplay, formatMetricValue } from "@/components/tft/shared";
 import { entityTypeLabel, isLowerBetter, metricLabel, statusLabel } from "@/lib/format";
@@ -107,6 +108,8 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
   }
 
   const { deltas, notes } = bundle;
+  // 출처 줄("대조 원본: Community Dragon 18.1 → 18.2")의 재료 — 행 조립과 달리 meta가 필요하다.
+  const gameData = loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to);
   const rows = rowsOf(bundle);
   const row = rows.find((r) => r.key === unslug(key));
 
@@ -158,6 +161,53 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
               {matchedNotes.length === 0 ? " · 패치노트에 이 엔티티를 언급한 항목이 없다" : null}
             </p>
           </header>
+
+          {/* B안(2026-09-21 사용자 확정) — 선언 카드를 「패치노트 대조」로 바꾸고 두 구획을 둔다.
+              잠수함은 선언과 **같은 축이고 방향만 반대**라서(바꿨는데 말하지 않았다) 옆자리가 맞다.
+              카드를 하나 더 만드는 A안을 기각한 이유: 두 줄이 붙어 있어야 "말한 건 이건데 그럼
+              잠수함은 뭐냐"가 질문이 되기 전에 닫힌다. LoL 아이템 상세가 이미 이 제목을 쓴다. */}
+          <SectionCard
+            eyebrow="선언 대조"
+            title="패치노트 대조"
+            variant="glass"
+            action={
+              <span className="font-mono text-xs text-muted">
+                말한 것 {matchedNotes.length} · 말하지 않은 것 {row.submarineChanges.length}
+              </span>
+            }
+          >
+            <div className="flex items-center gap-2 px-5 pt-4 pb-2">
+              <span className="h-1.5 w-1.5 rounded-pill bg-muted" aria-hidden="true" />
+              <h3 className="font-body text-xs font-bold tracking-wide text-muted">패치노트가 말한 것</h3>
+              <span className="ml-auto font-mono text-xs text-muted">{matchedNotes.length}건</span>
+            </div>
+            {matchedNotes.length === 0 ? (
+              <p className="px-5 pb-4 text-sm text-muted">
+                이 엔티티를 언급한 패치노트 항목이 없다. 위 관측은 <strong className="text-fg">미공지 변화</strong>다.
+              </p>
+            ) : (
+              <ul className={`flex flex-col ${PANEL_SCROLL_BODY}`}>
+                {matchedNotes.map((n) => (
+                  <li key={n.id} className="flex flex-col gap-1 px-5 pb-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-xs uppercase tracking-wider text-muted">{n.direction}</span>
+                      <span className="text-sm font-bold text-fg">{n.stat ?? "—"}</span>
+                    </div>
+                    <span className="font-mono text-xs tabular-nums text-fg-2">
+                      {n.before ?? "—"} ⇒ {n.after ?? "—"}
+                    </span>
+                    <ExternalLink href={n.anchorUrl} className="w-fit font-mono text-xs text-accent hover:underline">
+                      원문 ↗
+                    </ExternalLink>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <div className="border-t border-border-soft" />
+
+            <SubmarineDetailBlock changes={row.submarineChanges} source={gameData?.meta.source ?? null} />
+          </SectionCard>
 
           <SectionCard eyebrow="관측" title="지표별 변화" variant="glass">
             <div className="grid gap-3 px-5 pb-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -212,35 +262,6 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
             )}
           </SectionCard>
 
-          <SectionCard
-            eyebrow="선언"
-            title="패치노트가 말한 것"
-            variant="glass"
-            action={<span className="font-mono text-xs text-muted">{matchedNotes.length}건</span>}
-          >
-            {matchedNotes.length === 0 ? (
-              <p className="px-5 py-8 text-center text-sm text-muted">
-                이 엔티티를 언급한 패치노트 항목이 없다. 위 관측은 <strong className="text-fg">미공지 변화</strong>다.
-              </p>
-            ) : (
-              <ul className={`flex flex-col ${PANEL_SCROLL_BODY}`}>
-                {matchedNotes.map((n) => (
-                  <li key={n.id} className="flex flex-col gap-1 border-t border-border-soft px-5 py-3">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-mono text-xs uppercase tracking-wider text-muted">{n.direction}</span>
-                      <span className="text-sm font-bold text-fg">{n.stat ?? "—"}</span>
-                    </div>
-                    <span className="font-mono text-xs tabular-nums text-fg-2">
-                      {n.before ?? "—"} ⇒ {n.after ?? "—"}
-                    </span>
-                    <ExternalLink href={n.anchorUrl} className="w-fit font-mono text-xs text-accent hover:underline">
-                      원문 ↗
-                    </ExternalLink>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </SectionCard>
         </div>
       </Container>
       <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.rows.length} />
