@@ -117,31 +117,9 @@ export default function TftMethodologyPage() {
             </dl>
           </SectionCard>
 
-          <SectionCard eyebrow="판정" title="게임 무관 — 엔진은 하나다" variant="glass">
-            <dl className="px-5 pb-4">
-              <Row label="유의성">
-                비율은 Newcombe 신뢰구간 + 두 비율 z검정, 평균은 정규근사. 다중비교는 Benjamini-Hochberg FDR(q&lt;0.10)로
-                전체 델타에 <strong className="text-fg">한 번</strong> 건다 — 버킷별로 따로 걸면 보정이 약해진다.
-              </Row>
-              <Row label="효과크기 바닥">
-                유의하기만 하면 미공지로 올리지 않는다. 순방률은 절대 2%p(승률과 같은 값 — 둘 다 기저 50% 이항),
-                등장률은 상대 25% + 저기저 차단, 평균 등수는 절대 0.15등이다. 바닥 미달은{" "}
-                <span className="font-mono text-xs">below-threshold</span>로 따로 센다.
-              </Row>
-              <Row label="정렬·표시">
-                미공지 → 간접효과 → 공지·불일치 → 공지·일치 → 바닥미달 → 표본부족 → 무변화. 이 순서와 보고 자격 판정은{" "}
-                <span className="font-mono text-xs">src/pipeline/shared/</span>의 단일 소스이고, 세 게임이 같은 파일을
-                본다. TFT 전용 술어는 하나도 만들지 않았다.
-              </Row>
-              <Row label="근거">
-                짝지어진 노트가 있으면 그 원문 앵커를 링크로 건다. 없으면 회색이고 링크를 걸지 않는다. 원천 매치 ID
-                표본은 아직 붙이지 않았다 — 보드 단위 샘플링 규칙을 정하지 않아서이고, 그래서 비어 있다.
-              </Row>
-            </dl>
-          </SectionCard>
-
           {/* 수치 축(2026-09-21, F9) — LoL·PUBG 방법론의 같은 카드. 판정 기준은 세 게임이 같고(게이트와
-              무관하게 전량 노출 · 배지 1종), 소스만 다르다 — TFT는 Community Dragon 수치 추출본. */}
+              무관하게 전량 노출 · 배지 1종), 소스만 다르다 — TFT는 Community Dragon 수치 추출본.
+              자리는 "관측" 뒤·"판정" 앞 — LoL·PUBG처럼 이 카드로 페이지를 닫지 않는다(verify-impl B3-1). */}
           <SectionCard eyebrow="수치 축" title="잠수함 패치는 어떻게 찾나" variant="glass">
             <div className="flex flex-col gap-3 p-5 text-sm leading-relaxed text-fg-2">
               <p>
@@ -162,6 +140,29 @@ export default function TftMethodologyPage() {
                 근거 없이 잠수함이라 부르지 않기 위해 덜 찾는 쪽을 고른 것입니다.
               </p>
             </div>
+          </SectionCard>
+
+          <SectionCard eyebrow="판정" title="게임 무관 — 엔진은 하나다" variant="glass">
+            <dl className="px-5 pb-4">
+              <Row label="유의성">
+                비율은 Newcombe 신뢰구간 + 두 비율 z검정, 평균은 정규근사. 다중비교는 Benjamini-Hochberg FDR(q&lt;0.10)로
+                전체 델타에 <strong className="text-fg">한 번</strong> 건다 — 버킷별로 따로 걸면 보정이 약해진다.
+              </Row>
+              <Row label="효과크기 바닥">
+                유의하기만 하면 미공지로 올리지 않는다. 순방률은 절대 2%p(승률과 같은 값 — 둘 다 기저 50% 이항),
+                등장률은 상대 25% + 저기저 차단, 평균 등수는 절대 0.15등이다. 바닥 미달은{" "}
+                <span className="font-mono text-xs">below-threshold</span>로 따로 센다.
+              </Row>
+              <Row label="정렬·표시">
+                잠수함 패치 → 미공지 → 간접효과 → 공지·불일치 → 공지·일치 → 바닥미달 → 표본부족 → 무변화. 이 순서와 보고 자격 판정은{" "}
+                <span className="font-mono text-xs">src/pipeline/shared/</span>의 단일 소스이고, 세 게임이 같은 파일을
+                본다. TFT 전용 술어는 하나도 만들지 않았다.
+              </Row>
+              <Row label="근거">
+                짝지어진 노트가 있으면 그 원문 앵커를 링크로 건다. 없으면 회색이고 링크를 걸지 않는다. 원천 매치 ID
+                표본은 아직 붙이지 않았다 — 보드 단위 샘플링 규칙을 정하지 않아서이고, 그래서 비어 있다.
+              </Row>
+            </dl>
           </SectionCard>
 
           <p className="text-xs leading-relaxed text-muted">
