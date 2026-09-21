@@ -14,6 +14,7 @@ import {
   kstDateOf,
   pubgPatchOfLabel,
   telemetryMajor,
+  lolLiveKstOf,
 } from "../patch-detect";
 
 describe("nextPatchCandidates — 다음 후보 둘(마이너 +1, 메이저 롤오버)", () => {
@@ -73,5 +74,32 @@ describe("PUBG — 텔레메트리 라벨", () => {
   it("형식이 아니면 null", () => {
     expect(telemetryMajor("pc-2018")).toBeNull();
     expect(pubgPatchOfLabel("nonsense")).toBeNull();
+  });
+});
+
+// 역산 재현이 잡은 불일치(2026-09-21 실측). `datePublished`는 **기사 발행 시각**이고 KR 라이브일이
+// 아니다 — 26.16·26.17은 KST 수요일에 발행됐는데 캘린더 `liveKst`는 목요일이다.
+//
+//   26.16  발행 KST 08-12(수)  →  liveKst 08-13(목)
+//   26.17  발행 KST 08-26(수)  →  liveKst 08-27(목)
+//   26.18  발행 KST 09-10(목)  →  liveKst 09-10(목)
+//
+// 그대로 썼으면 시간창이 하루 일찍 닫혀 **직전 패치의 마지막 날 매치를 잃는다**(`endTime`은
+// 다음 패치의 liveKst다). 이 저장소가 이미 적어 둔 관측 — "패치 라이브 요일이 전부 KST 목요일"
+// (`collect.yml` cron 주석) — 을 규칙으로 쓴다: **발행일 이후(당일 포함) 첫 목요일**.
+describe("lolLiveKstOf — 발행 시각 → KR 라이브일", () => {
+  it("★ 커밋된 캘린더 3건을 전부 복원한다 — 이게 합격 기준이다", () => {
+    expect(lolLiveKstOf("2026-08-11T18:00:00.000Z")).toBe("2026-08-13");
+    expect(lolLiveKstOf("2026-08-25T18:00:00.000Z")).toBe("2026-08-27");
+    expect(lolLiveKstOf("2026-09-09T18:00:00.000Z")).toBe("2026-09-10");
+  });
+
+  it("발행일이 이미 목요일이면 그날이다 — 다음 주로 밀지 않는다", () => {
+    expect(lolLiveKstOf("2026-09-09T18:00:00.000Z")).toBe("2026-09-10");
+  });
+
+  it("목요일 직후(금요일) 발행이면 다음 목요일이다", () => {
+    // KST 금요일 2026-09-11 발행 → 다음 목요일 09-17
+    expect(lolLiveKstOf("2026-09-11T00:00:00.000Z")).toBe("2026-09-17");
   });
 });
