@@ -176,9 +176,16 @@ export function reduceTelemetry(
  * 격자를 매치 파일에 담을 수 있는 크기로 접는다 — (무기, 부위)마다 표본 수·최대치·최빈 8개.
  *
  * 전체 히스토그램을 남기면 축약본이 3KB에서 수십 KB로 불어난다(MP5K 한 무기가 한 매치에서
- * 고유값 84개). 판정에 실제로 쓰는 것은 **최대치**이고(무방어·근거리 피격이 격자 상단이라
- * 선언값에 가장 가깝다), 최빈값은 교차 검증용이라 상위 8개면 충분하다.
+ * 고유값 84개).
+ *
+ * **상위 40개**를 남긴다(2026-09-21 정정, 8개에서 상향). 8개일 때 판별이 네 번 연속 틀렸고
+ * 원인이 전부 같았다 — 유의한 값이 8위 **밖으로 밀리기만 해도** "사라졌다"로 읽혔다
+ * (실측: VSS 몸통의 26.93은 161회 관측인데 후 표본에서 9위로 밀렸다). 40개면 표본 1% 하한을
+ * 넘는 값이 잘릴 일이 없다.
  */
+/** 부위별로 남기는 최빈값 개수. 8은 부족했다(위 주석). */
+const TOP_VALUES_KEPT = 40;
+
 function toGrid(
   counts: ReadonlyMap<string, ReadonlyMap<number, number>>
 ): Record<string, Record<string, { n: number; max: number; top: [number, number][] }>> {
@@ -193,7 +200,7 @@ function toGrid(
     }
     const top = [...values.entries()]
       .sort((a, b) => b[1] - a[1] || a[0] - b[0])
-      .slice(0, 8)
+      .slice(0, TOP_VALUES_KEPT)
       .map(([value, count]) => [value, count] as [number, number]);
     (out[weapon] ??= {})[reason] = { n, max, top };
   }

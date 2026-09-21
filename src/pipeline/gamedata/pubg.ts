@@ -63,7 +63,7 @@ export function mergeGrids(grids: readonly DamageGrid[]): DamageGrid {
           max: Math.max(prev.max, cell.max),
           top: [...counts.entries()]
             .sort((a, b) => b[1] - a[1] || a[0] - b[0])
-            .slice(0, 8)
+            .slice(0, TOP_VALUES_KEPT)
             .map(([v, c]) => [v, c] as const),
         };
       }
@@ -74,12 +74,29 @@ export function mergeGrids(grids: readonly DamageGrid[]): DamageGrid {
 
 const DEFAULT_TOLERANCE = 0.015;
 
-/** 최빈값 중 가장 높은 값. 격자 상단의 **안정적인** 대리값이다(절대 최대치와 달리 이상치에 둔감). */
-function topMax(cell: GridCell): number | null {
-  if (cell.top.length === 0) return null;
-  let max = 0;
-  for (const [value] of cell.top) if (value > max) max = value;
-  return max === 0 ? null : max;
+/** 병합 시 유지하는 최빈값 개수 — 리듀서(`telemetry-reduce.ts`)와 같아야 한다. */
+const TOP_VALUES_KEPT = 40;
+
+/** 유의값으로 인정하는 최소 관측 수. 표본이 얇으면 1% 하한이 무의미해진다(실측: Win94 머리 n=157에서 6회짜리가 유의값이 됐다). */
+const MIN_VALUE_COUNT = 20;
+
+/**
+ * **유의 격자값** — 그 부위에서 반복 관측된 피해값들(표본의 1% 이상, 최소 3회).
+ *
+ * 판별자를 여기까지 끌고 온 경위(2026-09-21, 실측으로 세 번 정정):
+ * ① `max` 단독 → FNFal이 172/149히트 이상치로 발화. ② `max` + 최빈 상위값 → DP12가
+ * `TorsoShot`만 20.45→17.56으로 발화(다른 부위는 17.64→17.64로 **정확히 동일**, 최빈 격자도
+ * 그대로였다 — 20.45는 top 8에도 없는 꼬리값이었다). ③ 최빈 1위 → ACE32 팔이 23.22(1947회)와
+ * 19.35(1937회)로 **0.5% 차이 동률**이라 표본이 바뀌자 순위만 뒤집혔고, 그것을 −16.7%로 읽어
+ * AK47·FNFal까지 무더기 37건이 나왔다.
+ *
+ * 셋 다 "어느 한 값이 움직였나"를 물었기 때문에 틀렸다. 진짜 수치 변경이면 **옛 값이 사라지고
+ * 새 값이 생긴다** — 기본 데미지든 부위 배율이든 방어구 감소율이든, 곱이 바뀌면 그 자리의 관측이
+ * 통째로 다른 값으로 옮겨간다. 그래서 순위도 극단도 아닌 **집합의 생존**을 본다.
+ */
+function significantValues(cell: GridCell): number[] {
+  const floor = Math.max(MIN_VALUE_COUNT, cell.n * 0.01);
+  return cell.top.filter(([, count]) => count >= floor).map(([value]) => value);
 }
 
 export function compareGrids(
@@ -97,26 +114,30 @@ export function compareGrids(
       const b = after[weapon][reason];
       if (!a || !b) continue;
       if (a.n < options.minHits || b.n < options.minHits) continue;
-      if (a.max === 0) continue;
-      const relChange = (b.max - a.max) / a.max;
-      if (Math.abs(relChange) <= tolerance) continue;
+      const prevValues = significantValues(a);
+      const nextValues = significantValues(b);
+      if (prevValues.length === 0 || nextValues.length === 0) continue;
 
-      // **두 추정자가 함께 움직여야 한다.** `max`는 표본이 커질수록 커지는 편향 추정자라
-      // 이상치 하나로 발화한다(실측: FNFal 51.93 → 56.59이 172/149히트에서 나왔다).
-      // `top`의 최댓값은 **최빈값 중 가장 높은 것**이라 극단값에 훨씬 둔감하다 — 둘이 같은
-      // 방향으로 함께 이동할 때만 격자가 실제로 옮겨간 것으로 본다.
-      const modeA = topMax(a);
-      const modeB = topMax(b);
-      if (modeA === null || modeB === null || modeA === 0) continue;
-      const modeChange = (modeB - modeA) / modeA;
-      if (Math.abs(modeChange) <= tolerance) continue;
-      if (Math.sign(modeChange) !== Math.sign(relChange)) continue;
+      // 옛 유의 격자값이 새 표본에도 살아 있으면 격자는 안 움직였다. 부동소수 왕복이 있으므로
+      // 허용 오차 안이면 같은 값으로 본다.
+      const survives = (v: number): boolean =>
+        v !== 0 && nextValues.some((w) => Math.abs((w - v) / v) <= tolerance);
+      const gone = prevValues.filter((v) => !survives(v));
+      if (gone.length === 0) continue;
+
+      // 사라진 값 중 **가장 흔했던 것**을 대표로 싣고(top은 빈도 내림차순), 새 격자에서 가장
+      // 가까운 값을 짝으로 둔다 — 그 자리의 관측이 어디로 옮겨갔는지 보여 준다.
+      const from = gone[0];
+      if (from === 0) continue;
+      const to = nextValues.reduce((best, w) =>
+        Math.abs(w - from) < Math.abs(best - from) ? w : best
+      );
       out.push({
         weapon,
         reason,
-        before: a.max,
-        after: b.max,
-        relChange,
+        before: from,
+        after: to,
+        relChange: (to - from) / from,
         nBefore: a.n,
         nAfter: b.n,
       });
@@ -163,4 +184,15 @@ export function gridToChanges(
       matchedNoteIds: linkNotes({ entityName, fieldKeywords: ["피해량", "데미지"] }, notes),
     });
   });
+}
+
+/** PUBG 노트는 `entity` 대신 `weaponKeys`를 갖는다 — 대조기가 읽는 `NoteLike`로 편다. */
+export interface PubgNoteLike {
+  readonly id: string;
+  readonly stat?: string | null;
+  readonly weaponKeys?: readonly string[];
+}
+
+export function expandPubgNotes(_notes: readonly PubgNoteLike[]): NoteLike[] {
+  throw new Error("TODO(ST-5b): weaponKeys → NoteLike 전개");
 }
