@@ -17,6 +17,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
+import SubmarineSection from "@/components/gamedata/SubmarineSection";
+import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import StatusBadge from "@/components/StatusBadge";
 import { PubgFooter, PubgPageHeader, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import PubgBriefingTabs from "@/components/pubg/PubgBriefingTabs";
@@ -53,6 +55,8 @@ export default function PubgPage() {
   const weaponAssets = new Set(assets?.weapons ?? []);
   const mapAssets = new Set(assets?.maps ?? []);
   const reportable = deltas.rows.filter((row) => isReportable(row.status));
+  // 수치 축(F9) — 산출물이 없으면 섹션이 통째로 빠진다. 세 게임이 같은 컴포넌트를 쓴다.
+  const submarine = summarizeGameData(loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to));
   const unannounced = reportable.filter((row) => row.status === "unannounced");
   const announced = reportable.filter((row) => row.status !== "unannounced");
   // 표 아래 원문 링크 1개 — 모든 공지 행이 같은 패치노트 페이지를 가리킨다(43.1 노트는 5항목 1페이지).
@@ -267,6 +271,10 @@ export default function PubgPage() {
               </ul>
             </SectionCard>
           ) : null}
+
+          {/* 수치 축(2026-09-21) — LoL·TFT와 **같은 컴포넌트**다(게임을 모른다). PUBG는 게임사가
+              수치 파일을 내지 않아 텔레메트리 피해 격자에서 읽는다. 산출물이 없으면 빠진다. */}
+          {submarine ? <SubmarineSection summary={submarine} /> : null}
 
           <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
         </div>

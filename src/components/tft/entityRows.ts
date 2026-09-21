@@ -11,6 +11,8 @@
 import { EFFECT_SIZE_FLOORS } from "@/pipeline/aggregate/stats";
 import { displayStatus, DISPLAY_SORT_PRIORITY, type DisplayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
+import { submarineOnlyEntities, type SubmarineIndex } from "@/pipeline/gamedata/submarine";
+import type { GameDataChange } from "@/pipeline/gamedata/types";
 import type { DeltaEntityType, DeltaMetric, DeltaRecord } from "@/pipeline/types";
 
 /** 열 순서 — 채택(등장) → 성과(순방·등수). LoL의 픽/밴 → 승률 순서와 같은 뜻이다. */
@@ -28,6 +30,8 @@ export interface TftEntityRow {
   strength: number;
   /** 근거 링크(짝지어진 노트가 있으면). */
   noteAnchor: string | null;
+  /** 이 엔티티의 원본 수치 변경 중 패치노트에 없는 것. 비면 수치 축에서는 할 말이 없다. */
+  submarineChanges: readonly GameDataChange[];
 }
 
 /**
@@ -47,7 +51,12 @@ export function effectStrength(record: DeltaRecord): number {
   return floor.value === 0 ? 0 : relative / floor.value;
 }
 
-export function buildTftEntityRows(rows: readonly DeltaRecord[], qAlpha?: number): TftEntityRow[] {
+export function buildTftEntityRows(
+  rows: readonly DeltaRecord[],
+  qAlpha?: number,
+  /** 수치 축 색인. 지표 축 게이트를 못 넘긴 잠수함도 **행을 만든다**(2026-09-21 사용자 지시). */
+  submarine?: SubmarineIndex
+): TftEntityRow[] {
   const byEntity = new Map<string, TftEntityRow>();
 
   for (const record of rows) {
@@ -68,6 +77,7 @@ export function buildTftEntityRows(rows: readonly DeltaRecord[], qAlpha?: number
         status: shown,
         strength,
         noteAnchor: record.evidence.noteAnchor,
+        submarineChanges: [],
       });
       continue;
     }
@@ -75,6 +85,31 @@ export function buildTftEntityRows(rows: readonly DeltaRecord[], qAlpha?: number
     if (DISPLAY_SORT_PRIORITY[shown] < DISPLAY_SORT_PRIORITY[existing.status]) existing.status = shown;
     if (strength > existing.strength) existing.strength = strength;
     existing.noteAnchor ??= record.evidence.noteAnchor;
+  }
+
+  // 수치 축을 얹는다. 지표 축 게이트(표본 부족·바닥 미달·무변화)는 **지표 축에만** 건다 —
+  // 패치노트에 없는 수치 변경은 지표가 안 움직여도 발견이다(2026-09-21 사용자 지시).
+  // 실측: TFT 18.1→18.2 잠수함 37건 중 26건이 델타 행을 갖지 않는다.
+  if (submarine) {
+    for (const row of byEntity.values()) {
+      const changes = submarine.changesOf(row.entityType, row.key.split(":")[1] ?? "");
+      if (changes.length === 0) continue;
+      row.submarineChanges = changes;
+      row.status = "submarine";
+    }
+    for (const entity of submarineOnlyEntities(submarine, new Set(byEntity.keys()))) {
+      const key = `${entity.entityType}:${entity.entityKey}`;
+      byEntity.set(key, {
+        key,
+        name: entity.entityName,
+        entityType: entity.entityType as TftEntityRow["entityType"],
+        cells: {},
+        status: "submarine",
+        strength: 0,
+        noteAnchor: null,
+        submarineChanges: entity.changes,
+      });
+    }
   }
 
   return [...byEntity.values()].sort(

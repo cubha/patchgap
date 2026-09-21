@@ -15,11 +15,20 @@ import type { DeltaRecord } from "../types";
 import { displayStatus, type DisplayStatus } from "../shared/display-status";
 import { isSubmarineChange, type GameDataChange, type GameDataDiffFile } from "./types";
 
+export interface SubmarineEntity {
+  readonly entityType: string;
+  readonly entityKey: string;
+  readonly entityName: string;
+  readonly changes: readonly GameDataChange[];
+}
+
 export interface SubmarineIndex {
   /** 잠수함 변경 총수 — 화면 캡션의 재료. */
   readonly count: number;
   changesOf(entityType: string, entityKey: string): readonly GameDataChange[];
   has(entityType: string, entityKey: string): boolean;
+  /** 엔티티 단위 목록. 표가 **행을 새로 만들 때** 쓴다. */
+  entities(): readonly SubmarineEntity[];
 }
 
 /** `entityType:entityKey` — `DeltaRecord`와 `GameDataChange`가 같은 키 체계를 쓴다(실측 확인:
@@ -52,7 +61,32 @@ export function buildSubmarineIndexFromChanges(
     count,
     changesOf: (entityType, entityKey) => byEntity.get(keyOf(entityType, entityKey)) ?? [],
     has: (entityType, entityKey) => byEntity.has(keyOf(entityType, entityKey)),
+    entities: () =>
+      [...byEntity.values()].map((list) => ({
+        entityType: list[0].entityType,
+        entityKey: list[0].entityKey,
+        entityName: list[0].entityName,
+        changes: list,
+      })),
   };
+}
+
+/**
+ * 표가 **행을 새로 만들어야 하는** 잠수함 엔티티 — 이미 행이 있는 것은 뺀다.
+ *
+ * 왜 이 함수가 따로 있는가(2026-09-21 사용자 지시): 지표 축은 게이트를 건다 — 표본 부족·효과크기
+ * 바닥 미달·무변화는 `isReportableRecord`가 거르고, 그게 맞다. **잠수함은 그 게이트와 무관하다.**
+ * 패치노트에 없는 수치 변경이라는 사실 자체가 발견이고, 지표가 안 움직였다는 것은 그 사실을
+ * 약화시키지 않는다(오히려 "바꿨는데 효과가 없었다"는 별도의 정보다).
+ *
+ * 실측 근거: TFT 18.1→18.2의 잠수함 37건 중 **26건이 델타 행을 갖지 않는다**(강철나무·마트료시카
+ * 모루 등 아이템 21종). 게이트를 그대로 두면 표가 그 26건을 한 번도 말하지 않는다.
+ */
+export function submarineOnlyEntities(
+  index: SubmarineIndex,
+  existingKeys: ReadonlySet<string>
+): readonly SubmarineEntity[] {
+  return index.entities().filter((e) => !existingKeys.has(keyOf(e.entityType, e.entityKey)));
 }
 
 /** 여러 게임의 diff 파일을 한 색인으로. */

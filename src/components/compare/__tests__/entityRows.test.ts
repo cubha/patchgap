@@ -150,7 +150,7 @@ describe("buildEntityRows — 엔티티 1행·인라인 지표", () => {
       delta({ id: "champion:A:banRate", entityKey: "A", entityName: "A", metric: "banRate", delta: 0.09, after: 0.19, ci: [0.06, 0.12], matchedNoteIds: ["n2"] }),
     ];
     const [a] = buildEntityRows(rowsMulti, "all", Q);
-    expect(a.representative.id).toBe("champion:A:banRate");
+    expect(a.representative?.id).toBe("champion:A:banRate");
     expect(a.maxAbsDelta).toBeCloseTo(0.09);
     expect(a.matchedNoteIds.sort()).toEqual(["n1", "n2"]);
   });

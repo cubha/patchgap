@@ -26,7 +26,7 @@ import type { DeltaEntityType, DeltaRecord } from "@/pipeline/types";
 import { type LaneAxis, parseLaneAxis } from "@/lib/lane";
 import { DISPLAY_SORT_PRIORITY, displayStatus, type DisplayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
-import type { SubmarineIndex } from "@/pipeline/gamedata/submarine";
+import { submarineOnlyEntities, type SubmarineIndex } from "@/pipeline/gamedata/submarine";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 
 // 술어는 shared에 있다(홈과 같은 잣대) — 기존 호출부·테스트를 위해 여기서 재export한다.
@@ -83,8 +83,13 @@ export interface EntityCompareRow {
   cells: Partial<Record<EntityMetric, EntityCell>>;
   /** 셀 중 최우선 표시 키. */
   status: DisplayStatus;
-  /** |Δ| 최대 보고 셀 — 상세 링크·강조에 쓴다. */
-  representative: DeltaRecord;
+  /**
+   * |Δ| 최대 보고 셀 — 상세 링크·강조에 쓴다.
+   *
+   * **`null`일 수 있다**(2026-09-21): 잠수함 전용 행은 관측이 하나도 없다. 그런 행은 상세로
+   * 갈 자리가 없으므로 이름을 링크 없이 그린다 — 없는 링크를 만들지 않는다.
+   */
+  representative: DeltaRecord | null;
   /**
    * 이 엔티티의 **원본 수치 변경 중 패치노트에 없는 것**(2026-09-21). 비어 있으면 수치 축에서는
    * 할 말이 없다는 뜻이다.
@@ -198,6 +203,28 @@ export function buildEntityRows(
     row.status = changes.length > 0 ? "submarine" : status;
     row.representative = representative;
     row.maxAbsDelta = maxAbs;
+  }
+
+  // 지표 축 게이트를 **통과하지 못한** 잠수함 엔티티도 행을 만든다(2026-09-21 사용자 지시).
+  // 표본 부족·바닥 미달·무변화는 지표 축의 규율이지 수치 축의 규율이 아니다 — 패치노트에 없는
+  // 수치 변경은 그 자체로 발견이고, 지표가 안 움직였다는 사실이 그것을 약화시키지 않는다.
+  if (submarine) {
+    for (const entity of submarineOnlyEntities(submarine, new Set(out.map((r) => r.key)))) {
+      if (entity.entityType !== "champion" && entity.entityType !== "item") continue;
+      out.push({
+        key: `${entity.entityType}:${entity.entityKey}`,
+        entityType: entity.entityType,
+        entityKey: entity.entityKey,
+        entityName: entity.entityName,
+        lane,
+        cells: {},
+        status: "submarine",
+        representative: null,
+        submarineChanges: entity.changes,
+        matchedNoteIds: [],
+        maxAbsDelta: 0,
+      });
+    }
   }
 
   return out.sort(

@@ -169,9 +169,15 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                   <td className="px-4 py-3 font-body">
                     <div className="flex items-center gap-3">
                       <EntityIcon entityType={row.entityType} entityKey={row.entityKey} name={row.entityName} size={40} />
-                      <Link href={itemHref(row.representative.id)} className="font-bold text-fg hover:text-accent hover:underline">
-                        {row.entityName}
-                      </Link>
+                      {/* 잠수함 전용 행은 관측이 하나도 없어 상세로 갈 자리가 없다 —
+                          없는 링크를 만들지 않고 이름만 그린다(2026-09-21). */}
+                      {row.representative ? (
+                        <Link href={itemHref(row.representative.id)} className="font-bold text-fg hover:text-accent hover:underline">
+                          {row.entityName}
+                        </Link>
+                      ) : (
+                        <span className="font-bold text-fg">{row.entityName}</span>
+                      )}
                     </div>
                   </td>
                   {ENTITY_METRICS.map((metric: EntityMetric) => {
