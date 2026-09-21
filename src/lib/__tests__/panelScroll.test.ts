@@ -18,6 +18,11 @@ describe("상한은 데이터량이 아니라 구조로 보장된다", () => {
     ["src/app/tft/unit/[key]/page.tsx", "TFT 상세 — 한 엔티티에 노트가 여러 건일 수 있다"],
     ["src/app/pubg/page.tsx", "PUBG 브리핑 — 공지 표·미공지 목록·맵 그리드"],
     ["src/components/pubg/PubgCompareTable.tsx", "PUBG 대조표 — 무기 수가 는다"],
+    // 2026-09-21 — 이 목록이 **파일 이름을 손으로 세는 게이트**라 F9 신설 컴포넌트가 그대로
+    // 빠져나갔다(사용자 재지적: "미공지 Gap의 패치노트에 없는 수치 변경 섹션이 스크롤 폭발").
+    // 세 게임 홈이 같은 컴포넌트를 쓰므로 여기 한 줄이 세 화면을 동시에 묶는다.
+    ["src/components/gamedata/SubmarineSection.tsx", "잠수함 섹션 — 대상 수는 패치가 정한다(TFT 18.2 실측 31종)"],
+    ["src/components/gamedata/SubmarineDetailBlock.tsx", "잠수함 상세 구획 — 한 엔티티의 변경 값 수도 데이터가 정한다"],
   ] as const;
 
   for (const [file, why] of GROWABLE) {

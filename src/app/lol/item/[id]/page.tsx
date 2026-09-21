@@ -271,6 +271,7 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
                 mismatchChanges={mismatchChanges}
                 source={gameData?.meta.source ?? null}
                 notePatch={pair.to}
+                patch={gameData ? { from: gameData.meta.from, to: gameData.meta.to } : null}
               />
             </SectionCard>
             <SectionCard eyebrow="원인" title="추정 원인(LLM)" className="flex h-80 flex-col">

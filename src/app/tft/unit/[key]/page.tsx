@@ -212,6 +212,7 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
               mismatchChanges={row.mismatchChanges}
               source={gameData?.meta.source ?? null}
               notePatch={deltas.meta.to}
+              patch={gameData ? { from: gameData.meta.from, to: gameData.meta.to } : null}
             />
           </SectionCard>
 

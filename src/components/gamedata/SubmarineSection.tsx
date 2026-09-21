@@ -8,16 +8,10 @@ import Link from "next/link";
 
 import SectionCard from "@/components/SectionCard";
 import { statusLabel } from "@/lib/format";
-import { mismatchCellLines, submarineCellText } from "./submarineText";
+import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
+import { mismatchCellLines, sourceLineText, submarineCellText } from "./submarineText";
 import type { SubmarineSummary } from "@/lib/gamedata";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
-
-/** 대조 원본의 사람용 이름 — 게임마다 소스가 다르다는 사실을 화면이 그대로 말한다. */
-const SOURCE_LABELS: Record<string, string> = {
-  ddragon: "Data Dragon",
-  cdragon: "Community Dragon",
-  "telemetry-grid": "텔레메트리 피해 격자",
-};
 
 function formatRel(rel: number | null): string | null {
   if (rel === null) return null;
@@ -39,7 +33,7 @@ export interface SubmarineSectionProps {
 }
 
 export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionProps) {
-  const { entities, mismatches, changeCount, source } = summary;
+  const { entities, mismatches, changeCount, source, patch } = summary;
 
   return (
     <SectionCard
@@ -52,6 +46,12 @@ export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionPr
         <span className="font-mono text-xs text-muted">대상 {entities.length}종</span>
       }
     >
+      {/* **본문 전체가 하나의 스크롤러다**(2026-09-21 사용자 지적: "미공지 Gap의 패치노트에 없는
+          수치 변경 섹션이 스크롤 폭발"). 이 카드는 목록이 둘(잠수함 · 공지값 불일치)이라 각
+          목록에 상한을 걸면 카드 높이가 640×2가 된다 — 상한의 단위는 목록이 아니라 **카드**다.
+          출처 줄은 스크롤러 **밖**에 남겨 항상 보이게 한다(`CausesPanel`의 캡션과 같은 규율:
+          근거를 말하는 줄은 스크롤로 사라지면 안 된다). 규약 소유자는 `@/lib/panelScroll`. */}
+      <div className={PANEL_SCROLL_BODY}>
       {entities.length === 0 ? (
         <div className="p-5">
           <p className="text-sm text-fg-2">
@@ -167,8 +167,9 @@ export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionPr
           </ul>
         </div>
       ) : null}
+      </div>
       <p className="border-t border-border-soft px-5 py-2 font-mono text-[0.65rem] text-muted">
-        대조 원본: {SOURCE_LABELS[source.kind] ?? source.kind} {source.from} → {source.to}
+        대조 원본: {sourceLineText(source, patch)}
       </p>
     </SectionCard>
   );

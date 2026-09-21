@@ -213,6 +213,7 @@ export default async function PubgWeaponPage({ params }: PageProps) {
             mismatchChanges={mismatchChanges}
             source={gameData?.meta.source ?? null}
             notePatch={deltas.meta.to}
+            patch={gameData ? { from: gameData.meta.from, to: gameData.meta.to } : null}
           />
         </SectionCard>
 

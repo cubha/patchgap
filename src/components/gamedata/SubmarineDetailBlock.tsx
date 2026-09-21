@@ -13,15 +13,9 @@
 //
 // 값 포맷은 `submarineText`가 소유한다 — 여기서 `change.before`를 직접 찍지 않는다(float32 잡음).
 import { gameDataValue, statusLabel } from "@/lib/format";
-import { mismatchCellLines } from "./submarineText";
+import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
+import { mismatchCellLines, sourceLineText, type SourcePatchPair } from "./submarineText";
 import type { GameDataChange, GameDataSource } from "@/pipeline/gamedata/types";
-
-/** 대조 원본의 사람용 이름 — `SubmarineSection`과 같은 표(게임마다 소스가 다르다는 사실을 말한다). */
-const SOURCE_LABELS: Record<string, string> = {
-  ddragon: "Data Dragon",
-  cdragon: "Community Dragon",
-  "telemetry-grid": "텔레메트리 피해 격자",
-};
 
 function relText(rel: number | null): string | null {
   if (rel === null) return null;
@@ -41,6 +35,12 @@ export interface SubmarineDetailBlockProps {
    * 패치노트이므로 양쪽을 다 적어야 "대조 원본"이라는 말이 카드의 범위와 맞는다.
    */
   notePatch?: string | null;
+  /**
+   * 게임 데이터 쪽 **패치 쌍**(2026-09-21). `source`의 버전 라벨(16.17 → 16.18)은 패치 번호와
+   * 다른 축이라, 둘을 잇지 않으면 "다른 패치의 데이터로 판정했다"로 읽힌다 — 홈 출처 줄과
+   * 같은 함수(`sourceLineText`)를 쓴다.
+   */
+  patch?: SourcePatchPair | null;
 }
 
 export default function SubmarineDetailBlock({
@@ -48,9 +48,15 @@ export default function SubmarineDetailBlock({
   mismatchChanges = [],
   source = null,
   notePatch = null,
+  patch = null,
 }: SubmarineDetailBlockProps) {
   return (
     <div className="flex flex-col">
+      {/* 홈 `SubmarineSection`과 같은 규율(2026-09-21): 두 구획을 **하나의** 스크롤러에 넣어
+          카드 단위로 상한을 걸고, 출처 줄은 밖에 남겨 항상 보이게 한다. 한 엔티티의 변경 값이
+          몇 개까지 나올지는 데이터가 정하지 그 구조가 정하지 않는다
+          (`feedback_structural_caps_not_current_data`). */}
+      <div className={PANEL_SCROLL_BODY}>
       <div className="flex items-center gap-2 px-5 pt-4 pb-2">
         <span className="h-1.5 w-1.5 rounded-pill bg-accent" aria-hidden="true" />
         <h3 className="font-body text-xs font-bold tracking-wide text-accent">패치노트가 말하지 않은 것</h3>
@@ -111,10 +117,11 @@ export default function SubmarineDetailBlock({
         </div>
       ) : null}
 
+      </div>
       {source ? (
         <p className="border-t border-border-soft px-5 py-2 font-mono text-[0.65rem] text-muted">
           대조 원본: {notePatch ? `패치노트 ${notePatch} · ` : ""}
-          {SOURCE_LABELS[source.kind] ?? source.kind} {source.from} → {source.to}
+          {sourceLineText(source, patch)}
         </p>
       ) : null}
     </div>
