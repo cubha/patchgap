@@ -65,3 +65,35 @@ export function submarineCellLines(changes: readonly GameDataChange[]): readonly
     after: gameDataValue(change.after),
   }));
 }
+
+/** 「공지값 불일치」 한 줄 — 게임 값과 **노트가 적은 값**을 나란히 말해야 뜻이 선다. */
+export interface MismatchLine extends SubmarineLine {
+  readonly noteBefore: string;
+  readonly noteAfter: string;
+}
+
+/**
+ * 공지값 불일치는 **접지 않는다.**
+ *
+ * "외 N건"은 나머지를 상세에서 본다는 약속인데, 실측 2건(덩굴정령·어미 부리)은 PvE 몬스터라
+ * 델타 행이 0건이고 따라서 상세 라우트가 없다 — 접으면 갈 곳 없는 약속이 된다(LoL 잠수함
+ * 전용 행에서 이미 한 번 밟은 결함, acceptance-critic V1). 수가 적어서가 아니라 **갈 곳이
+ * 없어서** 끝까지 말한다.
+ *
+ * 값은 여기서만 만든다 — `change.before`를 화면이 직접 찍으면 float32 잡음이 돌아온다.
+ */
+export function mismatchCellLines(changes: readonly GameDataChange[]): readonly MismatchLine[] {
+  const out: MismatchLine[] = [];
+  for (const change of changes) {
+    const mismatch = change.noteMismatch;
+    if (!mismatch) continue;
+    out.push({
+      field: change.field,
+      before: gameDataValue(change.before),
+      after: gameDataValue(change.after),
+      noteBefore: mismatch.noteBefore,
+      noteAfter: mismatch.noteAfter,
+    });
+  }
+  return out;
+}

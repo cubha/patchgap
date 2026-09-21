@@ -99,6 +99,8 @@ export interface EntityCompareRow {
    * 그런 건은 홈의 잠수함 섹션이 맡는다(`SubmarineSection`) — 표의 의미를 지키기 위한 경계다.
    */
   submarineChanges: readonly GameDataChange[];
+  /** 노트가 말했는데 **값이 어긋난** 변경(2026-09-21). 잠수함과 같은 칸에 그린다. */
+  mismatchChanges: readonly GameDataChange[];
   /** 셀들의 matchedNoteIds 합집합 — 좌 내비 선택과의 연결. */
   matchedNoteIds: string[];
   maxAbsDelta: number;
@@ -138,7 +140,9 @@ export function buildEntityRows(
   lane: LaneAxis,
   qAlpha?: number,
   /** 수치 축 색인. 주면 해당 엔티티의 상태를 `submarine`으로 덮는다(증거 등급이 더 높다). */
-  submarine?: SubmarineIndex
+  submarine?: SubmarineIndex,
+  /** 「공지값 불일치」 색인. 같은 규칙이되 잠수함보다 한 칸 뒤다. */
+  mismatch?: SubmarineIndex
 ): EntityCompareRow[] {
   const order: string[] = [];
   const byKey = new Map<string, EntityCompareRow>();
@@ -164,6 +168,7 @@ export function buildEntityRows(
         lane,
         cells: { [record.metric]: newCell(record, recordLane) },
         status: displayStatus(record, qAlpha),
+        mismatchChanges: [],
         representative: record,
         submarineChanges: [],
         matchedNoteIds: [...record.matchedNoteIds],
@@ -199,8 +204,11 @@ export function buildEntityRows(
     // 수치 축이 지표 축을 덮는다 — 통계가 "움직였다"고 말하는 것과 게임사 데이터가 "바꿨다"고
     // 말하는 것은 증거 등급이 다르다(display-status.ts DISPLAY_SORT_PRIORITY 헤더 참고).
     const changes = submarine?.changesOf(row.entityType, row.entityKey) ?? [];
+    const mismatched = mismatch?.changesOf(row.entityType, row.entityKey) ?? [];
     row.submarineChanges = changes;
-    row.status = changes.length > 0 ? "submarine" : status;
+    row.mismatchChanges = mismatched;
+    row.status =
+      changes.length > 0 ? "submarine" : mismatched.length > 0 ? "note-mismatch" : status;
     row.representative = representative;
     row.maxAbsDelta = maxAbs;
   }
@@ -208,8 +216,10 @@ export function buildEntityRows(
   // 지표 축 게이트를 **통과하지 못한** 잠수함 엔티티도 행을 만든다(2026-09-21 사용자 지시).
   // 표본 부족·바닥 미달·무변화는 지표 축의 규율이지 수치 축의 규율이 아니다 — 패치노트에 없는
   // 수치 변경은 그 자체로 발견이고, 지표가 안 움직였다는 사실이 그것을 약화시키지 않는다.
-  if (submarine) {
-    for (const entity of submarineOnlyEntities(submarine, new Set(out.map((r) => r.key)))) {
+  for (const [index, kind] of ([submarine, mismatch] as const).entries()) {
+    if (!kind) continue;
+    const status = index === 0 ? ("submarine" as const) : ("note-mismatch" as const);
+    for (const entity of submarineOnlyEntities(kind, new Set(out.map((r) => r.key)))) {
       if (entity.entityType !== "champion" && entity.entityType !== "item") continue;
       out.push({
         key: `${entity.entityType}:${entity.entityKey}`,
@@ -218,9 +228,10 @@ export function buildEntityRows(
         entityName: entity.entityName,
         lane,
         cells: {},
-        status: "submarine",
+        status,
         representative: null,
-        submarineChanges: entity.changes,
+        submarineChanges: status === "submarine" ? entity.changes : [],
+        mismatchChanges: status === "note-mismatch" ? entity.changes : [],
         matchedNoteIds: [],
         maxAbsDelta: 0,
       });

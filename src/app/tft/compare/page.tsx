@@ -77,7 +77,10 @@ export default function TftComparePage() {
   const rows = tftEntityRows(deltas, loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to)?.changes ?? []);
   // 수치 축 열은 이 패치쌍에 잠수함이 있을 때만 만든다 — 0건인 쌍에서 열 전체가 `—`가 되는 것을
   // 막는다. 0건 증명은 홈 `SubmarineSection`이 맡는다(중복 금지).
-  const showSubmarine = rows.some((row) => row.submarineChanges.length > 0);
+  // 「바뀐 것」 열은 수치 축 전체를 담는다 — 잠수함이든 공지값 불일치든 같은 질문의 답이다.
+  const showSubmarine = rows.some(
+    (row) => row.submarineChanges.length > 0 || row.mismatchChanges.length > 0
+  );
   const counts = deltas.meta.counts;
   const bucket = (status: MatchStatus): number => counts[status] ?? 0;
   const shownDeltas = rows.reduce((sum, r) => sum + Object.keys(r.cells).length, 0);
@@ -161,7 +164,7 @@ export default function TftComparePage() {
                       ))}
                       {showSubmarine ? (
                         <td className="px-4 py-3">
-                          <SubmarineCell changes={row.submarineChanges} />
+                          <SubmarineCell changes={row.submarineChanges} mismatchChanges={row.mismatchChanges} />
                         </td>
                       ) : null}
                       <td className="px-4 py-3">

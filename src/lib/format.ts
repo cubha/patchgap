@@ -120,6 +120,9 @@ const STATUS_LABELS: Record<DisplayStatus | MatchStatus, string> = {
   // 수치 축(2026-09-21) — 통칭을 쓴다. 게이머가 실제로 쓰는 말이라 인지 비용이 0이고,
   // 정확한 정의("패치노트에 없는 원본 수치 변경")는 방법론과 상세가 말한다.
   submarine: "잠수함 패치",
+  // 노트가 같은 항목을 말했는데 **적힌 값이 실제와 다르다**. 잠수함(말하지 않음)과도, 공지(말했고
+  // 맞음)와도 다른 세 번째 자리라 배지를 따로 둔다 — 하나로 뭉치면 둘 중 어느 쪽이든 거짓말이 된다.
+  "note-mismatch": "공지값 불일치",
   announced: "공지",
   "announced-anomaly": "공지 · 이상 관측",
   unannounced: "미공지",

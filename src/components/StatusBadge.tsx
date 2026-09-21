@@ -22,6 +22,9 @@ const STATUS_CLASSES: Record<string, string> = {
   // 수치 축(F9) — 세 게임 공통. 지표 축 미공지(테두리 accent)와 구분되게 **채운다**: 통계가 아니라
   // 게임 데이터가 증명한 변경이라는 뜻(SubmarineSection의 pill과 같은 색).
   submarine: "border-accent bg-accent text-accent-on",
+  // 같은 수치 축이라 **같이 채우고**, 색만 warn으로 가른다 — 노트가 말하긴 했으므로 잠수함과
+  // 같은 골드로 찍으면 두 발견이 한 덩어리로 읽힌다(신규 토큰 0개).
+  "note-mismatch": "border-warn bg-warn text-accent-on",
   unpaired: "border-border-soft text-muted",
   // raw MatchStatus → 같은 색
   "announced-consistent": "border-border text-fg-2",

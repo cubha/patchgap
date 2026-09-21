@@ -48,23 +48,31 @@ export interface PubgCompareTableProps {
    * 서버가 넘기는 평문 배열이라 클라이언트 경계를 그대로 건넌다(색인은 여기서 만든다).
    */
   submarineChanges?: readonly GameDataChange[];
+  /** 노트가 말했는데 값이 어긋난 변경(2026-09-21). 잠수함과 같은 칸에 그린다. */
+  mismatchChanges?: readonly GameDataChange[];
 }
 
-export default function PubgCompareTable({ rows, submarineChanges = [] }: PubgCompareTableProps) {
+export default function PubgCompareTable({
+  rows,
+  submarineChanges = [],
+  mismatchChanges = [],
+}: PubgCompareTableProps) {
   const [filter, setFilter] = useState<string>("all");
   const [sort, setSort] = useState<SortKey>("effect");
-  const submarineByKey = useMemo(() => {
+  const byEntityKey = (changes: readonly GameDataChange[]): Map<string, GameDataChange[]> => {
     const map = new Map<string, GameDataChange[]>();
-    for (const change of submarineChanges) {
+    for (const change of changes) {
       const list = map.get(change.entityKey);
       if (list) list.push(change);
       else map.set(change.entityKey, [change]);
     }
     return map;
-  }, [submarineChanges]);
+  };
+  const submarineByKey = useMemo(() => byEntityKey(submarineChanges), [submarineChanges]);
+  const mismatchByKey = useMemo(() => byEntityKey(mismatchChanges), [mismatchChanges]);
   // 수치 축 열은 이 패치쌍에 잠수함이 있을 때만 만든다 — 42.3→43.1처럼 0건인 쌍에서 열 전체가
   // `—`가 되는 것을 막는다. 0건 증명은 홈 `SubmarineSection`이 맡는다(중복 금지).
-  const showSubmarine = submarineByKey.size > 0;
+  const showSubmarine = submarineByKey.size > 0 || mismatchByKey.size > 0;
 
   // 노이즈 상태(바닥 미달·변화 없음·표본 부족)는 이 표에 없다(C1).
   const judged = useMemo(() => rows.filter((row) => isReportable(row.status)), [rows]);
@@ -156,7 +164,10 @@ export default function PubgCompareTable({ rows, submarineChanges = [] }: PubgCo
                 </td>
                 {showSubmarine ? (
                   <td className="py-2.5 pr-3">
-                    <SubmarineCell changes={submarineByKey.get(row.weaponKey) ?? []} />
+                    <SubmarineCell
+                      changes={submarineByKey.get(row.weaponKey) ?? []}
+                      mismatchChanges={mismatchByKey.get(row.weaponKey) ?? []}
+                    />
                   </td>
                 ) : null}
                 <td className="py-2.5 pr-1">

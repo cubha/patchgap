@@ -9,7 +9,8 @@
 //
 // 서버 전용 의존이 없다 — LoL 대조표(`DeltaTable.tsx`)가 `"use client"`라 여기에 `server-only`가
 // 섞이면 번들이 깨진다.
-import { submarineCellLines, submarineCellText } from "./submarineText";
+import { statusLabel } from "@/lib/format";
+import { mismatchCellLines, submarineCellLines, submarineCellText } from "./submarineText";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 
 function Line({ field, before, after }: { field: string; before: string; after: string }) {
@@ -23,8 +24,32 @@ function Line({ field, before, after }: { field: string; before: string; after: 
   );
 }
 
+function MismatchLines({ changes }: { changes: readonly GameDataChange[] }) {
+  return (
+    <div className="flex flex-col gap-2">
+      {mismatchCellLines(changes).map((line) => (
+        <div key={line.field} className="flex flex-col gap-0.5">
+          <span className="font-body text-xs font-bold text-fg-2">{line.field}</span>
+          <span className="whitespace-nowrap font-mono text-xs tabular-nums text-muted">
+            {line.before} → <span className="font-bold text-warn">{line.after}</span>
+          </span>
+          {/* 노트가 적은 값을 같은 칸에서 말해야 "불일치"가 주장이 아니라 대조가 된다. */}
+          <span className="whitespace-nowrap font-mono text-[0.65rem] tabular-nums text-muted">
+            노트 {line.noteBefore} ⇒ {line.noteAfter}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export interface SubmarineCellProps {
   changes: readonly GameDataChange[];
+  /**
+   * 노트가 말했는데 값이 어긋난 변경(2026-09-21). 잠수함과 **같은 칸**에 산다 — 둘 다 "게임
+   * 데이터에서 무엇이 바뀌었나"의 답이고, 칸을 나누면 표가 한 열 더 넓어질 뿐 뜻이 갈리지 않는다.
+   */
+  mismatchChanges?: readonly GameDataChange[];
   /**
    * 이 행에 상세 화면이 있는가. `false`면 접지 않고 전부 나열한다.
    * 기본값이 `true`인 이유: 세 게임 중 둘(TFT·PUBG)은 상세가 늘 있다.
@@ -32,10 +57,25 @@ export interface SubmarineCellProps {
   collapsible?: boolean;
 }
 
-export default function SubmarineCell({ changes, collapsible = true }: SubmarineCellProps) {
-  if (changes.length === 0) {
+export default function SubmarineCell({
+  changes,
+  mismatchChanges = [],
+  collapsible = true,
+}: SubmarineCellProps) {
+  if (changes.length === 0 && mismatchChanges.length === 0) {
     // 수치 축에서 할 말이 없는 행 — 관측이 없는 것과 같은 어휘(`—`)를 쓴다.
     return <span className="px-1 font-mono text-xs text-muted">—</span>;
+  }
+
+  if (changes.length === 0) {
+    return (
+      <div className="flex flex-col gap-1">
+        <span className="w-fit rounded-sm bg-warn px-1.5 py-0.5 font-mono text-[0.6rem] font-bold text-accent-on">
+          {statusLabel("note-mismatch")}
+        </span>
+        <MismatchLines changes={mismatchChanges} />
+      </div>
+    );
   }
 
   if (!collapsible) {

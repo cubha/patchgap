@@ -206,7 +206,12 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
 
             <div className="border-t border-border-soft" />
 
-            <SubmarineDetailBlock changes={row.submarineChanges} source={gameData?.meta.source ?? null} notePatch={deltas.meta.to} />
+            <SubmarineDetailBlock
+              changes={row.submarineChanges}
+              mismatchChanges={row.mismatchChanges}
+              source={gameData?.meta.source ?? null}
+              notePatch={deltas.meta.to}
+            />
           </SectionCard>
 
           <SectionCard eyebrow="관측" title="지표별 변화" variant="glass">

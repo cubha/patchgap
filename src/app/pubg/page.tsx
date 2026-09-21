@@ -18,7 +18,7 @@ import Link from "next/link";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { gameDataEntityCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import StatusBadge from "@/components/StatusBadge";
 import { PubgFooter, PubgPageHeader, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import PubgBriefingTabs from "@/components/pubg/PubgBriefingTabs";
@@ -115,7 +115,7 @@ export default function PubgPage() {
           {/* 공지 대조가 기본 탭, 미공지가 두 번째 탭(2026-09-17 사용자 지시 — 홈과 같은 순서). */}
           <PubgBriefingTabs
             contentCount={announced.length}
-            gapCount={unannounced.length + (submarine?.entities.length ?? 0)}
+            gapCount={unannounced.length + gameDataEntityCount(submarine)}
             content={
               <SectionCard
                 eyebrow="대조"

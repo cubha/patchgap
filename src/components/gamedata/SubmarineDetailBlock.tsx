@@ -13,6 +13,7 @@
 //
 // 값 포맷은 `submarineText`가 소유한다 — 여기서 `change.before`를 직접 찍지 않는다(float32 잡음).
 import { gameDataValue, statusLabel } from "@/lib/format";
+import { mismatchCellLines } from "./submarineText";
 import type { GameDataChange, GameDataSource } from "@/pipeline/gamedata/types";
 
 /** 대조 원본의 사람용 이름 — `SubmarineSection`과 같은 표(게임마다 소스가 다르다는 사실을 말한다). */
@@ -29,6 +30,8 @@ function relText(rel: number | null): string | null {
 
 export interface SubmarineDetailBlockProps {
   changes: readonly GameDataChange[];
+  /** 노트가 말했는데 값이 어긋난 변경. 있으면 아래 구획을 하나 더 그린다. */
+  mismatchChanges?: readonly GameDataChange[];
   /** 대조 원본. 없으면(산출물 미생성) 출처 줄을 그리지 않는다 — 없는 근거를 지어내지 않는다. */
   source?: GameDataSource | null;
   /**
@@ -42,6 +45,7 @@ export interface SubmarineDetailBlockProps {
 
 export default function SubmarineDetailBlock({
   changes,
+  mismatchChanges = [],
   source = null,
   notePatch = null,
 }: SubmarineDetailBlockProps) {
@@ -77,6 +81,35 @@ export default function SubmarineDetailBlock({
           ))}
         </ul>
       )}
+
+      {mismatchChanges.length > 0 ? (
+        // 「말하지 않은 것」과 별개의 구획이다 — 이쪽은 노트가 **말하긴 했다**.
+        <div className="border-t border-border-soft">
+          <div className="flex items-center gap-2 px-5 pt-4 pb-2">
+            <span className="h-1.5 w-1.5 rounded-pill bg-warn" aria-hidden="true" />
+            <h3 className="font-body text-xs font-bold tracking-wide text-warn">
+              패치노트와 값이 다른 것
+            </h3>
+            <span className="ml-auto font-mono text-xs text-muted">{mismatchChanges.length}건</span>
+          </div>
+          <ul className="flex flex-col">
+            {mismatchCellLines(mismatchChanges).map((line) => (
+              <li key={line.field} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 pb-3">
+                <span className="rounded-sm bg-warn px-1.5 py-0.5 font-mono text-[0.65rem] font-bold text-accent-on">
+                  {statusLabel("note-mismatch")}
+                </span>
+                <span className="text-sm font-bold text-fg">{line.field}</span>
+                <span className="font-mono text-sm tabular-nums text-fg-2">
+                  {line.before} → <span className="text-fg">{line.after}</span>
+                </span>
+                <span className="font-mono text-xs tabular-nums text-muted">
+                  패치노트 {line.noteBefore} ⇒ {line.noteAfter}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
 
       {source ? (
         <p className="border-t border-border-soft px-5 py-2 font-mono text-[0.65rem] text-muted">

@@ -132,8 +132,12 @@ export interface ReleaseNoteStreamProps {
    * (이 파일은 client라 데이터를 직접 읽을 수 없다).
    */
   gapLead?: ReactNode;
-  /** `gapLead`가 든 수치 축 건수. `gapCount`(두 갈래 합)에서 빼 지표 축 건수를 낸다. */
-  submarineCount?: number;
+  /**
+   * `gapLead`가 든 **수치 축** 대상 수 — 잠수함 + 공지값 불일치. `gapCount`(두 갈래 합)에서
+   * 빼 지표 축 건수를 낸다. 이름이 `submarineCount`가 아닌 이유: 2026-09-21에 수치 축이
+   * 두 갈래가 됐고, 이름이 한쪽만 가리키면 다음 사람이 불일치를 빼먹는다.
+   */
+  gameDataCount?: number;
 }
 
 function groupKey(group: ReleaseStreamGroup): string {
@@ -158,7 +162,7 @@ export default function ReleaseNoteStream({
   skinPreviews,
   miscSections = [],
   gapLead,
-  submarineCount = 0,
+  gameDataCount = 0,
 }: ReleaseNoteStreamProps) {
   const { selectedLane } = useAmbient();
   const [tab, setTab] = useState<StreamTab>("content");
@@ -236,7 +240,7 @@ export default function ReleaseNoteStream({
           <div className="flex items-baseline gap-2 border-b border-border-soft px-5 py-3">
             <span className="text-xs font-bold text-muted">발견 · 지표 축</span>
             <h3 className="font-display text-sm font-bold text-fg">패치노트에 없는데 움직인 것</h3>
-            <span className="ml-auto font-mono text-xs text-muted">{gapCount - submarineCount}건</span>
+            <span className="ml-auto font-mono text-xs text-muted">{gapCount - gameDataCount}건</span>
           </div>
         </>
       ) : null}

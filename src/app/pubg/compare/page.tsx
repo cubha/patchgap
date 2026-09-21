@@ -59,6 +59,7 @@ export default function PubgComparePage() {
               <PubgCompareTable
                 rows={deltas.rows}
                 submarineChanges={submarine?.submarines ?? []}
+                mismatchChanges={(submarine?.mismatches ?? []).flatMap((e) => e.changes)}
               />
             </div>
           </SectionCard>

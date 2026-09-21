@@ -94,3 +94,46 @@ describe("tftEntityRows — 대조표·상세·경로가 같은 행 집합을 �
     expect(rows.map((r) => r.key)).toEqual(["unit:DA_18_KhaZix"]);
   });
 });
+
+// 2026-09-21 — 「공지값 불일치」도 **같은 규칙**으로 행을 만들어야 한다. 실측이 그 극단이다:
+// 덩굴정령·어미 부리는 PvE 몬스터라 플레이어 보드 델타가 **0건**이고, 잠수함도 아니다
+// (노트가 그 항목을 말했다). 이 경로가 없으면 두 발견이 화면 어디에도 안 뜬다.
+describe("tftEntityRows — 공지값 불일치도 행이 된다", () => {
+  const mismatched: GameDataChange = {
+    ...change("DA_Brambleback18", "덩굴정령", "공격력"),
+    before: 110,
+    after: 115,
+    matchedNoteIds: ["note-bramble"],
+    noteMismatch: { noteId: "note-bramble", noteBefore: "115", noteAfter: "120" },
+  };
+
+  it("★ 델타도 없고 잠수함도 아닌 엔티티가 행이 된다", () => {
+    const rows = tftEntityRows(DELTAS, [mismatched]);
+    const row = rows.find((r) => r.key === "unit:DA_Brambleback18");
+    expect(row).toBeDefined();
+    expect(row!.status).toBe("note-mismatch");
+    expect(row!.submarineChanges).toHaveLength(0);
+    expect(row!.mismatchChanges).toHaveLength(1);
+  });
+
+  it("★ 같은 엔티티에 둘 다 있으면 잠수함이 배지를 이긴다 — 말하지 않은 것이 더 앞선다", () => {
+    const rows = tftEntityRows(DELTAS, [
+      mismatched,
+      change("DA_Brambleback18", "덩굴정령", "체력"),
+    ]);
+    const row = rows.find((r) => r.key === "unit:DA_Brambleback18");
+    expect(row!.status).toBe("submarine");
+    // 내역은 둘 다 든다 — 배지가 하나라고 사실이 하나가 되는 것은 아니다.
+    expect(row!.submarineChanges).toHaveLength(1);
+    expect(row!.mismatchChanges).toHaveLength(1);
+  });
+
+  it("불일치 행이 잠수함 행보다 뒤에 정렬된다", () => {
+    const rows = tftEntityRows(DELTAS, [
+      mismatched,
+      change("DA_18_ElderDragon", "장로 드래곤", "공격력"),
+    ]);
+    const order = rows.map((r) => r.status);
+    expect(order.indexOf("submarine")).toBeLessThan(order.indexOf("note-mismatch"));
+  });
+});

@@ -27,7 +27,7 @@ import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
 import { detailRouteIds } from "@/lib/detailRoutes";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
-import { loadGameDataDiff, submarineChangesFor } from "@/lib/gamedata";
+import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import { displayStatus, isNoiseStatus } from "@/pipeline/shared/display-status";
 import { listPatchPairs, loadChampions, loadDeltas, loadItems, loadNotes, type PatchPair } from "@/lib/data";
 import { entityTypeLabel, fmtInt, itemIdFromSlug, itemSlug } from "@/lib/format";
@@ -176,6 +176,7 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
   // 수치 축(F9) — 이 엔티티에서 **게임사가 바꿨는데 말하지 않은 것**. 지표 축(위 판정)과 직교한다.
   const gameData = loadGameDataDiff("lol", pair.from, pair.to);
   const submarineChanges = submarineChangesFor(gameData, delta.entityType, delta.entityKey);
+  const mismatchChanges = noteMismatchChangesFor(gameData, delta.entityType, delta.entityKey);
   const rawDeltas = readDeltasRaw(pair);
   const hash = rawDeltas ? snapshotHash(rawDeltas) : null;
   const splashUrl = championSplashUrl(delta);
@@ -265,7 +266,12 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
             <SectionCard eyebrow="선언 대조" title="패치노트 대조" className="flex min-h-80 flex-col">
               <NoteContrastPanel result={noteContrast} />
               <div className="border-t border-border-soft" />
-              <SubmarineDetailBlock changes={submarineChanges} source={gameData?.meta.source ?? null} notePatch={pair.to} />
+              <SubmarineDetailBlock
+                changes={submarineChanges}
+                mismatchChanges={mismatchChanges}
+                source={gameData?.meta.source ?? null}
+                notePatch={pair.to}
+              />
             </SectionCard>
             <SectionCard eyebrow="원인" title="추정 원인(LLM)" className="flex h-80 flex-col">
               <CausesPanel causes={delta.causes} llm={delta.llm} notesById={notesById} generatedAt={generatedAt} />

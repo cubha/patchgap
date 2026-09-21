@@ -107,7 +107,9 @@ function MetricCell({ cell, labelled }: { cell: EntityCell; labelled: boolean })
 export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
   // 수치 축 열은 **이 패치쌍에 잠수함이 있을 때만** 만든다. 26.17→26.18처럼 0건인 쌍에서는
   // 열 전체가 `—`가 되는데, 0건 증명은 홈 `SubmarineSection`이 이미 맡고 있다(중복 금지).
-  const showSubmarine = rows.some((row) => row.submarineChanges.length > 0);
+  const showSubmarine = rows.some(
+    (row) => row.submarineChanges.length > 0 || row.mismatchChanges.length > 0
+  );
   const scrollerRef = useRef<HTMLDivElement>(null);
   const theadRef = useRef<HTMLTableSectionElement>(null);
 
@@ -208,7 +210,11 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                       {/* 상세로 갈 자리가 없는 행(`representative === null` = 델타 0건)은
                           접지 않는다 — "외 N건"은 나머지를 상세에서 본다는 약속인데
                           그 상세가 없다(2026-09-21 acceptance-critic V1). */}
-                      <SubmarineCell changes={row.submarineChanges} collapsible={row.representative !== null} />
+                      <SubmarineCell
+                        changes={row.submarineChanges}
+                        mismatchChanges={row.mismatchChanges}
+                        collapsible={row.representative !== null}
+                      />
                     </td>
                   ) : null}
                   <td className="px-4 py-3 font-body">

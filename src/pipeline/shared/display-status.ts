@@ -29,13 +29,14 @@ import { isSignificantDelta } from "./significance";
 
 /** 화면 배지·칩·정의표가 쓰는 키.
  *
- * `submarine`(2026-09-21)은 **`MatchStatus`에 없는 유일한 값**이다 — 판정 엔진은 지표가 어떻게
+ * `submarine`·`note-mismatch`(2026-09-21)는 **`MatchStatus`에 없는 값**이다 — 판정 엔진은 지표가 어떻게
  * 움직였나만 보고, 원본 수치가 바뀌었는지는 모른다(`src/pipeline/gamedata/*`가 따로 대조한다).
  * 이 union에 더하는 것으로 `DISPLAY_SORT_PRIORITY`·`STATUS_LABELS`가 exhaustive Record라
  * **라벨·정렬 누락을 tsc가 잡는다** — `status-order.ts` 헤더가 적어 둔 그 장치를 그대로 쓴다.
  */
 export type DisplayStatus =
   | "submarine"
+  | "note-mismatch"
   | "announced"
   | "announced-anomaly"
   | "unannounced"
@@ -83,9 +84,13 @@ export function displayStatus(record: DeltaRecord, qAlpha?: number): DisplayStat
  * 잠수함이 맨 위인 근거는 중요도가 아니라 **증거 등급**이다(2026-09-21 사용자 확정). 미공지·간접
  * 영향은 통계가 "움직였다"고 말하고, 잠수함은 게임사 데이터가 "바꿨다"고 말한다. 반박 가능한 것과
  * 반박 불가능한 것을 같은 줄에 둘 수 없다.
+ *
+ * 「공지값 불일치」는 바로 그 아래다 — 같은 등급(게임사 데이터 대조)이지만 노트가 그 항목을
+ * 말하긴 했다. 말하지 않은 것이 말했는데 틀린 것보다 앞선다.
  */
 export const DISPLAY_SORT_PRIORITY: Record<DisplayStatus, number> = {
-  submarine: -1,
+  submarine: -2,
+  "note-mismatch": -1,
   unannounced: 0,
   "announced-anomaly": 1,
   announced: 2,

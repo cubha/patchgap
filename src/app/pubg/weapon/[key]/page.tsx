@@ -11,7 +11,7 @@ import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
-import { loadGameDataDiff, submarineChangesFor } from "@/lib/gamedata";
+import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import PubgDetailSplash, { type PubgDetailStat } from "@/components/pubg/PubgDetailSplash";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { isReportable, loadPubg, loadPubgAssets } from "@/lib/pubgData";
@@ -88,6 +88,7 @@ export default async function PubgWeaponPage({ params }: PageProps) {
   // 수치 축(F9) — PUBG는 게임사가 수치 파일을 배포하지 않아 텔레메트리 피해 격자를 대조한다.
   const gameData = loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to);
   const submarineChanges = submarineChangesFor(gameData, "weapon", weaponKey);
+  const mismatchChanges = noteMismatchChangesFor(gameData, "weapon", weaponKey);
 
   // 자산 유무를 **빌드 타임에** 판정한다 — 없는 무기가 실제로 9종 있다(RPD 포함).
   const assets = loadPubgAssets();
@@ -206,7 +207,12 @@ export default async function PubgWeaponPage({ params }: PageProps) {
 
           <div className="border-t border-border-soft" />
 
-          <SubmarineDetailBlock changes={submarineChanges} source={gameData?.meta.source ?? null} notePatch={deltas.meta.to} />
+          <SubmarineDetailBlock
+            changes={submarineChanges}
+            mismatchChanges={mismatchChanges}
+            source={gameData?.meta.source ?? null}
+            notePatch={deltas.meta.to}
+          />
         </SectionCard>
 
         <SectionCard eyebrow="근거" title="이렇게 판정했습니다" variant="glass">

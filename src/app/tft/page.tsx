@@ -9,7 +9,7 @@ import ExternalLink from "@/components/ExternalLink";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
 import TftBriefingTabs from "@/components/tft/TftBriefingTabs";
-import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { gameDataEntityCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import StatusBadge from "@/components/StatusBadge";
 import {
   TftFooter,
@@ -238,7 +238,7 @@ export default function TftPage() {
               증거 등급이다(통계가 "움직였다"고 말하는 것과 게임사 파일이 "바꿨다"고 말하는 것). */}
           <TftBriefingTabs
             contentCount={announced.length}
-            gapCount={unannounced.length + (submarine?.entities.length ?? 0)}
+            gapCount={unannounced.length + gameDataEntityCount(submarine)}
             content={
               <SectionCard
                 eyebrow="대조"

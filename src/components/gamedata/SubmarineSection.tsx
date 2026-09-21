@@ -8,7 +8,7 @@ import Link from "next/link";
 
 import SectionCard from "@/components/SectionCard";
 import { statusLabel } from "@/lib/format";
-import { submarineCellText } from "./submarineText";
+import { mismatchCellLines, submarineCellText } from "./submarineText";
 import type { SubmarineSummary } from "@/lib/gamedata";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 
@@ -39,7 +39,7 @@ export interface SubmarineSectionProps {
 }
 
 export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionProps) {
-  const { entities, changeCount, source } = summary;
+  const { entities, mismatches, changeCount, source } = summary;
 
   return (
     <SectionCard
@@ -108,6 +108,65 @@ export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionPr
           })}
         </ul>
       )}
+      {mismatches.length > 0 ? (
+        // **잠수함과 같은 카드, 다른 구획.** 같은 대조에서 나온 발견이라 카드를 나누면 독자가
+        // 두 축을 따로 찾아다녀야 한다. 그렇다고 한 목록에 섞으면 "패치노트에 없는"이라는 이
+        // 카드의 제목이 이 줄들에 대해 **거짓말**이 된다 — 그래서 제목을 따로 단다.
+        <div className="border-t border-border-soft">
+          <div className="flex items-center gap-2 px-5 pt-4 pb-2">
+            <span className="h-1.5 w-1.5 rounded-pill bg-warn" aria-hidden="true" />
+            <h3 className="font-body text-xs font-bold tracking-wide text-warn">
+              패치노트와 값이 다른 것
+            </h3>
+            <span className="ml-auto font-mono text-xs text-muted">대상 {mismatches.length}종</span>
+          </div>
+          <p className="px-5 pb-2 text-xs text-muted">
+            노트가 같은 항목을 말했는데 적힌 값이 실제 게임 데이터와 다릅니다. 말하지 않은 것도,
+            말한 대로 한 것도 아닙니다.
+          </p>
+          <ul>
+            {mismatches.map((entity) => {
+              const href = hrefOf?.(entity.changes[0]) ?? null;
+              return (
+                <li
+                  key={`mismatch:${entity.entityType}:${entity.entityKey}`}
+                  className="border-b border-border-soft px-5 py-3 last:border-b-0"
+                >
+                  <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                    {href ? (
+                      <Link
+                        href={href}
+                        className="text-sm font-bold text-fg hover:text-accent hover:underline"
+                      >
+                        {entity.entityName} →
+                      </Link>
+                    ) : (
+                      <span className="text-sm font-bold text-fg">{entity.entityName}</span>
+                    )}
+                    <span className="rounded-pill bg-warn px-2 py-0.5 text-[0.65rem] font-bold text-accent-on">
+                      {statusLabel("note-mismatch")}
+                    </span>
+                  </div>
+                  {mismatchCellLines(entity.changes).map((line) => (
+                    <div
+                      key={line.field}
+                      className="mt-1 flex flex-wrap items-baseline gap-x-4 gap-y-0.5"
+                    >
+                      <span className="font-mono text-sm tabular-nums text-fg-2">
+                        {line.field} <span className="text-muted">{line.before}</span> →{" "}
+                        <span className="text-fg">{line.after}</span>
+                      </span>
+                      <span className="font-mono text-xs tabular-nums text-muted">
+                        패치노트 {line.noteBefore} ⇒ {line.noteAfter}
+                      </span>
+                    </div>
+                  ))}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : null}
       <p className="border-t border-border-soft px-5 py-2 font-mono text-[0.65rem] text-muted">
         대조 원본: {SOURCE_LABELS[source.kind] ?? source.kind} {source.from} → {source.to}
       </p>
