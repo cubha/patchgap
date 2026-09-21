@@ -61,7 +61,7 @@ export default function SubmarineDetailBlock({
         // 0건 **증명**(분모까지 밝히는 문장)은 홈 `SubmarineSection`이 맡는다 — 여기서는
         // 이 엔티티에 없다는 사실만 말하고 같은 말을 두 번 하지 않는다.
         <p className="px-5 pb-4 text-sm text-muted">
-          이 엔티티에는 없습니다 — 원본 수치에서 패치노트와 어긋난 값을 찾지 못했습니다.
+          이 엔티티에는 없습니다 — 원본 수치에서 패치노트가 말하지 않은 값을 찾지 못했습니다.
         </p>
       ) : (
         <ul className="flex flex-col">

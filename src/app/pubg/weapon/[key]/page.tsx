@@ -180,6 +180,7 @@ export default async function PubgWeaponPage({ params }: PageProps) {
           action={
             <span className="font-mono text-xs text-muted">
               말한 것 {note ? 1 : 0} · 말하지 않은 것 {submarineChanges.length}
+              {mismatchChanges.length > 0 ? ` · 값이 다른 것 ${mismatchChanges.length}` : ""}
             </span>
           }
         >

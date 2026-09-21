@@ -173,6 +173,7 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
             action={
               <span className="font-mono text-xs text-muted">
                 말한 것 {matchedNotes.length} · 말하지 않은 것 {row.submarineChanges.length}
+                {row.mismatchChanges.length > 0 ? ` · 값이 다른 것 ${row.mismatchChanges.length}` : ""}
               </span>
             }
           >
