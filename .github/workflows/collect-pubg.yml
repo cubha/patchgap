@@ -162,6 +162,25 @@ jobs:
           PATCH_TO: ${{ steps.determine.outputs.to }}
         run: npx tsx scripts/run-pubg-aggregate.ts --from "$PATCH_FROM" --to "$PATCH_TO"
 
+      # 수치 축(F9) — PUBG는 게임사가 수치 파일을 내지 않으므로 축약본의 **피해 격자**를 패치 간
+      # 대조한다(`run-gamedata-diff` runPubg). 버전 인자가 없는 유일한 게임이다 — 격자는 패치
+      # 라벨로 직접 묶인다.
+      #
+      # 게이트가 `notes_ready == 'true'`를 포함해야 한다: 이 단계가 `notes-{to}.json`을 읽고,
+      # 없으면 던진다(노트는 수기 입력이라 며칠 늦게 들어온다 — 위 헤더 참고). `continue-on-error`는
+      # LoL·TFT와 같은 이유다.
+      - name: Detect submarine patches (F9)
+        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true' && steps.sample_guard.outputs.sample_ok == 'true'
+        env:
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: |
+          npx tsx scripts/run-gamedata-diff.ts \
+            --game pubg \
+            --from "$PATCH_FROM" \
+            --to "$PATCH_TO"
+        continue-on-error: true
+
       - name: Discord briefing (PUBG 채널)
         if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true' && steps.sample_guard.outputs.sample_ok == 'true' && env.HAS_DISCORD_PUBG == 'true'
         env:
@@ -196,7 +215,7 @@ jobs:
           git config user.email "patchgap-bot@users.noreply.github.com"
           # PUBG 네임스페이스만 건드린다 — LoL·TFT 산출물은 이 워크플로의 소관이 아니다.
           # `data/raw/pubg`는 gitignore라 add 대상에 들어오지 않는다.
-          git add data/aggregated/pubg
+          git add data/aggregated/pubg data/aggregated/gamedata/pubg
           if git diff --cached --quiet; then
             echo "변경분 없음 — 커밋 생략"
           else
