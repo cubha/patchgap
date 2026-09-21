@@ -92,7 +92,7 @@ export function mergeTftWindows(
   return merged;
 }
 
-/** PUBG — 라벨이 직전과 같으면 거부한다(마이너 쌍은 격자가 붕괴해 언제나 0건을 낸다). */
+/** PUBG — 형식·단조만 본다. 마이너 쌍(같은 라벨)도 날짜 창이 가르므로 받는다. */
 export function mergePubgWindows(
   base: readonly PubgPatchWindow[],
   overlay: readonly PubgPatchWindow[]
@@ -117,12 +117,9 @@ export function mergePubgWindows(
           `캘린더 오버레이: PUBG ${next.patch}의 liveFrom이 ${last.patch}보다 뒤가 아니다 — 단조 위반`
         );
       }
-      if (next.telemetryPatch === last.telemetryPatch) {
-        throw new Error(
-          `캘린더 오버레이: PUBG ${next.patch}가 ${last.patch}와 같은 텔레메트리 라벨` +
-            `(${next.telemetryPatch})이다 — 마이너 패치는 텔레메트리로 구분되지 않아 대조할 수 없다`
-        );
-      }
+      // 같은 텔레메트리 라벨(마이너 쌍)을 **받는다**(2026-09-21 정정). 라벨은 메이저까지만
+      // 담지만 비교 구간을 가르는 것은 **날짜**다 — 판정 축(`selectMatches`)도 수치 축
+      // (`run-gamedata-diff` runPubg)도 「라벨 AND 날짜」로 거르므로 43.1 → 43.2가 성립한다.
     }
     merged.push({ ...next });
   }
