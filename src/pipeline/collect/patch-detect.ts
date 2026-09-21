@@ -76,3 +76,34 @@ export function lolLiveKstOf(iso: string): string {
   const ahead = (LOL_LIVE_WEEKDAY_KST - day + 7) % 7;
   return new Date(kstMs + ahead * 86_400_000).toISOString().slice(0, 10);
 }
+
+/**
+ * Steam 공지 제목 → 패치 표기. `Patch Notes - Update 43.1` → `43.1`.
+ *
+ * **PUBG 탐지의 유일한 신호다.** PUBG 자체 API에는 패치 필드가 없고(매치 `attributes`·`/status`
+ * 전부 확인), 공지 사이트는 SPA라 없는 패치도 200을 준다(`patch-notes-99-9`가 43-1과 동일 바이트).
+ * Steam 뉴스 피드(`ISteamNews/GetNewsForApp`, appid 578080)는 키가 필요 없고 구조화 JSON을 주며,
+ * 항목의 타임스탬프 UTC 날짜가 캘린더 `liveFrom`과 정확히 일치한다(실측 42.3·43.1 2/2).
+ *
+ * **같은 날 이웃 공지가 섞여 있다** — `Map Service Report - Update 43.1`·`September Store Update
+ * 2026` 등. 그래서 제목 전체를 고정 형태로 맞춘다(부분 일치를 쓰면 저 둘을 집는다).
+ */
+export function pubgPatchOfSteamTitle(title: string): string | null {
+  const m = /^Patch Notes - Update (\d{2}\.\d{1,2})$/.exec(title.trim());
+  return m ? m[1] : null;
+}
+
+/**
+ * 직전 라벨에서 새 텔레메트리 라벨을 만든다 — `pc-2018-43` + `44.1` → `pc-2018-44`.
+ *
+ * 연도 자리(`2018`)는 게임 출시 연도에서 온 **레거시 상수**라 바뀌지 않지만, 여기 박아 두는 대신
+ * **직전 라벨에서 그대로 가져온다**. 언젠가 바뀌면 캘린더의 마지막 항목이 먼저 알려 줄 것이고,
+ * 지어낸 값이 캘린더에 들어가는 것보다 낫다.
+ * 마이너 패치는 같은 라벨이 나온다(텔레메트리가 마이너를 구분하지 않는다) — 의도한 결과다.
+ */
+export function telemetryLabelFor(lastLabel: string, patch: string): string | null {
+  const m = /^(pc-\d{4}-)\d+$/.exec(lastLabel);
+  if (!m) return null;
+  const major = Number(patch.split(".")[0]);
+  return Number.isFinite(major) ? `${m[1]}${major}` : null;
+}

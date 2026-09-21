@@ -14,21 +14,29 @@
 // 다른 둘처럼 생겼지만 성질이 다르고, 그 한계를 아래 로그가 매번 말한다.
 import "dotenv/config";
 
-import { PubgApi, telemetryUrlOf } from "../src/pipeline/collect/pubg/api";
-import { parseMatchDefinition } from "../src/pipeline/collect/pubg/telemetry-reduce";
+import { comparePatchId } from "../src/pipeline/collect/calendar-overlay";
 import {
   extractDatePublished,
-  kstDateOf,
   lolLiveKstOf,
   nextPatchCandidates,
-  pubgPatchOfLabel,
-  telemetryMajor,
+  pubgPatchOfSteamTitle,
+  telemetryLabelFor,
 } from "../src/pipeline/collect/patch-detect";
 import { buildTftNotesUrl } from "./run-tft-notes";
 import { appendOverlay, loadLolCalendar, loadPubgWindows, loadTftWindows } from "./shared/calendar";
 import { isMainModule, parseCliArgs } from "./shared/cli";
 
 const UA = "Mozilla/5.0 (compatible; patchgap/1.0; +https://patchgap.vercel.app)";
+
+/** PUBG 공지 피드 — appid 578080, 키 불필요. 아래 `watchPubg` 주석이 이 소스를 고른 이유를 적는다. */
+const STEAM_NEWS =
+  "https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?appid=578080&count=50&maxlength=1";
+
+interface SteamNewsItem {
+  readonly title?: string;
+  /** unix seconds. */
+  readonly date?: number;
+}
 
 function lolNotesUrl(patch: string, locale = "ko-kr"): string {
   return `https://www.leagueoflegends.com/${locale}/news/game-updates/league-of-legends-patch-${patch.replace(/\./g, "-")}-notes/`;
@@ -43,9 +51,6 @@ function notice(message: string): void {
   console.log(process.env.GITHUB_ACTIONS ? `::notice::${message}` : `[notice] ${message}`);
 }
 
-function warn(message: string): void {
-  console.log(process.env.GITHUB_ACTIONS ? `::warning::${message}` : `[warning] ${message}`);
-}
 
 /** 후보 URL이 존재하면 그 페이지 HTML. 없으면 null. 200/404는 파싱할 것이 없다. */
 async function fetchNotesIfPublished(url: string): Promise<string | null> {
@@ -115,67 +120,62 @@ async function watchTft(dataRoot: string, dryRun: boolean): Promise<boolean> {
 }
 
 /**
- * PUBG — 샘플 매치 1건의 텔레메트리에서 라벨을 읽는다. **메이저 상승만** 탐지된다.
+ * PUBG — **Steam 뉴스 피드**에서 패치노트 공지를 읽는다.
  *
- * `liveFrom`은 "그 라벨을 처음 본 날"이다. 다른 둘과 달리 정확한 발행 시각을 주는 문서가 없다
- * (공지에 구조화 마크업이 없어 파서가 없는 것과 같은 이유). 감시자가 매일 돌므로 오차는
- * 하루 이내지만, 이 값은 비교 구간(`patch-5 … patch+6`)을 직접 정하므로 커밋 diff에서
- * 한 번 눈으로 보는 것이 좋다.
+ * **왜 Steam인가(2026-09-21 정정).** 한때 "PUBG는 탐지 원천 불가"로 적었는데 틀렸다. PUBG
+ * 자체 표면만 뒤진 결과였다 — 매치 `attributes`에 패치 필드가 없고, `/status`는 버전을 안 주고,
+ * 텔레메트리 라벨(`pc-2018-43`)은 **메이저까지만** 담고, 공지 사이트는 SPA라 없는 패치도 200을
+ * 준다(`patch-notes-99-9`가 43-1과 동일 바이트). 그런데 PUBG는 Steam 게임이고, **공지를 내는
+ * 곳은 Steam이다**. `ISteamNews/GetNewsForApp`은 키가 필요 없고 구조화 JSON을 준다.
+ *
+ * 날짜도 추측하지 않는다 — 항목 타임스탬프의 UTC 날짜가 캘린더 `liveFrom`과 정확히 일치한다
+ * (역산 재현 실측: 42.3 → 2026-08-11, 43.1 → 2026-09-09, 2/2).
+ *
+ * 이제 **마이너도 탐지된다**(43.1 → 43.2). 라벨이 같아도 비교 구간은 날짜가 가르므로 성립한다.
+ * 그래서 이 함수는 `PUBG_API_KEY`를 쓰지 않는다 — 탐지 경로에서 키가 사라졌다.
  */
 async function watchPubg(dataRoot: string, dryRun: boolean): Promise<boolean> {
-  const apiKey = (process.env.PUBG_API_KEY ?? "").trim();
-  if (!apiKey) {
-    // 경고로 남긴다 — 키가 없으면 PUBG는 **영원히** 새 패치를 못 찾는데, 로그 한 줄로 끝내면
-    // 그 사실이 초록불 뒤에 숨는다(이 저장소가 PUBG 수집에서 이미 겪은 실패 모드다).
-    warn("pubg: PUBG_API_KEY 미설정 — PUBG는 새 패치를 탐지할 수 없다");
-    return false;
-  }
   const windows = loadPubgWindows(dataRoot);
   const last = windows[windows.length - 1];
-  const lastMajor = telemetryMajor(last.telemetryPatch);
 
-  const api = new PubgApi({ apiKey });
-  const today = kstDateOf(new Date().toISOString());
-  const ids = await api.sampleMatchIds(new Date(Date.now() - 86_400_000).toISOString().slice(0, 10));
-  // **표본을 못 받은 것과 "변화 없음"은 다르다.** `PubgApi.request`는 재시도를 소진하면 조용히
-  // null을 돌려주므로(키 오류·쿼터·장애가 전부 같은 모양이다) 여기서 갈라 주지 않으면
-  // "확인하지 못했다"가 "새 패치 없다"로 읽힌다 — 실측으로 밟았다(2026-09-21: 시크릿이 잘못
-  // 등록돼 CI에서만 표본이 0건이었는데 로그는 「판단 보류」 한 줄이었고 잡은 초록이었다).
-  if (ids.length === 0) {
+  const res = await fetch(STEAM_NEWS, { headers: { "User-Agent": UA } });
+  if (!res.ok) {
+    // **확인 못 함은 변화 없음이 아니다** — 조용히 false를 돌려주면 그 침묵이 초록불이 된다.
+    throw new Error(`patch-watch: Steam 뉴스 피드 HTTP ${res.status} — PUBG를 확인하지 못했다`);
+  }
+  const body = (await res.json()) as { appnews?: { newsitems?: SteamNewsItem[] } };
+  const items = body.appnews?.newsitems ?? [];
+  const notes = items
+    .map((n) => ({ patch: pubgPatchOfSteamTitle(n.title ?? ""), date: n.date ?? 0 }))
+    .filter((n): n is { patch: string; date: number } => n.patch !== null)
+    .sort((a, z) => z.date - a.date);
+
+  if (notes.length === 0) {
+    // 피드는 받았는데 패치노트가 한 건도 없다 — 제목 형식이 바뀌었을 가능성이 크다.
+    // 조용히 넘기면 그날부터 영영 못 찾는다.
     throw new Error(
-      "patch-watch: pubg 표본을 받지 못했다(/samples 응답 없음) — PUBG_API_KEY·쿼터·API 상태를 확인하라. " +
-        "이것은 '새 패치 없음'이 아니라 '확인하지 못함'이다"
+      `patch-watch: Steam 피드 ${items.length}건에서 「Patch Notes - Update X.Y」를 하나도 못 찾았다 — ` +
+        "공지 제목 형식이 바뀌었을 수 있다"
     );
   }
-  for (const id of ids.slice(0, 5)) {
-    const match = await api.match(id);
-    if (!match) continue;
-    const url = telemetryUrlOf(match);
-    if (!url) continue;
-    const events = await api.telemetry(url);
-    if (!events) continue;
-    const def = events.find((e) => (e as Record<string, unknown>)["_T"] === "LogMatchDefinition");
-    const field = def ? String((def as Record<string, unknown>)["MatchId"] ?? "") : "";
-    const label = field ? parseMatchDefinition(field)?.patch : undefined;
-    if (!label) continue;
-    const major = telemetryMajor(label);
-    if (major === null || lastMajor === null || major <= lastMajor) {
-      log(`pubg: 라벨 ${label}(메이저 ${major}) · 마지막 등록 ${last.patch}(${last.telemetryPatch}) — 변화 없음`);
-      log("pubg: 마이너 패치(43.1 → 43.2)는 텔레메트리가 구분하지 않아 탐지 대상이 아니다");
-      return false;
-    }
-    const patch = pubgPatchOfLabel(label);
-    if (!patch) return false;
-    notice(`pubg: 새 메이저 ${patch} 발견 — 라벨 ${label} · liveFrom ${today}(처음 본 날)`);
-    if (dryRun) return false;
-    appendOverlay("pubg", { patch, telemetryPatch: label, liveFrom: today }, dataRoot);
-    return true;
+
+  const newest = notes[0];
+  if (comparePatchId(newest.patch, last.patch) <= 0) {
+    log(`pubg: 최신 공지 ${newest.patch} · 마지막 등록 ${last.patch} — 변화 없음`);
+    return false;
   }
-  // 표본은 받았는데 다섯 건 전부 라벨을 못 읽었다 — 텔레메트리 CDN 일시 오류 쪽이다.
-  // 이건 던지지 않는다(하루치 실패로 감시자를 빨갛게 만들면 진짜 실패가 묻힌다). 다만
-  // 위 "표본 0건"과 달리 **경고로** 남겨 연속으로 뜨는지 보이게 한다.
-  warn("pubg: 표본 5건에서 텔레메트리 라벨을 읽지 못했다 — 이번 실행은 판단 보류(연속되면 조사하라)");
-  return false;
+
+  const liveFrom = new Date(newest.date * 1000).toISOString().slice(0, 10);
+  const telemetryPatch = telemetryLabelFor(last.telemetryPatch, newest.patch);
+  if (telemetryPatch === null) {
+    throw new Error(
+      `patch-watch: 직전 라벨 ${JSON.stringify(last.telemetryPatch)}에서 새 라벨을 만들 수 없다`
+    );
+  }
+  notice(`pubg: 새 패치 ${newest.patch} 발견 — 공지 ${liveFrom} · 라벨 ${telemetryPatch}`);
+  if (dryRun) return false;
+  appendOverlay("pubg", { patch: newest.patch, telemetryPatch, liveFrom }, dataRoot);
+  return true;
 }
 
 async function main(): Promise<void> {

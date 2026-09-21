@@ -19,7 +19,8 @@ name: patch-watch
 # 감시자의 실패 모드는 **침묵**이다(캘린더가 안 채워지면 수집이 초록불로 아무것도 안 한다).
 # 조용히 넘어가면 그 침묵이 두 겹이 된다. 빨갛게 보여야 한다.
 #
-# 필요 secrets: PUBG_API_KEY(선택 — 없으면 PUBG만 건너뛴다). LoL·TFT는 공개 웹페이지라 키가 없다.
+# **필요 secrets 없음.** 세 게임 전부 키 없이 탐지한다 — LoL·TFT는 공개 패치노트 페이지,
+# PUBG는 Steam 뉴스 피드(appid 578080, 무인증)다.
 
 on:
   workflow_dispatch:
@@ -66,7 +67,6 @@ jobs:
       - name: Detect new patches
         id: watch
         env:
-          PUBG_API_KEY: ${{ secrets.PUBG_API_KEY }}
           GAME: ${{ github.event.inputs.game || 'all' }}
           DRY_RUN: ${{ github.event.inputs.dry_run }}
         run: |
