@@ -43,3 +43,25 @@ export function submarineCellText(changes: readonly GameDataChange[]): Submarine
     rest: changes.length - 1,
   };
 }
+
+/** 접지 않은 전체 목록의 한 줄. */
+export type SubmarineLine = Omit<SubmarineCell, "rest">;
+
+/**
+ * **전부** 나열한다 — 상세로 갈 자리가 없는 표에서 쓴다.
+ *
+ * 왜 두 형태가 필요한가(2026-09-21 acceptance-critic V1): "첫 건 외 N건"은 **나머지를 상세에서
+ * 본다**는 약속이다. LoL 잠수함 전용 행에는 그 상세가 없다 — 그 엔티티엔 델타가 0건이라
+ * `/lol/item/[id]` 라우트 자체가 만들어지지 않는다(PLAN X1). 그 행에서 접으면 갈 곳 없는
+ * 약속이 된다. X1 원문: "갈 곳이 없으므로 표에서 값을 끝까지 말한다".
+ *
+ * 지금 LoL 잠수함은 1건뿐이라 접든 안 접든 화면이 같다 — 그건 데이터의 우연이지 설계 근거가
+ * 아니다(`feedback_structural_caps_not_current_data`).
+ */
+export function submarineCellLines(changes: readonly GameDataChange[]): readonly SubmarineLine[] {
+  return changes.map((change) => ({
+    field: change.field,
+    before: gameDataValue(change.before),
+    after: gameDataValue(change.after),
+  }));
+}

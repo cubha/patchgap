@@ -205,7 +205,10 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                   })}
                   {showSubmarine ? (
                     <td className="px-3 py-2 align-middle font-body">
-                      <SubmarineCell changes={row.submarineChanges} />
+                      {/* 상세로 갈 자리가 없는 행(`representative === null` = 델타 0건)은
+                          접지 않는다 — "외 N건"은 나머지를 상세에서 본다는 약속인데
+                          그 상세가 없다(2026-09-21 acceptance-critic V1). */}
+                      <SubmarineCell changes={row.submarineChanges} collapsible={row.representative !== null} />
                     </td>
                   ) : null}
                   <td className="px-4 py-3 font-body">
