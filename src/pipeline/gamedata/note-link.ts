@@ -144,16 +144,21 @@ function soleNumber(raw: string): { value: number; percent: boolean } | null {
 /**
  * 노트 표기와 게임 값이 같은가.
  *
- * `%`로 적힌 노트는 비율 값과 견준다(「20% ⇒ 15%」 ↔ `0.2 → 0.15`). 게임 값이 1을 넘으면
- * 이미 퍼센트 단위로 적힌 것이므로 그대로 본다.
+ * `%`로 적힌 노트는 **둘 다** 시도한다 — 원값과 ×100 중 하나라도 맞으면 같다고 본다.
+ * 게임 파일이 비율을 어느 단위로 담는지는 필드마다 다르다(`0.2`로 담기도, `140`으로 담기도 한다).
+ * 크기로 단위를 추측하면(예: "1 이하면 비율") 배수형 필드(`critMultiplier` 1.4 ↔ 노트 「140%」)가
+ * **거짓 불일치**로 찍힌다. 「공지값 불일치」는 *패치노트가 틀렸다*는 주장이라 잠수함보다 강하다 —
+ * 애매하면 같다고 보는 쪽이 옳다.
  */
 function sameValue(noteText: string, game: number): boolean {
   const parsed = soleNumber(noteText);
   if (parsed === null) return false;
-  const scaled = parsed.percent && Math.abs(game) <= 1 ? game * 100 : game;
-  const scale = Math.max(Math.abs(parsed.value), Math.abs(scaled));
-  if (scale === 0) return parsed.value === scaled;
-  return Math.abs(parsed.value - scaled) / scale < 1e-6;
+  const candidates = parsed.percent ? [game, game * 100] : [game];
+  return candidates.some((candidate) => {
+    const scale = Math.max(Math.abs(parsed.value), Math.abs(candidate));
+    if (scale === 0) return parsed.value === candidate;
+    return Math.abs(parsed.value - candidate) / scale < 1e-6;
+  });
 }
 
 /**

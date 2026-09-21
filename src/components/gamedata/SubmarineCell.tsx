@@ -67,34 +67,37 @@ export default function SubmarineCell({
     return <span className="px-1 font-mono text-xs text-muted">—</span>;
   }
 
-  if (changes.length === 0) {
-    return (
-      <div className="flex flex-col gap-1">
-        <span className="w-fit rounded-sm bg-warn px-1.5 py-0.5 font-mono text-[0.6rem] font-bold text-accent-on">
-          {statusLabel("note-mismatch")}
-        </span>
-        <MismatchLines changes={mismatchChanges} />
-      </div>
-    );
-  }
-
-  if (!collapsible) {
-    return (
-      <div className="flex flex-col gap-2">
-        {submarineCellLines(changes).map((line) => (
-          <Line key={line.field} {...line} />
-        ))}
-      </div>
-    );
-  }
-
-  const cell = submarineCellText(changes)!;
+  // **두 갈래를 둘 다 그린다.** 행 객체는 둘 다 담는데 칸이 한쪽만 그리면, 그건 배지만 찍고
+  // 값을 말하지 않던 결함과 같은 형태다 — 데이터는 맞는데 화면에 없다
+  // ([[feedback_verification_asks_wrong_question]]). 오늘 데이터에 둘 다 가진 대상이 없다는
+  // 것은 설계 근거가 아니다([[feedback_structural_caps_not_current_data]]).
+  const cell = collapsible ? submarineCellText(changes) : null;
   return (
-    <div className="flex flex-col gap-0.5">
-      <Line field={cell.field} before={cell.before} after={cell.after} />
-      {cell.rest > 0 ? (
-        // 전부는 상세에서 본다 — 칸 안에 쌓으면 이 행만 높아져 표의 행 높이가 무너진다.
-        <span className="font-mono text-[0.65rem] text-muted">외 {cell.rest}건</span>
+    <div className="flex flex-col gap-2">
+      {cell ? (
+        <div className="flex flex-col gap-0.5">
+          <Line field={cell.field} before={cell.before} after={cell.after} />
+          {cell.rest > 0 ? (
+            // 전부는 상세에서 본다 — 칸 안에 쌓으면 이 행만 높아져 표의 행 높이가 무너진다.
+            <span className="font-mono text-[0.65rem] text-muted">외 {cell.rest}건</span>
+          ) : null}
+        </div>
+      ) : (
+        <div className="flex flex-col gap-2">
+          {submarineCellLines(changes).map((line) => (
+            <Line key={line.field} {...line} />
+          ))}
+        </div>
+      )}
+
+      {mismatchChanges.length > 0 ? (
+        <div className="flex flex-col gap-1">
+          {/* 배지를 붙여야 두 갈래가 한 칸 안에서 섞이지 않는다. */}
+          <span className="w-fit rounded-sm bg-warn px-1.5 py-0.5 font-mono text-[0.6rem] font-bold text-accent-on">
+            {statusLabel("note-mismatch")}
+          </span>
+          <MismatchLines changes={mismatchChanges} />
+        </div>
       ) : null}
     </div>
   );

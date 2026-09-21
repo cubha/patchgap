@@ -192,6 +192,14 @@ describe("noteValueMismatch — 공지했는데 값이 다르다", () => {
     expect(noteValueMismatch(linked, 0.2, 0.15)).toBeNull();
   });
 
+  it("★ %인데 게임 값도 퍼센트 단위면 그것도 같다 — 크기로 단위를 추측하지 않는다", () => {
+    // 배수형 필드(`critMultiplier` 1.4)를 노트가 「140%」로 적을 수 있다. "1 이하면 비율"로
+    // 단위를 추측하면 이 짝이 거짓 불일치로 찍힌다 — 「공지값 불일치」는 *패치노트가 틀렸다*는
+    // 주장이라 잠수함보다 강한 발언이고, 애매하면 같다고 보는 쪽이 옳다.
+    const linked = linkOf(note("n5b", "치명타 배수", "140%", "150%"), ["치명타"]);
+    expect(noteValueMismatch(linked, 140, 150)).toBeNull();
+  });
+
   it("★ 레벨별 배열은 견주지 않는다 — 어느 레벨을 대표로 삼을지는 이 층이 정할 문제가 아니다", () => {
     const linked = linkOf(note("n6", "스킬 피해량", "공격력 20/30/48", "공격력 22/33/48"), ["피해량"]);
     expect(noteValueMismatch(linked, 20, 22)).toBeNull();
