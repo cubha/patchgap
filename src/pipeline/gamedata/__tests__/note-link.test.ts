@@ -74,6 +74,22 @@ describe("linkNotes — 필드 단위 대조", () => {
     expect(e).toEqual([]);
   });
 
+  it("키워드가 비면 스킬 일치만으로 공지 — effectBurn은 인덱스 의미를 알 수 없다", () => {
+    // DDragon은 effect[1]이 피해량인지 슬로우인지 알려주지 않는다. 그래서 스킬 축 변경은
+    // 그 스킬을 언급한 노트가 하나라도 있으면 공지로 본다(보수적으로 틀리는 쪽).
+    const ids = linkNotes(
+      { entityName: "아우렐리온 솔", fieldKeywords: [], skillKey: "W" },
+      NOTES_2617
+    );
+    expect(ids).toEqual(["note:aurelion-w"]);
+  });
+
+  it("키워드가 비어도 스킬이 다르면 안 걸린다", () => {
+    expect(
+      linkNotes({ entityName: "아우렐리온 솔", fieldKeywords: [], skillKey: "E" }, NOTES_2617)
+    ).toEqual([]);
+  });
+
   it("노트에 엔티티가 아예 없으면 빈 배열 — 잠수함", () => {
     expect(linkNotes({ entityName: "장로 드래곤", fieldKeywords: ["공격력"] }, NOTES_2617)).toEqual([]);
   });

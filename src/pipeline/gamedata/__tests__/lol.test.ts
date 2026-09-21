@@ -59,6 +59,27 @@ describe("diffLol — 26.16 → 26.17 회귀 (실측 고정)", () => {
   });
 });
 
+describe("diffLol — effectBurn 미사용 슬롯", () => {
+  it('"0"은 값이 아니라 빈 슬롯이다 — 재배치를 수치 변경으로 오판하지 않는다', () => {
+    // 실측: 노틸러스 effectBurn = [null, "70/115/160/205/250", "0", "0.5"] — 인덱스 2는 미사용.
+    // 26.17 트런들은 스킬 개편으로 5개 슬롯이 통째로 "0"이 됐는데, 그것을 "값이 0으로 너프됐다"로
+    // 읽으면 잠수함 5건이 허위로 생긴다(2026-09-21 실측).
+    const snap = (v: string, effect: (string | null)[]): DdragonSnapshot => ({
+      version: v,
+      champions: { Trundle: { name: "트런들", stats: { hp: 100 } } },
+      items: {},
+      spells: { Trundle: { spells: [{ effectBurn: effect }] } },
+    }) as unknown as DdragonSnapshot;
+    const changes = diffLol(
+      snap("a", ["0.2/0.28", "0.3/0.45"]),
+      snap("b", ["0", "0"]),
+      [],
+      "26.17"
+    );
+    expect(changes).toEqual([]);
+  });
+});
+
 describe("diffLol — 26.17 → 26.18 회귀 (실측 고정)", () => {
   it("수치 변경이 있고, 그 전부가 공지됐다 — 잠수함 0건", () => {
     const changes = diffLol(snapshot("16.17.1"), snapshot("16.18.1"), notes("26.18"), "26.18");

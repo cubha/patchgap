@@ -73,6 +73,13 @@ export function linkNotes(input: LinkNotesInput, notes: readonly NoteLike[]): st
     // 되어서는 안 된다(아우렐리온 솔 W 노트가 E 변경을 덮어 주면 안 된다).
     if (input.skillKey && !mentionsSkill(text, input.skillKey)) continue;
 
+    // 키워드가 비면 **스킬 일치만으로 공지**다. `effectBurn`은 인덱스의 의미를 DDragon이
+    // 알려주지 않아(effect[1]이 피해량인지 슬로우인지 모른다) 필드 낱말을 만들 수 없다.
+    // 그 스킬을 언급한 노트가 하나라도 있으면 공지로 본다 — 보수적으로 틀리는 쪽을 고른다.
+    if (input.fieldKeywords.length === 0) {
+      if (input.skillKey) out.push(note.id);
+      continue;
+    }
     if (input.fieldKeywords.some((k) => text.includes(k))) out.push(note.id);
   }
   return out;

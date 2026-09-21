@@ -99,6 +99,15 @@ const SPELL_FIELD_LABELS: Record<string, readonly [string, readonly string[]]> =
   rangeBurn: ["사거리", ["사거리"]],
 };
 
+/**
+ * `effectBurn` 한 칸의 값. **`"0"`은 값이 아니라 미사용 슬롯**이다 — DDragon이 쓰지 않는 칸을
+ * 그렇게 채운다(실측: 노틸러스 Q = `[null, "70/115/160/205/250", "0", "0.5"]`, 인덱스 2가 그것).
+ */
+function slotValue(raw: string | null | undefined): string | null {
+  if (raw === null || raw === undefined) return null;
+  return raw === "0" ? null : raw;
+}
+
 /** 협곡에서 쓸 수 있는 아이템인가. `maps`가 없으면 판정 불가이므로 **제외**한다(보수적). */
 export function isRiftItem(item: DdragonItem): boolean {
   return item.maps?.[SUMMONERS_RIFT] === true;
@@ -180,9 +189,12 @@ export function diffLol(
       const pe = p.effectBurn ?? [];
       const ne = n.effectBurn ?? [];
       for (let j = 0; j < Math.max(pe.length, ne.length); j += 1) {
-        const pv = pe[j] ?? null;
-        const nv = ne[j] ?? null;
+        const pv = slotValue(pe[j]);
+        const nv = slotValue(ne[j]);
         if (pv === nv) continue;
+        // 한쪽이 빈 슬롯이면 값 변경이 아니라 **배열 재배치**다(스킬 개편). 실측 26.17 트런들에서
+        // 슬롯 5개가 통째로 "0"이 됐고, 그것을 "0으로 너프됐다"로 읽으면 잠수함 5건이 허위로 생긴다.
+        if (pv === null || nv === null) continue;
         push(id, next.name, "champion", `${key} 수치`, `spells.${i}.effect.${j}`, pv, nv, [], key);
       }
     }

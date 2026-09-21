@@ -26,7 +26,8 @@
     "pipeline:tft-determine": "tsx scripts/tft-determine.ts",
     "pipeline:pubg-collect": "tsx scripts/run-pubg-collect.ts",
     "pipeline:pubg-aggregate": "tsx scripts/run-pubg-aggregate.ts",
-    "pipeline:pubg-determine": "tsx scripts/pubg-determine.ts"
+    "pipeline:pubg-determine": "tsx scripts/pubg-determine.ts",
+    "pipeline:gamedata-diff": "tsx scripts/run-gamedata-diff.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.124.0",

@@ -291,17 +291,28 @@ interface ChampionDetailResponse {
  * 스킨 목록은 챔피언별 상세(`data/ko_KR/champion/{Id}.json`)에만 있어서 N회 요청이 불가피하다.
  * 대신 결과를 slim 인덱스로 **커밋**하므로 빌드·런타임에는 요청이 0이다.
  */
+/** 잠수함 패치 검출(F9)이 읽는 스킬 수치만 담는 축약형 — 응답 전체를 커밋하지 않기 위한 형태. */
+interface SpellNumerics {
+  readonly spells: readonly {
+    readonly cooldownBurn: string | null;
+    readonly costBurn: string | null;
+    readonly rangeBurn: string | null;
+    readonly effectBurn: readonly (string | null)[];
+  }[];
+}
+
 async function buildSkinIndex(
   version: string,
   ddragon: DdragonData,
   championIds: ReadonlySet<number>,
   fetchImpl: typeof fetch
-): Promise<SkinRef[]> {
+): Promise<{ skins: SkinRef[]; spellNumerics: Record<string, SpellNumerics> }> {
   const ids = Array.from(championIds)
     .map((key) => ddragon.champions.byKey(key))
     .filter((c): c is NonNullable<typeof c> => Boolean(c));
 
   const skins: SkinRef[] = [];
+  const spellNumerics: Record<string, SpellNumerics> = {};
   let failed = 0;
   await mapWithConcurrency(ids, DOWNLOAD_CONCURRENCY, async (champion) => {
     const url = `${cdnBase(version)}/data/ko_KR/champion/${champion.id}.json`;
@@ -320,6 +331,17 @@ async function buildSkinIndex(
           name: skin.name,
         });
       }
+      // 스킬 수치 보존(2026-09-21, ST-4) — 이 응답은 원래 **스킨만 빼고 버려졌다**. 잠수함 패치
+      // 검출(F9)은 스킬 수치 diff가 핵심인데(밸런스 변경 대부분이 기본 능력치가 아니라 스킬에
+      // 있다), 그 데이터가 이미 여기를 지나가고 있었다. 응답 전체를 커밋하면 버전당 10MB라
+      // **수치 필드만** 남긴다(~100KB).
+      const spells = (detail?.spells ?? []).map((spell) => ({
+        cooldownBurn: spell.cooldownBurn ?? null,
+        costBurn: spell.costBurn ?? null,
+        rangeBurn: spell.rangeBurn ?? null,
+        effectBurn: (spell.effectBurn ?? []).map((e) => e ?? null),
+      }));
+      if (spells.length > 0) spellNumerics[champion.id] = { spells };
     } catch {
       failed += 1; // 한 챔피언을 못 받아도 인덱스 전체를 버리지 않는다(부분 인덱스가 0보다 낫다)
     }
@@ -327,9 +349,9 @@ async function buildSkinIndex(
 
   skins.sort((a, b) => a.championId.localeCompare(b.championId) || a.num - b.num);
   console.log(
-    `[run-ddragon] skin index: champions=${ids.length} skins=${skins.length} fetch-failed=${failed}`
+    `[run-ddragon] skin index: champions=${ids.length} skins=${skins.length} fetch-failed=${failed} spells=${Object.keys(spellNumerics).length}`
   );
-  return skins;
+  return { skins, spellNumerics };
 }
 
 /** 커밋된 notes/*.json 전부에서 치장 항목만 모은다 — 스플래시 조달 대상의 유일한 출처. */
@@ -360,7 +382,17 @@ async function syncSkinIndexAndSplashes(
   championIds: ReadonlySet<number>,
   fetchImpl: typeof fetch
 ): Promise<void> {
-  const skins = await buildSkinIndex(version, ddragon, championIds, fetchImpl);
+  const { skins, spellNumerics } = await buildSkinIndex(version, ddragon, championIds, fetchImpl);
+
+  // 스킬 수치를 버전 폴더에 남긴다(ST-4) — 잠수함 패치 검출(F9)의 입력이다. 스킨 인덱스가
+  // 비어도 이건 쓴다(두 산출물은 독립이다).
+  if (Object.keys(spellNumerics).length > 0) {
+    const spellsDest = path.join(DATA_ROOT, "ddragon", version, "spells.json");
+    fs.mkdirSync(path.dirname(spellsDest), { recursive: true });
+    fs.writeFileSync(spellsDest, `${JSON.stringify(spellNumerics)}\n`, "utf8");
+    console.log(`[run-ddragon] spell numerics → ${spellsDest} (${Object.keys(spellNumerics).length}종)`);
+  }
+
   if (skins.length === 0) {
     console.log("[run-ddragon] skin index: 비어 있음 — 인덱스 파일을 덮어쓰지 않는다");
     return;
