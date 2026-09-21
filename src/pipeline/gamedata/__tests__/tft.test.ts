@@ -52,17 +52,27 @@ describe("diffTft — 18.1 → 18.2 회귀 (실측 고정)", () => {
     expect(types.has("item")).toBe(true);
   });
 
-  it("노트에 이름이 있는 엔티티는 잠수함이 아니다", () => {
-    const mentioned = new Set(
-      notes("18.2")
-        .map((n) => (n.entity ?? "").trim())
-        .filter(Boolean)
+  it("★ 엔티티가 노트에 있어도 그 줄이 다른 수치를 말하면 잠수함이다", () => {
+    // 폭풍갈퀴와 같은 패턴 — 이것이 필드 단위 대조의 존재 이유다.
+    // 카직스 노트는 "기본 공격력 30→40"만 말하는데 체력 850→950이 바뀌었다.
+    const kha = submarines.find(
+      (c) => c.entityName === "카직스" && c.fieldPath === "stats.hp"
     );
-    for (const s of submarines) {
-      expect(mentioned.has(s.entityName), `${s.entityName}이 노트에 있는데 잠수함으로 잡혔다`).toBe(
-        false
-      );
-    }
+    expect(kha).toBeDefined();
+    expect([kha!.before, kha!.after]).toEqual([850, 950]);
+
+    // 마스터 이 노트는 "기본 공격력 65→60"인데 방어력 60→55가 바뀌었다.
+    const yi = submarines.find(
+      (c) => c.entityName === "마스터 이" && c.fieldPath === "stats.armor"
+    );
+    expect(yi).toBeDefined();
+    expect([yi!.before, yi!.after]).toEqual([60, 55]);
+  });
+
+  it("18.1 → 18.2 잠수함은 37건이다 (유닛 19 · 아이템 18)", () => {
+    expect(submarines).toHaveLength(37);
+    expect(submarines.filter((c) => c.entityType === "unit")).toHaveLength(19);
+    expect(submarines.filter((c) => c.entityType === "item")).toHaveLength(18);
   });
 
   it("부동소수점 잡음은 변경이 아니다 — 0.039999961 → 0.039999962 같은 것", () => {

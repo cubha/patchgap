@@ -50,6 +50,14 @@ export interface LinkNotesInput {
   readonly fieldKeywords: readonly string[];
   /** 스킬 수치면 그 키(`"Q"`~`"R"`). 주면 **같은 스킬의 노트만** 걸린다. */
   readonly skillKey?: string | null;
+  /**
+   * 엔티티가 언급된 것만으로 공지로 볼 것인가.
+   *
+   * TFT 스킬 변수처럼 **노트가 그 수치를 뭐라 부르는지 알 수 없을 때** 쓴다(CDragon 변수명
+   * `Damage`를 노트는 "구체당 스킬 피해량"이라 부른다 — 사전을 만들 수 없다). 낱말도 스킬 축도
+   * 없으므로 엔티티 언급을 알리바이로 받는다. 보수적으로 덜 찾는 쪽이다.
+   */
+  readonly entityMatchSuffices?: boolean;
 }
 
 /**
@@ -76,6 +84,10 @@ export function linkNotes(input: LinkNotesInput, notes: readonly NoteLike[]): st
     // 키워드가 비면 **스킬 일치만으로 공지**다. `effectBurn`은 인덱스의 의미를 DDragon이
     // 알려주지 않아(effect[1]이 피해량인지 슬로우인지 모른다) 필드 낱말을 만들 수 없다.
     // 그 스킬을 언급한 노트가 하나라도 있으면 공지로 본다 — 보수적으로 틀리는 쪽을 고른다.
+    if (input.entityMatchSuffices) {
+      out.push(note.id);
+      continue;
+    }
     if (input.fieldKeywords.length === 0) {
       if (input.skillKey) out.push(note.id);
       continue;

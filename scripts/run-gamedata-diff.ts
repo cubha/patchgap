@@ -19,6 +19,7 @@ import {
   type DamageGrid,
 } from "../src/pipeline/gamedata/pubg";
 import { PUBG_PATCH_WINDOWS } from "../src/pipeline/collect/pubg/patch-calendar";
+import { diffTft, type CdragonSnapshot } from "../src/pipeline/gamedata/tft";
 import { isSubmarineChange, type GameDataDiffFile } from "../src/pipeline/gamedata/types";
 import type { NoteLike } from "../src/pipeline/gamedata/note-link";
 import { isMainModule, parseCliArgs } from "./shared/cli";
@@ -137,6 +138,42 @@ async function runPubg(dataRoot: string, from: string, to: string): Promise<void
   });
 }
 
+/**
+ * TFT는 Community Dragon 수치 추출본을 읽는다(SCOPE §3, 2026-09-21). 원본 응답은 버전당 24MB라
+ * 커밋하지 않고 수치 필드만 `data/cdragon/{version}/tft.json`에 남긴다.
+ */
+function runTft(dataRoot: string, from: string, to: string, vFrom: string, vTo: string): void {
+  const load = (version: string): CdragonSnapshot => ({
+    version,
+    ...readJson<Omit<CdragonSnapshot, "version">>(join(dataRoot, "cdragon", version, "tft.json")),
+  });
+  const notes = loadNotes(dataRoot, "tft", to);
+  const changes = diffTft(load(vFrom), load(vTo), notes, to);
+  const submarines = changes.filter(isSubmarineChange);
+
+  console.log(
+    `[gamedata] tft ${from} → ${to} · CDragon ${vFrom} → ${vTo} · 노트 ${notes.length}건`
+  );
+  console.log(`[gamedata] 수치 변경 ${changes.length}건 · 그중 노트에 없는 것 ${submarines.length}건`);
+  for (const s of submarines.slice(0, 10)) {
+    console.log(`[gamedata]   ★ ${s.entityName} ${s.field}: ${s.before} → ${s.after}`);
+  }
+  if (submarines.length > 10) console.log(`[gamedata]   … 외 ${submarines.length - 10}건`);
+
+  writeDiff(dataRoot, {
+    meta: {
+      game: "tft",
+      from,
+      to,
+      source: { kind: "cdragon", from: vFrom, to: vTo },
+      generatedAt: new Date().toISOString(),
+      changeCount: changes.length,
+      submarineCount: submarines.length,
+    },
+    changes,
+  });
+}
+
 function writeDiff(dataRoot: string, file: GameDataDiffFile): void {
   const out = join(dataRoot, "aggregated", "gamedata", file.meta.game, `${file.meta.from}_${file.meta.to}.json`);
   mkdirSync(dirname(out), { recursive: true });
@@ -163,9 +200,17 @@ async function main(): Promise<void> {
     await runPubg(dataRoot, from, to);
     return;
   }
+  if (game === "tft") {
+    const vFrom = String(args.versionFrom ?? "");
+    const vTo = String(args.versionTo ?? "");
+    if (!vFrom || !vTo) {
+      throw new Error("run-gamedata-diff: TFT는 --version-from/--version-to(Community Dragon 버전)가 필요하다");
+    }
+    runTft(dataRoot, from, to, vFrom, vTo);
+    return;
+  }
   if (game !== "lol") {
-    // TFT는 Community Dragon 채택(SCOPE §3 갱신)이 선행이다.
-    throw new Error(`TODO(gamedata): '${game}' 어댑터 미구현 — 현재 'lol'·'pubg'만 지원한다`);
+    throw new Error(`TODO(gamedata): '${game}' 어댑터 미구현 — 현재 'lol'·'tft'·'pubg'만 지원한다`);
   }
 
   const versionFrom = String(args.versionFrom ?? "");

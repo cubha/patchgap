@@ -117,6 +117,22 @@ describe("linkNotes — 필드 단위 대조", () => {
     ).toEqual([]);
   });
 
+  it("entityMatchSuffices면 엔티티 언급만으로 공지 — 노트가 그 낱말을 뭐라 부르는지 모를 때", () => {
+    // TFT 스킬 변수(ability.Damage 등)는 노트가 "구체당 스킬 피해량"처럼 제멋대로 부른다.
+    // 낱말 사전을 만들 수 없으므로 엔티티 언급을 알리바이로 받는다 — 보수적으로 덜 찾는 쪽.
+    const ids = linkNotes(
+      { entityName: "폭풍갈퀴", fieldKeywords: [], entityMatchSuffices: true },
+      NOTES_2617
+    );
+    expect(ids).toEqual(["note:stormrazor"]);
+  });
+
+  it("entityMatchSuffices여도 엔티티가 없으면 안 걸린다", () => {
+    expect(
+      linkNotes({ entityName: "없는엔티티", fieldKeywords: [], entityMatchSuffices: true }, NOTES_2617)
+    ).toEqual([]);
+  });
+
   it("노트에 엔티티가 아예 없으면 빈 배열 — 잠수함", () => {
     expect(linkNotes({ entityName: "장로 드래곤", fieldKeywords: ["공격력"] }, NOTES_2617)).toEqual([]);
   });

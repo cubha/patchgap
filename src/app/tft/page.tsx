@@ -7,6 +7,8 @@
 import Container from "@/components/Container";
 import ExternalLink from "@/components/ExternalLink";
 import SectionCard from "@/components/SectionCard";
+import SubmarineSection from "@/components/gamedata/SubmarineSection";
+import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import StatusBadge from "@/components/StatusBadge";
 import {
   TftFooter,
@@ -168,6 +170,8 @@ export default function TftPage() {
   }
 
   const { deltas, before, after, notes } = bundle;
+  // 수치 축(F9) — 산출물이 없으면 섹션이 통째로 빠진다.
+  const submarine = summarizeGameData(loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to));
   const reportable = deltas.rows.filter((row) => isReportableRecord(row, deltas.meta.qAlpha));
   const unannounced = reportable.filter((row) => displayStatusOf(row.status) === "unannounced");
   const announced = reportable.filter((row) => displayStatusOf(row.status) !== "unannounced");
@@ -271,6 +275,10 @@ export default function TftPage() {
               </ul>
             )}
           </SectionCard>
+
+          {/* 수치 축(2026-09-21) — 위 섹션들은 지표가 어떻게 움직였나를 말하고, 여기는 게임사가
+              무엇을 바꿨나를 말한다. LoL 홈과 **같은 컴포넌트**다(게임을 모른다). */}
+          {submarine ? <SubmarineSection summary={submarine} /> : null}
 
           <TftSampleNotice boards={before.boards + after.boards} matches={matches} />
         </div>
