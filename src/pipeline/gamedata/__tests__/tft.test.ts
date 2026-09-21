@@ -93,3 +93,45 @@ describe("diffTft — 18.1 → 18.2 회귀 (실측 고정)", () => {
     expect(diffTft(a, b, [], "18.2")).toEqual([]);
   });
 });
+
+// 2026-09-21 사용자 지적("건수가 동일대상의 여러항목으로 과다계상된건아닌지 확인해봐")으로
+// 패치노트 원문을 전수 대조한 결과 **명백한 오탐 4건**이 나왔다. 원인은 짝짓기 검색어로
+// CDragon **영문 키**(`Gold`·`Stats`)를 그대로 넘긴 것 — 노트는 한국어(「골드 제공」·「능력치
+// 부여」)라 영원히 못 맞춘다. 유닛 스킬 변수는 같은 문제를 이미 `entityMatchSuffices`로
+// 피하고 있었는데 아이템 효과에는 안 걸려 있었다.
+describe("diffTft — 아이템 효과는 한국어 낱말로 노트를 찾는다", () => {
+  const changes = diffTft(snapshot("16.17"), snapshot("16.18"), notes("18.2"), "18.2");
+  const submarines = changes.filter(isSubmarineChange);
+  const sub = (name: string, path: string) =>
+    submarines.find((c) => c.entityName === name && c.fieldPath === path);
+  const any = (name: string, path: string) =>
+    changes.find((c) => c.entityName === name && c.fieldPath === path);
+
+  it.each([
+    ["금빛 운명+", "effects.Gold", "골드 제공: 6골드 ⇒ 5골드"],
+    ["프리즘 운명+", "effects.Gold", "골드 제공: 10골드 ⇒ 7골드"],
+    ["남작의 소굴", "effects.Stats", "능력치 부여: 5% ⇒ 4%"],
+    ["황금 드래곤", "effects.BonusDurability", "내구력: 20% ⇒ 15%"],
+  ])("★ %s %s — 노트가 「%s」로 공지했으므로 잠수함이 아니다", (name, path, _note) => {
+    expect(any(name, path)).toBeDefined();
+    expect(sub(name, path)).toBeUndefined();
+  });
+
+  it("★ 같은 엔티티라도 노트가 말하지 않은 효과는 그대로 잠수함이다", () => {
+    // 황금 드래곤 노트는 「내구력」만 말했다 — 추가 체력 700 → 600은 여전히 미공지다.
+    expect(sub("황금 드래곤", "effects.BonusHealth")).toBeDefined();
+  });
+
+  it("효과 이름을 한국어로 표시한다 — 화면에 `효과 ASMultiplier`가 나가지 않는다", () => {
+    const c = any("후방의 핵심", "effects.ASMultiplier");
+    expect(c).toBeDefined();
+    expect(c!.field).toBe("효과 공격 속도");
+  });
+
+  it("사전에 없는 키는 낱말을 지어내지 않고 원문 키를 쓴다", () => {
+    for (const c of changes) {
+      if (!c.fieldPath.startsWith("effects.")) continue;
+      expect(c.field.startsWith("효과 ")).toBe(true);
+    }
+  });
+});
