@@ -100,6 +100,17 @@ async function runPubg(dataRoot: string, from: string, to: string): Promise<void
   };
   const labelFrom = telemetryLabel(from);
   const labelTo = telemetryLabel(to);
+  // **같은 라벨이면 대조가 성립하지 않는다.** PUBG 텔레메트리 라벨은 **메이저만** 담는다
+  // (실측: 42.3·43.1 → `pc-2018-42`·`pc-2018-43`). 즉 43.1 → 43.2 같은 마이너 쌍은 두 창이
+  // 같은 라벨이 되고, 아래 `grids` 객체는 계산된 키가 겹쳐 **항목이 하나로 붕괴**한다 —
+  // before·after가 같은 배열을 가리켜 `compareGrids`가 언제나 0건을 낸다. 조용한 0건은
+  // 화면에서 "잠수함 없음"과 구분되지 않으므로 여기서 던진다(`assertVersionPair`와 같은 규율).
+  if (labelFrom === labelTo) {
+    throw new Error(
+      `run-gamedata-diff: pubg ${from}·${to}가 같은 텔레메트리 라벨(${labelFrom})이다 — ` +
+        "마이너 패치는 텔레메트리로 구분되지 않아 대조할 수 없다(메이저 쌍만 가능하다)"
+    );
+  }
 
   const grids: Record<string, DamageGrid[]> = { [labelFrom]: [], [labelTo]: [] };
   let withGrid = 0;
