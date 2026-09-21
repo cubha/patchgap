@@ -53,7 +53,9 @@ export function main(): void {
   }
 
   // 산출물 존재 확인만 여기서 한다(파일 I/O) — 어떤 쌍인지는 캘린더가 정한다.
-  const windows = loadPubgWindows();
+  // 캘린더도 **같은 dataRoot**에서 읽는다 — 산출물만 옮기고 캘린더는 기본 경로에서 읽으면
+  // 테스트·모사에서 두 쪽이 다른 세계를 본다.
+  const windows = loadPubgWindows(dataRoot);
   const probe = determinePubgRun({ nowMs: Date.now(), outputsExist: false, force }, windows);
   const deltasFile = path.join(dataRoot, "aggregated", "pubg", "deltas.json");
   let outputsExist = false;

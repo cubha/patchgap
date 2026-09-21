@@ -87,7 +87,8 @@ export async function main(): Promise<void> {
 
   // ② 캘린더 판정. 산출물 존재 확인만 여기서 하고(파일 I/O) 규칙은 순수 함수가 갖는다.
   const nowMs = Date.now();
-  const windows = loadTftWindows();
+  // 캘린더도 같은 dataRoot에서 읽는다(산출물과 어긋나지 않게).
+  const windows = loadTftWindows(dataRoot);
   const probe = determineTftRun({ nowMs, hasOutputs: false, manualPatch, force }, windows);
   const hasOutputs =
     probe.from !== null &&
