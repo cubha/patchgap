@@ -265,7 +265,7 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
             <SectionCard eyebrow="선언 대조" title="패치노트 대조" className="flex min-h-80 flex-col">
               <NoteContrastPanel result={noteContrast} />
               <div className="border-t border-border-soft" />
-              <SubmarineDetailBlock changes={submarineChanges} source={gameData?.meta.source ?? null} />
+              <SubmarineDetailBlock changes={submarineChanges} source={gameData?.meta.source ?? null} notePatch={pair.to} />
             </SectionCard>
             <SectionCard eyebrow="원인" title="추정 원인(LLM)" className="flex h-80 flex-col">
               <CausesPanel causes={delta.causes} llm={delta.llm} notesById={notesById} generatedAt={generatedAt} />

@@ -132,6 +132,8 @@ export interface ReleaseNoteStreamProps {
    * (이 파일은 client라 데이터를 직접 읽을 수 없다).
    */
   gapLead?: ReactNode;
+  /** `gapLead`가 든 수치 축 건수. `gapCount`(두 갈래 합)에서 빼 지표 축 건수를 낸다. */
+  submarineCount?: number;
 }
 
 function groupKey(group: ReleaseStreamGroup): string {
@@ -156,6 +158,7 @@ export default function ReleaseNoteStream({
   skinPreviews,
   miscSections = [],
   gapLead,
+  submarineCount = 0,
 }: ReleaseNoteStreamProps) {
   const { selectedLane } = useAmbient();
   const [tab, setTab] = useState<StreamTab>("content");
@@ -223,7 +226,20 @@ export default function ReleaseNoteStream({
 
       {/* 수치 축 — Gap 탭의 위쪽 갈래. 목록이 0건이어도(아래 빈 상태 분기) 사라지면 안 되므로
           분기 **바깥**에 둔다. 라인 필터의 영향을 받지 않는다 — 원본 수치에는 라인 축이 없다. */}
-      {tab === "gap" && gapLead ? <div className="border-b border-border-soft p-5">{gapLead}</div> : null}
+      {tab === "gap" && gapLead ? (
+        <>
+          <div className="border-b border-border-soft p-5">{gapLead}</div>
+          {/* 아래쪽 갈래에도 이름을 붙인다(2026-09-21 screen-critic V2). 위 카드에는 「잠수함 패치 ·
+              수치 축」이라는 머리가 있는데 아래 목록에는 아무 이름이 없어서, **LoL에서만** 두 갈래의
+              경계가 화면에 안 보였다(TFT·PUBG는 각자 카드의 eyebrow가 말하고 있었다). 점선 테두리
+              대신 문구로 갈래를 가르기로 한 이상, 문구가 양쪽에 다 있어야 그 판단이 성립한다. */}
+          <div className="flex items-baseline gap-2 border-b border-border-soft px-5 py-3">
+            <span className="text-xs font-bold text-muted">발견 · 지표 축</span>
+            <h3 className="font-display text-sm font-bold text-fg">패치노트에 없는데 움직인 것</h3>
+            <span className="ml-auto font-mono text-xs text-muted">{gapCount - submarineCount}건</span>
+          </div>
+        </>
+      ) : null}
 
       {/* 정렬 고지("관측이 있는 항목부터 …")는 2026-09-18 라운드6(C3)에 뺐다 — 표기 이유는 방법론이
           말한다("표시 규칙"). */}

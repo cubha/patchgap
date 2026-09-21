@@ -206,7 +206,7 @@ export default async function PubgWeaponPage({ params }: PageProps) {
 
           <div className="border-t border-border-soft" />
 
-          <SubmarineDetailBlock changes={submarineChanges} source={gameData?.meta.source ?? null} />
+          <SubmarineDetailBlock changes={submarineChanges} source={gameData?.meta.source ?? null} notePatch={deltas.meta.to} />
         </SectionCard>
 
         <SectionCard eyebrow="근거" title="이렇게 판정했습니다" variant="glass">

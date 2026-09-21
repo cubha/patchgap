@@ -31,9 +31,20 @@ export interface SubmarineDetailBlockProps {
   changes: readonly GameDataChange[];
   /** 대조 원본. 없으면(산출물 미생성) 출처 줄을 그리지 않는다 — 없는 근거를 지어내지 않는다. */
   source?: GameDataSource | null;
+  /**
+   * 대조의 **반대편** — 패치노트 쪽 버전(2026-09-21 screen-critic V1).
+   *
+   * 이 카드는 두 구획을 담는데 출처 줄이 게임 데이터 한쪽만 말하고 있었다. 「말한 것」의 출처는
+   * 패치노트이므로 양쪽을 다 적어야 "대조 원본"이라는 말이 카드의 범위와 맞는다.
+   */
+  notePatch?: string | null;
 }
 
-export default function SubmarineDetailBlock({ changes, source = null }: SubmarineDetailBlockProps) {
+export default function SubmarineDetailBlock({
+  changes,
+  source = null,
+  notePatch = null,
+}: SubmarineDetailBlockProps) {
   return (
     <div className="flex flex-col">
       <div className="flex items-center gap-2 px-5 pt-4 pb-2">
@@ -69,7 +80,8 @@ export default function SubmarineDetailBlock({ changes, source = null }: Submari
 
       {source ? (
         <p className="border-t border-border-soft px-5 py-2 font-mono text-[0.65rem] text-muted">
-          대조 원본: {SOURCE_LABELS[source.kind] ?? source.kind} {source.from} → {source.to}
+          대조 원본: {notePatch ? `패치노트 ${notePatch} · ` : ""}
+          {SOURCE_LABELS[source.kind] ?? source.kind} {source.from} → {source.to}
         </p>
       ) : null}
     </div>
