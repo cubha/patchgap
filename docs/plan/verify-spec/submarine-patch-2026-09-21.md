@@ -166,3 +166,28 @@
   자체가 바뀌어 새 계약(실측 픽스처 + 합성 이동)으로 교체했다. `page-order.test.tsx`에는 `server-only`
   mock 1줄 추가 — 페이지가 `@/lib/gamedata`를 import하게 된 뒤 HEAD에서도 suite 로드가 실패하고
   있었다(단언은 변경 없음).
+
+### 3회차 판정 반영 (verify-impl 2026-09-21, 축A acceptance-critic · 축B screen-critic)
+
+1라운드: 축A 기준선 충족(UNMET 1 ⚠️ · ❓ 2) · 축B 이탈 1(낮음). 조치와 근거:
+
+- **A3-1 verify.sh 단위 테스트 240s 타임아웃** — 원인은 코드가 아니라 실행 환경: 121개 테스트 파일 전부 jsdom이라
+  환경 생성이 전체의 79%(단독 219s), 유휴 기계에서도 재현. `vitest.config.ts`에 `projects`로 환경 분리
+  (`.tsx` 12개만 jsdom, `.ts` 109개는 node — 커밋 513db68). 테스트 파일·단언 무변경, 121 files/1,410 tests 동일,
+  61s. 3회차 `verify.sh --full` 전 항목 ✔ EXIT 0.
+- **A3-2 보정 수치 출처** — `docs/plan/provenance/2026-09-21-pubg-grid-calibration/`(스크립트 3개 + 실행 결과 +
+  README, 커밋 f435e82). TS `compareGrids`와 같은 통계 정의. 원본 축약본은 gitignore(336h 보존 → 재수신 불가).
+- **A3-3 run-ddragon.ts** — `ChampionDetailResponse.spells` 타입 선언 16줄(ST-4 잔여), 런타임 변경 없음.
+- **B3-1 TFT 방법론 수치 축 카드 위계** — 카드를 "관측" 뒤·"판정" 앞으로 이동(커밋 219b4f0). 판정 카드의 정렬 행에
+  "잠수함 패치 →"를 앞에 추가(DISPLAY_SORT_PRIORITY와 일치).
+
+2라운드(델타 재판정) 결과는 아래에 비평가 원문으로 싣는다.
+
+**2라운드 판정(비평가 원문 요지)**
+- 축A acceptance-critic: A3-1 ✅ — `vitest.config.ts:14-23` projects 분리 확인, `.ts` 테스트 중 DOM 의존 0건(patch-calendar의
+  `window`는 지역 변수), 테스트 파일·단언 무변경. A3-2 ✅ — `output-quantiles.txt:73-91` NULL42 max 0.021 · NULL43 0.000 ·
+  REAL 0.027이 README와 일치, `2-shift-statistic.py`와 `pubg.ts:66-75` 통계 정의 동일(한계: 원본 축약본은 gitignore —
+  README에 고지). A3-3 ✅ — `run-ddragon.ts:283-299` 타입 선언이 기존 `spells.json` 기록 로직(348-358)의 잔여분으로 정합
+  (비평가는 diff를 직접 못 보므로 정적 정합성 판정; 메인이 `git diff` 16+/2− 확인). 결론: 기준선 충족 · UNMET 0 · SPEC 0.
+- 축B screen-critic: B3-1 ✅ — `/tft/methodology/` 카드 순서 한계 → 관측 → 수치 축 → 판정, 캡처
+  `.playwright-mcp/screen-critic/tft-methodology-impl-r2.png`. 결론: 시안 충족 · DEVIATION 0 · SPEC 0.
