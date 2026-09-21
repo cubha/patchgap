@@ -82,6 +82,7 @@ export function reduceTelemetry(
   vehicleDamageHits: Record<string, number>;
   weaponDamageSum: Record<string, number>;
   vehicleDamageSum: Record<string, number>;
+  damageGrid: Record<string, Record<string, { n: number; max: number; top: [number, number][] }>>;
 } {
   let label: MatchDefinitionLabel | null = null;
   const pickup = new Map<string, number>();
@@ -91,6 +92,11 @@ export function reduceTelemetry(
   const vehicleHits = new Map<string, number>();
   const damageSum = new Map<string, number>();
   const vehicleSum = new Map<string, number>();
+  // 피해 **격자**(2026-09-21, ST-6) — 잠수함 패치 검출의 입력이다.
+  // 여기서 `damage` 개별값을 합계로만 접으면 격자가 사라진다. 실제로 그렇게 하고 있었고, 그 탓에
+  // PUBG를 "관측 추정"으로 잘못 분류했다. 개별 값은 `기본데미지 × 부위배율 × 방어구계수 ×
+  // 거리감쇠`의 곱이라 이산값이고, **격자 위치는 방어구·거리 구성이 바뀌어도 안 움직인다**.
+  const gridCounts = new Map<string, Map<number, number>>();
   const bots = new Set<string>();
   const humans = new Set<string>();
 
@@ -111,7 +117,16 @@ export function reduceTelemetry(
       const weapon = asString(event["damageCauserName"]);
       if (weapon && weapon.startsWith("Weap")) {
         bump(damageHits, weapon);
-        bump(damageSum, weapon, Number(event["damage"]) || 0);
+        const raw = Number(event["damage"]) || 0;
+        bump(damageSum, weapon, raw);
+        if (raw > 0) {
+          const reason = asString(event["damageReason"]) ?? "NonSpecific";
+          const key = `${weapon}\u0000${reason}`;
+          const counts = gridCounts.get(key) ?? new Map<number, number>();
+          const value = Math.round(raw * 100) / 100;
+          counts.set(value, (counts.get(value) ?? 0) + 1);
+          gridCounts.set(key, counts);
+        }
       }
     } else if (type === "LogVehicleDamage") {
       const weapon = asString(event["damageCauserName"]);
@@ -153,5 +168,34 @@ export function reduceTelemetry(
     vehicleDamageHits: toRecord(vehicleHits),
     weaponDamageSum: round1(damageSum),
     vehicleDamageSum: round1(vehicleSum),
+    damageGrid: toGrid(gridCounts),
   };
+}
+
+/**
+ * 격자를 매치 파일에 담을 수 있는 크기로 접는다 — (무기, 부위)마다 표본 수·최대치·최빈 8개.
+ *
+ * 전체 히스토그램을 남기면 축약본이 3KB에서 수십 KB로 불어난다(MP5K 한 무기가 한 매치에서
+ * 고유값 84개). 판정에 실제로 쓰는 것은 **최대치**이고(무방어·근거리 피격이 격자 상단이라
+ * 선언값에 가장 가깝다), 최빈값은 교차 검증용이라 상위 8개면 충분하다.
+ */
+function toGrid(
+  counts: ReadonlyMap<string, ReadonlyMap<number, number>>
+): Record<string, Record<string, { n: number; max: number; top: [number, number][] }>> {
+  const out: Record<string, Record<string, { n: number; max: number; top: [number, number][] }>> = {};
+  for (const [key, values] of counts) {
+    const [weapon, reason] = key.split("\u0000");
+    let n = 0;
+    let max = 0;
+    for (const [value, count] of values) {
+      n += count;
+      if (value > max) max = value;
+    }
+    const top = [...values.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0] - b[0])
+      .slice(0, 8)
+      .map(([value, count]) => [value, count] as [number, number]);
+    (out[weapon] ??= {})[reason] = { n, max, top };
+  }
+  return out;
 }

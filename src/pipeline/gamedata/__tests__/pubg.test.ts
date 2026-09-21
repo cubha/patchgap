@@ -3,12 +3,15 @@ import { describe, it, expect } from "vitest";
 import { mergeGrids, compareGrids, gridToChanges, type DamageGrid } from "../pubg";
 import { isSubmarineChange } from "../types";
 
-function grid(spec: Record<string, Record<string, { n: number; max: number }>>): DamageGrid {
+function grid(
+  spec: Record<string, Record<string, { n: number; max: number; top?: [number, number][] }>>
+): DamageGrid {
   const out: DamageGrid = {};
   for (const [weapon, reasons] of Object.entries(spec)) {
     out[weapon] = {};
     for (const [reason, v] of Object.entries(reasons)) {
-      out[weapon][reason] = { n: v.n, max: v.max, top: [] };
+      // top이 없으면 max를 최빈값으로 둔다 — 두 추정자가 같이 움직이는 기본형.
+      out[weapon][reason] = { n: v.n, max: v.max, top: v.top ?? [[v.max, v.n]] };
     }
   }
   return out;
@@ -65,6 +68,29 @@ describe("compareGrids — 표본 게이트", () => {
     expect(shifts[0].weapon).toBe("WeapFNFal_C");
     expect(shifts[0].reason).toBe("TorsoShot");
     expect(shifts[0].relChange).toBeCloseTo((56.59 - 51.93) / 51.93, 6);
+  });
+});
+
+describe("compareGrids — 이상치 방어 (max는 표본이 커질수록 커지는 편향 추정자다)", () => {
+  it("최대치만 움직이고 최빈값이 그대로면 이상치다 — 판정하지 않는다", () => {
+    const before = grid({
+      W: { TorsoShot: { n: 500, max: 41.0, top: [[41.0, 300], [30.0, 200]] } },
+    });
+    const after = grid({
+      W: { TorsoShot: { n: 500, max: 52.0, top: [[41.0, 300], [30.0, 200]] } },
+    });
+    expect(compareGrids(before, after, { minHits: 120, tolerance: 0.015 })).toEqual([]);
+  });
+
+  it("두 추정자가 함께 이동하면 격자가 실제로 옮겨간 것이다", () => {
+    const before = grid({
+      W: { TorsoShot: { n: 500, max: 41.0, top: [[41.0, 300], [30.0, 200]] } },
+    });
+    const after = grid({
+      W: { TorsoShot: { n: 500, max: 45.0, top: [[45.0, 300], [33.0, 200]] } },
+    });
+    const shifts = compareGrids(before, after, { minHits: 120, tolerance: 0.015 });
+    expect(shifts).toHaveLength(1);
   });
 });
 

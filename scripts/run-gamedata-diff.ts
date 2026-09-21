@@ -9,9 +9,16 @@
 //   npm run pipeline:gamedata-diff -- --game lol --from 26.16 --to 26.17 \
 //     --version-from 16.16.1 --version-to 16.17.1
 
-import { mkdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { diffLol, type DdragonSnapshot } from "../src/pipeline/gamedata/lol";
+import {
+  compareGrids,
+  gridToChanges,
+  mergeGrids,
+  type DamageGrid,
+} from "../src/pipeline/gamedata/pubg";
+import { PUBG_PATCH_WINDOWS } from "../src/pipeline/collect/pubg/patch-calendar";
 import { isSubmarineChange, type GameDataDiffFile } from "../src/pipeline/gamedata/types";
 import type { NoteLike } from "../src/pipeline/gamedata/note-link";
 import { isMainModule, parseCliArgs } from "./shared/cli";
@@ -50,6 +57,93 @@ function loadNotes(dataRoot: string, game: string, patch: string): NoteLike[] {
   return Array.isArray(parsed) ? parsed : (parsed.items ?? []);
 }
 
+interface ReducedMatchFile {
+  readonly patch?: string | null;
+  readonly matchType?: string | null;
+  readonly damageGrid?: DamageGrid;
+}
+
+/** 부위별 최소 히트 — 못 채우면 판정하지 않는다(`insufficient-sample`과 같은 규율). */
+const PUBG_MIN_HITS = 120;
+
+/**
+ * PUBG는 게임사가 수치 파일을 내지 않으므로 축약본의 **피해 격자**를 읽는다. 격자가 없는 축약본은
+ * ST-6 이전에 만들어진 것이라 건너뛴다 — 조용히 0으로 세지 않고 아래에서 수를 보고한다.
+ */
+async function runPubg(dataRoot: string, from: string, to: string): Promise<void> {
+  const dir = join(dataRoot, "raw", "pubg", "telemetry-reduced");
+  if (!existsSync(dir)) throw new Error(`run-gamedata-diff: ${dir} 없음 — 먼저 수집이 필요하다`);
+
+  // 축약본의 `patch`는 텔레메트리 라벨(`pc-2018-43`)이고 인자는 표기(`43.1`)다 — 캘린더가 그
+  // 대응을 소유한다(`PubgPatchWindow.telemetryPatch`). 여기서 따로 문자열을 만들지 않는다.
+  const telemetryLabel = (patch: string): string => {
+    const window = PUBG_PATCH_WINDOWS.find((w) => w.patch === patch);
+    if (!window) throw new Error(`run-gamedata-diff: PUBG 패치 '${patch}'가 캘린더에 없다`);
+    return window.telemetryPatch;
+  };
+  const labelFrom = telemetryLabel(from);
+  const labelTo = telemetryLabel(to);
+
+  const grids: Record<string, DamageGrid[]> = { [labelFrom]: [], [labelTo]: [] };
+  let withGrid = 0;
+  let withoutGrid = 0;
+  for (const file of readdirSync(dir)) {
+    if (!file.endsWith(".json")) continue;
+    const m = readJson<ReducedMatchFile>(join(dir, file));
+    if (m.matchType !== "official") continue;
+    const patch = m.patch ?? "";
+    if (!(patch in grids)) continue;
+    if (!m.damageGrid) {
+      withoutGrid += 1;
+      continue;
+    }
+    withGrid += 1;
+    grids[patch].push(m.damageGrid);
+  }
+
+  console.log(
+    `[gamedata] pubg ${from} → ${to} · 격자 보유 축약본 ${withGrid}건 · 미보유 ${withoutGrid}건`
+  );
+  if (withoutGrid > 0) {
+    console.log("[gamedata] ::warning:: 격자 없는 축약본은 ST-6 이전 생성분이다 — 재수집이 필요하다");
+  }
+
+  const before = mergeGrids(grids[labelFrom]);
+  const after = mergeGrids(grids[labelTo]);
+  const shifts = compareGrids(before, after, { minHits: PUBG_MIN_HITS });
+  const notes = loadNotes(dataRoot, "pubg", to);
+  const changes = gridToChanges(shifts, notes, to);
+  const submarines = changes.filter(isSubmarineChange);
+
+  const weaponsCompared = Object.keys(after).filter((w) => before[w]).length;
+  console.log(
+    `[gamedata] 무기 ${weaponsCompared}종 비교 · 격자 이동 ${shifts.length}건 · 그중 노트에 없는 것 ${submarines.length}건`
+  );
+  for (const s of submarines) {
+    console.log(`[gamedata]   ★ ${s.entityName} ${s.field}: ${s.before} → ${s.after}`);
+  }
+
+  writeDiff(dataRoot, {
+    meta: {
+      game: "pubg",
+      from,
+      to,
+      source: { kind: "telemetry-grid", from, to },
+      generatedAt: new Date().toISOString(),
+      changeCount: changes.length,
+      submarineCount: submarines.length,
+    },
+    changes,
+  });
+}
+
+function writeDiff(dataRoot: string, file: GameDataDiffFile): void {
+  const out = join(dataRoot, "aggregated", "gamedata", file.meta.game, `${file.meta.from}_${file.meta.to}.json`);
+  mkdirSync(dirname(out), { recursive: true });
+  writeFileSync(out, `${JSON.stringify(file, null, 2)}\n`, "utf8");
+  console.log(`[gamedata] 저장: ${out}`);
+}
+
 async function main(): Promise<void> {
   const args = parseCliArgs("run-gamedata-diff", process.argv.slice(2), [
     { name: "game", type: "string", required: true },
@@ -65,9 +159,13 @@ async function main(): Promise<void> {
   const to = String(args.to);
   const dataRoot = String(args.dataRoot);
 
+  if (game === "pubg") {
+    await runPubg(dataRoot, from, to);
+    return;
+  }
   if (game !== "lol") {
-    // TFT는 Community Dragon 채택(SCOPE §3 갱신)이 선행이고, PUBG는 텔레메트리 격자 경로가 따로다.
-    throw new Error(`TODO(gamedata): '${game}' 어댑터 미구현 — 현재 'lol'만 지원한다`);
+    // TFT는 Community Dragon 채택(SCOPE §3 갱신)이 선행이다.
+    throw new Error(`TODO(gamedata): '${game}' 어댑터 미구현 — 현재 'lol'·'pubg'만 지원한다`);
   }
 
   const versionFrom = String(args.versionFrom ?? "");
@@ -104,15 +202,11 @@ async function main(): Promise<void> {
     changes,
   };
 
-  const out = join(dataRoot, "aggregated", "gamedata", game, `${from}_${to}.json`);
-  mkdirSync(dirname(out), { recursive: true });
-  writeFileSync(out, `${JSON.stringify(file, null, 2)}\n`, "utf8");
-
   console.log(`[gamedata] 수치 변경 ${changes.length}건 · 그중 노트에 없는 것 ${submarines.length}건`);
   for (const s of submarines) {
     console.log(`[gamedata]   ★ ${s.entityName} ${s.field}: ${s.before} → ${s.after}`);
   }
-  console.log(`[gamedata] 저장: ${out}`);
+  writeDiff(dataRoot, file);
 }
 
 if (isMainModule(import.meta.url)) {
