@@ -22,7 +22,7 @@ const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
 const TELEMETRY_LABEL = /^pc-\d{4}-\d+$/;
 
 /** `26.9` < `26.18` — 문자열 비교로는 뒤집힌다. */
-function comparePatchId(a: string, b: string): number {
+export function comparePatchId(a: string, b: string): number {
   const [aMajor, aMinor] = a.split(".").map(Number);
   const [bMajor, bMinor] = b.split(".").map(Number);
   return aMajor !== bMajor ? aMajor - bMajor : aMinor - bMinor;

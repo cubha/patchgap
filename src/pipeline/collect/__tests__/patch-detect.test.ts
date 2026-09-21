@@ -15,6 +15,8 @@ import {
   pubgPatchOfLabel,
   telemetryMajor,
   lolLiveKstOf,
+  pubgPatchOfSteamTitle,
+  telemetryLabelFor,
 } from "../patch-detect";
 
 describe("nextPatchCandidates — 다음 후보 둘(마이너 +1, 메이저 롤오버)", () => {
@@ -101,5 +103,42 @@ describe("lolLiveKstOf — 발행 시각 → KR 라이브일", () => {
   it("목요일 직후(금요일) 발행이면 다음 목요일이다", () => {
     // KST 금요일 2026-09-11 발행 → 다음 목요일 09-17
     expect(lolLiveKstOf("2026-09-11T00:00:00.000Z")).toBe("2026-09-17");
+  });
+});
+
+// PUBG 탐지는 **Steam 뉴스 피드**가 답이다(2026-09-21). PUBG 자체 API·웹사이트에는 신호가 없어
+// 한때 "탐지 원천 불가"로 적었는데, 정작 Steam 게임이 공지를 내는 곳을 안 봤던 것이다.
+// `api.steampowered.com/ISteamNews/GetNewsForApp`은 키가 필요 없고 구조화 JSON을 준다.
+//
+// 역산 재현 확인(실측): `Patch Notes - Update 42.3` → 2026-08-11 = 캘린더 liveFrom,
+// `Patch Notes - Update 43.1` → 2026-09-09 = 캘린더 liveFrom. 2/2 일치.
+describe("pubgPatchOfSteamTitle — Steam 공지 제목 → 패치 표기", () => {
+  it("★ 패치노트 제목에서 버전을 뽑는다", () => {
+    expect(pubgPatchOfSteamTitle("Patch Notes - Update 43.1")).toBe("43.1");
+    expect(pubgPatchOfSteamTitle("Patch Notes - Update 42.3")).toBe("42.3");
+  });
+
+  it("앞뒤 공백을 허용한다", () => {
+    expect(pubgPatchOfSteamTitle("  Patch Notes - Update 44.1  ")).toBe("44.1");
+  });
+
+  it("★ 같은 날 올라오는 이웃 공지를 집지 않는다 — 실측으로 섞여 있다", () => {
+    expect(pubgPatchOfSteamTitle("Map Service Report - Update 43.1")).toBeNull();
+    expect(pubgPatchOfSteamTitle("September Store Update 2026")).toBeNull();
+    expect(pubgPatchOfSteamTitle("PEC: Fall Finals 1 Day 3 is LIVE!!")).toBeNull();
+  });
+});
+
+describe("telemetryLabelFor — 직전 라벨에서 새 라벨을 만든다", () => {
+  it("★ 메이저만 갈아 끼운다 — 연도 자리(2018)는 레거시 상수라 직전 것을 그대로 쓴다", () => {
+    expect(telemetryLabelFor("pc-2018-43", "44.1")).toBe("pc-2018-44");
+  });
+
+  it("마이너는 라벨이 그대로다 — 텔레메트리가 마이너를 구분하지 않기 때문", () => {
+    expect(telemetryLabelFor("pc-2018-43", "43.2")).toBe("pc-2018-43");
+  });
+
+  it("직전 라벨 형식이 아니면 null — 지어내지 않는다", () => {
+    expect(telemetryLabelFor("nonsense", "44.1")).toBeNull();
   });
 });
