@@ -199,14 +199,9 @@ export default function TftPage() {
           </div>
 
           <TftPageHeader
-            title={
-              <>
-                <span className="text-accent">
-                  {deltas.meta.from} ⇒ {deltas.meta.to}
-                </span>{" "}
-                · 유닛 · 특성 · 아이템
-              </>
-            }
+            /* 패치쌍은 헤더가 이미 말한다(`Header.tsx:137` — "18.1 → 18.2") — 2026-09-21
+               사용자 지시로 중복 제거. 세 게임 모두 같다. */
+            title={<>유닛 · 특성 · 아이템</>}
             lead={
               <>
                 KR · Master+ <strong className="text-fg">{before.matches.toLocaleString()}</strong> →{" "}

@@ -33,7 +33,8 @@ import ExternalLink from "@/components/ExternalLink";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
 export const metadata: Metadata = {
-  title: "PUBG 42.3 ⇒ 43.1 · patchgap",
+  // 패치쌍은 헤더 셀렉터가 말한다 — 탭 제목에서도 뺀다(2026-09-21, TFT와 같은 형식).
+  title: "배틀그라운드 — patchgap",
   description: "PUBG: BATTLEGROUNDS 43.1 패치노트의 공지와 실제 관측 데이터를 대조한다.",
 };
 
@@ -68,12 +69,21 @@ export default function PubgPage() {
         {/* pt-40 — 시안 `.hero-body`가 히어로 스테이지 하단에 붙는 배치. 키아트 상단 구간을 글자로 덮지
             않는다(LoL 홈 pt-44와 같은 이유, 아트 밴드 높이에 맞춰 한 단계 작은 값). */}
         <div className="flex flex-col gap-6 pt-40 pb-8">
+          {/* 히어로 문장 — LoL·TFT와 같은 형태로 맞춘다(2026-09-21 사용자 지시). PUBG에만
+              없어서 세 게임의 첫인상이 달랐다. 두 숫자를 accent로 대비시킨다. */}
+          <div className="flex flex-col gap-2">
+            <span className="font-mono text-xs font-bold tracking-wide text-accent uppercase">
+              패치노트가 말한 것 vs 통계가 말하는 것
+            </span>
+            <p className="max-w-3xl font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
+              패치노트는 <span className="text-accent">{notes.length}개 항목</span>을 말했고, 통계는{" "}
+              <span className="text-accent">{reportable.length}개 변화</span>를 말합니다
+            </p>
+          </div>
+
           <PubgPageHeader
-            title={
-              <>
-                <span className="text-accent">42.3 ⇒ 43.1</span> · 무기 획득 점유율
-              </>
-            }
+            /* 패치쌍은 헤더가 이미 말한다 — 중복 제거(2026-09-21). */
+            title={<>무기 획득 점유율</>}
             lead={
               <>
                 {/* 설명 문장은 방법론으로(재판정 보완 6) — 리드는 표본 수치만. */}
