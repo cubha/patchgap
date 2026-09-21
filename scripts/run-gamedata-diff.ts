@@ -8,6 +8,12 @@
 // 사용:
 //   npm run pipeline:gamedata-diff -- --game lol --from 26.16 --to 26.17 \
 //     --version-from 16.16.1 --version-to 16.17.1
+//
+// **버전 인자는 선택이다**(2026-09-21, F9를 cron에 올리면서). 안 주면 저장소에서 찾는다:
+//   versionFrom = 직전 쌍 산출물의 `meta.source.to`   (지난 실행이 이미 적어 커밋했다)
+//   versionTo   = 같은 잡의 앞 스텝이 방금 받아 둔 가장 새 스냅숏
+// cron은 "지금 라이브인 패치"만 알고 게임 버전은 모르기 때문이다. 규칙은
+// `src/pipeline/gamedata/snapshot-version.ts`, 디스크 접근은 `scripts/shared/snapshot-version.ts`.
 
 import { mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -25,6 +31,11 @@ import { diffTft, type CdragonSnapshot } from "../src/pipeline/gamedata/tft";
 import { isSubmarineChange, type GameDataDiffFile } from "../src/pipeline/gamedata/types";
 import type { NoteLike } from "../src/pipeline/gamedata/note-link";
 import { isMainModule, parseCliArgs } from "./shared/cli";
+import {
+  resolveCdragonVersion,
+  resolveDdragonVersion,
+  resolvePreviousSnapshotVersion,
+} from "./shared/snapshot-version";
 
 interface DdragonListFile {
   readonly data: Record<string, unknown>;
@@ -185,6 +196,20 @@ function runTft(dataRoot: string, from: string, to: string, vFrom: string, vTo: 
   });
 }
 
+/**
+ * 두 버전이 같으면 대조할 것이 없다. **조용히 0건으로 넘기지 않는다** — 그 화면은 "잠수함 없음"과
+ * 구분되지 않는다. cron에서 이 상황은 보통 하나뿐이다: 패치는 라이브인데 DDragon·CDragon이
+ * 아직 그 버전을 안 냈다(앞 스텝이 전 버전을 최신으로 집었다).
+ */
+function assertVersionPair(game: string, from: string, to: string): void {
+  if (from === to) {
+    throw new Error(
+      `run-gamedata-diff: ${game} 전/후 버전이 같다(${from}) — ` +
+        "스냅숏이 아직 이번 패치 버전으로 갱신되지 않았다. 잠시 뒤 다시 돌리거나 --version-to로 직접 준다"
+    );
+  }
+}
+
 function writeDiff(dataRoot: string, file: GameDataDiffFile): void {
   const out = join(dataRoot, "aggregated", "gamedata", file.meta.game, `${file.meta.from}_${file.meta.to}.json`);
   mkdirSync(dirname(out), { recursive: true });
@@ -212,11 +237,9 @@ async function main(): Promise<void> {
     return;
   }
   if (game === "tft") {
-    const vFrom = String(args.versionFrom ?? "");
-    const vTo = String(args.versionTo ?? "");
-    if (!vFrom || !vTo) {
-      throw new Error("run-gamedata-diff: TFT는 --version-from/--version-to(Community Dragon 버전)가 필요하다");
-    }
+    const vFrom = String(args.versionFrom ?? "") || resolvePreviousSnapshotVersion(dataRoot, "tft", from);
+    const vTo = String(args.versionTo ?? "") || resolveCdragonVersion(dataRoot, to);
+    assertVersionPair("tft", vFrom, vTo);
     runTft(dataRoot, from, to, vFrom, vTo);
     return;
   }
@@ -224,11 +247,9 @@ async function main(): Promise<void> {
     throw new Error(`TODO(gamedata): '${game}' 어댑터 미구현 — 현재 'lol'·'tft'·'pubg'만 지원한다`);
   }
 
-  const versionFrom = String(args.versionFrom ?? "");
-  const versionTo = String(args.versionTo ?? "");
-  if (!versionFrom || !versionTo) {
-    throw new Error("run-gamedata-diff: --version-from/--version-to가 필요하다(DDragon 버전)");
-  }
+  const versionFrom = String(args.versionFrom ?? "") || resolvePreviousSnapshotVersion(dataRoot, "lol", from);
+  const versionTo = String(args.versionTo ?? "") || resolveDdragonVersion(dataRoot);
+  assertVersionPair("lol", versionFrom, versionTo);
 
   const before = loadDdragon(dataRoot, versionFrom);
   const after = loadDdragon(dataRoot, versionTo);

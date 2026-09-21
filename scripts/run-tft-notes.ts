@@ -12,13 +12,10 @@ import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";
 
-import {
-  fetchTftCatalog,
-  setNumberOfPatch,
-  type CdragonNameFile,
-} from "../src/pipeline/match/tft-catalog";
+import { fetchTftCatalog, type CdragonNameFile } from "../src/pipeline/match/tft-catalog";
 import { parseTftPatchNotes } from "../src/pipeline/match/tft-notes-parser";
 import { isMainModule, parseCliArgs } from "./shared/cli";
+import { resolveCdragonVersion } from "./shared/snapshot-version";
 
 const USER_AGENT = "Mozilla/5.0 (compatible; patchgap/1.0; +https://patchgap.vercel.app)";
 
@@ -63,36 +60,14 @@ export function parseArgs(argv: string[]): CliArgs {
 }
 
 /**
- * 이 패치의 세트에 해당하는 CDragon 추출본 버전. **같은 세트 안에서 가장 높은 버전**을 쓴다.
+ * 이 패치의 세트에 해당하는 CDragon 추출본 버전 — 규칙은 `scripts/shared/snapshot-version.ts`가
+ * 소유한다(같은 질문을 `run-gamedata-diff`도 하기 때문에 한 곳에 뒀다).
  *
  * 왜 자동으로 고르나: TFT 패치 번호(18.2)와 CDragon 버전(16.18)의 대응은 규칙이 아니라 사실이라
  * 계산할 수 없다. 그렇다고 인자를 필수로 두면 cron(`collect-tft.yml`)이 패치마다 그 대응을
  * 알아야 하는데, 그 지식이 어디에도 없다. 그래서 **스냅숏이 스스로 밝히는 세트**(`set` 필드)로
  * 고르고, 고른 것을 로그에 남긴다.
  */
-export function resolveCdragonVersion(dataRoot: string, patch: string): string {
-  const dir = path.join(dataRoot, "cdragon");
-  const want = `TFTSet${setNumberOfPatch(patch)}`;
-  const matches = fs.existsSync(dir)
-    ? fs
-        .readdirSync(dir)
-        .filter((v) => fs.existsSync(path.join(dir, v, "tft.json")))
-        .filter((v) => {
-          const parsed = JSON.parse(fs.readFileSync(path.join(dir, v, "tft.json"), "utf8")) as {
-            set?: string;
-          };
-          return parsed.set === want;
-        })
-        .sort((a, z) => z.localeCompare(a, "en", { numeric: true }))
-    : [];
-  const picked = matches[0];
-  if (!picked) {
-    throw new Error(
-      `${want} CDragon 추출본이 ${dir}에 없다 — 노트 대상 해소율이 34% 떨어지므로 진행하지 않는다`
-    );
-  }
-  return picked;
-}
 
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
