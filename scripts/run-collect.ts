@@ -7,7 +7,8 @@ import "dotenv/config";
 import { loadEnv } from "../src/pipeline/shared/env";
 import { createRiotClient, type LeagueTier } from "../src/pipeline/collect/riot-client";
 import { crawlPatch } from "../src/pipeline/collect/crawler";
-import { PATCH_CALENDAR } from "../src/pipeline/collect/patch-calendar";
+import { patchWindow } from "../src/pipeline/collect/patch-calendar";
+import { loadLolCalendar } from "./shared/calendar";
 import { isMainModule, parseCliArgs } from "./shared/cli";
 
 const VALID_TIERS: readonly LeagueTier[] = ["challenger", "grandmaster", "master"];
@@ -57,10 +58,11 @@ function parseArgs(argv: string[]): CliArgs {
   }
   const tiers = tiersRaw !== undefined ? parseTiers(tiersRaw) : undefined;
 
-  if (!Object.prototype.hasOwnProperty.call(PATCH_CALENDAR, patch)) {
+  const calendar = loadLolCalendar();
+  if (!Object.prototype.hasOwnProperty.call(calendar, patch)) {
     throw new Error(
       `run-collect: --patch "${patch}" is not registered in PATCH_CALENDAR ` +
-        `(${Object.keys(PATCH_CALENDAR).join(", ")}) — crawlPatch would throw on this patch anyway, ` +
+        `(${Object.keys(calendar).join(", ")}) — crawlPatch would throw on this patch anyway, ` +
         `checked here so --dry-run catches it too.`
     );
   }
@@ -100,6 +102,9 @@ async function main(): Promise<void> {
   try {
     const result = await crawlPatch(client, {
       patch: args.patch,
+      // 시간창을 **여기서** 계산해 넘긴다 — crawler가 스스로 부르면 기저 상수만 보고,
+      // 감시자가 오버레이에 넣은 새 패치는 "등록 안 됨"으로 던진다.
+      window: patchWindow(args.patch, Date.now, loadLolCalendar()),
       target: args.target,
       tiers: args.tiers,
       seedLimit: args.seedLimit,

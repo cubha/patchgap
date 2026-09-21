@@ -28,7 +28,7 @@ import {
   type DamageGrid,
   type PubgNoteLike,
 } from "../src/pipeline/gamedata/pubg";
-import { PUBG_PATCH_WINDOWS } from "../src/pipeline/collect/pubg/patch-calendar";
+import { loadPubgWindows } from "./shared/calendar";
 import { diffTft, type CdragonSnapshot } from "../src/pipeline/gamedata/tft";
 import { isSubmarineChange, type GameDataDiffFile } from "../src/pipeline/gamedata/types";
 import type { NoteLike } from "../src/pipeline/gamedata/note-link";
@@ -94,7 +94,7 @@ async function runPubg(dataRoot: string, from: string, to: string): Promise<void
   // 축약본의 `patch`는 텔레메트리 라벨(`pc-2018-43`)이고 인자는 표기(`43.1`)다 — 캘린더가 그
   // 대응을 소유한다(`PubgPatchWindow.telemetryPatch`). 여기서 따로 문자열을 만들지 않는다.
   const telemetryLabel = (patch: string): string => {
-    const window = PUBG_PATCH_WINDOWS.find((w) => w.patch === patch);
+    const window = loadPubgWindows(dataRoot).find((w) => w.patch === patch);
     if (!window) throw new Error(`run-gamedata-diff: PUBG 패치 '${patch}'가 캘린더에 없다`);
     return window.telemetryPatch;
   };

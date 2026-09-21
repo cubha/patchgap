@@ -26,6 +26,14 @@ export interface PubgPatchWindow {
   liveFrom: string;
 }
 
+/**
+ * 손으로 적은 **기저** 창. 감시자(`patch-watch.yml`)가 `data/patch-calendar/pubg.json`에 더하고
+ * 소비자는 `loadPubgWindows()`로 합쳐 본다.
+ *
+ * **감시자가 잡을 수 있는 것은 메이저 상승뿐이다** — 텔레메트리 라벨이 `pc-2018-43`처럼
+ * 메이저까지만 담아 43.1 → 43.2를 구분하지 못한다(그리고 넣어서도 안 된다: 두 창의 라벨이
+ * 같으면 피해 격자가 한 배열로 붕괴해 대조가 언제나 0건이 된다). 마이너는 손으로 적는다.
+ */
 export const PUBG_PATCH_WINDOWS: readonly PubgPatchWindow[] = [
   { patch: "42.3", telemetryPatch: "pc-2018-42", liveFrom: "2026-08-11" },
   { patch: "43.1", telemetryPatch: "pc-2018-43", liveFrom: "2026-09-09" },

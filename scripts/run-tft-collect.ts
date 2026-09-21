@@ -14,7 +14,7 @@ import "dotenv/config";
 
 import { createTftClient, type TftTier } from "../src/pipeline/collect/tft-client";
 import { crawlTft } from "../src/pipeline/collect/tft-crawler";
-import { TFT_PATCH_WINDOWS as PATCH_WINDOWS } from "../src/pipeline/collect/tft-patch-calendar";
+import { loadTftWindows } from "./shared/calendar";
 import { isMainModule, parseCliArgs } from "./shared/cli";
 
 const VALID_TIERS: readonly TftTier[] = ["challenger", "grandmaster", "master"];
@@ -23,6 +23,9 @@ const VALID_TIERS: readonly TftTier[] = ["challenger", "grandmaster", "master"];
 // **워크플로 `determine` 스텝이 같은 상수를 읽어야** 하는데, 스크립트 안에 있으면 CI가 규칙을
 // 다시 적게 되고 두 곳이 조용히 갈라진다. 기존 import 경로를 깨지 않으려고 여기서 재수출한다.
 export { TFT_PATCH_WINDOWS } from "../src/pipeline/collect/tft-patch-calendar";
+
+/** 크롤이 도는 창 — 기저 상수 + 감시자 오버레이. 병합본을 안 쓰면 새 패치 구간을 안 돈다. */
+const PATCH_WINDOWS = loadTftWindows();
 
 interface CliArgs {
   target: number;
