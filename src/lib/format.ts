@@ -59,6 +59,27 @@ export function fmtInt(n: number): string {
   return new Intl.NumberFormat("en-US").format(Math.round(n));
 }
 
+/**
+ * 게임 데이터 **원본 수치**(수치 축 F9)의 표시 형식.
+ *
+ * Community Dragon은 값을 float32로 내보내므로 JSON에 `0.800000011920929`·`0.07999999821186066`
+ * 같은 잡음이 그대로 남는다. **비교**는 `tft.ts`의 `sameNumber()`가 상대 오차 1e-6으로 이미
+ * 흡수하지만 **표시는 아무도 걸러 주지 않았다** — 2026-09-21 프로덕션 실측에서 TFT 홈 잠수함
+ * 목록이 드레이븐 공격 속도를 `0.800000011920929 → 0.8500000238418579`로 렌더하고 있었다.
+ *
+ * 유효숫자 6자리로 접는다. float32의 유효숫자가 7자리 남짓이라 6자리면 잡음만 사라지고 실제
+ * 수치(850·3000·26.46)는 손대지 않는다. **반올림은 표시에서만 한다** — 산출물 JSON은 게임사가
+ * 낸 값 그대로 두어야 다음 패치와 대조할 때 기준이 흔들리지 않는다.
+ *
+ * `null`은 한쪽 패치에만 있던 필드다(신규·삭제). 0으로 적으면 거짓이 되므로 "없음"으로 말한다.
+ */
+export function gameDataValue(value: number | string | null): string {
+  if (value === null) return "없음";
+  if (typeof value === "string") return value;
+  if (!Number.isFinite(value)) return String(value);
+  return String(Number(value.toPrecision(6)));
+}
+
 /** 부호 포함 정수(골드 델타 등). fmtDeltaInt(320) => "+320", fmtDeltaInt(-85) => "−85". */
 export function fmtDeltaInt(n: number): string {
   return `${sign(n)}${fmtInt(Math.abs(n))}`;

@@ -5,7 +5,7 @@
 // "게임사 데이터를 전부 대조했고 노트와 어긋난 것이 없었다"는 **증명된 사실**이다.
 // 그래서 회색으로 숨기지 않고 분모(검출된 수치 변경 수)와 함께 말한다.
 import SectionCard from "@/components/SectionCard";
-import { statusLabel } from "@/lib/format";
+import { gameDataValue, statusLabel } from "@/lib/format";
 import type { SubmarineSummary } from "@/lib/gamedata";
 
 /** 대조 원본의 사람용 이름 — 게임마다 소스가 다르다는 사실을 화면이 그대로 말한다. */
@@ -14,11 +14,6 @@ const SOURCE_LABELS: Record<string, string> = {
   cdragon: "Community Dragon",
   "telemetry-grid": "텔레메트리 피해 격자",
 };
-
-function formatValue(value: number | string | null): string {
-  if (value === null) return "없음";
-  return typeof value === "number" ? String(value) : value;
-}
 
 function formatRel(rel: number | null): string | null {
   if (rel === null) return null;
@@ -70,8 +65,8 @@ export default function SubmarineSection({ summary }: { summary: SubmarineSummar
                 {statusLabel("submarine")}
               </span>
               <span className="font-mono text-sm tabular-nums text-fg-2">
-                {change.field} <span className="text-muted">{formatValue(change.before)}</span> →{" "}
-                <span className="text-fg">{formatValue(change.after)}</span>
+                {change.field} <span className="text-muted">{gameDataValue(change.before)}</span> →{" "}
+                <span className="text-fg">{gameDataValue(change.after)}</span>
               </span>
               {formatRel(change.relChange) ? (
                 <span className="font-mono text-xs tabular-nums text-muted">
