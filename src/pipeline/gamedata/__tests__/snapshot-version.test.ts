@@ -10,7 +10,7 @@
 // 앞 스텝이 방금 받아 놓은 **가장 새 스냅숏 디렉터리**다. 여기 두 순수 함수가 그 둘을 고른다.
 import { describe, it, expect } from "vitest";
 
-import { newestVersion, diffFileEndingAt } from "../snapshot-version";
+import { newestVersion, diffFileEndingAt, diffFileStartingAt } from "../snapshot-version";
 
 describe("newestVersion — 스냅숏 디렉터리 중 가장 새 버전", () => {
   it("★ 숫자로 센다 — 문자열 정렬이면 16.9.1이 16.18.1을 이긴다", () => {
@@ -58,5 +58,29 @@ describe("diffFileEndingAt — 그 패치를 `to`로 삼은 직전 산출물", (
 
   it("없으면 null", () => {
     expect(diffFileEndingAt([], "26.18")).toBeNull();
+  });
+});
+
+// 한 패치의 버전은 **양쪽 어느 쌍에든** 적혀 있다. 재실행(`force`)이 그 반대편을 요구한다 —
+// 26.18을 다시 돌리는데 "오늘의 최신 스냅숏"을 집으면 16.19.1과 대조하게 된다.
+describe("diffFileStartingAt — 그 패치를 `from`으로 삼은 산출물", () => {
+  it("★ `{patch}_{to}.json`을 고른다 — 재실행 때 그 패치의 버전을 되찾는 경로다", () => {
+    expect(diffFileStartingAt(["26.17_26.18.json", "26.18_26.19.json"], "26.18")).toBe(
+      "26.18_26.19.json"
+    );
+  });
+
+  it("그 패치가 `to`인 쌍은 고르지 않는다", () => {
+    expect(diffFileStartingAt(["26.17_26.18.json"], "26.18")).toBeNull();
+  });
+
+  it("접두가 겹치는 다른 패치를 집지 않는다 — 26.1_ 이 26.18_ 을 먹으면 안 된다", () => {
+    expect(diffFileStartingAt(["26.18_26.19.json"], "26.1")).toBeNull();
+  });
+
+  it("여럿이면 `to`가 가장 나중인 것", () => {
+    expect(diffFileStartingAt(["26.18_26.19.json", "26.18_26.20.json"], "26.18")).toBe(
+      "26.18_26.20.json"
+    );
   });
 });

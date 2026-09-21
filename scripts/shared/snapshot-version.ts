@@ -10,6 +10,7 @@ import path from "node:path";
 
 import {
   diffFileEndingAt,
+  diffFileStartingAt,
   newestVersion,
 } from "../../src/pipeline/gamedata/snapshot-version";
 import type { GameDataDiffFile } from "../../src/pipeline/gamedata/types";
@@ -55,28 +56,44 @@ export function resolveDdragonVersion(dataRoot: string): string {
 }
 
 /**
- * 이번 쌍의 `versionFrom` — **직전 쌍 산출물의 `meta.source.to`**다.
+ * 이미 커밋된 산출물이 **그 패치의 게임 버전을 어떻게 적어 뒀는지** 되읽는다. 없으면 `null`.
  *
  * 패치 번호와 게임 버전의 대응을 새로 저장하지 않는 이유가 이것이다: 지난 실행이 이미 그 사실을
- * 산출물에 적어 커밋했다. 없으면 던진다 — 조용히 최신 두 개를 짝지으면 엉뚱한 쌍을 대조한 결과가
- * "잠수함 0건"으로 보인다.
+ * 산출물에 적어 커밋했다. 한 패치는 **양쪽 어느 쌍에든** 있을 수 있어 둘 다 본다 —
+ * `{x}_{patch}.json`의 `source.to`, 또는 `{patch}_{y}.json`의 `source.from`.
+ */
+export function recordedVersionOf(dataRoot: string, game: string, patch: string): string | null {
+  const dir = path.join(dataRoot, "aggregated", "gamedata", game);
+  const files = listDir(dir);
+  const asTo = diffFileEndingAt(files, patch);
+  if (asTo) return readMeta(path.join(dir, asTo)).source.to || null;
+  const asFrom = diffFileStartingAt(files, patch);
+  if (asFrom) return readMeta(path.join(dir, asFrom)).source.from || null;
+  return null;
+}
+
+function readMeta(file: string): GameDataDiffFile["meta"] {
+  const meta = (JSON.parse(fs.readFileSync(file, "utf8")) as GameDataDiffFile).meta;
+  if (!meta?.source) throw new Error(`${file}에 meta.source가 없다 — 산출물이 손상됐다`);
+  return meta;
+}
+
+/**
+ * 이번 쌍의 `versionFrom`. 기록이 없으면 **던진다** — 조용히 최신 두 개를 짝지으면 엉뚱한 쌍을
+ * 대조한 결과가 "잠수함 0건"으로 보인다.
  */
 export function resolvePreviousSnapshotVersion(
   dataRoot: string,
   game: string,
   from: string
 ): string {
-  const dir = path.join(dataRoot, "aggregated", "gamedata", game);
-  const name = diffFileEndingAt(listDir(dir), from);
-  if (!name) {
+  const recorded = recordedVersionOf(dataRoot, game, from);
+  if (!recorded) {
     throw new Error(
-      `${game} ${from}을 to로 삼은 이전 산출물이 ${dir}에 없다 — ` +
+      `${game} ${from}의 게임 버전이 기록된 산출물이 ` +
+        `${path.join(dataRoot, "aggregated", "gamedata", game)}에 없다 — ` +
         `--version-from으로 직접 주거나 그 쌍을 먼저 만들어야 한다`
     );
   }
-  const meta = (JSON.parse(fs.readFileSync(path.join(dir, name), "utf8")) as GameDataDiffFile).meta;
-  if (!meta.source?.to) {
-    throw new Error(`${path.join(dir, name)}에 meta.source.to가 없다 — 산출물이 손상됐다`);
-  }
-  return meta.source.to;
+  return recorded;
 }

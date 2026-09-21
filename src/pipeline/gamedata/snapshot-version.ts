@@ -51,3 +51,21 @@ export function diffFileEndingAt(files: readonly string[], patch: string): strin
     .sort((a, z) => compareVersionDesc(a.slice(0, -suffix.length), z.slice(0, -suffix.length)));
   return matched[0] ?? null;
 }
+
+/**
+ * 그 패치를 **`from`으로 삼은** 산출물 파일명(`{patch}_{to}.json`). `diffFileEndingAt`의 반대편이다 —
+ * 한 패치의 버전은 **양쪽 어느 쌍에든** 적혀 있을 수 있다(`source.to` 또는 `source.from`).
+ *
+ * 이게 필요한 이유는 재실행이다: `force`로 지난 패치를 다시 돌리면 "디스크에서 가장 새 스냅숏"은
+ * **오늘의 최신**이지 그 패치의 것이 아니다(26.18을 다시 돌리는데 16.19.1과 대조하게 된다).
+ * 이미 기록된 쌍이 있으면 그 기록이 디스크 상태보다 우선한다.
+ */
+export function diffFileStartingAt(files: readonly string[], patch: string): string | null {
+  const prefix = `${patch}_`;
+  const matched = files
+    .filter((f) => f.startsWith(prefix) && f.endsWith(".json"))
+    .sort((a, z) =>
+      compareVersionDesc(a.slice(prefix.length, -5), z.slice(prefix.length, -5))
+    );
+  return matched[0] ?? null;
+}

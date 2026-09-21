@@ -10,8 +10,10 @@
 //     --version-from 16.16.1 --version-to 16.17.1
 //
 // **버전 인자는 선택이다**(2026-09-21, F9를 cron에 올리면서). 안 주면 저장소에서 찾는다:
-//   versionFrom = 직전 쌍 산출물의 `meta.source.to`   (지난 실행이 이미 적어 커밋했다)
-//   versionTo   = 같은 잡의 앞 스텝이 방금 받아 둔 가장 새 스냅숏
+//   versionFrom = 이미 커밋된 산출물에 적힌 그 패치의 버전   (지난 실행이 적어 두고 갔다)
+//   versionTo   = 같은 규칙, 없으면 앞 스텝이 방금 받아 둔 가장 새 스냅숏
+// 기록을 디스크 최신보다 **먼저** 보는 이유는 재실행이다 — `force`로 지난 패치를 다시 돌리면
+// "가장 새 스냅숏"은 오늘의 최신이지 그 패치의 것이 아니다.
 // cron은 "지금 라이브인 패치"만 알고 게임 버전은 모르기 때문이다. 규칙은
 // `src/pipeline/gamedata/snapshot-version.ts`, 디스크 접근은 `scripts/shared/snapshot-version.ts`.
 
@@ -32,6 +34,7 @@ import { isSubmarineChange, type GameDataDiffFile } from "../src/pipeline/gameda
 import type { NoteLike } from "../src/pipeline/gamedata/note-link";
 import { isMainModule, parseCliArgs } from "./shared/cli";
 import {
+  recordedVersionOf,
   resolveCdragonVersion,
   resolveDdragonVersion,
   resolvePreviousSnapshotVersion,
@@ -238,7 +241,10 @@ async function main(): Promise<void> {
   }
   if (game === "tft") {
     const vFrom = String(args.versionFrom ?? "") || resolvePreviousSnapshotVersion(dataRoot, "tft", from);
-    const vTo = String(args.versionTo ?? "") || resolveCdragonVersion(dataRoot, to);
+    const vTo =
+      String(args.versionTo ?? "") ||
+      recordedVersionOf(dataRoot, "tft", to) ||
+      resolveCdragonVersion(dataRoot, to);
     assertVersionPair("tft", vFrom, vTo);
     runTft(dataRoot, from, to, vFrom, vTo);
     return;
@@ -248,7 +254,10 @@ async function main(): Promise<void> {
   }
 
   const versionFrom = String(args.versionFrom ?? "") || resolvePreviousSnapshotVersion(dataRoot, "lol", from);
-  const versionTo = String(args.versionTo ?? "") || resolveDdragonVersion(dataRoot);
+  const versionTo =
+    String(args.versionTo ?? "") ||
+    recordedVersionOf(dataRoot, "lol", to) ||
+    resolveDdragonVersion(dataRoot);
   assertVersionPair("lol", versionFrom, versionTo);
 
   const before = loadDdragon(dataRoot, versionFrom);
