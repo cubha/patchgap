@@ -32,7 +32,7 @@
 // 부수효과(아래 주석)는 스크롤 컨테이너가 `<ul>`인 한 그대로 유지된다.
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import type { DeltaRecord, LanePosition } from "@/pipeline/types";
 import { useAmbient } from "@/components/AmbientContext";
 import { panelSurfaceClass } from "@/lib/panelSurface";
@@ -122,6 +122,16 @@ export interface ReleaseNoteStreamProps {
   /** "기타 변경" 카테고리(2026-09-18 라운드6 L2) — 패치 내용 탭 목록의 마지막 1블록. 라인 필터와
    * 무관하게 항상 실린다(줄에 라인 정보가 없다). */
   miscSections?: MiscSection[];
+  /**
+   * 「미공지 Gap」 탭의 **위쪽 갈래**(2026-09-21). 미공지는 두 갈래다 — 수치 축(게임사가 무엇을
+   * 바꿨나, 증거 A)과 지표 축(패치노트에 없는데 움직였나, 증거 B). 위계의 근거는 중요도가
+   * 아니라 증거 등급이다.
+   *
+   * **세 번째 탭이 아니라 Gap 탭 안의 위쪽**인 이유: 잠수함도 미공지이고, 잠수함 > 미공지라는
+   * 위계를 동시에 만족하는 자리가 여기뿐이다. 서버 컴포넌트가 렌더해 노드로 내려보낸다
+   * (이 파일은 client라 데이터를 직접 읽을 수 없다).
+   */
+  gapLead?: ReactNode;
 }
 
 function groupKey(group: ReleaseStreamGroup): string {
@@ -145,6 +155,7 @@ export default function ReleaseNoteStream({
   causes,
   skinPreviews,
   miscSections = [],
+  gapLead,
 }: ReleaseNoteStreamProps) {
   const { selectedLane } = useAmbient();
   const [tab, setTab] = useState<StreamTab>("content");
@@ -209,6 +220,10 @@ export default function ReleaseNoteStream({
           );
         })}
       </div>
+
+      {/* 수치 축 — Gap 탭의 위쪽 갈래. 목록이 0건이어도(아래 빈 상태 분기) 사라지면 안 되므로
+          분기 **바깥**에 둔다. 라인 필터의 영향을 받지 않는다 — 원본 수치에는 라인 축이 없다. */}
+      {tab === "gap" && gapLead ? <div className="border-b border-border-soft p-5">{gapLead}</div> : null}
 
       {/* 정렬 고지("관측이 있는 항목부터 …")는 2026-09-18 라운드6(C3)에 뺐다 — 표기 이유는 방법론이
           말한다("표시 규칙"). */}

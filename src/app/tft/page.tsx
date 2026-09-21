@@ -8,6 +8,7 @@ import Container from "@/components/Container";
 import ExternalLink from "@/components/ExternalLink";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
+import TftBriefingTabs from "@/components/tft/TftBriefingTabs";
 import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import StatusBadge from "@/components/StatusBadge";
 import {
@@ -231,23 +232,44 @@ export default function TftPage() {
             </div>
           </section>
 
-          <SectionCard
-            eyebrow="대조"
-            title="공지된 변경은 실제로 그렇게 됐나"
-            variant="glass"
-            action={<span className="font-mono text-xs text-muted">{announced.length}건</span>}
-          >
-            <DeltaTable rows={topRows(announced, 15)} emptyText="공지와 짝지어진 유의한 관측이 없다." />
-          </SectionCard>
+          {/* 「패치 내용 / 미공지 Gap」 탭(2026-09-21 신설) — LoL·PUBG에 이미 있던 것을 TFT에도.
+              미공지 Gap 안은 **두 갈래**다: 위가 수치 축(게임사가 무엇을 바꿨나 — 증거 A),
+              아래가 지표 축(패치노트에 없는데 움직였나 — 증거 B). 위계의 근거는 중요도가 아니라
+              증거 등급이다(통계가 "움직였다"고 말하는 것과 게임사 파일이 "바꿨다"고 말하는 것). */}
+          <TftBriefingTabs
+            contentCount={announced.length}
+            gapCount={unannounced.length + (submarine?.submarines.length ?? 0)}
+            content={
+              <SectionCard
+                eyebrow="대조"
+                title="공지된 변경은 실제로 그렇게 됐나"
+                variant="glass"
+                action={<span className="font-mono text-xs text-muted">{announced.length}건</span>}
+              >
+                <DeltaTable rows={topRows(announced, 15)} emptyText="공지와 짝지어진 유의한 관측이 없다." />
+              </SectionCard>
+            }
+            gap={
+              <div className="flex flex-col gap-6">
+                {/* 수치 축 — 산출물이 없으면 통째로 빠진다(없는 것을 있는 척하지 않는다). */}
+                {submarine ? (
+                  <SubmarineSection
+                    summary={submarine}
+                    hrefOf={(change) => `/tft/unit/${entitySlug(`${change.entityType}:${change.entityKey}`)}/`}
+                  />
+                ) : null}
 
-          <SectionCard
-            eyebrow="발견"
-            title="패치노트에 없는데 움직인 것"
-            variant="glass"
-            action={<span className="font-mono text-xs text-muted">{unannounced.length}건</span>}
-          >
-            <DeltaTable rows={topRows(unannounced, 15)} emptyText="미공지 변화가 없다." />
-          </SectionCard>
+                <SectionCard
+                  eyebrow="발견 · 지표 축"
+                  title="패치노트에 없는데 움직인 것"
+                  variant="glass"
+                  action={<span className="font-mono text-xs text-muted">{unannounced.length}건</span>}
+                >
+                  <DeltaTable rows={topRows(unannounced, 15)} emptyText="미공지 변화가 없다." />
+                </SectionCard>
+              </div>
+            }
+          />
 
           {/* 표가 "무엇이 움직였나"를 말했으면, 여기서 "왜 그랬을까"를 말한다 — 이 사이트의
               목적이 수치 나열이 아니라 원인 추론이기 때문이다(2026-09-20 사용자 지적). 근거가
@@ -270,10 +292,6 @@ export default function TftPage() {
               </ul>
             )}
           </SectionCard>
-
-          {/* 수치 축(2026-09-21) — 위 섹션들은 지표가 어떻게 움직였나를 말하고, 여기는 게임사가
-              무엇을 바꿨나를 말한다. LoL 홈과 **같은 컴포넌트**다(게임을 모른다). */}
-          {submarine ? <SubmarineSection summary={submarine} /> : null}
 
           <TftSampleNotice boards={before.boards + after.boards} matches={matches} />
         </div>

@@ -166,10 +166,16 @@ export default function Home() {
                 patch={pair?.to ?? null}
                 qAlpha={deltas?.meta.qAlpha}
                 contentCount={contentLineCount}
-                gapCount={headline.unannouncedCount}
+                gapCount={headline.unannouncedCount + (submarine?.submarines.length ?? 0)}
                 causes={indirectCauses}
                 skinPreviews={skinPreviews}
                 miscSections={miscSections}
+                /* 수치 축(2026-09-21) — 미공지 Gap 탭의 **위쪽 갈래**. 세 번째 탭이 아닌
+                   이유는 잠수함도 미공지이기 때문이다(잠수함 > 미공지 위계를 같은 탭 안에서
+                   위아래로 표현한다). 산출물이 없는 쌍에서는 통째로 빠진다.
+                   상세 링크를 걸지 않는 이유: LoL 잠수함 전용 엔티티(폭풍갈퀴)는 델타가
+                   0건이라 `/lol/item/[id]` 라우트가 없다 — 없는 링크를 만들지 않는다. */
+                gapLead={submarine ? <SubmarineSection summary={submarine} /> : undefined}
               />
             }
             right={
@@ -186,15 +192,6 @@ export default function Home() {
             }
           />
 
-          {/* 수치 축(2026-09-21) — 위 스트림은 **지표가 움직였나**를 말하고, 여기는 **게임사가
-              무엇을 바꿨나**를 말한다. 두 축은 직교하므로 섹션을 따로 둔다(사용자 확정:
-              "레이아웃이 달라진게아니라 상태가 추가된거잖아"). 산출물이 없는 쌍에서는 통째로
-              빠진다 — 없는 것을 있는 척하지 않는다. */}
-          {submarine ? (
-            <div className="pb-9">
-              <SubmarineSection summary={submarine} />
-            </div>
-          ) : null}
         </Container>
       </main>
     </div>

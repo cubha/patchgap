@@ -4,9 +4,12 @@
 // 빈 상태가 곧 이 축의 값이다. 다른 섹션의 "없음"은 관측 실패일 수 있지만, 여기서는
 // "게임사 데이터를 전부 대조했고 노트와 어긋난 것이 없었다"는 **증명된 사실**이다.
 // 그래서 회색으로 숨기지 않고 분모(검출된 수치 변경 수)와 함께 말한다.
+import Link from "next/link";
+
 import SectionCard from "@/components/SectionCard";
 import { gameDataValue, statusLabel } from "@/lib/format";
 import type { SubmarineSummary } from "@/lib/gamedata";
+import type { GameDataChange } from "@/pipeline/gamedata/types";
 
 /** 대조 원본의 사람용 이름 — 게임마다 소스가 다르다는 사실을 화면이 그대로 말한다. */
 const SOURCE_LABELS: Record<string, string> = {
@@ -21,12 +24,25 @@ function formatRel(rel: number | null): string | null {
   return `${sign}${(rel * 100).toFixed(1)}%`;
 }
 
-export default function SubmarineSection({ summary }: { summary: SubmarineSummary }) {
+export interface SubmarineSectionProps {
+  summary: SubmarineSummary;
+  /**
+   * 엔티티 이름 → 상세 경로(2026-09-21 사용자 요청: "대조표의 이름을 클릭할때처럼 상세로
+   * 이동하는 ux도 있으면좋겟네"). 게임마다 라우트 모양이 달라 홈이 만들어 넘긴다.
+   *
+   * `null`을 돌려주면 **링크를 걸지 않는다** — LoL은 잠수함 전용 엔티티에 델타가 0건이라
+   * 상세 라우트가 없다(`/lol/item/[id]`는 `DeltaRecord` 전제로 서 있다). 없는 링크를
+   * 만드는 대신 이름만 그린다.
+   */
+  hrefOf?: (change: GameDataChange) => string | null;
+}
+
+export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionProps) {
   const { submarines, changeCount, source } = summary;
 
   return (
     <SectionCard
-      eyebrow="잠수함 패치"
+      eyebrow="잠수함 패치 · 수치 축"
       title="패치노트에 없는 수치 변경"
       variant="glass"
       action={
@@ -60,7 +76,16 @@ export default function SubmarineSection({ summary }: { summary: SubmarineSummar
               key={change.id}
               className="flex flex-wrap items-baseline gap-x-4 gap-y-1 border-b border-border-soft px-5 py-3 last:border-b-0"
             >
-              <span className="text-sm font-bold text-fg">{change.entityName}</span>
+              {(() => {
+                const href = hrefOf?.(change) ?? null;
+                return href ? (
+                  <Link href={href} className="text-sm font-bold text-fg hover:text-accent hover:underline">
+                    {change.entityName} →
+                  </Link>
+                ) : (
+                  <span className="text-sm font-bold text-fg">{change.entityName}</span>
+                );
+              })()}
               <span className="rounded-pill bg-accent px-2 py-0.5 text-[0.65rem] font-bold text-accent-on">
                 {statusLabel("submarine")}
               </span>
