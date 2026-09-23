@@ -9,6 +9,11 @@ import Link from "next/link";
 
 import CausesPanel from "@/components/causes/CausesPanel";
 import Container from "@/components/Container";
+import PageHeader from "@/components/PageHeader";
+import EntityIcon from "@/components/EntityIcon";
+import AmbientDetailSplash from "@/components/item/AmbientDetailSplash";
+import { publicTftAssetPath } from "@/pipeline/tft/asset-path";
+import { detailCrumbs } from "@/lib/breadcrumbs";
 import ExternalLink from "@/components/ExternalLink";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
@@ -17,18 +22,13 @@ import { TFT_METRICS, effectStrength, tftEntityRows } from "@/components/tft/ent
 import { TftFooter, TftUnavailable, deltaDisplay, formatMetricValue } from "@/components/tft/shared";
 import { entityTypeLabel, isLowerBetter, metricLabel, statusLabel } from "@/lib/format";
 import { loadGameDataDiff } from "@/lib/gamedata";
-import { loadTft, type TftBundle } from "@/lib/tftData";
+import { loadTft, loadTftAssets, type TftBundle } from "@/lib/tftData";
 import type { DeltaMetric, DeltaRecord } from "@/pipeline/types";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
+import { entityKeyFromSlug as unslug, entitySlug } from "@/lib/tftRoutes";
 
-/** `unit:DA_18_Rakan` → `unit~DA_18_Rakan`. 경로에 `:`을 그대로 쓰지 않는다. */
-export function entitySlug(key: string): string {
-  return key.replace(/:/g, "~");
-}
-
-function unslug(slug: string): string {
-  return slug.replace(/~/g, ":");
-}
+// 슬러그 규칙은 `@/lib/tftRoutes`가 소유한다 — 라우트 파일에 두면 클라이언트 컴포넌트가
+// 페이지 모듈을 import해야 하고, prop으로 넘기면 빌드가 막는다(2026-09-23 실측).
 
 /**
  * 이 라우트가 보는 행 집합 — **대조표와 같은 것**이어야 한다.
@@ -87,8 +87,11 @@ function MetricBlock({ record }: { record: DeltaRecord }) {
         <dt>바닥 대비</dt>
         <dd>{effectStrength(record).toFixed(2)}배</dd>
       </dl>
+      {/* §8-7 #9: 전에는 이 자리에 **JSON 경로 문자열만** 떠 있어서 그것이 무엇인지 말하지
+          않았다. LoL 상세(`SourceMatchesPanel`)와 같은 라벨을 붙인다. `break-all`은 이 줄에만
+          건다 — 공백 없는 긴 토큰이라 래핑 지점이 없으면 열 폭을 밀어낸다(실측). */}
       <span className="mt-1 font-mono text-xs leading-relaxed break-all text-muted">
-        {record.evidence.aggregatePath}
+        집계 경로: {record.evidence.aggregatePath}
       </span>
     </div>
   );
@@ -117,19 +120,27 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
     return (
       <main>
         <Container>
+          {/* 빈 상태에도 **같은 머리**를 쓴다 — 이동 경로가 여기서만 다른 형식이 되면 §8-5가 깨진다. */}
           <div className="flex flex-col gap-3 pt-40 pb-8">
-            <h1 className="font-display text-3xl font-bold text-fg">보고할 관측이 없는 엔티티다</h1>
-            <p className="max-w-2xl text-sm leading-relaxed text-fg-2">
-              이 키에는 통계 게이트와 효과크기 바닥을 통과한 관측이 없다. 없는 것을 지어내지 않는다.
-            </p>
-            <Link href="/tft/compare/" className="w-fit text-sm text-accent hover:underline">
-              ← 대조표로
-            </Link>
+            <PageHeader
+              crumbs={detailCrumbs("tft", "보고할 관측 없음")}
+              title="보고할 관측이 없는 대상입니다"
+              lead="이 키에는 통계 게이트와 효과크기 바닥을 통과한 관측이 없습니다. 없는 것을 지어내지 않습니다."
+            />
           </div>
         </Container>
       </main>
     );
   }
+
+  const assets = loadTftAssets();
+  // `unit:DA_18_Rakan` → `DA_18_Rakan`. 자산 파일명은 키의 뒷조각이다.
+  const entityKeyOnly = row.key.slice(row.key.indexOf(":") + 1);
+  // 유닛만 스플래시가 있다(특성·아이템은 아이콘뿐) — 없는 자산을 배경으로 올리지 않는다.
+  const splashUrl =
+    row.entityType === "unit" && assets?.assets.unit.includes(entityKeyOnly)
+      ? publicTftAssetPath("unit", entityKeyOnly)
+      : null;
 
   // 이 엔티티에 걸린 패치노트 — 이름 정확일치(판정과 같은 규칙).
   const matchedNotes = notes.items.filter((n) => n.entity === row.name);
@@ -148,19 +159,49 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
     <main>
       <Container>
         <div className="flex flex-col gap-6 pt-40 pb-8">
-          <header className="flex flex-col gap-3">
-            <Link href="/tft/compare/" className="w-fit font-mono text-xs text-muted hover:text-fg">
-              ← 대조표 · {entityTypeLabel(row.entityType)}
-            </Link>
-            <div className="flex flex-wrap items-center gap-3">
-              <h1 className="font-display text-3xl font-bold tracking-tight text-fg sm:text-4xl">{row.name}</h1>
-              <StatusBadge status={row.status} />
-            </div>
-            <p className="max-w-3xl text-sm leading-relaxed text-fg-2">
-              {deltas.meta.from} ⇒ {deltas.meta.to} · 판정 <strong className="text-fg">{statusLabel(row.status)}</strong>
-              {matchedNotes.length === 0 ? " · 패치노트에 이 엔티티를 언급한 항목이 없다" : null}
-            </p>
-          </header>
+          {/* 제목은 **대상 이름**이고 유형은 옆 라벨이다(§8-5). 이동 경로·액션 줄의 자리는
+              `PageHeader`가 소유한다 — 세 게임이 같은 위치에 둔다(§8-7 #1·#8·#18). */}
+          {/* 상세 스플래시 — TFT 화면의 이미지는 **0건**이었다(§8-7 말미). 자산이 실재하는 지금
+              LoL 상세와 같은 배경 레이어를 켠다. 없는 대상은 `null`이라 배경이 지형만 남는다. */}
+          <AmbientDetailSplash url={splashUrl} />
+          <PageHeader
+            crumbs={detailCrumbs("tft", row.name)}
+            title={
+              <span className="flex flex-wrap items-center gap-3">
+                <EntityIcon
+                  game="tft"
+                  entityType={row.entityType}
+                  entityKey={entityKeyOnly}
+                  name={row.name}
+                  size={72}
+                  assetMissing={!assets?.assets[row.entityType as "unit" | "trait" | "item"]?.includes(entityKeyOnly)}
+                  className="rounded-md text-lg"
+                />
+                {row.name}
+              </span>
+            }
+            titleAside={
+              <span className="flex items-center gap-2">
+                {entityTypeLabel(row.entityType)}
+                <StatusBadge status={row.status} />
+              </span>
+            }
+            lead={
+              <>
+                {deltas.meta.from} → {deltas.meta.to} · 판정{" "}
+                <strong className="text-fg">{statusLabel(row.status)}</strong>
+                {matchedNotes.length === 0 ? " · 패치노트에 이 대상을 언급한 항목이 없습니다" : null}
+              </>
+            }
+            actions={
+              <Link
+                href="/tft/methodology/#discord"
+                className="inline-flex min-h-10 items-center justify-center rounded-md bg-accent px-5 text-sm font-bold text-accent-on hover:opacity-90"
+              >
+                방송 규칙 보기 →
+              </Link>
+            }
+          />
 
           {/* B안(2026-09-21 사용자 확정) — 선언 카드를 「패치노트 대조」로 바꾸고 두 구획을 둔다.
               잠수함은 선언과 **같은 축이고 방향만 반대**라서(바꿨는데 말하지 않았다) 옆자리가 맞다.
@@ -184,7 +225,7 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
             </div>
             {matchedNotes.length === 0 ? (
               <p className="px-5 pb-4 text-sm text-muted">
-                이 엔티티를 언급한 패치노트 항목이 없다. 위 관측은 <strong className="text-fg">미공지 변화</strong>다.
+                이 엔티티를 언급한 패치노트 항목이 없습니다. 위 관측은 <strong className="text-fg">미공지 변화</strong>입니다.
               </p>
             ) : (
               <ul className={`flex flex-col ${PANEL_SCROLL_BODY}`}>
@@ -247,8 +288,8 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
           >
             {causeBlocks.length === 0 ? (
               <p className="px-5 py-8 text-center text-sm text-muted">
-                이 엔티티의 관측은 LLM 2단 대상이 아니었다 — 패치노트와 짝지어졌거나(공지-일치),
-                판정이 미공지·공지-불일치가 아니다. 없는 원인을 지어내지 않는다.
+                이 엔티티의 관측은 LLM 2단 대상이 아니었습니다 — 패치노트와 짝지어졌거나(공지-일치),
+                판정이 미공지·공지-불일치가 아니기 때문입니다. 없는 원인을 지어내지 않습니다.
               </p>
             ) : (
               <div className={`flex flex-col ${PANEL_SCROLL_BODY}`}>

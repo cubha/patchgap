@@ -1,5 +1,9 @@
 // src/components/compare/logic.ts
-// 대조표 순수 로직 — 상태 필터·정렬·좌 내비게이터 검색/섹션 필터·델타 셀 포맷·커버리지 집계.
+// 대조표 LoL 전용 순수 로직 — 라인 축·배지 해석·델타 셀 포맷·커버리지 집계.
+//
+// **2026-09-23 §8-3 이관**: 상태 칩(`STATUS_FILTERS`)·정렬·검색·좌 내비 묶기(`groupNotesForNav`)는
+// 세 게임 공통 규칙이 됐으므로 `toolbarRules.ts`·`noteNav.ts`로 옮겼다. 같은 어휘를 두 곳이
+// 소유하면 한쪽만 고쳐진다 — 그래서 여기서는 **지웠다**(재export도 하지 않는다).
 // 렌더(CompareExplorer.tsx 등)와 분리해 단위 테스트한다(완료 조건 "상태 필터·정렬 로직(순수
 // 함수)"). UX-BRIEF §3 "02 대조표" 기준.
 
@@ -8,33 +12,13 @@ import { isDisplayExcludedNote } from "@/pipeline/shared/excluded-notes";
 import type { DeltaRecord, PatchNoteItem, PatchNoteSection } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
 import { fmtCiHalf, fmtDeltaInt, fmtDeltaSec, fmtInt, fmtPp } from "@/lib/format";
-import { absDelta, countRelevantNoteEntities, metricKind } from "@/components/home/logic";
+import { countRelevantNoteEntities, metricKind } from "@/components/home/logic";
 import { parseLaneAxis, type LaneAxis } from "@/lib/lane";
-import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
 import { DISPLAY_SORT_PRIORITY, displayStatus, type DisplayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "./entityRows";
+import type { StreamEntityIcon } from "@/components/home/releaseStreamEntity";
+import type { NoteNavItem } from "./noteNav";
 
-/**
- * 상태 필터 칩 — 2026-09-18 라운드6(사용자 C5·C1) **4종**. 이전 10종(전체·공지-일치·공지-불일치·
- * 공지 · 관측 미확인·공지 · 바닥 미달·노트에 없는 변화·미공지·간접 영향·표본 부족·바닥 미달)은
- * 판정 엔진 어휘를 그대로 칩으로 옮긴 것이라 "공지된 내용은 공지된 내용인데 상세 value가 나뉜다"는
- * 지적을 받았다. 화면이 답할 질문은 둘이다 — 노트가 말한 것인가 · 노트와 반대로 움직였는가.
- * 노이즈 3종(표본 부족·바닥 미달·변화 없음)은 표에 올리지 않으므로 칩도 없다(배지 1종 = 칩 1종 불변식
- * 유지 — 표에 없는 상태의 칩은 항상 0건을 가리키게 된다).
- */
-export const STATUS_FILTERS: ReadonlyArray<{ key: DisplayStatus | "all"; label: string }> = [
-  { key: "all", label: "전체" },
-  { key: "announced", label: "공지" },
-  { key: "announced-anomaly", label: "공지 · 이상 관측" },
-  { key: "unannounced", label: "미공지" },
-];
-
-/** 표시 키 동등비교 — `unannounced`는 `indirect-effect`까지 함께 남긴다(displayStatus가 한 키로
- * 접는다). 소속 판정을 여기서 다시 쓰지 않는다. */
-export function filterByStatus(rows: DeltaRecord[], key: string, qAlpha?: number): DeltaRecord[] {
-  if (key === "all") return rows;
-  return rows.filter((r) => displayStatus(r, qAlpha) === key);
-}
 
 /**
  * 라인 필터 — 확정 시안(2026-09-10)이 대조표 필터바에도 라인 6종을 두므로 신설했다.
@@ -55,58 +39,36 @@ export function filterByLane(rows: DeltaRecord[], lane: LaneAxis): DeltaRecord[]
   );
 }
 
-/** 헤더 정렬 3키(ST-11 프롬프트 "헤더 정렬(클라이언트, |Δ|·q·n)"). q는 낮을수록(더 유의할수록)
- * 우선이므로 오름차순, |Δ|·n은 클수록 우선이므로 내림차순이 기본 방향이다. */
-export type SortKey = "absDelta" | "q" | "n" | "priority";
+/** 좌 내비게이터 섹션 라벨 — 프로토타입은 챔피언/아이템/시스템 3종만 두고 "기타"는 없다. */
+export const NAV_SECTION_LABEL: Partial<Record<PatchNoteSection, string>> = {
+  champion: "챔피언",
+  item: "아이템",
+  system: "시스템",
+};
 
-function nOf(record: DeltaRecord): number {
-  return record.n.before + record.n.after;
-}
 
-export function sortRows(rows: DeltaRecord[], key: SortKey, direction: "asc" | "desc" = "desc"): DeltaRecord[] {
-  const copy = [...rows];
-  copy.sort((a, b) => {
-    // |Δ|·n은 "값이 클수록 우선"이라 desc(기본값)가 -cmp(큰 값 먼저)다. q는 반대로 "값이 작을수록
-    // (더 유의할수록) 우선"이므로 desc가 오히려 +cmp(작은 값 먼저)여야 세 키 모두 "desc = 더
-    // 흥미로운/중요한 행이 먼저"라는 사용자 관점의 일관된 기본 방향을 유지한다.
-    if (key === "q") {
-      const cmp = (a.q ?? Infinity) - (b.q ?? Infinity);
-      return direction === "desc" ? cmp : -cmp;
-    }
-    // 2026-09-18(채점 라운드1 ST-9): 기본 정렬. |Δ| 단독이면 첫 화면이 라인골드 "바닥 미달"
-    // 6행으로 채워진다(실측) — 골드는 절대값이 커서 비율 지표를 항상 이긴다. 상태 우선순위
-    // (미공지 → 간접 → 불일치 → …)를 먼저 보고, 같은 상태 안에서만 |Δ|로 가른다.
-    if (key === "priority") {
-      const rank = STATUS_SORT_PRIORITY[a.status] - STATUS_SORT_PRIORITY[b.status];
-      const cmp = rank !== 0 ? -rank : absDelta(a) - absDelta(b);
-      return direction === "asc" ? cmp : -cmp;
-    }
-    const cmp = key === "absDelta" ? absDelta(a) - absDelta(b) : nOf(a) - nOf(b);
-    return direction === "asc" ? cmp : -cmp;
-  });
-  return copy;
-}
-
-/** 좌 내비게이터 섹션 탭 대상 — 프로토타입은 챔피언/아이템/시스템 3탭만 두고 "기타"는 없다. */
-export const NAV_SECTIONS: ReadonlyArray<{ key: PatchNoteSection; label: string }> = [
-  { key: "champion", label: "챔피언" },
-  { key: "item", label: "아이템" },
-  { key: "system", label: "시스템" },
-];
-
-export function filterNotesBySection(items: PatchNoteItem[], section: PatchNoteSection): PatchNoteItem[] {
-  return items.filter((item) => item.section === section);
-}
-
-export function filterNotesBySearch(items: PatchNoteItem[], query: string): PatchNoteItem[] {
-  const q = query.trim().toLowerCase();
-  if (!q) return items;
-  return items.filter(
-    (item) =>
-      item.entity.toLowerCase().includes(q) ||
-      (item.skill ?? "").toLowerCase().includes(q) ||
-      (item.stat ?? "").toLowerCase().includes(q)
-  );
+/**
+ * LoL 패치노트 줄 → 좌 내비의 게임 중립 항목(`NoteNavItem`).
+ *
+ * **여기가 제외 술어의 자리다**: 의회 투표 결과·게임 모드 섹션 줄은 소환사의 협곡 엔티티 항목이
+ * 아니라서 홈·엔티티 수와 같은 술어(`isDisplayExcludedNote`)로 걸러야 한다(2026-09-18 라운드6
+ * 보완 1·5). 묶기 규칙(`noteNav.ts`)은 게임 중립이라 이 술어를 알 수 없으므로 변환에서 건다.
+ */
+export function lolNoteNavItems(
+  notes: readonly PatchNoteItem[],
+  icons: Record<string, StreamEntityIcon> = {}
+): NoteNavItem[] {
+  return notes
+    .filter((n) => !isDisplayExcludedNote(n))
+    .map((n) => ({
+      id: n.id,
+      entity: n.entity,
+      section: n.section,
+      sectionLabel: NAV_SECTION_LABEL[n.section] ?? n.section,
+      summary: n.summary,
+      detail: n.skill ?? n.stat,
+      icon: icons[n.id] ?? null,
+    }));
 }
 
 /** 노트 id → 그 노트와 짝지어진 델타들의 "대표 상태"(우선순위 최상위 1개). 짝지어진 델타가 하나도
@@ -127,41 +89,6 @@ export function representativeStatus(noteId: string, rows: DeltaRecord[], qAlpha
   return best;
 }
 
-/** 좌 내비 항목 1개 = 엔티티 1개(2026-09-18 라운드6, 사용자 L4 "챔피언, 아이템 별로 하나의 항목으로
- * 묶어서 표시"). 줄 목록은 문서 순서 그대로, 스킬은 첫 등장 순서로 중복 제거. */
-export interface NoteEntityGroup {
-  /** 대표 id = 첫 줄 id(선택·React key). */
-  id: string;
-  entity: string;
-  section: PatchNoteSection;
-  notes: PatchNoteItem[];
-  skills: string[];
-}
-
-export function groupNotesForNav(items: readonly PatchNoteItem[]): NoteEntityGroup[] {
-  const order: string[] = [];
-  const byEntity = new Map<string, NoteEntityGroup>();
-  for (const item of items) {
-    // 의회 투표 결과·게임 모드 섹션 줄은 SR 엔티티 항목이 아니다 — 홈·엔티티 수와 같은 술어(라운드6 보완 1·5).
-    if (isDisplayExcludedNote(item)) continue;
-    const key = `${item.section}:${item.entity}`;
-    const group = byEntity.get(key);
-    if (group) {
-      group.notes.push(item);
-      if (item.skill && !group.skills.includes(item.skill)) group.skills.push(item.skill);
-      continue;
-    }
-    byEntity.set(key, {
-      id: item.id,
-      entity: item.entity,
-      section: item.section,
-      notes: [item],
-      skills: item.skill ? [item.skill] : [],
-    });
-    order.push(key);
-  }
-  return order.map((key) => byEntity.get(key)!);
-}
 
 /**
  * 엔티티 묶음의 배지 — 그 묶음의 줄들에 짝지어진 행 중 **보고 가능**(유의·바닥 통과·노이즈 아님)한

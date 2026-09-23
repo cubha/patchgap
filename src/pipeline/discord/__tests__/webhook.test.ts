@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { buildBriefingEmbeds, formatDeltaLine, sendWebhook } from "../webhook";
 import type { DeltaRecord, DeltasFile, MatchStatus } from "../../types";
-import { itemHref } from "../../../lib/format";
 
 function delta(overrides: Partial<DeltaRecord>): DeltaRecord {
   return {
@@ -87,17 +86,22 @@ describe("buildBriefingEmbeds", () => {
     const [embed] = buildBriefingEmbeds(deltasFile(rows), { siteUrl: SITE, topN: 5 });
     expect(embed.fields).toHaveLength(5);
     const urls = embed.fields.map((f) => f.value).join("\n");
-    expect(urls).toContain(itemHref("a"));
-    expect(urls).toContain(itemHref("e"));
-    expect(urls).not.toContain(itemHref("f"));
+    // 2026-09-23 §8-7 #10: 링크 단위가 **지표 → 대상**으로 바뀌었다(`lolEntityHref`).
+    // 규칙이 약해진 게 아니라 무엇을 가리키는지가 바뀐 것이고, 옛 지표 URL은 별칭 라우트가 받는다.
+    expect(urls).toContain("/lol/item/champion~Ahri/");
+    expect(urls).toContain("/lol/item/champion~Ekko/");
+    expect(urls).not.toContain("/lol/item/champion~Fiora/");
     expect(embed.description).toContain("미공지 6건");
   });
 
-  it("id에 ':'가 있으면 링크가 '~' 치환 슬러그를 쓴다(퍼센트 인코딩 미사용, 2026-09-05 근본 수정)", () => {
-    const rows = [delta({ id: "champion:Trundle:pickRate", status: "unannounced" })];
+  it("대상 키에 ':'가 있어도 링크는 '~' 치환 슬러그다(퍼센트 인코딩 미사용, 2026-09-05 근본 수정)", () => {
+    // 이 테스트의 요지는 **퍼센트 인코딩을 쓰지 않는다**이고 그대로다. 바뀐 것은 가리키는 단위뿐이다.
+    const rows = [
+      delta({ id: "champion:Trundle:pickRate", entityKey: "Trundle", status: "unannounced" }),
+    ];
     const [embed] = buildBriefingEmbeds(deltasFile(rows), { siteUrl: SITE, topN: 5 });
     const urls = embed.fields.map((f) => f.value).join("\n");
-    const url = `${SITE}/lol/item/champion~Trundle~pickRate/`;
+    const url = `${SITE}/lol/item/champion~Trundle/`;
     expect(urls).toContain(url);
     expect(url).not.toContain("%");
   });

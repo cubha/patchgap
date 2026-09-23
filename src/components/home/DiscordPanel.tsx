@@ -27,17 +27,25 @@
 import Link from "next/link";
 import { fmtKst } from "@/lib/format";
 import { DISCORD_INVITE_URL } from "@/lib/links";
+import { sectionHref, type GameId } from "@/lib/game";
 import SectionCard from "@/components/SectionCard";
 import ExternalLink from "@/components/ExternalLink";
 
 export interface DiscordPanelProps {
+  /**
+   * 이 패널이 놓인 게임 — "무엇이 언제 나가나"가 **그 게임의 방법론**으로 가야 한다(§8-1).
+   * 전에는 `/lol/methodology/#discord`가 하드코딩돼 있었고, 그래서 이 패널을 TFT·PUBG에 놓는
+   * 순간 세 게임의 독자가 전부 LoL 방법론으로 끌려갔다(웹훅은 게임마다 따로인데도).
+   */
+  game: GameId;
   /** deltas.meta.generatedAt(ISO) — "마지막 전송 시각"이 아니라 이 델타 파일이 마지막으로
    * 생성된 시각을 대신 표기한다(ST-11 프롬프트: "마지막 전송 시각은 deltas.meta.generatedAt
    * 표기"). 파일이 없으면 캡션 자체를 생략한다. */
   generatedAt: string | null;
 }
 
-export default function DiscordPanel({ generatedAt }: DiscordPanelProps) {
+export default function DiscordPanel({ game, generatedAt }: DiscordPanelProps) {
+  const rulesHref = `${sectionHref(game, "methodology")}#discord`;
   return (
     <SectionCard title="디스코드 공유받기" variant="glass">
       <div className="flex flex-col items-start gap-3 p-5">
@@ -53,13 +61,13 @@ export default function DiscordPanel({ generatedAt }: DiscordPanelProps) {
             >
               디스코드 방 들어가기 →
             </ExternalLink>
-            <Link href="/lol/methodology/#discord" className="text-xs text-fg-2 underline">
+            <Link href={rulesHref} className="text-xs text-fg-2 underline">
               무엇이 언제 나가나
             </Link>
           </>
         ) : (
           <Link
-            href="/lol/methodology/#discord"
+            href={rulesHref}
             className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md bg-accent px-5 text-sm font-bold text-accent-on transition-colors hover:bg-accent-hover"
           >
             방송 규칙 보기 →

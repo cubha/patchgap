@@ -5,7 +5,9 @@ import { describe, expect, it } from "vitest";
 import { fireEvent, render } from "@testing-library/react";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import DeltaTable from "../DeltaTable";
-import NoteNavigator from "../NoteNavigator";
+import NoteNavPanel from "../NoteNavPanel";
+import { groupNoteNavItems, noteNavSections } from "../noteNav";
+import { lolNoteNavItems } from "../logic";
 import CoverageBar from "../CoverageBar";
 import CompareExplorer from "../CompareExplorer";
 import { buildEntityRows } from "../entityRows";
@@ -140,76 +142,74 @@ describe("DeltaTable — 엔티티 1행·인라인 지표(사용자 L3)", () => 
   });
 });
 
-describe("NoteNavigator — 빈 상태(notes=[])", () => {
-  it("검색 결과 없음 문구를 렌더한다", () => {
+// 2026-09-23 §8-3: `NoteNavigator`(LoL 전용)를 공용 `NoteNavPanel`로 바꿨다. 검색창은 여기서
+// 빠지고(도구모음이 질의를 소유한다) 묶기는 `noteNav.ts`가 한다 — 이 describe는 그 새 계약을 잰다.
+describe("NoteNavPanel — 빈 상태(groups=[])", () => {
+  it("항목이 없다는 문구를 렌더하고 섹션이 하나뿐이면 탭 줄을 그리지 않는다", () => {
     const { container } = render(
-      <NoteNavigator
-        notes={[]}
-        rows={[]}
-        activeSection="champion"
+      <NoteNavPanel
+        groups={[]}
+        sections={[{ key: "champion", label: "챔피언", count: 0 }]}
+        activeSection={null}
         onSectionChange={() => {}}
-        searchQuery=""
-        onSearchChange={() => {}}
-        selectedGroupId={null}
+        selectedId={null}
         onSelect={() => {}}
-        icons={{}}
+        statusOf={() => null}
       />
     );
-    expect(container.textContent).toContain("검색 결과가 없습니다");
-    expect(container.textContent).toContain("챔피언 0");
+    expect(container.textContent).toContain("해당하는 패치노트 항목이 없습니다");
+    expect(container.querySelector('[role="tablist"]')).toBeNull();
   });
 });
 
-describe("NoteNavigator — 엔티티 묶음·아이콘·배지(사용자 L4·C1)", () => {
-  const items = [
-    note({ id: "note:1", entity: "초가스", skill: "Q - 파열" }),
-    note({ id: "note:2", entity: "초가스", skill: "E - 흡혈 가시" }),
-    note({ id: "note:3", entity: "바드" }),
-  ];
+describe("NoteNavPanel — 엔티티 묶음·아이콘·배지(사용자 L4·C1)", () => {
+  const groups = groupNoteNavItems(
+    lolNoteNavItems(
+      [
+        note({ id: "note:1", entity: "초가스", skill: "Q - 파열" }),
+        note({ id: "note:2", entity: "초가스", skill: "E - 흡혈 가시" }),
+        note({ id: "note:3", entity: "바드" }),
+      ],
+      { "note:1": { entityType: "champion", entityKey: "Chogath" } }
+    )
+  );
 
-  it("같은 챔피언 줄 2개가 항목 1개로 묶이고 줄 수·스킬을 보여준다 · 탭 숫자는 엔티티 수", () => {
+  it("같은 챔피언 줄 2개가 항목 1개로 묶이고 줄 수·스킬을 보여준다", () => {
     const { container } = render(
-      <NoteNavigator
-        notes={items}
-        rows={[]}
-        activeSection="champion"
+      <NoteNavPanel
+        groups={groups}
+        sections={noteNavSections(groups)}
+        activeSection={null}
         onSectionChange={() => {}}
-        searchQuery=""
-        onSearchChange={() => {}}
-        selectedGroupId={null}
+        selectedId={null}
         onSelect={() => {}}
-        icons={{ "note:1": { entityType: "champion", entityKey: "Chogath" } }}
+        statusOf={() => null}
       />
     );
     expect(container.querySelectorAll("ul > li")).toHaveLength(2);
     expect(container.textContent).toContain("2줄");
     expect(container.textContent).toContain("Q - 파열 · E - 흡혈 가시");
-    expect(container.textContent).toContain("챔피언 2");
     const img = container.querySelector("img");
     expect(img?.getAttribute("src")).toBe("/dd/champion/Chogath.png");
     expect(img?.closest("span")?.getAttribute("style")).toContain("width: 40px");
   });
 
   it("보고 가능한 관측이 없으면 배지 대신 '유의한 관측 없음'을 쓴다 · 클릭은 묶음을 넘긴다", () => {
-    const rows = [delta({ id: "champion:Chogath:pickRate", entityKey: "Chogath", entityName: "초가스", q: 0.9, status: "announced-consistent", matchedNoteIds: ["note:1"] })];
     let picked: string | null = null;
     const { container } = render(
-      <NoteNavigator
-        notes={items}
-        rows={rows}
-        activeSection="champion"
+      <NoteNavPanel
+        groups={groups}
+        sections={noteNavSections(groups)}
+        activeSection={null}
         onSectionChange={() => {}}
-        searchQuery=""
-        onSearchChange={() => {}}
-        selectedGroupId={null}
+        selectedId={null}
         onSelect={(g) => {
           picked = g.entity;
         }}
-        icons={{}}
+        statusOf={() => null}
       />
     );
     expect(container.textContent).toContain("유의한 관측 없음");
-    expect(container.querySelector("img")).toBeNull();
     fireEvent.click(container.querySelector("ul > li button")!);
     expect(picked).toBe("초가스");
   });

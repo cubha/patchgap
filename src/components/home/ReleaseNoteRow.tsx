@@ -34,7 +34,8 @@ import StatusBadge from "@/components/StatusBadge";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/components/compare/entityRows";
 import DeltaValue from "@/components/DeltaValue";
-import { itemHref, metricLabel } from "@/lib/format";
+import { metricLabel } from "@/lib/format";
+import { lolEntityHref } from "@/lib/detailRoutes";
 import { isCosmeticGroup, isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
 import CosmeticSkinPreview, { type CosmeticSkinItem } from "./CosmeticSkinPreview";
 import { spellIconKey } from "@/pipeline/match/spell-icon";
@@ -238,6 +239,38 @@ export default function ReleaseNoteRow({
 
   const skillGroups = isUnannounced ? [] : groupNotesBySkill(group.notes);
 
+  /**
+   * 접힌 줄이 밝히는 **「N개 항목」**(§8-2). TFT·PUBG 행은 이 수를 늘 적는데 이 카드만 적지
+   * 않아서, 한 대상에 지표가 여럿일 때(예: 오공 — 전체 승률과 정글 승률) **더 있다는 사실
+   * 자체가 접힌 상태에서 보이지 않았다**(2026-09-23 화면 대조 V2).
+   *
+   * 세는 대상은 **펼치면 실제로 나오는 줄 수**다 — 미공지는 대표 관측 + 나머지 지표,
+   * 공지는 스킬 묶음 줄이다. 화면이 약속한 수와 펼친 뒤 보이는 수가 어긋나면 안 된다.
+   */
+  const itemCount = isUnannounced
+    ? (observation ? 1 : 0) + remainingDeltas.length
+    : skillGroups.length;
+
+  /**
+   * 접힘 줄이 들 **대표 판정**과 **상세 경로**(§8-1).
+   * - 미공지 카드: 대표 델타가 곧 그 카드의 판정이고 상세도 그것으로 간다.
+   * - 공지 카드: 짝지은 관측 중 대표를 쓴다. 관측이 없으면(치장·짝없음) 뱃지를 만들지 않는다 —
+   *   없는 판정을 지어내지 않는다.
+   */
+  const headerRecord = isUnannounced
+    ? gapRepresentative ?? null
+    : representativeRecord(
+        // 스킬 행 배지와 **같은 술어**로 고른다(위 ST5 주석): 보고 가능한 행 중에서 대표를 뽑아야
+        // 형제 행이 있는데 배지가 사라지는 일이 없다.
+        group.notes.filter((note) => {
+          const r = noteDeltas[note.id];
+          return r !== undefined && isReportableRecord(r, qAlpha);
+        }),
+        noteDeltas
+      );
+  const headerBadge = headerRecord && !cosmeticGroup ? displayStatus(headerRecord, qAlpha) : null;
+  const headerHref = headerRecord ? lolEntityHref(headerRecord) : null;
+
   // 미공지 행 강조(2026-09-13·6차 연속) — 채움 없이 왼쪽 골드 보더 하나로만 표시한다.
   // 이력: 원래 불투명 `bg-surface-warm`이었고(미공지는 스트림 최상단 정렬이라 스크롤 없이 보이는
   // 행이 거의 전부 미공지 → 부모 <ul>의 `panel-surface-glass`가 통째로 가려졌다), 이를 반투명
@@ -255,10 +288,35 @@ export default function ReleaseNoteRow({
       {/* 기본 접힘 아코디언 — 카드 전체가 항상 펼쳐져 화면을 뒤덮던 문제(2026-09-11) 수정.
           네이티브 <details>/<summary>라 서버 컴포넌트 그대로 유지할 수 있다(JS 상태 불필요). */}
       <details className="group px-5 py-4">
-        <summary className="flex cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+        <summary className="flex cursor-pointer list-none flex-wrap items-center gap-x-4 gap-y-2 [&::-webkit-details-marker]:hidden">
+          {/* **뱃지가 아이콘보다 앞**이다(§8-1 「뱃지 위치: 행 맨 앞」). 2026-09-23 화면 대조에서
+              이 카드만 `[아이콘][뱃지]` 순이라 세 게임의 뱃지 좌측 시작점이 어긋난 것이 잡혔다 —
+              바로 위 주석이 "뱃지가 맨 앞"이라고 말하고 있었는데도 실제 순서는 그렇지 않았다. */}
+          {headerBadge ? <StatusBadge status={headerBadge} /> : null}
           <CardIcon icon={icon} entity={group.entity} />
-          <div className="min-w-0 flex-1">
-            <div className="font-display text-base font-bold text-fg">{group.entity}</div>
+          {/* 모바일(sm 미만)에서 **이름 칸을 통째로 다음 줄로 내린다**. 전에는 한 줄 flex라
+              뱃지·아이콘·「N개 항목」이 전부 `shrink-0`이고 이 칸만 줄어들어, 390px에서 폭
+              20px가 되어 이름이 세로로 한 글자씩 쌓였다(2026-09-23 렌더 실측).
+              `min-w-*` 임계로 접지 않는 이유: 뱃지 문구 길이가 행마다 달라(「공지 · 이상 관측」
+              vs 「공지」) 같은 폭에서 어떤 행은 접히고 어떤 행은 안 접힌다 — 뱃지 위치를
+              세 게임이 맞추기로 한 표면에 행마다 다른 접힘을 새로 만들게 된다. */}
+          <div className="min-w-0 basis-full sm:basis-0 sm:flex-1">
+            {/* 접힘 줄의 구성은 세 게임이 같다(UX-BRIEF §8-1·§8-2): **뱃지가 맨 앞**, 이름이
+                상세 링크. 전에는 뱃지가 카드 **안쪽** 스킬 행 우측에만 있어 접힌 상태에서는
+                판정이 아예 보이지 않았고(`관측 변화 없음 · N건` 묶음은 더더욱), 이름에는
+                링크가 없어 "근거 보기"라는 별도 문구를 찾아 눌러야 했다(2026-09-22 실측). */}
+            <div className="flex flex-wrap items-center gap-2">
+              {headerHref ? (
+                <Link
+                  href={headerHref}
+                  className="font-display text-base font-bold text-fg hover:text-accent hover:underline"
+                >
+                  {group.entity} →
+                </Link>
+              ) : (
+                <span className="font-display text-base font-bold text-fg">{group.entity}</span>
+              )}
+            </div>
             {observation ? (
               <ObservationLine record={observation} />
             ) : cosmeticGroup ? (
@@ -269,6 +327,9 @@ export default function ReleaseNoteRow({
               <div className="mt-1 text-xs text-muted">유의한 관측 없음</div>
             )}
           </div>
+          {itemCount > 0 ? (
+            <span className="shrink-0 font-mono text-xs text-muted">{itemCount}개 항목</span>
+          ) : null}
           <span
             aria-hidden="true"
             className="shrink-0 text-xs text-muted transition-transform group-open:rotate-180"
@@ -286,13 +347,13 @@ export default function ReleaseNoteRow({
             ) : null}
             {/* B2 — 원인이 규명된 Gap은 인과 체인을, 아닌 Gap은 네 상태를 구분한 문구를 쓴다. */}
             {causeEntry ? (
-              <CauseChain entry={causeEntry} href={itemHref(gapRepresentative!.id)} />
+              <CauseChain entry={causeEntry} href={lolEntityHref(gapRepresentative!)} />
             ) : gapCause ? (
               <p className={`mt-2 text-xs ${CAUSE_TONE[gapCause.mode]}`}>
                 {gapCause.mode === "verified" ? "추정 원인: " : gapCause.mode === "weak" ? "가능성(신뢰도 낮음): " : null}
                 {gapCause.text}{" "}
                 <Link
-                  href={itemHref(gapRepresentative!.id)}
+                  href={lolEntityHref(gapRepresentative!)}
                   className="font-bold text-accent hover:underline"
                 >
                   근거 보기 →
@@ -311,7 +372,7 @@ export default function ReleaseNoteRow({
                       </span>
                     </div>
                     <DeltaValue delta={row.delta} ci={row.ci} kind={metricKind(row.metric)} />
-                    <Link href={itemHref(row.id)} className="text-xs font-bold text-accent hover:underline">
+                    <Link href={lolEntityHref(row)} className="text-xs font-bold text-accent hover:underline">
                       근거 보기 →
                     </Link>
                   </li>

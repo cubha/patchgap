@@ -18,11 +18,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useRowFocus } from "./useRowFocus";
 import type { DeltaRecord } from "@/pipeline/types";
 import { PANEL_SPLIT_BODY } from "@/lib/panelScroll";
 import type { LaneAxis } from "@/lib/lane";
-import { itemHref, metricLabel, positionLabel } from "@/lib/format";
+import { metricLabel, positionLabel } from "@/lib/format";
+import { lolEntityHref } from "@/lib/detailRoutes";
 import EntityIcon from "@/components/EntityIcon";
 import LaneGlyph from "@/components/LaneGlyph";
 import StatusBadge from "@/components/StatusBadge";
@@ -61,7 +62,7 @@ function Observation({
   const deltaText = kind === "pp" ? fmtPp(delta) : String(delta);
   return (
     <Link
-      href={itemHref(record.id)}
+      href={lolEntityHref(record)}
       className="group/cell flex flex-col gap-0.5 rounded-sm px-1 py-0.5 hover:bg-accent/10"
       aria-label={`${record.entityName} ${lane && lane !== "all" ? `${positionLabel(lane)} ` : ""}${metricLabel(record.metric)} 상세`}
     >
@@ -110,23 +111,9 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
   const showSubmarine = rows.some(
     (row) => row.submarineChanges.length > 0 || row.mismatchChanges.length > 0
   );
-  const scrollerRef = useRef<HTMLDivElement>(null);
-  const theadRef = useRef<HTMLTableSectionElement>(null);
+  // 포커스 스크롤 규약은 `useRowFocus`가 소유한다 — 세 게임 표가 같은 훅을 쓴다(사본 금지).
+  const { scrollerRef, headRef: theadRef } = useRowFocus<HTMLDivElement, HTMLTableSectionElement>(focusKey);
 
-  // 포커스 행을 컨테이너 최상단으로 — sticky 헤더 높이만큼 아래에 앉힌다.
-  useEffect(() => {
-    if (!focusKey) return;
-    const scroller = scrollerRef.current;
-    if (!scroller) return;
-    // `CSS.escape`·`scrollTo`는 jsdom에 없다 — 속성 비교로 찾고 존재할 때만 스크롤한다.
-    const row = Array.from(scroller.querySelectorAll<HTMLTableRowElement>("tr[data-entity-key]")).find(
-      (tr) => tr.dataset.entityKey === focusKey
-    );
-    if (!row) return;
-    // 즉시 이동 — `behavior: "smooth"`는 실측(정적 빌드, Chromium)에서 이동이 시작되지 않는 경우가 있었다.
-    const headerHeight = theadRef.current?.offsetHeight ?? 0;
-    scroller.scrollTop = Math.max(0, row.offsetTop - headerHeight);
-  }, [focusKey]);
 
   const fromLabel = pair?.from ?? "이전";
   const toLabel = pair?.to ?? "이후";
@@ -160,7 +147,7 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
               </th>
             ) : null}
             <th scope="col" className={thBase}>
-              상태
+              판정
             </th>
           </tr>
         </thead>
@@ -189,7 +176,7 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                       {/* 잠수함 전용 행은 관측이 하나도 없어 상세로 갈 자리가 없다 —
                           없는 링크를 만들지 않고 이름만 그린다(2026-09-21). */}
                       {row.representative ? (
-                        <Link href={itemHref(row.representative.id)} className="font-bold text-fg hover:text-accent hover:underline">
+                        <Link href={lolEntityHref(row.representative)} className="font-bold text-fg hover:text-accent hover:underline">
                           {row.entityName}
                         </Link>
                       ) : (

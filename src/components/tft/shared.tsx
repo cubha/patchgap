@@ -4,7 +4,7 @@
 // `STATUS_SORT_PRIORITY`가 전부 그냥 걸린다. TFT 전용 술어를 만들지 않는다.
 import type { ReactNode } from "react";
 
-import Container from "@/components/Container";
+import SiteFooter from "@/components/SiteFooter";
 import { metricLabel, isLowerBetter } from "@/lib/format";
 import type { DeltaMetric } from "@/pipeline/types";
 
@@ -54,9 +54,9 @@ export function TftSampleNotice({ boards, matches }: { boards: number; matches: 
   return (
     <p className="text-xs leading-relaxed text-muted">
       표본은 KR 챌린저~마스터 랭크(큐 1100) <strong className="text-fg-2">{matches.toLocaleString()}</strong>매치 ={" "}
-      <strong className="text-fg-2">{boards.toLocaleString()}</strong>보드다. 등장률의 분모는 매치가 아니라{" "}
-      <strong className="text-fg-2">보드(참가자)</strong>다 — 한 판에 8명이 각자 보드를 들고, 한 보드에 여러 유닛이
-      동시에 서므로 제로섬이 아니다.
+      <strong className="text-fg-2">{boards.toLocaleString()}</strong>보드입니다. 등장률의 분모는 매치가 아니라{" "}
+      <strong className="text-fg-2">보드(참가자)</strong>입니다 — 한 판에 8명이 각자 보드를 들고, 한 보드에 여러 유닛이
+      동시에 서므로 제로섬이 아닙니다.
     </p>
   );
 }
@@ -73,22 +73,20 @@ export function TftMetricCaption({ metric }: { metric: DeltaMetric }) {
 export function TftUnavailable() {
   return (
     <div className="flex flex-col gap-3 pt-40 pb-8">
-      <h1 className="font-display text-3xl font-bold text-fg">전략적 팀 전투 — 아직 연결되지 않았다</h1>
+      <h1 className="font-display text-3xl font-bold text-fg">전략적 팀 전투 — 아직 연결되지 않았습니다</h1>
       <p className="max-w-2xl text-sm leading-relaxed text-fg-2">
-        TFT 집계 산출물(<span className="font-mono">data/aggregated/tft/</span>)이 없다. 수집·집계·판정 파이프라인을
-        돌리면 이 화면이 채워진다. 지어낸 값으로 채우지 않는다.
+        TFT 집계 산출물(<span className="font-mono">data/aggregated/tft/</span>)이 없습니다. 수집·집계·판정 파이프라인을
+        돌리면 이 화면이 채워집니다. 지어낸 값으로 채우지 않습니다.
       </p>
     </div>
   );
 }
 
+/**
+ * 푸터는 **`SiteFooter`가 소유한다**(UX-BRIEF §8-1). 이 이름은 호출부 10곳을 지키기 위한
+ * 얇은 위임일 뿐이고, 문구·시각 포맷·고지를 여기서 다시 쓰지 않는다 — 전에는 여기서 직접
+ * 썼고 그래서 **반말 + ISO 원문 시각**이 TFT 화면에만 나갔다(2026-09-22 실측).
+ */
 export function TftFooter({ generatedAt, nVerdicts }: { generatedAt: string; nVerdicts: number }) {
-  return (
-    <Container>
-      <p className="border-t border-border-soft py-6 text-xs leading-relaxed text-muted">
-        판정 {nVerdicts}건 · 집계 {generatedAt}. patchgap은 Riot Games가 승인하거나 후원하지 않았다. Riot Games와
-        관련된 모든 자산은 Riot Games, Inc.의 자산이다.
-      </p>
-    </Container>
-  );
+  return <SiteFooter game="tft" generatedAt={generatedAt} nVerdicts={nVerdicts} />;
 }

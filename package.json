@@ -25,9 +25,11 @@
     "pipeline:tft-aggregate": "tsx scripts/run-tft-aggregate.ts",
     "pipeline:tft-match": "tsx scripts/run-tft-match.ts",
     "pipeline:tft-determine": "tsx scripts/tft-determine.ts",
+    "pipeline:tft-assets": "tsx scripts/run-tft-assets.ts",
     "pipeline:pubg-collect": "tsx scripts/run-pubg-collect.ts",
     "pipeline:pubg-aggregate": "tsx scripts/run-pubg-aggregate.ts",
     "pipeline:pubg-determine": "tsx scripts/pubg-determine.ts",
+    "pipeline:pubg-llm": "tsx scripts/run-pubg-llm.ts",
     "pipeline:gamedata-diff": "tsx scripts/run-gamedata-diff.ts"
   },
   "dependencies": {

@@ -51,7 +51,9 @@ describe("AdapterMatrix", () => {
     for (const game of GAMES) {
       expect(heads.some((h) => h?.startsWith(gameLabel(game.id)))).toBe(true);
     }
-    expect(heads.some((h) => h?.includes("실연결 · 42.3 ⇒ 43.1"))).toBe(true);
+    // 2026-09-23 **명세 변경**(UX-BRIEF §8-5): 패치 쌍 기호를 `→`로 통일했다. `⇒`는 패치노트가
+    // 적은 값(`115 ⇒ 120`) 전용이라 두 뜻이 겹치고 있었다 — 테스트 약화가 아니라 어휘 반영이다.
+    expect(heads.some((h) => h?.includes("실연결 · 42.3 → 43.1"))).toBe(true);
     expect(heads).not.toContain("PUBG (어댑터 확정 · 미연결)");
   });
 

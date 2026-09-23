@@ -46,7 +46,7 @@ function buildShownRows(alpha: number): DefinitionRow[] {
   return [
     {
       status: "announced",
-      definition: "패치노트가 말한 항목의 관측. 방향 일치·비유의·바닥 미달을 따로 가르지 않는다",
+      definition: "패치노트가 말한 항목의 관측. 방향 일치·비유의·바닥 미달을 따로 가르지 않습니다",
       condition: `짝 존재 · 아래 이상 관측이 아닌 전부`,
     },
     {
@@ -56,8 +56,8 @@ function buildShownRows(alpha: number): DefinitionRow[] {
     },
     {
       status: "unannounced",
-      definition: "패치노트에 대응 조항이 없는 유의 변화. 다른 조항의 파급으로 설명되는 것도 여기 포함(원인이 규명됐는가만 다르다)",
-      condition: `짝 없음 · q<${alpha} · CI가 0 미포함 · 효과크기 바닥 이상 (원인 후보가 신뢰도 보통 이상으로 검증되면 파급으로 재분류 — 표시는 같다)`,
+      definition: "패치노트에 대응 조항이 없는 유의 변화. 다른 조항의 파급으로 설명되는 것도 여기 포함(원인이 규명됐는가만 다릅니다)",
+      condition: `짝 없음 · q<${alpha} · CI가 0 미포함 · 효과크기 바닥 이상 (원인 후보가 신뢰도 보통 이상으로 검증되면 파급으로 재분류 — 표시는 같습니다)`,
     },
   ];
 }
@@ -66,7 +66,7 @@ function buildHiddenRows(minN: number, alpha: number, floors: Record<DeltaMetric
   return [
     {
       status: "below-threshold",
-      definition: "통계적으로는 유의하나 규모가 효과크기 바닥 미만. 라인 골드·오브젝트 시각·경기 시간은 패치노트에 대응 항목이 없는 집계 지표라 바닥이 특히 높다",
+      definition: "통계적으로는 유의하나 규모가 효과크기 바닥 미만. 라인 골드·오브젝트 시각·경기 시간은 패치노트에 대응 항목이 없는 집계 지표라 바닥이 특히 높습니다",
       condition: `q<${alpha} · |Δ|<바닥(${floorCaption(floors)})`,
     },
     {

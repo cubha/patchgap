@@ -17,14 +17,18 @@
 import { GAMES, gameLabel } from "@/lib/game";
 import { ADAPTER_MATRIX, COLUMN_STATUS, JUDGMENT_ENGINE_NOTE } from "./adapterMatrixData";
 
-const HEAD_CLASS = "border-b border-border-soft px-5 py-3 text-left text-xs font-bold text-muted";
+// `whitespace-nowrap`(머리글·계층 열) + `min-width`(표 전체)가 함께 있어야 한다. 390px에서
+// 이 표는 5열을 우겨넣어 계층 칸이 52px가 되고 「파이프라인 계층」이 세로로 쌓였다(2026-09-23
+// 렌더 실측). 본문 칸은 **산문**이라 nowrap을 걸면 표가 3000px가 되므로 거기엔 걸지 않는다 —
+// 접히면 안 되는 것은 짧은 라벨뿐이고, 산문은 접혀도 된다.
+const HEAD_CLASS = "border-b border-border-soft px-5 py-3 text-left text-xs font-bold whitespace-nowrap text-muted";
 const CELL_CLASS = "border-b border-border-soft px-5 py-4 align-top text-fg-2";
 
 export default function AdapterMatrix() {
   return (
     <div className="flex flex-col gap-4">
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-sm">
+        <table className="w-full border-collapse text-sm" style={{ minWidth: "var(--table-min)" }}>
           <thead>
             <tr>
               <th className={HEAD_CLASS}>파이프라인 계층</th>
@@ -39,7 +43,7 @@ export default function AdapterMatrix() {
           <tbody>
             {ADAPTER_MATRIX.map((row) => (
               <tr key={row.layer}>
-                <td className="border-b border-border-soft px-5 py-4 align-top font-bold text-fg">
+                <td className="border-b border-border-soft px-5 py-4 align-top font-bold whitespace-nowrap text-fg">
                   {row.layer}
                 </td>
                 {/* 게임 무관 행(판정 엔진)은 게임 열 전체를 한 칸이 가로지른다 — "이 계층은

@@ -7,6 +7,7 @@
 import "server-only";
 import fs from "node:fs";
 import path from "node:path";
+import type { TftAssetManifest } from "@/pipeline/tft/asset-path";
 
 import type { DeltaRecord, DeltasRunLlmMeta, MatchStatus, PatchNoteItem } from "@/pipeline/types";
 import type { NamedStat } from "@/pipeline/match/tft-delta";
@@ -85,4 +86,12 @@ export function loadTft(): TftBundle | null {
   if (!before || !after || !notes) return null;
 
   return { deltas, before, after, notes };
+}
+
+/**
+ * 자산 매니페스트(`scripts/run-tft-assets.ts` 산출). 없으면 `null` — 화면은 폴백 박스를 그린다.
+ * 깨진 `<img>`는 폴백이 아니므로, **빌드 타임에** 있고 없음을 판정한다(PUBG와 같은 구조).
+ */
+export function loadTftAssets(): TftAssetManifest | null {
+  return readJson<TftAssetManifest>(path.join(TFT_DIR, "assets.json"));
 }

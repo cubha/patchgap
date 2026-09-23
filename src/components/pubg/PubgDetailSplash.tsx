@@ -25,9 +25,15 @@ export interface PubgDetailStat {
 }
 
 export interface PubgDetailSplashProps {
-  /** 시안 `.detail-eyebrow` — "무기 · 돌격소총" / "맵 · 8×8". */
-  eyebrow: string;
-  title: string;
+  /**
+   * 시안 `.detail-eyebrow` — "무기 · 돌격소총" / "맵 · 8×8".
+   *
+   * **2026-09-23부터 선택이다**: 유형 라벨과 대상 이름은 화면 머리(`PageHeader`)가 소유하게
+   * 됐다(§8-1 — LoL·TFT 상세는 원래 그랬고 PUBG만 히어로 아래 카드로 밀려 있었다). 둘을 여기서도
+   * 그리면 한 화면에서 이름이 세 번 반복된다(머리 · 이 카드 · 자산 없을 때의 폴백 마크).
+   */
+  eyebrow?: string;
+  title?: string;
   /** 자산 경로. null이면 폴백 레이어를 그린다(깨진 이미지 금지). */
   imageSrc: string | null;
   /** 무기 렌더는 `contain`(여백 두고 실루엣), 맵 지형도는 `cover`(꽉 채움) — 시안과 동일. */
@@ -92,10 +98,12 @@ export default function PubgDetailSplash({
 
       {/* .detail-body */}
       <div className="relative z-2 p-5" style={{ maxWidth: "340px" }}>
-        <p className="font-mono text-xs tracking-wide uppercase" style={{ color: "var(--game-glow)" }}>
-          {eyebrow}
-        </p>
-        <h2 className="mt-1.5 font-display text-xl font-bold text-fg">{title}</h2>
+        {eyebrow ? (
+          <p className="font-mono text-xs tracking-wide uppercase" style={{ color: "var(--game-glow)" }}>
+            {eyebrow}
+          </p>
+        ) : null}
+        {title ? <h2 className="mt-1.5 font-display text-xl font-bold text-fg">{title}</h2> : null}
 
         <dl className="mt-2 flex flex-col gap-1">
           {stats.map((stat) => (

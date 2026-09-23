@@ -35,7 +35,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
     byGame: {
       lol: "공식 패치노트 HTML — {스킬키} {스탯}: A ⇒ B",
       pubg: "공식 패치노트 — 동일한 A ⇒ B 구조",
-      tft: "공식 패치노트 — 같은 CMS·같은 ⇒ 구조이나 엔티티 앵커(h3.change-title)가 0건이라 DDragon 카탈로그 대조로 엔티티를 판별한다",
+      tft: "공식 패치노트 — 같은 CMS·같은 ⇒ 구조이나 엔티티 앵커(h3.change-title)가 0건이라 DDragon 카탈로그 대조로 대상을 판별합니다",
     },
     iface: "NoteSource.fetch()",
   },
@@ -44,7 +44,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
     byGame: {
       lol: "Riot Match-V5 · Timeline",
       pubg: "PUBG Developer API — 실측 완료(2026-09-16) · 매치·텔레메트리 조회 리밋 없음 · 표본 API 10 RPM · 보존 336시간",
-      tft: "Riot TFT-League-V1 → TFT-Match-V1 — game_version이 비어 있어(\"TFT Unreal Version ?.?.?.?\") 패치 구분은 노트 발행 시각 창으로 한다",
+      tft: "Riot TFT-League-V1 → TFT-Match-V1 — game_version이 비어 있어(\"TFT Unreal Version ?.?.?.?\") 패치 구분은 노트 발행 시각 창으로 합니다",
     },
     iface: "MatchSource.collect()",
   },
@@ -62,7 +62,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
     byGame: {
       lol: "라인 5종 (탑·정글·미드·원딜·서포터)",
       pubg: "맵 (설계: 낙하 구역)",
-      tft: "없음 — 보드는 위치 축을 갖지 않는다",
+      tft: "없음 — 보드는 위치 축을 갖지 않습니다",
     },
     iface: "Segment[]",
   },
@@ -71,7 +71,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
     byGame: {
       lol: "픽률 · 밴률",
       pubg: "무기 획득 점유율 (설계: 초반 교전 사용률)",
-      tft: "등장률 — 분모가 매치가 아니라 **보드(참가자)**다. 한 보드에 여러 유닛이 서므로 제로섬이 아니다",
+      tft: "등장률 — 분모가 매치가 아니라 **보드(참가자)**입니다. 한 보드에 여러 유닛이 서므로 제로섬이 아닙니다",
     },
     iface: "Metric.adoption",
   },
@@ -80,7 +80,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
     byGame: {
       lol: "승률 (n≥200 게이트)",
       pubg: "(설계) 순위 · 생존 시간",
-      tft: "순방률(상위 4등, n≥200 게이트) · 평균 등수 — 평균 등수만 **작을수록 개선**이라 방향이 반대다",
+      tft: "순방률(상위 4등, n≥200 게이트) · 평균 등수 — 평균 등수만 **작을수록 개선**이라 방향이 반대입니다",
     },
     iface: "Metric.outcome",
   },
@@ -89,16 +89,19 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
     byGame: {
       lol: "골드@10/14 · 첫 오브젝트 시각",
       pubg: "(설계) 첫 교전 시각 · 자기장 단계별 생존",
-      tft: "(설계) 탈락 라운드 · 탈락 시각 — 수집은 되고 있으나 델타로는 아직 안 낸다",
+      tft: "(설계) 탈락 라운드 · 탈락 시각 — 수집은 되고 있으나 델타로는 아직 내지 않습니다",
     },
     iface: "Metric.timeline",
   },
   {
     layer: "엔티티 자산",
     byGame: {
-      lol: "Data Dragon (아이콘·스펠)",
+      lol: "Data Dragon 아이콘·스펠·스플래시(챔피언 186)",
       pubg: "pubg/api-assets 공식 렌더(무기 38/47 · 맵 9/9)",
-      tft: "Data Dragon tft-champion·tft-trait·tft-item (Set 18 필터)",
+      // 2026-09-23: 이 칸은 **거짓이었다** — "Data Dragon tft-champion·tft-trait·tft-item
+      // (Set 18 필터)"라 적었지만 그것은 **이름 카탈로그** 용도였고 TFT 화면의 이미지는 0건이었다
+      // (UX-BRIEF §8-7 말미가 이 자기모순을 기록했다). 자산 조달을 배선한 뒤 실측 수로 고친다.
+      tft: "Data Dragon 스플래시·아이콘(유닛 55 · 특성 36 · 아이템 140 — 미보유 2)",
     },
     iface: "AssetSource.icon()",
   },
@@ -123,8 +126,8 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
  */
 export const COLUMN_STATUS: Record<GameId, string> = {
   lol: "연결됨",
-  pubg: "실연결 · 42.3 ⇒ 43.1",
-  tft: "실연결 · 18.1 ⇒ 18.2",
+  pubg: "실연결 · 42.3 → 43.1",
+  tft: "실연결 · 18.1 → 18.2",
 };
 
 /** 표 아래 강조 문단 — 시안 `.note-blocked`. 마지막 행(판정 엔진)이 왜 핵심인지 말한다. */

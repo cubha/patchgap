@@ -1,6 +1,12 @@
-// src/app/item/[id]/page.tsx
-// 항목 상세(ST-12) — 판정 헤더·델타 차트·통계 게이트·패치노트 대조·LLM 추정 원인·원천 매치
-// (UX-BRIEF §3 "03 항목 상세", 프로토타입 `docs/design/prototype/03-item-detail.html`).
+// src/app/lol/item/[id]/page.tsx
+// **대상 상세** — 판정 헤더·패치노트 대조·LLM 추정 원인 + **지표마다 한 구획**(차트·통계
+// 게이트·원천 매치). UX-BRIEF §3 "03 항목 상세", 프로토타입 `03-item-detail.html`.
+//
+// **2026-09-23 라우트 단위 변경**(§8-7 #10 · §8-5 「라우트 단위도 대상」): 전에는 이 화면이
+// **지표 하나**였다 — `champion~MonkeyKing~JUNGLE~winRate`. 같은 챔피언을 보려면 지표마다 다른
+// URL을 열어야 했고, TFT·PUBG는 이미 대상 단위여서 세 게임이 어긋났다. 이제 한 대상이 한 화면이고
+// 지표는 그 안의 구획이다. 구 지표 경로는 **별칭으로 살아 있다**(`detailRouteSlugs` 주석 참고) —
+// 이미 디스코드로 나간 링크를 죽이지 않기 위해서다.
 // output:'export' 정적 배포이므로 generateStaticParams가 필수 — 모든 패치 쌍의 deltas rows에서
 // id를 모은다(쌍이 0개면 `_placeholder` 1건 유지 — 실측(2026-09-05): output:'export'에서
 // generateStaticParams가 빈 배열을 반환하면 `next build`가 즉시 실패한다).
@@ -25,12 +31,12 @@ import DeltaValue from "@/components/DeltaValue";
 import EntityIcon from "@/components/EntityIcon";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
-import { detailRouteIds } from "@/lib/detailRoutes";
+import { detailRouteSlugs } from "@/lib/detailRoutes";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import { displayStatus, isNoiseStatus } from "@/pipeline/shared/display-status";
 import { listPatchPairs, loadChampions, loadDeltas, loadItems, loadNotes, type PatchPair } from "@/lib/data";
-import { entityTypeLabel, fmtInt, itemIdFromSlug, itemSlug } from "@/lib/format";
+import { entityTypeLabel, fmtInt, itemIdFromSlug } from "@/lib/format";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import { loadDdragonSafe } from "@/pipeline/match/ddragon";
 import AmbientDetailSplash from "@/components/item/AmbientDetailSplash";
@@ -50,14 +56,19 @@ import { resolveNoteContrast } from "@/components/item/noteContrast";
 import { resolveStoredCi } from "@/components/item/storedCi";
 import { snapshotHash } from "@/components/item/snapshotHash";
 import { championSplashUrl } from "@/components/item/detailSplash";
+import SiteFooter from "@/components/SiteFooter";
+import PageHeader from "@/components/PageHeader";
+import { detailCrumbs } from "@/lib/breadcrumbs";
+import { DISPLAY_SORT_PRIORITY } from "@/pipeline/shared/display-status";
 
 interface ItemPageProps {
   params: Promise<{ id: string }>;
 }
 
-interface FoundDelta {
+interface FoundEntity {
   pair: PatchPair;
-  delta: DeltaRecord;
+  /** 이 대상의 관측 전부 — 표시 우선순위 → |Δ| 순. 구획 하나가 관측 하나다. */
+  rows: DeltaRecord[];
   generatedAt: string;
   qAlpha?: number;
 }
@@ -80,24 +91,40 @@ function decodeIdParam(id: string): string {
 }
 
 /**
- * 이 id의 상세로 보여줄 레코드를 고른다 — **판정이 선 쌍을 우선**한다(2026-09-19 재판정 K2-4).
+ * 이 슬러그가 가리키는 **대상**과 그 대상의 관측 전부를 고른다.
  *
- * `listPatchPairs()`는 최신 우선이고, 그전에는 최신 쌍의 레코드를 무조건 썼다. 그런데 라우트
- * 자격(`detailRouteIds`)은 **어느 한 쌍에서라도** 판정이 서면 주는 합집합이라, 옛 쌍에서 미공지였고
- * 최신 쌍에서 노이즈가 된 id가 상세에서 "표본 부족"을 그대로 렌더했다(실측 268장 중 126장).
- * 자격과 렌더가 서로 다른 쌍을 보고 있던 것이 결함의 정체다 — 자격을 좁히는 대신 **렌더가 자격을
- * 준 바로 그 쌍**을 고르게 한다. 어느 쌍에서도 판정이 안 섰으면(직접 URL 진입) 최신 쌍으로
- * 떨어뜨려 관측을 사실대로 보여준다.
+ * 슬러그는 두 형태를 받는다: 정준 `champion~MonkeyKing`과 구 지표 별칭
+ * `champion~MonkeyKing~JUNGLE~winRate`. 둘 다 `champion:MonkeyKing`으로 접어 같은 화면을 그린다.
+ *
+ * **판정이 선 쌍을 우선**한다(2026-09-19 재판정 K2-4). 라우트 자격은 「어느 한 쌍에서라도 판정이
+ * 서면」 주는 합집합이라, 최신 쌍을 무조건 쓰면 옛 쌍에서 미공지였고 최신에서 노이즈가 된 대상이
+ * 상세에서 "표본 부족"만 렌더한다 — 자격을 준 바로 그 쌍을 고르게 한다.
  */
-function findDeltaForId(rawId: string): FoundDelta | null {
-  let fallback: FoundDelta | null = null;
+function findEntity(rawId: string): FoundEntity | null {
+  // `champion:MonkeyKing:JUNGLE:winRate` → `champion:MonkeyKing`. 세그먼트 2개면 이미 대상 키다.
+  const segments = rawId.split(":");
+  const entityKey = segments.length <= 2 ? rawId : `${segments[0]}:${segments[1]}`;
+
+  let fallback: FoundEntity | null = null;
   for (const pair of listPatchPairs()) {
     const deltas = loadDeltas(pair.from, pair.to);
     if (!deltas) continue;
-    const delta = deltas.rows.find((row) => row.id === rawId);
-    if (!delta) continue;
-    const found = { pair, delta, generatedAt: deltas.meta.generatedAt, qAlpha: deltas.meta.qAlpha };
-    if (!isNoiseStatus(delta.status)) return found;
+    const rows = deltas.rows.filter((row) => `${row.entityType}:${row.entityKey}` === entityKey);
+    if (rows.length === 0) continue;
+    // 표시 우선순위대로 — 첫 구획이 그 대상에서 가장 할 말이 많은 지표가 된다.
+    const sorted = [...rows].sort(
+      (a, b) =>
+        DISPLAY_SORT_PRIORITY[displayStatus(a, deltas.meta.qAlpha)] -
+          DISPLAY_SORT_PRIORITY[displayStatus(b, deltas.meta.qAlpha)] ||
+        Math.abs(b.delta ?? 0) - Math.abs(a.delta ?? 0)
+    );
+    const found: FoundEntity = {
+      pair,
+      rows: sorted,
+      generatedAt: deltas.meta.generatedAt,
+      qAlpha: deltas.meta.qAlpha,
+    };
+    if (sorted.some((row) => !isNoiseStatus(row.status))) return found;
     fallback ??= found;
   }
   return fallback;
@@ -126,9 +153,10 @@ export function generateStaticParams(): Array<{ id: string }> {
     .map((pair) => loadDeltas(pair.from, pair.to))
     .filter((deltas): deltas is NonNullable<typeof deltas> => deltas !== null)
     .map((deltas) => deltas.rows);
-  const ids = detailRouteIds(rowsByPair);
-  if (ids.length === 0) return [{ id: "_placeholder" }];
-  return ids.map((id) => ({ id: itemSlug(id) }));
+  // 정준(대상) + 별칭(구 지표 경로). 별칭을 빼면 이미 나간 디스코드 링크가 조용히 404가 된다.
+  const slugs = detailRouteSlugs(rowsByPair);
+  if (slugs.length === 0) return [{ id: "_placeholder" }];
+  return slugs.map((id) => ({ id }));
 }
 
 function EmptyState() {
@@ -143,126 +171,213 @@ function EmptyState() {
   );
 }
 
+/**
+ * 지표 하나 = 구획 하나. 전에는 이 내용이 **한 화면 전체**였다(라우트가 지표 단위였으므로).
+ * 라우트가 대상 단위가 되면서 여기가 지표의 자리가 됐다 — 내용은 그대로다.
+ */
+function MetricSection({
+  row,
+  pair,
+  qAlpha,
+  ddragon,
+  championsFrom,
+  championsTo,
+  itemsFrom,
+  itemsTo,
+  snapshot,
+}: {
+  row: DeltaRecord;
+  pair: PatchPair;
+  qAlpha?: number;
+  ddragon: ReturnType<typeof loadDdragonSafe>;
+  championsFrom: Parameters<typeof resolveStoredCi>[2];
+  championsTo: Parameters<typeof resolveStoredCi>[3];
+  itemsFrom: Parameters<typeof resolveStoredCi>[4];
+  itemsTo: Parameters<typeof resolveStoredCi>[5];
+  snapshot: string;
+}) {
+  const kind = metricKind(row.metric);
+  // UX-BRIEF §1 불변 원칙: "승률은 n 게이트 미달 시 '표본 부족' 라벨(델타 미제시)" — 표본이 극히
+  // 작으면 ci가 크게 벌어져 막대에 거대한 오차 막대가 붙는다. 값 자체는 계속 보여준다.
+  const suppressDelta = row.status === "insufficient-sample";
+  const storedCi = resolveStoredCi(row, ddragon, championsFrom, championsTo, itemsFrom, itemsTo);
+  const chartData = buildChartData(row, pair.from, pair.to, suppressDelta, storedCi);
+
+  return (
+    <SectionCard eyebrow="관측" title={displayMetricLabel(row)}>
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-border-soft px-5 py-4">
+        <StatusBadge status={displayStatus(row, qAlpha)} />
+        <span className="font-mono text-sm tabular-nums text-fg-2">
+          {formatMetricValue(row.before, kind)} → {formatMetricValue(row.after, kind)}
+        </span>
+        {suppressDelta ? (
+          <span className="text-xs font-bold text-muted">
+            표본 부족 — 델타 미제시, n({fmtInt(row.n.before)}/{fmtInt(row.n.after)})
+          </span>
+        ) : (
+          <DeltaValue delta={row.delta} ci={row.ci} kind={kind} />
+        )}
+      </div>
+
+      {/* 이 지표에 대한 LLM 한 줄 — **지표 단위**라 여기가 제 자리다. 검증에 실패한 문장은
+          회색이고, 실행되지 않았으면 그 사유를 말한다(무근거 회색 원칙). */}
+      {row.llm ? (
+        <p
+          className={`border-b border-border-soft px-5 py-3 text-sm leading-relaxed ${
+            row.llm.skipped || !row.llm.summaryVerified ? "text-muted" : "text-fg-2"
+          }`}
+        >
+          {row.llm.skipped
+            ? `LLM 미실행(${row.llm.reason ?? "사유 없음"})`
+            : (row.llm.summary ?? "LLM이 이 변화를 설명할 조항을 찾지 못했습니다.")}
+        </p>
+      ) : null}
+
+      <div className="max-w-xl">
+        <ItemChart data={chartData} />
+      </div>
+      <div className="flex flex-wrap gap-4 border-t border-border-soft px-5 py-4 text-xs text-muted">
+        <span className="inline-flex items-center gap-2">
+          <span className="inline-block h-2.5 w-2.5 rounded-sm bg-fg-2" aria-hidden="true" />
+          전({pair.from})
+        </span>
+        <span className="inline-flex items-center gap-2">
+          <span className="inline-block h-2.5 w-2.5 rounded-sm bg-accent" aria-hidden="true" />
+          후({pair.to})
+        </span>
+        <span className="inline-flex items-center gap-2">
+          <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: "var(--muted)" }} aria-hidden="true" />
+          95% CI
+          {chartData.barCi ? (
+            <span className="font-mono">
+              {formatCiRange(chartData.barCi.before)} · {formatCiRange(chartData.barCi.after)}
+            </span>
+          ) : null}
+        </span>
+      </div>
+
+      {/* 통계 게이트·원천 매치는 **관측마다** 다르다 — 지표 구획 안에 둔다. 높이를 고정하고
+          안에서 스크롤하는 규약은 그대로(원천 매치 ID 수에 따라 옆 카드가 늘어나지 않게). */}
+      <div className="grid grid-cols-1 gap-px border-t border-border-soft bg-border-soft lg:grid-cols-2">
+        <div className="flex h-64 flex-col bg-surface">
+          <p className="px-5 pt-4 font-body text-xs font-bold text-muted">통계 게이트</p>
+          <div className="min-h-0 flex-1 overflow-y-auto">
+            <StatsGatePanel delta={row} kind={kind} />
+          </div>
+        </div>
+        <div className="flex h-64 flex-col bg-surface">
+          <p className="px-5 pt-4 font-body text-xs font-bold text-muted">원천 매치</p>
+          <div className="flex min-h-0 flex-1 flex-col">
+            <SourceMatchesPanel
+              matchIds={row.evidence.matchIds}
+              aggregatePath={row.evidence.aggregatePath}
+              snapshotHash={snapshot}
+            />
+          </div>
+        </div>
+      </div>
+    </SectionCard>
+  );
+}
+
 export default async function ItemDetailPage({ params }: ItemPageProps) {
   const { id } = await params;
   const rawId = id === "_placeholder" ? null : decodeIdParam(id);
-  const found = rawId ? findDeltaForId(rawId) : null;
+  const found = rawId ? findEntity(rawId) : null;
 
   if (!found) {
     return <EmptyState />;
   }
 
-  const { pair, delta, generatedAt, qAlpha } = found;
+  const { pair, rows, generatedAt, qAlpha } = found;
+  const head = rows[0];
   const notes = loadNotes(pair.to);
   const notesById = new Map<string, PatchNoteItem>((notes?.items ?? []).map((item) => [item.id, item]));
-  const kind = metricKind(delta.metric);
-  // UX-BRIEF §1 불변 원칙: "승률은 n 게이트 미달 시 '표본 부족' 라벨(델타 미제시)" — 실측
-  // (LeeSin TOP winRate, n=8)으로 표본이 극히 작을 때 ci가 [-0.398,0.398]까지 벌어져 62.5%
-  // 막대에 ±39.8pp 오차 막대가 붙는 왜곡을 발견했다. `insufficient-sample`이면 헤드라인의
-  // 델타·CI 문구와 차트 오차 막대를 모두 생략한다(원시 전/후 관측값 자체는 계속 보여준다 —
-  // "델타 미제시"이지 "값 미제시"가 아니다).
-  const suppressDelta = delta.status === "insufficient-sample";
   const ddragon = loadDdragonSafe();
-  const storedCi = resolveStoredCi(
-    delta,
-    ddragon,
-    loadChampions(pair.from)?.rows ?? null,
-    loadChampions(pair.to)?.rows ?? null,
-    loadItems(pair.from)?.rows ?? null,
-    loadItems(pair.to)?.rows ?? null
+  const championsFrom = loadChampions(pair.from)?.rows ?? null;
+  const championsTo = loadChampions(pair.to)?.rows ?? null;
+  const itemsFrom = loadItems(pair.from)?.rows ?? null;
+  const itemsTo = loadItems(pair.to)?.rows ?? null;
+
+  // 패치노트 대조는 **대상 단위**다 — 이 대상의 모든 관측이 짝지은 노트를 합쳐서 본다.
+  const matchedNoteIds = Array.from(new Set(rows.flatMap((row) => row.matchedNoteIds)));
+  const noteContrast = resolveNoteContrast(
+    { matchedNoteIds, entityName: head.entityName },
+    notes,
+    pair.to
   );
-  const chartData = buildChartData(delta, pair.from, pair.to, suppressDelta, storedCi);
-  const noteContrast = resolveNoteContrast(delta, notes, pair.to);
-  // 수치 축(F9) — 이 엔티티에서 **게임사가 바꿨는데 말하지 않은 것**. 지표 축(위 판정)과 직교한다.
+  // 추정 원인도 대상 단위로 합친다. 같은 문장이 여러 지표에 붙을 수 있어 노트 id로 접는다.
+  const causes = Array.from(
+    new Map(
+      rows.flatMap((row) => row.causes).map((cause) => [`${cause.candidateNoteId ?? ""}:${cause.text}`, cause])
+    ).values()
+  );
+  /**
+   * **대상 단위 요약은 만들지 않는다**(2026-09-23 scope-critic 지적).
+   *
+   * `llm.summary`는 **지표 하나**에 대한 브리핑 한 줄이다. 여러 지표를 묶은 이 패널에 그중
+   * 하나를 올리면, 한 지표의 문장이 대상 전체를 대표하는 것처럼 읽힌다 — 더 나쁜 것은 그
+   * 문장의 `summaryVerified`가 **다른 지표에서 온 원인들**의 신뢰도인 양 읽히는 것이다.
+   * 그 문장은 **각 지표 구획**이 말한다(`MetricSection`). 여기 남기는 것은 검토 시각 캡션뿐이다.
+   */
+  const entityLlm = rows.some((row) => row.llm && !row.llm.skipped) ? { skipped: false } : undefined;
+
+  // 수치 축(F9) — 이 대상에서 **게임사가 바꿨는데 말하지 않은 것**. 지표 축(위 판정)과 직교한다.
   const gameData = loadGameDataDiff("lol", pair.from, pair.to);
-  const submarineChanges = submarineChangesFor(gameData, delta.entityType, delta.entityKey);
-  const mismatchChanges = noteMismatchChangesFor(gameData, delta.entityType, delta.entityKey);
+  const submarineChanges = submarineChangesFor(gameData, head.entityType, head.entityKey);
+  const mismatchChanges = noteMismatchChangesFor(gameData, head.entityType, head.entityKey);
   const rawDeltas = readDeltasRaw(pair);
   const hash = rawDeltas ? snapshotHash(rawDeltas) : null;
-  const splashUrl = championSplashUrl(delta);
+  const splashUrl = championSplashUrl(head);
 
   return (
     <div className="flex flex-1 flex-col">
       <AmbientDetailSplash url={splashUrl} />
       <main>
-        {/* width="narrow"(1040px, 2026-09-12·3차 Q3 "안 L1") — 전역 Container(1320px)는
-            그대로 두고 이 페이지만 좁힌다. 1440px에서 우측 여백이 60→200px로 넓어져
-            .ambient-duo(상세 스플래시) 가시 면적이 실제로 늘어난다. */}
+        {/* width="narrow"(1040px) — 전역 Container(1320px)는 그대로 두고 이 페이지만 좁힌다.
+            1440px에서 우측 여백이 넓어져 .ambient-duo(상세 스플래시) 가시 면적이 실제로 늘어난다. */}
         <Container width="narrow" className="flex flex-col gap-6 py-8">
-          {/* 2026-09-12(3차) Q4: 판정 헤더를 불투명 bg-surface 카드에서 벗겨 홈 히어로와 같은
-              방식으로 배경(상세 스플래시) 위 텍스트로 뺐다(HeroSummary.tsx 전례). text-shadow는
-              .ambient-detail-headline/-sub(src/styles/ambient.css) — 히어로보다 강한 값을 쓴다,
-              duo 스플래시가 brightness(1.55)+screen이라 히어로 배경보다 밝기 때문이다. */}
-          {/* 브레드크럼 — 원시안 2종(배경 테마 v5 `.detail .crumb`, 방향 제안 항목상세 목업)이
-              모두 그렸는데 구현에만 없던 것을 2026-09-12 /verify-impl 화면 대조로 잡아 보완했다.
-              진입 경로가 대조표 행 클릭이므로(UX-BRIEF §2 화면 흐름) 첫 마디는 대조표 링크다. */}
-          <nav aria-label="위치" className="ambient-detail-sub pt-1 font-mono text-xs text-fg-2">
-            <Link href="/lol/compare/" className="hover:text-fg">
-              대조표
-            </Link>
-            <span className="px-1.5 text-muted" aria-hidden="true">
-              ›
-            </span>
-            {entityTypeLabel(delta.entityType)}
-            <span className="px-1.5 text-muted" aria-hidden="true">
-              ›
-            </span>
-            {delta.entityName}
-          </nav>
-          <div className="flex flex-wrap items-center gap-4">
-            <EntityIcon
-              entityType={delta.entityType}
-              entityKey={delta.entityKey}
-              name={delta.entityName}
-              size={72}
-              className="rounded-md text-lg"
-            />
-            <div>
-              <div className="flex items-center gap-3">
-                <h1 className="ambient-detail-headline font-display text-xl font-bold text-fg">
-                  {delta.entityName} — {displayMetricLabel(delta)}
-                </h1>
-                {/* 2026-09-18(ST-4, scope-critic 지적): 대조표와 같은 표시 키 — 비유의 "불일치"는
-                    여기서도 회색 "관측 미확인"이어야 두 화면이 서로를 반박하지 않는다. */}
-                <StatusBadge status={displayStatus(delta, qAlpha)} />
-              </div>
-              <p className="ambient-detail-sub mt-2 text-lg text-fg-2">
-                {pair.from}→{pair.to} {displayMetricLabel(delta)}{" "}
-                <span className="num font-bold text-fg">
-                  {formatMetricValue(delta.before, kind)}
-                </span>{" "}
-                →{" "}
-                <span className="num font-bold text-fg">
-                  {formatMetricValue(delta.after, kind)}
-                </span>{" "}
-                {suppressDelta ? (
-                  <span className="text-sm font-bold text-muted">
-                    (표본 부족 — 델타 미제시, n({fmtInt(delta.n.before)}/{fmtInt(delta.n.after)}))
-                  </span>
-                ) : (
-                  <>(<DeltaValue delta={delta.delta} ci={delta.ci} kind={kind} />)</>
-                )}
-              </p>
-            </div>
-            <div className="ml-auto">
+          {/* 제목은 **대상 이름**이다 — 지표를 붙이지 않는다(§8-5). 지표는 아래 구획이 말한다. */}
+          <PageHeader
+            crumbs={detailCrumbs("lol", head.entityName)}
+            title={
+              <span className="flex flex-wrap items-center gap-4">
+                <EntityIcon
+                  entityType={head.entityType}
+                  entityKey={head.entityKey}
+                  name={head.entityName}
+                  size={72}
+                  className="rounded-md text-lg"
+                />
+                {head.entityName}
+              </span>
+            }
+            titleAside={
+              <span className="flex items-center gap-2">
+                {entityTypeLabel(head.entityType)}
+                <StatusBadge status={displayStatus(head, qAlpha)} />
+              </span>
+            }
+            lead={
+              <>
+                {pair.from} → {pair.to} 관측 <strong className="text-fg">{rows.length}</strong>건.
+                지표마다 전/후 값·통계 게이트·원천 매치를 아래에서 볼 수 있습니다.
+              </>
+            }
+            actions={
+              // §8-7 #18: 이 액션 줄이 LoL 상세에만 있었다. 자리는 `PageHeader`가 소유하므로
+              // 세 게임이 같은 위치에 둘 수 있다.
               <Link
                 href="/lol/methodology/#discord"
                 className="inline-flex min-h-10 items-center justify-center rounded-md bg-accent px-5 text-sm font-bold text-accent-on hover:opacity-90"
               >
                 방송 규칙 보기 →
               </Link>
-            </div>
-          </div>
+            }
+          />
 
-          {/* 2026-09-18 라운드6(사용자 L5) 배치: 1행 [패치노트 대조 | 추정 원인(LLM)] · 2행 [전/후 관측값] ·
-              3행 [통계 게이트 | 원천 매치]. 추정 원인을 패치노트 대조와 같은 최상단에 두고, 통계 게이트·원천
-              매치(중요도 낮음)를 맨 아래로 내렸다. 1·3행 카드는 **고정 높이**(h-80 / h-64, Tailwind 표준
-              스케일) + 내부 스크롤이라 원천 매치 ID 수나 원인 개수에 따라 옆 카드가 늘어나지 않는다(이전엔
-              grid stretch + flex-1로 서로 높이를 맞추느라 매 항목 레이아웃이 달랐다). */}
+          {/* 1행 [패치노트 대조 | 추정 원인(LLM)] — 대상 단위로 한 번만 그린다. */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            {/* B안(2026-09-21) — 이 카드는 이미 「패치노트 대조」다. 그 안에 두 번째 구획
-                「패치노트가 말하지 않은 것」을 넣어 세 게임 어휘를 맞춘다. 고정 높이를
-                `min-h-80`으로 바꾼 이유: 잠수함이 여러 건이면 카드가 자라야 값이 안 잘린다. */}
             <SectionCard eyebrow="선언 대조" title="패치노트 대조" className="flex min-h-80 flex-col">
               <NoteContrastPanel result={noteContrast} />
               <div className="border-t border-border-soft" />
@@ -275,51 +390,28 @@ export default async function ItemDetailPage({ params }: ItemPageProps) {
               />
             </SectionCard>
             <SectionCard eyebrow="원인" title="추정 원인(LLM)" className="flex h-80 flex-col">
-              <CausesPanel causes={delta.causes} llm={delta.llm} notesById={notesById} generatedAt={generatedAt} />
+              <CausesPanel causes={causes} llm={entityLlm} notesById={notesById} generatedAt={generatedAt} />
             </SectionCard>
           </div>
 
-          <SectionCard eyebrow="관측" title="전/후 관측값">
-            <div className="max-w-xl">
-              <ItemChart data={chartData} />
-            </div>
-            <div className="flex flex-wrap gap-4 border-t border-border-soft px-5 py-4 text-xs text-muted">
-              <span className="inline-flex items-center gap-2">
-                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-fg-2" aria-hidden="true" />
-                전({pair.from})
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <span className="inline-block h-2.5 w-2.5 rounded-sm bg-accent" aria-hidden="true" />
-                후({pair.to})
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: "var(--muted)" }} aria-hidden="true" />
-                95% CI
-                {chartData.barCi ? (
-                  <span className="font-mono">
-                    {formatCiRange(chartData.barCi.before)} · {formatCiRange(chartData.barCi.after)}
-                  </span>
-                ) : null}
-              </span>
-            </div>
-          </SectionCard>
-
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <SectionCard title="통계 게이트" className="flex h-64 flex-col">
-              <div className="min-h-0 flex-1 overflow-y-auto">
-                <StatsGatePanel delta={delta} kind={kind} />
-              </div>
-            </SectionCard>
-            <SectionCard title="원천 매치" className="flex h-64 flex-col">
-              <div className="flex min-h-0 flex-1 flex-col">
-                <SourceMatchesPanel
-                  matchIds={delta.evidence.matchIds}
-                  aggregatePath={delta.evidence.aggregatePath}
-                  snapshotHash={hash ?? "unknown"}
-                />
-              </div>
-            </SectionCard>
-          </div>
+          {/* 지표마다 한 구획 — 라우트가 대상 단위가 되면서 여기가 지표의 자리가 됐다. */}
+          {rows.map((row) => (
+            <MetricSection
+              key={row.id}
+              row={row}
+              pair={pair}
+              qAlpha={qAlpha}
+              ddragon={ddragon}
+              championsFrom={championsFrom}
+              championsTo={championsTo}
+              itemsFrom={itemsFrom}
+              itemsTo={itemsTo}
+              snapshot={hash ?? "unknown"}
+            />
+          ))}
+        </Container>
+        <Container>
+          <SiteFooter game="lol" generatedAt={generatedAt} nVerdicts={rows.length} />
         </Container>
       </main>
     </div>

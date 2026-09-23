@@ -19,7 +19,7 @@ vi.mock("@/lib/links", () => ({
 
 async function renderPanel(): Promise<HTMLElement> {
   const { default: DiscordPanel } = await import("../DiscordPanel");
-  return render(<DiscordPanel generatedAt={null} />).container;
+  return render(<DiscordPanel game="lol" generatedAt={null} />).container;
 }
 
 function linkByText(container: HTMLElement, text: string): HTMLAnchorElement | null {
