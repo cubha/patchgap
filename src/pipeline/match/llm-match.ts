@@ -21,7 +21,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { DeltaRecord, LlmCause, PatchNoteItem } from "../types";
 import { llmCacheDir } from "../shared/paths";
-import type { GameLlmProfile } from "./llm-profile";
+import type { GameLlmProfile, LlmDelta } from "./llm-profile";
 
 export { LLM_MODEL, PROMPT_VERSION } from "./llm-config";
 import { LLM_MODEL, PROMPT_VERSION } from "./llm-config";
@@ -91,7 +91,7 @@ function cacheKeyFor(model: string, promptVersion: string, deltaId: string, cand
     .digest("hex");
 }
 
-function buildSystemPrompt(profile: GameLlmProfile, notes: readonly PatchNoteItem[]): string {
+function buildSystemPrompt<TDelta extends LlmDelta>(profile: GameLlmProfile<TDelta>, notes: readonly PatchNoteItem[]): string {
   return `${profile.systemInstructions}\n\n후보 패치노트 항목 목록(JSON):\n${serializeCandidates(notes)}`;
 }
 
@@ -117,11 +117,11 @@ export interface LlmCallResult {
  * 서버 측 프롬프트 캐싱(cache_read_input_tokens)을 검증한다(파일 캐시를 우회해야 두 번째 호출이
  * 실제로 API에 도달한다).
  */
-export async function callLlmForDelta(
+export async function callLlmForDelta<TDelta extends LlmDelta = DeltaRecord>(
   client: Anthropic,
   model: string,
-  profile: GameLlmProfile,
-  delta: DeltaRecord,
+  profile: GameLlmProfile<TDelta>,
+  delta: TDelta,
   candidates: readonly PatchNoteItem[],
   /** 길이 재요청 문구(1회 한정). 있으면 사용자 메시지 뒤에 붙는다 — 시스템 프롬프트는 그대로라
    * 캐시 프리픽스가 깨지지 않는다. */
@@ -192,11 +192,11 @@ function writeCache(cacheDir: string, key: string, value: CacheFileShape): void 
  * LLM이 반환한 causes를 후보셋 검증한다 — 존재하지 않는 id·자기 엔티티 참조는 candidateNoteId를
  * null로, verified를 false로 폐기(text/confidence는 회색 표기용으로 보존).
  */
-export function verifyCauses(
+export function verifyCauses<TDelta extends LlmDelta = DeltaRecord>(
   rawCauses: LlmOutput["causes"],
   candidates: readonly PatchNoteItem[],
-  delta: DeltaRecord,
-  profile: GameLlmProfile
+  delta: TDelta,
+  profile: GameLlmProfile<TDelta>
 ): LlmCause[] {
   const candidateIds = new Set(candidates.map((note) => note.id));
   const notesById = new Map(candidates.map((note) => [note.id, note] as const));
@@ -234,10 +234,10 @@ export function verifyCauses(
  * 확인한다(causes와 달리 자기참조 배제는 요구되지 않음 — summary는 델타 자신의 수치를 근거로
  * 쓰는 것이 정상이므로). 빈 배열은 "인용 없음"이라 항상 통과(true).
  */
-export function verifySummaryCites(
+export function verifySummaryCites<TDelta extends LlmDelta = DeltaRecord>(
   summaryCites: readonly string[],
   candidates: readonly PatchNoteItem[],
-  profile: GameLlmProfile
+  profile: GameLlmProfile<TDelta>
 ): boolean {
   if (summaryCites.length === 0) return true;
   // 존재 + core. 모드 노트를 근거로 쓴 요약은 본문색으로 단언할 수 없다(위 verifyCauses와 같은 이유).
@@ -458,9 +458,9 @@ export interface LlmRunSummary {
   usage: LlmUsageTotals;
 }
 
-export interface LlmMatchResult {
+export interface LlmMatchResult<TDelta extends LlmDelta = DeltaRecord> {
   /** 입력과 같은 길이 — 대상이 아니었던 델타는 그대로, 대상이었던 델타는 causes/llm이 갱신됨. */
-  deltas: DeltaRecord[];
+  deltas: TDelta[];
   summary: LlmRunSummary;
 }
 
@@ -477,12 +477,12 @@ function addUsage(total: LlmUsageTotals, delta: LlmUsageTotals): void {
  * `causes=[]`·`llm:{skipped:true, reason:'call-budget-exceeded'}`로 남긴다. 429/5xx 등 API 실패는
  * 캐시 폴백(캐시가 없으면 회색 처리) — 파이프라인을 죽이지 않는다.
  */
-export async function inferIndirectCandidates(
-  deltas: readonly DeltaRecord[],
+export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRecord>(
+  deltas: readonly TDelta[],
   notes: readonly PatchNoteItem[],
-  profile: GameLlmProfile,
+  profile: GameLlmProfile<TDelta>,
   options: LlmMatchOptions = {}
-): Promise<LlmMatchResult> {
+): Promise<LlmMatchResult<TDelta>> {
   const maxDeltas = options.maxDeltas ?? DEFAULT_MAX_DELTAS;
   const maxTotalCalls = options.maxTotalCalls ?? DEFAULT_MAX_TOTAL_CALLS;
   const cacheDir = options.cacheDir ?? llmCacheDir();
@@ -505,7 +505,7 @@ export async function inferIndirectCandidates(
     prose: summarizeProseHygiene([]),
   };
   const client = options.client ?? new Anthropic();
-  const resultById = new Map<string, DeltaRecord>();
+  const resultById = new Map<string, TDelta>();
 
   for (const delta of targets) {
     const key = cacheKeyFor(model, PROMPT_VERSION, delta.id, candSetHash);
@@ -652,7 +652,7 @@ export async function inferIndirectCandidates(
     merged.map((record) => ({
       summary:
         record.llm && !record.llm.skipped && record.llm.summaryVerified ? (record.llm.summary ?? null) : null,
-      causes: record.causes.map((cause) => ({ text: cause.text, confidence: cause.confidence })),
+      causes: (record.causes ?? []).map((cause) => ({ text: cause.text, confidence: cause.confidence })),
     }))
   );
   return { deltas: merged, summary };

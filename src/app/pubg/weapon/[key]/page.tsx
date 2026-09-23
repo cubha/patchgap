@@ -8,7 +8,11 @@ import type { Metadata } from "next";
 import { buildPubgEvidenceProse } from "@/components/pubg/evidenceProse";
 import Link from "next/link";
 import Container from "@/components/Container";
+import PageHeader from "@/components/PageHeader";
+import { detailCrumbs } from "@/lib/breadcrumbs";
 import SectionCard from "@/components/SectionCard";
+import CausesPanel from "@/components/causes/CausesPanel";
+import { pubgNotesAsPatchNotes } from "@/pipeline/match/pubg-delta";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
@@ -38,7 +42,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const weaponKey = weaponKeyFromSlug(key, bundle?.after.weapons.map((w) => w.weaponKey) ?? []);
   const name = bundle?.after.weapons.find((w) => w.weaponKey === weaponKey)?.weaponName ?? "무기";
   return {
-    title: `${name} · PUBG 42.3 ⇒ 43.1 · patchgap`,
+    title: `${name} · PUBG 42.3 → 43.1 · patchgap`,
     description: `${name}의 42.3 → 43.1 획득 점유율 변화와 판정 근거.`,
   };
 }
@@ -84,6 +88,12 @@ export default async function PubgWeaponPage({ params }: PageProps) {
 
   const row = deltas.rows.find((r) => r.weaponKey === weaponKey) ?? null;
   const note = row?.matchedNoteId ? (notes.find((n) => n.id === row.matchedNoteId) ?? null) : null;
+  // 원인 문장이 인용한 노트 — 엔진과 **같은 변환**을 써야 id가 맞는다(사본 금지).
+  const notesById = new Map(
+    pubgNotesAsPatchNotes(notes, (key) => deltas.rows.find((r) => r.weaponKey === key)?.weaponName ?? null).map(
+      (n) => [n.id, n] as const
+    )
+  );
 
   // 수치 축(F9) — PUBG는 게임사가 수치 파일을 배포하지 않아 텔레메트리 피해 격자를 대조한다.
   const gameData = loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to);
@@ -138,36 +148,64 @@ export default async function PubgWeaponPage({ params }: PageProps) {
     <main>
       <Container>
       <div className="flex flex-col gap-6 pt-12 pb-8">
-        <nav className="font-mono text-xs text-muted">
-          <Link href="/pubg/" className="hover:text-fg-2">
-            브리핑
-          </Link>
-          <span className="px-1.5">/</span>
-          <Link href="/pubg/compare/" className="hover:text-fg-2">
-            대조표
-          </Link>
-          <span className="px-1.5">/</span>
-          <span className="text-fg-2">{statAfter.weaponName}</span>
-        </nav>
 
-        <PubgDetailSplash
-          // 시안 §4 `.detail-eyebrow`가 "무기 · 돌격소총"처럼 세부 분류를 쓴다.
-          eyebrow={`무기 · ${weaponCategoryLabel(weaponKey)}`}
-          title={statAfter.weaponName}
-          imageSrc={hasRender ? publicWeaponPath(weaponKey) : null}
-          fit="contain"
-          fallbackMark={statAfter.weaponName}
-          stats={stats}
-          verdict={
+        {/* 이동 경로 + h1은 `PageHeader`가 소유한다(§8-7 #1·#8): 전에는 이 화면에 h1이 없고
+            이동 경로 구분자도 `/`라 다른 두 게임과 달랐다. 스플래시 카드는 그 아래 시각 블록이다.
+            **유형 라벨과 판정 뱃지도 머리에 있어야 한다**(§8-1) — 전에는 둘 다 히어로 아래 카드로
+            밀려 있어 같은 자리를 세 게임에서 열면 PUBG만 머리가 비어 보였다(2026-09-23 화면 대조 V3).
+            판정이 서지 않은 무기는 뱃지 대신 그 사유를 한 줄로 말한다. */}
+        <PageHeader
+          crumbs={detailCrumbs("pubg", statAfter.weaponName)}
+          title={
+            <span className="flex flex-wrap items-center gap-3">
+              {hasRender ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={publicWeaponPath(weaponKey)}
+                  alt=""
+                  aria-hidden="true"
+                  className="h-12 w-24 object-contain"
+                />
+              ) : null}
+              {statAfter.weaponName}
+            </span>
+          }
+          titleAside={
+            <span className="flex items-center gap-2">
+              {`무기 · ${weaponCategoryLabel(weaponKey)}`}
+              {row && judged ? <StatusBadge status={displayStatusOf(row.status)} /> : null}
+            </span>
+          }
+          lead={
             row && judged ? (
               <>
-                <StatusBadge status={displayStatusOf(row.status)} />{" "}
-                {note ? `공지 "${note.summary}" 대조` : "43.1 패치노트에 이 무기 항목 없음"}
+                {deltas.meta.from} → {deltas.meta.to} 획득 점유율{" "}
+                <strong className="text-fg">{pct(row.before ?? 0, 2)}</strong> →{" "}
+                <strong className="text-fg">{pct(row.after ?? 0, 2)}</strong> (
+                {signedPct(row.relChange ?? 0)})
+                {note ? ` · 공지 “${note.summary}” 대조` : ` · ${deltas.meta.to} 패치노트에 이 무기 항목 없음`}
               </>
             ) : (
               unjudgedReason
             )
           }
+          actions={
+            <Link
+              href="/pubg/methodology/#discord"
+              className="inline-flex min-h-10 items-center justify-center rounded-md bg-accent px-5 text-sm font-bold text-accent-on hover:opacity-90"
+            >
+              방송 규칙 보기 →
+            </Link>
+          }
+        />
+
+        {/* 유형·이름·판정은 위 머리가 소유한다(§8-1) — 여기 다시 그리면 한 화면에서
+            이름이 세 번 반복된다. 이 카드는 렌더 이미지와 수치만 든다. */}
+        <PubgDetailSplash
+          imageSrc={hasRender ? publicWeaponPath(weaponKey) : null}
+          fit="contain"
+          fallbackMark={statAfter.weaponName}
+          stats={stats}
         />
 
         {/* B안(2026-09-21 사용자 확정) — 세 게임이 같은 자리에 같은 제목을 쓴다. PUBG 상세에는
@@ -214,6 +252,18 @@ export default async function PubgWeaponPage({ params }: PageProps) {
             source={gameData?.meta.source ?? null}
             notePatch={deltas.meta.to}
             patch={gameData ? { from: gameData.meta.from, to: gameData.meta.to } : null}
+          />
+        </SectionCard>
+
+        {/* 추정 원인 — 이 게임에도 축이 생겼다(2026-09-23, `scripts/run-pubg-llm.ts`).
+            LoL·TFT 상세와 **같은 패널**을 쓴다: 검증 통과 문장만 본문색이고 나머지는 회색이다.
+            원인이 0건인 무기에서는 패널이 그 사실을 말한다(빈 카드를 만들지 않는다). */}
+        <SectionCard eyebrow="원인" title="추정 원인(LLM)" variant="glass" className="flex min-h-64 flex-col">
+          <CausesPanel
+            causes={row?.causes ?? []}
+            llm={row?.llm}
+            notesById={notesById}
+            generatedAt={deltas.meta.generatedAt}
           />
         </SectionCard>
 

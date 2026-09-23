@@ -180,6 +180,26 @@ if [ -n "$TARGET_FILES" ]; then
         ;;
     esac
 
+    # 4d) 화면 어휘 단일화 — UX-BRIEF §8-5. 세 게임이 같은 개념을 다른 말로 부르고 있었다
+    # (2026-09-22 13화면 실측: 패치 쌍 기호 `→`/`⇒` 혼용 · 판정 열이 LoL만 「상태」 ·
+    # 대조표 카드 제목이 내부 용어 「델타 테이블」 · 집계 시각이 TFT만 ISO 원문).
+    # 산문 규칙은 드리프트한다 — 같은 규칙을 `src/app/__tests__/screen-parity.test.ts`가
+    # 렌더 축에서, 여기가 소스 축에서 잡는다. 주석은 대상이 아니다(지난 결정의 기록).
+    case "$file" in
+      */__tests__/*|verify.sh) ;;
+      *.tsx)
+        if grep -nE '[0-9]+\.[0-9]+[[:space:]]*⇒[[:space:]]*[0-9]+\.[0-9]+|meta\.from\}[[:space:]]*⇒' "$file" 2>/dev/null \
+            | grep -vE '^[0-9]*:[[:space:]]*(//|\*|/\*|\{/\*)' | grep -q .; then
+          fail "[어휘] 패치 쌍은 '→'만 쓴다 — '⇒'는 패치노트가 적은 값 전용(UX-BRIEF §8-5): $file"
+          FAIL_COUNT=$((FAIL_COUNT + 1))
+        fi
+        if grep -nE '>[[:space:]]*델타 테이블[[:space:]]*<' "$file" 2>/dev/null | grep -q .; then
+          fail "[어휘] 내부 용어가 화면에 나간다 — '델타 테이블'(UX-BRIEF §8-5): $file"
+          FAIL_COUNT=$((FAIL_COUNT + 1))
+        fi
+        ;;
+    esac
+
     # 4) 디자인 토큰 Ground Truth 하드코딩 검사 (docs/design/DESIGN-TOKENS.md 존재 시)
     if [ "$DESIGN_TOKENS_GT" = true ]; then
       case "$file" in

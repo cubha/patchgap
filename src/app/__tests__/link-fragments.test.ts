@@ -8,12 +8,20 @@ import { describe, expect, it } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 
+import { METHODOLOGY_SLOTS } from "@/components/methodology/slots";
+
 const SRC = path.join(process.cwd(), "src");
+
+/** 방법론 화면의 앵커는 9슬롯 registry가 소유한다(§8-4) — 화면 소스에 문자열로 나타나지 않는다. */
+const METHODOLOGY_ANCHORS = new Set<string>(
+  METHODOLOGY_SLOTS.flatMap((slot) => (slot.anchor === null ? [] : [slot.anchor]))
+);
 
 /** 해시가 DOM 앵커가 아니라 상태 키인 라우트 — 그 경우 프래그먼트는 페이지가 해석한다. */
 // 2026-09-19: LoL이 `/lol` 접두를 받으면서 대조표 경로가 `/lol/compare/`로 옮겼다. 구 경로는
 // vercel.json 리다이렉트가 받으므로 소스에는 더 이상 존재하지 않는다(legacy-redirects.test.ts).
-const STATE_FRAGMENT_ROUTES = new Set(["/lol/compare/", "/pubg/compare/"]);
+// 2026-09-23 §8-3: TFT 대조표도 상태 칩을 갖게 되어 `#unannounced`가 착지한다.
+const STATE_FRAGMENT_ROUTES = new Set(["/lol/compare/", "/tft/compare/", "/pubg/compare/"]);
 
 function walk(dir: string): string[] {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -44,6 +52,25 @@ function stripComments(source: string): string {
   return source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
 }
 
+/** 한 화면이 거쳐서라도 그리는 소스 전부 — `@/…` 임포트를 깊이 제한으로 따라간다. */
+function closureOf(entry: string, depth: number, seen = new Set<string>()): string {
+  if (seen.has(entry) || !fs.existsSync(entry)) return "";
+  seen.add(entry);
+  const source = stripComments(fs.readFileSync(entry, "utf8"));
+  if (depth === 0) return source;
+  let out = source;
+  for (const match of source.matchAll(/from\s+"(@\/[^"]+)"/g)) {
+    const base = path.join(process.cwd(), match[1].replace(/^@\//, "src/"));
+    for (const ext of [".tsx", ".ts"]) {
+      if (fs.existsSync(base + ext)) {
+        out += "\n" + closureOf(base + ext, depth - 1, seen);
+        break;
+      }
+    }
+  }
+  return out;
+}
+
 /** 라우트 → 그 페이지 소스 경로(정적 export 규약: /a/b/ → src/app/a/b/page.tsx). */
 function pageSourceOf(route: string): string {
   const segments = route.split("/").filter((s) => s.length > 0);
@@ -62,7 +89,11 @@ describe("내부 링크 프래그먼트", () => {
       if (STATE_FRAGMENT_ROUTES.has(link.route)) return false;
       const source = pageSourceOf(link.route);
       if (!fs.existsSync(source)) return true;
-      return !stripComments(fs.readFileSync(source, "utf8")).includes(`id="${link.fragment}"`);
+      // 앵커가 **소스에 문자열로 없을 수 있다**(2026-09-23): 방법론은 9슬롯 골격이
+      // `id={slot.anchor}`로 그리므로 grep으로는 영원히 못 찾는다. 그 경우 **앵커의 소유자**
+      // (`slots.ts`)에게 묻는다 — 슬롯에서 앵커를 지우면 여기서 죽은 링크로 잡힌다.
+      if (/\/methodology\/$/.test(link.route)) return !METHODOLOGY_ANCHORS.has(link.fragment);
+      return !closureOf(source, 3).includes(`id="${link.fragment}"`);
     });
     expect(dead.map((d) => `${d.file} → ${d.route}#${d.fragment}`)).toEqual([]);
   });

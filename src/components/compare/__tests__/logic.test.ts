@@ -1,6 +1,9 @@
 // src/components/compare/__tests__/logic.test.ts
-// 대조표 순수 로직(logic.ts) 단위 테스트 — 상태 필터·헤더 정렬·좌 내비 검색/섹션 필터·대표
-// 상태 산출·테이블 셀 포맷·커버리지 집계. ST-11 완료 조건("상태 필터·정렬 로직(순수 함수)").
+// 대조표 **LoL 전용** 순수 로직(logic.ts) 단위 테스트 — 라인 축·대표 상태 산출·셀 포맷·커버리지.
+//
+// 2026-09-23 §8-3: 상태 칩·정렬·검색·내비 묶기는 세 게임 공통 규칙이 되어 `toolbarRules.ts`·
+// `noteNav.ts`로 옮겼고, 그 테스트도 각 모듈 옆(`toolbarRules.test.ts`·`noteNav.test.ts`)으로
+// 따라갔다. 여기서 사라진 describe는 **약화가 아니라 이사**다.
 
 import { describe, expect, it } from "vitest";
 import { modeScopeFromAnchorUrl } from "@/pipeline/shared/mode-scope";
@@ -10,18 +13,13 @@ import {
   computeCoverage,
   directionSymbol,
   filterByLane,
-  filterByStatus,
-  filterNotesBySearch,
-  filterNotesBySection,
   formatCiCell,
   formatDeltaCell,
   formatNCell,
-  groupNotesForNav,
+  lolNoteNavItems,
   navBadgeStatus,
   representativeStatus,
   shortNoteId,
-  sortRows,
-  STATUS_FILTERS,
 } from "../logic";
 
 function delta(overrides: Partial<DeltaRecord>): DeltaRecord {
@@ -76,103 +74,6 @@ function notesFile(items: PatchNoteItem[]): NotesFile {
   };
 }
 
-describe("filterByStatus", () => {
-  const rows = [
-    delta({ id: "1", status: "unannounced" }),
-    delta({ id: "2", status: "announced-consistent" }),
-    delta({ id: "3", status: "no-change" }),
-  ];
-
-  it("all은 전체(그대로 반환)", () => {
-    expect(filterByStatus(rows, "all")).toHaveLength(3);
-  });
-
-  it("특정 표시 키만 남긴다", () => {
-    expect(filterByStatus(rows, "unannounced").map((r) => r.id)).toEqual(["1"]);
-    expect(filterByStatus(rows, "announced").map((r) => r.id)).toEqual(["2"]);
-  });
-
-  // 2026-09-18 라운드6(사용자 C5) 명세 변경: "미공지, 노트에없는변화, 간접영향은 결국 미공지내용" —
-  // 통합 필터 `gap`과 개별 칩(간접 영향)을 없애고 `unannounced` 하나가 둘을 함께 남긴다.
-  it("unannounced 칩은 미공지와 간접 영향을 함께 남긴다 — 홈 타일이 세는 집합과 같다", () => {
-    const gapRows = [
-      delta({ id: "u", status: "unannounced" }),
-      delta({ id: "i", status: "indirect-effect" }),
-      delta({ id: "a", status: "announced-consistent" }),
-      delta({ id: "b", status: "below-threshold" }),
-    ];
-    expect(filterByStatus(gapRows, "unannounced").map((r) => r.id)).toEqual(["u", "i"]);
-  });
-
-  it("announced-anomaly 칩은 방향 반대·유의·바닥 통과 행만 남긴다", () => {
-    const mixed = [
-      delta({ id: "anom", status: "announced-inconsistent", delta: 0.05, after: 0.15, ci: [0.03, 0.07], q: 0.01 }),
-      delta({ id: "quiet", status: "announced-inconsistent", q: 0.6 }),
-      delta({ id: "ok", status: "announced-consistent" }),
-    ];
-    expect(filterByStatus(mixed, "announced-anomaly", 0.1).map((r) => r.id)).toEqual(["anom"]);
-    expect(filterByStatus(mixed, "announced", 0.1).map((r) => r.id)).toEqual(["quiet", "ok"]);
-  });
-});
-
-describe("sortRows", () => {
-  it("absDelta desc가 기본", () => {
-    const rows = [delta({ id: "small", delta: 0.01 }), delta({ id: "big", delta: -0.09 })];
-    expect(sortRows(rows, "absDelta", "desc").map((r) => r.id)).toEqual(["big", "small"]);
-  });
-
-  it("asc 방향 전환", () => {
-    const rows = [delta({ id: "small", delta: 0.01 }), delta({ id: "big", delta: -0.09 })];
-    expect(sortRows(rows, "absDelta", "asc").map((r) => r.id)).toEqual(["small", "big"]);
-  });
-
-  it("q는 낮을수록(더 유의) desc 기본에서 앞에 온다", () => {
-    const rows = [delta({ id: "high-q", q: 0.5 }), delta({ id: "low-q", q: 0.01 })];
-    expect(sortRows(rows, "q", "desc").map((r) => r.id)).toEqual(["low-q", "high-q"]);
-  });
-
-  it("n은 before+after 합", () => {
-    const rows = [
-      delta({ id: "small-n", n: { before: 10, after: 10 } }),
-      delta({ id: "big-n", n: { before: 5000, after: 5000 } }),
-    ];
-    expect(sortRows(rows, "n", "desc").map((r) => r.id)).toEqual(["big-n", "small-n"]);
-  });
-
-  it("원본 배열을 변형하지 않는다", () => {
-    const rows = [delta({ id: "a", delta: 0.01 }), delta({ id: "b", delta: 0.02 })];
-    const original = [...rows];
-    sortRows(rows, "absDelta", "desc");
-    expect(rows).toEqual(original);
-  });
-});
-
-describe("filterNotesBySection", () => {
-  it("섹션이 일치하는 항목만", () => {
-    const items = [note({ id: "a", section: "champion" }), note({ id: "b", section: "item" })];
-    expect(filterNotesBySection(items, "item").map((i) => i.id)).toEqual(["b"]);
-  });
-});
-
-describe("filterNotesBySearch", () => {
-  const items = [
-    note({ id: "a", entity: "아우렐리온 솔", skill: "Q - 빛의 숨결" }),
-    note({ id: "b", entity: "트런들", skill: null }),
-  ];
-
-  it("빈 검색어는 전체 반환", () => {
-    expect(filterNotesBySearch(items, "  ")).toHaveLength(2);
-  });
-
-  it("entity로 검색", () => {
-    expect(filterNotesBySearch(items, "트런들").map((i) => i.id)).toEqual(["b"]);
-  });
-
-  it("skill로 검색(대소문자 무시)", () => {
-    expect(filterNotesBySearch(items, "빛의").map((i) => i.id)).toEqual(["a"]);
-  });
-});
-
 describe("representativeStatus", () => {
   it("짝지어진 델타가 없으면 null", () => {
     expect(representativeStatus("note:1", [delta({ matchedNoteIds: [] })])).toBeNull();
@@ -198,37 +99,6 @@ describe("representativeStatus", () => {
       delta({ id: "4", matchedNoteIds: ["note:1"], status: "unannounced" }),
     ];
     expect(representativeStatus("note:1", rows2)).toBe("unannounced");
-  });
-});
-
-describe("STATUS_FILTERS — 2026-09-18 라운드6 어휘 통일(사용자 C5·C1)", () => {
-  it("칩은 전체 / 공지 / 공지 · 이상 관측 / 미공지 4종뿐이다 — 노이즈·세분 칩은 없다", () => {
-    expect(STATUS_FILTERS.map((f) => [f.key, f.label])).toEqual([
-      ["all", "전체"],
-      ["announced", "공지"],
-      ["announced-anomaly", "공지 · 이상 관측"],
-      ["unannounced", "미공지"],
-    ]);
-  });
-});
-
-describe("groupNotesForNav — 좌 내비 엔티티 묶음(사용자 L4)", () => {
-  it("같은 엔티티의 줄을 하나로 묶고 스킬 목록·줄 수를 낸다(문서 순서 유지)", () => {
-    const items = [
-      note({ id: "a", entity: "카시오페아", skill: "E - 쌍독니", stat: "피해량" }),
-      note({ id: "b", entity: "바드", skill: "W - 수호자의 성소" }),
-      note({ id: "c", entity: "카시오페아", skill: "E - 쌍독니", stat: "마나" }),
-      note({ id: "d", entity: "카시오페아", skill: "Q - 유독성 폭발" }),
-    ];
-    const groups = groupNotesForNav(items);
-    expect(groups.map((g) => g.entity)).toEqual(["카시오페아", "바드"]);
-    expect(groups[0].notes.map((n) => n.id)).toEqual(["a", "c", "d"]);
-    expect(groups[0].skills).toEqual(["E - 쌍독니", "Q - 유독성 폭발"]);
-    expect(groups[0].id).toBe("a"); // 대표 id = 첫 줄
-  });
-
-  it("빈 입력은 빈 배열", () => {
-    expect(groupNotesForNav([])).toEqual([]);
   });
 });
 
@@ -299,14 +169,22 @@ describe("shortNoteId", () => {
   });
 });
 
-describe("groupNotesForNav — 제외 노트(라운드6 재판정 보완 1·5)", () => {
+// 2026-09-23 §8-3: 묶기 규칙 자체는 게임 중립이 되어 `noteNav.ts`로 갔고(거기서 테스트한다),
+// **제외 술어는 LoL 변환에 남았다** — 이 게이트를 잃으면 의회 투표 줄이 내비에 되살아난다.
+describe("lolNoteNavItems — 제외 노트(라운드6 재판정 보완 1·5)", () => {
   it("의회 투표 결과·게임 모드 섹션 줄은 내비 항목이 되지 않는다", () => {
     const items = [
       note({ id: "a", entity: "에코", anchorUrl: "https://x/#patch-ekko" }),
       note({ id: "b", entity: "의회 - 투표 1 결과", anchorUrl: "https://x/#patch-classic" }),
       note({ id: "c", entity: "피오라", anchorUrl: "https://x/#patch-classic" }),
     ];
-    expect(groupNotesForNav(items).map((g) => g.entity)).toEqual(["에코"]);
+    expect(lolNoteNavItems(items).map((g) => g.entity)).toEqual(["에코"]);
+  });
+
+  it("섹션 라벨과 보조 문구(스킬 → 없으면 스탯)를 채운다", () => {
+    const [item] = lolNoteNavItems([note({ id: "a", entity: "에코", skill: "Q", anchorUrl: "https://x/#patch-ekko" })]);
+    expect(item.sectionLabel).toBe("챔피언");
+    expect(item.detail).toBe("Q");
   });
 });
 
@@ -391,32 +269,4 @@ describe("filterByLane — 대조표 라인 필터(시안 .m-filter, 2026-09-10)
   });
 });
 
-// ── sortRows "priority" (2026-09-18, 채점 라운드1 ST-9) ───────────────────────────
-// 기본 정렬이 |Δ| 단독이면 첫 화면이 라인골드 "임계 미달"로 채워진다(실측 6행). 상태 우선순위
-// (STATUS_SORT_PRIORITY: 미공지 → 간접 → 불일치 → …)를 먼저 보고 그 안에서 |Δ|로 정렬한다.
-describe("sortRows — priority", () => {
-  it("상태 우선순위가 |Δ|보다 먼저다", () => {
-    const rows = [
-      delta({ id: "gold-below", status: "below-threshold", delta: -0.9 }),
-      delta({ id: "gap-small", status: "unannounced", delta: 0.01 }),
-      delta({ id: "incons", status: "announced-inconsistent", delta: 0.5 }),
-    ];
-    expect(sortRows(rows, "priority", "desc").map((r) => r.id)).toEqual(["gap-small", "incons", "gold-below"]);
-  });
 
-  it("같은 상태 안에서는 |Δ| 내림차순", () => {
-    const rows = [
-      delta({ id: "gap-small", status: "unannounced", delta: 0.01 }),
-      delta({ id: "gap-big", status: "unannounced", delta: -0.08 }),
-    ];
-    expect(sortRows(rows, "priority", "desc").map((r) => r.id)).toEqual(["gap-big", "gap-small"]);
-  });
-
-  it("asc는 전체를 뒤집는다(헤더 토글 대칭)", () => {
-    const rows = [
-      delta({ id: "gap", status: "unannounced", delta: 0.01 }),
-      delta({ id: "none", status: "no-change", delta: 0.5 }),
-    ];
-    expect(sortRows(rows, "priority", "asc").map((r) => r.id)).toEqual(["none", "gap"]);
-  });
-});

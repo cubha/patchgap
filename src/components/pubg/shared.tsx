@@ -3,7 +3,7 @@
 // 사용자 노출 문구에서 다른 게임과의 비교 서술을 전부 뺐다 — PUBG는 PUBG의 판정표로만 말한다.
 // 표본 성격 고지는 방법론에만 붙는다(브리핑·대조표는 결과만).
 import type { ReactNode } from "react";
-import { fmtKst } from "@/lib/format";
+import SiteFooter from "@/components/SiteFooter";
 
 export function pct(value: number, digits = 1): string {
   return `${(value * 100).toFixed(digits)}%`;
@@ -52,18 +52,12 @@ export function PubgSampleNotice({ sampleScope }: { sampleScope: string }) {
 }
 
 /** 집계 캡션 + 크래프톤 권리 고지. 세 라우트 공통 푸터. */
+/**
+ * 푸터는 **`SiteFooter`가 소유한다**(UX-BRIEF §8-1). PUBG 호출부는 전부 이미 `Container`
+ * 안이라 `contained={false}`로 넘긴다 — 컨테이너가 두 겹이 되면 좌우 여백이 한 화면만 달라진다.
+ */
 export function PubgFooter({ generatedAt, nVerdicts }: { generatedAt: string; nVerdicts: number }) {
-  return (
-    <footer className="flex flex-col gap-1 border-t border-border-soft pt-4">
-      <p className="font-mono text-xs text-muted">
-        집계 {fmtKst(generatedAt)} · 판정 {nVerdicts}건 · 데이터 PUBG Developer API
-      </p>
-      <p className="text-xs leading-relaxed text-muted">
-        PUBG: BATTLEGROUNDS 및 관련 이미지·데이터의 권리는 KRAFTON, Inc.에 있습니다. 이 페이지는
-        비상업 개인 프로젝트이며 KRAFTON이 후원·제휴·승인한 서비스가 아닙니다.
-      </p>
-    </footer>
-  );
+  return <SiteFooter game="pubg" generatedAt={generatedAt} nVerdicts={nVerdicts} contained={false} />;
 }
 
 /** 집계 산출물이 없을 때의 정직한 빈 화면 — 정적 export라 라우트는 항상 빌드된다(게이트는

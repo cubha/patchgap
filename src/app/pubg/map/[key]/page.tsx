@@ -9,6 +9,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Container from "@/components/Container";
+import PageHeader from "@/components/PageHeader";
+import { detailCrumbs } from "@/lib/breadcrumbs";
 import SectionCard from "@/components/SectionCard";
 import PubgDetailSplash, { type PubgDetailStat } from "@/components/pubg/PubgDetailSplash";
 import { PubgFooter, PubgUnavailable, pct } from "@/components/pubg/shared";
@@ -46,7 +48,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const mapKey = mapKeyFromSlug(key, allMapKeys());
   const name = mapKey ? mapIdentity(mapKey).koName : "맵";
   return {
-    title: `${name} · PUBG 42.3 ⇒ 43.1 · patchgap`,
+    title: `${name} · PUBG 42.3 → 43.1 · patchgap`,
     description: `${name}의 42.3 → 43.1 매치 점유율·평균 소요·무기 구성 변화.`,
   };
 }
@@ -127,26 +129,35 @@ export default async function PubgMapPage({ params }: PageProps) {
     <main>
       <Container>
       <div className="flex flex-col gap-6 pt-12 pb-8">
-        <nav className="font-mono text-xs text-muted">
-          <Link href="/pubg/" className="hover:text-fg-2">
-            브리핑
-          </Link>
-          <span className="px-1.5">/</span>
-          <span className="text-fg-2">{identity.koName}</span>
-        </nav>
 
-        <PubgDetailSplash
-          eyebrow={`맵 · ${identity.sizeLabel}`}
+        {/* 이동 경로 + h1은 `PageHeader`가 소유한다(§8-7 #1·#8): 전에는 이 화면에 h1이 없고
+            이동 경로 구분자도 `/`라 다른 두 게임과 달랐다. 스플래시 카드는 그 아래 시각 블록이다. */}
+        <PageHeader
+          crumbs={detailCrumbs("pubg", identity.koName)}
           title={identity.koName}
+          titleAside={`맵 · ${identity.sizeLabel}`}
+          lead={
+            // 맵에는 통계 판정 행이 없다 — 없는 판정을 있는 것처럼 쓰지 않고 관측값만 말한다.
+            oneSided
+              ? "한쪽 구간에만 표본이 잡혀 두 패치를 비교하지 않았습니다."
+              : `${bundle.deltas.meta.to} 패치노트에 맵 항목이 없어 판정 없이 관측값만 표시합니다.`
+          }
+          actions={
+            <Link
+              href="/pubg/methodology/#discord"
+              className="inline-flex min-h-10 items-center justify-center rounded-md bg-accent px-5 text-sm font-bold text-accent-on hover:opacity-90"
+            >
+              방송 규칙 보기 →
+            </Link>
+          }
+        />
+
+        {/* 유형·이름·판정은 위 머리가 소유한다(§8-1). 이 카드는 지형도와 수치만 든다. */}
+        <PubgDetailSplash
           imageSrc={hasRender ? publicMapPath(identity.assetName) : null}
           fit="cover"
           fallbackMark={identity.koName}
           stats={stats}
-          verdict={
-            oneSided
-              ? "한쪽 구간에만 표본이 잡혀 두 패치를 비교하지 않았습니다."
-              : "43.1 패치노트에 맵 항목 없음 · 관측값만 표시"
-          }
         />
 
         {/* 2026-09-19 사용자 지적("근거가 전혀 사용자가 알아볼 수 없게되어있어")의 맵 쪽 대응.

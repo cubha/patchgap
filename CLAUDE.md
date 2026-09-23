@@ -82,7 +82,8 @@ public/dd/          Data Dragon 정적 자산(챔피언/아이템 아이콘) —
 
 - `docs/scope/SCOPE-patchgap-2026-09-05.md` — 범위·스택·일정 확정
 - `docs/research/RESEARCH-patchgap-2026-09-05.md` — 기반 리서치
-- `docs/design/UX-BRIEF.md` — 화면 맵·스토리보드·구현 준수 원칙
+- `docs/design/UX-BRIEF.md` — 화면 맵·스토리보드·구현 준수 원칙 + **§8 게임 간 동등성 계약**(메뉴별 레이아웃·뱃지 위치·클릭 이동·어휘·푸터가 세 게임 공통이어야 하는 범위. 화면을 추가·수정하기 전에 읽는다)
+- `docs/plan/PLAN-screen-parity-2026-09-23.md` — 그 계약의 구현 순서와 요구사항 원문(Phase 1 브리핑 → Phase 2 대조표 → Phase 3 방법론·상세·색인·자산·파이프라인, ST-1~ST-25). **화면을 추가·수정하면 `src/app/__tests__/screen-parity.test.ts`가 그 게임을 요구한다** — 게임 목록을 `lib/game.ts`에서 읽으므로 네 번째 게임은 자동으로 대상이 된다
 - `docs/design/DESIGN-TOKENS.md` / `docs/design/seed/catalog-tokens.css` — 토큰 값
 - `docs/design/prototype/*.html` — 화면 4장 프로토타입(픽셀 단위 참조)
 

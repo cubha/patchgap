@@ -39,13 +39,19 @@ import { lanesForEntityKey } from "@/lib/lane";
 import {
   getDefaultPair,
   listAvailableSplashes,
+  loadChampions,
   loadDeltas,
+  loadItems,
   loadNotes,
   loadObjectives,
   loadSkinIndex,
   loadSpellIcons,
   loadSummary,
 } from "@/lib/data";
+import SiteFooter from "@/components/SiteFooter";
+import EntityIndexSection, { EntityIndexGrid } from "@/components/EntityIndexSection";
+import { buildEntityIndex } from "@/components/home/entityIndex";
+import { detailEntityKeys, lolEntityHref } from "@/lib/detailRoutes";
 
 export default function Home() {
   const pair = getDefaultPair();
@@ -62,6 +68,32 @@ export default function Home() {
   const ddragon = loadDdragonSafe();
 
   const headline = computeHeadline(deltas, notesTo, deltas?.meta.qAlpha);
+
+  // 전 대상 색인(§8-1) — 이 패치 집계에 등장한 **모든** 챔피언·아이템. 이름은 Data Dragon이 주고,
+  // 상세가 실재하는 대상만 링크한다(없는 경로는 정적 export에서 곧 404다).
+  const detailKeys = new Set(detailEntityKeys([deltas?.rows ?? []]));
+  const hasDetail = (type: string, key: string) => detailKeys.has(`${type}:${key}`);
+  const championIndex = buildEntityIndex(
+    (pair ? (loadChampions(pair.to)?.rows ?? []) : [])
+      .filter((row) => row.scope === "all")
+      .map((row) => ({
+        type: "champion",
+        key: row.championKey,
+        name: ddragon?.champions.byKey(row.championId)?.name ?? row.championName,
+      })),
+    hasDetail,
+    (type, key) => lolEntityHref({ entityType: type as DeltaRecord["entityType"], entityKey: key })
+  );
+  const itemIndex = buildEntityIndex(
+    (pair ? (loadItems(pair.to)?.rows ?? []) : []).map((row) => ({
+      type: "item",
+      key: String(row.itemId),
+      // 이름을 못 찾으면 **숫자 id 그대로** 둔다 — 지어내지 않는다.
+      name: ddragon?.items.byId(row.itemId)?.name ?? String(row.itemId),
+    })),
+    hasDetail,
+    (type, key) => lolEntityHref({ entityType: type as DeltaRecord["entityType"], entityKey: key })
+  );
 
   // 2026-09-18(ST-8): 공지 그룹은 3티어(불일치 → 일치 → 관측 없음 → 치장)로, Gap 그룹은 그대로.
   // note.id → 그 노트를 근거로 매칭된 델타. 스트림 카드가 뱃지(status)뿐 아니라 관측 수치
@@ -154,7 +186,7 @@ export default function Home() {
             같이 내려가므로 그 요구를 그대로 만족한다. 176px은 Tailwind 표준 스케일(11rem)이라
             arbitrary 불필요. */}
         <Container className="flex flex-col gap-6 pt-44 pb-8">
-          <HeroSummary stats={headline} />
+          <HeroSummary stats={headline} patch={pair?.to ?? ""} />
           <StreamColumnLayout
             leftHeader={<StreamLaneFilter />}
             left={
@@ -170,6 +202,12 @@ export default function Home() {
                 causes={indirectCauses}
                 skinPreviews={skinPreviews}
                 miscSections={miscSections}
+                /* 세 게임이 같은 자리에서 같은 말을 한다(§8-1) — "공지했는데 아무 일도
+                   없었다"는 사실을 LoL만 말하고 있었다(2026-09-23 화면 대조 V5). */
+                announcedCoverage={{
+                  noteTargets: headline.noteEntityCount,
+                  observed: headline.statCount,
+                }}
                 /* 수치 축(2026-09-21) — 미공지 Gap 탭의 **위쪽 갈래**. 세 번째 탭이 아닌
                    이유는 잠수함도 미공지이기 때문이다(잠수함 > 미공지 위계를 같은 탭 안에서
                    위아래로 표현한다). 산출물이 없는 쌍에서는 통째로 빠진다.
@@ -188,11 +226,22 @@ export default function Home() {
                   objectivesFrom={objectivesFrom?.data ?? null}
                 />
                 <LaneGapPanel rows={laneDistribution} />
-                <DiscordPanel generatedAt={deltas?.meta.generatedAt ?? null} />
+                <DiscordPanel game="lol" generatedAt={deltas?.meta.generatedAt ?? null} />
               </>
             }
           />
 
+          {/* 전 대상 색인(§8-1) — 대조표는 판정이 선 것만 올리므로 전수 진입점은 여기뿐이다. */}
+          <EntityIndexSection
+            groups={[
+              { label: "챔피언", total: championIndex.length, body: <EntityIndexGrid items={championIndex} /> },
+              { label: "아이템", total: itemIndex.length, body: <EntityIndexGrid items={itemIndex} /> },
+            ]}
+          />
+        </Container>
+        <Container>
+          {/* 푸터는 세 게임 공통이다(UX-BRIEF §8-1) — LoL만 전 화면에 없었다(2026-09-22 실측). */}
+          <SiteFooter game="lol" generatedAt={deltas?.meta.generatedAt ?? null} nVerdicts={deltas?.rows.length ?? null} />
         </Container>
       </main>
     </div>

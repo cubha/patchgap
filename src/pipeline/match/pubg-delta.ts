@@ -7,7 +7,7 @@
 // 쓸 근거가 0이고, 바닥 없이 출하하면 시행수 수십만 규모에서 전부 "유의"로 터진다 —
 // 2026-09-13에 이미 겪은 실패(미공지 277건 중 84%가 잡음)의 재현이다.
 // 그래서 **패치노트가 언급하지 않은 무기들의 변화 분포를 귀무분포로 삼아** 바닥을 만든다.
-import type { Interval, MatchStatus } from "../types";
+import type { Interval, MatchStatus, LlmCause, PatchNoteItem } from "../types";
 import type { PubgPatchAggregate } from "../aggregate/pubg-weapons";
 
 /** 손으로 옮긴 PUBG 패치노트 항목 1건(파서 없음 — PLAN §5, 43.1 노트는 수기 입력). */
@@ -45,6 +45,23 @@ export interface PubgDeltaRow {
   matchedNoteId: string | null;
   matchedNoteIds: string[];
   evidence: { aggregatePath: string; noteAnchor: string | null; matchIds: string[] };
+  /**
+   * LLM 2단이 짚은 **간접 원인 후보**(2026-09-23 신설). 선택 필드인 이유는 이 파이프라인이
+   * LLM 단계를 건너뛸 수 있기 때문이다 — 없는 것과 0건인 것을 구분한다. 검증(`verified`)을
+   * 통과하지 못한 문장은 화면에서 회색으로만 쓰인다(무근거 회색 원칙).
+   */
+  causes?: LlmCause[];
+  /**
+   * LLM 2단 처리 진단 + 브리핑 한 줄 요약. `DeltaRecord.llm`과 같은 계약이다 —
+   * `skipped=true`면 예산 소진·파싱 실패 등으로 끝내 처리하지 못했다는 뜻이고 `causes`는 항상 `[]`다.
+   */
+  llm?: {
+    skipped: boolean;
+    reason?: string;
+    summary?: string;
+    summaryCites?: string[];
+    summaryVerified?: boolean;
+  };
 }
 
 /** 점유율 비교 최소 시행수 — 이보다 적으면 `insufficient-sample`. */
@@ -259,4 +276,35 @@ export function buildPubgDeltas(
     return d !== 0 ? d : Math.abs(z.relChange ?? 0) - Math.abs(a.relChange ?? 0);
   });
   return { rows, effectFloor, counts };
+}
+
+/**
+ * PUBG 노트 → **공용 `PatchNoteItem`**(2026-09-23).
+ *
+ * LLM 2단 엔진과 화면의 원인 패널이 둘 다 `PatchNoteItem`을 전제로 서 있다. 변환을 두 곳에서
+ * 따로 하면 같은 노트가 서로 다른 문자열이 되어, 원인 문장이 인용한 id를 화면이 못 찾는다.
+ *
+ * `entity`에 **무기 표시명을 이어 붙인다**(「RPD · M249」) — 한 줄이 여러 무기를 말하기 때문이다.
+ * 자기참조 판정은 이 문자열이 아니라 원본 키 배열이 한다(`llm-profile-pubg.ts` 참고).
+ */
+export function pubgNotesAsPatchNotes(
+  notes: readonly PubgNoteItem[],
+  nameOf: (weaponKey: string) => string | null
+): PatchNoteItem[] {
+  return notes.map((note) => ({
+    id: note.id,
+    patch: note.patch,
+    // PUBG 노트는 전부 무기 조항이다 — 섹션 축이 하나뿐이라 `item`으로 고정한다.
+    section: "item" as const,
+    entity: note.weaponKeys.map((key) => nameOf(key) ?? key).join(" · ") || "체계",
+    skill: null,
+    stat: note.stat,
+    before: note.before,
+    after: note.after,
+    direction: note.direction,
+    summary: note.summary,
+    anchorUrl: note.anchorUrl,
+    anchorKind: "page" as const,
+    modeScope: "core" as const,
+  }));
 }

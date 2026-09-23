@@ -23,7 +23,10 @@ function withAmbient(children: ReactNode) {
 describe("HeroSummary — 빈 상태(모든 수치 0)", () => {
   it("0을 그대로 렌더하고 크래시하지 않는다", () => {
     const { container } = render(
-      <HeroSummary stats={{ noteEntityCount: 0, noteItemCount: 0, statCount: 0, unannouncedCount: 0 }} />
+      <HeroSummary
+        stats={{ noteEntityCount: 0, noteItemCount: 0, statCount: 0, unannouncedCount: 0 }}
+        patch="26.18"
+      />
     );
     // 2026-09-18 명세 변경(채점 라운드1 ST-10): 히어로 문장이 "N 엔티티 / M 항목"에서 사람 말
     // ("N개 챔피언·아이템을 바꿨다고 말했고")로 바뀌었다 — 테스트 약화가 아니라 문구 반영.
@@ -143,7 +146,7 @@ describe("SideMatchAverages — 데이터 없음(전부 null)", () => {
 // 갱신했다. 링크의 죽은 프래그먼트(#discord)도 함께 뗐다(그 섹션은 2026-09-14 사용자 지시로 제거).
 describe("DiscordPanel — generatedAt 없음", () => {
   it("집계 시각 캡션을 생략한다", () => {
-    const { container } = render(<DiscordPanel generatedAt={null} />);
+    const { container } = render(<DiscordPanel game="lol" generatedAt={null} />);
     expect(container.textContent).not.toContain("마지막 집계");
     // 방송 규칙으로 가는 링크는 **두 갈래 모두에서** 남는다 — 문구만 갈린다(초대가 있으면
     // "무엇이 언제 나가나", 없으면 "방송 규칙 보기"). 여기서 문구 하나를 박으면 초대 상수를
@@ -154,12 +157,12 @@ describe("DiscordPanel — generatedAt 없음", () => {
   });
 
   it("generatedAt이 있으면 KST로 포맷한 캡션을 렌더한다", () => {
-    const { container } = render(<DiscordPanel generatedAt="2026-09-05T05:00:00.000Z" />);
+    const { container } = render(<DiscordPanel game="lol" generatedAt="2026-09-05T05:00:00.000Z" />);
     expect(container.textContent).toContain("마지막 집계 2026-09-05 14:00 KST");
   });
 
   it("보내지 않는 것을 보낸다고 말하지 않는다 — '공지'는 방송 대상이 아니다", () => {
-    const { container } = render(<DiscordPanel generatedAt={null} />);
+    const { container } = render(<DiscordPanel game="lol" generatedAt={null} />);
     expect(container.textContent).not.toContain("디스코드로 브리핑 보내기");
     expect(container.textContent).toContain("미공지 상위 항목과 이상 관측");
   });

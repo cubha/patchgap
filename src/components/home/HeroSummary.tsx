@@ -36,14 +36,15 @@
 // `.panel-surface-glass .text-muted { color: var(--fg-2) }` 한 줄로 중앙화했다(개별 치환은
 // 되돌림). 대비 실측·근거는 그 CSS 주석 참고.
 
-import Link from "next/link";
 import { fmtInt } from "@/lib/format";
-import { panelSurfaceClass } from "@/lib/panelSurface";
 import type { ReactNode } from "react";
 import type { HeadlineStats } from "./logic";
+import StatTiles from "@/components/StatTiles";
 
 export interface HeroSummaryProps {
   stats: HeadlineStats;
+  /** 대조 후 패치 번호 — 3타일 첫 칸 부제("26.18 패치노트 · 181개 항목")의 재료(§8-1). */
+  patch: string;
   /**
    * 히어로 문구 바로 아래에 놓일 조작 요소(인트로 재생 버튼). **주입받는 이유**: 이 컴포넌트는
    * 순수 프레젠테이션이고 `__tests__/render.test.tsx`가 provider 없이 단독 렌더한다. 버튼을
@@ -54,7 +55,7 @@ export interface HeroSummaryProps {
   action?: ReactNode;
 }
 
-export default function HeroSummary({ stats, action }: HeroSummaryProps) {
+export default function HeroSummary({ stats, patch, action }: HeroSummaryProps) {
   const { noteEntityCount, noteItemCount, statCount, unannouncedCount } = stats;
 
   return (
@@ -81,30 +82,16 @@ export default function HeroSummary({ stats, action }: HeroSummaryProps) {
             슬롯은 히어로 아래 조작 요소 주입용으로 남긴다(지금은 호출부가 넘기지 않는다). */}
         {action ? <div className="mt-4">{action}</div> : null}
       </div>
-      <section className={`${panelSurfaceClass("glass")} grid grid-cols-3 overflow-hidden rounded-lg`}>
-        <div className="border-r border-border-soft p-5">
-          <strong className="block font-display text-3xl font-bold tabular-nums text-fg">
-            {fmtInt(noteEntityCount)}
-          </strong>
-          <span className="text-sm text-muted">공지된 변화 ({fmtInt(noteItemCount)}개 항목)</span>
-        </div>
-        <div className="border-r border-border-soft p-5">
-          <strong className="block font-display text-3xl font-bold tabular-nums text-fg">
-            {fmtInt(statCount)}
-          </strong>
-          <span className="text-sm text-muted">유의한 관측</span>
-        </div>
-        {/* hover 채움(2026-09-13·6차 연속): `bg-surface-warm`(완전 불투명)은 hover 순간 이 타일만
-            유리가 꺼져 보였다 — 유리 패널 안의 상태 표현은 전부 반투명으로 통일한다. */}
-        {/* 2026-09-18 라운드6: 대조표 칩 `unannounced`가 미공지+간접 영향을 함께 남긴다(어휘 통일) —
-            타일이 세는 집합과 같은 칩으로 간다. */}
-        <Link href="/lol/compare/#unannounced" className="p-5 transition-colors hover:bg-accent/10">
-          <strong className="block font-display text-3xl font-bold tabular-nums text-accent">
-            {fmtInt(unannouncedCount)}
-          </strong>
-          <span className="text-sm text-muted">미공지 Gap</span>
-        </Link>
-      </section>
+      {/* 3타일은 세 게임 공통 컴포넌트다(UX-BRIEF §8-1) — 전에는 이 안에 직접 그렸고,
+          그래서 라벨("미공지 Gap")과 클릭 동작이 LoL에만 있었다. `patch`는 대조 후 패치다. */}
+      <StatTiles
+        announcedCount={noteEntityCount}
+        patch={patch}
+        itemCount={noteItemCount}
+        significantCount={statCount}
+        gapCount={unannouncedCount}
+        game="lol"
+      />
     </div>
   );
 }

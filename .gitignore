@@ -55,3 +55,9 @@ scratch.md
 
 # 랜딩 스플래시 월 합성용 원격 아트 캐시(재배포 방지 — 합성 결과만 커밋)
 docs/design/tools/.wall-cache/
+
+# pre-compact 훅이 남기는 세션 부산물 — 프로젝트 파일이 아니다
+scratch.md.precompact-backup-*
+
+# 루트의 임시 스크린샷 — 출품용은 docs/submission/screenshots/ 에만 둔다
+/*.png

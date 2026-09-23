@@ -184,6 +184,28 @@
           "045d16ad-f5dc-472b-8c0a-0463dc8c010c",
           "04da760d-cb7a-457d-ae49-7b204deaeb04"
         ]
+      },
+      "causes": [
+        {
+          "text": "RPD·M249 스폰율이 100%→70%로 줄면서 빈자리를 Groza 획득이 메웠습니다.",
+          "candidateNoteId": "note:pubg-43.1:spawn:lmg",
+          "verified": true,
+          "confidence": "high"
+        },
+        {
+          "text": "LMG 조준 전환이 0.30초→0.37초로 느려져 근접 돌격 역할이 Groza로 옮겨갔을 수 있습니다.",
+          "candidateNoteId": "note:pubg-43.1:ads:lmg",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "llm": {
+        "skipped": false,
+        "summary": "Groza 점유율 +26.3%는 직접 변경이 아니라 RPD·M249 스폰율 100%→70% 감소로 생긴 제로섬 반사 상승입니다.",
+        "summaryCites": [
+          "note:pubg-43.1:spawn:lmg"
+        ],
+        "summaryVerified": true
       }
     },
     {
@@ -220,6 +242,28 @@
           "012741f9-a14b-4dda-ad27-97a267a452b5",
           "0149ee14-30d8-48d0-bae3-ad90031e320e"
         ]
+      },
+      "causes": [
+        {
+          "text": "RPD·M249 스폰율 100%→70% 감소분이 남은 무기로 재분배되며 Beryl 점유율이 상승했습니다.",
+          "candidateNoteId": "note:pubg-43.1:spawn:lmg",
+          "verified": true,
+          "confidence": "high"
+        },
+        {
+          "text": "LMG 조준 전환 0.30→0.37초 너프로 근접 교전용 픽이 돌격소총으로 이동했습니다.",
+          "candidateNoteId": "note:pubg-43.1:ads:lmg",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "llm": {
+        "skipped": false,
+        "summary": "RPD·M249 스폰율 30% 감소로 빈자리가 재분배되어 Beryl M762 획득 점유율이 +15.7% 올랐습니다.",
+        "summaryCites": [
+          "note:pubg-43.1:spawn:lmg"
+        ],
+        "summaryVerified": true
       }
     },
     {
@@ -256,6 +300,13 @@
           "019bfae0-d4d5-4b6e-9be8-c1053194596a",
           "01f57e86-a168-4736-98bb-d9d83e4f3c0a"
         ]
+      },
+      "causes": [],
+      "llm": {
+        "skipped": false,
+        "summary": "M9 획득 점유율이 3.29%→2.84%(-13.9%, CI -15.4~-12.3%)로 내렸으나, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
+        "summaryVerified": true
       }
     },
     {
@@ -292,6 +343,28 @@
           "03de7db2-c126-44e4-b1af-7ac3c3a94487",
           "0446b32a-a20c-40ec-afb1-fa010b8b89ab"
         ]
+      },
+      "causes": [
+        {
+          "text": "RPD·M249 스폰율이 100%에서 70%로 줄면서 남은 무기의 획득 점유율이 밀려 올라갔습니다.",
+          "candidateNoteId": "note:pubg-43.1:spawn:lmg",
+          "verified": true,
+          "confidence": "high"
+        },
+        {
+          "text": "LMG 조준 전환이 0.30초→0.37초로 느려져 해당 총기를 지나치는 선택이 늘었습니다.",
+          "candidateNoteId": "note:pubg-43.1:ads:lmg",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "llm": {
+        "skipped": false,
+        "summary": "RPD·M249 스폰율 100%→70% 감축의 제로섬 반사로 L6 획득 점유율이 0.14%→0.16%(+20.2%)로 올랐습니다.",
+        "summaryCites": [
+          "note:pubg-43.1:spawn:lmg"
+        ],
+        "summaryVerified": true
       }
     },
     {
@@ -436,6 +509,13 @@
           "07c2e5c2-c443-41a2-9dc3-5c66117a9b8f",
           "09b74b5d-0087-4767-b9b5-1e5135c2a717"
         ]
+      },
+      "causes": [],
+      "llm": {
+        "skipped": false,
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
+        "summaryVerified": true
       }
     },
     {

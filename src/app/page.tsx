@@ -14,11 +14,13 @@ import AdapterMatrix from "@/components/methodology/AdapterMatrix";
 import { panelSurfaceClass } from "@/lib/panelSurface";
 import { fmtInt } from "@/lib/format";
 import { landingCards, landingTotals } from "@/lib/landing";
+import SiteFooter from "@/components/SiteFooter";
+import { TILE_LABELS } from "@/components/StatTiles";
 
 export const metadata: Metadata = {
   title: "patchgap — 패치노트에 없는 변화를 찾습니다",
   description:
-    "공식 패치노트와 실제 매치 통계를 자동으로 대조해, 공지되지 않은 변화와 간접 파급을 통계 게이트와 원천 링크로 보여준다.",
+    "공식 패치노트와 실제 매치 통계를 자동으로 대조해, 공지되지 않은 변화와 간접 파급을 통계 게이트와 원천 링크로 보여 드립니다.",
 };
 
 /** 하단 3열 — 파이프라인을 한 문장씩. 게임과 무관한 서술만 둔다. */
@@ -75,13 +77,13 @@ export default function LandingPage() {
               <strong className="block font-display text-2xl font-bold tabular-nums text-fg">
                 {fmtInt(totals.significant)}
               </strong>
-              <span className="text-xs text-muted">유의한 관측</span>
+              <span className="text-xs text-muted">{TILE_LABELS.significant}</span>
             </div>
             <div className="p-4">
               <strong className="block font-display text-2xl font-bold tabular-nums text-accent">
                 {fmtInt(totals.unannounced)}
               </strong>
-              <span className="text-xs text-muted">패치노트에 없던 변화</span>
+              <span className="text-xs text-muted">{TILE_LABELS.gap}</span>
             </div>
           </div>
         </Container>
@@ -128,13 +130,13 @@ export default function LandingPage() {
                         <strong className="block font-display text-lg font-bold tabular-nums text-fg">
                           {fmtInt(card.significant)}
                         </strong>
-                        <span className="text-xs text-muted">유의한 관측</span>
+                        <span className="text-xs text-muted">{TILE_LABELS.significant}</span>
                       </span>
                       <span>
                         <strong className="block font-display text-lg font-bold tabular-nums text-accent">
                           {fmtInt(card.unannounced)}
                         </strong>
-                        <span className="text-xs text-muted">미공지</span>
+                        <span className="text-xs text-muted">{TILE_LABELS.gap}</span>
                       </span>
                     </span>
                     <span className="mt-4 inline-flex h-9 w-fit items-center rounded-pill bg-accent px-4 text-xs font-bold text-accent-on">
@@ -193,10 +195,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <footer className="border-t border-border-soft py-5 text-xs text-muted">
-          patchgap는 각 게임사와 제휴하거나 보증을 받지 않았습니다. 상표·자산의 저작권은 각
-          권리자에게 있습니다.
-        </footer>
+        {/* 랜딩은 어느 게임에도 속하지 않는다 — `game={null}`이 그 자리다(lib/game.ts 계약). */}
+        <SiteFooter game={null} contained={false} />
       </Container>
     </main>
   );

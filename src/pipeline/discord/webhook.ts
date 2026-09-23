@@ -4,7 +4,8 @@
 // 네트워크·시간에 의존하지 않아 결정론적으로 테스트할 수 있다.
 
 import type { DeltaRecord, DeltasFile, LlmCause } from "../types";
-import { fmtCiHalf, fmtDeltaInt, fmtDeltaSec, fmtInt, fmtKst, fmtPct, fmtPp, fmtSec, itemHref, metricKind, metricLabel, positionLabel } from "../../lib/format";
+import { fmtCiHalf, fmtDeltaInt, fmtDeltaSec, fmtInt, fmtKst, fmtPct, fmtPp, fmtSec, metricKind, metricLabel, positionLabel } from "../../lib/format";
+import { lolEntityHref } from "../../lib/detailRoutes";
 import { displayStatus } from "../shared/display-status";
 import { countGapEntities, countReportable } from "../shared/headline";
 
@@ -118,7 +119,9 @@ function truncate(s: string, max: number): string {
  * 두 섹션(미공지 상위 N · 공지-불일치 상위 3)을 시각적으로 구분한다. */
 function buildField(d: DeltaRecord, siteUrl: string, inconsistent: boolean): DiscordEmbedField {
   const name = `${inconsistent ? "⚠ " : ""}${entityLabel(d)} · ${metricLabel(d.metric)}`;
-  const url = `${siteUrl}${itemHref(d.id)}`;
+  // 링크는 **대상 상세**로 보낸다(2026-09-23 §8-7 #10) — 라우트 단위가 지표에서 대상으로
+  // 바뀌었다. 이미 나간 옛 메시지의 지표 경로는 별칭 라우트가 계속 받는다(`detailRouteSlugs`).
+  const url = `${siteUrl}${lolEntityHref(d)}`;
   const cause = causeText(d.causes);
   const base = `${formatDeltaLine(d)} · [근거](${url})`;
   const value = cause ? `${base}\n${cause}` : base;

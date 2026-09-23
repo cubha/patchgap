@@ -21,11 +21,9 @@
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import fs from "node:fs";
 import path from "node:path";
-import Container from "@/components/Container";
-import SectionCard from "@/components/SectionCard";
+import MethodologyLayout, { type MethodologySlots } from "@/components/methodology/MethodologyLayout";
 import { computeLlmCauseStats, dominantConfidence } from "@/components/methodology/llmStats";
 import { getDefaultPair, loadDeltas, loadNotes, loadSummary } from "@/lib/data";
-import { fmtKst } from "@/lib/format";
 import { EFFECT_SIZE_FLOORS, FDR_ALPHA, WIN_RATE_MIN_N } from "@/pipeline/aggregate/stats";
 import { countRelevantNoteEntities } from "@/pipeline/shared/notes-count";
 import GateGrid from "@/components/methodology/GateGrid";
@@ -96,238 +94,261 @@ export default function MethodologyPage() {
   // 적용): 상단 패딩만 기존 32px에서 120px 더한 값으로 분리, 하단 여백은 그대로 유지. 이
   // 페이지는 헤드라인 없이 패널이 바로 첫 블록이라 패널 자체가 120px 내려가는 것으로 홈의
   // "블록 전체가 같이 내려가야" 요구를 동일하게 만족한다.
+  const slots: MethodologySlots = {
+    sample: (
+      <dl className="grid grid-cols-1 gap-x-8 gap-y-4 p-5 text-sm md:grid-cols-2">
+        <div>
+          <dt className="font-display font-bold text-fg">무엇으로 재나</dt>
+          <dd className="mt-1 leading-relaxed text-fg-2">
+            KR 서버 마스터 이상 랭크 게임의 Match-V5 · Timeline 응답입니다. 챔피언·아이템·라인
+            골드·오브젝트·경기 시간을 매치마다 축약해 쌓고, 패치 쌍의 두 집계를 견줍니다. 이름·
+            아이콘은 Data Dragon{ddragonVersion ? ` ${ddragonVersion}` : ""} 카탈로그를 씁니다.
+          </dd>
+        </div>
+        <div>
+          <dt className="font-display font-bold text-fg">이 쌍의 표본</dt>
+          <dd className="mt-1 leading-relaxed text-fg-2">
+            {summaryFrom && summaryTo && pair ? (
+              <>
+                {pair.from} <strong className="text-fg">{summaryFrom.data.matches.toLocaleString()}</strong>매치 ·{" "}
+                {pair.to} <strong className="text-fg">{summaryTo.data.matches.toLocaleString()}</strong>매치.
+              </>
+            ) : (
+              // 집계가 없으면 수를 지어내지 않는다.
+              <>집계 산출물이 없어 표본 수를 말할 수 없습니다.</>
+            )}{" "}
+            승률·픽률의 분모는 매치가 아니라 <strong className="text-fg">그 챔피언이 등장한 판</strong>입니다.
+          </dd>
+        </div>
+        <div>
+          <dt className="font-display font-bold text-fg">패치노트</dt>
+          <dd className="mt-1 leading-relaxed text-fg-2">
+            {notes ? (
+              <>
+                {notes.meta.patch} 공식 패치노트에서 변경 항목{" "}
+                <strong className="text-fg">{notes.meta.itemCount}</strong>건, 대상{" "}
+                <strong className="text-fg">{countRelevantNoteEntities(notes.items)}</strong>종을 추출했습니다.
+              </>
+            ) : (
+              <>패치노트 산출물이 없습니다.</>
+            )}
+          </dd>
+        </div>
+        <div>
+          <dt className="font-display font-bold text-fg">무엇을 세지 않나</dt>
+          <dd className="mt-1 leading-relaxed text-fg-2">
+            소환사의 협곡만 셉니다. 아레나·무작위 총력전 등 다른 게임 모드는 수집·판정·인용
+            후보에서 전부 제외합니다 — 재는 모집단이 다르기 때문입니다.
+          </dd>
+        </div>
+      </dl>
+    ),
+    pipeline: <PipelineDiagram steps={steps} />,
+    gate: (
+      <div className="flex flex-1 flex-col">
+        <GateGrid minN={WIN_RATE_MIN_N} alpha={FDR_ALPHA} />
+      </div>
+    ),
+    verdict: (
+      <StatusDefinitionTable minN={WIN_RATE_MIN_N} alpha={FDR_ALPHA} floors={EFFECT_SIZE_FLOORS} />
+    ),
+    display: (
+      <dl className="grid grid-cols-1 gap-x-8 gap-y-4 p-5 text-sm md:grid-cols-2">
+        <div>
+          <dt className="font-display font-bold text-fg">브리핑 — 패치 내용 탭</dt>
+          <dd className="mt-1 leading-relaxed text-fg-2">
+            챔피언·아이템 카드는 관측이 있는 항목부터(공지 · 이상 관측 → 공지 → 유의한 관측 없음), 같은 묶음 안에서는
+            패치노트 순서. 유의한 관측이 없는 카드는 연속 구간을 1행으로 접습니다. 버그 수정·편의성 개선·신규
+            스킨·증강은 목록 끝 &ldquo;기타 변경&rdquo; 1블록에 카테고리별로 모으고 배지를 달지 않습니다. 커뮤니티
+            투표 결과 묶음은 패치 내용이 아니라 싣지 않습니다.
+          </dd>
+        </div>
+        <div>
+          <dt className="font-display font-bold text-fg">브리핑 — 미공지 Gap 탭</dt>
+          <dd className="mt-1 leading-relaxed text-fg-2">
+            패치노트에 없는 유의 변화를 |Δ| 큰 순으로. 원인은 LLM이 노트 조항을 인용해 추정하되, 인용이 실재하고
+            신뢰도가 보통 이상일 때만 본문색으로 씁니다. 나머지는 회색(가능성 · 후보 미검증 · 원인 미검토 · 설명 후보
+            없음)입니다.
+          </dd>
+        </div>
+        <div>
+          <dt className="font-display font-bold text-fg">대조표</dt>
+          <dd className="mt-1 leading-relaxed text-fg-2">
+            행은 챔피언·아이템 1개씩이고 셀은 밴률·승률·픽률·채택률 중 유의하고 바닥을 넘는 지표만 채웁니다. 유의한
+            관측이 없는 엔티티는 표에 없고, 라인 골드·오브젝트·경기 시간은 홈 사이드 &ldquo;매치 평균&rdquo;에서만
+            봅니다. 전체 보기는 챔피언 전체 행을 우선하되 그 지표가 특정 라인에서만 유의하면 그 라인 행이 셀을
+            대표하고 라인을 표기합니다. 라인을 고르면 그 라인의 픽률·승률만 봅니다(밴은 라인 무관).
+          </dd>
+        </div>
+        <div>
+          <dt className="font-display font-bold text-fg">항목 상세</dt>
+          <dd className="mt-1 leading-relaxed text-fg-2">
+            패치노트 대조와 추정 원인이 맨 위, 전/후 관측값이 가운데, 통계 게이트와 원천 매치가 맨 아래입니다.
+            추정 원인은 검증·신뢰도 순(높음 → 보통 → 낮음 → 인용 없음)입니다.
+          </dd>
+        </div>
+      </dl>
+    ),
+    cause: (
+      <div className="flex flex-col gap-4 p-5 text-sm leading-relaxed text-fg-2">
+        <p>
+          패치노트와 짝지어지지 않았거나 노트와 방향이 어긋난 관측에 한해, 언어 모델이 <strong className="text-fg">다른
+          항목의 파급 효과</strong>를 추정합니다. 직접 변경(그 챔피언·아이템 자신의 노트)은 앞 단계인 결정론 매칭이
+          이미 처리하므로 후보에서 제외됩니다 — 그래서 모델이 찾는 것은 처음부터 간접 원인뿐입니다.
+        </p>
+        <dl className="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-2">
+          <div>
+            <dt className="font-display font-bold text-fg">무엇을 대상으로 하나</dt>
+            <dd className="mt-1">
+              판정이 &ldquo;미공지&rdquo; 또는 &ldquo;공지 · 이상 관측&rdquo;인 관측만, 중요도 상위 120건입니다
+              (상태 우선순위 → 변화폭 내림차순). 나머지는 아예 묻지 않습니다.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-display font-bold text-fg">무엇을 보여주나</dt>
+            <dd className="mt-1">
+              그 패치 노트 전체를 항목 id · 엔티티 · 스킬 · 변경 전/후 값 · 방향 · 섹션만 남긴 목록으로 줍니다.
+              본문 산문이 아니라 구조화된 목록이라, 모델이 인용할 수 있는 것은 실재하는 항목뿐입니다.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-display font-bold text-fg">기각 규칙(기계가 검사)</dt>
+            <dd className="mt-1">
+              인용한 id가 목록에 없으면 기각합니다. 그 관측의 엔티티 자신을 가리키면 기각합니다. 다른 게임
+              모드(LoL 클래식 · 아수라장 · 아레나)의 항목이면 기각합니다 — 우리가 재는 것은 소환사의 협곡이기
+              때문입니다. 기각된 문장은 링크 없이 회색으로만 남습니다.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-display font-bold text-fg">왜 &ldquo;후보 없음&rdquo;이 많나</dt>
+            <dd className="mt-1">
+              관측 변화의 상당수는 패치가 아니라 메타 이동·표본 구성 변화에서 옵니다. 그럴듯한 조항이 없을 때
+              지어내지 않는 것이 이 사이트의 규칙이라, 그런 경우는 &ldquo;설명할 조항을 찾지 못했습니다&rdquo;로
+              끝냅니다.{" "}
+              {llmStats ? (
+                <>
+                  실측({pair?.to ?? "최근 패치"}): 대상 {llmStats.attempted}건 중 원인을 못 찾은 것이{" "}
+                  {llmStats.withoutCause}건, 후보를 냈으나 검증에서 전부 기각된 것이{" "}
+                  {llmStats.withUnverifiedCauseOnly}건, 검증을 통과한 원인을 가진 것이{" "}
+                  {llmStats.withVerifiedCause}건입니다. 검증을 통과한 원인 문장{" "}
+                  {llmStats.confidence.low + llmStats.confidence.medium + llmStats.confidence.high}건의
+                  신뢰도는 낮음 {llmStats.confidence.low} · 보통 {llmStats.confidence.medium} · 높음{" "}
+                  {llmStats.confidence.high}건으로, 가장 많은 등급은{" "}
+                  <strong className="text-fg">{dominant?.label ?? "없음"}</strong>입니다 — 그 분포 자체가 이
+                  추정의 한계를 말합니다.
+                </>
+              ) : null}
+            </dd>
+          </div>
+        </dl>
+        <p className="text-muted">
+          본문색으로 단언하는 것은 인용이 실재하고 신뢰도가 보통 이상인 문장뿐입니다. 그 외는 전부 회색이며,
+          회색 문장은 &ldquo;근거가 약하다&rdquo;는 표시이지 판정이 아닙니다.
+        </p>
+      </div>
+    ),
+    gamedata: (
+      <div className="flex h-full flex-col gap-3 p-5 text-sm leading-relaxed text-fg-2">
+        <p>
+          이 사이트가 말하는 &ldquo;미공지&rdquo;는 두 종류입니다. 하나는{" "}
+          <strong className="text-fg">지표 축</strong> — 승률·픽률이 유의하게 움직였는데 짝지을
+          패치노트가 없는 경우로, 통계가 근거입니다. 다른 하나는{" "}
+          <strong className="text-fg">수치 축</strong> — 데미지·재사용 대기시간·가격 같은 원본
+          값이 실제로 바뀌었는데 패치노트에 없는 경우이고, 통칭 잠수함 패치입니다.
+        </p>
+        <p>
+          수치 축은 추론하지 않습니다. 게임사가 패치마다 배포하는 데이터를 패치 간 그대로
+          대조하고, 바뀐 값마다 그것을 말한 패치노트 항목이 있는지 찾습니다. 짝이 없으면
+          잠수함입니다. 그래서 이 판정은 반박할 수 없고,{" "}
+          <strong className="text-fg">지표가 하나도 안 움직여도 발견입니다</strong> —
+          바꿨는데 효과가 없었던 변경도 바뀐 것은 사실이기 때문입니다.
+        </p>
+        <p>
+          짝이 있어도 끝이 아닙니다. 패치노트가 <strong className="text-fg">같은 항목을 말했는데 적힌
+          값이 실제와 다른</strong> 경우가 있어서, 그것만 따로 「공지값 불일치」로 부릅니다. 말하지 않은
+          것도, 말한 대로 한 것도 아니라 둘 중 어느 쪽에 넣어도 거짓말이 됩니다. 값을 견줄 수 있을 때만
+          견줍니다 — 레벨별 배열(<span className="font-mono">75/115/155</span>)이나 합성 표현은 어느 쪽을
+          대표로 삼을지 정할 근거가 없으므로 견주지 않습니다.
+        </p>
+        <p className="text-muted">
+          증거가 다르므로 위계도 다릅니다. 잠수함 패치는 미공지·간접 영향보다 위에 옵니다.
+        </p>
+        <p className="text-muted">
+          오탐을 막는 규칙 두 가지를 둡니다. 아이템 목록에는 칼바람·아레나 등 다른 모드의
+          항목이 섞여 있으므로 <strong className="text-fg-2">소환사의 협곡에서 쓸 수 있는 것만</strong>{" "}
+          봅니다. 스킬 수치는 배열 자리의 의미가 공개되지 않아, 그 스킬을 언급한 패치노트가
+          하나라도 있으면 공지로 봅니다 — 근거 없이 잠수함이라 부르지 않기 위해 덜 찾는 쪽을
+          고른 것입니다.
+        </p>
+      </div>
+    ),
+    notify: (
+      <div className="flex flex-col gap-3 p-5 text-sm leading-relaxed text-fg-2">
+        <p>
+          브리핑은 <strong className="text-fg">배치가 보냅니다</strong>. 이 사이트는 정적 페이지라
+          브라우저에서 아무것도 전송하지 않습니다 — 패치 수집·집계·판정이 끝난 뒤 CI가 한 번 보냅니다.
+        </p>
+        <dl className="grid grid-cols-1 gap-x-8 gap-y-3 md:grid-cols-2">
+          <div>
+            <dt className="font-display font-bold text-fg">보내는 것</dt>
+            <dd className="mt-1">
+              미공지 관측 상위 항목과 이상 관측(공지 방향과 반대로 움직인 관측) 상위 3건입니다.
+              <strong className="text-fg"> 공지대로 움직인 관측은 보내지 않습니다</strong> — 패치노트를
+              읽으면 아는 내용이기 때문입니다.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-display font-bold text-fg">보내지 않는 것</dt>
+            <dd className="mt-1">
+              표본 부족 · 바닥 미달 · 변화 없음으로 판정된 관측은 화면과 마찬가지로 방송에서도 빠집니다.
+              그래서 건수가 적은 패치에는 짧은 브리핑이 갑니다.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-display font-bold text-fg">언제</dt>
+            <dd className="mt-1">패치 수집이 끝난 뒤 판정 파이프라인 마지막 단계에서 1회. 실패해도 재전송하지 않습니다.</dd>
+          </div>
+          <div>
+            <dt className="font-display font-bold text-fg">홈의 &ldquo;마지막 집계&rdquo;</dt>
+            <dd className="mt-1">전송 시각이 아니라 이 판정 파일이 마지막으로 생성된 시각입니다.</dd>
+          </div>
+        </dl>
+      </div>
+    ),
+    limits: (
+      <div className="flex flex-col gap-3 p-5 text-sm leading-relaxed text-fg-2">
+        <p>
+          <strong className="text-fg">표본은 한 서버·한 티어대입니다.</strong> KR 마스터 이상에서
+          움직인 값이 전 서버·전 티어에서 같게 움직인다는 보장은 없습니다. 이 화면의 수는 그
+          모집단 안에서만 참입니다.
+        </p>
+        <p>
+          <strong className="text-fg">유의하다고 원인이 밝혀진 것은 아닙니다.</strong> 관측 변화의
+          상당수는 패치가 아니라 메타 이동·표본 구성 변화에서 옵니다. 그래서 원인 문장은 인용이
+          실재하고 신뢰도가 보통 이상일 때만 본문색이고, 나머지는 회색으로 둡니다.
+        </p>
+        <p>
+          <strong className="text-fg">덜 찾는 쪽을 고른 자리가 있습니다.</strong> 스킬 수치는 배열
+          자리의 의미가 공개되지 않아, 그 스킬을 언급한 패치노트가 하나라도 있으면 공지로 봅니다.
+          근거 없이 잠수함이라 부르지 않기 위한 선택이고, 그만큼 놓치는 건이 있습니다.
+        </p>
+        <p className="text-muted">
+          표본 부족(n&lt;{WIN_RATE_MIN_N}) · 효과크기 바닥 미달 · 변화 없음으로 판정된 관측은 화면과
+          방송 어디에도 올리지 않습니다. 숨기는 것이 아니라 <strong className="text-fg-2">세는 대상이
+          아니라는 뜻</strong>이고, 그 건수는 대조표 아래 커버리지 줄이 밝힙니다.
+        </p>
+      </div>
+    ),
+  };
+
   return (
-    <div className="flex flex-1 flex-col">
-      <main>
-        <Container className="flex flex-col gap-6 pt-[152px] pb-8"> {/* design-lint-ignore: PLAN-deployed-ui-fix-2026-09-12.md R8 — 사용자 확정 +120px, 대응 토큰 없는 페이지별 배치 수치 */}
-          <SectionCard eyebrow="신뢰" title="데이터 파이프라인" variant="glass">
-            <PipelineDiagram steps={steps} />
-          </SectionCard>
-
-          <SectionCard eyebrow="해석" title="상태 정의" variant="glass">
-            <StatusDefinitionTable
-              minN={WIN_RATE_MIN_N}
-              alpha={FDR_ALPHA}
-              floors={EFFECT_SIZE_FLOORS}
-            />
-          </SectionCard>
-
-          {/* 표시 규칙(2026-09-18 라운드6, 사용자 C3) — 각 메뉴에 흩어져 있던 "왜 이렇게 보이나"를 여기 모았다.
-              브리핑·대조표·상세는 결과만 말하고, 그 결과가 어떻게 골라졌는지는 이 카드가 말한다. */}
-          <SectionCard eyebrow="표시 규칙" title="화면이 고르는 것" variant="glass">
-            <dl className="grid grid-cols-1 gap-x-8 gap-y-4 p-5 text-sm md:grid-cols-2">
-              <div>
-                <dt className="font-display font-bold text-fg">브리핑 — 패치 내용 탭</dt>
-                <dd className="mt-1 leading-relaxed text-fg-2">
-                  챔피언·아이템 카드는 관측이 있는 항목부터(공지 · 이상 관측 → 공지 → 유의한 관측 없음), 같은 묶음 안에서는
-                  패치노트 순서. 유의한 관측이 없는 카드는 연속 구간을 1행으로 접습니다. 버그 수정·편의성 개선·신규
-                  스킨·증강은 목록 끝 &ldquo;기타 변경&rdquo; 1블록에 카테고리별로 모으고 배지를 달지 않습니다. 커뮤니티
-                  투표 결과 묶음은 패치 내용이 아니라 싣지 않습니다.
-                </dd>
-              </div>
-              <div>
-                <dt className="font-display font-bold text-fg">브리핑 — 미공지 Gap 탭</dt>
-                <dd className="mt-1 leading-relaxed text-fg-2">
-                  패치노트에 없는 유의 변화를 |Δ| 큰 순으로. 원인은 LLM이 노트 조항을 인용해 추정하되, 인용이 실재하고
-                  신뢰도가 보통 이상일 때만 본문색으로 씁니다. 나머지는 회색(가능성 · 후보 미검증 · 원인 미검토 · 설명 후보
-                  없음)입니다.
-                </dd>
-              </div>
-              <div>
-                <dt className="font-display font-bold text-fg">대조표</dt>
-                <dd className="mt-1 leading-relaxed text-fg-2">
-                  행은 챔피언·아이템 1개씩이고 셀은 밴률·승률·픽률·채택률 중 유의하고 바닥을 넘는 지표만 채웁니다. 유의한
-                  관측이 없는 엔티티는 표에 없고, 라인 골드·오브젝트·경기 시간은 홈 사이드 &ldquo;매치 평균&rdquo;에서만
-                  봅니다. 전체 보기는 챔피언 전체 행을 우선하되 그 지표가 특정 라인에서만 유의하면 그 라인 행이 셀을
-                  대표하고 라인을 표기합니다. 라인을 고르면 그 라인의 픽률·승률만 봅니다(밴은 라인 무관).
-                </dd>
-              </div>
-              <div>
-                <dt className="font-display font-bold text-fg">항목 상세</dt>
-                <dd className="mt-1 leading-relaxed text-fg-2">
-                  패치노트 대조와 추정 원인이 맨 위, 전/후 관측값이 가운데, 통계 게이트와 원천 매치가 맨 아래입니다.
-                  추정 원인은 검증·신뢰도 순(높음 → 보통 → 낮음 → 인용 없음)입니다.
-                </dd>
-              </div>
-            </dl>
-          </SectionCard>
-
-          {/* 추정 원인의 판정 기준(2026-09-19 사용자 질문: "원인후보 없음 항목이 대다수인거같은데
-              LLM 판정기준이 어떻게되고 어떤 기준으로 분석하여 판정하는지?"). 화면 곳곳이 LLM 문장을
-              쓰면서 그 규칙은 코드에만 있었다 — 방법론에 총망라한다는 원칙(공통3)대로 여기 적는다. */}
-          <SectionCard eyebrow="추정 원인" title="LLM은 무엇을 보고 판정하나" variant="glass">
-            <div className="flex flex-col gap-4 p-5 text-sm leading-relaxed text-fg-2">
-              <p>
-                패치노트와 짝지어지지 않았거나 노트와 방향이 어긋난 관측에 한해, 언어 모델이 <strong className="text-fg">다른
-                항목의 파급 효과</strong>를 추정합니다. 직접 변경(그 챔피언·아이템 자신의 노트)은 앞 단계인 결정론 매칭이
-                이미 처리하므로 후보에서 제외됩니다 — 그래서 모델이 찾는 것은 처음부터 간접 원인뿐입니다.
-              </p>
-              <dl className="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-2">
-                <div>
-                  <dt className="font-display font-bold text-fg">무엇을 대상으로 하나</dt>
-                  <dd className="mt-1">
-                    판정이 &ldquo;미공지&rdquo; 또는 &ldquo;공지 · 이상 관측&rdquo;인 관측만, 중요도 상위 120건입니다
-                    (상태 우선순위 → 변화폭 내림차순). 나머지는 아예 묻지 않습니다.
-                  </dd>
-                </div>
-                <div>
-                  <dt className="font-display font-bold text-fg">무엇을 보여주나</dt>
-                  <dd className="mt-1">
-                    그 패치 노트 전체를 항목 id · 엔티티 · 스킬 · 변경 전/후 값 · 방향 · 섹션만 남긴 목록으로 줍니다.
-                    본문 산문이 아니라 구조화된 목록이라, 모델이 인용할 수 있는 것은 실재하는 항목뿐입니다.
-                  </dd>
-                </div>
-                <div>
-                  <dt className="font-display font-bold text-fg">기각 규칙(기계가 검사)</dt>
-                  <dd className="mt-1">
-                    인용한 id가 목록에 없으면 기각합니다. 그 관측의 엔티티 자신을 가리키면 기각합니다. 다른 게임
-                    모드(LoL 클래식 · 아수라장 · 아레나)의 항목이면 기각합니다 — 우리가 재는 것은 소환사의 협곡이기
-                    때문입니다. 기각된 문장은 링크 없이 회색으로만 남습니다.
-                  </dd>
-                </div>
-                <div>
-                  <dt className="font-display font-bold text-fg">왜 &ldquo;후보 없음&rdquo;이 많나</dt>
-                  <dd className="mt-1">
-                    관측 변화의 상당수는 패치가 아니라 메타 이동·표본 구성 변화에서 옵니다. 그럴듯한 조항이 없을 때
-                    지어내지 않는 것이 이 사이트의 규칙이라, 그런 경우는 &ldquo;설명할 조항을 찾지 못했습니다&rdquo;로
-                    끝냅니다.{" "}
-                    {llmStats ? (
-                      <>
-                        실측({pair?.to ?? "최근 패치"}): 대상 {llmStats.attempted}건 중 원인을 못 찾은 것이{" "}
-                        {llmStats.withoutCause}건, 후보를 냈으나 검증에서 전부 기각된 것이{" "}
-                        {llmStats.withUnverifiedCauseOnly}건, 검증을 통과한 원인을 가진 것이{" "}
-                        {llmStats.withVerifiedCause}건입니다. 검증을 통과한 원인 문장{" "}
-                        {llmStats.confidence.low + llmStats.confidence.medium + llmStats.confidence.high}건의
-                        신뢰도는 낮음 {llmStats.confidence.low} · 보통 {llmStats.confidence.medium} · 높음{" "}
-                        {llmStats.confidence.high}건으로, 가장 많은 등급은{" "}
-                        <strong className="text-fg">{dominant?.label ?? "없음"}</strong>입니다 — 그 분포 자체가 이
-                        추정의 한계를 말합니다.
-                      </>
-                    ) : null}
-                  </dd>
-                </div>
-              </dl>
-              <p className="text-muted">
-                본문색으로 단언하는 것은 인용이 실재하고 신뢰도가 보통 이상인 문장뿐입니다. 그 외는 전부 회색이며,
-                회색 문장은 &ldquo;근거가 약하다&rdquo;는 표시이지 판정이 아닙니다.
-              </p>
-            </div>
-          </SectionCard>
-
-          {/* 수치 축(2026-09-21) — 이 페이지의 다른 카드는 전부 **통계 추론**을 설명한다. 이것만
-              성질이 다르다: 게임사가 배포한 원본 수치를 직접 대조하는 문서 축이다. 두 축이 왜
-              다른지를 여기서 말하지 않으면 화면의 배지 하나가 근거 없이 떠 있게 된다. */}
-          <SectionCard eyebrow="수치 축" title="잠수함 패치는 어떻게 찾나" variant="glass">
-            <div className="flex h-full flex-col gap-3 p-5 text-sm leading-relaxed text-fg-2">
-              <p>
-                이 사이트가 말하는 &ldquo;미공지&rdquo;는 두 종류입니다. 하나는{" "}
-                <strong className="text-fg">지표 축</strong> — 승률·픽률이 유의하게 움직였는데 짝지을
-                패치노트가 없는 경우로, 통계가 근거입니다. 다른 하나는{" "}
-                <strong className="text-fg">수치 축</strong> — 데미지·재사용 대기시간·가격 같은 원본
-                값이 실제로 바뀌었는데 패치노트에 없는 경우이고, 통칭 잠수함 패치입니다.
-              </p>
-              <p>
-                수치 축은 추론하지 않습니다. 게임사가 패치마다 배포하는 데이터를 패치 간 그대로
-                대조하고, 바뀐 값마다 그것을 말한 패치노트 항목이 있는지 찾습니다. 짝이 없으면
-                잠수함입니다. 그래서 이 판정은 반박할 수 없고,{" "}
-                <strong className="text-fg">지표가 하나도 안 움직여도 발견입니다</strong> —
-                바꿨는데 효과가 없었던 변경도 바뀐 것은 사실이기 때문입니다.
-              </p>
-              <p>
-                짝이 있어도 끝이 아닙니다. 패치노트가 <strong className="text-fg">같은 항목을 말했는데 적힌
-                값이 실제와 다른</strong> 경우가 있어서, 그것만 따로 「공지값 불일치」로 부릅니다. 말하지 않은
-                것도, 말한 대로 한 것도 아니라 둘 중 어느 쪽에 넣어도 거짓말이 됩니다. 값을 견줄 수 있을 때만
-                견줍니다 — 레벨별 배열(<span className="font-mono">75/115/155</span>)이나 합성 표현은 어느 쪽을
-                대표로 삼을지 정할 근거가 없으므로 견주지 않습니다.
-              </p>
-              <p className="text-muted">
-                증거가 다르므로 위계도 다릅니다. 잠수함 패치는 미공지·간접 영향보다 위에 옵니다.
-              </p>
-              <p className="text-muted">
-                오탐을 막는 규칙 두 가지를 둡니다. 아이템 목록에는 칼바람·아레나 등 다른 모드의
-                항목이 섞여 있으므로 <strong className="text-fg-2">소환사의 협곡에서 쓸 수 있는 것만</strong>{" "}
-                봅니다. 스킬 수치는 배열 자리의 의미가 공개되지 않아, 그 스킬을 언급한 패치노트가
-                하나라도 있으면 공지로 봅니다 — 근거 없이 잠수함이라 부르지 않기 위해 덜 찾는 쪽을
-                고른 것입니다.
-              </p>
-            </div>
-          </SectionCard>
-
-          {/* 디스코드 방송 규칙(2026-09-19, 독립 채점 K1-2): 홈·항목 상세의 "방송 규칙 보기 →"가
-              이 페이지로 오는데 정작 방송에 대한 서술이 0건이었다. 2026-09-14에 제거된 것은
-              **미리보기 목업**이고, 무엇이 언제 나가는지에 대한 서술은 방법론이 총망라해야 한다
-              (공통3). 목업을 되살리지 않고 규칙만 적는다. */}
-          {/* scroll-mt: sticky 헤더(높이 ~57px)가 앵커 착지 시 카드 제목을 덮는다 — 실측 21px 가림
-              (독립 채점 보완4). 착지점을 헤더 아래로 내린다. */}
-          <div id="discord" className="scroll-mt-20">
-            <SectionCard eyebrow="알림" title="디스코드로 무엇이 나가나" variant="glass">
-              <div className="flex flex-col gap-3 p-5 text-sm leading-relaxed text-fg-2">
-                <p>
-                  브리핑은 <strong className="text-fg">배치가 보냅니다</strong>. 이 사이트는 정적 페이지라
-                  브라우저에서 아무것도 전송하지 않습니다 — 패치 수집·집계·판정이 끝난 뒤 CI가 한 번 보냅니다.
-                </p>
-                <dl className="grid grid-cols-1 gap-x-8 gap-y-3 md:grid-cols-2">
-                  <div>
-                    <dt className="font-display font-bold text-fg">보내는 것</dt>
-                    <dd className="mt-1">
-                      미공지 관측 상위 항목과 이상 관측(공지 방향과 반대로 움직인 관측) 상위 3건입니다.
-                      <strong className="text-fg"> 공지대로 움직인 관측은 보내지 않습니다</strong> — 패치노트를
-                      읽으면 아는 내용이기 때문입니다.
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="font-display font-bold text-fg">보내지 않는 것</dt>
-                    <dd className="mt-1">
-                      표본 부족 · 바닥 미달 · 변화 없음으로 판정된 관측은 화면과 마찬가지로 방송에서도 빠집니다.
-                      그래서 건수가 적은 패치에는 짧은 브리핑이 갑니다.
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="font-display font-bold text-fg">언제</dt>
-                    <dd className="mt-1">패치 수집이 끝난 뒤 판정 파이프라인 마지막 단계에서 1회. 실패해도 재전송하지 않습니다.</dd>
-                  </div>
-                  <div>
-                    <dt className="font-display font-bold text-fg">홈의 &ldquo;마지막 집계&rdquo;</dt>
-                    <dd className="mt-1">전송 시각이 아니라 이 판정 파일이 마지막으로 생성된 시각입니다.</dd>
-                  </div>
-                </dl>
-              </div>
-            </SectionCard>
-          </div>
-
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
-            <div id="gates">
-              <SectionCard eyebrow="투명성" title="통계 게이트" variant="glass" className="flex h-full flex-col">
-                <div className="flex flex-1 flex-col">
-                  <GateGrid minN={WIN_RATE_MIN_N} alpha={FDR_ALPHA} />
-                </div>
-              </SectionCard>
-            </div>
-
-            <aside>
-              <SectionCard title="고지" variant="glass" className="flex h-full flex-col">
-                <div className="flex flex-1 flex-col gap-3 p-5">
-                  <p className="text-xs leading-relaxed text-muted">
-                    patchgap isn&apos;t endorsed by Riot Games and doesn&apos;t reflect the views
-                    or opinions of Riot Games or anyone officially involved in producing or
-                    managing Riot Games properties. Riot Games, and all associated properties are
-                    trademarks or registered trademarks of Riot Games, Inc.
-                  </p>
-                  <p className="text-xs text-muted">
-                    데이터 출처: Riot Games Match-V5 · Timeline API
-                    {ddragonVersion ? `, Data Dragon ${ddragonVersion}` : ""}, KR 서버, Master+
-                    티어
-                  </p>
-                  <div className="flex items-center gap-2 text-xs text-muted">
-                    <span className="h-2 w-2 rounded-pill bg-success" aria-hidden="true" />
-                    정상 운영 · 빌드 {fmtKst(new Date().toISOString())}
-                  </div>
-                </div>
-              </SectionCard>
-            </aside>
-          </div>
-        </Container>
-      </main>
-    </div>
+    <MethodologyLayout
+      game="lol"
+      title="리그 오브 레전드 — 어떻게 판정하나"
+      lead="판정 엔진은 세 게임이 같은 것을 씁니다. 갈리는 것은 무엇을 관측하느냐뿐입니다."
+      slots={slots}
+      generatedAt={deltas?.meta.generatedAt ?? null}
+      nVerdicts={deltas?.rows.length ?? null}
+    />
   );
 }

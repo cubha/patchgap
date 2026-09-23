@@ -42,15 +42,14 @@ import type { IndirectEffectEntry } from "./indirectEffects";
 import type { ContentTier, ReleaseStreamGroup } from "./releaseStream";
 import type { StreamEntityIcon } from "./releaseStreamEntity";
 import { segmentStream } from "./streamSegments";
+import AnnouncedCoverageLine from "./AnnouncedCoverageLine";
 import MiscChangesSection from "./MiscChangesSection";
 import type { MiscSection } from "./miscSections";
+import { BriefingTabBar } from "@/components/BriefingTabs";
 
 type StreamTab = "content" | "gap";
 
-const STREAM_TABS: { key: StreamTab; label: string }[] = [
-  { key: "content", label: "패치 내용" },
-  { key: "gap", label: "미공지 Gap" },
-];
+// 탭 라벨은 `components/BriefingTabs.tsx`가 소유한다 — 여기 있던 사본(STREAM_TABS)은 제거했다.
 
 /** ReleaseStreamGroup.kind → 탭 키. buildReleaseStream이 두 그룹을 이미 concat해 두므로
  * 여기서 kind로 되나눈다(단일 소스: releaseStream.ts의 kind 판별을 재사용, 새 분류 로직
@@ -122,6 +121,8 @@ export interface ReleaseNoteStreamProps {
   /** "기타 변경" 카테고리(2026-09-18 라운드6 L2) — 패치 내용 탭 목록의 마지막 1블록. 라인 필터와
    * 무관하게 항상 실린다(줄에 라인 정보가 없다). */
   miscSections?: MiscSection[];
+  /** 「패치 내용」 탭 맨 아래 한 줄(§8-1) — 세 게임 공통. 없으면 그리지 않는다. */
+  announcedCoverage?: { noteTargets: number; observed: number };
   /**
    * 「미공지 Gap」 탭의 **위쪽 갈래**(2026-09-21). 미공지는 두 갈래다 — 수치 축(게임사가 무엇을
    * 바꿨나, 증거 A)과 지표 축(패치노트에 없는데 움직였나, 증거 B). 위계의 근거는 중요도가
@@ -161,6 +162,7 @@ export default function ReleaseNoteStream({
   causes,
   skinPreviews,
   miscSections = [],
+  announcedCoverage,
   gapLead,
   gameDataCount = 0,
 }: ReleaseNoteStreamProps) {
@@ -207,26 +209,15 @@ export default function ReleaseNoteStream({
     // 항상 렌더되므로 빈 탭에서도 다른 탭으로 되돌아올 수 있다(2026-09-14 — 이전 early-return
     // 구조는 filtered.length===0일 때 패널 전체를 문구로 바꿔치기해 탭 자체가 사라졌다).
     <section className={`${panelSurfaceClass("glass")} flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg`}>
-      <div className="flex gap-2 border-b border-border-soft px-5 pt-4" role="tablist" aria-label="스트림 보기">
-        {STREAM_TABS.map(({ key, label }) => {
-          const count = key === "content" ? contentCount : gapCount;
-          const isActive = key === tab;
-          return (
-            <button
-              key={key}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => setTab(key)}
-              className={`border-b-2 px-1 py-2 text-xs font-bold ${
-                isActive ? "border-accent text-fg" : "border-transparent text-muted hover:text-fg-2"
-              }`}
-            >
-              {label} {count}
-            </button>
-          );
-        })}
-      </div>
+      {/* 탭 바는 세 게임 공용이다(UX-BRIEF §8-1, `components/BriefingTabs.tsx`) — 라벨·시맨틱·
+          스타일의 소유자가 하나다. 배치(카드 안 · px-5 pt-4)만 여기 남는다. */}
+      <BriefingTabBar
+        tab={tab}
+        onSelect={setTab}
+        contentCount={contentCount}
+        gapCount={gapCount}
+        className="flex gap-2 border-b border-border-soft px-5 pt-4"
+      />
 
       {/* 수치 축 — Gap 탭의 위쪽 갈래. 목록이 0건이어도(아래 빈 상태 분기) 사라지면 안 되므로
           분기 **바깥**에 둔다. 라인 필터의 영향을 받지 않는다 — 원본 수치에는 라인 축이 없다. */}
@@ -309,6 +300,13 @@ export default function ReleaseNoteStream({
           {tab === "content" ? <MiscChangesSection sections={miscSections} skinPreviews={skinPreviews} laneFiltered={selectedLane !== "all"} /> : null}
         </ul>
       )}
+      {/* 세 게임이 같은 자리에서 같은 말을 한다(§8-1) — 문구는 `AnnouncedCoverageLine`이 소유한다. */}
+      {tab === "content" && announcedCoverage ? (
+        <AnnouncedCoverageLine
+          noteTargets={announcedCoverage.noteTargets}
+          observed={announcedCoverage.observed}
+        />
+      ) : null}
     </section>
   );
 }

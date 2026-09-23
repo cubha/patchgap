@@ -131,8 +131,17 @@ export function isGameHome(pathname: string): boolean {
   return gameFromPathname(pathname) !== null && segmentsOf(pathname).length === 1;
 }
 
-/** LoL 항목 상세(`/lol/item/{slug}/`)인가 — 앰비언트 상세 스플래시(LAYER 4) 게이트. */
+/**
+ * 앰비언트 상세 스플래시(LAYER 4)를 켜는 라우트인가.
+ *
+ * 2026-09-23: LoL 항목 상세만 보던 것을 **TFT 대상 상세**까지 넓혔다. TFT 자산이 이제 실재하고
+ * (`scripts/run-tft-assets.ts`), 같은 자리의 화면이 한 게임에서만 배경을 갖는 것은 §8-1 위반이다.
+ * PUBG는 상세 안에 `PubgDetailSplash` 카드가 따로 있어 배경 레이어를 쓰지 않는다.
+ */
 export function isItemDetailPath(pathname: string): boolean {
   const segments = segmentsOf(pathname);
-  return gameFromPathname(pathname) === "lol" && segments[1] === "item";
+  const game = gameFromPathname(pathname);
+  if (game === "lol") return segments[1] === "item";
+  if (game === "tft") return segments[1] === "unit";
+  return false;
 }

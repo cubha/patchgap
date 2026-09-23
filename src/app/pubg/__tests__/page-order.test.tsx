@@ -26,8 +26,10 @@ describe("/pubg/ 정보 위계", () => {
     const tabs = at("패치 내용");
     const table = at("공지된 변경은 실제로 그렇게 됐나");
     const caption = at("총 획득 대비");
-    const grid = at("무기별 상세");
-    const maps = at("어디서 얼마나 싸웠나");
+    // 2026-09-23 §8-1: 무기 그리드·맵 그리드가 **세 게임 공통 「전 대상 색인」 슬롯**으로
+    // 들어갔다. 카드 제목은 그 슬롯이 소유하고(`ENTITY_INDEX_TITLE`), 게임은 묶음 라벨만 준다.
+    const grid = at("이 패치의 모든 대상");
+    const maps = at("맵");
     expect(tiles).toBeLessThan(tabs);
     expect(tabs).toBeLessThan(table);
     expect(table).toBeLessThan(caption);
@@ -66,7 +68,18 @@ describe("/pubg/methodology/ · /pubg/compare/ — 판정표 기준 문구", () 
   it("방법론에 표본·기저·게이트·판정표·표시하지 않는 관측이 있고 다른 게임 비교·매핑표는 없다", () => {
     const { container } = render(<PubgMethodologyPage />);
     const text = container.textContent ?? "";
-    for (const needle of ["비교 구간", "함께 움직인 값", "효과크기 바닥", "판정표", "표시하지 않는 관측", "관측 축이 없는 공지 항목"]) {
+    // 2026-09-23 §8-4: 카드 제목은 **9슬롯 registry가 소유**하고 게임은 본문만 채운다. 그래서
+    // 옛 제목("비교 구간"·"판정표"·"표시하지 않는 관측")은 화면에서 사라졌다 — 규칙이 약해진 게
+    // 아니라 제목의 소유자가 바뀐 것이다. 이 테스트가 재는 것은 **그 본문이 여전히 있는가**다.
+    for (const needle of [
+      "무엇을 셌나",
+      "함께 움직인 값",
+      "통계 게이트와 효과크기 바닥",
+      "판정은 무엇을 뜻하나",
+      "화면이 고르는 것",
+      "먼저 밝히는 것",
+      "검증하지 못했습니다",
+    ]) {
       expect(text, needle).toContain(needle);
     }
     expect(text).not.toContain("리그 오브 레전드");

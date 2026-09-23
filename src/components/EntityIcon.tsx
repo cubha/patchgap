@@ -12,6 +12,8 @@
 import { useState } from "react";
 import type { DeltaEntityType } from "@/pipeline/types";
 import IconBox from "@/components/IconBox";
+import type { GameId } from "@/lib/game";
+import { publicTftAssetPath } from "@/pipeline/tft/asset-path";
 
 export interface EntityIconProps {
   entityType: DeltaEntityType;
@@ -25,10 +27,29 @@ export interface EntityIconProps {
   fallbackLabel?: string;
   /** 정사각 한 변(px). 기본 32(대조표·미공지 목록 행 크기). */
   size?: number;
+  /** 자산 경로 계열. 기본 `"lol"`(기존 호출부 호환). */
+  game?: GameId;
+  /**
+   * 이 대상의 자산이 **실재하지 않는다**고 호출부가 이미 아는 경우(매니페스트 조회 결과).
+   * 참이면 요청 자체를 하지 않고 폴백 박스를 그린다 — 404 콘솔 오류는 설계된 상태가 아니다
+   * (실측: TFT 미보유 2건이 매 페이지에서 404를 냈다, 2026-09-23).
+   */
+  assetMissing?: boolean;
   className?: string;
 }
 
-function ddragonSrc(entityType: DeltaEntityType, entityKey: string): string | null {
+/**
+ * 자산 경로는 **게임마다 다르다** — `item`이라는 같은 어휘가 LoL에서는 숫자 itemId,
+ * TFT에서는 `DA_Artifact_*` 키를 가리키므로 한 경로 규칙으로 합칠 수 없다(2026-09-23).
+ * TFT 자산은 `public/dd/tft/{kind}/{key}.png`이고 조달은 `scripts/run-tft-assets.ts`가 한다.
+ */
+function ddragonSrc(game: GameId, entityType: DeltaEntityType, entityKey: string): string | null {
+  if (game === "tft") {
+    if (entityType === "unit" || entityType === "trait" || entityType === "item") {
+      return publicTftAssetPath(entityType, entityKey);
+    }
+    return null;
+  }
   if (entityType === "champion") return `/dd/champion/${entityKey}.png`;
   if (entityType === "item") return `/dd/item/${entityKey}.png`;
   return null;
@@ -40,9 +61,11 @@ export default function EntityIcon({
   name,
   fallbackLabel,
   size = 32,
+  game = "lol",
+  assetMissing = false,
   className = "",
 }: EntityIconProps) {
-  const src = ddragonSrc(entityType, entityKey);
+  const src = assetMissing ? null : ddragonSrc(game, entityType, entityKey);
   const [errored, setErrored] = useState(false);
   const label = fallbackLabel ?? name.slice(0, 1);
   const boxClassName = `font-display text-xs font-bold ${className}`;
