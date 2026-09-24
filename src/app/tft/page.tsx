@@ -232,9 +232,10 @@ export default function TftPage() {
               쓰지 않는 이유: 그쪽은 좌측 높이를 우측에 맞춰 고정하고 좌측 안에서 스크롤시키는
               장치인데, TFT 본문은 이미 `PANEL_SCROLL_BODY`로 제 높이를 갖는다. 두 장치를 겹치면
               카드가 잘린다 — **같은 골격을 쓰되 높이 결합은 하지 않는다**. */}
-          <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[2fr_1fr]">
-            <div className="flex flex-col gap-6">
-            <BriefingTabs
+          {/* 2컬럼 골격의 소유자는 `BriefingTabs`다(§8-1 A안). 페이지가 그리드를 만들면
+              우측 패널이 좌측 **탭 바** 상단에 맞아 카드끼리 어긋난다 — 그 배치는 탭 바
+              위치를 아는 쪽만 정할 수 있다(2026-09-24). */}
+          <BriefingTabs
               contentCount={announced.length}
               gapCount={unannounced.length + gameDataEntityCount(submarine)}
               content={
@@ -288,14 +289,12 @@ export default function TftPage() {
                   </SectionCard>
                 </div>
               }
-            />
-            </div>
-            <div className="flex flex-col gap-6">
-              {/* 사이드는 그 게임이 가진 것만 — TFT는 지금 디스코드뿐이고, 없는 패널을 만들어
-                  채우지 않는다(§8-1). 표본은 화면 하단 캡션이 이미 말한다. */}
+            aside={
+              /* 사이드는 그 게임이 가진 것만 — TFT는 지금 디스코드뿐이고, 없는 패널을 만들어
+                 채우지 않는다(§8-1). 표본은 화면 하단 캡션이 이미 말한다. */
               <DiscordPanel game="tft" generatedAt={deltas.meta.generatedAt} />
-            </div>
-          </div>
+            }
+          />
 
           {/* 원인은 **그 대상의 행 안에서** 말한다(UX-BRIEF §8-2) — 하단 별도 카드
               「왜 그랬을까 — LLM이 짚은 원인」은 폐지했다. 목적(사용자 2026-09-20 지시)은

@@ -14,7 +14,7 @@ import type { ReactNode } from "react";
 
 import Link from "next/link";
 
-import StatusBadge from "@/components/StatusBadge";
+import StatusBadge, { BADGE_SLOT } from "@/components/StatusBadge";
 import ExternalLink from "@/components/ExternalLink";
 import { itemCountLabel, type BriefingGroup } from "@/components/briefingRows";
 
@@ -55,7 +55,11 @@ export default function BriefingRowList({
             <details>
               {/* marker 제거 — 삼각형 기본 마커는 게임마다 브라우저 기본값이 달라 보인다. */}
               <summary className="flex cursor-pointer list-none flex-wrap items-center gap-x-3 gap-y-1 px-5 py-3 [&::-webkit-details-marker]:hidden">
-                <StatusBadge status={group.status} />
+                {/* 뱃지 칸은 고정폭 — 라벨 길이가 뒤의 아이콘·이름·지표를 밀지 않게 한다
+                    (`BADGE_SLOT`이 그 폭의 유일한 소유자). */}
+                <span className={BADGE_SLOT}>
+                  <StatusBadge status={group.status} />
+                </span>
                 {iconOf ? iconOf(group) : null}
                 {href ? (
                   <Link href={href} className="text-sm font-bold text-fg hover:text-accent hover:underline">

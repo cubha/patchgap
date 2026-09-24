@@ -545,3 +545,55 @@ describe("§8-6 모바일 — 390px에서 칸이 무너지지 않는다", () => 
     expect(src).toMatch(/const CELL_CLASS = "(?:(?!whitespace-nowrap)[^"])*"/);
   });
 });
+
+/**
+ * §8-1 행 정렬 — **맨 앞 칸이 고정폭이라 그 뒤가 항상 같은 x에서 시작한다.**
+ *
+ * 2026-09-24 사용자 지적(스크린샷): 뱃지가 `inline-flex`라 「공지」 54px · 「공지 · 이상 관측」
+ * 125px로 폭이 변했고, 맨 앞에 있으니 그 71px 차이가 아이콘·이름·지표를 행마다 밀어냈다.
+ * 「뱃지는 행 맨 앞」(§8-1)은 유지하고 **칸만 고정**하는 쪽으로 닫았다 — 계약을 뒤집지 않는다.
+ */
+describe("§8-1 행 정렬 — 뱃지 칸이 고정폭이다", () => {
+  it("세 게임 브리핑 행이 같은 뱃지 슬롯 상수를 쓴다", () => {
+    // 폭의 소유자는 하나다 — 화면마다 손으로 적으면 반드시 하나가 어긋난다(이 repo의 결함군).
+    for (const f of ["src/components/home/ReleaseNoteRow.tsx", "src/components/BriefingRowList.tsx"]) {
+      const src = read(f);
+      expect(src).toMatch(/import StatusBadge, \{ BADGE_SLOT \}/);
+      expect(src).toMatch(/className=\{BADGE_SLOT\}/);
+    }
+  });
+
+  it("뱃지가 없는 행도 슬롯은 남긴다 — 그 행만 당겨지지 않게", () => {
+    // 「유의한 관측 없음」 묶음은 붙일 판정이 없어 뱃지를 안 그린다. 칸까지 비우면 그 행만
+    // 아이콘이 왼쪽으로 당겨진다 — 조건부인 것은 **뱃지**여야 하고 **슬롯**이면 안 된다.
+    const src = read("src/components/home/ReleaseNoteRow.tsx");
+    const slot = src.slice(src.indexOf("className={BADGE_SLOT}"));
+    expect(slot).toMatch(/^className=\{BADGE_SLOT\}>\s*\{headerBadge \? <StatusBadge/);
+  });
+
+  it("슬롯 폭(w-36=144px)이 모든 상태 라벨을 담는다", () => {
+    // **jsdom은 폭을 못 잰다** — 실제 폭은 브라우저 렌더로 쟀다(최장 125px = 「공지 · 이상 관측」).
+    // 여기서 막는 것은 그 실측을 무효로 만드는 변경, 즉 **더 긴 라벨의 추가**다. 글자 수는
+    // 픽셀의 근사일 뿐이지만(실측 125px ↔ 공백 포함 10자), 회귀는 이걸로 잡힌다.
+    const MAX_LABEL_CHARS = 10;
+    const body = read("src/lib/format.ts");
+    const block = body.slice(body.indexOf("const STATUS_LABELS"), body.indexOf("export function statusLabel"));
+    const labels = [...block.matchAll(/:\s*"([^"]+)"/g)].map((m) => m[1]);
+    expect(labels.length).toBeGreaterThan(5);
+    expect(labels.filter((l) => l.length > MAX_LABEL_CHARS)).toEqual([]);
+    expect(read("src/components/StatusBadge.tsx")).toMatch(/export const BADGE_SLOT = "w-36 shrink-0"/);
+  });
+
+  it("2컬럼 골격의 소유자는 BriefingTabs다 — 페이지가 그리드를 만들지 않는다", () => {
+    // 페이지가 그리드를 쥐면 우측 패널이 좌측 **탭 바** 상단에 맞아 카드끼리 어긋난다.
+    // 탭 바는 1행, 카드와 사이드는 같은 2행에 서야 한다 — 그 배치는 탭 바 위치를 아는 쪽만 안다.
+    const tabs = read("src/components/BriefingTabs.tsx");
+    expect(tabs).toMatch(/lg:row-start-1/);
+    expect(tabs).toMatch(/lg:col-start-2 lg:row-start-2/);
+    for (const g of ["tft", "pubg"]) {
+      const page = read(`src/app/${g}/page.tsx`);
+      expect(page).toMatch(/<BriefingTabs[\s\S]*?aside=\{/);
+      expect(page).not.toMatch(/grid-cols-\[2fr_1fr\]/);
+    }
+  });
+});
