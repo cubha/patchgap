@@ -15,23 +15,10 @@ import path from "node:path";
 import { determineLolRun } from "../src/pipeline/collect/patch-calendar";
 import { isMainModule } from "./shared/cli";
 import { loadLolCalendar } from "./shared/calendar";
+import { reportRun, reportSkip, warn } from "./shared/determine-report";
 
 const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
 
-/** GitHub Actions 출력 한 묶음. 로컬 실행(=GITHUB_OUTPUT 없음)에서는 stdout으로만 찍는다. */
-function emit(values: Record<string, string>): void {
-  const body = Object.entries(values)
-    .map(([k, v]) => `${k}=${v}`)
-    .join("\n");
-  const out = process.env.GITHUB_OUTPUT;
-  if (out) fs.appendFileSync(out, `${body}\n`);
-  console.log(`[lol-determine] ${body.replace(/\n/g, " ")}`);
-}
-
-/** Actions 로그에 접히지 않는 경고로 남긴다(로컬에서는 평문). */
-function warn(message: string): void {
-  console.log(process.env.GITHUB_ACTIONS ? `::warning::${message}` : `[warning] ${message}`);
-}
 
 function trimmed(name: string): string | undefined {
   const v = (process.env[name] ?? "").trim();
@@ -86,10 +73,11 @@ function main(): void {
   }
 
   if (!decision.shouldRun || decision.from === null || decision.to === null) {
-    emit({ should_run: "false" });
+    // 사유는 순수 판정 함수가 이미 문장으로 갖고 있다 — 카테고리만 덧붙여 기계가 읽게 한다.
+    reportSkip("lol", "no-run-condition", decision.reason);
     return;
   }
-  emit({ should_run: "true", patch: decision.patch ?? "", from: decision.from, to: decision.to });
+  reportRun("lol", { patch: decision.patch ?? "", from: decision.from, to: decision.to });
 }
 
 if (isMainModule(import.meta.url)) {

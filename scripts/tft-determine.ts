@@ -17,21 +17,7 @@ import { determineTftRun } from "../src/pipeline/collect/tft-patch-calendar";
 import { loadTftWindows } from "./shared/calendar";
 import { runTftPreflight } from "../src/pipeline/collect/tft-preflight";
 import { isMainModule } from "./shared/cli";
-
-/** GitHub Actions 출력 한 묶음. 로컬 실행(=GITHUB_OUTPUT 없음)에서는 stdout으로만 찍는다. */
-function emit(values: Record<string, string>): void {
-  const body = Object.entries(values)
-    .map(([k, v]) => `${k}=${v}`)
-    .join("\n");
-  const out = process.env.GITHUB_OUTPUT;
-  if (out) fs.appendFileSync(out, `${body}\n`);
-  console.log(`[tft-determine] ${body.replace(/\n/g, " ")}`);
-}
-
-/** Actions 로그에 접히지 않는 경고로 남긴다(로컬에서는 평문). */
-function warn(message: string): void {
-  console.log(process.env.GITHUB_ACTIONS ? `::warning::${message}` : `[warning] ${message}`);
-}
+import { reportRun, reportSkip, warn } from "./shared/determine-report";
 
 function trimmed(name: string): string | undefined {
   const v = (process.env[name] ?? "").trim();
@@ -70,8 +56,7 @@ export async function main(): Promise<void> {
   // ① 권한을 먼저 본다. 캘린더가 "돌아야 한다"고 해도 키가 죽어 있으면 수집 루프
   //    한가운데서 죽을 뿐이다 — 들어가기 전에 싼 호출 하나로 판별한다.
   if (!apiKey) {
-    warn("RIOT_TFT_API_KEY·RIOT_API_KEY 둘 다 미설정 — TFT 수집을 건너뛴다.");
-    emit({ should_run: "false" });
+    reportSkip("tft", "key-missing", "RIOT_TFT_API_KEY·RIOT_API_KEY 둘 다 설정돼 있지 않다.");
     return;
   }
   const preflight = await runTftPreflight({ apiKey, platform });
@@ -80,8 +65,13 @@ export async function main(): Promise<void> {
       // 진짜 오류는 삼키지 않는다 — 조용히 스킵하면 "돌고 있다"는 착각을 만든다.
       throw new Error(preflight.message);
     }
-    warn(preflight.message);
-    emit({ should_run: "false" });
+    // **401과 403은 조치가 정반대다** — 만료는 사람이 재발급해야 하고, 미승인은 사람이 할 일이
+    // 없다. 프리플라이트가 이미 둘을 갈라 놓았으므로 그 판별을 요약까지 그대로 들고 간다.
+    reportSkip(
+      "tft",
+      preflight.kind === "product-unapproved" ? "product-unapproved" : "key-expired",
+      preflight.message,
+    );
     return;
   }
 
@@ -108,10 +98,10 @@ export async function main(): Promise<void> {
   }
 
   if (!decision.shouldRun || decision.from === null || decision.to === null) {
-    emit({ should_run: "false" });
+    reportSkip("tft", "no-run-condition", decision.reason);
     return;
   }
-  emit({ should_run: "true", patch: decision.patch ?? "", from: decision.from, to: decision.to });
+  reportRun("tft", { patch: decision.patch ?? "", from: decision.from, to: decision.to });
 }
 
 if (isMainModule(import.meta.url)) {
