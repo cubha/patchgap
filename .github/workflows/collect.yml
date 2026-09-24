@@ -67,6 +67,14 @@ on:
         required: false
         default: "400"
         type: string
+      max_minutes:
+        # 수집 스텝 시간 상한. 잡 timeout(350분)에서 수집 뒤 단계 실측치(타임라인 30분 +
+        # 집계·ddragon·매칭·브리핑 ≈25분, 26.19 첫 실행)와 여유를 뺀 값이다. 이걸 넘기면
+        # 잡이 timeout으로 죽어 받은 매치가 전부 사라진다.
+        description: "수집 시간 상한(분) — 목표 미달이어도 여기서 멈추고 집계·커밋으로 넘어간다"
+        required: false
+        default: "240"
+        type: string
       force:
         description: "true면 data/aggregated/{patch}/summary.json이 이미 있어도 재실행한다(재수집·재집계 강제)"
         required: false
@@ -171,10 +179,23 @@ jobs:
         env:
           PATCH: ${{ steps.determine.outputs.patch }}
           TARGET: ${{ github.event.inputs.target || '10000' }}
+          MAX_MINUTES: ${{ github.event.inputs.max_minutes || '240' }}
         run: |
           npx tsx scripts/run-collect.ts \
             --patch "$PATCH" \
-            --target "$TARGET"
+            --target "$TARGET" \
+            --max-minutes "$MAX_MINUTES"
+
+      # 수집 직후 data/raw를 **무조건** 저장한다. actions/cache의 자동 저장(post 스텝)은 잡이
+      # 성공해야만 돈다 — 26.19 첫 실행은 커밋에서 실패해 캐시가 0건이었고, 재실행이 "재개"가
+      # 아니라 0부터였다(2026-09-24 실측, `gh cache list`). 키는 복원 스텝과 같다: 잡이 성공하면
+      # post 스텝이 같은 키로 한 번 더 저장하려다 "이미 있음"으로 건너뛴다(무해).
+      - name: Save data/raw (실패해도 재개 가능하게)
+        if: always() && steps.determine.outputs.should_run == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: data/raw
+          key: patchgap-raw-${{ steps.determine.outputs.patch }}-${{ github.run_id }}
 
       - name: Collect timeline sample (F8)
         if: steps.determine.outputs.should_run == 'true'
@@ -321,7 +342,16 @@ jobs:
 
             GitHub Actions collect.yml(run_id=${{ github.run_id }})가 생성."
             # [skip ci]를 넣지 않는다 — Vercel git 연동이 이 커밋을 감지해 재빌드해야 한다(PLAN ④).
-            git push
+            # push 경합 재시도 — 장시간 잡이 도는 동안 main에 다른 커밋(PR 머지·자매 워크플로)이
+            # 들어오면 push가 `fetch first`로 거절된다. 재시도가 없던 시절 26.19 수집(5h13m)의
+            # 산출물 전체가 이 한 줄에서 버려졌다(2026-09-24). 봇 커밋은 data/·public/dd만
+            # 건드리므로 코드 PR과 rebase 충돌이 날 일이 드물다 — 충돌하면 그때는 멈춘다.
+            for attempt in 1 2 3 4 5; do
+              if git push; then break; fi
+              if [ "$attempt" = 5 ]; then echo "::error::push 5회 거절"; exit 1; fi
+              git pull --rebase origin main || { git rebase --abort; echo "::error::rebase 충돌 — 수동 해소 필요"; exit 1; }
+              sleep $((attempt * 10))
+            done
           fi
 
       - name: Upload logs on failure

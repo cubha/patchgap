@@ -1,7 +1,7 @@
 // scripts/run-collect.ts
 // F1 파이프라인 진입점 — dotenv 로드 후 crawlPatch 호출.
 // 실행: npm run pipeline:collect -- --patch 26.17 --target 10000
-//       [--tiers challenger,grandmaster] [--seed-limit N] [--dry-run]
+//       [--tiers challenger,grandmaster] [--seed-limit N] [--max-minutes N] [--dry-run]
 
 import "dotenv/config";
 import { loadEnv } from "../src/pipeline/shared/env";
@@ -18,6 +18,7 @@ interface CliArgs {
   target: number;
   tiers?: LeagueTier[];
   seedLimit?: number;
+  maxMinutes?: number;
   dryRun: boolean;
 }
 
@@ -41,12 +42,14 @@ function parseArgs(argv: string[]): CliArgs {
     { name: "target", type: "number", default: 10000 },
     { name: "tiers", type: "string" },
     { name: "seedLimit", type: "number" },
+    { name: "maxMinutes", type: "number" },
     { name: "dryRun", type: "boolean", default: false },
   ]);
 
   const patch = raw.patch as string;
   const target = raw.target as number;
   const seedLimit = raw.seedLimit as number | undefined;
+  const maxMinutes = raw.maxMinutes as number | undefined;
   const tiersRaw = raw.tiers as string | undefined;
   const dryRun = raw.dryRun as boolean;
 
@@ -55,6 +58,9 @@ function parseArgs(argv: string[]): CliArgs {
   }
   if (seedLimit !== undefined && seedLimit <= 0) {
     throw new Error(`run-collect: --seed-limit must be a positive number (got "${seedLimit}")`);
+  }
+  if (maxMinutes !== undefined && maxMinutes <= 0) {
+    throw new Error(`run-collect: --max-minutes must be a positive number (got "${maxMinutes}")`);
   }
   const tiers = tiersRaw !== undefined ? parseTiers(tiersRaw) : undefined;
 
@@ -67,7 +73,7 @@ function parseArgs(argv: string[]): CliArgs {
     );
   }
 
-  return { patch, target, tiers, seedLimit, dryRun };
+  return { patch, target, tiers, seedLimit, maxMinutes, dryRun };
 }
 
 async function main(): Promise<void> {
@@ -77,6 +83,7 @@ async function main(): Promise<void> {
     `[run-collect] patch=${args.patch} target=${args.target}` +
       (args.tiers ? ` tiers=${args.tiers.join(",")}` : "") +
       (args.seedLimit !== undefined ? ` seedLimit=${args.seedLimit}` : "") +
+      (args.maxMinutes !== undefined ? ` maxMinutes=${args.maxMinutes}` : "") +
       (args.dryRun ? " (dry-run)" : "")
   );
 
@@ -98,6 +105,18 @@ async function main(): Promise<void> {
     abortController.abort();
   };
   process.on("SIGINT", onSigint);
+  // 시간 상한 — 목표 수에 못 미쳐도 여기서 멈추고 **정상 종료**한다. 잡 timeout에 걸려 죽으면
+  // 그때까지 받은 매치·집계·커밋이 전부 사라진다(2026-09-24 26.19: 1,911매치 4h20m 수집 후 유실,
+  // 재실행은 캐시 없이 0부터). 얇은 표본이 커밋되는 쪽이 아무것도 없는 쪽보다 낫다 —
+  // 선언 축(패치노트)은 표본과 무관하게 최신이어야 한다.
+  const deadline =
+    args.maxMinutes !== undefined
+      ? setTimeout(() => {
+          console.log(`[run-collect] --max-minutes ${args.maxMinutes} 도달 — 현재 매치까지 마치고 정상 종료합니다.`);
+          abortController.abort();
+        }, args.maxMinutes * 60_000)
+      : undefined;
+  deadline?.unref();
 
   try {
     const result = await crawlPatch(client, {
@@ -121,6 +140,7 @@ async function main(): Promise<void> {
         `skippedSeen=${result.skippedSeen} errors=${result.errors}`
     );
   } finally {
+    if (deadline) clearTimeout(deadline);
     process.off("SIGINT", onSigint);
     await client.dispose();
   }
