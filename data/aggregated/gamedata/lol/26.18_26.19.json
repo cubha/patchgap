@@ -1,0 +1,196 @@
+{
+  "meta": {
+    "game": "lol",
+    "from": "26.18",
+    "to": "26.19",
+    "source": {
+      "kind": "ddragon",
+      "from": "16.18.1",
+      "to": "16.19.1"
+    },
+    "generatedAt": "2026-09-24T17:39:10.552Z",
+    "changeCount": 13,
+    "submarineCount": 3
+  },
+  "changes": [
+    {
+      "id": "gdc:lol:26.19:Aatrox:spells.1.cooldownBurn",
+      "entityKey": "Aatrox",
+      "entityName": "아트록스",
+      "entityType": "champion",
+      "field": "W 재사용 대기시간",
+      "fieldPath": "spells.1.cooldownBurn",
+      "before": "20/18/16/14/12",
+      "after": "18/16.5/15/13.5/12",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.19:champion:aatrox:5bc9f3f5"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.19:Draven:stats.attackdamage",
+      "entityKey": "Draven",
+      "entityName": "드레이븐",
+      "entityType": "champion",
+      "field": "기본 공격력",
+      "fieldPath": "stats.attackdamage",
+      "before": 62,
+      "after": 64,
+      "relChange": 0.03225806451612903,
+      "matchedNoteIds": [
+        "note:26.19:champion:draven:d1cc348b"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.19:Elise:spells.3.effect.2",
+      "entityKey": "Elise",
+      "entityName": "엘리스",
+      "entityType": "champion",
+      "field": "R 수치",
+      "fieldPath": "spells.3.effect.2",
+      "before": "12/22/32/42",
+      "after": "14/24/34/44",
+      "relChange": null,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:lol:26.19:Fiora:stats.hpperlevel",
+      "entityKey": "Fiora",
+      "entityName": "피오라",
+      "entityType": "champion",
+      "field": "기본 체력 증가량",
+      "fieldPath": "stats.hpperlevel",
+      "before": 99,
+      "after": 105,
+      "relChange": 0.06060606060606061,
+      "matchedNoteIds": [
+        "note:26.19:champion:fiora:c754a41b",
+        "note:26.19:champion:fiora:c5680bad",
+        "note:26.19:champion:fiora:e5ba347c",
+        "note:26.19:champion:fiora:4ff3c93f"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.19:Khazix:spells.1.effect.4",
+      "entityKey": "Khazix",
+      "entityName": "카직스",
+      "entityType": "champion",
+      "field": "W 수치",
+      "fieldPath": "spells.1.effect.4",
+      "before": "2",
+      "after": "2.25",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.19:champion:khazix:51e4a44b"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.19:Khazix:spells.1.effect.6",
+      "entityKey": "Khazix",
+      "entityName": "카직스",
+      "entityType": "champion",
+      "field": "W 수치",
+      "fieldPath": "spells.1.effect.6",
+      "before": "2",
+      "after": "2.25",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.19:champion:khazix:51e4a44b"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.19:Lillia:stats.armor",
+      "entityKey": "Lillia",
+      "entityName": "릴리아",
+      "entityType": "champion",
+      "field": "기본 방어력",
+      "fieldPath": "stats.armor",
+      "before": 22,
+      "after": 24,
+      "relChange": 0.09090909090909091,
+      "matchedNoteIds": [
+        "note:26.19:champion:lillia:9935b4fb"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.19:Nocturne:spells.3.cooldownBurn",
+      "entityKey": "Nocturne",
+      "entityName": "녹턴",
+      "entityType": "champion",
+      "field": "R 재사용 대기시간",
+      "fieldPath": "spells.3.cooldownBurn",
+      "before": "140/115/90",
+      "after": "160/130/100",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.19:champion:nocturne:daf7f9d0"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.19:Ryze:stats.armorperlevel",
+      "entityKey": "Ryze",
+      "entityName": "라이즈",
+      "entityType": "champion",
+      "field": "기본 방어력 증가량",
+      "fieldPath": "stats.armorperlevel",
+      "before": 4.2,
+      "after": 4.7,
+      "relChange": 0.11904761904761904,
+      "matchedNoteIds": [
+        "note:26.19:champion:ryze:9da2cbc6"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.19:Ryze:spells.2.costBurn",
+      "entityKey": "Ryze",
+      "entityName": "라이즈",
+      "entityType": "champion",
+      "field": "E 소모량",
+      "fieldPath": "spells.2.costBurn",
+      "before": "35/45/55/65/75",
+      "after": "40/50/60/70/80",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.19:champion:ryze:f4e781e8"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.19:Vi:stats.attackdamage",
+      "entityKey": "Vi",
+      "entityName": "바이",
+      "entityType": "champion",
+      "field": "기본 공격력",
+      "fieldPath": "stats.attackdamage",
+      "before": 63,
+      "after": 61,
+      "relChange": -0.031746031746031744,
+      "matchedNoteIds": [
+        "note:26.19:champion:vi:90715c64"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.19:3865:stats.FlatHPPoolMod",
+      "entityKey": "3865",
+      "entityName": "세계 지도집",
+      "entityType": "item",
+      "field": "체력",
+      "fieldPath": "stats.FlatHPPoolMod",
+      "before": 30,
+      "after": null,
+      "relChange": null,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:lol:26.19:3866:stats.FlatHPPoolMod",
+      "entityKey": "3866",
+      "entityName": "룬 나침반",
+      "entityType": "item",
+      "field": "체력",
+      "fieldPath": "stats.FlatHPPoolMod",
+      "before": 100,
+      "after": 60,
+      "relChange": -0.4,
+      "matchedNoteIds": []
+    }
+  ]
+}
