@@ -1,0 +1,2877 @@
+{
+  "patch": "18.3",
+  "matches": 333,
+  "boards": 2664,
+  "droppedMatches": 0,
+  "summary": {
+    "avgGameLengthSec": 2253.7037657774963,
+    "avgLastRound": 31.200075075075077
+  },
+  "unmatchedKeys": {
+    "units": [],
+    "traits": [],
+    "items": []
+  },
+  "units": [
+    {
+      "kind": "unit",
+      "key": "DA_Amumu18",
+      "boards": 1086,
+      "playRate": 0.40765765765765766,
+      "top4Rate": 0.5138121546961326,
+      "top4Ci": [
+        0.48408925562200966,
+        0.5434376804024549
+      ],
+      "avgPlacement": 4.406077348066298,
+      "placementSd": 2.2742639239664073,
+      "name": "아무무"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_Vi18",
+      "boards": 839,
+      "playRate": 0.31493993993993996,
+      "top4Rate": 0.4862932061978546,
+      "top4Ci": [
+        0.45261214463003197,
+        0.5200992165557473
+      ],
+      "avgPlacement": 4.643623361144219,
+      "placementSd": 2.2206568146660612,
+      "name": "바이"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Kennen",
+      "boards": 693,
+      "playRate": 0.26013513513513514,
+      "top4Rate": 0.6190476190476191,
+      "top4Ci": [
+        0.5823286160350893,
+        0.6544540329916049
+      ],
+      "avgPlacement": 3.898989898989899,
+      "placementSd": 2.28051855378887,
+      "name": "케넨"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Yorick",
+      "boards": 669,
+      "playRate": 0.2511261261261261,
+      "top4Rate": 0.5022421524663677,
+      "top4Ci": [
+        0.4644490583118427,
+        0.5400096434093351
+      ],
+      "avgPlacement": 4.553064275037369,
+      "placementSd": 2.2611553860790448,
+      "name": "요릭"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_Fiddlesticks18",
+      "boards": 658,
+      "playRate": 0.246996996996997,
+      "top4Rate": 0.5486322188449848,
+      "top4Ci": [
+        0.510436164094433,
+        0.5862637109209786
+      ],
+      "avgPlacement": 4.227963525835866,
+      "placementSd": 2.225425744202634,
+      "name": "피들스틱"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Diana",
+      "boards": 638,
+      "playRate": 0.23948948948948948,
+      "top4Rate": 0.5156739811912225,
+      "top4Ci": [
+        0.4769167781885697,
+        0.5542435579442082
+      ],
+      "avgPlacement": 4.434169278996865,
+      "placementSd": 2.2534589180454283,
+      "name": "다이애나"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Maokai",
+      "boards": 618,
+      "playRate": 0.23198198198198197,
+      "top4Rate": 0.5501618122977346,
+      "top4Ci": [
+        0.5107495424932244,
+        0.5889543049174346
+      ],
+      "avgPlacement": 4.135922330097087,
+      "placementSd": 2.3655354019502255,
+      "name": "마오카이"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_Taric18",
+      "boards": 591,
+      "playRate": 0.22184684684684686,
+      "top4Rate": 0.5905245346869712,
+      "top4Ci": [
+        0.5504181896646667,
+        0.6294616304420642
+      ],
+      "avgPlacement": 3.967851099830795,
+      "placementSd": 2.382986721193465,
+      "name": "타릭"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Ivern",
+      "boards": 533,
+      "playRate": 0.20007507507507508,
+      "top4Rate": 0.5947467166979362,
+      "top4Ci": [
+        0.5525331478606238,
+        0.6356042841118612
+      ],
+      "avgPlacement": 3.8836772983114445,
+      "placementSd": 2.3495272250778796,
+      "name": "아이번"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Sett",
+      "boards": 516,
+      "playRate": 0.19369369369369369,
+      "top4Rate": 0.4941860465116279,
+      "top4Ci": [
+        0.45124950571495265,
+        0.5372085168827001
+      ],
+      "avgPlacement": 4.52906976744186,
+      "placementSd": 2.24714012572372,
+      "name": "세트"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Azir",
+      "boards": 495,
+      "playRate": 0.1858108108108108,
+      "top4Rate": 0.501010101010101,
+      "top4Ci": [
+        0.45712462116343583,
+        0.5448800231966175
+      ],
+      "avgPlacement": 4.458585858585859,
+      "placementSd": 2.217386674482393,
+      "name": "아지르"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Soraka",
+      "boards": 472,
+      "playRate": 0.17717717717717718,
+      "top4Rate": 0.5614406779661016,
+      "top4Ci": [
+        0.5163566646655088,
+        0.6055326363119592
+      ],
+      "avgPlacement": 4.22457627118644,
+      "placementSd": 2.147528533213101,
+      "name": "소라카"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Ornn",
+      "boards": 460,
+      "playRate": 0.17267267267267267,
+      "top4Rate": 0.5717391304347826,
+      "top4Ci": [
+        0.5261087317098082,
+        0.6161812224469557
+      ],
+      "avgPlacement": 4.069565217391304,
+      "placementSd": 2.2461654146147616,
+      "name": "오른"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_Lux18_Base",
+      "boards": 455,
+      "playRate": 0.1707957957957958,
+      "top4Rate": 0.6571428571428571,
+      "top4Ci": [
+        0.6123751388106454,
+        0.6992792534676484
+      ],
+      "avgPlacement": 3.5604395604395602,
+      "placementSd": 2.3230732682989723,
+      "name": "럭스"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Zyra",
+      "boards": 445,
+      "playRate": 0.16704204204204204,
+      "top4Rate": 0.5078651685393258,
+      "top4Ci": [
+        0.4615463059846169,
+        0.5540493963745228
+      ],
+      "avgPlacement": 4.4337078651685395,
+      "placementSd": 2.172356207218697,
+      "name": "자이라"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Rakan",
+      "boards": 427,
+      "playRate": 0.1602852852852853,
+      "top4Rate": 0.44028103044496486,
+      "top4Ci": [
+        0.39393484549397595,
+        0.48769218402220815
+      ],
+      "avgPlacement": 4.866510538641686,
+      "placementSd": 2.273232223824323,
+      "name": "라칸"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Alune",
+      "boards": 425,
+      "playRate": 0.15953453453453453,
+      "top4Rate": 0.6564705882352941,
+      "top4Ci": [
+        0.6101004221345081,
+        0.7000374003155527
+      ],
+      "avgPlacement": 3.583529411764706,
+      "placementSd": 2.273350898195504,
+      "name": "알룬"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Ashe",
+      "boards": 421,
+      "playRate": 0.15803303303303304,
+      "top4Rate": 0.5510688836104513,
+      "top4Ci": [
+        0.5033076511884652,
+        0.5979065425251446
+      ],
+      "avgPlacement": 4.130641330166271,
+      "placementSd": 2.411191528625696,
+      "name": "애쉬"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_GnarSmall",
+      "boards": 418,
+      "playRate": 0.1569069069069069,
+      "top4Rate": 0.6483253588516746,
+      "top4Ci": [
+        0.6013877965032901,
+        0.6925614014895111
+      ],
+      "avgPlacement": 3.8038277511961724,
+      "placementSd": 2.2290397947793656,
+      "name": "나르"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Ahri",
+      "boards": 415,
+      "playRate": 0.15578078078078078,
+      "top4Rate": 0.5060240963855421,
+      "top4Ci": [
+        0.4580871021986115,
+        0.5538505849843235
+      ],
+      "avgPlacement": 4.421686746987952,
+      "placementSd": 2.2453412957690353,
+      "name": "아리"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Ezreal",
+      "boards": 412,
+      "playRate": 0.15465465465465467,
+      "top4Rate": 0.5703883495145631,
+      "top4Ci": [
+        0.5221546336156593,
+        0.6173215515471526
+      ],
+      "avgPlacement": 4.116504854368932,
+      "placementSd": 2.1940018691703185,
+      "name": "이즈리얼"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_Nidalee18_AP",
+      "boards": 408,
+      "playRate": 0.15315315315315314,
+      "top4Rate": 0.49754901960784315,
+      "top4Ci": [
+        0.44928203825217256,
+        0.5458617257580684
+      ],
+      "avgPlacement": 4.661764705882353,
+      "placementSd": 2.0445430031967526,
+      "name": "니달리"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_KogMaw18_AD",
+      "boards": 406,
+      "playRate": 0.1524024024024024,
+      "top4Rate": 0.49507389162561577,
+      "top4Ci": [
+        0.4467142911597797,
+        0.5435258406374807
+      ],
+      "avgPlacement": 4.610837438423645,
+      "placementSd": 2.056313563103834,
+      "name": "코그모"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Sivir",
+      "boards": 399,
+      "playRate": 0.14977477477477477,
+      "top4Rate": 0.46616541353383456,
+      "top4Ci": [
+        0.4177720466275715,
+        0.515204090891493
+      ],
+      "avgPlacement": 4.646616541353383,
+      "placementSd": 2.333486259105513,
+      "name": "시비르"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Hecarim",
+      "boards": 398,
+      "playRate": 0.1493993993993994,
+      "top4Rate": 0.5326633165829145,
+      "top4Ci": [
+        0.4835668934696332,
+        0.5811352180091186
+      ],
+      "avgPlacement": 4.306532663316583,
+      "placementSd": 2.3639840720455543,
+      "name": "헤카림"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Alistar",
+      "boards": 384,
+      "playRate": 0.14414414414414414,
+      "top4Rate": 0.5338541666666666,
+      "top4Ci": [
+        0.4838697816736077,
+        0.5831678955636974
+      ],
+      "avgPlacement": 4.263020833333333,
+      "placementSd": 2.3373652881880616,
+      "name": "알리스타"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Aphelios",
+      "boards": 377,
+      "playRate": 0.1415165165165165,
+      "top4Rate": 0.5305039787798409,
+      "top4Ci": [
+        0.4800715166569673,
+        0.5803210455001081
+      ],
+      "avgPlacement": 4.405835543766578,
+      "placementSd": 2.1356318275090045,
+      "name": "아펠리오스"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Malphite",
+      "boards": 361,
+      "playRate": 0.13551051051051052,
+      "top4Rate": 0.4903047091412742,
+      "top4Ci": [
+        0.43910966209182783,
+        0.5417039293407281
+      ],
+      "avgPlacement": 4.501385041551247,
+      "placementSd": 2.2212667228653458,
+      "name": "말파이트"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_LeBlanc",
+      "boards": 357,
+      "playRate": 0.134009009009009,
+      "top4Rate": 0.5238095238095238,
+      "top4Ci": [
+        0.4720236774264941,
+        0.5750884072111974
+      ],
+      "avgPlacement": 4.299719887955182,
+      "placementSd": 2.375512938097718,
+      "name": "르블랑"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_RekSai",
+      "boards": 356,
+      "playRate": 0.13363363363363365,
+      "top4Rate": 0.49719101123595505,
+      "top4Ci": [
+        0.4455599040476134,
+        0.5488820948763576
+      ],
+      "avgPlacement": 4.426966292134831,
+      "placementSd": 2.376588348692779,
+      "name": "렉사이"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Sejuani",
+      "boards": 309,
+      "playRate": 0.11599099099099099,
+      "top4Rate": 0.44983818770226536,
+      "top4Ci": [
+        0.39532335725486584,
+        0.5055849618433615
+      ],
+      "avgPlacement": 4.786407766990291,
+      "placementSd": 2.200872696317082,
+      "name": "세주아니"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Morgana",
+      "boards": 303,
+      "playRate": 0.11373873873873874,
+      "top4Rate": 0.43234323432343236,
+      "top4Ci": [
+        0.3777523686398349,
+        0.4886282003573285
+      ],
+      "avgPlacement": 4.70957095709571,
+      "placementSd": 2.367300866276105,
+      "name": "모르가나"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_KhaZix",
+      "boards": 299,
+      "playRate": 0.11223723723723723,
+      "top4Rate": 0.568561872909699,
+      "top4Ci": [
+        0.5119030715952239,
+        0.6234812349201293
+      ],
+      "avgPlacement": 4.1404682274247495,
+      "placementSd": 2.3055960041581005,
+      "name": "카직스"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_Karma18",
+      "boards": 284,
+      "playRate": 0.1066066066066066,
+      "top4Rate": 0.4154929577464789,
+      "top4Ci": [
+        0.3596776954742422,
+        0.4735639207480134
+      ],
+      "avgPlacement": 4.915492957746479,
+      "placementSd": 2.187316337356704,
+      "name": "카르마"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Varus",
+      "boards": 274,
+      "playRate": 0.10285285285285285,
+      "top4Rate": 0.5072992700729927,
+      "top4Ci": [
+        0.4484112785214097,
+        0.5659854136945868
+      ],
+      "avgPlacement": 4.631386861313868,
+      "placementSd": 2.112036040901883,
+      "name": "바루스"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Lillia",
+      "boards": 251,
+      "playRate": 0.09421921921921922,
+      "top4Rate": 0.4820717131474104,
+      "top4Ci": [
+        0.42099180340108894,
+        0.5436921414493595
+      ],
+      "avgPlacement": 4.629482071713148,
+      "placementSd": 2.393776792158636,
+      "name": "릴리아"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Yunara",
+      "boards": 251,
+      "playRate": 0.09421921921921922,
+      "top4Rate": 0.50199203187251,
+      "top4Ci": [
+        0.4405734327233244,
+        0.5633505734044035
+      ],
+      "avgPlacement": 4.553784860557769,
+      "placementSd": 2.276860913084038,
+      "name": "유나라"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Veigar",
+      "boards": 245,
+      "playRate": 0.09196696696696696,
+      "top4Rate": 0.5387755102040817,
+      "top4Ci": [
+        0.4762363597634619,
+        0.6001174331714815
+      ],
+      "avgPlacement": 4.208163265306123,
+      "placementSd": 2.399097912321906,
+      "name": "베이가"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Cassiopeia",
+      "boards": 222,
+      "playRate": 0.08333333333333333,
+      "top4Rate": 0.5135135135135135,
+      "top4Ci": [
+        0.44809557566475094,
+        0.5784717175177274
+      ],
+      "avgPlacement": 4.387387387387387,
+      "placementSd": 2.4593387301312237,
+      "name": "카시오페아"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_Draven18",
+      "boards": 198,
+      "playRate": 0.07432432432432433,
+      "top4Rate": 0.5909090909090909,
+      "top4Ci": null,
+      "avgPlacement": 3.893939393939394,
+      "placementSd": 2.372401305786844,
+      "name": "드레이븐"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Shen",
+      "boards": 184,
+      "playRate": 0.06906906906906907,
+      "top4Rate": 0.4945652173913043,
+      "top4Ci": null,
+      "avgPlacement": 4.646739130434782,
+      "placementSd": 2.3400037871603816,
+      "name": "쉔"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Leona",
+      "boards": 123,
+      "playRate": 0.04617117117117117,
+      "top4Rate": 0.4959349593495935,
+      "top4Ci": null,
+      "avgPlacement": 4.5528455284552845,
+      "placementSd": 2.2147169897744083,
+      "name": "레오나"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Xayah",
+      "boards": 121,
+      "playRate": 0.045420420420420424,
+      "top4Rate": 0.45454545454545453,
+      "top4Ci": null,
+      "avgPlacement": 4.669421487603306,
+      "placementSd": 2.3430337518982594,
+      "name": "자야"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Elise",
+      "boards": 117,
+      "playRate": 0.04391891891891892,
+      "top4Rate": 0.41025641025641024,
+      "top4Ci": null,
+      "avgPlacement": 4.905982905982906,
+      "placementSd": 2.684511469018428,
+      "name": "엘리스"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Kayle",
+      "boards": 99,
+      "playRate": 0.037162162162162164,
+      "top4Rate": 0.5151515151515151,
+      "top4Ci": null,
+      "avgPlacement": 4.414141414141414,
+      "placementSd": 2.2361140720149506,
+      "name": "케일"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Rammus",
+      "boards": 98,
+      "playRate": 0.03678678678678678,
+      "top4Rate": 0.47959183673469385,
+      "top4Ci": null,
+      "avgPlacement": 4.520408163265306,
+      "placementSd": 2.2850008091168443,
+      "name": "람머스"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Akali_AD",
+      "boards": 95,
+      "playRate": 0.03566066066066066,
+      "top4Rate": 0.47368421052631576,
+      "top4Ci": null,
+      "avgPlacement": 4.768421052631579,
+      "placementSd": 2.3675673464502767,
+      "name": "아칼리"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Tristana",
+      "boards": 91,
+      "playRate": 0.03415915915915916,
+      "top4Rate": 0.34065934065934067,
+      "top4Ci": null,
+      "avgPlacement": 5.197802197802198,
+      "placementSd": 2.166511687892058,
+      "name": "트리스타나"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Warwick",
+      "boards": 76,
+      "playRate": 0.028528528528528527,
+      "top4Rate": 0.47368421052631576,
+      "top4Ci": null,
+      "avgPlacement": 4.657894736842105,
+      "placementSd": 2.3240919751102647,
+      "name": "워윅"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Rengar",
+      "boards": 75,
+      "playRate": 0.028153153153153154,
+      "top4Rate": 0.64,
+      "top4Ci": null,
+      "avgPlacement": 4.1466666666666665,
+      "placementSd": 2.2159942758569193,
+      "name": "렝가"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Caitlyn",
+      "boards": 67,
+      "playRate": 0.02515015015015015,
+      "top4Rate": 0.31343283582089554,
+      "top4Ci": null,
+      "avgPlacement": 5.358208955223881,
+      "placementSd": 2.020362197780788,
+      "name": "케이틀린"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_MasterYi_AD",
+      "boards": 65,
+      "playRate": 0.024399399399399398,
+      "top4Rate": 0.5846153846153846,
+      "top4Ci": null,
+      "avgPlacement": 4.415384615384616,
+      "placementSd": 2.2422944979160553,
+      "name": "마스터 이"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Kobuko",
+      "boards": 57,
+      "playRate": 0.021396396396396396,
+      "top4Rate": 0.631578947368421,
+      "top4Ci": null,
+      "avgPlacement": 4.192982456140351,
+      "placementSd": 2.2790865689947872,
+      "name": "코부코"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Camille",
+      "boards": 43,
+      "playRate": 0.01614114114114114,
+      "top4Rate": 0.3488372093023256,
+      "top4Ci": null,
+      "avgPlacement": 5.3023255813953485,
+      "placementSd": 2.483611844921581,
+      "name": "카밀"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_18_Teemo",
+      "boards": 34,
+      "playRate": 0.012762762762762763,
+      "top4Rate": 0.5,
+      "top4Ci": null,
+      "avgPlacement": 4.9411764705882355,
+      "placementSd": 2.255514138399602,
+      "name": "티모"
+    },
+    {
+      "kind": "unit",
+      "key": "DA_Lux18_Blackthorn",
+      "boards": 1,
+      "playRate": 0.00037537537537537537,
+      "top4Rate": 1,
+      "top4Ci": null,
+      "avgPlacement": 4,
+      "placementSd": null,
+      "name": "럭스 (검은 가시)"
+    }
+  ],
+  "traits": [
+    {
+      "kind": "trait",
+      "key": "DA_Juggernaut18",
+      "boards": 1489,
+      "playRate": 0.558933933933934,
+      "top4Rate": 0.5016789791806582,
+      "top4Ci": [
+        0.4763107155524663,
+        0.5270386016155441
+      ],
+      "avgPlacement": 4.503022162525185,
+      "placementSd": 2.281917640595318,
+      "name": "전쟁기계"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Vanguard",
+      "boards": 1192,
+      "playRate": 0.44744744744744747,
+      "top4Rate": 0.5151006711409396,
+      "top4Ci": [
+        0.4867257382265533,
+        0.5433785832822486
+      ],
+      "avgPlacement": 4.409395973154362,
+      "placementSd": 2.306529767350681,
+      "name": "선봉대"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Spellweaver",
+      "boards": 980,
+      "playRate": 0.36786786786786785,
+      "top4Rate": 0.5581632653061225,
+      "top4Ci": [
+        0.5269036639645843,
+        0.5889686471879428
+      ],
+      "avgPlacement": 4.154081632653061,
+      "placementSd": 2.287715042548647,
+      "name": "주문술사"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Brawler",
+      "boards": 934,
+      "playRate": 0.3506006006006006,
+      "top4Rate": 0.5417558886509636,
+      "top4Ci": [
+        0.5096953381487027,
+        0.5734743570322318
+      ],
+      "avgPlacement": 4.274089935760172,
+      "placementSd": 2.283693295050338,
+      "name": "싸움꾼"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Inferno",
+      "boards": 866,
+      "playRate": 0.32507507507507505,
+      "top4Rate": 0.5496535796766744,
+      "top4Ci": [
+        0.516369676322945,
+        0.5824988992889827
+      ],
+      "avgPlacement": 4.2482678983833715,
+      "placementSd": 2.2603959962668925,
+      "name": "지옥불"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Executioner",
+      "boards": 847,
+      "playRate": 0.31794294294294295,
+      "top4Rate": 0.5478158205430933,
+      "top4Ci": [
+        0.5141561206761602,
+        0.5810437379109141
+      ],
+      "avgPlacement": 4.224321133412042,
+      "placementSd": 2.2511827688853647,
+      "name": "처형자"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_FloraFatalis18",
+      "boards": 788,
+      "playRate": 0.2957957957957958,
+      "top4Rate": 0.5482233502538071,
+      "top4Ci": [
+        0.5133246947016433,
+        0.5826540970162961
+      ],
+      "avgPlacement": 4.232233502538071,
+      "placementSd": 2.229666349885416,
+      "name": "치명적인 꽃"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Defender",
+      "boards": 698,
+      "playRate": 0.262012012012012,
+      "top4Rate": 0.5429799426934098,
+      "top4Ci": [
+        0.5058889685462754,
+        0.5796004068341524
+      ],
+      "avgPlacement": 4.263610315186247,
+      "placementSd": 2.298866198617785,
+      "name": "엄호대"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_Primal18",
+      "boards": 692,
+      "playRate": 0.25975975975975973,
+      "top4Rate": 0.4956647398843931,
+      "top4Ci": [
+        0.4585390308519449,
+        0.532838317096209
+      ],
+      "avgPlacement": 4.569364161849711,
+      "placementSd": 2.206971758285234,
+      "name": "원시"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Invoker",
+      "boards": 659,
+      "playRate": 0.24737237237237236,
+      "top4Rate": 0.46889226100151743,
+      "top4Ci": [
+        0.4310812702805717,
+        0.5070638310528388
+      ],
+      "avgPlacement": 4.6600910470409715,
+      "placementSd": 2.1767842468539063,
+      "name": "기원자"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Blackthorn",
+      "boards": 624,
+      "playRate": 0.23423423423423423,
+      "top4Rate": 0.5128205128205128,
+      "top4Ci": [
+        0.47364365776549056,
+        0.5518404770863574
+      ],
+      "avgPlacement": 4.395833333333333,
+      "placementSd": 2.2914556787936946,
+      "name": "검은 가시"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_Riftbeast18",
+      "boards": 622,
+      "playRate": 0.2334834834834835,
+      "top4Rate": 0.4903536977491961,
+      "top4Ci": [
+        0.45124652176727825,
+        0.52957929741764
+      ],
+      "avgPlacement": 4.546623794212219,
+      "placementSd": 2.260116961464016,
+      "name": "협곡야수"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Maokai_UniqueTrait",
+      "boards": 617,
+      "playRate": 0.23160660660660662,
+      "top4Rate": 0.5494327390599676,
+      "top4Ci": [
+        0.5099872960430856,
+        0.5882664292227471
+      ],
+      "avgPlacement": 4.136142625607779,
+      "placementSd": 2.3674483563289517,
+      "name": "고목"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_Emerald18",
+      "boards": 587,
+      "playRate": 0.22034534534534533,
+      "top4Rate": 0.5877342419080068,
+      "top4Ci": [
+        0.5474680056455391,
+        0.626859597556402
+      ],
+      "avgPlacement": 3.979557069846678,
+      "placementSd": 2.38587806435054,
+      "name": "에메랄드 성위"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Elderwood",
+      "boards": 581,
+      "playRate": 0.2180930930930931,
+      "top4Rate": 0.5869191049913941,
+      "top4Ci": [
+        0.5464375844937321,
+        0.6262587490092196
+      ],
+      "avgPlacement": 4.0034423407917386,
+      "placementSd": 2.292413693828503,
+      "name": "나무정령"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Blossom",
+      "boards": 571,
+      "playRate": 0.21433933933933935,
+      "top4Rate": 0.500875656742557,
+      "top4Ci": [
+        0.45999541153891493,
+        0.5417441981205113
+      ],
+      "avgPlacement": 4.5148861646234675,
+      "placementSd": 2.2581716978217874,
+      "name": "개화"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Lunar",
+      "boards": 540,
+      "playRate": 0.20270270270270271,
+      "top4Rate": 0.5407407407407407,
+      "top4Ci": [
+        0.4985684282721068,
+        0.5823374825666374
+      ],
+      "avgPlacement": 4.277777777777778,
+      "placementSd": 2.2258113666594768,
+      "name": "달빛"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Summoner",
+      "boards": 537,
+      "playRate": 0.20157657657657657,
+      "top4Rate": 0.5009310986964618,
+      "top4Ci": [
+        0.4587848972559571,
+        0.5430640729416016
+      ],
+      "avgPlacement": 4.4860335195530725,
+      "placementSd": 2.177798958775693,
+      "name": "소환사"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Greenfather",
+      "boards": 532,
+      "playRate": 0.1996996996996997,
+      "top4Rate": 0.5939849624060151,
+      "top4Ci": [
+        0.5517245346369416,
+        0.6348977806144313
+      ],
+      "avgPlacement": 3.8890977443609023,
+      "placementSd": 2.348400412011577,
+      "name": "자연의 아버지"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_LuxUniqueTrait",
+      "boards": 456,
+      "playRate": 0.17117117117117117,
+      "top4Rate": 0.6578947368421053,
+      "top4Ci": [
+        0.6131935249022408,
+        0.6999577863318887
+      ],
+      "avgPlacement": 3.56140350877193,
+      "placementSd": 2.320610331690373,
+      "name": "화신"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_ZyraUniqueTrait",
+      "boards": 445,
+      "playRate": 0.16704204204204204,
+      "top4Rate": 0.5078651685393258,
+      "top4Ci": [
+        0.4615463059846169,
+        0.5540493963745228
+      ],
+      "avgPlacement": 4.4337078651685395,
+      "placementSd": 2.172356207218697,
+      "name": "가시의 여인"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_AluneUniqueTrait18",
+      "boards": 422,
+      "playRate": 0.15840840840840842,
+      "top4Rate": 0.6540284360189573,
+      "top4Ci": [
+        0.6074371038225368,
+        0.6978407271831705
+      ],
+      "avgPlacement": 3.59478672985782,
+      "placementSd": 2.2743580080337162,
+      "name": "조율"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Hunter",
+      "boards": 418,
+      "playRate": 0.1569069069069069,
+      "top4Rate": 0.48564593301435405,
+      "top4Ci": [
+        0.4380815294009398,
+        0.5334717740191116
+      ],
+      "avgPlacement": 4.473684210526316,
+      "placementSd": 2.3301848540394174,
+      "name": "사냥꾼"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Rapidfire",
+      "boards": 410,
+      "playRate": 0.1539039039039039,
+      "top4Rate": 0.5487804878048781,
+      "top4Ci": [
+        0.5003817516757703,
+        0.5962735869852055
+      ],
+      "avgPlacement": 4.290243902439024,
+      "placementSd": 2.140802225847825,
+      "name": "속사포"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Caustic",
+      "boards": 406,
+      "playRate": 0.1524024024024024,
+      "top4Rate": 0.49507389162561577,
+      "top4Ci": [
+        0.4467142911597797,
+        0.5435258406374807
+      ],
+      "avgPlacement": 4.610837438423645,
+      "placementSd": 2.056313563103834,
+      "name": "부식"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Slayer",
+      "boards": 401,
+      "playRate": 0.15052552552552553,
+      "top4Rate": 0.5211970074812967,
+      "top4Ci": [
+        0.4723331214248126,
+        0.569658610650152
+      ],
+      "avgPlacement": 4.41147132169576,
+      "placementSd": 2.2456108478096772,
+      "name": "약탈자"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Adaptor",
+      "boards": 377,
+      "playRate": 0.1415165165165165,
+      "top4Rate": 0.4960212201591512,
+      "top4Ci": [
+        0.44584556769101763,
+        0.546277141592842
+      ],
+      "avgPlacement": 4.689655172413793,
+      "placementSd": 2.0057693748367527,
+      "name": "적응가"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Battlemage",
+      "boards": 359,
+      "playRate": 0.13475975975975976,
+      "top4Rate": 0.48746518105849584,
+      "top4Ci": [
+        0.43616600586720194,
+        0.5390297820468631
+      ],
+      "avgPlacement": 4.50974930362117,
+      "placementSd": 2.2233624175489397,
+      "name": "거석"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Rival",
+      "boards": 357,
+      "playRate": 0.134009009009009,
+      "top4Rate": 0.5798319327731093,
+      "top4Ci": [
+        0.5280464948364043,
+        0.6299175536546789
+      ],
+      "avgPlacement": 4.162464985994398,
+      "placementSd": 2.292254318750948,
+      "name": "경쟁자"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_ApexPredator",
+      "boards": 289,
+      "playRate": 0.10848348348348348,
+      "top4Rate": 0.5467128027681661,
+      "top4Ci": [
+        0.48907949526421585,
+        0.6031205200341572
+      ],
+      "avgPlacement": 4.256055363321799,
+      "placementSd": 2.417422226080186,
+      "name": "최상위 포식자"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_DravenUniqueTrait18",
+      "boards": 197,
+      "playRate": 0.07394894894894895,
+      "top4Rate": 0.5888324873096447,
+      "top4Ci": null,
+      "avgPlacement": 3.9035532994923856,
+      "placementSd": 2.374575700756719,
+      "name": "현상금 추적자"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Fae",
+      "boards": 183,
+      "playRate": 0.0686936936936937,
+      "top4Rate": 0.40437158469945356,
+      "top4Ci": null,
+      "avgPlacement": 5.021857923497268,
+      "placementSd": 2.233501868163081,
+      "name": "요정"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Coven",
+      "boards": 105,
+      "playRate": 0.039414414414414414,
+      "top4Rate": 0.45714285714285713,
+      "top4Ci": null,
+      "avgPlacement": 4.742857142857143,
+      "placementSd": 2.7281600288210996,
+      "name": "악의 여단"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Solar",
+      "boards": 96,
+      "playRate": 0.036036036036036036,
+      "top4Rate": 0.5416666666666666,
+      "top4Ci": null,
+      "avgPlacement": 4.260416666666667,
+      "placementSd": 2.2111906374366996,
+      "name": "햇빛"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Sprykin",
+      "boards": 93,
+      "playRate": 0.03490990990990991,
+      "top4Rate": 0.6021505376344086,
+      "top4Ci": null,
+      "avgPlacement": 4.010752688172043,
+      "placementSd": 2.3101600907066553,
+      "name": "날렵이"
+    },
+    {
+      "kind": "trait",
+      "key": "DA_18_Eclipse",
+      "boards": 2,
+      "playRate": 0.0007507507507507507,
+      "top4Rate": 1,
+      "top4Ci": null,
+      "avgPlacement": 1.5,
+      "placementSd": 0.7071067811865476,
+      "name": "일월식"
+    }
+  ],
+  "items": [
+    {
+      "kind": "item",
+      "key": "DA_GargoyleStoneplate",
+      "boards": 1648,
+      "playRate": 0.6186186186186187,
+      "top4Rate": 0.5297330097087378,
+      "top4Ci": [
+        0.5055939532693785,
+        0.5537337691950515
+      ],
+      "avgPlacement": 4.31371359223301,
+      "placementSd": 2.3045070900829483,
+      "name": "가고일 돌갑옷"
+    },
+    {
+      "kind": "item",
+      "key": "DA_SpearOfShojin",
+      "boards": 1203,
+      "playRate": 0.45157657657657657,
+      "top4Rate": 0.5569409808811305,
+      "top4Ci": [
+        0.5287328057806053,
+        0.5847866486366107
+      ],
+      "avgPlacement": 4.193682460515379,
+      "placementSd": 2.270382257739028,
+      "name": "쇼진의 창"
+    },
+    {
+      "kind": "item",
+      "key": "DA_WarmogsArmor",
+      "boards": 1175,
+      "playRate": 0.4410660660660661,
+      "top4Rate": 0.5429787234042553,
+      "top4Ci": [
+        0.5144010459067535,
+        0.5712762834307928
+      ],
+      "avgPlacement": 4.247659574468085,
+      "placementSd": 2.2829885416458007,
+      "name": "워모그의 갑옷"
+    },
+    {
+      "kind": "item",
+      "key": "DA_GuinsoosRageblade",
+      "boards": 962,
+      "playRate": 0.3611111111111111,
+      "top4Rate": 0.525987525987526,
+      "top4Ci": [
+        0.49439304457556305,
+        0.5573752785117837
+      ],
+      "avgPlacement": 4.392931392931393,
+      "placementSd": 2.2895209713664286,
+      "name": "구인수의 격노검"
+    },
+    {
+      "kind": "item",
+      "key": "DA_VoidStaff",
+      "boards": 937,
+      "playRate": 0.3517267267267267,
+      "top4Rate": 0.5368196371398078,
+      "top4Ci": [
+        0.5048059115717682,
+        0.5685326822999311
+      ],
+      "avgPlacement": 4.247598719316969,
+      "placementSd": 2.294213525818738,
+      "name": "공허의 지팡이"
+    },
+    {
+      "kind": "item",
+      "key": "DA_RedBuff",
+      "boards": 873,
+      "playRate": 0.3277027027027027,
+      "top4Rate": 0.565864833906071,
+      "top4Ci": [
+        0.5327681642220402,
+        0.5983843723364443
+      ],
+      "avgPlacement": 4.161512027491409,
+      "placementSd": 2.2661820750746338,
+      "name": "붉은 덩굴정령"
+    },
+    {
+      "kind": "item",
+      "key": "DA_JeweledGauntlet",
+      "boards": 835,
+      "playRate": 0.31343843843843844,
+      "top4Rate": 0.5197604790419161,
+      "top4Ci": [
+        0.4858597453955342,
+        0.5534802205765873
+      ],
+      "avgPlacement": 4.359281437125748,
+      "placementSd": 2.2796712836953863,
+      "name": "보석 건틀릿"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Crownguard",
+      "boards": 741,
+      "playRate": 0.27815315315315314,
+      "top4Rate": 0.5506072874493927,
+      "top4Ci": [
+        0.5146214844164986,
+        0.5860710655162656
+      ],
+      "avgPlacement": 4.205128205128205,
+      "placementSd": 2.296536908930874,
+      "name": "크라운가드"
+    },
+    {
+      "kind": "item",
+      "key": "DA_SpiritVisage",
+      "boards": 739,
+      "playRate": 0.2774024024024024,
+      "top4Rate": 0.5561569688768606,
+      "top4Ci": [
+        0.5201363324218207,
+        0.5915967746093418
+      ],
+      "avgPlacement": 4.2422192151556155,
+      "placementSd": 2.247444426570897,
+      "name": "정령의 형상"
+    },
+    {
+      "kind": "item",
+      "key": "DA_HextechGunblade",
+      "boards": 718,
+      "playRate": 0.2695195195195195,
+      "top4Rate": 0.5362116991643454,
+      "top4Ci": [
+        0.499638433554575,
+        0.5723995315613175
+      ],
+      "avgPlacement": 4.235376044568246,
+      "placementSd": 2.2584789713988913,
+      "name": "마법공학 총검"
+    },
+    {
+      "kind": "item",
+      "key": "DA_AdaptiveHelm",
+      "boards": 711,
+      "playRate": 0.2668918918918919,
+      "top4Rate": 0.5724331926863573,
+      "top4Ci": [
+        0.5357745157867712,
+        0.6083133492731246
+      ],
+      "avgPlacement": 4.071729957805907,
+      "placementSd": 2.301053577475137,
+      "name": "적응형 투구"
+    },
+    {
+      "kind": "item",
+      "key": "DA_InfinityEdge",
+      "boards": 710,
+      "playRate": 0.26651651651651653,
+      "top4Rate": 0.5309859154929577,
+      "top4Ci": [
+        0.49420963720631467,
+        0.5674286870381675
+      ],
+      "avgPlacement": 4.377464788732395,
+      "placementSd": 2.2290679478759357,
+      "name": "무한의 대검"
+    },
+    {
+      "kind": "item",
+      "key": "DA_ThiefsGloves",
+      "boards": 656,
+      "playRate": 0.24624624624624625,
+      "top4Rate": 0.5746951219512195,
+      "top4Ci": [
+        0.5365348322965762,
+        0.6119856611066892
+      ],
+      "avgPlacement": 4.028963414634147,
+      "placementSd": 2.2677458610396624,
+      "name": "도적의 장갑"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Morellonomicon",
+      "boards": 637,
+      "playRate": 0.23911411411411412,
+      "top4Rate": 0.5745682888540031,
+      "top4Ci": [
+        0.5358391510138294,
+        0.6124034100184131
+      ],
+      "avgPlacement": 4.073783359497646,
+      "placementSd": 2.2555076483433245,
+      "name": "모렐로노미콘"
+    },
+    {
+      "kind": "item",
+      "key": "DA_SteraksGage",
+      "boards": 631,
+      "playRate": 0.23686186186186187,
+      "top4Rate": 0.5515055467511886,
+      "top4Ci": [
+        0.5125045651820086,
+        0.5898831800445172
+      ],
+      "avgPlacement": 4.190174326465927,
+      "placementSd": 2.1628828061303067,
+      "name": "스테락의 도전"
+    },
+    {
+      "kind": "item",
+      "key": "DA_BlueBuff",
+      "boards": 619,
+      "playRate": 0.23235735735735735,
+      "top4Rate": 0.5605815831987075,
+      "top4Ci": [
+        0.5212275721413924,
+        0.5991882767678648
+      ],
+      "avgPlacement": 4.147011308562197,
+      "placementSd": 2.276807923799981,
+      "name": "푸른 파수꾼"
+    },
+    {
+      "kind": "item",
+      "key": "DA_ArchangelsStaff",
+      "boards": 614,
+      "playRate": 0.23048048048048048,
+      "top4Rate": 0.5553745928338762,
+      "top4Ci": [
+        0.5158448751620142,
+        0.5942156969975815
+      ],
+      "avgPlacement": 4.263843648208469,
+      "placementSd": 2.2586637003414602,
+      "name": "대천사의 지팡이"
+    },
+    {
+      "kind": "item",
+      "key": "DA_StrikersFlail",
+      "boards": 604,
+      "playRate": 0.22672672672672672,
+      "top4Rate": 0.5413907284768212,
+      "top4Ci": [
+        0.5015152771115303,
+        0.5807429954384236
+      ],
+      "avgPlacement": 4.25,
+      "placementSd": 2.1737351214233653,
+      "name": "타격대의 철퇴"
+    },
+    {
+      "kind": "item",
+      "key": "DA_EdgeOfNight",
+      "boards": 576,
+      "playRate": 0.21621621621621623,
+      "top4Rate": 0.6145833333333334,
+      "top4Ci": [
+        0.5742021568241997,
+        0.6534462216295022
+      ],
+      "avgPlacement": 3.888888888888889,
+      "placementSd": 2.198374454351645,
+      "name": "밤의 끝자락"
+    },
+    {
+      "kind": "item",
+      "key": "DA_GiantSlayer",
+      "boards": 562,
+      "playRate": 0.21096096096096095,
+      "top4Rate": 0.5800711743772242,
+      "top4Ci": [
+        0.5388573931316634,
+        0.6201977205255863
+      ],
+      "avgPlacement": 4.147686832740214,
+      "placementSd": 2.187609734607457,
+      "name": "거인 학살자"
+    },
+    {
+      "kind": "item",
+      "key": "DA_RabadonsDeathcap",
+      "boards": 560,
+      "playRate": 0.21021021021021022,
+      "top4Rate": 0.6089285714285714,
+      "top4Ci": [
+        0.5678996435919265,
+        0.6484731816838246
+      ],
+      "avgPlacement": 3.9089285714285715,
+      "placementSd": 2.2302022486812714,
+      "name": "라바돈의 죽음모자"
+    },
+    {
+      "kind": "item",
+      "key": "DA_LastWhisper",
+      "boards": 549,
+      "playRate": 0.20608108108108109,
+      "top4Rate": 0.5264116575591985,
+      "top4Ci": [
+        0.4846061043709783,
+        0.5678501507299403
+      ],
+      "avgPlacement": 4.302367941712204,
+      "placementSd": 2.275627338577185,
+      "name": "최후의 속삭임"
+    },
+    {
+      "kind": "item",
+      "key": "DA_SteadfastHeart",
+      "boards": 509,
+      "playRate": 0.19106606606606608,
+      "top4Rate": 0.5795677799607073,
+      "top4Ci": [
+        0.5362443179870596,
+        0.6216991873759999
+      ],
+      "avgPlacement": 4.168958742632613,
+      "placementSd": 2.196753845326302,
+      "name": "굳건한 심장"
+    },
+    {
+      "kind": "item",
+      "key": "DA_ProtectorsVow",
+      "boards": 488,
+      "playRate": 0.1831831831831832,
+      "top4Rate": 0.5471311475409836,
+      "top4Ci": [
+        0.5027693124257332,
+        0.5907567333581126
+      ],
+      "avgPlacement": 4.223360655737705,
+      "placementSd": 2.3592422514606652,
+      "name": "수호자의 맹세"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Deathblade",
+      "boards": 448,
+      "playRate": 0.16816816816816818,
+      "top4Rate": 0.5580357142857143,
+      "top4Ci": [
+        0.5117478481905994,
+        0.6033367301218004
+      ],
+      "avgPlacement": 4.176339285714286,
+      "placementSd": 2.1742180555510187,
+      "name": "죽음의 검"
+    },
+    {
+      "kind": "item",
+      "key": "DA_KrakensFury",
+      "boards": 435,
+      "playRate": 0.16328828828828829,
+      "top4Rate": 0.503448275862069,
+      "top4Ci": [
+        0.4566379039518847,
+        0.55019827566281
+      ],
+      "avgPlacement": 4.429885057471265,
+      "placementSd": 2.215681176143213,
+      "name": "크라켄의 분노"
+    },
+    {
+      "kind": "item",
+      "key": "DA_HandOfJustice",
+      "boards": 399,
+      "playRate": 0.14977477477477477,
+      "top4Rate": 0.606516290726817,
+      "top4Ci": [
+        0.557783653894631,
+        0.653217394656462
+      ],
+      "avgPlacement": 3.9724310776942358,
+      "placementSd": 2.082890785605523,
+      "name": "정의의 손길"
+    },
+    {
+      "kind": "item",
+      "key": "DA_IonicSpark",
+      "boards": 393,
+      "playRate": 0.14752252252252251,
+      "top4Rate": 0.6361323155216285,
+      "top4Ci": [
+        0.5874600033033245,
+        0.6821689872057352
+      ],
+      "avgPlacement": 3.7735368956743,
+      "placementSd": 2.1575950233969485,
+      "name": "이온 충격기"
+    },
+    {
+      "kind": "item",
+      "key": "DA_SunfireCape",
+      "boards": 388,
+      "playRate": 0.14564564564564564,
+      "top4Rate": 0.5876288659793815,
+      "top4Ci": [
+        0.5380209546036149,
+        0.6355185572807793
+      ],
+      "avgPlacement": 4.079896907216495,
+      "placementSd": 2.1796114177753956,
+      "name": "태양불꽃 망토"
+    },
+    {
+      "kind": "item",
+      "key": "DA_DragonsClaw",
+      "boards": 370,
+      "playRate": 0.1388888888888889,
+      "top4Rate": 0.572972972972973,
+      "top4Ci": [
+        0.5220748769116365,
+        0.6223713270421236
+      ],
+      "avgPlacement": 4.094594594594595,
+      "placementSd": 2.274930648568712,
+      "name": "용의 발톱"
+    },
+    {
+      "kind": "item",
+      "key": "DA_NashorsTooth",
+      "boards": 339,
+      "playRate": 0.12725225225225226,
+      "top4Rate": 0.5781710914454278,
+      "top4Ci": [
+        0.5250114331260387,
+        0.6295789083027729
+      ],
+      "avgPlacement": 4.12094395280236,
+      "placementSd": 2.1919981548921523,
+      "name": "내셔의 이빨"
+    },
+    {
+      "kind": "item",
+      "key": "DA_BrambleVest",
+      "boards": 321,
+      "playRate": 0.1204954954954955,
+      "top4Rate": 0.5887850467289719,
+      "top4Ci": [
+        0.5342149977386575,
+        0.641255139091108
+      ],
+      "avgPlacement": 4.059190031152648,
+      "placementSd": 2.1736169377101184,
+      "name": "덤불 조끼"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Evenshroud",
+      "boards": 300,
+      "playRate": 0.11261261261261261,
+      "top4Rate": 0.6,
+      "top4Ci": [
+        0.5436355502609682,
+        0.6538357637394846
+      ],
+      "avgPlacement": 3.9,
+      "placementSd": 2.277562506255243,
+      "name": "저녁갑주"
+    },
+    {
+      "kind": "item",
+      "key": "DA_TitansResolve",
+      "boards": 272,
+      "playRate": 0.1021021021021021,
+      "top4Rate": 0.5698529411764706,
+      "top4Ci": [
+        0.5104446791379107,
+        0.6273155426705475
+      ],
+      "avgPlacement": 4.069852941176471,
+      "placementSd": 2.357114373588142,
+      "name": "거인의 결의"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Bloodthirster",
+      "boards": 247,
+      "playRate": 0.09271771771771772,
+      "top4Rate": 0.6558704453441295,
+      "top4Ci": [
+        0.5946417794351467,
+        0.7123248481098856
+      ],
+      "avgPlacement": 3.777327935222672,
+      "placementSd": 2.0509298272366543,
+      "name": "피바라기"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemExecutioner",
+      "boards": 227,
+      "playRate": 0.0852102102102102,
+      "top4Rate": 0.5903083700440529,
+      "top4Ci": [
+        0.5253471188854643,
+        0.6522638489816793
+      ],
+      "avgPlacement": 4.0176211453744495,
+      "placementSd": 2.3611245965130383,
+      "name": "처형자 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Quicksilver",
+      "boards": 199,
+      "playRate": 0.0746996996996997,
+      "top4Rate": 0.6130653266331658,
+      "top4Ci": null,
+      "avgPlacement": 4.100502512562814,
+      "placementSd": 2.269683764904358,
+      "name": "수은"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemInferno",
+      "boards": 159,
+      "playRate": 0.059684684684684686,
+      "top4Rate": 0.4716981132075472,
+      "top4Ci": null,
+      "avgPlacement": 4.471698113207547,
+      "placementSd": 2.46702639833053,
+      "name": "지옥불 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemInvoker",
+      "boards": 117,
+      "playRate": 0.04391891891891892,
+      "top4Rate": 0.47863247863247865,
+      "top4Ci": null,
+      "avgPlacement": 4.35042735042735,
+      "placementSd": 2.346370047968591,
+      "name": "기원자 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemSpellweaver",
+      "boards": 116,
+      "playRate": 0.04354354354354354,
+      "top4Rate": 0.5948275862068966,
+      "top4Ci": null,
+      "avgPlacement": 3.939655172413793,
+      "placementSd": 2.246886901832219,
+      "name": "주문술사 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Component_GiantsBelt",
+      "boards": 115,
+      "playRate": 0.04316816816816817,
+      "top4Rate": 0.48695652173913045,
+      "top4Ci": null,
+      "avgPlacement": 4.417391304347826,
+      "placementSd": 2.3951068858530222,
+      "name": "거인의 허리띠"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Component_RecurveBow",
+      "boards": 111,
+      "playRate": 0.041666666666666664,
+      "top4Rate": 0.45045045045045046,
+      "top4Ci": null,
+      "avgPlacement": 4.702702702702703,
+      "placementSd": 2.2425415556891313,
+      "name": "곡궁"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Component_NeedlesslyLargeRod",
+      "boards": 106,
+      "playRate": 0.03978978978978979,
+      "top4Rate": 0.5471698113207547,
+      "top4Ci": null,
+      "avgPlacement": 4.433962264150943,
+      "placementSd": 2.3381672428860396,
+      "name": "쓸데없이 큰 지팡이"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemBlackthorn",
+      "boards": 103,
+      "playRate": 0.03866366366366367,
+      "top4Rate": 0.5436893203883495,
+      "top4Ci": null,
+      "avgPlacement": 4.019417475728155,
+      "placementSd": 2.461390418969239,
+      "name": "검은 가시 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Component_TearOfTheGoddess",
+      "boards": 91,
+      "playRate": 0.03415915915915916,
+      "top4Rate": 0.4065934065934066,
+      "top4Ci": null,
+      "avgPlacement": 4.835164835164835,
+      "placementSd": 2.325050710384788,
+      "name": "여신의 눈물"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemElderwood",
+      "boards": 90,
+      "playRate": 0.033783783783783786,
+      "top4Rate": 0.6222222222222222,
+      "top4Ci": null,
+      "avgPlacement": 3.9444444444444446,
+      "placementSd": 2.265327870761193,
+      "name": "나무정령 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemFloraFatalis",
+      "boards": 82,
+      "playRate": 0.03078078078078078,
+      "top4Rate": 0.5975609756097561,
+      "top4Ci": null,
+      "avgPlacement": 3.8902439024390243,
+      "placementSd": 2.1602817463765676,
+      "name": "치명적인 꽃 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemLunar",
+      "boards": 81,
+      "playRate": 0.030405405405405407,
+      "top4Rate": 0.5308641975308642,
+      "top4Ci": null,
+      "avgPlacement": 4.333333333333333,
+      "placementSd": 2.1447610589527217,
+      "name": "달빛 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemVanguard",
+      "boards": 81,
+      "playRate": 0.030405405405405407,
+      "top4Rate": 0.5679012345679012,
+      "top4Ci": null,
+      "avgPlacement": 4.271604938271605,
+      "placementSd": 2.2417200186408888,
+      "name": "선봉대 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Component_NegatronCloak",
+      "boards": 80,
+      "playRate": 0.03003003003003003,
+      "top4Rate": 0.4875,
+      "top4Ci": null,
+      "avgPlacement": 4.5375,
+      "placementSd": 2.2498593486277305,
+      "name": "음전자 망토"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemBrawler",
+      "boards": 79,
+      "playRate": 0.029654654654654656,
+      "top4Rate": 0.6582278481012658,
+      "top4Ci": null,
+      "avgPlacement": 3.5443037974683542,
+      "placementSd": 2.2915534332179748,
+      "name": "싸움꾼 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_Dawncore",
+      "boards": 77,
+      "playRate": 0.028903903903903905,
+      "top4Rate": 0.6883116883116883,
+      "top4Ci": null,
+      "avgPlacement": 3.4805194805194803,
+      "placementSd": 2.29765549620059,
+      "name": "새벽심장"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemHunter",
+      "boards": 76,
+      "playRate": 0.028528528528528527,
+      "top4Rate": 0.5263157894736842,
+      "top4Ci": null,
+      "avgPlacement": 4.276315789473684,
+      "placementSd": 2.3128549988302414,
+      "name": "사냥꾼 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemBlossom",
+      "boards": 75,
+      "playRate": 0.028153153153153154,
+      "top4Rate": 0.5733333333333334,
+      "top4Ci": null,
+      "avgPlacement": 4.173333333333333,
+      "placementSd": 2.3444778899739243,
+      "name": "개화 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemJuggernaut",
+      "boards": 75,
+      "playRate": 0.028153153153153154,
+      "top4Rate": 0.6266666666666667,
+      "top4Ci": null,
+      "avgPlacement": 3.8666666666666667,
+      "placementSd": 2.3210746190907754,
+      "name": "전쟁기계 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemDefender",
+      "boards": 72,
+      "playRate": 0.02702702702702703,
+      "top4Rate": 0.5972222222222222,
+      "top4Ci": null,
+      "avgPlacement": 3.9305555555555554,
+      "placementSd": 2.177518867749559,
+      "name": "엄호대 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemRapidfire",
+      "boards": 72,
+      "playRate": 0.02702702702702703,
+      "top4Rate": 0.625,
+      "top4Ci": null,
+      "avgPlacement": 3.736111111111111,
+      "placementSd": 2.1029359460321753,
+      "name": "속사포 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Component_ChainVest",
+      "boards": 70,
+      "playRate": 0.026276276276276277,
+      "top4Rate": 0.4857142857142857,
+      "top4Ci": null,
+      "avgPlacement": 4.714285714285714,
+      "placementSd": 2.140992977960698,
+      "name": "쇠사슬 조끼"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemSlayer",
+      "boards": 69,
+      "playRate": 0.0259009009009009,
+      "top4Rate": 0.4492753623188406,
+      "top4Ci": null,
+      "avgPlacement": 4.536231884057971,
+      "placementSd": 2.2134595635693675,
+      "name": "약탈자 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Component_SparringGloves",
+      "boards": 68,
+      "playRate": 0.025525525525525526,
+      "top4Rate": 0.5294117647058824,
+      "top4Ci": null,
+      "avgPlacement": 4.411764705882353,
+      "placementSd": 2.1526470627221217,
+      "name": "연습용 장갑"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Component_BFSword",
+      "boards": 62,
+      "playRate": 0.023273273273273273,
+      "top4Rate": 0.4032258064516129,
+      "top4Ci": null,
+      "avgPlacement": 5.112903225806452,
+      "placementSd": 2.375453977040726,
+      "name": "B.F. 대검"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_LightshieldCrest",
+      "boards": 56,
+      "playRate": 0.021021021021021023,
+      "top4Rate": 0.5357142857142857,
+      "top4Ci": null,
+      "avgPlacement": 4.125,
+      "placementSd": 2.544602129999894,
+      "name": "라이트실드 문장"
+    },
+    {
+      "kind": "item",
+      "key": "DA_TacticiansCrown",
+      "boards": 55,
+      "playRate": 0.020645645645645645,
+      "top4Rate": 0.7090909090909091,
+      "top4Ci": null,
+      "avgPlacement": 3.690909090909091,
+      "placementSd": 2.2432840284554323,
+      "name": "전략가의 왕관"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemFae",
+      "boards": 54,
+      "playRate": 0.02027027027027027,
+      "top4Rate": 0.4444444444444444,
+      "top4Ci": null,
+      "avgPlacement": 4.666666666666667,
+      "placementSd": 2.298481861560914,
+      "name": "요정 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemPrimal",
+      "boards": 51,
+      "playRate": 0.019144144144144143,
+      "top4Rate": 0.5294117647058824,
+      "top4Ci": null,
+      "avgPlacement": 4.431372549019608,
+      "placementSd": 2.3431167445160246,
+      "name": "원시 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_LudensTempest",
+      "boards": 44,
+      "playRate": 0.016516516516516516,
+      "top4Rate": 0.6818181818181818,
+      "top4Ci": null,
+      "avgPlacement": 3.340909090909091,
+      "placementSd": 2.101419031281413,
+      "name": "루덴의 폭풍"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_TheIndomitable",
+      "boards": 42,
+      "playRate": 0.015765765765765764,
+      "top4Rate": 0.5,
+      "top4Ci": null,
+      "avgPlacement": 4.4523809523809526,
+      "placementSd": 2.2760940114363977,
+      "name": "불굴"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemSprykin",
+      "boards": 40,
+      "playRate": 0.015015015015015015,
+      "top4Rate": 0.575,
+      "top4Ci": null,
+      "avgPlacement": 4.15,
+      "placementSd": 2.3702212381861565,
+      "name": "날렵이 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_TacticiansCape",
+      "boards": 38,
+      "playRate": 0.014264264264264264,
+      "top4Rate": 0.5789473684210527,
+      "top4Ci": null,
+      "avgPlacement": 4.026315789473684,
+      "placementSd": 2.2237883686161783,
+      "name": "전략가의 망토"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_MogulsMail",
+      "boards": 37,
+      "playRate": 0.013888888888888888,
+      "top4Rate": 0.40540540540540543,
+      "top4Ci": null,
+      "avgPlacement": 4.864864864864865,
+      "placementSd": 2.1878726623793225,
+      "name": "거물의갑옷"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_Manazane",
+      "boards": 33,
+      "playRate": 0.012387387387387387,
+      "top4Rate": 0.42424242424242425,
+      "top4Ci": null,
+      "avgPlacement": 4.515151515151516,
+      "placementSd": 2.0328737682344555,
+      "name": "마나자네"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_EternalPact",
+      "boards": 32,
+      "playRate": 0.012012012012012012,
+      "top4Rate": 0.59375,
+      "top4Ci": null,
+      "avgPlacement": 4,
+      "placementSd": 2.286002286003429,
+      "name": "영원한 서약"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_Fishbones",
+      "boards": 30,
+      "playRate": 0.01126126126126126,
+      "top4Rate": 0.5666666666666667,
+      "top4Ci": null,
+      "avgPlacement": 4,
+      "placementSd": 1.9826836567538,
+      "name": "생선대가리"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_LichBane",
+      "boards": 29,
+      "playRate": 0.010885885885885885,
+      "top4Rate": 0.4827586206896552,
+      "top4Ci": null,
+      "avgPlacement": 4.482758620689655,
+      "placementSd": 2.2139281452911512,
+      "name": "리치베인"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_NavoriFlickerblade",
+      "boards": 29,
+      "playRate": 0.010885885885885885,
+      "top4Rate": 0.5517241379310345,
+      "top4Ci": null,
+      "avgPlacement": 4.551724137931035,
+      "placementSd": 2.1644234946145375,
+      "name": "명멸검"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_BlightingJewel",
+      "boards": 26,
+      "playRate": 0.00975975975975976,
+      "top4Rate": 0.4230769230769231,
+      "top4Ci": null,
+      "avgPlacement": 5,
+      "placementSd": 2.4,
+      "name": "역병의 보석"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_SeekersArmguard",
+      "boards": 26,
+      "playRate": 0.00975975975975976,
+      "top4Rate": 0.5,
+      "top4Ci": null,
+      "avgPlacement": 4.769230769230769,
+      "placementSd": 2.2681744607977987,
+      "name": "추적자의 팔목 보호대"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_WitsEnd",
+      "boards": 25,
+      "playRate": 0.009384384384384385,
+      "top4Rate": 0.52,
+      "top4Ci": null,
+      "avgPlacement": 4.32,
+      "placementSd": 2.4103941586387894,
+      "name": "마법사의 최후"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemFloraFatalisAugment",
+      "boards": 24,
+      "playRate": 0.009009009009009009,
+      "top4Rate": 0.4583333333333333,
+      "top4Ci": null,
+      "avgPlacement": 4.875,
+      "placementSd": 2.3277625009587135,
+      "name": "치명적인 꽃 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_SilvermereDawn",
+      "boards": 23,
+      "playRate": 0.008633633633633633,
+      "top4Rate": 0.6086956521739131,
+      "top4Ci": null,
+      "avgPlacement": 3.8260869565217392,
+      "placementSd": 2.228986192563856,
+      "name": "은빛 여명"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_HellfireHatchet",
+      "boards": 20,
+      "playRate": 0.0075075075075075074,
+      "top4Rate": 0.7,
+      "top4Ci": null,
+      "avgPlacement": 3.85,
+      "placementSd": 1.9808291724745768,
+      "name": "지옥불 손도끼"
+    },
+    {
+      "kind": "item",
+      "key": "DA_GuinsoosRagebladeRadiant",
+      "boards": 20,
+      "playRate": 0.0075075075075075074,
+      "top4Rate": 0.6,
+      "top4Ci": null,
+      "avgPlacement": 3.8,
+      "placementSd": 2.2618111047751555,
+      "name": "찬란한 구인수의 격노검"
+    },
+    {
+      "kind": "item",
+      "key": "DA_18_EmblemCoven",
+      "boards": 17,
+      "playRate": 0.0063813813813813815,
+      "top4Rate": 0.35294117647058826,
+      "top4Ci": null,
+      "avgPlacement": 5.0588235294117645,
+      "placementSd": 2.357715743980127,
+      "name": "악의 여단 상징"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_AegisOfDusk",
+      "boards": 17,
+      "playRate": 0.0063813813813813815,
+      "top4Rate": 0.5882352941176471,
+      "top4Ci": null,
+      "avgPlacement": 4.176470588235294,
+      "placementSd": 2.0986690460160413,
+      "name": "황혼의 방패"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_StatikkShiv",
+      "boards": 17,
+      "playRate": 0.0063813813813813815,
+      "top4Rate": 0.5294117647058824,
+      "top4Ci": null,
+      "avgPlacement": 4.647058823529412,
+      "placementSd": 2.3168183050950564,
+      "name": "스태틱의 단검"
+    },
+    {
+      "kind": "item",
+      "key": "DA_BlueBuffRadiant",
+      "boards": 17,
+      "playRate": 0.0063813813813813815,
+      "top4Rate": 0.47058823529411764,
+      "top4Ci": null,
+      "avgPlacement": 4.0588235294117645,
+      "placementSd": 2.357715743980127,
+      "name": "찬란한 푸른 파수꾼"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_GoldCollector",
+      "boards": 15,
+      "playRate": 0.00563063063063063,
+      "top4Rate": 0.6666666666666666,
+      "top4Ci": null,
+      "avgPlacement": 3.2,
+      "placementSd": 2.3964259101539405,
+      "name": "황금 징수의 총"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_ZhonyasParadox",
+      "boards": 15,
+      "playRate": 0.00563063063063063,
+      "top4Rate": 0.5333333333333333,
+      "top4Ci": null,
+      "avgPlacement": 4.4,
+      "placementSd": 2.8233718443429603,
+      "name": "존야의 역설"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_AegisOfDawn",
+      "boards": 14,
+      "playRate": 0.005255255255255256,
+      "top4Rate": 0.42857142857142855,
+      "top4Ci": null,
+      "avgPlacement": 4.285714285714286,
+      "placementSd": 2.1989008243131014,
+      "name": "새벽의 방패"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_InfinityForce",
+      "boards": 14,
+      "playRate": 0.005255255255255256,
+      "top4Rate": 0.7142857142857143,
+      "top4Ci": null,
+      "avgPlacement": 4.142857142857143,
+      "placementSd": 2.213842564659668,
+      "name": "무한한 삼위일체"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_RapidFireCannon",
+      "boards": 14,
+      "playRate": 0.005255255255255256,
+      "top4Rate": 0.5714285714285714,
+      "top4Ci": null,
+      "avgPlacement": 4.214285714285714,
+      "placementSd": 2.8332794651203272,
+      "name": "고속 연사포"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Item_Artifact_TalismanOfAscension",
+      "boards": 14,
+      "playRate": 0.005255255255255256,
+      "top4Rate": 0.5714285714285714,
+      "top4Ci": null,
+      "avgPlacement": 4.142857142857143,
+      "placementSd": 2.213842564659668,
+      "name": "승천의 부적"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_ForbiddenIdol",
+      "boards": 13,
+      "playRate": 0.00487987987987988,
+      "top4Rate": 0.46153846153846156,
+      "top4Ci": null,
+      "avgPlacement": 4.461538461538462,
+      "placementSd": 2.2216879699673027,
+      "name": "금지된 우상"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_Hullcrusher",
+      "boards": 13,
+      "playRate": 0.00487987987987988,
+      "top4Rate": 0.6153846153846154,
+      "top4Ci": null,
+      "avgPlacement": 3.769230769230769,
+      "placementSd": 1.964427234329223,
+      "name": "선체분쇄자"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_VoidGauntlet",
+      "boards": 12,
+      "playRate": 0.0045045045045045045,
+      "top4Rate": 0.5,
+      "top4Ci": null,
+      "avgPlacement": 4.416666666666667,
+      "placementSd": 2.6097137890209456,
+      "name": "공허 건틀릿"
+    },
+    {
+      "kind": "item",
+      "key": "DA_RabadonsDeathcap_Radiant",
+      "boards": 12,
+      "playRate": 0.0045045045045045045,
+      "top4Rate": 0.6666666666666666,
+      "top4Ci": null,
+      "avgPlacement": 3.75,
+      "placementSd": 1.9598237397554634,
+      "name": "찬란한 라바돈의 죽음모자"
+    },
+    {
+      "kind": "item",
+      "key": "DA_StrikersFlailRadiant",
+      "boards": 12,
+      "playRate": 0.0045045045045045045,
+      "top4Rate": 0.5833333333333334,
+      "top4Ci": null,
+      "avgPlacement": 3.9166666666666665,
+      "placementSd": 1.7298624923456327,
+      "name": "찬란한 타격대의 철퇴"
+    },
+    {
+      "kind": "item",
+      "key": "DA_AdaptiveHelm_Radiant",
+      "boards": 11,
+      "playRate": 0.004129129129129129,
+      "top4Rate": 0.7272727272727273,
+      "top4Ci": null,
+      "avgPlacement": 3.6363636363636362,
+      "placementSd": 2.975658826973525,
+      "name": "찬란한 적응형 투구"
+    },
+    {
+      "kind": "item",
+      "key": "DA_DeathbladeRadiant",
+      "boards": 11,
+      "playRate": 0.004129129129129129,
+      "top4Rate": 0.18181818181818182,
+      "top4Ci": null,
+      "avgPlacement": 5.545454545454546,
+      "placementSd": 2.1616492020508944,
+      "name": "찬란한 죽음의 검"
+    },
+    {
+      "kind": "item",
+      "key": "DA_SpearOfShojinRadiant",
+      "boards": 11,
+      "playRate": 0.004129129129129129,
+      "top4Rate": 0.36363636363636365,
+      "top4Ci": null,
+      "avgPlacement": 4.636363636363637,
+      "placementSd": 2.500908925679912,
+      "name": "찬란한 쇼진의 창"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_HorizonFocus",
+      "boards": 10,
+      "playRate": 0.0037537537537537537,
+      "top4Rate": 0.7,
+      "top4Ci": null,
+      "avgPlacement": 3.5,
+      "placementSd": 2.41522945769824,
+      "name": "지평선의 초점"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_Mittens",
+      "boards": 10,
+      "playRate": 0.0037537537537537537,
+      "top4Rate": 0.5,
+      "top4Ci": null,
+      "avgPlacement": 4.5,
+      "placementSd": 1.7159383568311668,
+      "name": "방한 장갑"
+    },
+    {
+      "kind": "item",
+      "key": "DA_GiantSlayer_Radiant",
+      "boards": 9,
+      "playRate": 0.0033783783783783786,
+      "top4Rate": 0.3333333333333333,
+      "top4Ci": null,
+      "avgPlacement": 4.444444444444445,
+      "placementSd": 2.5055493963954847,
+      "name": "찬란한 거인 학살자"
+    },
+    {
+      "kind": "item",
+      "key": "DA_ThiefsGlovesRadiant",
+      "boards": 9,
+      "playRate": 0.0033783783783783786,
+      "top4Rate": 0.3333333333333333,
+      "top4Ci": null,
+      "avgPlacement": 4.888888888888889,
+      "placementSd": 2.7588242262078073,
+      "name": "찬란한 도적의 장갑"
+    },
+    {
+      "kind": "item",
+      "key": "DA_HandOfJusticeRadiant",
+      "boards": 8,
+      "playRate": 0.003003003003003003,
+      "top4Rate": 0.625,
+      "top4Ci": null,
+      "avgPlacement": 4,
+      "placementSd": 2.878491668515698,
+      "name": "찬란한 정의의 손길"
+    },
+    {
+      "kind": "item",
+      "key": "DA_WarmogsArmorRadiant",
+      "boards": 8,
+      "playRate": 0.003003003003003003,
+      "top4Rate": 0.375,
+      "top4Ci": null,
+      "avgPlacement": 5.125,
+      "placementSd": 2.295181287579947,
+      "name": "찬란한 워모그의 갑옷"
+    },
+    {
+      "kind": "item",
+      "key": "DA_GargoyleStoneplate_Radiant",
+      "boards": 7,
+      "playRate": 0.002627627627627628,
+      "top4Rate": 0.2857142857142857,
+      "top4Ci": null,
+      "avgPlacement": 5.714285714285714,
+      "placementSd": 2.497617912751115,
+      "name": "찬란한 가고일 돌갑옷"
+    },
+    {
+      "kind": "item",
+      "key": "DA_HextechGunbladeRadiant",
+      "boards": 7,
+      "playRate": 0.002627627627627628,
+      "top4Rate": 1,
+      "top4Ci": null,
+      "avgPlacement": 1.7142857142857142,
+      "placementSd": 0.951189731211342,
+      "name": "찬란한 마법공학 총검"
+    },
+    {
+      "kind": "item",
+      "key": "DA_InfinityEdgeRadiant",
+      "boards": 7,
+      "playRate": 0.002627627627627628,
+      "top4Rate": 0.2857142857142857,
+      "top4Ci": null,
+      "avgPlacement": 5.714285714285714,
+      "placementSd": 1.8898223650461357,
+      "name": "찬란한 무한의 대검"
+    },
+    {
+      "kind": "item",
+      "key": "DA_JeweledGauntletRadiant",
+      "boards": 7,
+      "playRate": 0.002627627627627628,
+      "top4Rate": 0.42857142857142855,
+      "top4Ci": null,
+      "avgPlacement": 5.142857142857143,
+      "placementSd": 2.0354009783964284,
+      "name": "찬란한 보석 건틀릿"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_GamblersBlade",
+      "boards": 6,
+      "playRate": 0.0022522522522522522,
+      "top4Rate": 0.3333333333333333,
+      "top4Ci": null,
+      "avgPlacement": 5.833333333333333,
+      "placementSd": 2.3166067138525412,
+      "name": "도박꾼의 칼날"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Artifact_TitanicHydra",
+      "boards": 6,
+      "playRate": 0.0022522522522522522,
+      "top4Rate": 0.16666666666666666,
+      "top4Ci": null,
+      "avgPlacement": 5.833333333333333,
+      "placementSd": 1.722401424368509,
+      "name": "거대한 히드라"
+    },
+    {
+      "kind": "item",
+      "key": "DA_BlastPotion18",
+      "boards": 6,
+      "playRate": 0.0022522522522522522,
+      "top4Rate": 0.6666666666666666,
+      "top4Ci": null,
+      "avgPlacement": 3.6666666666666665,
+      "placementSd": 1.861898672502526,
+      "name": "폭발 물약"
+    },
+    {
+      "kind": "item",
+      "key": "DA_KrakensFury_Radiant",
+      "boards": 6,
+      "playRate": 0.0022522522522522522,
+      "top4Rate": 0.5,
+      "top4Ci": null,
+      "avgPlacement": 4.666666666666667,
+      "placementSd": 2.3380903889000235,
+      "name": "찬란한 크라켄의 분노"
+    },
+    {
+      "kind": "item",
+      "key": "DA_RedBuffRadiant",
+      "boards": 6,
+      "playRate": 0.0022522522522522522,
+      "top4Rate": 0.5,
+      "top4Ci": null,
+      "avgPlacement": 4.333333333333333,
+      "placementSd": 3.0110906108363245,
+      "name": "찬란한 붉은 덩굴정령"
+    },
+    {
+      "kind": "item",
+      "key": "DA_SpiritVisage_Radiant",
+      "boards": 6,
+      "playRate": 0.0022522522522522522,
+      "top4Rate": 0.5,
+      "top4Ci": null,
+      "avgPlacement": 4.666666666666667,
+      "placementSd": 3.2041639575194436,
+      "name": "찬란한 정령의 형상"
+    },
+    {
+      "kind": "item",
+      "key": "DA_TacticiansShield",
+      "boards": 6,
+      "playRate": 0.0022522522522522522,
+      "top4Rate": 0.8333333333333334,
+      "top4Ci": null,
+      "avgPlacement": 2.5,
+      "placementSd": 2.5099800796022267,
+      "name": "전략가의 방패"
+    },
+    {
+      "kind": "item",
+      "key": "DA_HealthPotion18",
+      "boards": 4,
+      "playRate": 0.0015015015015015015,
+      "top4Rate": 0.75,
+      "top4Ci": null,
+      "avgPlacement": 3.5,
+      "placementSd": 1.2909944487358056,
+      "name": "체력 물약"
+    },
+    {
+      "kind": "item",
+      "key": "DA_NashorsToothRadiant",
+      "boards": 4,
+      "playRate": 0.0015015015015015015,
+      "top4Rate": 0.75,
+      "top4Ci": null,
+      "avgPlacement": 3.25,
+      "placementSd": 2.6299556396765835,
+      "name": "찬란한 내셔의 이빨"
+    },
+    {
+      "kind": "item",
+      "key": "DA_TitansResolve_Radiant",
+      "boards": 4,
+      "playRate": 0.0015015015015015015,
+      "top4Rate": 0,
+      "top4Ci": null,
+      "avgPlacement": 5.75,
+      "placementSd": 0.9574271077563381,
+      "name": "찬란한 거인의 결의"
+    },
+    {
+      "kind": "item",
+      "key": "DA_VoidStaffRadiant",
+      "boards": 4,
+      "playRate": 0.0015015015015015015,
+      "top4Rate": 0.25,
+      "top4Ci": null,
+      "avgPlacement": 6,
+      "placementSd": 2,
+      "name": "찬란한 공허의 지팡이"
+    },
+    {
+      "kind": "item",
+      "key": "DA_SteraksGageRadiant",
+      "boards": 3,
+      "playRate": 0.0011261261261261261,
+      "top4Rate": 0.6666666666666666,
+      "top4Ci": null,
+      "avgPlacement": 3.6666666666666665,
+      "placementSd": 2.0816659994661335,
+      "name": "찬란한 스테락의 도전"
+    },
+    {
+      "kind": "item",
+      "key": "DA_ArchangelsStaffRadiant",
+      "boards": 2,
+      "playRate": 0.0007507507507507507,
+      "top4Rate": 0.5,
+      "top4Ci": null,
+      "avgPlacement": 3.5,
+      "placementSd": 3.5355339059327378,
+      "name": "찬란한 대천사의 지팡이"
+    },
+    {
+      "kind": "item",
+      "key": "DA_BlastPotion18_Radiant",
+      "boards": 2,
+      "playRate": 0.0007507507507507507,
+      "top4Rate": 0.5,
+      "top4Ci": null,
+      "avgPlacement": 4,
+      "placementSd": 1.4142135623730951,
+      "name": "찬란한 폭발 물약"
+    },
+    {
+      "kind": "item",
+      "key": "DA_BloodthirsterRadiant",
+      "boards": 2,
+      "playRate": 0.0007507507507507507,
+      "top4Rate": 0.5,
+      "top4Ci": null,
+      "avgPlacement": 4.5,
+      "placementSd": 2.1213203435596424,
+      "name": "찬란한 피바라기"
+    },
+    {
+      "kind": "item",
+      "key": "DA_BrambleVestRadiant",
+      "boards": 2,
+      "playRate": 0.0007507507507507507,
+      "top4Rate": 0.5,
+      "top4Ci": null,
+      "avgPlacement": 3.5,
+      "placementSd": 3.5355339059327378,
+      "name": "찬란한 덤불 조끼"
+    },
+    {
+      "kind": "item",
+      "key": "DA_CrownguardRadiant",
+      "boards": 2,
+      "playRate": 0.0007507507507507507,
+      "top4Rate": 0,
+      "top4Ci": null,
+      "avgPlacement": 6.5,
+      "placementSd": 0.7071067811865476,
+      "name": "찬란한 크라운가드"
+    },
+    {
+      "kind": "item",
+      "key": "DA_DragonsClawRadiant",
+      "boards": 2,
+      "playRate": 0.0007507507507507507,
+      "top4Rate": 0.5,
+      "top4Ci": null,
+      "avgPlacement": 5,
+      "placementSd": 1.4142135623730951,
+      "name": "찬란한 용의 발톱"
+    },
+    {
+      "kind": "item",
+      "key": "DA_EdgeOfNightRadiant",
+      "boards": 2,
+      "playRate": 0.0007507507507507507,
+      "top4Rate": 1,
+      "top4Ci": null,
+      "avgPlacement": 2.5,
+      "placementSd": 2.1213203435596424,
+      "name": "찬란한 밤의 끝자락"
+    },
+    {
+      "kind": "item",
+      "key": "DA_SteadfastHeartRadiant",
+      "boards": 2,
+      "playRate": 0.0007507507507507507,
+      "top4Rate": 1,
+      "top4Ci": null,
+      "avgPlacement": 2.5,
+      "placementSd": 0.7071067811865476,
+      "name": "찬란한 굳건한 심장"
+    },
+    {
+      "kind": "item",
+      "key": "DA_Component_Spatula",
+      "boards": 1,
+      "playRate": 0.00037537537537537537,
+      "top4Rate": 0,
+      "top4Ci": null,
+      "avgPlacement": 7,
+      "placementSd": null,
+      "name": "뒤집개"
+    },
+    {
+      "kind": "item",
+      "key": "DA_EvenshroudRadiant",
+      "boards": 1,
+      "playRate": 0.00037537537537537537,
+      "top4Rate": 1,
+      "top4Ci": null,
+      "avgPlacement": 2,
+      "placementSd": null,
+      "name": "찬란한 저녁갑주"
+    },
+    {
+      "kind": "item",
+      "key": "DA_HealthPotion18_Radiant",
+      "boards": 1,
+      "playRate": 0.00037537537537537537,
+      "top4Rate": 1,
+      "top4Ci": null,
+      "avgPlacement": 1,
+      "placementSd": null,
+      "name": "찬란한 체력 물약"
+    },
+    {
+      "kind": "item",
+      "key": "DA_IonicSparkRadiant",
+      "boards": 1,
+      "playRate": 0.00037537537537537537,
+      "top4Rate": 0,
+      "top4Ci": null,
+      "avgPlacement": 6,
+      "placementSd": null,
+      "name": "찬란한 이온 충격기"
+    },
+    {
+      "kind": "item",
+      "key": "DA_LastWhisperRadiant",
+      "boards": 1,
+      "playRate": 0.00037537537537537537,
+      "top4Rate": 1,
+      "top4Ci": null,
+      "avgPlacement": 3,
+      "placementSd": null,
+      "name": "찬란한 최후의 속삭임"
+    },
+    {
+      "kind": "item",
+      "key": "DA_MorellonomiconRadiant",
+      "boards": 1,
+      "playRate": 0.00037537537537537537,
+      "top4Rate": 1,
+      "top4Ci": null,
+      "avgPlacement": 1,
+      "placementSd": null,
+      "name": "찬란한 모렐로노미콘"
+    },
+    {
+      "kind": "item",
+      "key": "DA_ProtectorsVowRadiant",
+      "boards": 1,
+      "playRate": 0.00037537537537537537,
+      "top4Rate": 1,
+      "top4Ci": null,
+      "avgPlacement": 2,
+      "placementSd": null,
+      "name": "찬란한 수호자의 맹세"
+    },
+    {
+      "kind": "item",
+      "key": "DA_QuicksilverRadiant",
+      "boards": 1,
+      "playRate": 0.00037537537537537537,
+      "top4Rate": 0,
+      "top4Ci": null,
+      "avgPlacement": 7,
+      "placementSd": null,
+      "name": "찬란한 수은"
+    },
+    {
+      "kind": "item",
+      "key": "DA_SunfireCape_Radiant",
+      "boards": 1,
+      "playRate": 0.00037537537537537537,
+      "top4Rate": 0,
+      "top4Ci": null,
+      "avgPlacement": 6,
+      "placementSd": null,
+      "name": "찬란한 태양불꽃 망토"
+    }
+  ]
+}
