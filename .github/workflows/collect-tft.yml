@@ -266,7 +266,16 @@ jobs:
 
             GitHub Actions collect-tft.yml(run_id=${{ github.run_id }})가 생성."
             # [skip ci]를 넣지 않는다 — Vercel이 이 커밋을 감지해 재빌드해야 한다.
-            git push
+            # push 경합 재시도 — 장시간 잡이 도는 동안 main에 다른 커밋(PR 머지·자매 워크플로)이
+            # 들어오면 push가 `fetch first`로 거절된다. 재시도가 없던 시절 26.19 수집(5h13m)의
+            # 산출물 전체가 이 한 줄에서 버려졌다(2026-09-24). 봇 커밋은 data/·public/dd만
+            # 건드리므로 코드 PR과 rebase 충돌이 날 일이 드물다 — 충돌하면 그때는 멈춘다.
+            for attempt in 1 2 3 4 5; do
+              if git push; then break; fi
+              if [ "$attempt" = 5 ]; then echo "::error::push 5회 거절"; exit 1; fi
+              git pull --rebase origin main || { git rebase --abort; echo "::error::rebase 충돌 — 수동 해소 필요"; exit 1; }
+              sleep $((attempt * 10))
+            done
           fi
 
       - name: Upload logs on failure
