@@ -159,9 +159,10 @@ export default function PubgPage() {
           {/* 공지 대조가 기본 탭, 미공지가 두 번째 탭(2026-09-17 사용자 지시 — 홈과 같은 순서). */}
           {/* 2컬럼 골격 — 좌 본문 / 우 사이드(UX-BRIEF §8-1, A안). 무기 그리드·맵은 아래
               「전 대상 색인」 슬롯에 그대로 둔다 — 1fr 사이드로 옮기면 7~47칸 격자가 찌그러진다. */}
-          <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[2fr_1fr]">
-            <div className="flex flex-col gap-6">
-            <BriefingTabs
+          {/* 2컬럼 골격의 소유자는 `BriefingTabs`다(§8-1 A안). 페이지가 그리드를 만들면
+              우측 패널이 좌측 **탭 바** 상단에 맞아 카드끼리 어긋난다 — 그 배치는 탭 바
+              위치를 아는 쪽만 정할 수 있다(2026-09-24). */}
+          <BriefingTabs
               contentCount={announced.length}
               gapCount={unannounced.length + gameDataEntityCount(submarine)}
               content={
@@ -226,13 +227,11 @@ export default function PubgPage() {
                 </SectionCard>
                 </div>
               }
-            />
-            </div>
-            <div className="flex flex-col gap-6">
-              {/* 사이드는 그 게임이 가진 것만(§8-1). PUBG는 지금 디스코드뿐이다. */}
+            aside={
+              /* 사이드는 그 게임이 가진 것만(§8-1). PUBG는 지금 디스코드뿐이다. */
               <DiscordPanel game="pubg" generatedAt={deltas.meta.generatedAt} />
-            </div>
-          </div>
+            }
+          />
 
           {/* 전 대상 색인(§8-1) — 세 게임 공통 슬롯. 대조표는 판정이 선 무기만 올리므로
               전수 진입점은 여기뿐이다(2026-09-18 P1 "상세페이지 진입점이 없음"이 이 슬롯의 출처다).

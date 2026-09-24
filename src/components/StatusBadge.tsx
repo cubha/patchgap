@@ -37,6 +37,26 @@ const STATUS_CLASSES: Record<string, string> = {
 
 const FALLBACK_CLASSES = "border-border-soft text-muted";
 
+/**
+ * 브리핑 행 **맨 앞 뱃지 칸의 고정 폭**. 뱃지 자신이 아니라 뱃지를 담는 슬롯에 건다.
+ *
+ * **왜 필요한가**(2026-09-24 사용자 지적, 실측): 뱃지는 `inline-flex`라 글자 수만큼 폭이
+ * 변한다 — 「공지」 54px vs 「공지 · 이상 관측」 125px. 그 71px 차이가 맨 앞에 있으니 뒤의
+ * 아이콘·이름·지표가 행마다 다른 x에서 시작했다. 뱃지가 맨 앞이라는 §8-1 계약은 유지하되
+ * (판정을 가장 먼저 읽는다), **칸을 고정해** 그 뒤를 정렬시킨다.
+ *
+ * **144px(`w-36`)인 근거**: 화면 뱃지로 쓰이는 라벨 전수를 실제 폰트로 렌더해 잰 최댓값이
+ * 125px이다(「공지 · 이상 관측」. 다음이 「짝지은 관측 없음」 123px · 「공지값 불일치」 105px).
+ * `w-36`은 그 위의 가장 타이트한 Tailwind 스케일 값이라 여백이 19px로 최소다. arbitrary 값이
+ * 아니므로 토큰 우회 경고도 나지 않는다.
+ *
+ * **지금 데이터로 정하지 않았다**: 현재 브리핑에 실제로 뜨는 뱃지는 2종뿐인데, 그 2종에
+ * 맞추면 라벨이 하나 늘 때 조용히 깨진다. 그래서 `STATUS_LABELS` **전수**로 상한을 잡고,
+ * 더 긴 라벨이 추가되면 `screen-parity.test.ts`가 실패한다(그 게이트는 픽셀이 아니라 글자
+ * 수를 본다 — jsdom은 폭을 못 잰다. 한계는 그쪽 주석에 적었다).
+ */
+export const BADGE_SLOT = "w-36 shrink-0";
+
 export default function StatusBadge({ status, className = "" }: StatusBadgeProps) {
   const colorClasses = STATUS_CLASSES[status] ?? FALLBACK_CLASSES;
   return (

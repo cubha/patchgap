@@ -30,7 +30,7 @@ import EntityIcon from "@/components/EntityIcon";
 import IconBox from "@/components/IconBox";
 import LaneGlyph from "@/components/LaneGlyph";
 import SpellIcon from "@/components/SpellIcon";
-import StatusBadge from "@/components/StatusBadge";
+import StatusBadge, { BADGE_SLOT } from "@/components/StatusBadge";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/components/compare/entityRows";
 import DeltaValue from "@/components/DeltaValue";
@@ -292,7 +292,12 @@ export default function ReleaseNoteRow({
           {/* **뱃지가 아이콘보다 앞**이다(§8-1 「뱃지 위치: 행 맨 앞」). 2026-09-23 화면 대조에서
               이 카드만 `[아이콘][뱃지]` 순이라 세 게임의 뱃지 좌측 시작점이 어긋난 것이 잡혔다 —
               바로 위 주석이 "뱃지가 맨 앞"이라고 말하고 있었는데도 실제 순서는 그렇지 않았다. */}
-          {headerBadge ? <StatusBadge status={headerBadge} /> : null}
+          {/* **뱃지가 없는 행도 칸은 차지한다.** 「유의한 관측 없음」 묶음은 붙일 판정이
+              없어 뱃지를 그리지 않는데(라운드6 C1), 칸까지 비우면 그 행만 아이콘이 왼쪽으로
+              당겨져 정렬이 깨진다 — 빈 슬롯을 남기는 것이 곧 정렬이다. */}
+          <span className={BADGE_SLOT}>
+            {headerBadge ? <StatusBadge status={headerBadge} /> : null}
+          </span>
           <CardIcon icon={icon} entity={group.entity} />
           {/* 모바일(sm 미만)에서 **이름 칸을 통째로 다음 줄로 내린다**. 전에는 한 줄 flex라
               뱃지·아이콘·「N개 항목」이 전부 `shrink-0`이고 이 칸만 줄어들어, 390px에서 폭
