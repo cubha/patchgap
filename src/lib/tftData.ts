@@ -11,6 +11,7 @@ import type { TftAssetManifest } from "@/pipeline/tft/asset-path";
 
 import type { DeltaRecord, DeltasRunLlmMeta, MatchStatus, PatchNoteItem } from "@/pipeline/types";
 import type { NamedStat } from "@/pipeline/match/tft-delta";
+import { latestPatchId } from "@/pipeline/collect/staleness";
 
 const TFT_DIR = path.join(process.cwd(), "data", "aggregated", "tft");
 
@@ -67,14 +68,29 @@ function readJson<T>(file: string): T | null {
   }
 }
 
+/**
+ * 델타 산출 파일명만 매치한다 — `deltas-{from}-{to}.json`(PatchId = `{숫자}.{숫자}`).
+ *
+ * 확장자만 보고 통과시키면 안 된다: 같은 디렉토리에 전송 로그가 남으면 `to`가 가짜가 되어
+ * rows 없는 파일이 화면으로 올라간다(LoL이 2026-09-09에 실제로 그렇게 죽었다 —
+ * `data.ts`의 `DELTAS_FILE_PATTERN` 주석 참고. 같은 함정을 여기서도 닫는다).
+ */
+const TFT_DELTAS_FILE_PATTERN = /^deltas-(\d+\.\d+)-(\d+\.\d+)\.json$/;
+
 /** 존재하는 델타 파일 중 가장 최근 것. 없으면 null(빈 데이터 빌드 보장). */
 export function loadTft(): TftBundle | null {
   if (!fs.existsSync(TFT_DIR)) return null;
-  const deltaFiles = fs
-    .readdirSync(TFT_DIR)
-    .filter((f) => f.startsWith("deltas-") && f.endsWith(".json"))
-    .sort();
-  const latest = deltaFiles.at(-1);
+  // **문자열 정렬을 쓰지 않는다**(2026-09-24 수정). 이전엔 `.sort().at(-1)`이었는데 사전순이라
+  // `deltas-18.10-…`이 `deltas-18.9-…`보다 **앞**에 온다 — 마이너가 두 자리가 되는 순간
+  // 화면이 "최신"이라고 말하면서 옛 패치를 보여준다. 실패가 조용해서 더 나쁘다.
+  // LoL(`data.ts`)은 이미 숫자 비교(`comparePatchDesc`)를 쓰고 있었고 TFT만 예외였다.
+  const byTo = new Map<string, string>();
+  for (const file of fs.readdirSync(TFT_DIR)) {
+    const m = TFT_DELTAS_FILE_PATTERN.exec(file);
+    if (m) byTo.set(m[2], file);
+  }
+  const latestTo = latestPatchId([...byTo.keys()]);
+  const latest = latestTo === null ? undefined : byTo.get(latestTo);
   if (!latest) return null;
 
   const deltas = readJson<TftDeltasFile>(path.join(TFT_DIR, latest));

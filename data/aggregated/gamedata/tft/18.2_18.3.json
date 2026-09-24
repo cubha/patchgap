@@ -1,0 +1,65 @@
+{
+  "meta": {
+    "game": "tft",
+    "from": "18.2",
+    "to": "18.3",
+    "source": {
+      "kind": "cdragon",
+      "from": "16.18",
+      "to": "16.19"
+    },
+    "generatedAt": "2026-09-24T06:55:41.707Z",
+    "changeCount": 4,
+    "submarineCount": 4
+  },
+  "changes": [
+    {
+      "id": "gdc:tft:18.3:DA_18_MasterYi_AD:stats.damage",
+      "entityKey": "DA_18_MasterYi_AD",
+      "entityName": "마스터 이",
+      "entityType": "unit",
+      "field": "공격력",
+      "fieldPath": "stats.damage",
+      "before": 65,
+      "after": 62,
+      "relChange": -0.046153846153846156,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.3:DA_18_Rengar:stats.attackSpeed",
+      "entityKey": "DA_18_Rengar",
+      "entityName": "렝가",
+      "entityType": "unit",
+      "field": "공격 속도",
+      "fieldPath": "stats.attackSpeed",
+      "before": 0.800000011920929,
+      "after": 0.75,
+      "relChange": -0.06250001396983841,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.3:DA_Brambleback18:stats.damage",
+      "entityKey": "DA_Brambleback18",
+      "entityName": "덩굴정령",
+      "entityType": "unit",
+      "field": "공격력",
+      "fieldPath": "stats.damage",
+      "before": 115,
+      "after": 120,
+      "relChange": 0.043478260869565216,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.3:DA_BlackthornTraitAugment:effects.NumComponents",
+      "entityKey": "DA_BlackthornTraitAugment",
+      "entityName": "아이템 추출",
+      "entityType": "item",
+      "field": "효과 조합 아이템 수",
+      "fieldPath": "effects.NumComponents",
+      "before": 4,
+      "after": 3,
+      "relChange": -0.25,
+      "matchedNoteIds": []
+    }
+  ]
+}
