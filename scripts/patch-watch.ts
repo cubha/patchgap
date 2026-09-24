@@ -13,6 +13,7 @@
 // **PUBG는 마이너를 탐지할 수 없다.** 텔레메트리 라벨이 메이저까지만 담는다(`pc-2018-43`).
 // 다른 둘처럼 생겼지만 성질이 다르고, 그 한계를 아래 로그가 매번 말한다.
 import "dotenv/config";
+import fs from "node:fs";
 
 import { comparePatchId } from "../src/pipeline/collect/calendar-overlay";
 import {
@@ -24,6 +25,13 @@ import {
 } from "../src/pipeline/collect/patch-detect";
 import { buildTftNotesUrl } from "./run-tft-notes";
 import { appendOverlay, loadLolCalendar, loadPubgWindows, loadTftWindows } from "./shared/calendar";
+import { aggregatedLatestOf } from "./shared/aggregated-latest";
+import {
+  latestPatchId,
+  stalenessOf,
+  stalenessTable,
+  type GameStaleness,
+} from "../src/pipeline/collect/staleness";
 import { isMainModule, parseCliArgs } from "./shared/cli";
 
 const UA = "Mozilla/5.0 (compatible; patchgap/1.0; +https://patchgap.vercel.app)";
@@ -178,6 +186,30 @@ async function watchPubg(dataRoot: string, dryRun: boolean): Promise<boolean> {
   return true;
 }
 
+/**
+ * 캘린더 최신 ↔ 집계 최신 격차를 실행 요약에 적는다.
+ *
+ * 캘린더는 **기준 + 오버레이 병합본**을 쓴다(`shared/calendar.ts`). 오버레이만 읽으면 LoL은
+ * `lol.json`이 `[]`라 "아는 패치 없음"으로 읽히고, 정작 26.19는 코드의 `PATCH_CALENDAR`에
+ * 있으므로 **조용히 통과**한다 — 병합 로더가 존재하는 이유가 그것이다.
+ */
+function reportStaleness(dataRoot: string): void {
+  const rows: GameStaleness[] = [
+    stalenessOf("lol", latestPatchId(Object.keys(loadLolCalendar(dataRoot))), aggregatedLatestOf("lol", dataRoot)),
+    stalenessOf("tft", latestPatchId(loadTftWindows(dataRoot).map((w) => w.patch)), aggregatedLatestOf("tft", dataRoot)),
+    stalenessOf("pubg", latestPatchId(loadPubgWindows(dataRoot).map((w) => w.patch)), aggregatedLatestOf("pubg", dataRoot)),
+  ];
+  const table = stalenessTable(rows);
+  for (const line of table.split("\n")) log(line);
+  const summary = process.env.GITHUB_STEP_SUMMARY;
+  if (summary) {
+    fs.appendFileSync(summary, `### 패치 수집 격차\n\n${table}\n\n`);
+  }
+  for (const r of rows.filter((x) => x.behind)) {
+    notice(`${r.game}: ${r.aggregatedLatest ?? "없음"} → ${r.calendarLatest} 미수집 — 수집 워크플로 요약에서 사유를 본다.`);
+  }
+}
+
 async function main(): Promise<void> {
   const args = parseCliArgs("patch-watch", process.argv.slice(2), [
     { name: "game", type: "string", default: "all" },
@@ -205,6 +237,12 @@ async function main(): Promise<void> {
   await run("lol", () => watchLol(dataRoot, dryRun));
   await run("tft", () => watchTft(dataRoot, dryRun));
   await run("pubg", () => watchPubg(dataRoot, dryRun));
+
+  // **격차 보고 — 합불을 판정하지 않는다.** 감시자는 키가 없어 "왜 못 받았는지"를 알 수 없고
+  // (403인지 401인지는 수집 워크플로만 본다), 임계값("N일 밀리면 실패")은 정직하게 고를 수
+  // 없다 — 심사가 몇 주면 매일 빨간불이 되고 그 알림은 곧 무시된다. 그래서 **매일 같은 자리에
+  // 숫자만** 적는다. 이유는 `determine-report.ts`의 `SkipReason`이 수집 쪽 요약에 적는다.
+  reportStaleness(dataRoot);
 
   const out = process.env.GITHUB_OUTPUT;
   if (out) {

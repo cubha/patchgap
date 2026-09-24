@@ -23,19 +23,7 @@ import path from "node:path";
 import { determinePubgRun } from "../src/pipeline/collect/pubg/patch-calendar";
 import { loadPubgWindows } from "./shared/calendar";
 import { isMainModule } from "./shared/cli";
-
-function emit(values: Record<string, string>): void {
-  const body = Object.entries(values)
-    .map(([k, v]) => `${k}=${v}`)
-    .join("\n");
-  const out = process.env.GITHUB_OUTPUT;
-  if (out) fs.appendFileSync(out, `${body}\n`);
-  console.log(`[pubg-determine] ${body.replace(/\n/g, " ")}`);
-}
-
-function warn(message: string): void {
-  console.log(process.env.GITHUB_ACTIONS ? `::warning::${message}` : `[warning] ${message}`);
-}
+import { reportRun, reportSkip, warn } from "./shared/determine-report";
 
 function trimmed(name: string): string | undefined {
   const v = (process.env[name] ?? "").trim();
@@ -47,8 +35,7 @@ export function main(): void {
   const force = trimmed("MANUAL_FORCE") === "true";
 
   if (!trimmed("PUBG_API_KEY")) {
-    warn("PUBG_API_KEY 미설정 — PUBG 수집을 건너뛴다.");
-    emit({ should_run: "false" });
+    reportSkip("pubg", "key-missing", "PUBG_API_KEY 시크릿이 설정돼 있지 않다.");
     return;
   }
 
@@ -82,7 +69,7 @@ export function main(): void {
   }
 
   if (!decision.shouldRun || decision.from === null || decision.to === null) {
-    emit({ should_run: "false" });
+    reportSkip("pubg", "no-run-condition", decision.reason);
     return;
   }
   // 수기 노트가 들어왔나 — 없으면 수집만 하고 집계는 보류한다(위 헤더 참고).
@@ -96,8 +83,7 @@ export function main(): void {
     );
   }
 
-  emit({
-    should_run: "true",
+  reportRun("pubg", {
     notes_ready: notesReady ? "true" : "false",
     from: decision.from,
     to: decision.to,
