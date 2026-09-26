@@ -13,6 +13,8 @@ import path from "node:path";
 
 import { candidateSetHash, serializeCandidates } from "../llm-match";
 import { TFT_SYSTEM_INSTRUCTIONS_TEXT, tftLlmProfile } from "../llm-profile-tft";
+import { lolLlmProfile } from "../llm-profile-lol";
+import { loadDdragonSafe } from "../ddragon";
 import type { DeltaRecord, PatchNoteItem } from "../../types";
 
 function tftDelta(overrides: Partial<DeltaRecord> = {}): DeltaRecord {
@@ -98,3 +100,63 @@ describe("TFT LLM 프로필", () => {
     expect(hash).not.toBe("619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023");
   });
 });
+
+// 2026-09-27 감사: LLM 대상 중 `announced-inconsistent`의 대다수(LoL 52/69 · TFT 35/47)가 **비유의**였는데,
+// 프롬프트는 그것을 전부 "노트 방향과 관측이 다름"이라고 전했다 — 모델이 잡음에 원인을 지어 붙였다.
+// 방향 중립(상향·하향 동률)도 "반대"가 아니다. 대상은 화면이 「이상 관측」이라 부르는 행으로 좁힌다.
+describe("LLM 대상 선정 — 화면이 부르는 이름과 같은 행만", () => {
+  const profiles = [
+    ["tft", tftLlmProfile],
+    ["lol", lolLlmProfile(loadDdragonSafe())],
+  ] as const;
+  const anomaly = tftDelta({ status: "announced-inconsistent", directionAgreement: "inconsistent", delta: 0.5, after: 4.9123, ci: [0.3, 0.7], q: 0.001 });
+
+  for (const [game, profile] of profiles) {
+    it(`${game}: 미공지는 대상이다`, () => {
+      expect(profile.isTarget?.(tftDelta())).toBe(true);
+    });
+    it(`${game}: 방향 반대 + 유의 + 바닥 통과인 공지-불일치는 대상이다`, () => {
+      expect(profile.isTarget?.(anomaly)).toBe(true);
+    });
+    it(`${game}: 비유의 공지-불일치는 대상이 아니다 — 설명할 변화가 없다`, () => {
+      expect(profile.isTarget?.({ ...anomaly, q: 0.6, ci: [-0.1, 0.9] })).toBe(false);
+    });
+    it(`${game}: 방향 중립 공지-불일치는 대상이 아니다 — "반대"라고 전할 수 없다`, () => {
+      expect(profile.isTarget?.({ ...anomaly, directionAgreement: "neutral" })).toBe(false);
+    });
+    it(`${game}: 공지-일치·노이즈는 대상이 아니다`, () => {
+      expect(profile.isTarget?.({ ...anomaly, status: "announced-consistent" })).toBe(false);
+      expect(profile.isTarget?.({ ...anomaly, status: "no-change" })).toBe(false);
+    });
+  }
+});
+
+// 2026-09-27 감사: 26.19 블리츠크랭크 밴률 원인이 「앞으로 나올 스킨 및 크로마」 노트를 인용한 채
+// verified로 나갔다. 치장 노트는 관측 지표의 원인이 될 수 없다 — 인용 가능성에서 뺀다(후보 풀은
+// 그대로 두어 candidateSetHash·캐시를 지킨다).
+describe("인용 가능성 — 치장 노트 제외", () => {
+  const cosmetic: PatchNoteItem = {
+    id: "note:26.19:other:skins:1",
+    patch: "26.19",
+    section: "other",
+    entity: "앞으로 나올 스킨 및 크로마",
+    skill: null,
+    stat: null,
+    before: null,
+    after: null,
+    direction: "unknown",
+    summary: "이번 패치 기간에 다음과 같은 스킨이 출시됩니다.",
+    anchorUrl: "https://x/#patch-upcoming-skins-and-chromas",
+    anchorKind: "section",
+    modeScope: "core",
+  };
+  it("LoL·TFT 둘 다 치장 노트를 인용 불가로 본다", () => {
+    expect(lolLlmProfile(loadDdragonSafe()).isCitable(cosmetic)).toBe(false);
+    expect(tftLlmProfile.isCitable(cosmetic)).toBe(false);
+  });
+  it("수치가 있는 core 노트는 그대로 인용 가능하다", () => {
+    const balance = { ...cosmetic, entity: "녹턴", section: "champion" as const, stat: "재사용 대기시간", before: "140", after: "160", direction: "nerf" as const, summary: "재사용 대기시간: 140 ⇒ 160", anchorUrl: "https://x/#patch-champions" };
+    expect(lolLlmProfile(loadDdragonSafe()).isCitable(balance)).toBe(true);
+  });
+});
+

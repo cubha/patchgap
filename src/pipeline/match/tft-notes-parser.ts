@@ -86,10 +86,22 @@ const SECTION_OF: Record<TftEntityKind, PatchNoteSection> = {
 };
 
 interface CatalogIndex {
-  /** 표시명 → 종류. 긴 이름이 먼저 오도록 정렬해 최장 일치를 보장한다. */
-  entries: { name: string; kind: TftEntityKind }[];
+  /**
+   * 원문에서 찾을 이름 → (종류, 카탈로그 표시명). 긴 이름이 먼저 오도록 정렬해 최장 일치를 보장한다.
+   * `name`과 `entity`가 다른 것은 별칭 행뿐이다(`TFT_NOTE_NAME_ALIASES`).
+   */
+  entries: { name: string; kind: TftEntityKind; entity: string }[];
   lookup: Map<string, TftEntityKind>;
 }
+
+/**
+ * 원문 표기 → 카탈로그 표시명 별칭(2026-09-27). 패치노트가 카탈로그와 **다른 이름**으로 부르는 대상만
+ * 적는다 — 18.3 원문 「징수의 총 공격력: 40% ⇒ 35%」는 카탈로그 「황금 징수의 총」이라 미해소로
+ * 버려졌고, 원문 서술상 그 패치의 핵심 너프였다. 대상 이름이 카탈로그에 **있을 때만** 등록한다.
+ */
+const TFT_NOTE_NAME_ALIASES: Readonly<Record<string, string>> = {
+  "징수의 총": "황금 징수의 총",
+};
 
 function indexCatalog(catalog: TftCatalog): CatalogIndex {
   const lookup = new Map<string, TftEntityKind>();
@@ -105,9 +117,13 @@ function indexCatalog(catalog: TftCatalog): CatalogIndex {
   push(catalog.traits, "trait");
   push(catalog.augments, "augment");
   push(catalog.items, "item");
-  const entries = [...lookup.entries()]
-    .map(([name, kind]) => ({ name, kind }))
-    .sort((a, z) => z.name.length - a.name.length);
+  const aliasEntries = Object.entries(TFT_NOTE_NAME_ALIASES).flatMap(([alias, entity]) => {
+    const kind = lookup.get(entity);
+    return kind !== undefined && !lookup.has(alias) ? [{ name: alias, kind, entity }] : [];
+  });
+  const entries = [...[...lookup.entries()].map(([name, kind]) => ({ name, kind, entity: name })), ...aliasEntries].sort(
+    (a, z) => z.name.length - a.name.length
+  );
   return { entries, lookup };
 }
 
@@ -172,11 +188,11 @@ export function resolveTftEntity(
  * 「나르」가 「나르샤」를 먹는다. 한글·영숫자가 바로 이어지면 그건 다른 이름이다.
  */
 function stripEntityPrefix(label: string, index: CatalogIndex): { entity: string; kind: TftEntityKind; rest: string } | null {
-  for (const { name, kind } of index.entries) {
+  for (const { name, kind, entity } of index.entries) {
     if (!label.startsWith(name)) continue;
     const tail = label.slice(name.length);
     if (tail.length > 0 && !BOUNDARY_AFTER_NAME.test(tail)) continue;
-    return { entity: name, kind, rest: tail.replace(/^[\s,，、(（)）·:：-]+/, "").trim() };
+    return { entity, kind, rest: tail.replace(/^[\s,，、(（)）·:：-]+/, "").trim() };
   }
   return null;
 }

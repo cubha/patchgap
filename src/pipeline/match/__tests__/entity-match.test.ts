@@ -15,6 +15,15 @@ function makeDdragon(): DdragonData {
     폭풍갈퀴: [
       { id: 3095, name: "폭풍갈퀴", into: [], from: [], gold: { base: 700, purchasable: true, total: 3200, sell: 2240 }, tags: [] },
     ],
+    "세계 지도집": [
+      { id: 3865, name: "세계 지도집", into: [], from: [], gold: { base: 400, purchasable: true, total: 400, sell: 160 }, tags: [] },
+    ],
+    "룬 나침반": [
+      { id: 3866, name: "룬 나침반", into: [], from: [], gold: { base: 400, purchasable: true, total: 800, sell: 320 }, tags: [] },
+    ],
+    "빛과 어둠": [
+      { id: 9999, name: "빛과 어둠", into: [], from: [], gold: { base: 0, purchasable: true, total: 3000, sell: 0 }, tags: [] },
+    ],
   };
 
   return {
@@ -240,3 +249,41 @@ describe("modeScope 게이트 — 다른 게임 모드의 노트는 SR 델타와
     expect(outcome.matches.get("champion:Aatrox:winRate")?.noteIds).toEqual(["note:core:1"]);
   });
 });
+
+// 2026-09-27: 26.19 아이템 섹션의 h4 하나가 두 아이템을 함께 말했다(「세계 지도집과 룬 나침반」).
+// 통째로는 DDragon에 없어 매핑 실패로 버려졌고, 두 아이템의 델타가 노트와 짝지어지지 않았다.
+describe("matchDeterministic — 합친 이름 노트", () => {
+  const combined = note({
+    id: "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+    patch: "26.19",
+    section: "item",
+    entity: "세계 지도집과 룬 나침반",
+    skill: null,
+    anchorUrl: "https://example.com/#patch-items",
+  });
+
+  it("통째로 해소되지 않고 모든 조각이 아이템으로 해소되면 조각 각각에 짝짓는다", () => {
+    const deltas = [
+      delta({ id: "item:3865:adoptionRate", entityType: "item", entityKey: "3865", entityName: "세계 지도집" }),
+      delta({ id: "item:3866:adoptionRate", entityType: "item", entityKey: "3866", entityName: "룬 나침반" }),
+    ];
+    const outcome = matchDeterministic([combined], deltas, makeDdragon());
+    expect(outcome.matches.get("item:3865:adoptionRate")?.noteIds).toEqual([combined.id]);
+    expect(outcome.matches.get("item:3866:adoptionRate")?.noteIds).toEqual([combined.id]);
+    expect(outcome.mappingFailures).toEqual([]);
+  });
+
+  it("이름에 「과/와」가 있어도 통째로 해소되면 쪼개지 않는다", () => {
+    const whole = note({ ...combined, id: "n-whole", entity: "빛과 어둠" });
+    const deltas = [delta({ id: "item:9999:adoptionRate", entityType: "item", entityKey: "9999", entityName: "빛과 어둠" })];
+    const outcome = matchDeterministic([whole], deltas, makeDdragon());
+    expect(outcome.matches.get("item:9999:adoptionRate")?.noteIds).toEqual(["n-whole"]);
+  });
+
+  it("조각 하나라도 해소되지 않으면 쪼개지 않고 매핑 실패로 보고한다", () => {
+    const partial = note({ ...combined, id: "n-partial", entity: "세계 지도집과 없는 아이템" });
+    const outcome = matchDeterministic([partial], [], makeDdragon());
+    expect(outcome.mappingFailures).toEqual(["세계 지도집과 없는 아이템"]);
+  });
+});
+

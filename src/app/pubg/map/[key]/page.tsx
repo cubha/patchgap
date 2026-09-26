@@ -14,7 +14,7 @@ import { detailCrumbs } from "@/lib/breadcrumbs";
 import SectionCard from "@/components/SectionCard";
 import PubgDetailSplash, { type PubgDetailStat } from "@/components/pubg/PubgDetailSplash";
 import { PubgFooter, PubgUnavailable, pct } from "@/components/pubg/shared";
-import { loadPubg, loadPubgAssets, loadPubgMaps } from "@/lib/pubgData";
+import { loadPubg, loadPubgAssets, loadPubgMaps, pubgPair } from "@/lib/pubgData";
 import { mapKeyFromSlug, mapSlug, weaponHref } from "@/lib/pubgRoutes";
 import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
 import { publicMapPath } from "@/pipeline/pubg/asset-path";
@@ -47,9 +47,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { key } = await params;
   const mapKey = mapKeyFromSlug(key, allMapKeys());
   const name = mapKey ? mapIdentity(mapKey).koName : "맵";
+  const pair = pubgPair();
+  const span = pair ? `${pair.from} → ${pair.to}` : "패치 비교";
   return {
-    title: `${name} · PUBG 42.3 → 43.1 · patchgap`,
-    description: `${name}의 42.3 → 43.1 매치 점유율·평균 소요·무기 구성 변화.`,
+    title: `${name} · PUBG ${span} · patchgap`,
+    description: `${name}의 ${span} 매치 점유율·평균 소요·무기 구성 변화.`,
   };
 }
 

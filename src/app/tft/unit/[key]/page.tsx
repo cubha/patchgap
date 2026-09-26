@@ -93,6 +93,14 @@ function MetricBlock({ record }: { record: DeltaRecord }) {
       <span className="mt-1 font-mono text-xs leading-relaxed break-all text-muted">
         집계 경로: {record.evidence.aggregatePath}
       </span>
+      {/* 원천 매치(2026-09-27) — PUBG 무기 상세와 같은 한 줄 표기(앞 3건 + 나머지 수). 없으면 줄을
+          그리지 않는다(지어내지 않는다 — 이 필드 이전의 집계 파일이면 비어 있다). */}
+      {record.evidence.matchIds.length > 0 ? (
+        <span className="font-mono text-xs leading-relaxed break-all text-muted">
+          표본 매치: {record.evidence.matchIds.slice(0, 3).join(" · ")}
+          {record.evidence.matchIds.length > 3 ? ` 외 ${record.evidence.matchIds.length - 3}건` : ""}
+        </span>
+      ) : null}
     </div>
   );
 }

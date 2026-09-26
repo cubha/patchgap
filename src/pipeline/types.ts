@@ -356,6 +356,12 @@ export interface PatchNoteItem {
  * PLAN-unannounced-effect-size-floor-2026-09-13.md). 정렬 우선순위는
  * `src/pipeline/shared/status-order.ts` 단일 소스를 따른다.
  */
+/**
+ * 노트 방향(buff/nerf 다수결)과 관측 부호의 정합 — 1단 짝짓기가 계산한다. `neutral`은 노트 방향이
+ * 동률·중립이거나 관측 변화가 0이라 **반대인지 말할 수 없다**는 뜻이다(2026-09-27부터 행에 기록).
+ */
+export type DirectionAgreement = "consistent" | "inconsistent" | "neutral";
+
 export type MatchStatus =
   | "announced-consistent"
   | "announced-inconsistent"
@@ -446,6 +452,12 @@ export interface DeltaRecord {
   n: { before: number; after: number };
   q: number | null;
   status: MatchStatus;
+  /**
+   * 2026-09-27 신규(optional) — 노트 짝이 있을 때만 존재한다. 판정 엔진은 `neutral`을
+   * `announced-inconsistent`로 접어 넣으므로(verdict.ts), 화면이 "방향 반대(이상 관측)"와
+   * "방향을 말할 수 없음"을 가르려면 이 값이 필요하다. 없으면 이 필드 이전에 만든 파일이다.
+   */
+  directionAgreement?: DirectionAgreement;
   matchedNoteId: string | null;
   /**
    * ST-08 신규 — 같은 엔티티에 노트 항목이 여럿이면(예: 챔피언 스킬 변경 3줄) 그 전부를 여기

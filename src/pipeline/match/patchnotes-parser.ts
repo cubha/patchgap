@@ -83,8 +83,32 @@ import path from "node:path";
 import type { PatchId, PatchNoteItem, PatchNoteSection } from "../types";
 import { notesCacheFile } from "../shared/paths";
 
-/** 낮을수록 좋은 스탯 — 값이 늘면 nerf, 줄면 buff로 반전한다(그 외 스탯은 늘면 buff). */
-const LOWER_IS_BETTER_KEYWORDS = ["재사용 대기시간", "마나 소모", "기력 소모", "피해 감소", "비용"];
+/**
+ * 낮을수록 좋은 스탯 — 값이 늘면 nerf, 줄면 buff로 반전한다(그 외 스탯은 늘면 buff).
+ * 가격·기준치·요구치·소모·지연은 2026-09-27 감사에서 추가했다 — TFT 18.3에서 「목숨값 가격 1→2골드」가
+ * buff, 「빛비늘 정수 지연 라운드 8→6」이 nerf로 찍히는 등 약 9줄이 반대였다(TFT 파서도 이 함수를 쓴다).
+ */
+const LOWER_IS_BETTER_KEYWORDS = [
+  "재사용 대기시간",
+  "마나 소모",
+  "기력 소모",
+  "피해 감소",
+  "비용",
+  "가격",
+  "기준치",
+  "요구치",
+  "소모",
+  "지연",
+];
+
+/**
+ * 위 목록의 뜻을 **다시 뒤집는** 접미 — 「재사용 대기시간 반환」은 돌려받는 양이라 클수록 좋다
+ * (26.19 아레나 1.5→2.5초가 nerf로 찍혔다).
+ */
+const HIGHER_IS_BETTER_OVERRIDES = ["반환"];
+
+/** 원문이 수치를 바꾸되 "효과는 같다"고 밝힌 줄 — 방향이 아니라 조정이다(TFT 18.3 니달리 관통력). */
+const SAME_EFFECT_PATTERN = /(?:효과|성능)[은는]?\s*(?:전과|이전과|기존과)?\s*동일/u;
 
 /** "{라벨}: {before} ⇒ {after}" 형태의 원문 한 줄을 분해한다. 매치 실패 시 null(서술형 취급). */
 const STAT_LINE_PATTERN = /^(.+?):\s*(.+?)\s*⇒\s*(.+)$/;
@@ -208,9 +232,10 @@ function resolveSectionStrategy(title: string): SectionStrategy {
   return { kind: "fixed", section: "system" };
 }
 
+/** 천 단위 쉼표(「1,020」)는 한 숫자다 — 쪼개면 950→1,020이 [950]→[1, 20]이 되어 방향이 뒤집힌다. */
 function extractNumbers(text: string): number[] {
-  const matches = text.match(/\d+(?:\.\d+)?/g);
-  return matches ? matches.map(Number) : [];
+  const matches = text.match(/\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?/g);
+  return matches ? matches.map((m) => Number(m.replace(/,/g, ""))) : [];
 }
 
 type NumericVerdict = "buff" | "nerf" | "inconclusive";
@@ -229,7 +254,10 @@ function computeNumericDirection(stat: string | null, before: string, after: str
     else if (delta < 0) sawDecrease = true;
   }
   if (sawIncrease === sawDecrease) return "inconclusive"; // 둘 다 참(혼재) 또는 둘 다 거짓(순변화 0)
-  const lowerIsBetter = stat !== null && LOWER_IS_BETTER_KEYWORDS.some((k) => stat.includes(k));
+  const lowerIsBetter =
+    stat !== null &&
+    LOWER_IS_BETTER_KEYWORDS.some((k) => stat.includes(k)) &&
+    !HIGHER_IS_BETTER_OVERRIDES.some((k) => stat.includes(k));
   if (lowerIsBetter) return sawIncrease ? "nerf" : "buff";
   return sawIncrease ? "buff" : "nerf";
 }
@@ -253,6 +281,7 @@ export function resolveDirection(
   if (before === null || after === null) {
     return keywordHint ?? "unknown";
   }
+  if (SAME_EFFECT_PATTERN.test(before) || SAME_EFFECT_PATTERN.test(after)) return "adjust";
   const numeric = computeNumericDirection(stat, before, after);
   if (numeric !== "inconclusive") return numeric;
   return keywordHint ?? "adjust";

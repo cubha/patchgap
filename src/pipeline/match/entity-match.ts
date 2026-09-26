@@ -10,12 +10,12 @@
 // "neutral") vs 관측 델타 부호(픽률·밴률·승률·채택률 상승 = "up", 그 외 "down"/"flat")를 비교한다.
 // lane/objective/summary 엔티티는 패치노트에 대응 엔티티명이 없어 매칭 대상에서 제외한다.
 
-import type { DeltaRecord, PatchNoteItem } from "../types";
+import type { DeltaRecord, DirectionAgreement, PatchNoteItem } from "../types";
 import { isCoreNote } from "../shared/mode-scope";
 import type { DdragonData } from "./ddragon";
 
 export type NoteDirectionMajority = "buff" | "nerf" | "neutral";
-export type DirectionAgreement = "consistent" | "inconsistent" | "neutral";
+export type { DirectionAgreement };
 
 export interface EntityMatchInfo {
   /** 이 엔티티에 걸린 패치노트 항목 id 전부(문서 순서). */
@@ -74,6 +74,35 @@ function bucketKey(entityType: "champion" | "item", key: string): string {
 }
 
 /**
+ * 한 제목이 여러 대상을 함께 말하는 경우의 조각들 — 「세계 지도집과 룬 나침반」(26.19 아이템 h4).
+ * 「A과 B」·「A와 B」·「A 및 B」·「A, B」를 가른다. **호출부는 통째 이름이 해소되지 않을 때만** 이것을
+ * 쓰고, 조각이 **전부** 해소될 때만 채택한다 — 「빛과 어둠」처럼 이름 자체에 「과」가 든 대상을
+ * 쪼개지 않기 위해서다. 조각이 2개 미만이면 빈 배열.
+ */
+export function splitCombinedEntity(entity: string): string[] {
+  const parts = entity
+    .split(/(?<=\S)(?:과|와)\s+|\s+및\s+|\s*,\s*/u)
+    .map((p) => p.trim())
+    .filter((p) => p.length > 0);
+  return parts.length >= 2 ? parts : [];
+}
+
+/**
+ * 통째 → (실패 시) 조각 전부. 하나라도 못 찾으면 `null` — 부분 짝짓기는 하지 않는다.
+ * LLM 프로필의 자기참조 판정(llm-profile-lol.ts)도 이 함수를 쓴다 — 짝짓기와 자기참조가 다른 규칙으로
+ * 이름을 풀면, 짝지어진 노트를 "다른 대상의 노트"로 인용하는 원인이 통과한다.
+ */
+export function resolveNoteEntity<T>(entity: string, resolve: (name: string) => T[]): T[] | null {
+  const whole = resolve(entity);
+  if (whole.length > 0) return whole;
+  const parts = splitCombinedEntity(entity);
+  if (parts.length === 0) return null;
+  const resolved = parts.map(resolve);
+  if (resolved.some((r) => r.length === 0)) return null;
+  return resolved.flat();
+}
+
+/**
  * 패치노트 항목과 델타를 1단(결정론)으로 짝짓는다. 순수 함수 — 네트워크·파일 I/O 없음(ddragon은
  * 이미 로드된 객체를 주입받는다).
  */
@@ -92,18 +121,23 @@ export function matchDeterministic(
     // mappingFailures에도 넣지 않는다(SR 대상이 아니므로 "매핑 실패"가 아니다).
     if (!isCoreNote(note)) continue;
     if (note.section === "champion") {
-      const champion = ddragon.champions.byKoName(note.entity);
-      if (!champion) {
+      const champions = resolveNoteEntity(note.entity, (name) => {
+        const c = ddragon.champions.byKoName(name);
+        return c ? [c] : [];
+      });
+      if (!champions) {
         mappingFailures.add(note.entity);
         continue;
       }
-      const key = bucketKey("champion", champion.id);
-      const bucket = notesByEntityBucket.get(key) ?? [];
-      bucket.push(note);
-      notesByEntityBucket.set(key, bucket);
+      for (const champion of champions) {
+        const key = bucketKey("champion", champion.id);
+        const bucket = notesByEntityBucket.get(key) ?? [];
+        bucket.push(note);
+        notesByEntityBucket.set(key, bucket);
+      }
     } else if (note.section === "item") {
-      const candidates = ddragon.items.byKoName(note.entity);
-      if (candidates.length === 0) {
+      const candidates = resolveNoteEntity(note.entity, (name) => ddragon.items.byKoName(name));
+      if (!candidates) {
         mappingFailures.add(note.entity);
         continue;
       }

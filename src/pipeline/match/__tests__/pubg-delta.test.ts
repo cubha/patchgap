@@ -13,8 +13,11 @@ import {
   deriveEffectFloor,
   relChangeInterval,
   PICKUP_MIN_N,
+  capOverclaimedConfidence,
+  redistributionExpectation,
   type PubgNoteItem,
 } from "../pubg-delta";
+import type { PubgPatchAggregate } from "../../aggregate/pubg-weapons";
 
 const NOTE_SPAWN: PubgNoteItem = {
   id: "note:pubg-43.1:spawn:lmg",
@@ -165,3 +168,45 @@ describe("conservativeEffect", () => {
     expect(conservativeEffect([0.139, 0.174])).toBeGreaterThan(conservativeEffect([0.106, 0.306]));
   });
 });
+
+// 2026-09-27 감사: 43.1 원인 3건이 「RPD·M249 스폰 −30%의 제로섬 반사」를 confidence high로 단정했다.
+// 두 무기 점유율 7.00%→5.21%(−1.79%p)를 나머지에 균등 재분배해도 각 무기는 약 +1.9%다 — Groza +26.3%·
+// L6 +20.2%·Beryl +15.7%를 재분배만으로 설명할 수 없다. 기대치를 계산해 프롬프트에 주고, 코드로 상한을 건다.
+describe("재분배 기대치 · 과잉 확신 상한", () => {
+  const agg = (weapons: [string, number][]): PubgPatchAggregate => ({
+    patch: "x",
+    label: "x",
+    nMatches: 100,
+    nBots: 0,
+    nHumans: 100,
+    totalPickups: 1000,
+    pickupsPerMatch: 10,
+    botShare: 0,
+    weapons: weapons.map(([weaponKey, share]) => ({ weaponKey, weaponName: weaponKey, pickups: share * 1000, share, shareCi: [share, share] as [number, number] })),
+  });
+  const notes: PubgNoteItem[] = [
+    { id: "n1", patch: "43.1", weaponKeys: ["RPD", "M249"], stat: "스폰율", before: "100%", after: "70%", direction: "nerf", expectedRelChange: -0.3, summary: "s", anchorUrl: "a" },
+    { id: "n2", patch: "43.1", weaponKeys: ["MG3"], stat: "조준 전환 시간", before: null, after: null, direction: "nerf", expectedRelChange: null, summary: "s", anchorUrl: "a" },
+  ];
+
+  it("점유율로 검증 가능한 노트 무기들이 잃은 몫을 나머지에 균등 재분배한 상대 변화", () => {
+    const before = agg([["RPD", 0.04], ["M249", 0.03], ["AKM", 0.93]]);
+    const after = agg([["RPD", 0.029], ["M249", 0.023], ["AKM", 0.948]]);
+    // 잃은 몫 0.018 / 나머지 0.93 = 0.01935…
+    expect(redistributionExpectation(before, after, notes)).toBeCloseTo(0.018 / 0.93, 6);
+  });
+
+  it("검증 축이 없는 노트(expectedRelChange=null)는 재분배 원천이 아니다", () => {
+    const before = agg([["MG3", 0.05], ["AKM", 0.95]]);
+    const after = agg([["MG3", 0.02], ["AKM", 0.98]]);
+    expect(redistributionExpectation(before, after, [notes[1]])).toBe(0);
+  });
+
+  it("관측 변화가 기대치의 2배를 넘으면 원인 확신도를 low로 낮춘다 — 재분배만으로 설명되지 않는다", () => {
+    const row = { relChange: 0.263, causes: [{ text: "t", candidateNoteId: "n1", verified: true, confidence: "high" as const }] };
+    expect(capOverclaimedConfidence(row, 0.0193).causes?.[0].confidence).toBe("low");
+    const small = { relChange: 0.03, causes: [{ text: "t", candidateNoteId: "n1", verified: true, confidence: "high" as const }] };
+    expect(capOverclaimedConfidence(small, 0.0193).causes?.[0].confidence).toBe("high");
+  });
+});
+

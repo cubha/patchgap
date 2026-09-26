@@ -10,6 +10,8 @@ import { describe, expect, it } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import { isCoreNote } from "../../shared/mode-scope";
+import { isCosmeticNote } from "../../shared/cosmetic-note";
+import { namesOtherEntityThanCited } from "../llm-match";
 import type { DeltasFile, PatchNoteItem } from "../../types";
 
 const AGG = path.join(process.cwd(), "data", "aggregated");
@@ -103,6 +105,37 @@ describe("커밋된 판정 산출물 불변식", () => {
         });
       });
       expect(`${pair.name}: 모드 인용 요약 ${bad.length}건`).toBe(`${pair.name}: 모드 인용 요약 0건`);
+    }
+  });
+
+  // 2026-09-27: 재요청 병합이 위치로 짝지어 26.19 원인 6건이 **다른 노트의 인용**을 단 채 verified로
+  // 나갔다(나피리 밴률 "녹턴 R…" → 라이즈 노트). 결함을 그 형태 그대로 인코딩한다 — 수정 전 26.19에서 6건.
+  it("검증 통과 원인의 문장이 인용 노트와 다른 대상을 말하지 않는다", () => {
+    for (const pair of pairs) {
+      const all = [...pair.notes.values()];
+      const bad = pair.rows.flatMap((row) =>
+        row.causes
+          .filter((cause) => cause.verified && cause.candidateNoteId !== null)
+          .filter((cause) => {
+            const note = pair.notes.get(cause.candidateNoteId as string);
+            return note !== undefined && namesOtherEntityThanCited(cause.text, note, all, row.entityName);
+          })
+          .map((cause) => `${row.id}: ${cause.text.slice(0, 24)}`)
+      );
+      expect(`${pair.name}: 인용 어긋남 ${bad.length}건 ${bad.join(" | ")}`).toBe(`${pair.name}: 인용 어긋남 0건 `);
+    }
+  });
+
+  it("검증 통과 원인이 치장 노트(스킨·크로마 등)를 인용하지 않는다", () => {
+    for (const pair of pairs) {
+      const bad = pair.rows.flatMap((row) =>
+        row.causes.filter((cause) => {
+          if (!cause.verified || cause.candidateNoteId === null) return false;
+          const note = pair.notes.get(cause.candidateNoteId);
+          return note !== undefined && isCosmeticNote(note);
+        })
+      );
+      expect(`${pair.name}: 치장 인용 원인 ${bad.length}건`).toBe(`${pair.name}: 치장 인용 원인 0건`);
     }
   });
 });

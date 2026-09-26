@@ -200,7 +200,7 @@ export default function MethodologyPage() {
           <div>
             <dt className="font-display font-bold text-fg">무엇을 대상으로 하나</dt>
             <dd className="mt-1">
-              판정이 &ldquo;미공지&rdquo; 또는 &ldquo;공지 · 이상 관측&rdquo;인 관측만, 중요도 상위 120건입니다
+              판정이 &ldquo;미공지&rdquo; 또는 &ldquo;공지 · 이상 관측&rdquo;인 관측만, 중요도 상위 400건입니다
               (상태 우선순위 → 변화폭 내림차순). 나머지는 아예 묻지 않습니다.
             </dd>
           </div>

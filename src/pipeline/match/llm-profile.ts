@@ -15,6 +15,9 @@
 // `candidateSetHash` 실측값을 앵커로 삼아 고정한다.
 
 import type { DeltaRecord, LlmCause, MatchStatus, PatchNoteItem } from "../types";
+import { displayStatus } from "../shared/display-status";
+import { isCosmeticNote } from "../shared/cosmetic-note";
+import { isCoreNote } from "../shared/mode-scope";
 
 /**
  * 엔진이 델타에서 **직접** 읽는 것의 전부(2026-09-23). 나머지 필드는 전부 프로필이 읽는다.
@@ -72,4 +75,34 @@ export interface GameLlmProfile<TDelta extends LlmDelta = DeltaRecord> {
 
   /** 델타 1건을 사람이 읽는 형태로 적은 사용자 메시지. */
   buildUserPrompt(delta: TDelta): string;
+
+  /**
+   * 이 델타를 LLM 2단에 보낼까. 없으면 엔진 기본값(`unannounced` ∨ `announced-inconsistent`) — PUBG는
+   * 판정기가 불일치를 이미 비율 밴드로 확정하므로 기본값이 맞다.
+   */
+  isTarget?(delta: TDelta): boolean;
 }
+
+/**
+ * LoL·TFT 대상 선정(2026-09-27) — **화면이 「미공지」·「이상 관측」이라 부르는 행만**.
+ *
+ * 엔진 기본값은 `announced-inconsistent`를 통째로 보냈는데, 판정 엔진은 그 값에 "방향 반대 + 유의"뿐
+ * 아니라 "비유의"와 "방향 중립"까지 접어 넣는다(verdict.ts). 실측 26.19: 69건 중 52건이 비유의였고
+ * 프롬프트는 그것을 전부 "노트 방향과 관측이 다름"이라고 전했다 — 모델이 잡음에 원인을 지어냈다.
+ * 화면과 같은 술어(`displayStatus`)를 써서, 프롬프트의 상태 문구가 참인 행만 보낸다.
+ */
+export function isAnomalyOrGapTarget(delta: DeltaRecord): boolean {
+  if (delta.status === "unannounced") return true;
+  if (delta.status !== "announced-inconsistent") return false;
+  return displayStatus(delta) === "announced-anomaly";
+}
+
+/**
+ * LoL·TFT 인용 가능성 — core 노트 중 **치장이 아닌 것**(2026-09-27). 26.19 블리츠크랭크 밴률 원인이
+ * 「앞으로 나올 스킨 및 크로마」를 인용한 채 verified로 나갔다. 후보 풀(`candidatesOf`)에서 빼면
+ * candidateSetHash가 바뀌어 캐시가 전량 무효가 되므로, `isCitable`의 원래 설계대로 검증 지점에서 거른다.
+ */
+export function isCitableBalanceNote(note: PatchNoteItem): boolean {
+  return isCoreNote(note) && !isCosmeticNote(note);
+}
+

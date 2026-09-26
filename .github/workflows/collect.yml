@@ -340,6 +340,38 @@ jobs:
             "${SITE_ARGS[@]}"
         continue-on-error: true
 
+      # 데이터 불변식 — **경보형**(2026-09-27). 봇의 GITHUB_TOKEN push는 CI를 트리거하지 않아서, 봇이
+      # 만든 데이터에는 불변식이 한 번도 돌지 않았다 — 26.19 노트 오귀속(「세계 지도집과 룬 나침반」이
+      # 「룬」 범주로 빠짐)이 이틀간 main·사이트에 있었고, 그 사이 공지된 변경 2건이 잠수함으로 떠 있었다.
+      # 차단형이면 다시 패치노트를 인질로 잡으므로(결정 8) 커밋은 진행하고 알리기만 한다. 전체 스위트를
+      # 돈다 — 코드는 main과 같으므로 여기서 깨지는 것은 곧 **이 실행이 만든 데이터**다.
+      - name: Data invariants (경보 — 커밋은 막지 않는다)
+        id: invariants
+        if: steps.determine.outputs.should_run == 'true'
+        run: |
+          LOG="$RUNNER_TEMP/invariants.log"
+          if npx vitest run --reporter=dot > "$LOG" 2>&1; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            tail -60 "$LOG"
+            echo "::warning::데이터 불변식 실패 — 커밋은 진행한다(선언 축 최신 유지). 코드 PR로 고친다."
+            { echo "## ⚠️ 데이터 불변식 실패 (collect)"; echo '```'; tail -40 "$LOG"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Discord invariants alert (불변식 실패 시)
+        if: steps.determine.outputs.should_run == 'true' && steps.invariants.outputs.ok == 'false' && env.HAS_DISCORD_LOL == 'true'
+        env:
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+          DISCORD_WEBHOOK_URL_LOL: ${{ secrets.DISCORD_WEBHOOK_URL_LOL }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          URL="${DISCORD_WEBHOOK_URL_LOL:-$DISCORD_WEBHOOK_URL}"
+          BODY=$(node -e "console.log(JSON.stringify({content: \`⚠️ patchgap collect: \${process.env.PATCH_TO} 산출물이 데이터 불변식을 통과하지 못했습니다. 커밋은 진행했습니다 — 실행 요약: \${process.env.RUN_URL}\`}))")
+          curl -sf -X POST "$URL" -H "Content-Type: application/json" -d "$BODY"
+        continue-on-error: true
+
       - name: Commit + push generated data
         if: steps.determine.outputs.should_run == 'true'
         env:

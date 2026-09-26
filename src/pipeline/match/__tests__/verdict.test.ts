@@ -173,6 +173,21 @@ describe("applyVerdicts", () => {
     expect(result[0].evidence.noteAnchor).toBe("https://example.com/#patch-aatrox");
   });
 
+  it("짝이 있으면 방향 정합(directionAgreement)을 행에 기록한다 — 화면이 중립과 반대를 가른다", () => {
+    const deltas = [delta({ id: "champion:Aatrox:winRate" })];
+    const outcome: EntityMatchOutcome = {
+      matches: new Map([["champion:Aatrox:winRate", { noteIds: ["n1"], directionAgreement: "neutral" }]]),
+      mappingFailures: [],
+    };
+    expect(applyVerdicts(deltas, outcome, indexNotesById([]))[0].directionAgreement).toBe("neutral");
+  });
+
+  it("짝이 없으면 directionAgreement 필드 자체가 없다", () => {
+    const deltas = [delta({ id: "champion:Aatrox:winRate" })];
+    const outcome: EntityMatchOutcome = { matches: new Map(), mappingFailures: [] };
+    expect("directionAgreement" in applyVerdicts(deltas, outcome, indexNotesById([]))[0]).toBe(false);
+  });
+
   it("매칭 없는 델타는 matchedNoteId=null·noteAnchor=null 유지", () => {
     const deltas = [delta({ id: "champion:Aatrox:winRate", q: 0.9 })];
     const outcome: EntityMatchOutcome = { matches: new Map(), mappingFailures: [] };

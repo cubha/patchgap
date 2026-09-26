@@ -15,6 +15,7 @@ import {
   isNounEnding,
   mergeRepairedProse,
   verifyCauses,
+  namesOtherEntityThanCited,
   verifySummaryCites,
 } from "../llm-match";
 import { lolLlmProfile, SYSTEM_INSTRUCTIONS_TEXT } from "../llm-profile-lol";
@@ -130,6 +131,45 @@ describe("candidateSetHash", () => {
 
 describe("verifyCauses", () => {
   const candidates = [note({ id: "n1", entity: "아트록스", section: "champion" }), note({ id: "n2", entity: "그레이브즈", section: "champion" })];
+
+  // 2026-09-27: 재요청 병합이 위치로 짝지어 문장이 **다른 노트의 인용**을 달고 verified로 나갔다
+  // (26.19 나피리 밴률 "녹턴 R 재사용 대기시간…" → 라이즈 노트). 문장은 캐시에 그대로 저장돼
+  // 재생성으로도 안 고쳐진다 — 검증 지점이 막아야 한다.
+  describe("문장이 말하는 대상 ↔ 인용 노트 대상", () => {
+    const three = [...candidates, note({ id: "n3", entity: "세계 지도집과 룬 나침반", section: "item" })];
+    const run = (text: string, id: string) =>
+      verifyCauses([{ candidateNoteId: id, text, confidence: "low" }], three, delta({ entityKey: "Zed", entityName: "제드" }), lolLlmProfile(makeDdragon()))[0];
+
+    it("다른 후보 대상만 말하고 인용 대상은 말하지 않으면 verified=false", () => {
+      expect(run("그레이브즈 Q 너프로 정글 경쟁이 바뀌었습니다.", "n1").verified).toBe(false);
+    });
+    it("인용 대상을 말하면 다른 대상을 곁들여도 verified=true", () => {
+      expect(run("아트록스 상향으로 그레이브즈 대신 탑이 강해졌습니다.", "n1").verified).toBe(true);
+    });
+    it("어느 대상도 이름으로 말하지 않으면 판단하지 않는다(verified=true)", () => {
+      expect(run("서포터 아이템 체력 재생 상향으로 라인 유지력이 올랐습니다.", "n3").verified).toBe(true);
+    });
+    it("델타 자신의 이름은 '다른 대상'이 아니다", () => {
+      expect(run("제드 밴이 그레이브즈 때문에 늘었습니다.", "n2").verified).toBe(true);
+      expect(namesOtherEntityThanCited("제드 견제가 늘었습니다.", three[0], [...three, note({ id: "z", entity: "제드" })], "제드")).toBe(false);
+    });
+    it("인용 노트 수치 이름의 앞 세 어절을 말하면 인용 대상을 말한 것이다 — 두 어절 일반어는 아니다", () => {
+      const sub = note({ id: "s1", entity: "개화", stat: "주술 마나가 풍부한 토양 최대 마나 감소" });
+      const other = note({ id: "s2", entity: "마나가 풍부한 토양" });
+      expect(namesOtherEntityThanCited("주술 마나가 풍부한 토양 25%→20% 하향입니다.", sub, [sub, other])).toBe(false);
+      const generic = note({ id: "g1", entity: "알리스타", stat: "스킬 피해량" });
+      const vei = note({ id: "g2", entity: "베이가" });
+      expect(namesOtherEntityThanCited("베이가 스킬 피해량 상향입니다.", generic, [generic, vei])).toBe(true);
+    });
+    it("인용 노트의 수치 이름에 든 대상 이름은 '다른 대상'이 아니다", () => {
+      const rival = note({ id: "r1", entity: "경쟁을 넘어서", stat: "카직스가 렝가에게 부여하는 마나" });
+      const others = [rival, note({ id: "k", entity: "카직스" }), note({ id: "g", entity: "렝가" })];
+      expect(namesOtherEntityThanCited("카직스가 렝가에게 주는 마나가 70%→50%로 줄었습니다.", rival, others)).toBe(false);
+    });
+    it("합친 이름 노트는 조각 이름을 말해도 인용 대상을 말한 것이다", () => {
+      expect(run("룬 나침반 체력 너프로 라인전이 약해졌습니다.", "n3").verified).toBe(true);
+    });
+  });
 
   it("후보셋에 존재하는 id + 다른 엔티티면 verified=true", () => {
     const ddragon = makeDdragon();
@@ -250,6 +290,22 @@ describe("inferIndirectCandidates", () => {
     });
     expect(parseFn).toHaveBeenCalledTimes(2); // d1, d4만
     expect(result.summary.calls).toBe(2);
+  });
+
+  // 2026-09-27: 캐시 키에 프롬프트 본문이 들어가지 않아 지시문을 고쳐도 조용히 적중한다. 게임 하나만
+  // 다시 묻고 싶을 때(PUBG 제로섬 전제 수정) 전역 PROMPT_VERSION을 올리면 LoL·TFT 캐시까지 전량 무효다.
+  it("promptRevision이 다르면 캐시가 적중하지 않는다 — 없으면 기존 키 그대로", async () => {
+    const parseFn = vi.fn().mockResolvedValue(fakeResponse({ causes: [], summary: "요약", summaryCites: [] }));
+    const client = fakeClient(parseFn);
+    const deltas = [delta({ id: "d1", status: "unannounced" })];
+    const notes = [note({})];
+    const profile = lolLlmProfile(makeDdragon());
+    await inferIndirectCandidates(deltas, notes, profile, { client, cacheDir: tmpCacheDir });
+    const again = await inferIndirectCandidates(deltas, notes, profile, { client, cacheDir: tmpCacheDir });
+    expect(again.summary.cacheHits).toBe(1);
+    const revised = await inferIndirectCandidates(deltas, notes, profile, { client, cacheDir: tmpCacheDir, promptRevision: "r2" });
+    expect(revised.summary.cacheHits).toBe(0);
+    expect(revised.summary.calls).toBe(1);
   });
 
   it("캐시 파일이 있으면 API 호출 0", async () => {
@@ -572,8 +628,8 @@ describe("길이 재요청(v5) — 문구가 아니라 호출부가 닫는다", 
         summary: "원래 요약입니다.",
         summaryCites: ["note:a"],
         causes: [
-          { text: "밀렸습니다.", candidateNoteId: "note:ZZZ", confidence: "low" as const },
-          { text: "짧습니다.", candidateNoteId: "note:YYY", confidence: "high" as const },
+          { text: "밀렸습니다.", candidateNoteId: "note:a", confidence: "low" as const },
+          { text: "짧습니다.", candidateNoteId: "note:b", confidence: "high" as const },
         ],
       };
       const merged = mergeRepairedProse(original, repaired);
@@ -583,6 +639,39 @@ describe("길이 재요청(v5) — 문구가 아니라 호출부가 닫는다", 
       expect(merged?.causes[0].confidence).toBe("high");
       expect(merged?.causes[1].candidateNoteId).toBe("note:b");
       expect(merged?.causes[1].confidence).toBe("low");
+    });
+
+    // 2026-09-27 명세 변경: 전에는 인용이 무엇으로 바뀌었든 i번째 문장을 i번째 원본 인용에 붙였다.
+    // 재요청 응답이 원인 **순서**를 바꾸면(실측 26.19 나피리 밴률: 문장 i가 인용 i+1의 내용) 문장이
+    // 엉뚱한 노트를 인용한 채 verified로 나갔다 — LoL 3행·TFT 4행. 문장과 인용은 한 쌍이다.
+    it("재요청이 원인 순서를 바꾸면 인용 id로 짝을 다시 짓는다", () => {
+      const repaired = {
+        summary: "원래 요약입니다.",
+        summaryCites: ["note:a"],
+        causes: [
+          { text: "b를 말합니다.", candidateNoteId: "note:b", confidence: "low" as const },
+          { text: "a를 말합니다.", candidateNoteId: "note:a", confidence: "high" as const },
+        ],
+      };
+      const merged = mergeRepairedProse(original, repaired);
+      expect(merged?.causes.map((c) => [c.candidateNoteId, c.text])).toEqual([
+        ["note:a", "a를 말합니다."],
+        ["note:b", "b를 말합니다."],
+      ]);
+    });
+
+    it("재요청 문장이 원본에 없는 노트를 인용하면 그 원인은 원본 문장을 지킨다", () => {
+      const repaired = {
+        summary: "원래 요약입니다.",
+        summaryCites: ["note:a"],
+        causes: [
+          { text: "다른 노트 이야기입니다.", candidateNoteId: "note:ZZZ", confidence: "low" as const },
+          { text: "b를 말합니다.", candidateNoteId: "note:b", confidence: "high" as const },
+        ],
+      };
+      const merged = mergeRepairedProse(original, repaired);
+      expect(merged?.causes[0]).toEqual(original.causes[0]);
+      expect(merged?.causes[1].text).toBe("b를 말합니다.");
     });
 
     it("원인 개수가 달라지면 병합하지 않는다 — 짝을 지을 수 없다", () => {

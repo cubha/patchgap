@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-import { TFT_MIN_BOARDS, aggregateTftBoards } from "../tft-boards";
+import { TFT_MATCH_ID_SAMPLE_SIZE, TFT_MIN_BOARDS, aggregateTftBoards } from "../tft-boards";
 import type { TftMatchSlim, TftParticipantSlim } from "../../types";
 
 function board(placement: number, unitIds: string[], traits: string[] = [], itemIds: string[] = []): TftParticipantSlim {
@@ -126,3 +126,26 @@ describe("aggregateTftBoards — 요약·정렬", () => {
     expect(agg.summary.avgLastRound).toBe(30);
   });
 });
+
+// 2026-09-27: TFT 판정의 `evidence.matchIds`가 전부 비어 있었다 — 「모든 판정문은 원천 링크를 가진다」를
+// TFT만 지키지 못했다. LoL과 같은 규칙(엔티티가 등장한 매치 id를 입력 순서대로 최대 10개)을 집계가 낸다.
+describe("aggregateTftBoards — 원천 매치 표본", () => {
+  it("엔티티가 등장한 매치 id를 입력 순서대로, 매치당 한 번만 싣는다", () => {
+    const agg = aggregateTftBoards(
+      [
+        match([board(1, ["A"]), board(2, ["A"])], "KR_1"),
+        match([board(1, ["B"])], "KR_2"),
+        match([board(3, ["A", "B"])], "KR_3"),
+      ],
+      "18.2"
+    );
+    expect(agg.units.find((u) => u.key === "A")?.sampleMatchIds).toEqual(["KR_1", "KR_3"]);
+    expect(agg.units.find((u) => u.key === "B")?.sampleMatchIds).toEqual(["KR_2", "KR_3"]);
+  });
+
+  it("최대 10개까지만 싣는다 — 산출물 크기를 엔티티 수에 비례시키지 않는다", () => {
+    const matches = Array.from({ length: 15 }, (_, i) => match([board(1, ["A"])], `KR_${i}`));
+    expect(aggregateTftBoards(matches, "18.2").units[0].sampleMatchIds).toHaveLength(TFT_MATCH_ID_SAMPLE_SIZE);
+  });
+});
+

@@ -40,8 +40,10 @@ interface Draft {
   delta: number;
   ci: Interval;
   n: { before: number; after: number };
-  p: number;
+  /** `null` = BH 가족에 넣지 않는다(개체 표본 미달 — 판정은 `assignStatus`가 표본 부족으로 찍는다). */
+  p: number | null;
   aggregatePath: string;
+  matchIds: string[];
 }
 
 /** 두 평균의 차이에 대한 양측 p값 — `delta.ts`의 `meanDiffPValue`와 같은 정규근사다. */
@@ -89,6 +91,8 @@ function bucketDrafts(
     if (!before) continue; // 신규 엔티티 — 이전 패치에 없던 것은 "변화"가 아니다.
     const name = displayName(after);
     const idBase = `${entityType}:${after.key}`;
+    // 원천 매치 — 이후 패치 집계의 표본(LoL이 `to` 패치 원본에서 뽑는 것과 같은 쪽). 없으면 빈 배열.
+    const matchIds = after.sampleMatchIds ?? [];
 
     // ① 등장률 — 분모는 전체 보드 수.
     {
@@ -106,11 +110,16 @@ function bucketDrafts(
         n: { before: beforeBoards, after: afterBoards },
         p: twoProportionPValue(before.boards, beforeBoards, after.boards, afterBoards),
         aggregatePath: aggPath(afterPatch, bucket, after.key),
+        matchIds,
       });
     }
 
-    // ② 순방률 — 분모는 **그 엔티티가 등장한 보드 수**. 표본 게이트를 여기서 건다.
-    if (before.boards >= TFT_MIN_BOARDS && after.boards >= TFT_MIN_BOARDS) {
+    // ② 순방률 — 분모는 **그 엔티티가 등장한 보드 수**. 표본이 모자라도 행은 낸다(2026-09-27):
+    //    전에는 여기서 행 자체를 버려 TFT에 `insufficient-sample`이 한 건도 찍히지 않았다 —
+    //    "판정 유보"가 "관측 없음"과 구분되지 않았다. 대신 p를 `null`로 두어 **BH 가족에서 뺀다**
+    //    (넣으면 다른 행의 q가 흔들린다). 표본 부족 판정은 `verdict.assignStatus`의 n 게이트가 한다.
+    const sampled = before.boards >= TFT_MIN_BOARDS && after.boards >= TFT_MIN_BOARDS;
+    {
       const top4Before = Math.round(before.top4Rate * before.boards);
       const top4After = Math.round(after.top4Rate * after.boards);
       drafts.push({
@@ -124,8 +133,9 @@ function bucketDrafts(
         delta: after.top4Rate - before.top4Rate,
         ci: newcombeDiffInterval(top4Before, before.boards, top4After, after.boards),
         n: { before: before.boards, after: after.boards },
-        p: twoProportionPValue(top4Before, before.boards, top4After, after.boards),
+        p: sampled ? twoProportionPValue(top4Before, before.boards, top4After, after.boards) : null,
         aggregatePath: aggPath(afterPatch, bucket, after.key),
+        matchIds,
       });
 
       // ③ 평균 등수 — 표준편차가 있어야 p값을 낼 수 있다(집계가 함께 낸다).
@@ -146,8 +156,11 @@ function bucketDrafts(
           delta: after.avgPlacement - before.avgPlacement,
           ci: meanDiffInterval(before.avgPlacement, sdBefore, before.boards, after.avgPlacement, sdAfter, after.boards),
           n: { before: before.boards, after: after.boards },
-          p: meanDiffP(before.avgPlacement, sdBefore, before.boards, after.avgPlacement, sdAfter, after.boards),
+          p: sampled
+            ? meanDiffP(before.avgPlacement, sdBefore, before.boards, after.avgPlacement, sdAfter, after.boards)
+            : null,
           aggregatePath: aggPath(afterPatch, bucket, after.key),
+          matchIds,
         });
       }
     }
@@ -167,10 +180,16 @@ export function buildTftDeltas(before: TftAggregateNamed, after: TftAggregateNam
   ];
 
   // BH-FDR은 **전체 델타에 한 번** 건다 — 버킷별로 따로 걸면 보정이 약해져 위양성이 는다.
-  const { q } = benjaminiHochberg(
-    drafts.map((d) => d.p),
+  // 표본 미달 행(p=null)은 가족에서 뺀다 — q=null로 남고 판정은 표본 부족이다.
+  const family = drafts.flatMap((d, index) => (d.p === null ? [] : [{ index, p: d.p }]));
+  const { q: familyQ } = benjaminiHochberg(
+    family.map((f) => f.p),
     FDR_ALPHA
   );
+  const q: (number | null)[] = drafts.map(() => null);
+  family.forEach((f, i) => {
+    q[f.index] = familyQ[i];
+  });
 
   return drafts.map((draft, index) => ({
     id: draft.id,
@@ -189,10 +208,9 @@ export function buildTftDeltas(before: TftAggregateNamed, after: TftAggregateNam
     matchedNoteIds: [],
     causes: [],
     evidence: {
-      // 원천 매치 ID 표본은 아직 붙이지 않는다 — 붙일 수 있는데 안 하는 게 아니라,
-      // 보드 단위 샘플링 규칙을 정하지 않았다. 빈 배열이 곧 "근거 링크 없음"이고
-      // 화면은 그것을 회색으로 읽는다(무근거 회색 원칙).
-      matchIds: [],
+      // 원천 매치 id 표본 — 집계(`tft-boards.ts`)가 엔티티별로 낸다(2026-09-27). 이 필드 이전의
+      // 집계 파일이면 빈 배열이고, 화면은 그것을 「원천 매치 표본 없음」으로 읽는다(지어내지 않는다).
+      matchIds: draft.matchIds,
       aggregatePath: draft.aggregatePath,
       noteAnchor: null,
     },

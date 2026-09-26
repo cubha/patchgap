@@ -24,6 +24,7 @@ import { isGapStatus } from "./logic";
 import { selectReportableObservation } from "./streamVerdict";
 import { indexNoteDeltas } from "./noteDeltaIndex";
 import { isCosmeticGroup } from "@/pipeline/shared/cosmetic-note";
+import { displayStatus } from "@/pipeline/shared/display-status";
 
 export interface MatchedStreamGroup {
   kind: "matched";
@@ -139,7 +140,9 @@ export function contentTier(
   }
   const observation = selectReportableObservation(rows, qAlpha);
   if (!observation) return 2;
-  return observation.status === "announced-inconsistent" ? 0 : 1;
+  // 배지와 같은 키로 가른다 — 원시 상태값은 "방향 중립"도 불일치에 접어 넣어(verdict.ts), 배지는
+  // 「공지」인데 행만 이상 관측 티어로 올라가는 어긋남이 생긴다(2026-09-27).
+  return displayStatus(observation, qAlpha) === "announced-anomaly" ? 0 : 1;
 }
 
 /**

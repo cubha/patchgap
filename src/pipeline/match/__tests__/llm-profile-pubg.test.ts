@@ -95,3 +95,24 @@ describe("프롬프트 계약", () => {
     expect(prompt).toContain("획득 점유율");
   });
 });
+
+// 2026-09-27: 제로섬은 성질이지만 **상한이 있는 효과**다. 지시문이 그것을 무한정 전제로 주입해
+// 43.1 원인 3건이 재분배 기대치(+1.9%)의 10배가 넘는 변화를 "제로섬 반사"로 high 단정했다.
+describe("재분배 상한 계약", () => {
+  it("지시문이 재분배 폭의 상한과 high 금지를 말한다", () => {
+    expect(PUBG_SYSTEM_INSTRUCTIONS_TEXT).toContain("균등 재분배 기대치");
+    expect(PUBG_SYSTEM_INSTRUCTIONS_TEXT).not.toContain("제로섬이므로 직접 너프를 받지 않은 무기도 움직입니다");
+  });
+
+  it("맥락이 주어지면 사용자 메시지에 기대치와 전체 획득 수 변화가 수치로 들어간다", () => {
+    const withContext = createPubgLlmProfile(new Map(), { redistribution: 0.0193, totalPickupsRelChange: -0.179 });
+    const prompt = withContext.buildUserPrompt(row({ weaponKey: "Item_Weapon_Groza_C", weaponName: "Groza" }));
+    expect(prompt).toContain("균등 재분배 기대치: +1.9%");
+    expect(prompt).toContain("전체 획득 수 변화: -17.9%");
+  });
+
+  it("맥락이 없으면 그 줄을 지어내지 않는다", () => {
+    expect(profile.buildUserPrompt(row({ weaponKey: "Item_Weapon_Groza_C" }))).not.toContain("재분배 기대치");
+  });
+});
+

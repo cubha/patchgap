@@ -24,6 +24,7 @@ import { llmCacheDir } from "../shared/paths";
 import type { GameLlmProfile, LlmDelta } from "./llm-profile";
 
 export { LLM_MODEL, PROMPT_VERSION } from "./llm-config";
+import { splitCombinedEntity } from "./entity-match";
 import { LLM_MODEL, PROMPT_VERSION } from "./llm-config";
 // 2026-09-17: 50 → 120. 실측 후보가 113건(미공지 47 + 간접 2 + 공지-불일치 64)인데 상한이
 // 50이라 미공지 14건이 LLM을 **아예 거치지 못했고**, 화면은 그것을 "근거 미확인"으로 표시해
@@ -192,6 +193,62 @@ function writeCache(cacheDir: string, key: string, value: CacheFileShape): void 
  * LLM이 반환한 causes를 후보셋 검증한다 — 존재하지 않는 id·자기 엔티티 참조는 candidateNoteId를
  * null로, verified를 false로 폐기(text/confidence는 회색 표기용으로 보존).
  */
+/** 노트 대상의 이름들 — 합친 이름(「세계 지도집과 룬 나침반」)은 조각까지. 2자 미만은 버린다(「룬」 같은 범주어). */
+function entityNames(entity: string): string[] {
+  return [entity, ...splitCombinedEntity(entity)].filter((name) => name.length >= 2);
+}
+
+/**
+ * 인용 노트를 "말했다"고 볼 이름 — 대상 전체 이름 + 어절(「순간이동 재사용 대기시간」의 「순간이동」) +
+ * 수치 이름의 앞 세 어절(TFT 18.3: 개화 노트의 「주술 마나가 풍부한 토양 …」을 문장이 그대로 말한다).
+ * 세 어절 미만의 수치 이름은 보지 않는다 — 「스킬 피해량」·「체력」 같은 일반어를 인정하면 다른 노트를
+ * 말한 문장이 통과한다(실측: 베이가 문장이 알리스타 「스킬 피해량」 노트를 인용한 행이 새어 나갔다).
+ */
+function citedMentionNames(note: PatchNoteItem): string[] {
+  const names = entityNames(note.entity);
+  const words = names.flatMap((name) => name.split(/\s+/u)).filter((word) => word.length >= 2);
+  const statWords = (note.stat ?? "").trim().split(/\s+/u);
+  const statHead = statWords.length >= 3 ? statWords.slice(0, 3).join(" ") : "";
+  return [...new Set([...names, ...words, ...(statHead ? [statHead] : [])])];
+}
+
+/**
+ * 원인 문장이 **인용 노트와 다른 대상을 말하는가**(2026-09-27).
+ *
+ * 참이 되는 조건: 문장이 인용 노트 대상의 이름(또는 그 어절)을 하나도 말하지 않으면서, 다른 후보 노트
+ * 대상의 이름을 말한다. 다음은 "다른 대상"으로 세지 않는다 — 델타 **자신의** 이름(「기원자 빌드가
+ * 약화됐습니다」는 자연스러운 문장이다), 인용 대상 이름과 부분 문자열 관계인 이름, 인용 노트의 수치 이름에
+ * 든 이름. 어느 대상도 이름으로
+ * 말하지 않는 문장("서포터 아이템 체력 재생…")은 판단하지 않는다(거짓) — 이 게이트는 보수적이다.
+ *
+ * 왜 필요한가: 재요청 병합이 위치로 짝지어 26.19 LoL 3행·TFT 18.3 4행의 문장이 다른 노트의 인용을
+ * 달고 verified로 나갔고, 그 결과가 캐시에 되쓰여 재생성으로도 고쳐지지 않았다.
+ */
+export function namesOtherEntityThanCited(
+  text: string,
+  cited: PatchNoteItem,
+  candidates: readonly PatchNoteItem[],
+  ownName: string | null = null
+): boolean {
+  if (citedMentionNames(cited).some((name) => text.includes(name))) return false;
+  const citedNames = entityNames(cited.entity);
+  // 인용 노트의 수치 이름 안에 든 이름도 "다른 대상"이 아니다 — TFT 18.2 「경쟁을 넘어서」의 수치가
+  // 「카직스가 렝가에게 부여하는 마나」라, 카직스·렝가를 말한 문장은 그 노트를 말한 것이다.
+  const citedStat = cited.stat ?? "";
+  const excluded = (name: string) =>
+    name === ownName || citedStat.includes(name) || citedNames.some((c) => c.includes(name) || name.includes(c));
+  return candidates.some(
+    (note) => note.id !== cited.id && entityNames(note.entity).some((name) => !excluded(name) && text.includes(name))
+  );
+}
+
+/** 델타 자신의 표시 이름 — LoL·TFT `entityName`, PUBG `weaponName`. 엔진은 `LlmDelta`만 알므로 좁혀 읽는다. */
+function ownNameOf(delta: LlmDelta): string | null {
+  if ("entityName" in delta && typeof delta.entityName === "string") return delta.entityName;
+  if ("weaponName" in delta && typeof delta.weaponName === "string") return delta.weaponName;
+  return null;
+}
+
 export function verifyCauses<TDelta extends LlmDelta = DeltaRecord>(
   rawCauses: LlmOutput["causes"],
   candidates: readonly PatchNoteItem[],
@@ -218,6 +275,10 @@ export function verifyCauses<TDelta extends LlmDelta = DeltaRecord>(
       return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
     }
     if (note && profile.isSameEntity(note, delta)) {
+      return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
+    }
+    // 문장과 인용은 한 쌍이다 — 문장이 다른 대상을 말하면 인용 링크가 거짓 근거가 된다.
+    if (note && namesOtherEntityThanCited(cause.text, note, candidates, ownNameOf(delta))) {
       return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
     }
     return {
@@ -297,7 +358,7 @@ export function countProseViolations(parsed: LlmOutput): number {
  * "candidateNoteId와 confidence는 그대로 두세요"라고 적고 있었지만 **아무것도 그것을 강제하지
  * 않았다**. 문구는 계약이 아니다 — 코드가 계약이다.
  *
- * 원인 개수가 달라지면 짝을 지을 수 없으므로 병합을 포기한다(null). 요약은 `summaryCites`가
+ * 원인 개수가 달라지면 병합을 포기한다(null). 원인은 인용 id로 짝짓는다(위치가 아니라). 요약은 `summaryCites`가
  * 그대로일 때만 새 문장을 쓴다 — 문장과 인용은 한 쌍이라 한쪽만 바꾸면 인용이 문장을 벗어난다.
  */
 export function mergeRepairedProse(original: LlmOutput, repaired: LlmOutput): LlmOutput | null {
@@ -305,13 +366,23 @@ export function mergeRepairedProse(original: LlmOutput, repaired: LlmOutput): Ll
   const citesUnchanged =
     repaired.summaryCites.length === original.summaryCites.length &&
     repaired.summaryCites.every((id, index) => id === original.summaryCites[index]);
+  // 원인 문장은 **인용 id로** 짝짓는다(2026-09-27). 위치로 짝지으면 재요청이 순서를 바꿨을 때 문장이
+  // 다른 노트의 인용을 달고 나간다 — 26.19 나피리 밴률 등 LoL 3행·TFT 4행이 그렇게 verified로 나갔다.
+  // 같은 id가 여럿이면 등장 순서대로 소비한다. 짝이 없는 원인은 원본 문장을 지킨다(위반이 남더라도
+  // 문장과 인용이 어긋나는 것보다 낫다 — 전자는 계측에 잡히고 후자는 화면에서 조용히 틀린다).
+  const pool = new Map<string | null, string[]>();
+  for (const cause of repaired.causes) {
+    const texts = pool.get(cause.candidateNoteId) ?? [];
+    texts.push(cause.text);
+    pool.set(cause.candidateNoteId, texts);
+  }
   return {
     summary: citesUnchanged ? repaired.summary : original.summary,
     summaryCites: original.summaryCites,
-    causes: original.causes.map((cause, index) => ({
+    causes: original.causes.map((cause) => ({
       candidateNoteId: cause.candidateNoteId,
       confidence: cause.confidence,
-      text: repaired.causes[index].text,
+      text: pool.get(cause.candidateNoteId)?.shift() ?? cause.text,
     })),
   };
 }
@@ -439,6 +510,12 @@ export interface LlmMatchOptions {
   maxTotalCalls?: number;
   /** 기본 data/cache/llm/. */
   cacheDir?: string;
+  /**
+   * 게임 하나의 지시문을 고쳤을 때 **그 게임만** 다시 묻게 하는 개정 태그(2026-09-27). 캐시 키가 프롬프트
+   * 본문을 보지 않으므로, 없으면 지시문 수정이 조용히 캐시 적중으로 묻힌다. 전역 `PROMPT_VERSION`을
+   * 올리면 다른 게임 캐시까지 전량 무효가 된다. 비워 두면 키는 이 옵션이 생기기 전과 같다.
+   */
+  promptRevision?: string;
   /** 주입 가능한 Anthropic 클라이언트(테스트 모킹용). 기본은 `new Anthropic()`(env의 ANTHROPIC_API_KEY 사용). */
   client?: Anthropic;
   model?: string;
@@ -486,14 +563,15 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
   const maxDeltas = options.maxDeltas ?? DEFAULT_MAX_DELTAS;
   const maxTotalCalls = options.maxTotalCalls ?? DEFAULT_MAX_TOTAL_CALLS;
   const cacheDir = options.cacheDir ?? llmCacheDir();
+  const promptVersion = options.promptRevision ? `${PROMPT_VERSION}+${options.promptRevision}` : PROMPT_VERSION;
   const model = options.model ?? LLM_MODEL;
 
   const candidates = profile.candidatesOf(notes);
   const candSetHash = candidateSetHash(serializeCandidates(candidates));
 
-  const targets = deltas
-    .filter((d) => d.status === "unannounced" || d.status === "announced-inconsistent")
-    .slice(0, maxDeltas);
+  const isTarget =
+    profile.isTarget ?? ((d: TDelta) => d.status === "unannounced" || d.status === "announced-inconsistent");
+  const targets = deltas.filter((d) => isTarget(d)).slice(0, maxDeltas);
   const targetIds = new Set(targets.map((d) => d.id));
 
   const summary: LlmRunSummary = {
@@ -508,7 +586,7 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
   const resultById = new Map<string, TDelta>();
 
   for (const delta of targets) {
-    const key = cacheKeyFor(model, PROMPT_VERSION, delta.id, candSetHash);
+    const key = cacheKeyFor(model, promptVersion, delta.id, candSetHash);
     const cached = readCache(cacheDir, key);
     if (cached) {
       summary.cacheHits += 1;
@@ -611,7 +689,7 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
       writeCache(cacheDir, key, {
         deltaId: delta.id,
         model,
-        promptVersion: PROMPT_VERSION,
+        promptVersion,
         candidateSetHash: candSetHash,
         generatedAt: new Date().toISOString(),
         parsed,

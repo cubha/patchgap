@@ -16,6 +16,9 @@ import type { Interval, TftMatchSlim } from "../types";
 /** 등장률 최소 표본 — 이 미만이면 하류가 `insufficient-sample`로 떨어뜨린다. */
 export const TFT_MIN_BOARDS = 200;
 
+/** 엔티티당 원천 매치 id 표본 수 — LoL `delta.ts`의 `MATCH_ID_SAMPLE_SIZE`와 같은 값·같은 규칙(입력 순서 앞쪽). */
+export const TFT_MATCH_ID_SAMPLE_SIZE = 10;
+
 export type TftEntityKind = "unit" | "trait" | "item";
 
 export interface TftEntityStat {
@@ -36,6 +39,11 @@ export interface TftEntityStat {
    * 분모 0으로 **무한 확신**을 갖게 된다.
    */
   placementSd: number | null;
+  /**
+   * 이 엔티티가 등장한 매치 id(입력 순서, 매치당 1회, 최대 `TFT_MATCH_ID_SAMPLE_SIZE`개) — 판정의
+   * `evidence.matchIds` 원천(2026-09-27). 선택 필드인 이유: 이 필드 이전에 만든 집계 파일에는 없다.
+   */
+  sampleMatchIds?: string[];
 }
 
 export interface TftAggregate {
@@ -59,11 +67,16 @@ interface Acc {
   placementSum: number;
   /** 제곱합 — 한 번 훑어 분산을 내기 위한 누적값. */
   placementSqSum: number;
+  sampleMatchIds: string[];
 }
 
-function bump(map: Map<string, Acc>, key: string, placement: number): void {
-  const cur = map.get(key) ?? { boards: 0, top4: 0, placementSum: 0, placementSqSum: 0 };
+function bump(map: Map<string, Acc>, key: string, placement: number, matchId: string): void {
+  const cur = map.get(key) ?? { boards: 0, top4: 0, placementSum: 0, placementSqSum: 0, sampleMatchIds: [] };
   cur.boards += 1;
+  // 한 매치의 여러 보드가 같은 엔티티를 써도 id는 한 번만 — 매치는 연속으로 들어오므로 마지막 것만 보면 된다.
+  if (cur.sampleMatchIds.length < TFT_MATCH_ID_SAMPLE_SIZE && cur.sampleMatchIds.at(-1) !== matchId) {
+    cur.sampleMatchIds.push(matchId);
+  }
   if (placement <= 4) cur.top4 += 1;
   cur.placementSum += placement;
   cur.placementSqSum += placement * placement;
@@ -91,6 +104,7 @@ function finish(map: Map<string, Acc>, kind: TftEntityKind, totalBoards: number)
       top4Ci: acc.boards >= TFT_MIN_BOARDS ? wilsonInterval(acc.top4, acc.boards) : null,
       avgPlacement: acc.boards === 0 ? 0 : acc.placementSum / acc.boards,
       placementSd: sampleSd(acc),
+      sampleMatchIds: acc.sampleMatchIds,
     });
   }
   // 등장률 내림차순 — 표시 정렬은 하류(판정 우선순위)가 다시 하지만, 산출물 자체가
@@ -114,9 +128,9 @@ export function aggregateTftBoards(matches: readonly TftMatchSlim[], patch: stri
       boards += 1;
       lastRoundSum += p.lastRound;
       // 보드 단위 중복 제거 — 같은 유닛을 두 칸에 놓아도 "쓴 보드"는 하나다.
-      for (const key of new Set(p.unitIds)) bump(units, key, p.placement);
-      for (const key of new Set(p.itemIds)) bump(items, key, p.placement);
-      for (const key of new Set(p.traits.map((t) => t.name))) bump(traits, key, p.placement);
+      for (const key of new Set(p.unitIds)) bump(units, key, p.placement, match.matchId);
+      for (const key of new Set(p.itemIds)) bump(items, key, p.placement, match.matchId);
+      for (const key of new Set(p.traits.map((t) => t.name))) bump(traits, key, p.placement, match.matchId);
     }
   }
 

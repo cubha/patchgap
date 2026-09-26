@@ -95,6 +95,45 @@ export function agreesWithNote(
   return observedImprovement === noteImprovement ? "consistent" : "inconsistent";
 }
 
+/**
+ * 짝짓기(엔티티 이름 정확일치) + 1단 판정. 순수 함수 — `main`에서 떼어낸 이유는 방향 정합 기록
+ * (`directionAgreement`, 2026-09-27)을 단위 테스트로 고정하기 위해서다.
+ */
+export function judgeTftDeltas(
+  deltas: readonly DeltaRecord[],
+  notes: readonly PatchNoteItem[]
+): { rows: DeltaRecord[]; matched: number } {
+  const notesByEntity = new Map<string, PatchNoteItem[]>();
+  for (const n of notes) {
+    const list = notesByEntity.get(n.entity) ?? [];
+    list.push(n);
+    notesByEntity.set(n.entity, list);
+  }
+
+  let matched = 0;
+  const rows: DeltaRecord[] = deltas.map((d) => {
+    const hits = notesByEntity.get(d.entityName) ?? [];
+    if (hits.length === 0) {
+      return { ...d, status: assignStatus(d, null) };
+    }
+    matched += 1;
+    const majority = directionMajority(hits);
+    const agreement = agreesWithNote(d.metric, d.delta ?? 0, majority);
+    // EntityMatchInfo는 noteIds + directionAgreement 둘뿐이다 — 다수결은 여기서 소비하고 끝난다.
+    const status = assignStatus(d, { noteIds: hits.map((h) => h.id), directionAgreement: agreement });
+    return {
+      ...d,
+      status,
+      // 화면이 "방향 반대"와 "방향을 말할 수 없음(동률)"을 가른다 — LoL `applyVerdicts`와 같은 계약.
+      directionAgreement: agreement,
+      matchedNoteId: hits[0].id,
+      matchedNoteIds: hits.map((h) => h.id),
+      evidence: { ...d.evidence, noteAnchor: hits[0].anchorUrl },
+    };
+  });
+  return { rows, matched };
+}
+
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
   const dir = path.join(args.dataRoot, "aggregated", "tft");
@@ -109,35 +148,8 @@ async function main(): Promise<void> {
   const deltas = buildTftDeltas(before, after);
   console.log(`[tft-match] 델타 ${deltas.length}건`);
 
-  // ── 짝짓기: 엔티티 이름 정확일치 ──────────────────────────────────────
-  const notesByEntity = new Map<string, PatchNoteItem[]>();
-  for (const n of notes) {
-    const list = notesByEntity.get(n.entity) ?? [];
-    list.push(n);
-    notesByEntity.set(n.entity, list);
-  }
-
   const notesById = new Map(notes.map((n) => [n.id, n] as const));
-
-  let matched = 0;
-  const judged: DeltaRecord[] = deltas.map((d) => {
-    const hits = notesByEntity.get(d.entityName) ?? [];
-    if (hits.length === 0) {
-      return { ...d, status: assignStatus(d, null) };
-    }
-    matched += 1;
-    const majority = directionMajority(hits);
-    const agreement = agreesWithNote(d.metric, d.delta ?? 0, majority);
-    // EntityMatchInfo는 noteIds + directionAgreement 둘뿐이다 — 다수결은 여기서 소비하고 끝난다.
-    const status = assignStatus(d, { noteIds: hits.map((h) => h.id), directionAgreement: agreement });
-    return {
-      ...d,
-      status,
-      matchedNoteId: hits[0].id,
-      matchedNoteIds: hits.map((h) => h.id),
-      evidence: { ...d.evidence, noteAnchor: hits[0].anchorUrl },
-    };
-  });
+  const { rows: judged, matched } = judgeTftDeltas(deltas, notes);
 
   const matchedEntities = new Set(judged.filter((d) => d.matchedNoteIds.length > 0).map((d) => d.entityName));
   console.log(

@@ -51,6 +51,20 @@ describe("displayStatus — 공지 계열", () => {
     expect(displayStatus(delta({ delta: 0.01, after: 0.11, ci: [0.005, 0.015] }), 0.1)).toBe("announced");
   });
 
+  // 2026-09-27: 노트 방향이 동률·중립(상향 1 + 하향 1, 또는 전부 adjust)이면 "반대로 움직였다"를
+  // 말할 근거가 없다 — 이상 관측은 **방향 반대**의 표시다. 판정 시 기록한 `directionAgreement`를 읽는다.
+  it("노트 방향이 중립이면 유의·바닥 통과여도 announced — 반대라고 말할 근거가 없다", () => {
+    expect(displayStatus(delta({ directionAgreement: "neutral" }), 0.1)).toBe("announced");
+  });
+
+  it("방향 반대가 기록돼 있으면 그대로 announced-anomaly", () => {
+    expect(displayStatus(delta({ directionAgreement: "inconsistent" }), 0.1)).toBe("announced-anomaly");
+  });
+
+  it("기록이 없는 낡은 파일은 지금 동작 그대로(announced-anomaly) — 재생성 전 데이터를 바꾸지 않는다", () => {
+    expect(displayStatus(delta({ directionAgreement: undefined }), 0.1)).toBe("announced-anomaly");
+  });
+
   it("방향 일치(announced-consistent)는 유의 여부와 무관하게 announced", () => {
     expect(displayStatus(delta({ status: "announced-consistent" }), 0.1)).toBe("announced");
     expect(displayStatus(delta({ status: "announced-consistent", q: 0.9 }), 0.1)).toBe("announced");

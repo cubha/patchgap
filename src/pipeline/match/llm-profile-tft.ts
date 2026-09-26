@@ -17,7 +17,7 @@
 
 import { isCoreNote } from "../shared/mode-scope";
 import type { DeltaRecord, PatchNoteItem } from "../types";
-import type { GameLlmProfile } from "./llm-profile";
+import { isAnomalyOrGapTarget, isCitableBalanceNote, type GameLlmProfile } from "./llm-profile";
 
 const SYSTEM_INSTRUCTIONS = [
   "당신은 전략적 팀 전투(TFT) 패치 분석가입니다.",
@@ -116,7 +116,9 @@ export const tftLlmProfile: GameLlmProfile = {
   // TFT 패치노트는 게임 모드 섹션을 나누지 않아 파서가 전부 `core`로 새긴다. 그래도 술어를
   // 그대로 쓰는 이유: 라이엇이 모드 섹션을 도입하면 LoL과 **같은 지점**에서 걸러지게 하려는 것이다.
   candidatesOf: (notes) => notes.filter(isCoreNote),
-  isCitable: isCoreNote,
+  isCitable: isCitableBalanceNote,
   isSameEntity: (note: PatchNoteItem, delta: DeltaRecord) => note.entity === delta.entityName,
   buildUserPrompt,
+  // 화면이 「미공지」·「이상 관측」이라 부르는 행만 — 근거는 llm-profile.ts `isAnomalyOrGapTarget`.
+  isTarget: isAnomalyOrGapTarget,
 };
