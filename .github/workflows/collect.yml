@@ -106,22 +106,16 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 350
     env:
-      RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-      # 게임별 채널 분리(2026-09-20). 웹훅 URL은 **채널 하나에 묶여 있어** 채널을 나누는 유일한
-      # 방법이 URL을 나누는 것이다. `run-notify.ts --game`이 이 이름 규칙으로 고른다
-      # (src/pipeline/discord/targets.ts). LoL만 레거시 DISCORD_WEBHOOK_URL로 폴백한다 —
-      # 전 게임 폴백으로 두면 PUBG·TFT 브리핑이 LoL 채널로 나가 분리 목적이 깨진다.
-      DISCORD_WEBHOOK_URL_LOL: ${{ secrets.DISCORD_WEBHOOK_URL_LOL }}
-      DISCORD_WEBHOOK_URL_PUBG: ${{ secrets.DISCORD_WEBHOOK_URL_PUBG }}
-      DISCORD_WEBHOOK_URL_TFT: ${{ secrets.DISCORD_WEBHOOK_URL_TFT }}
-      # 역할 멘션(선택). 미설정이면 멘션 없이 embed만 나간다 — 채널 분리는 *읽을 때* 안 섞이게
-      # 해줄 뿐이고, 디스코드는 채널 글에 기본 알림을 주지 않는다. "내가 보는 게임만 받는다"가
-      # 되려면 이 값이 있어야 한다.
-      DISCORD_ROLE_ID_LOL: ${{ secrets.DISCORD_ROLE_ID_LOL }}
-      DISCORD_ROLE_ID_PUBG: ${{ secrets.DISCORD_ROLE_ID_PUBG }}
-      DISCORD_ROLE_ID_TFT: ${{ secrets.DISCORD_ROLE_ID_TFT }}
+      # **시크릿 값은 job-level에 두지 않는다**(2026-09-21 security-auditor Warning — collect-tft·
+      # collect-pubg는 그때 내렸고 이 파일만 남아 있었다). job-level env는 `npm ci`를 포함한 모든
+      # 스텝에 상속된다 — 의존성의 postinstall 스크립트가 키를 읽을 수 있는 자리다. 값은 그 값을
+      # 실제로 쓰는 스텝의 `env:`에만 내린다(수집·타임라인=RIOT, 매칭=ANTHROPIC, 디스코드 2곳).
+      #
+      # 여기 남는 것은 **존재 여부 불리언**뿐이다. 스텝 `if:`는 `secrets`를 못 읽고 `env`는 읽는다.
+      # 값이 문자열 "true"/"false"라 시크릿이 아니다. LoL 채널은 `DISCORD_WEBHOOK_URL_LOL`, 없으면
+      # 레거시 `DISCORD_WEBHOOK_URL`로 폴백한다(src/pipeline/discord/targets.ts) — 예전 조건은
+      # 레거시 쪽만 봐서 LoL 전용 URL만 등록된 경우 브리핑을 건너뛰었다.
+      HAS_DISCORD_LOL: ${{ secrets.DISCORD_WEBHOOK_URL_LOL != '' || secrets.DISCORD_WEBHOOK_URL != '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -180,6 +174,7 @@ jobs:
           PATCH: ${{ steps.determine.outputs.patch }}
           TARGET: ${{ github.event.inputs.target || '10000' }}
           MAX_MINUTES: ${{ github.event.inputs.max_minutes || '240' }}
+          RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
         run: |
           npx tsx scripts/run-collect.ts \
             --patch "$PATCH" \
@@ -202,6 +197,7 @@ jobs:
         env:
           PATCH: ${{ steps.determine.outputs.patch }}
           TIMELINE_SAMPLE: ${{ github.event.inputs.timeline_sample || '1500' }}
+          RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
         run: |
           npx tsx scripts/run-timeline.ts \
             --patch "$PATCH" \
@@ -222,11 +218,20 @@ jobs:
         if: steps.determine.outputs.should_run == 'true'
         run: npx tsx scripts/run-ddragon.ts
 
-      # 표본 임계 가드(PLAN-pubg-normalization-2026-09-17.md ST-6) — 9/10 26.18 선례:
-      # cron 자동 발화가 target=10000을 지정했는데도 n=737로 떨어졌고, 그 얇은 표본이
-      # 한 번 커밋·배포까지 나갔다가 나중에 force 재수집(2h44m)으로 복구해야 했다.
-      # 26.19(9/24)는 예선 창 안에서 같은 트리거를 탄다 — 이번엔 얇은 채로 나가기 전에 잡는다.
-      - name: Sample size guard
+      # 표본 경보 — **막지 않는다. 알리기만 한다.**
+      #
+      # 예전엔 5,000 미만이면 매칭·브리핑·커밋을 통째로 보류했다(9/10 26.18 n=737 선례, ST-6).
+      # 두 가지가 틀렸다:
+      #  ① 선언 축까지 막았다. 패치노트 최신화는 표본과 무관하게 기본이고, 관측은 그 위에 얹는
+      #    부가다(사용자 확정 2026-09-24). 관측을 거르는 일은 이미 **개체 단위** 게이트가 한다 —
+      #    승률 n<200이면 `insufficient-sample`(src/pipeline/match/verdict.ts). 전체 차단은 그 위에
+      #    얹힌 중복이었고, 비용은 선언 축이 치렀다.
+      #  ② 한 번도 작동하지 않았다. `summary.json`의 `.nMatches`를 읽었는데 실제 필드는
+      #    `.meta.nMatches`라 N이 `undefined`였고, `[ undefined -lt 5000 ]`이 에러로 else에 빠져
+      #    항상 통과했다. 26.19(3,871매치)가 반영된 건 이 버그 덕이었다 — 필드만 고쳤다면 26.19는
+      #    통째로 보류됐다.
+      # 그래서 읽기가 실패하면 조용히 넘어가지 않고 스텝을 깨뜨린다(숫자가 아니면 exit 1).
+      - name: Sample size alert
         id: sample_guard
         if: steps.determine.outputs.should_run == 'true'
         env:
@@ -234,25 +239,28 @@ jobs:
         run: |
           # PATCH_TO를 JS 문자열 리터럴에 직접 꿰매지 않는다 — workflow_dispatch 수동 입력
           # (patch/to)에서 유래할 수 있어 작은따옴표 포함 값이 들어오면 리터럴을 탈출해
-          # 이 잡의 시크릿(RIOT_API_KEY 등)·contents:write 권한 컨텍스트에서 임의 코드가
-          # 실행될 수 있다(security-auditor 2026-09-17 지적). process.env로 넘겨 값이
-          # 코드로 해석되지 않게 한다 — 이 파일의 다른 스텝들(Collect matches 등)과 같은
-          # "$VAR" 인자 전달 패턴으로 통일.
-          N=$(node -e "console.log(JSON.parse(require('fs').readFileSync(\`data/aggregated/\${process.env.PATCH_TO}/summary.json\`,'utf8')).nMatches)")
+          # contents:write 권한 컨텍스트에서 임의 코드가 실행될 수 있다(security-auditor
+          # 2026-09-17 지적). process.env로 넘겨 값이 코드로 해석되지 않게 한다.
+          N=$(node -e "console.log(JSON.parse(require('fs').readFileSync(\`data/aggregated/\${process.env.PATCH_TO}/summary.json\`,'utf8')).meta.nMatches)")
           echo "[sample_guard] patch=${PATCH_TO} nMatches=${N}"
+          if ! [[ "$N" =~ ^[0-9]+$ ]]; then
+            echo "::error::summary.json meta.nMatches를 숫자로 읽지 못했다(got '${N}')"
+            exit 1
+          fi
           if [ "$N" -lt 5000 ]; then
-            echo "sample_ok=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::patch=${PATCH_TO} nMatches=${N} < 5000 — 표본 부족. 매칭·브리핑·커밋을 보류한다. 재수집: gh workflow run collect.yml -f patch=${PATCH_TO} -f force=true"
+            echo "sample_thin=true" >> "$GITHUB_OUTPUT"
+            echo "::warning::patch=${PATCH_TO} nMatches=${N} < 5000 — 관측 축이 얇다. 선언 축은 그대로 반영하고, 개체별 승률은 n<200이면 insufficient-sample로 떨어진다. 보강: gh workflow run collect.yml -f patch=${PATCH_TO} -f force=true"
           else
-            echo "sample_ok=true" >> "$GITHUB_OUTPUT"
+            echo "sample_thin=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Match + verdict (F3/F4, LLM 2단 포함)
-        if: steps.determine.outputs.should_run == 'true' && steps.sample_guard.outputs.sample_ok != 'false'
+        if: steps.determine.outputs.should_run == 'true'
         env:
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
           LLM_MAX: ${{ github.event.inputs.llm_max || '400' }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           npx tsx scripts/run-match.ts \
             --from "$PATCH_FROM" \
@@ -271,7 +279,7 @@ jobs:
       # 버전 인자를 주지 않는다 — 직전 쌍 산출물의 `meta.source.to`와 방금 받은 DDragon 최신에서
       # 스스로 찾는다(scripts/shared/snapshot-version.ts).
       - name: Detect submarine patches (F9)
-        if: steps.determine.outputs.should_run == 'true' && steps.sample_guard.outputs.sample_ok != 'false'
+        if: steps.determine.outputs.should_run == 'true'
         env:
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
@@ -282,22 +290,25 @@ jobs:
             --to "$PATCH_TO"
         continue-on-error: true
 
-      - name: Discord thin-sample alert (표본 부족 — 정상 브리핑 대신 이것만 보낸다)
-        if: steps.determine.outputs.should_run == 'true' && steps.sample_guard.outputs.sample_ok == 'false' && env.DISCORD_WEBHOOK_URL != ''
+      - name: Discord thin-sample alert (표본 얇음 — 브리핑과 함께 보낸다)
+        if: steps.determine.outputs.should_run == 'true' && steps.sample_guard.outputs.sample_thin == 'true' && env.HAS_DISCORD_LOL == 'true'
         env:
           PATCH_TO: ${{ steps.determine.outputs.to }}
+          DISCORD_WEBHOOK_URL_LOL: ${{ secrets.DISCORD_WEBHOOK_URL_LOL }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           # PATCH_TO를 JSON 문자열에 수동 이스케이프로 꿰매지 않는다 — 값에 "가 섞이면
           # 페이로드가 깨진다(security-auditor 2026-09-17 지적, Info). node -e가
           # JSON.stringify로 만들게 해 이스케이프를 위임한다.
-          BODY=$(PATCH_TO="$PATCH_TO" node -e "console.log(JSON.stringify({content: \`⚠️ patchgap collect: \${process.env.PATCH_TO} 표본 부족(5,000 미만) — 집계 산출물 교체를 보류했습니다. \\\`gh workflow run collect.yml -f patch=\${process.env.PATCH_TO} -f force=true\\\`로 재수집하세요.\`}))")
-          curl -sf -X POST "$DISCORD_WEBHOOK_URL" \
+          URL="${DISCORD_WEBHOOK_URL_LOL:-$DISCORD_WEBHOOK_URL}"
+          BODY=$(PATCH_TO="$PATCH_TO" node -e "console.log(JSON.stringify({content: \`⚠️ patchgap collect: \${process.env.PATCH_TO} 표본이 얇습니다(5,000 미만). 패치노트는 반영했고, 표본이 모자란 승률은 판정 유보로 표시됩니다. 보강하려면 \\\`gh workflow run collect.yml -f patch=\${process.env.PATCH_TO} -f force=true\\\`\`}))")
+          curl -sf -X POST "$URL" \
             -H "Content-Type: application/json" \
             -d "$BODY"
         continue-on-error: true
 
       - name: Discord briefing (F6, 웹훅 시크릿이 있을 때만)
-        if: steps.determine.outputs.should_run == 'true' && steps.sample_guard.outputs.sample_ok != 'false' && env.DISCORD_WEBHOOK_URL != ''
+        if: steps.determine.outputs.should_run == 'true' && env.HAS_DISCORD_LOL == 'true'
         # run-notify.ts CLI 인자(--from --to --top --site)는 이제 확정된 시그니처다(scripts/run-notify.ts
         # 실물 확인). `--site`는 **미지정 시 스크립트 자체 기본값**(DEFAULT_SITE_URL,
         # https://patchgap.vercel.app 자리표시)을 쓰고, 지정하려면 http(s):// 스킴에 non-empty
@@ -308,6 +319,9 @@ jobs:
         # "필요 secrets·variables" 표에 "배포 후 필수"로 명시.
         env:
           SITE_URL: ${{ vars.PATCHGAP_SITE_URL }}
+          DISCORD_WEBHOOK_URL_LOL: ${{ secrets.DISCORD_WEBHOOK_URL_LOL }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_ROLE_ID_LOL: ${{ secrets.DISCORD_ROLE_ID_LOL }}
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
         run: |
@@ -327,7 +341,7 @@ jobs:
         continue-on-error: true
 
       - name: Commit + push generated data
-        if: steps.determine.outputs.should_run == 'true' && steps.sample_guard.outputs.sample_ok != 'false'
+        if: steps.determine.outputs.should_run == 'true'
         env:
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}

@@ -577,11 +577,11 @@
       "anchorKind": "entity"
     },
     {
-      "id": "note:26.19:item:아이템:c6bf0dd0",
+      "id": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
       "patch": "26.19",
       "section": "item",
       "modeScope": "core",
-      "entity": "아이템",
+      "entity": "세계 지도집과 룬 나침반",
       "skill": null,
       "stat": "체력",
       "before": "30/100/200",
@@ -592,11 +592,11 @@
       "anchorKind": "section"
     },
     {
-      "id": "note:26.19:item:아이템:b5ca9faa",
+      "id": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
       "patch": "26.19",
       "section": "item",
       "modeScope": "core",
-      "entity": "아이템",
+      "entity": "세계 지도집과 룬 나침반",
       "skill": null,
       "stat": "체력 재생",
       "before": "25%/50%/75%",
