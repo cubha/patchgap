@@ -26,6 +26,9 @@ function loadAll(): { patch: string; items: PatchNoteItem[] }[] {
 
 const files = loadAll();
 
+/** SR 전용 h2 앵커 — 모드 섹션이 아니라 소환사의 협곡 챔피언·아이템 섹션 자체. */
+const SR_SECTION_ANCHORS = new Set(["patch-champions", "patch-items"]);
+
 describe("커밋된 패치노트 데이터 불변식", () => {
   it("검사 대상 파일이 있다(빈 클론이면 이 테스트 전체가 무의미하므로 먼저 확인한다)", () => {
     expect(files.length).toBeGreaterThan(0);
@@ -45,16 +48,38 @@ describe("커밋된 패치노트 데이터 불변식", () => {
     }
   });
 
-  it("SR(core) 챔피언·아이템 항목은 반드시 엔티티 앵커를 갖는다 — 섹션 앵커 폴백은 모드 섹션의 표식이다", () => {
+  it("SR(core) 챔피언·아이템 항목은 엔티티 앵커 또는 SR 전용 h2 앵커를 갖는다 — 그 밖의 섹션 앵커 폴백은 모드 섹션의 표식이다", () => {
     // 실측(26.16~26.18): 엔티티 h3 앵커는 챔피언·아이템·룬 섹션에만 존재하고 클래식·아레나·
     // 아수라장에는 0건이다. 따라서 "core인데 섹션 앵커로 폴백한 champion/item"은 곧 오귀속이다.
     // 라이엇이 h2 제목을 바꿔 모드 섹션이 조용히 core로 떨어지면 여기서 크게 실패한다.
+    //
+    // 예외 하나(26.19 실측): SR 「아이템」 섹션 안에서 라이엇이 엔티티를 h3가 아니라 **id 없는 h4**로
+    // 적었다(「세계 지도집과 룬 나침반」). 그 줄은 모드 섹션이 아니라 SR 섹션 그 자체라 앵커가
+    // `#patch-items`로 폴백하는 것이 정확하다. 모드 섹션이 core로 샌 경우는 앵커가 그 모드의 h2
+    // (`#patch-classic` 등)라 여전히 여기서 걸린다.
     for (const { patch, items } of files) {
       const suspects = items.filter(
-        (i) => (i.section === "champion" || i.section === "item") && isCoreNote(i) && i.anchorKind !== "entity"
+        (i) =>
+          (i.section === "champion" || i.section === "item") &&
+          isCoreNote(i) &&
+          i.anchorKind !== "entity" &&
+          !SR_SECTION_ANCHORS.has(i.anchorUrl.split("#")[1] ?? "")
       );
       expect(`${patch}: 오귀속 의심 ${suspects.length}건 ${suspects.slice(0, 3).map((s) => s.id).join(",")}`).toBe(
         `${patch}: 오귀속 의심 0건 `
+      );
+    }
+  });
+  it("SR(core) 챔피언·아이템 항목의 엔티티는 섹션 제목이 아니다 — 폴백은 엔티티를 못 찾았다는 뜻이다", () => {
+    // 위 앵커 예외(SR 전용 h2 앵커 허용)가 가리는 것을 여기서 잡는다. 26.19 「세계 지도집과 룬
+    // 나침반」 두 줄이 엔티티 "아이템"으로 저장됐었다 — 범주 판별이 `includes("룬")`이라 그 이름을
+    // 범주 라벨로 오인했다. 엔티티가 h2 제목이면 짝짓기가 어떤 아이템에도 닿지 못한다.
+    for (const { patch, items } of files) {
+      const unnamed = items.filter(
+        (i) => (i.section === "champion" || i.section === "item") && isCoreNote(i) && (i.entity === "챔피언" || i.entity === "아이템")
+      );
+      expect(`${patch}: 엔티티 미식별 ${unnamed.length}건 ${unnamed.slice(0, 3).map((u) => u.id).join(",")}`).toBe(
+        `${patch}: 엔티티 미식별 0건 `
       );
     }
   });

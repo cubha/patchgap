@@ -373,6 +373,14 @@ interface ParseBlockOptions {
   sectionAnchorId: string | null;
   /** h3가 없는 블록(클래식/아레나/버그수정 등)에서 엔티티를 특정할 수 없을 때 쓸 이름(대개 h2 제목). */
   fallbackEntity: string;
+  /**
+   * 범주 라벨(「챔피언」·「룬 밸런스」·「체계」 등)을 건너뛸지. 범주 라벨은 여러 범주를 한 h2에 묶는
+   * 섹션(클래식·아레나 등)에만 있다. SR 전용 「챔피언」·「아이템」 h2에서는 끈다 — 거기선 h4가 곧
+   * 엔티티다. 26.19 「아이템」 h2의 「세계 지도집과 룬 나침반」(h3 없이 h4)이 `includes("룬")`에 걸려
+   * 범주 라벨로 오인되고, 두 줄이 엔티티 "아이템"(섹션 폴백)으로 떨어졌다. 판별을 좁히는 대신
+   * 적용 범위를 좁힌 이유: 26.16 클래식의 「룬 밸런스」·「신규 룬」은 부분 일치로만 잡힌다.
+   */
+  skipCategoryLabels: boolean;
 }
 
 /**
@@ -462,7 +470,7 @@ function parseNoteBlock(
       if (label.length === 0) return;
       // 새 엔티티가 시작되는가 — 라벨이 자기 소개 문단(blockquote.context)을 데리고 있으면 그렇다.
       const opensEntity = h3.length === 0 && startsNewEntity($, node);
-      if ((entity === null || opensEntity) && classicCategoryFor(label) !== null) {
+      if (opts.skipCategoryLabels && (entity === null || opensEntity) && classicCategoryFor(label) !== null) {
         // 클래식/아레나 섹션의 범주 라벨("챔피언"/"아이템"/"룬 및 진척도"/"체계" 등)은 엔티티
         // 자체가 아니다 — 건너뛴다. `classicCategoryFor`를 재사용해 인식 범위를 한 곳에 고정한다
         // (전에는 "챔피언"/"아이템"만 걸러 "룬 및 진척도"/"체계" 라벨 자체가 엔티티로 오인되고
@@ -613,6 +621,10 @@ export function parsePatchNotes(html: string, options: ParsePatchNotesOptions): 
         sourceUrl: options.sourceUrl,
         sectionAnchorId: currentSectionAnchorId,
         fallbackEntity: currentH2,
+        skipCategoryLabels: !(
+          currentStrategy.kind === "fixed" &&
+          (currentStrategy.section === "champion" || currentStrategy.section === "item")
+        ),
       },
       idCounters
     );

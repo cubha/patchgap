@@ -545,3 +545,31 @@ describe("parsePatchNotes — 한 블록 안의 엔티티 경계", () => {
     expect(result.items.find((i) => i.entity === "h3 소유자")?.skill).toBe("가짜 엔티티");
   });
 });
+
+describe("parsePatchNotes — 이름에 '룬'이 든 엔티티(26.19 실측 마크업)", () => {
+  // 26.19 아이템 섹션: h3 없이 h4.change-detail-title로 엔티티를 적었고, 그 이름에 '룬'이 들어 있다.
+  // 범주 판별이 부분 일치였을 때 이 라벨이 「룬」 범주로 오인돼 건너뛰어졌다.
+  const html = `<div id="patch-notes-container">
+    <header class="header-primary"><h2 id="patch-items">아이템</h2></header>
+    <div class="content-border"><div class="patch-change-block white-stone accent-before"><div>
+      <h4 class="change-detail-title">세계 지도집과 룬 나침반</h4>
+      <blockquote class="blockquote context"><p>근접 서포터의 공격로 지속력을 높입니다.</p></blockquote>
+      <hr class="divider">
+      <ul><li><strong>체력</strong>: 30/100/200 ⇒ <strong>0/60/200</strong></li></ul>
+    </div></div></div>
+  </div>`;
+
+  it("h4 라벨을 엔티티로 잡는다 — 섹션 제목으로 폴백하지 않는다", () => {
+    const result = parsePatchNotes(html, { patch: "26.19", sourceUrl: "https://example.test/26-19" });
+    expect(result.items.map((i) => i.entity)).toEqual(["세계 지도집과 룬 나침반"]);
+  });
+});
+
+describe("parsePatchNotes — 클래식 범주 라벨은 여전히 건너뛴다(26.16 fixture)", () => {
+  // 위 26.19 수정을 범주 판별(`includes("룬")`)을 좁히는 방식으로 했을 때 26.16 클래식의
+  // 「룬 밸런스」·「신규 룬」이 엔티티로 새어 나왔다. 적용 범위(SR 전용 h2)를 좁혀야 하는 근거.
+  it("「룬 밸런스」는 엔티티가 아니다", () => {
+    const result = parsePatchNotes(FIXTURE_16, { patch: "26.16", sourceUrl: "https://example.test/26-16" });
+    expect(result.items.some((i) => i.entity === "룬 밸런스" || i.entity === "신규 룬")).toBe(false);
+  });
+});

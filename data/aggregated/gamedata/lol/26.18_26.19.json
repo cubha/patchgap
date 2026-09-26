@@ -8,9 +8,9 @@
       "from": "16.18.1",
       "to": "16.19.1"
     },
-    "generatedAt": "2026-09-24T17:39:10.552Z",
+    "generatedAt": "2026-09-26T08:51:40.948Z",
     "changeCount": 13,
-    "submarineCount": 3
+    "submarineCount": 1
   },
   "changes": [
     {
@@ -178,7 +178,10 @@
       "before": 30,
       "after": null,
       "relChange": null,
-      "matchedNoteIds": []
+      "matchedNoteIds": [
+        "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+        "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa"
+      ]
     },
     {
       "id": "gdc:lol:26.19:3866:stats.FlatHPPoolMod",
@@ -190,7 +193,10 @@
       "before": 100,
       "after": 60,
       "relChange": -0.4,
-      "matchedNoteIds": []
+      "matchedNoteIds": [
+        "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+        "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa"
+      ]
     }
   ]
 }
