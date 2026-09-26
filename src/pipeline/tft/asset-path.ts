@@ -59,3 +59,30 @@ export interface TftAssetManifest {
   /** 원격에 없어서 조달하지 못한 항목 — 숨기지 않고 기록한다. */
   missing: { kind: TftAssetKind; key: string; reason: string }[];
 }
+
+/**
+ * CDragon 폴백(2026-09-27) — DDragon `tft-*` 카탈로그에 없는 대상의 이미지. CDragon 원본 JSON
+ * (`/latest/cdragon/tft/ko_kr.json`)은 아이콘을 게임 파일 경로(`…/x.tex`)로 주고, 공개 미러는 같은
+ * 경로를 **소문자 + `.png`**로 서빙한다. 실측: 18.x 「선체분쇄자」(`DA_Artifact_Hullcrusher`)가
+ * DDragon에는 없고 CDragon에는 있었다 — 화면은 폴백 박스를 그리고 있었다.
+ */
+export function cdragonTftImageUrl(iconPath: string): string {
+  const png = iconPath.toLowerCase().replace(/\.(tex|dds)$/, ".png");
+  return `https://raw.communitydragon.org/latest/game/${png.replace(/^\/+/, "")}`;
+}
+
+/** CDragon 항목의 아이콘 경로 후보 — 없으면 `null`(지어내지 않는다). */
+export interface CdragonIconFields {
+  icon?: string | null;
+  squareIcon?: string | null;
+  tileIcon?: string | null;
+}
+
+/**
+ * 종류별 아이콘 선택. 유닛은 DDragon 유닛 이미지가 스플래시 크롭이라 가장 가까운 타일 → 정사각 → 기본
+ * 순이고, 아이템·특성은 기본 아이콘이다.
+ */
+export function cdragonIconOf(kind: TftAssetKind, entry: CdragonIconFields): string | null {
+  const order = kind === "unit" ? [entry.tileIcon, entry.squareIcon, entry.icon] : [entry.icon];
+  return order.find((p): p is string => typeof p === "string" && p.length > 0) ?? null;
+}

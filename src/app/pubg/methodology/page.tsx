@@ -77,11 +77,11 @@ export default function PubgMethodologyPage() {
           <div className="p-5">
             <dl className="flex flex-col gap-2 text-sm">
               <div className="flex items-baseline justify-between gap-3">
-                <dt className="text-muted">42.3 ({deltas.meta.window.before[0]?.slice(5)}~{deltas.meta.window.before.at(-1)?.slice(5)})</dt>
+                <dt className="text-muted">{deltas.meta.from} ({deltas.meta.window.before[0]?.slice(5)}~{deltas.meta.window.before.at(-1)?.slice(5)})</dt>
                 <dd className="font-mono tabular-nums text-fg">{before.nMatches.toLocaleString()}매치</dd>
               </div>
               <div className="flex items-baseline justify-between gap-3">
-                <dt className="text-muted">43.1 ({deltas.meta.window.after[0]?.slice(5)}~{deltas.meta.window.after.at(-1)?.slice(5)})</dt>
+                <dt className="text-muted">{deltas.meta.to} ({deltas.meta.window.after[0]?.slice(5)}~{deltas.meta.window.after.at(-1)?.slice(5)})</dt>
                 <dd className="font-mono tabular-nums text-fg">{after.nMatches.toLocaleString()}매치</dd>
               </div>
               <div className="flex items-baseline justify-between gap-3 border-t border-border-soft pt-2">
@@ -311,7 +311,7 @@ export default function PubgMethodologyPage() {
     limits: (
       <div className="p-5">
         <p className="text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
-          43.1 패치노트의 나머지 항목은 이 표본으로 검증하지 못했습니다. 숫자를 지어내지 않고 비워 둡니다.
+          {deltas.meta.to} 패치노트의 나머지 항목은 이 표본으로 검증하지 못했습니다. 숫자를 지어내지 않고 비워 둡니다.
         </p>
         <ul className="mt-3 flex flex-col gap-2">
           {unverifiable.map((note) => (
@@ -327,6 +327,8 @@ export default function PubgMethodologyPage() {
           1차 출처 단독이라 판정 축에서 제외했습니다.
         </p>
 
+        {/* 이 표의 「42.3」·「43.1」은 **의도된 고정 라벨**이다 — 버린 축의 반증 기록(accuracy-comparison.json,
+            PLAN-pubg-gate-2026-09-16.md §8)이 그 두 패치로만 만들어졌다. 현재 쌍을 따라가면 거짓 라벨이 된다. */}
         {accuracyComparison && accuracyComparison.length > 0 ? (
           <details className="mt-4 rounded-md border border-border-soft">
             <summary className="cursor-pointer px-4 py-3 font-mono text-xs font-bold text-muted">

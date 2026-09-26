@@ -250,7 +250,7 @@ jobs:
           fi
 
       - name: Discord invariants alert (불변식 실패 시)
-        if: steps.determine.outputs.should_run == 'true' && steps.invariants.outputs.ok == 'false' && env.HAS_DISCORD_PUBG == 'true'
+        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true' && steps.invariants.outputs.ok == 'false' && env.HAS_DISCORD_PUBG == 'true'
         env:
           PATCH_TO: ${{ steps.determine.outputs.to }}
           DISCORD_WEBHOOK_URL_PUBG: ${{ secrets.DISCORD_WEBHOOK_URL_PUBG }}

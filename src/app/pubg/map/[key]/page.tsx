@@ -180,7 +180,7 @@ export default async function PubgMapPage({ params }: PageProps) {
           eyebrow="구성"
           title={`${identity.koName}에서 많이 줍는 총`}
           variant="glass"
-          action={<span className="font-mono text-xs text-muted">43.1 기준</span>}
+          action={<span className="font-mono text-xs text-muted">{maps.deltas.meta.to} 기준</span>}
         >
           {(statAfter ?? shown).topWeapons.length === 0 ? (
             <p className="p-5 text-sm text-muted">이 구간 표본에 무기 획득 기록이 없습니다.</p>

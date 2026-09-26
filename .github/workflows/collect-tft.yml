@@ -169,6 +169,16 @@ jobs:
           npx tsx scripts/run-tft-aggregate.ts --patch "$PATCH_FROM"
           npx tsx scripts/run-tft-aggregate.ts --patch "$PATCH_TO"
 
+      # 엔티티 자산(이미지) — 집계에 등장한 키만 받는다. 전에는 CI에 이 스텝이 없어 매니페스트가 16.18.1에
+      # 멈췄고, 18.3에 새로 나온 대상(「럭스 (검은 가시)」)이 폴백 박스로 그려졌다(2026-09-27 발견).
+      # 공개 미러라 키가 필요 없다. 실패해도 판정·커밋은 계속한다 — 화면은 매니페스트를 읽어 폴백한다.
+      - name: Fetch TFT entity assets
+        if: steps.determine.outputs.should_run == 'true'
+        env:
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: npx tsx scripts/run-tft-assets.ts --patch "$PATCH_TO"
+        continue-on-error: true
+
       # 표본 경보 — **막지 않는다**(2026-09-27, LoL #55와 동형). 전에는 보드 8,000 미만이면 판정·브리핑·
       # 커밋을 전부 보류했는데, 그 커밋에는 **패치노트(선언 축)**가 들어 있다 — 표본(관측 축)이 선언 축을
       # 인질로 잡는 구조였고 TFT 18.3이 바로 그렇게 멈췄다(사용자 확정 8: 선언 축은 항상 최신).
@@ -305,7 +315,7 @@ jobs:
           # TFT 네임스페이스만 건드린다 — LoL·PUBG 산출물은 이 워크플로의 소관이 아니다.
           # `data/cdragon`은 TFT 전용 수치 스냅숏이라 같이 커밋한다 — 커밋하지 않으면 다음 패치의
           # "전 버전" 스냅숏이 사라져 수치 축이 대조할 짝을 잃는다(버전당 316KB).
-          git add data/aggregated/tft data/aggregated/gamedata/tft data/cdragon
+          git add data/aggregated/tft data/aggregated/gamedata/tft data/cdragon public/dd/tft
           if git diff --cached --quiet; then
             echo "변경분 없음 — 커밋 생략"
           else

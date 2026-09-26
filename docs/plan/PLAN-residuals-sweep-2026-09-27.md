@@ -35,6 +35,7 @@
 | ST13 | CI 누락 — TFT·PUBG 워크플로에 LLM 캐시 복원 없음(매 실행 콜드), PUBG 워크플로에 LLM 2단 스텝 자체가 없음(다음 패치부터 원인 소실) | `collect-tft.yml` · `collect-pubg.yml` | — |
 | ST14 | TFT·PUBG 데이터 불변식 신설(짝 노트 실재·앵커, 원인 인용 실재·비치장·대상 일치, PUBG 화면 파일 쌍 존재) + LoL 불변식에 인용 대상 일치·치장 인용 금지 추가 | `__tests__/tft-pubg-data-invariants.test.ts` · `deltas-invariants.test.ts` | — |
 | ST15 | TFT 원문 표기 별칭 — 18.3 「징수의 총 공격력 40→35%」가 카탈로그 「황금 징수의 총」과 달라 미해소로 버려짐 | `tft-notes-parser.ts` | [TDD] |
+| ST16 | TFT 미보유 자산 — DDragon 카탈로그에 없는 대상의 CDragon 폴백(「선체분쇄자」 확인), 자산 스크립트의 하드코딩 기본값(16.18.1·18.2) 제거, CI에 자산 스텝·커밋 경로 추가(매니페스트가 18.2에 멈춰 18.3 「럭스 (검은 가시)」 누락) | `asset-path.ts` · `run-tft-assets.ts` · `collect-tft.yml` | [TDD] |
 | ST9 | TFT 7일 규칙의 틀린 사유 주석 정정(보드 단위 실측) | `tft-patch-calendar.ts` | — |
 | ST10 | 데이터 재생성: LoL 26.19 노트(파서 수정)·26.18→26.19 판정 · TFT 18.3 노트·재집계(매치 id)·18.1→18.2/18.2→18.3 판정 · PUBG 43.1 원인 — LLM은 캐시 우선, 오염 캐시(인용 어긋남 15행)만 무효화 | `data/aggregated/**` | — |
 

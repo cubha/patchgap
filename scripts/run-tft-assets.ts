@@ -8,13 +8,21 @@
 // **전 카탈로그를 받지 않는다**: `tft-champion.json`은 334항목이고 그중 현행 세트는 64개다.
 // 쓰지 않을 이미지를 커밋하면 저장소만 무거워진다 — **집계에 등장한 키**만 받는다.
 //
-// 실행: npx tsx scripts/run-tft-assets.ts [--version 16.18.1] [--patch 18.2]
+// 실행: npx tsx scripts/run-tft-assets.ts --patch 18.3 [--version 16.19.1]
+//       버전을 주지 않으면 Data Dragon 최신(`api/versions.json` 첫 항목)을 쓴다 — 수집 워크플로는 지금
+//       라이브인 패치를 받으므로 그것이 곧 이 패치의 게임 버전이다(run-cdragon과 같은 규칙).
+//
+// **CDragon 폴백(2026-09-27)**: DDragon 카탈로그에 없는 대상은 CDragon 원본 JSON의 아이콘 경로로
+// 한 번 더 찾는다 — 18.x 「선체분쇄자」가 그랬다. 원본 JSON이 24MB라 **미보유가 있을 때만** 받는다.
 import fs from "node:fs";
 import path from "node:path";
 import {
+  cdragonIconOf,
+  cdragonTftImageUrl,
   publicTftAssetPath,
   remoteTftCatalogUrl,
   remoteTftImageUrl,
+  type CdragonIconFields,
   type TftAssetKind,
   type TftAssetManifest,
 } from "../src/pipeline/tft/asset-path";
@@ -77,6 +85,7 @@ export async function runTftAssets(version: string, patch: string): Promise<TftA
     missing: [],
   };
 
+  const notInCatalog: { kind: TftAssetKind; key: string }[] = [];
   for (const kind of ["unit", "trait", "item"] as const) {
     const res = await fetch(remoteTftCatalogUrl(version, kind));
     if (!res.ok) throw new Error(`run-tft-assets: ${kind} 카탈로그 HTTP ${res.status}`);
@@ -93,8 +102,8 @@ export async function runTftAssets(version: string, patch: string): Promise<TftA
     for (const key of wanted[kind]) {
       const full = byBase.get(key);
       if (!full) {
-        // 카탈로그에 아예 없는 대상이 실재한다(소환수 등) — 숨기지 않고 적는다.
-        manifest.missing.push({ kind, key, reason: "카탈로그에 항목 없음" });
+        // 카탈로그에 아예 없는 대상이 실재한다(소환수 등) — 아래 CDragon 폴백으로 넘긴다.
+        notInCatalog.push({ kind, key });
         continue;
       }
       const dest = path.join(ROOT, "public", publicTftAssetPath(kind, key));
@@ -104,17 +113,75 @@ export async function runTftAssets(version: string, patch: string): Promise<TftA
     }
   }
 
+  if (notInCatalog.length > 0) {
+    const icons = await fetchCdragonIcons();
+    for (const { kind, key } of notInCatalog) {
+      const entry = icons.get(key);
+      const icon = entry ? cdragonIconOf(kind, entry) : null;
+      if (!icon) {
+        // 두 원천 모두에 없다 — 숨기지 않고 적는다(화면은 설계된 폴백을 그린다).
+        manifest.missing.push({ kind, key, reason: "DDragon 카탈로그·CDragon 모두 항목 없음" });
+        continue;
+      }
+      const dest = path.join(ROOT, "public", publicTftAssetPath(kind, key));
+      const ok = await download(cdragonTftImageUrl(icon), dest);
+      if (ok) manifest.assets[kind].push(key);
+      else manifest.missing.push({ kind, key, reason: `CDragon 이미지 내려받기 실패(${icon})` });
+    }
+    manifest.source = "Data Dragon (tft-champion · tft-trait · tft-item) + Community Dragon 폴백";
+  }
+
   fs.mkdirSync(AGG_DIR, { recursive: true });
   fs.writeFileSync(MANIFEST, `${JSON.stringify(manifest, null, 2)}\n`);
   return manifest;
 }
 
+interface CdragonNode extends CdragonIconFields {
+  apiName?: unknown;
+}
+
+/** CDragon 원본 JSON 전체를 훑어 `apiName → 아이콘 필드`를 만든다(세트·아이템·특성 구조를 가정하지 않는다). */
+async function fetchCdragonIcons(): Promise<Map<string, CdragonIconFields>> {
+  const res = await fetch("https://raw.communitydragon.org/latest/cdragon/tft/ko_kr.json");
+  if (!res.ok) throw new Error(`run-tft-assets: CDragon 원본 HTTP ${res.status}`);
+  const root: unknown = await res.json();
+  const out = new Map<string, CdragonIconFields>();
+  const walk = (node: unknown): void => {
+    if (Array.isArray(node)) {
+      for (const child of node) walk(child);
+      return;
+    }
+    if (node === null || typeof node !== "object") return;
+    const entry = node as CdragonNode;
+    if (typeof entry.apiName === "string" && !out.has(entry.apiName)) {
+      out.set(entry.apiName, { icon: entry.icon, squareIcon: entry.squareIcon, tileIcon: entry.tileIcon });
+    }
+    for (const value of Object.values(node)) walk(value);
+  };
+  walk(root);
+  return out;
+}
+
+/** Data Dragon 최신 버전 — `--version`이 없을 때. */
+async function latestDdragonVersion(): Promise<string> {
+  const res = await fetch("https://ddragon.leagueoflegends.com/api/versions.json");
+  if (!res.ok) throw new Error(`run-tft-assets: DDragon versions HTTP ${res.status}`);
+  const versions = (await res.json()) as unknown;
+  if (!Array.isArray(versions) || typeof versions[0] !== "string") {
+    throw new Error("run-tft-assets: DDragon versions.json 형식이 예상과 다르다");
+  }
+  return versions[0];
+}
+
 async function main(): Promise<void> {
+  // 기본값으로 버전·패치를 박아 두지 않는다 — 전에는 16.18.1·18.2가 기본이라 18.3 이후에도 조용히
+  // 옛 패치의 자산 목록을 만들었다(매니페스트가 16.18.1에 멈춰 18.3의 「럭스 (검은 가시)」가 빠졌다).
   const args = parseCliArgs("run-tft-assets", process.argv.slice(2), [
-    { name: "version", type: "string", default: "16.18.1" },
-    { name: "patch", type: "string", default: "18.2" },
+    { name: "version", type: "string", default: "" },
+    { name: "patch", type: "patch", required: true },
   ]);
-  const manifest = await runTftAssets(args.version as string, args.patch as string);
+  const version = (args.version as string) || (await latestDdragonVersion());
+  const manifest = await runTftAssets(version, String(args.patch));
   const total = (["unit", "trait", "item"] as const).map((k) => `${k} ${manifest.assets[k].length}`).join(" · ");
   console.log(`[tft-assets] ${total} · 미보유 ${manifest.missing.length}`);
   for (const m of manifest.missing.slice(0, 20)) console.log(`   미보유 ${m.kind} ${m.key} — ${m.reason}`);
