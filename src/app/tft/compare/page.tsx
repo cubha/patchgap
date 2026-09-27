@@ -104,8 +104,8 @@ export default function TftComparePage() {
               </li>
             </ul>
             <p className="mt-3 text-xs leading-relaxed text-muted">
-              표본이 모자란 대상(등장 보드 200 미만)은 순방률·평균 등수 행 자체를 만들지 않습니다 — 좁은 신뢰구간을
-              지어내 유의한 것처럼 보이게 하지 않기 위해서입니다. 등장률은 그대로 남습니다. 패치노트 변경 줄{" "}
+              표본이 모자란 대상(등장 보드 200 미만)의 순방률·평균 등수는 표본 부족으로 판정하고 표에 올리지 않습니다 —
+              좁은 표본으로 유의한 것처럼 보이게 하지 않기 위해서입니다. 등장률은 그대로 남습니다. 패치노트 변경 줄{" "}
               {notes.stats.lines}건 중 {notes.items.length}건(
               {((notes.items.length / Math.max(1, notes.stats.lines)) * 100).toFixed(1)}%)에서 대상을 특정했고,
               나머지 {notes.stats.unresolved}건은 대상이 없는 체계 변경이거나 사전에 없는 소환수입니다.

@@ -53,7 +53,10 @@ describe("AdapterMatrix", () => {
     }
     // 2026-09-23 **명세 변경**(UX-BRIEF §8-5): 패치 쌍 기호를 `→`로 통일했다. `⇒`는 패치노트가
     // 적은 값(`115 ⇒ 120`) 전용이라 두 뜻이 겹치고 있었다 — 테스트 약화가 아니라 어휘 반영이다.
-    expect(heads.some((h) => h?.includes("실연결 · 42.3 → 43.1"))).toBe(true);
+    // 2026-09-27 **명세 변경**: 머리글에서 패치 쌍을 뺐다 — 수기 상수라 TFT가 18.3으로 넘어간 뒤에도
+    // 「18.1 → 18.2」라고 말하고 있었다(패치마다 낡는 문장). 쌍은 위 패널들이 산출물에서 읽는다.
+    expect(heads.some((h) => h?.includes("실연결"))).toBe(true);
+    expect(heads.some((h) => /\d+\.\d+\s*→/.test(h ?? ""))).toBe(false);
     expect(heads).not.toContain("PUBG (어댑터 확정 · 미연결)");
   });
 

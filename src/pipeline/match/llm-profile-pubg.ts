@@ -23,8 +23,10 @@ const SYSTEM_INSTRUCTIONS = [
   "설명되지 않거나 노트와 불일치하는 관측 변화)를 설명할 수 있는 간접 영향 후보를 찾으세요.",
   "이 게임의 성질(인과 추론의 전제):",
   "- 관측 지표는 **획득 점유율** 하나입니다. 전체 무기 획득 중 그 무기가 차지한 비율이며,",
-  "  스폰율의 대리 지표입니다. 한 무기의 스폰이 줄면 남은 무기들의 점유율이 **함께** 올라갑니다",
-  "  — 제로섬이므로 직접 너프를 받지 않은 무기도 움직입니다.",
+  "  스폰율의 대리 지표입니다. 점유율은 제로섬이라 한 무기의 스폰이 줄면 남은 무기들의 점유율이",
+  "  함께 오르지만, 그 폭에는 **상한**이 있습니다 — 사용자 메시지의 「균등 재분배 기대치」가 그",
+  "  수준입니다. 관측 변화가 그보다 훨씬 크면 재분배만으로는 설명되지 않습니다. 그때 재분배를",
+  "  원인으로 들려면 confidence를 low로 두고, 다른 설명(전체 획득 수 변화 등)이 없으면 그렇게 적으세요.",
   "- 같은 탄약·같은 파밍 구역·같은 역할(근접 돌격·장거리)을 공유하는 무기가 서로를 밀어냅니다.",
   "- 반동·조준 전환 시간·차량 피해 같은 항목은 **획득 점유율로 검증되지 않습니다**. 그런 조항을",
   "  인용할 때는 「줍는 빈도가 바뀌었다」는 인과 고리를 분명히 적고, 없으면 인용하지 마세요.",
@@ -70,8 +72,17 @@ function fmtRel(value: number | null): string {
  * `PatchNoteItem`으로 바뀐 뒤라 배열이 사라진다 — 그래서 원본 매핑을 클로저로 든다.
  * 이름 비교로 대신하면 「RPD」가 든 5줄 중 어느 것이 자기 조항인지 가릴 수 없다.
  */
+/** 패치쌍 단위 맥락 — 모든 델타 프롬프트에 같이 실린다(없으면 줄을 생략한다). */
+export interface PubgPromptContext {
+  /** `redistributionExpectation` — 노트 무기가 잃은 몫을 나머지에 균등 재분배한 상대 변화. */
+  redistribution: number;
+  /** 전체 무기 획득 수의 상대 변화(표본 구성·루팅 변화가 점유율을 흔드는 정도). */
+  totalPickupsRelChange: number;
+}
+
 export function createPubgLlmProfile(
-  noteWeaponKeys: ReadonlyMap<string, readonly string[]>
+  noteWeaponKeys: ReadonlyMap<string, readonly string[]>,
+  context: PubgPromptContext | null = null
 ): GameLlmProfile<PubgDeltaRow> {
   return {
     game: "pubg",
@@ -95,6 +106,12 @@ export function createPubgLlmProfile(
             ? "미공지(패치노트에 직접 조항 없음)"
             : "공지-불일치(노트 방향·규모와 관측이 다름)"
         }`,
+        ...(context
+          ? [
+              `균등 재분배 기대치: ${fmtRel(context.redistribution)} (노트가 스폰을 바꾼 무기의 몫을 나머지에 고르게 나눈 값)`,
+              `전체 획득 수 변화: ${fmtRel(context.totalPickupsRelChange)}`,
+            ]
+          : []),
       ].join("\n"),
   };
 }

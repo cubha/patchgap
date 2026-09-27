@@ -4,6 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import {
+  resolveDirection,
   buildPatchNotesUrl,
   fetchPatchNotesHtml,
   parsePatchNotes,
@@ -573,3 +574,39 @@ describe("parsePatchNotes — 클래식 범주 라벨은 여전히 건너뛴다(
     expect(result.items.some((i) => i.entity === "룬 밸런스" || i.entity === "신규 룬")).toBe(false);
   });
 });
+
+// 2026-09-27 감사(최신 패치 실데이터): 방향 판정이 두 경로로 뒤집혀 있었다.
+//  ① "1,020"을 1과 20으로 쪼갰다 — 카시오페아 950→1,020이 adjust, 오른 155,000→140,000이 nerf.
+//  ② 낮을수록 좋은 수치 목록에 가격·기준치·요구치·소모·지연이 없었다 — TFT 18.3 약 9줄이 반대로 찍혔다.
+describe("resolveDirection — 최신 패치 실측 사례", () => {
+  it("천 단위 쉼표를 한 숫자로 읽는다", () => {
+    expect(resolveDirection("피해량", "400/600/950", "425/630/1,020", null)).toBe("buff");
+    expect(resolveDirection("최대 귀환 거리", "1,500", "2,500", null)).toBe("buff");
+  });
+
+  it("쉼표 숫자 + 낮을수록 좋은 기준치", () => {
+    expect(resolveDirection("두 번째 유물 기준치", "대장간의 힘 155,000", "대장간의 힘 140,000", null)).toBe("buff");
+  });
+
+  it("가격·요구치·소모·지연은 낮을수록 좋다", () => {
+    expect(resolveDirection("주술 목숨값 가격", "1골드", "2골드", null)).toBe("nerf");
+    expect(resolveDirection("업그레이드 단계당 고대의 종 요구치", "4", "3", null)).toBe("buff");
+    expect(resolveDirection("주술 불길한 거래 체력 소모", "체력 3", "체력 2", null)).toBe("buff");
+    expect(resolveDirection("지연 라운드", "8", "6", null)).toBe("buff");
+    expect(resolveDirection("4단계 유닛 획득에 필요한 스테이지별 최소 수호령 가격", "15/6/4/0골드", "15/5/3/0골드", null)).toBe("buff");
+  });
+
+  it("「반환」은 뜻을 뒤집는다 — 재사용 대기시간 반환은 클수록 좋다", () => {
+    expect(resolveDirection("재사용 대기시간 반환", "1.5초", "2.5초", null)).toBe("buff");
+  });
+
+  it("원문이 「효과는 전과 동일」이라 적은 줄은 방향이 아니라 조정이다", () => {
+    expect(resolveDirection("공격력 형태 스킬 방어구 관통력", "40%", "60% (효과는 전과 동일)", null)).toBe("adjust");
+  });
+
+  it("기존 규칙은 그대로다 — 재사용 대기시간 증가는 nerf, 골드 증가는 buff", () => {
+    expect(resolveDirection("재사용 대기시간", "140/115/90초", "160/130/100초", null)).toBe("nerf");
+    expect(resolveDirection("최초 골드", "4골드", "6골드", null)).toBe("buff");
+  });
+});
+

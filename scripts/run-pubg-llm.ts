@@ -14,14 +14,21 @@ import path from "node:path";
 
 import { inferIndirectCandidates } from "../src/pipeline/match/llm-match";
 import { createPubgLlmProfile } from "../src/pipeline/match/llm-profile-pubg";
-import { pubgNotesAsPatchNotes, type PubgDeltaRow, type PubgNoteItem } from "../src/pipeline/match/pubg-delta";
+import {
+  capOverclaimedConfidence,
+  pubgNotesAsPatchNotes,
+  redistributionExpectation,
+  type PubgDeltaRow,
+  type PubgNoteItem,
+} from "../src/pipeline/match/pubg-delta";
+import type { PubgPatchAggregate } from "../src/pipeline/aggregate/pubg-weapons";
 import { isMainModule, parseCliArgs } from "./shared/cli";
 
 const ROOT = process.cwd();
 const AGG_DIR = path.join(ROOT, "data", "aggregated", "pubg");
 
 interface DeltasFile {
-  meta: { to: string; [k: string]: unknown };
+  meta: { from: string; to: string; [k: string]: unknown };
   rows: PubgDeltaRow[];
 }
 
@@ -39,16 +46,35 @@ async function main(): Promise<void> {
 
   const nameByKey = new Map(deltas.rows.map((row) => [row.weaponKey, row.weaponName] as const));
   const candidates = pubgNotesAsPatchNotes(notes, (key) => nameByKey.get(key) ?? null);
-  const profile = createPubgLlmProfile(new Map(notes.map((n) => [n.id, n.weaponKeys] as const)));
+  // 재분배 상한 맥락(2026-09-27) — 제로섬 효과의 **폭**을 모델과 코드 게이트가 같은 수치로 본다.
+  const weaponsOf = (patch: string) =>
+    JSON.parse(fs.readFileSync(path.join(AGG_DIR, `weapons-${patch}.json`), "utf8")) as PubgPatchAggregate;
+  const before = weaponsOf(String(deltas.meta.from));
+  const after = weaponsOf(deltas.meta.to);
+  const redistribution = redistributionExpectation(before, after, notes);
+  const totalPickupsRelChange = before.totalPickups > 0 ? after.totalPickups / before.totalPickups - 1 : 0;
+  console.log(
+    `[pubg-llm] 균등 재분배 기대치 ${(redistribution * 100).toFixed(2)}% · 전체 획득 수 ${(totalPickupsRelChange * 100).toFixed(1)}%`
+  );
+  const profile = createPubgLlmProfile(new Map(notes.map((n) => [n.id, n.weaponKeys] as const)), {
+    redistribution,
+    totalPickupsRelChange,
+  });
 
   const targets = deltas.rows.filter(
     (row) => row.status === "unannounced" || row.status === "announced-inconsistent"
   );
   console.log(`[pubg-llm] 대상 ${targets.length}행 · 후보 조항 ${candidates.length}건`);
 
-  const result = await inferIndirectCandidates(deltas.rows, candidates, profile, {
+  const inferred = await inferIndirectCandidates(deltas.rows, candidates, profile, {
     maxDeltas: args.llmMax as number,
+    // 지시문의 제로섬 전제를 상한 있는 서술로 바꿨다(2026-09-27) — PUBG만 다시 묻는다.
+    promptRevision: "pubg-redistribution-bound",
   });
+  const capped = inferred.deltas.map((row) => capOverclaimedConfidence(row, redistribution));
+  const cappedCount = capped.filter((row, i) => row !== inferred.deltas[i]).length;
+  console.log(`[pubg-llm] 재분배 폭을 넘는 변화의 원인 확신도를 low로 낮춘 행: ${cappedCount}`);
+  const result = { ...inferred, deltas: capped };
 
   const withCause = result.deltas.filter((row) => (row.causes ?? []).some((c) => c.verified)).length;
   console.log(
@@ -59,7 +85,27 @@ async function main(): Promise<void> {
     console.log("[pubg-llm] --dry-run — 파일을 쓰지 않는다");
     return;
   }
-  fs.writeFileSync(deltasPath, `${JSON.stringify({ ...deltas, rows: result.deltas }, null, 2)}\n`);
+  // 실행 요약을 meta에 싣는다(2026-09-27 인수검증 V9) — LoL·TFT 산출물은 `meta.llm.prose`로 문장 위생을
+  // 남기는데 PUBG만 없어, 표현 규칙(요약 100자·원인 80자·완곡 종결)을 산출물에서 확인할 수 없었다.
+  const s = result.summary;
+  const llm = {
+    calls: s.calls,
+    cacheHits: s.cacheHits,
+    skipped: s.skipped,
+    proseRepairs: s.proseRepairs,
+    usage: s.usage,
+    prose: s.prose,
+    redistribution,
+    confidenceCapped: cappedCount,
+  };
+  console.log(
+    `[pubg-llm] 문장 위생: 요약 ${s.prose.summaryCount}건 중 100자 초과 ${s.prose.summaryOverLength}건 · ` +
+      `원인 ${s.prose.causeCount}건 중 80자 초과 ${s.prose.causeOverLength}건 · 명사형 종결 ${s.prose.causeNounEnding}건`
+  );
+  fs.writeFileSync(
+    deltasPath,
+    `${JSON.stringify({ ...deltas, meta: { ...deltas.meta, llm }, rows: result.deltas }, null, 2)}\n`
+  );
   console.log(`[pubg-llm] 기록: ${path.relative(ROOT, deltasPath)}`);
 }
 

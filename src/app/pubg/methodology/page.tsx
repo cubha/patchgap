@@ -15,7 +15,12 @@ import MethodologyLayout, { type MethodologySlots } from "@/components/methodolo
 import StatusBadge from "@/components/StatusBadge";
 import { PubgSampleNotice, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { loadPubg } from "@/lib/pubgData";
-import { ANNOUNCED_RATIO_BAND, PICKUP_MIN_N } from "@/pipeline/match/pubg-delta";
+import {
+  ANNOUNCED_RATIO_BAND,
+  PICKUP_MIN_N,
+  REDISTRIBUTION_OVERCLAIM_FACTOR,
+  redistributionExpectation,
+} from "@/pipeline/match/pubg-delta";
 
 export const metadata: Metadata = {
   title: "PUBG 방법론 · patchgap",
@@ -50,6 +55,16 @@ export default function PubgMethodologyPage() {
     (sum, row) => sum + (row.causes?.filter((cause) => cause.verified).length ?? 0),
     0
   );
+  // 재분배 상한(2026-09-27) — 원인 영역이 「제로섬 반사」를 단정하던 문장을 대체한다. 기대치와 그것을 넘는
+  // 무기 수는 **이 패치의 데이터에서** 계산한다(run-pubg-llm.ts의 확신도 게이트와 같은 함수·같은 배수).
+  const redistribution = redistributionExpectation(before, after, notes);
+  const beyondRedistribution = deltas.rows.filter(
+    (row) =>
+      (row.causes ?? []).length > 0 &&
+      row.relChange !== null &&
+      redistribution !== 0 &&
+      Math.abs(row.relChange) > REDISTRIBUTION_OVERCLAIM_FACTOR * Math.abs(redistribution)
+  ).length;
   const hidden = (counts["below-threshold"] ?? 0) + (counts["no-change"] ?? 0) + (counts["insufficient-sample"] ?? 0);
 
   const statusRows = [
@@ -77,11 +92,11 @@ export default function PubgMethodologyPage() {
           <div className="p-5">
             <dl className="flex flex-col gap-2 text-sm">
               <div className="flex items-baseline justify-between gap-3">
-                <dt className="text-muted">42.3 ({deltas.meta.window.before[0]?.slice(5)}~{deltas.meta.window.before.at(-1)?.slice(5)})</dt>
+                <dt className="text-muted">{deltas.meta.from} ({deltas.meta.window.before[0]?.slice(5)}~{deltas.meta.window.before.at(-1)?.slice(5)})</dt>
                 <dd className="font-mono tabular-nums text-fg">{before.nMatches.toLocaleString()}매치</dd>
               </div>
               <div className="flex items-baseline justify-between gap-3">
-                <dt className="text-muted">43.1 ({deltas.meta.window.after[0]?.slice(5)}~{deltas.meta.window.after.at(-1)?.slice(5)})</dt>
+                <dt className="text-muted">{deltas.meta.to} ({deltas.meta.window.after[0]?.slice(5)}~{deltas.meta.window.after.at(-1)?.slice(5)})</dt>
                 <dd className="font-mono tabular-nums text-fg">{after.nMatches.toLocaleString()}매치</dd>
               </div>
               <div className="flex items-baseline justify-between gap-3 border-t border-border-soft pt-2">
@@ -184,13 +199,16 @@ export default function PubgMethodologyPage() {
             않습니다.
           </dd>
         </div>
-        <div>
-          <dt className="font-display font-bold text-fg">LLM 원인 추정 없음</dt>
-          <dd className="mt-1 leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
+        {/* 데이터에 의존하는 단언은 데이터로 가른다(2026-09-27 — 전에는 원인이 있는 패치에서도 「없음」을 말했다). */}
+        {verifiedCauseCount === 0 ? (
+          <div>
+            <dt className="font-display font-bold text-fg">LLM 원인 추정 없음</dt>
+            <dd className="mt-1 leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
               {deltas.meta.to} 패치노트는 무기 항목 {notes.length}건뿐이라 미공지 변화에 짝지을 후보 조항이
-            없습니다. 무기 상세에는 관측값과 판정 근거만 있습니다.
-          </dd>
-        </div>
+              없습니다. 무기 상세에는 관측값과 판정 근거만 있습니다.
+            </dd>
+          </div>
+        ) : null}
         </dl>
       </>
     ),
@@ -240,8 +258,10 @@ export default function PubgMethodologyPage() {
           {verifiedCauseCount > 0 ? (
             <>
               {" "}
-              대부분은 <strong className="text-fg">제로섬 반사</strong>입니다 — 경기관총 스폰이 줄면
-              그 자리를 다른 무기가 메우므로, 직접 너프를 받지 않은 무기의 점유율이 올라갑니다.
+              점유율은 제로섬이라 노트가 스폰을 줄인 무기의 몫은 다른 무기로 넘어가지만, 그 폭에는 상한이 있습니다 — 이
+              패치의 <strong className="text-fg">균등 재분배 기대치는 {signedPct(redistribution)}</strong>입니다. 원인이 붙은
+              무기 중 <strong className="text-fg">{beyondRedistribution}종</strong>은 변화가 그 {REDISTRIBUTION_OVERCLAIM_FACTOR}배를
+              넘어 재분배만으로 설명되지 않으므로, 원인 문장의 확신도를 기계가 「낮음」으로 내립니다.
             </>
           ) : null}
           {verifiedCauseCount === 0 ? (
@@ -311,7 +331,7 @@ export default function PubgMethodologyPage() {
     limits: (
       <div className="p-5">
         <p className="text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
-          43.1 패치노트의 나머지 항목은 이 표본으로 검증하지 못했습니다. 숫자를 지어내지 않고 비워 둡니다.
+          {deltas.meta.to} 패치노트의 나머지 항목은 이 표본으로 검증하지 못했습니다. 숫자를 지어내지 않고 비워 둡니다.
         </p>
         <ul className="mt-3 flex flex-col gap-2">
           {unverifiable.map((note) => (
@@ -327,6 +347,8 @@ export default function PubgMethodologyPage() {
           1차 출처 단독이라 판정 축에서 제외했습니다.
         </p>
 
+        {/* 이 표의 「42.3」·「43.1」은 **의도된 고정 라벨**이다 — 버린 축의 반증 기록(accuracy-comparison.json,
+            PLAN-pubg-gate-2026-09-16.md §8)이 그 두 패치로만 만들어졌다. 현재 쌍을 따라가면 거짓 라벨이 된다. */}
         {accuracyComparison && accuracyComparison.length > 0 ? (
           <details className="mt-4 rounded-md border border-border-soft">
             <summary className="cursor-pointer px-4 py-3 font-mono text-xs font-bold text-muted">

@@ -64,12 +64,15 @@ export function displayStatusOf(status: MatchStatus): DisplayStatus {
 /**
  * 판정 상태 + 두 게이트(유의성·효과크기 바닥)로 **화면이 쓸 키**를 정한다.
  *
- * LoL의 `announced-inconsistent`는 판정 엔진이 "방향 반대"와 "비유의"를 한 값에 넣는다(verdict.ts
- * 헤더 — 실측 26.17→26.18: 64건 중 59건이 비유의). 그래서 **유의 + 바닥 통과**일 때만 이상 관측이고,
+ * LoL의 `announced-inconsistent`는 판정 엔진이 "방향 반대"·"방향 중립"·"비유의"를 한 값에 넣는다(verdict.ts
+ * 헤더 — 실측 26.17→26.18: 64건 중 59건이 비유의). 그래서 **방향 반대 + 유의 + 바닥 통과**일 때만 이상 관측이고,
  * 나머지는 전부 "공지"다 — 노트가 말한 항목이고 반대 증거는 없다는 뜻이다.
  */
 export function displayStatus(record: DeltaRecord, qAlpha?: number): DisplayStatus {
   if (record.status === "announced-inconsistent") {
+    // 노트 방향이 동률·중립이면 "반대로 움직였다"고 말할 근거가 없다(2026-09-27) — 엔진은 중립을
+    // 불일치 값에 접어 넣지만, 이상 관측은 방향 반대의 표시다. 필드가 없는 낡은 파일은 기존 동작.
+    if (record.directionAgreement === "neutral") return "announced";
     const significant = isSignificantDelta(record, qAlpha);
     const aboveFloor =
       record.delta !== null && meetsEffectFloor(record.metric, record.delta, record.before);

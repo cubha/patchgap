@@ -14,7 +14,7 @@ import { detailCrumbs } from "@/lib/breadcrumbs";
 import SectionCard from "@/components/SectionCard";
 import PubgDetailSplash, { type PubgDetailStat } from "@/components/pubg/PubgDetailSplash";
 import { PubgFooter, PubgUnavailable, pct } from "@/components/pubg/shared";
-import { loadPubg, loadPubgAssets, loadPubgMaps } from "@/lib/pubgData";
+import { loadPubg, loadPubgAssets, loadPubgMaps, pubgPair } from "@/lib/pubgData";
 import { mapKeyFromSlug, mapSlug, weaponHref } from "@/lib/pubgRoutes";
 import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
 import { publicMapPath } from "@/pipeline/pubg/asset-path";
@@ -47,9 +47,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { key } = await params;
   const mapKey = mapKeyFromSlug(key, allMapKeys());
   const name = mapKey ? mapIdentity(mapKey).koName : "맵";
+  const pair = pubgPair();
+  const span = pair ? `${pair.from} → ${pair.to}` : "패치 비교";
   return {
-    title: `${name} · PUBG 42.3 → 43.1 · patchgap`,
-    description: `${name}의 42.3 → 43.1 매치 점유율·평균 소요·무기 구성 변화.`,
+    title: `${name} · PUBG ${span} · patchgap`,
+    description: `${name}의 ${span} 매치 점유율·평균 소요·무기 구성 변화.`,
   };
 }
 
@@ -178,7 +180,7 @@ export default async function PubgMapPage({ params }: PageProps) {
           eyebrow="구성"
           title={`${identity.koName}에서 많이 줍는 총`}
           variant="glass"
-          action={<span className="font-mono text-xs text-muted">43.1 기준</span>}
+          action={<span className="font-mono text-xs text-muted">{maps.deltas.meta.to} 기준</span>}
         >
           {(statAfter ?? shown).topWeapons.length === 0 ? (
             <p className="p-5 text-sm text-muted">이 구간 표본에 무기 획득 기록이 없습니다.</p>

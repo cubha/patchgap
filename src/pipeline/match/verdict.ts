@@ -5,7 +5,8 @@
 //
 // 상태 판정 순서(PLAN ③ ST-08 행 그대로, n 게이트를 유의성 표보다 먼저 확인 — PLAN ②는 "승률
 // 델타는 n>=200 게이트... 미달=insufficient-sample"을 무조건 조항으로 서술한다):
-//   1) metric==="winRate" && !passesSampleGate(n.before, n.after) → "insufficient-sample"(무조건).
+//   1) 개체 조건부 지표(winRate·top4Rate·avgPlacement) && !passesSampleGate(n.before, n.after)
+//      → "insufficient-sample"(무조건). TFT 두 지표는 2026-09-27에 합류했다.
 //   2) 유의(q<FDR_ALPHA && CI가 0을 포함하지 않음):
 //        노트 짝 있음 → 방향 일치("consistent") → "announced-consistent"
 //                       불일치/중립           → "announced-inconsistent"
@@ -44,8 +45,16 @@ function isSignificant(delta: DeltaRecord): boolean {
  * 델타 1건 + (있으면) 1단 매칭 정보로 최종 MatchStatus를 정한다. 순수 함수 — delta 자체의
  * q/ci/n/metric만 읽고 부수효과 없음.
  */
+/**
+ * 개체 n 게이트가 걸리는 지표 — **분모가 그 개체가 등장한 표본**인 결과 비율·평균이다.
+ * LoL 승률(챔피언 등장 경기), TFT 순방률·평균 등수(유닛·특성·아이템 등장 보드). 픽률·등장률처럼
+ * 분모가 전체 표본인 지표는 개체가 드물어도 분모가 커서 이 게이트의 대상이 아니다.
+ * 임계는 둘 다 200이다(`WIN_RATE_MIN_N` = `TFT_MIN_BOARDS`).
+ */
+const ENTITY_SAMPLE_GATED_METRICS: ReadonlySet<DeltaRecord["metric"]> = new Set(["winRate", "top4Rate", "avgPlacement"]);
+
 export function assignStatus(delta: DeltaRecord, match: EntityMatchInfo | null): MatchStatus {
-  if (delta.metric === "winRate" && !passesSampleGate(delta.n.before, delta.n.after)) {
+  if (ENTITY_SAMPLE_GATED_METRICS.has(delta.metric) && !passesSampleGate(delta.n.before, delta.n.after)) {
     return "insufficient-sample";
   }
 
@@ -81,6 +90,8 @@ export function applyVerdicts(
     return {
       ...delta,
       status,
+      // 화면이 "방향 반대"와 "방향을 말할 수 없음"을 가르는 데 쓴다(display-status.ts) — 짝이 있을 때만.
+      ...(match ? { directionAgreement: match.directionAgreement } : {}),
       matchedNoteId,
       matchedNoteIds,
       evidence: {

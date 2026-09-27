@@ -2,7 +2,7 @@
   "meta": {
     "from": "26.18",
     "to": "26.19",
-    "generatedAt": "2026-09-26T09:10:23.017Z",
+    "generatedAt": "2026-09-26T19:13:09.344Z",
     "n": 1931,
     "counts": {
       "unannounced": 27,
@@ -15,27 +15,27 @@
     },
     "qAlpha": 0.1,
     "llm": {
-      "calls": 130,
-      "cacheHits": 0,
+      "calls": 3,
+      "cacheHits": 55,
       "skipped": 0,
       "usage": {
-        "inputTokens": 17230,
-        "cacheReadInputTokens": 1024389,
+        "inputTokens": 602,
+        "cacheReadInputTokens": 15882,
         "cacheCreationInputTokens": 7941,
-        "outputTokens": 72291
+        "outputTokens": 2134
       },
       "prose": {
-        "summaryCount": 125,
+        "summaryCount": 56,
         "summaryOverLength": 2,
-        "summaryHedged": 26,
+        "summaryHedged": 14,
         "maxSummaryLength": 111,
-        "causeCount": 279,
+        "causeCount": 168,
         "causeOverLength": 0,
-        "causeHedged": 89,
+        "causeHedged": 54,
         "causeHedgedConfident": 0,
         "causeNounEnding": 0
       },
-      "proseRepairs": 5
+      "proseRepairs": 2
     }
   },
   "rows": [
@@ -278,8 +278,8 @@
         },
         {
           "text": "신규 스킨·크로마 출시가 픽/밴 관심을 끌어올린 영향으로 보입니다.",
-          "candidateNoteId": "note:26.19:other:앞으로-나올-스킨-및-크로마:be5be69f",
-          "verified": true,
+          "candidateNoteId": null,
+          "verified": false,
           "confidence": "low"
         }
       ],
@@ -907,20 +907,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "녹턴 R 재사용 대기시간이 140/115/90초에서 160/130/100초로 늘며 밴 우선순위에서 밀렸습니다.",
-          "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "바이 보호막이 최대 체력의 12%에서 10%로 줄어 정글 밴 수요가 나피리로 이동했습니다.",
+          "text": "녹턴 R 쿨다운이 160/130/100초로 늘며 다이브 정글 선택지가 줄어, 나피리로 밴 압력이 몰린 것으로 보입니다.",
           "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "마스터 이 Q 쿨 환급이 스킬 가속 비례에서 고정 1초로 바뀌어 견제 대상이 바뀌었을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:lucian:98722aa4",
+          "text": "나서스 Q 추가 피해가 10 감소해 탑 대체 픽으로 나피리 수요가 늘었을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:nasus:b5997156",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "탑 퀘스트 순간이동 쿨이 390초로 줄어 라인 주도권형 탑 챔피언 가치가 올랐습니다.",
+          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
           "verified": true,
           "confidence": "low"
         }
@@ -943,11 +943,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "나피리 밴률이 7.2%→11.4%(+4.2%p)로 올랐는데 직접 조항은 없고, 라이즈·루시안·녹턴 하향에 따른 반사이익으로 보입니다.",
+        "summary": "나피리 직접 변경은 없고, 녹턴 R 쿨 증가·나서스 Q 너프로 경쟁 픽이 약해지며 밴률이 7.2%→11.4%(+4.2%p) 오른 것으로 보입니다.",
         "summaryCites": [
-          "note:26.19:champion:ryze:2bcac5df",
-          "note:26.19:champion:lucian:98722aa4",
-          "note:26.19:champion:nocturne:daf7f9d0"
+          "note:26.19:champion:nocturne:daf7f9d0",
+          "note:26.19:champion:nasus:b5997156"
         ],
         "summaryVerified": true
       }
@@ -3809,38 +3808,7 @@
         "note:26.19:champion:fiora:e5ba347c",
         "note:26.19:champion:fiora:4ff3c93f"
       ],
-      "causes": [
-        {
-          "text": "탑 퀘스트 순간이동 쿨이 420초→390초로 줄어 분열 운영형 피오라의 사이드 주도권이 강해졌습니다.",
-          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "탑 강화 순간이동 쿨 300~210초로 단축되어 스플릿 압박 후 합류 손실이 줄었습니다.",
-          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:f037ef05",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "나서스 Q 추가 피해 10 감소로 대표적 탑 대치 상대가 약화됐습니다.",
-          "candidateNoteId": "note:26.19:champion:nasus:b5997156",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "럼블 과열 공격속도 50~130%→30~100% 너프로 탑 라인 경쟁자가 약해졌습니다.",
-          "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "뽀삐 Q 미니언·몬스터 피해 상한 하향으로 탑 카운터 픽 입지가 줄었습니다.",
-          "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393131254",
@@ -3857,17 +3825,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=114,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-fiora"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "피오라 탑 승률이 46.3%→54.7%(+8.4%p)로 급등했는데, 탑 순간이동 쿨 단축(390초·300~210초)과 나서스·럼블 너프가 겹친 영향입니다.",
-        "summaryCites": [
-          "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
-          "note:26.19:system:순간이동-재사용-대기시간:f037ef05",
-          "note:26.19:champion:nasus:b5997156",
-          "note:26.19:champion:rumble:17e40d96"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Khazix:JUNGLE:winRate",
@@ -3894,20 +3852,7 @@
         "note:26.19:champion:khazix:51e4a44b",
         "note:26.19:champion:khazix:49b122f5"
       ],
-      "causes": [
-        {
-          "text": "녹턴 R 재사용 대기시간이 최대 20초 늘어 경쟁 암살 정글러가 약화됐습니다.",
-          "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "바이 보호막이 최대 체력 12%에서 10%로 줄어 정글 경쟁 구도가 카직스에 유리해졌습니다.",
-          "candidateNoteId": "note:26.19:champion:vi:8f97f057",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392418531",
@@ -3924,15 +3869,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=121,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-khazix"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "카직스 정글 승률이 44.8%→52.0%(+7.2%p)로 올랐지만 95% CI가 0을 포함해 유의하지 않고, 녹턴·바이 너프의 정글 경쟁 완화가 일부 작용했을 수 있습니다.",
-        "summaryCites": [
-          "note:26.19:champion:nocturne:daf7f9d0",
-          "note:26.19:champion:vi:8f97f057"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Khazix:winRate",
@@ -3959,26 +3896,7 @@
         "note:26.19:champion:khazix:51e4a44b",
         "note:26.19:champion:khazix:49b122f5"
       ],
-      "causes": [
-        {
-          "text": "녹턴 R 쿨다운 140/115/90초→160/130/100초 너프로 암살자 정글 경쟁자가 줄었습니다.",
-          "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "마스터 이 Q 쿨 회수의 스킬 가속 비례 제거로 후반 정글 픽 경쟁이 완화됐습니다.",
-          "candidateNoteId": "note:26.19:champion:masteryi:871d9688",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "바이 보호막 최대 체력 12%→10% 너프로 갱킹형 정글 상대 난도가 낮아졌습니다.",
-          "candidateNoteId": "note:26.19:champion:vi:8f97f057",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392418531",
@@ -3995,14 +3913,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=121,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-khazix"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "카직스 승률 45.2%→52.0%(+6.8%p, CI 하한 -0.8%p)는 녹턴 R 쿨다운 너프 등 정글 경쟁자 약화가 겹친 결과입니다.",
-        "summaryCites": [
-          "note:26.19:champion:nocturne:daf7f9d0"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Vi:winRate",
@@ -4028,26 +3939,7 @@
         "note:26.19:champion:vi:90715c64",
         "note:26.19:champion:vi:8f97f057"
       ],
-      "causes": [
-        {
-          "text": "카직스 기본 지속 피해량 상향(17~136→22~141)으로 정글 경쟁에서 바이 입지가 밀렸습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "엘리스 W 공격 속도 10%p 상향으로 초반 정글 주도권 경쟁이 불리해졌을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:elise:a7bec286",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "릴리아 R 수면 2초→2.5초로 한타 개시 역할이 겹치는 바이 수요가 줄었습니다.",
-          "candidateNoteId": "note:26.19:champion:lillia:9a5c8c9b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393148907",
@@ -4064,16 +3956,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=254,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-vi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "바이 승률 -5.0%p이나 표본 203, CI가 0을 포함해 불확실하며 카직스·엘리스·릴리아 정글 상향의 반사 영향으로 보입니다.",
-        "summaryCites": [
-          "note:26.19:champion:khazix:defcade0",
-          "note:26.19:champion:elise:a7bec286",
-          "note:26.19:champion:lillia:9a5c8c9b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aatrox:winRate",
@@ -4099,26 +3982,7 @@
         "note:26.19:champion:aatrox:5bc9f3f5",
         "note:26.19:champion:aatrox:f629d9e5"
       ],
-      "causes": [
-        {
-          "text": "나서스 Q 추가 피해량이 10 하향돼 탑 맞라인 난이도가 낮아졌습니다.",
-          "candidateNoteId": "note:26.19:champion:nasus:b5997156",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "럼블 과열 공격 속도가 50~130%에서 30~100%로 줄어 탑 경쟁 챔피언 압박이 완화됐습니다.",
-          "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "탑 순간이동 대기시간이 420초에서 390초로 줄어 라인 복귀·합류가 쉬워졌습니다.",
-          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392639675",
@@ -4135,16 +3999,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=266,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aatrox"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "아트록스 승률 43.1%→47.0%(+3.9%p)이나 CI가 0을 포함합니다. 나서스·럼블 너프와 탑 순간이동 단축이 보탬이 됐을 수 있습니다.",
-        "summaryCites": [
-          "note:26.19:champion:nasus:b5997156",
-          "note:26.19:champion:rumble:17e40d96",
-          "note:26.19:system:순간이동-재사용-대기시간:c9025e15"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aurora:winRate",
@@ -4170,20 +4025,7 @@
         "note:26.19:champion:aurora:537dcee9",
         "note:26.19:champion:aurora:8770c9ea"
       ],
-      "causes": [
-        {
-          "text": "라이즈 Q 전이 추가 피해량이 10%p 깎여 미드 경쟁자가 약해진 반사이익일 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "럼블 과열 공격 속도가 50~130%에서 30~100%로 하향돼 미드 대치 구도가 오로라에게 유리해졌습니다.",
-          "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393099955",
@@ -4200,15 +4042,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=893,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aurora"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "오로라 승률이 44.1%→47.6%(+3.6%p)로 올랐지만 CI가 [-4.8%p, 12.0%p]로 0을 포함해, 라이즈·럼블 하향 반사이익 정도만 추정됩니다.",
-        "summaryCites": [
-          "note:26.19:champion:ryze:2bcac5df",
-          "note:26.19:champion:rumble:17e40d96"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aphelios:winRate",
@@ -4237,20 +4071,7 @@
         "note:26.19:champion:aphelios:ccd9a119",
         "note:26.19:champion:aphelios:447bb1b1"
       ],
-      "causes": [
-        {
-          "text": "루시안 경계 강화 적중 피해 감소로 경쟁 원딜 입지가 줄어든 반사이익일 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:lucian:98722aa4",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "서포터 시작 아이템 체력 재생 상향으로 봇 라인 유지력이 올라 아펠리오스 초반 안정성이 개선됐습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393230642",
@@ -4267,12 +4088,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=523,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aphelios"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "아펠리오스 승률 48.6%→51.6%(3.0%p)이나 95% CI가 [-2.4%p, 8.4%p]로 0을 포함해 유의하지 않습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aphelios:BOTTOM:winRate",
@@ -4301,20 +4117,7 @@
         "note:26.19:champion:aphelios:ccd9a119",
         "note:26.19:champion:aphelios:447bb1b1"
       ],
-      "causes": [
-        {
-          "text": "루시안 경계 강화 적중 피해가 15(+공격력 20%)에서 5(+15%)로 줄어, 경쟁 원딜 약화가 아펠리오스 승률을 밀어올렸을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:lucian:98722aa4",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "서포터 아이템 체력 재생이 25%/50%에서 50%/75%로 올라 바텀 라인 유지력이 늘었습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393230642",
@@ -4331,14 +4134,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=523,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aphelios"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "아펠리오스 승률 +3.0%p이나 95% CI가 [-2.4, 8.4]로 0을 포함해 노이즈 범위이며, 루시안 너프 등 바텀 환경 변화가 보조 요인입니다.",
-        "summaryCites": [
-          "note:26.19:champion:lucian:98722aa4"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ryze:winRate",
@@ -4365,26 +4161,7 @@
         "note:26.19:champion:ryze:2bcac5df",
         "note:26.19:champion:ryze:f4e781e8"
       ],
-      "causes": [
-        {
-          "text": "오로라 E 기본 피해량이 10 올라 미드 대치 경쟁이 불리해졌습니다.",
-          "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "세계 지도집 초반 체력이 30에서 0으로 줄어 라인 유지 대가가 까다로워졌습니다.",
-          "candidateNoteId": "note:26.19:champion:fiora:c754a41b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "루시안 Q 기본 피해량이 최대 30 올라 라인전 우위가 줄어들었습니다.",
-          "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392810915",
@@ -4401,16 +4178,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=13,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-ryze"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "라이즈 승률 46.6%→43.6%(-3.0%p)이나 CI가 0을 포함하고 표본 241판으로 작아, 오로라·피오라·아트록스 상향에 따른 상대 구도 변화 수준의 영향으로 봅니다.",
-        "summaryCites": [
-          "note:26.19:champion:aurora:537dcee9",
-          "note:26.19:champion:fiora:c754a41b",
-          "note:26.19:champion:aatrox:f629d9e5"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Elise:winRate",
@@ -4436,20 +4204,7 @@
         "note:26.19:champion:elise:c62534d2",
         "note:26.19:champion:elise:a7bec286"
       ],
-      "causes": [
-        {
-          "text": "녹턴 R 재사용 대기시간이 최대 20초 늘어 정글 경쟁자가 약해진 반사이익으로 보입니다.",
-          "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "뽀삐 Q의 몬스터 피해 상한 하향으로 정글 뽀삐가 밀린 점도 일부 작용했을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393323723",
@@ -4466,14 +4221,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=60,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-elise"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "엘리스 승률 2.6%p 상승은 CI [-5.8%p, 11.0%p]로 유의하지 않으며, 녹턴 R 너프 등 정글 경쟁 완화가 일부 영향.",
-        "summaryCites": [
-          "note:26.19:champion:nocturne:daf7f9d0"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Draven:winRate",
@@ -4498,26 +4246,7 @@
       "matchedNoteIds": [
         "note:26.19:champion:draven:d1cc348b"
       ],
-      "causes": [
-        {
-          "text": "아펠리오스가 다방면으로 강화되며 원거리 딜러 경쟁에서 드레이븐이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "루시안 Q 기본 피해량이 10~30 상승해 초반 라인전 맞대결이 불리해졌습니다.",
-          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "서포터 아이템 초반 체력이 30→0으로 줄어 봇 라인 초반 교전 안정성이 떨어졌습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393016874",
@@ -4534,15 +4263,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=119,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "드레이븐은 공격력 상향에도 승률이 53.2%→50.9%로 내렸지만 CI가 0을 포함해 유의하지 않고, 아펠리오스·루시안 강화로 인한 봇 경쟁 심화가 배경입니다.",
-        "summaryCites": [
-          "note:26.19:champion:aphelios:ccd9a119",
-          "note:26.19:champion:lucian:24a11f30"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:MasterYi:pickRate",
@@ -4567,26 +4288,7 @@
       "matchedNoteIds": [
         "note:26.19:champion:masteryi:871d9688"
       ],
-      "causes": [
-        {
-          "text": "녹턴 R 쿨다운이 140/115/90초에서 160/130/100초로 늘며 정글 한 자리가 비었습니다.",
-          "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "뽀삐 Q의 몬스터 대상 피해 상한이 15 감소해 정글 수급이 나빠졌습니다.",
-          "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "럼블 과열 공격 속도가 50~130%에서 30~100%로 하향돼 정글 선호도가 밀렸습니다.",
-          "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393387810",
@@ -4603,15 +4305,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=11,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-masteryi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "마스터 이는 Q 쿨 환급 조정(너프)에도 픽률이 2.9%→5.0%로 올랐는데, 녹턴 R 쿨 증가와 뽀삐 Q 정글 피해 하향에 따른 반사이득입니다.",
-        "summaryCites": [
-          "note:26.19:champion:nocturne:daf7f9d0",
-          "note:26.19:champion:poppy:d2a46ee3"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Lucian:BOTTOM:pickRate",
@@ -4637,26 +4331,7 @@
         "note:26.19:champion:lucian:98722aa4",
         "note:26.19:champion:lucian:24a11f30"
       ],
-      "causes": [
-        {
-          "text": "아펠리오스가 화염포 Q 쿨 1초 단축 등 전 무기 버프를 받아 원딜 픽이 그쪽으로 이동했습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "만월총 Q 피해량 10 상승으로 아펠리오스 초반 주도권이 올라 루시안 수요를 잠식했습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "드레이븐 기본 공격력 62→64 버프로 공격적 봇 픽 경쟁이 심화됐습니다.",
-          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392330132",
@@ -4673,15 +4348,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=236,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lucian"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "루시안 픽률이 10.0%→8.0%(-2.0%p)로 하락했는데, 아펠리오스 전 무기 버프와 드레이븐 공격력 상향으로 원딜 수요가 분산된 영향입니다.",
-        "summaryCites": [
-          "note:26.19:champion:aphelios:ccd9a119",
-          "note:26.19:champion:draven:d1cc348b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:MasterYi:JUNGLE:pickRate",
@@ -4706,26 +4373,7 @@
       "matchedNoteIds": [
         "note:26.19:champion:masteryi:871d9688"
       ],
-      "causes": [
-        {
-          "text": "녹턴 R 재사용 대기시간이 140/115/90초에서 160/130/100초로 늘며 정글 한 자리가 비었습니다.",
-          "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "바이 보호막이 최대 체력 12%에서 10%로 줄어 초반 정글 주도권이 약해졌습니다.",
-          "candidateNoteId": "note:26.19:champion:vi:8f97f057",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "뽀삐 Q 몬스터 피해 상한 하향으로 정글 뽀삐 수요가 마스터 이로 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393387810",
@@ -4742,15 +4390,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=11,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-masteryi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "마스터 이 정글 픽률이 2.2%→4.0%(+1.9%p) 상승했습니다. 본인은 Q 쿨 환급 하향을 받았지만 녹턴 R 쿨 증가 등 경쟁 정글러 너프가 반사 이익을 준 것으로 봅니다.",
-        "summaryCites": [
-          "note:26.19:champion:nocturne:daf7f9d0",
-          "note:26.19:champion:masteryi:871d9688"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Lucian:BOTTOM:winRate",
@@ -4776,20 +4416,7 @@
         "note:26.19:champion:lucian:98722aa4",
         "note:26.19:champion:lucian:24a11f30"
       ],
-      "causes": [
-        {
-          "text": "아펠리오스가 무기 전반에 걸쳐 대폭 상향돼 바텀 원딜 경쟁에서 루시안 입지가 밀렸습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "드레이븐 기본 공격력 62→64로 초반 라인전 우위가 커져 루시안의 강점이 상대적으로 희석됐습니다.",
-          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392330132",
@@ -4806,15 +4433,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=236,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lucian"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "루시안 승률 47.5%→46.1%(-1.4%p)이나 CI가 0을 포함하고 이후 표본 308판이라, 아펠리오스·드레이븐 상향에 따른 바텀 경쟁 변화 수준의 노이즈입니다.",
-        "summaryCites": [
-          "note:26.19:champion:aphelios:ccd9a119",
-          "note:26.19:champion:draven:d1cc348b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Fiora:banRate",
@@ -4842,26 +4461,7 @@
         "note:26.19:champion:fiora:e5ba347c",
         "note:26.19:champion:fiora:4ff3c93f"
       ],
-      "causes": [
-        {
-          "text": "아트록스 E 회복 계수와 W 쿨 버프로 탑 밴 우선순위가 이동해 피오라 밴 지분이 줄었습니다.",
-          "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "상단 순간이동 쿨 420초→390초로 탑 라인전 회복력이 올라 피오라 압박에 대한 체감 위협이 낮아졌습니다.",
-          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카직스·릴리아 등 정글 버프로 밴 슬롯 경쟁이 늘어 피오라 밴이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393131254",
@@ -4878,14 +4478,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=114,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-fiora"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "피오라는 버프에도 밴률이 9.7%→8.3%(-1.4%p) 하락했고, 아트록스 버프 등 탑 밴 우선순위 이동이 주요 후보입니다.",
-        "summaryCites": [
-          "note:26.19:champion:aatrox:f629d9e5"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Lucian:banRate",
@@ -4911,20 +4504,7 @@
         "note:26.19:champion:lucian:98722aa4",
         "note:26.19:champion:lucian:24a11f30"
       ],
-      "causes": [
-        {
-          "text": "아펠리오스가 무기 전반 버프를 받아 바텀 밴 우선순위를 가져갔을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "드레이븐 기본 공격력 62→64로 원거리 딜러 밴 표가 분산됐습니다.",
-          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392330132",
@@ -4941,15 +4521,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=236,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lucian"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "루시안 밴률이 7.1%→5.8%(-1.3%p)로 내렸습니다. 아펠리오스·드레이븐 버프로 바텀 밴 표가 옮겨간 영향으로 보입니다.",
-        "summaryCites": [
-          "note:26.19:champion:aphelios:ccd9a119",
-          "note:26.19:champion:draven:d1cc348b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Lucian:MIDDLE:pickRate",
@@ -4975,26 +4547,7 @@
         "note:26.19:champion:lucian:98722aa4",
         "note:26.19:champion:lucian:24a11f30"
       ],
-      "causes": [
-        {
-          "text": "라이즈 Q 전이 피해 너프로 미드 마법사 입지가 줄며 루시안이 반사 이익을 얻었습니다.",
-          "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "라이즈 E 마나 소모 증가로 라인전이 약해져 미드 대체 픽 수요가 커졌습니다.",
-          "candidateNoteId": "note:26.19:champion:ryze:f4e781e8",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "럼블 과열 공격 속도 너프로 미드 경쟁 픽이 줄어든 영향으로 보입니다.",
-          "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392330132",
@@ -5011,15 +4564,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=236,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lucian"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "루시안 미드 픽률이 0.2%→1.4%(+1.2%p)로 급등했고, 라이즈 Q·E 너프로 비워진 미드 자리를 메운 것으로 보입니다.",
-        "summaryCites": [
-          "note:26.19:champion:ryze:2bcac5df",
-          "note:26.19:champion:ryze:f4e781e8"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Lucian:winRate",
@@ -5045,26 +4590,7 @@
         "note:26.19:champion:lucian:98722aa4",
         "note:26.19:champion:lucian:24a11f30"
       ],
-      "causes": [
-        {
-          "text": "서포터 아이템 초반 체력이 30에서 0으로 줄어, 공격적 바텀 라인전 주도력이 약해졌습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "드레이븐 기본 공격력 62→64 버프로 초반 교전 원거리 딜러 경쟁에서 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "아펠리오스 다수 버프로 바텀 픽 경쟁이 심해져 루시안 입지가 좁아졌습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392330132",
@@ -5081,16 +4607,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=236,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lucian"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "루시안 승률 -1.2%p는 CI [-7.0%p, 4.6%p]로 통계적 유의성이 없고, 서포터 아이템 초반 체력 삭제와 드레이븐·아펠리오스 버프가 바텀 경쟁에 영향을 준 정도입니다.",
-        "summaryCites": [
-          "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
-          "note:26.19:champion:draven:d1cc348b",
-          "note:26.19:champion:aphelios:fa3a30c8"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Nocturne:banRate",
@@ -5115,20 +4632,7 @@
       "matchedNoteIds": [
         "note:26.19:champion:nocturne:daf7f9d0"
       ],
-      "causes": [
-        {
-          "text": "카직스 등 정글 버프로 정글 밴 구도가 흔들려 녹턴 밴률이 0.9%p 올랐을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:masteryi:871d9688",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "궁극기 재사용 대기시간 너프 직후 체감 위협이 유지돼 밴 대상으로 남았습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393450312",
@@ -5145,14 +4649,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=56,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nocturne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "녹턴 밴률이 1.5%→2.4%(+0.9%p)로 올랐지만 궁극기 너프 방향과 반대이며, 이를 설명할 명확한 간접 조항은 확인되지 않습니다.",
-        "summaryCites": [
-          "note:26.19:champion:nocturne:daf7f9d0"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Rumble:TOP:pickRate",
@@ -5178,32 +4675,7 @@
         "note:26.19:champion:rumble:17e40d96",
         "note:26.19:champion:rumble:70cb1a94"
       ],
-      "causes": [
-        {
-          "text": "피오라 R 회복량·계수 상향으로 탑 픽이 피오라 쪽으로 이동했습니다.",
-          "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "피오라 레벨당 체력 99→105 상향까지 겹쳐 탑 라인 경쟁에서 밀렸습니다.",
-          "candidateNoteId": "note:26.19:champion:fiora:c754a41b",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "아트록스 E 회복 계수 상향(추가 체력 100당 1.1%→1.3%)이 탑 지분을 가져갔습니다.",
-          "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "아트록스 W 쿨타임 감소로 탑 브루저 선호도가 올라간 영향으로 보입니다.",
-          "candidateNoteId": "note:26.19:champion:aatrox:5bc9f3f5",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392951229",
@@ -5220,16 +4692,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=68,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-rumble"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "럼블 탑 픽률 4.6%→3.7%(-0.9%p)는 피오라 R·체력 상향과 아트록스 회복 상향으로 탑 픽이 이동한 결과입니다.",
-        "summaryCites": [
-          "note:26.19:champion:fiora:4ff3c93f",
-          "note:26.19:champion:fiora:c754a41b",
-          "note:26.19:champion:aatrox:f629d9e5"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Rumble:banRate",
@@ -5255,26 +4718,7 @@
         "note:26.19:champion:rumble:17e40d96",
         "note:26.19:champion:rumble:70cb1a94"
       ],
-      "causes": [
-        {
-          "text": "피오라 궁극기 회복량 상향으로 탑 밴 우선순위가 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "아트록스 E 회복 계수 상향 등 탑 강자 버프로 밴 표가 분산됐습니다.",
-          "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카직스 기본 지속 피해 상향으로 정글 밴 수요가 옮겨갔습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392951229",
@@ -5291,15 +4735,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=68,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-rumble"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "럼블 밴률이 4.8%→4.0%(-0.8%p)로 내렸고, 피오라·아트록스 등 탑 챔피언 버프로 밴 표가 분산된 영향으로 보입니다.",
-        "summaryCites": [
-          "note:26.19:champion:fiora:4ff3c93f",
-          "note:26.19:champion:aatrox:f629d9e5"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Elise:banRate",
@@ -5325,26 +4761,7 @@
         "note:26.19:champion:elise:c62534d2",
         "note:26.19:champion:elise:a7bec286"
       ],
-      "causes": [
-        {
-          "text": "녹턴 R 재사용 대기시간이 140/115/90초에서 160/130/100초로 늘며 정글 밴 지분이 엘리스로 옮겨간 것으로 보입니다.",
-          "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "뽀삐 Q의 몬스터 대상 피해 상한 너프로 정글 선택지가 줄어든 영향이 있습니다.",
-          "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "럼블 과열 공격 속도 50~130%→30~100% 너프로 경쟁 정글러 입지가 축소됐습니다.",
-          "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393323723",
@@ -5361,14 +4778,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=60,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-elise"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "엘리스 밴률 3.5%→4.2%(+0.7%p)는 CI 하한이 0%p로 약하며, 녹턴 궁 쿨 너프 등 경쟁 정글러 약화의 파급으로 보입니다.",
-        "summaryCites": [
-          "note:26.19:champion:nocturne:daf7f9d0"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Lucian:TOP:pickRate",
@@ -5394,26 +4804,7 @@
         "note:26.19:champion:lucian:98722aa4",
         "note:26.19:champion:lucian:24a11f30"
       ],
-      "causes": [
-        {
-          "text": "탑 순간이동 쿨다운이 420초→390초로 줄어 라인 이탈 부담이 큰 원거리 탑 픽의 진입 장벽이 낮아졌습니다.",
-          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "나서스 Q 추가 피해량이 40~120→30~110으로 약화되며 탑 근접 대치 챔피언 입지가 줄었습니다.",
-          "candidateNoteId": "note:26.19:champion:nasus:b5997156",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "뽀삐 Q 몬스터/미니언 피해 상한 하향으로 탑 메타 상위권이 흔들린 영향으로 보입니다.",
-          "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392330132",
@@ -5430,14 +4821,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=236,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lucian"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "루시안 탑 픽률이 0.1%→0.7%(+0.6%p)로 올랐습니다. 탑 순간이동 쿨다운 390초 단축이 원거리 탑 운영을 뒷받침합니다.",
-        "summaryCites": [
-          "note:26.19:system:순간이동-재사용-대기시간:c9025e15"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Rumble:pickRate",
@@ -5463,20 +4847,7 @@
         "note:26.19:champion:rumble:17e40d96",
         "note:26.19:champion:rumble:70cb1a94"
       ],
-      "causes": [
-        {
-          "text": "피오라 궁극기 회복량·체력 증가 버프로 탑 경쟁 구도가 밀리며 픽률이 눌렸을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "아트록스 E 회복 계수와 W 쿨감 버프도 탑 선호도를 흡수한 요인으로 보입니다.",
-          "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392951229",
@@ -5493,15 +4864,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=68,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-rumble"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "럼블 픽률 5.0%→4.4%(-0.5%p)는 CI가 0을 포함해 유의하지 않고, 피오라·아트록스 탑 버프의 경쟁 압박이 겹친 정도로 보입니다.",
-        "summaryCites": [
-          "note:26.19:champion:fiora:4ff3c93f",
-          "note:26.19:champion:aatrox:f629d9e5"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Nasus:winRate",
@@ -5526,20 +4889,7 @@
       "matchedNoteIds": [
         "note:26.19:champion:nasus:b5997156"
       ],
-      "causes": [
-        {
-          "text": "피오라 R 회복량·계수 상향으로 탑 맞대결 구도가 불리해졌습니다.",
-          "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "아트록스 E 회복 계수 상향으로 탑 라인전 압박이 커졌습니다.",
-          "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392349751",
@@ -5556,15 +4906,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=75,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nasus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "승률 -0.5%p는 CI [-7.2%p, +6.2%p], 표본 272판이라 노이즈 수준이며, 피오라·아트록스 탑 버프가 소폭 영향을 줬을 수 있습니다.",
-        "summaryCites": [
-          "note:26.19:champion:fiora:4ff3c93f",
-          "note:26.19:champion:aatrox:f629d9e5"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nocturne:JUNGLE:pickRate",
@@ -5589,32 +4931,7 @@
       "matchedNoteIds": [
         "note:26.19:champion:nocturne:daf7f9d0"
       ],
-      "causes": [
-        {
-          "text": "카직스 기본 지속 피해량 +5와 E 진화 사거리 300 상향으로 암살자 정글 자리를 잠식했습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "엘리스 W 공격 속도 10%p 상향으로 초반 정글 픽 경쟁에서 밀렸습니다.",
-          "candidateNoteId": "note:26.19:champion:elise:a7bec286",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "릴리아 R 수면 2.5초와 방어력 상향으로 한타형 정글 수요가 분산됐습니다.",
-          "candidateNoteId": "note:26.19:champion:lillia:9a5c8c9b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카직스 E 진화 사거리 200→300으로 갱킹 기동력이 올라 녹턴 수요를 대체했습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:49b122f5",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393450312",
@@ -5631,16 +4948,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=56,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nocturne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "녹턴 정글 픽률이 2.4%→1.9%로 하락했습니다. 카직스·엘리스·릴리아 정글 버프가 픽 경쟁을 가져간 영향입니다.",
-        "summaryCites": [
-          "note:26.19:champion:khazix:defcade0",
-          "note:26.19:champion:elise:a7bec286",
-          "note:26.19:champion:lillia:9a5c8c9b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nocturne:pickRate",
@@ -5665,26 +4973,7 @@
       "matchedNoteIds": [
         "note:26.19:champion:nocturne:daf7f9d0"
       ],
-      "causes": [
-        {
-          "text": "카직스 기본 지속 효과 피해량 상향으로 암살 정글 픽이 녹턴 자리를 일부 대체했습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "엘리스 W 공격 속도 10%p 상향으로 초반 정글 선택지 경쟁이 심해졌습니다.",
-          "candidateNoteId": "note:26.19:champion:elise:a7bec286",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "릴리아 R 수면 시간 2초→2.5초 상향으로 정글 한타형 픽 선호가 올라갔을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:lillia:9a5c8c9b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393450312",
@@ -5701,15 +4990,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=56,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nocturne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "녹턴 픽률 2.7%→2.3%(-0.3%p)는 CI가 0을 포함해 유의하지 않으며, 카직스·엘리스 등 정글 상향이 겹친 영향입니다.",
-        "summaryCites": [
-          "note:26.19:champion:khazix:defcade0",
-          "note:26.19:champion:elise:a7bec286"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aurora:banRate",
@@ -5735,20 +5016,7 @@
         "note:26.19:champion:aurora:537dcee9",
         "note:26.19:champion:aurora:8770c9ea"
       ],
-      "causes": [
-        {
-          "text": "카직스 기본 지속 효과 피해량 상향으로 정글 밴 우선순위가 옮겨갔을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "피오라 R 회복량 상향으로 상체 밴 슬롯 경쟁이 커진 영향으로 보입니다.",
-          "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393099955",
@@ -5765,12 +5033,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=893,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aurora"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "오로라는 E·R 상향을 받았지만 밴률은 1.3%→0.9%로 내렸고, CI가 0을 포함해 유의하지 않은 변동입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Poppy:TOP:pickRate",
@@ -5795,26 +5058,7 @@
       "matchedNoteIds": [
         "note:26.19:champion:poppy:d2a46ee3"
       ],
-      "causes": [
-        {
-          "text": "피오라가 궁극기 회복량·범위·기본 체력까지 상향돼 탑 경쟁에서 뽀삐 지분을 흡수했습니다.",
-          "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "아트록스 E 회복 계수와 W 쿨 상향으로 탑 브루저 선호가 뽀삐에서 이동한 것으로 보입니다.",
-          "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "Q의 미니언·몬스터 피해 상한 너프가 정글뿐 아니라 탑 라인전 체감까지 떨어뜨렸습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "medium"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392470133",
@@ -5831,15 +5075,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=78,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-poppy"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "뽀삐 탑 픽률 1.5%→1.2%(-0.2%p)는 CI가 0을 포함해 유의하지 않으며, Q 상한 너프와 피오라 상향에 따른 탑 경쟁 심화가 겹친 결과입니다.",
-        "summaryCites": [
-          "note:26.19:champion:poppy:d2a46ee3",
-          "note:26.19:champion:fiora:4ff3c93f"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Lucian:pickRate",
@@ -5865,20 +5101,7 @@
         "note:26.19:champion:lucian:98722aa4",
         "note:26.19:champion:lucian:24a11f30"
       ],
-      "causes": [
-        {
-          "text": "아펠리오스가 화염포 Q 쿨다운 등 전방위 버프를 받아 원거리 딜러 픽 경쟁이 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "드레이븐 기본 공격력 62→64 버프로 바텀 픽 일부가 분산된 것으로 보입니다.",
-          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392330132",
@@ -5895,15 +5118,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=236,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lucian"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "루시안 픽률 -0.2%p는 신뢰구간이 0을 포함해 유의하지 않으며, 아펠리오스·드레이븐 버프에 따른 바텀 경쟁 정도로 설명됩니다.",
-        "summaryCites": [
-          "note:26.19:champion:aphelios:ccd9a119",
-          "note:26.19:champion:draven:d1cc348b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Rumble:JUNGLE:pickRate",
@@ -5929,20 +5144,7 @@
         "note:26.19:champion:rumble:17e40d96",
         "note:26.19:champion:rumble:70cb1a94"
       ],
-      "causes": [
-        {
-          "text": "럼블 기본 지속 효과의 몬스터 대상 최대 피해량이 65~150에서 90~175로 올라 정글 클리어가 빨라졌습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "high"
-        },
-        {
-          "text": "과열 공격 속도가 50~130%에서 30~100%로 줄었지만, 라인전 비중이 큰 탑에서 정글로 수요가 이동했습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392951229",
@@ -5959,14 +5161,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=68,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-rumble"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "럼블의 몬스터 대상 최대 피해량 상향(65~150→90~175)으로 정글 클리어가 개선되며 정글 픽률이 0.0%→0.3%로 올랐습니다.",
-        "summaryCites": [
-          "note:26.19:champion:rumble:70cb1a94"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Ryze:TOP:pickRate",
@@ -5993,32 +5188,7 @@
         "note:26.19:champion:ryze:2bcac5df",
         "note:26.19:champion:ryze:f4e781e8"
       ],
-      "causes": [
-        {
-          "text": "탑 퀘스트 순간이동 쿨다운이 420초에서 390초로 줄어 글로벌 합류형 탑 라이즈의 가치가 올랐습니다.",
-          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "강화 순간이동 쿨다운도 300~210초로 단축되어 라인 주도권형 탑 픽 선택이 늘었습니다.",
-          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:f037ef05",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "나서스 Q 추가 피해 10 너프로 탑 경쟁 픽이 약화되며 라이즈 픽률이 상대적으로 올랐습니다.",
-          "candidateNoteId": "note:26.19:champion:nasus:b5997156",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "뽀삐 Q 미니언·몬스터 피해 상한 너프도 탑 픽 분포 이동에 일조했을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392810915",
@@ -6035,15 +5205,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=13,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-ryze"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "라이즈 탑 픽률 1.2%→1.4%(+0.2%p)는 CI가 0을 포함해 유의하지 않으며, 탑 순간이동 쿨다운 단축과 나서스 너프에 따른 반사 효과로 보입니다.",
-        "summaryCites": [
-          "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
-          "note:26.19:champion:nasus:b5997156"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Vi:UTILITY:pickRate",
@@ -6069,20 +5231,7 @@
         "note:26.19:champion:vi:90715c64",
         "note:26.19:champion:vi:8f97f057"
       ],
-      "causes": [
-        {
-          "text": "서포터 아이템 체력 재생이 초반 50%로 올라 라인 유지력이 좋아진 영향일 수 있습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "서포터 아이템 초반 체력이 0/60으로 줄어 물몸 서폿 대신 탱키한 바이가 선택됐을 여지가 있습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393148907",
@@ -6099,15 +5248,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=254,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-vi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "바이 서포터 픽률 0.1%→0.3%로 미세 상승했으나 CI 하한이 0.0%p이고, 서포터 아이템 체력·재생 재조정 외 뚜렷한 근거는 없습니다.",
-        "summaryCites": [
-          "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
-          "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Khazix:TOP:pickRate",
@@ -6134,32 +5275,7 @@
         "note:26.19:champion:khazix:51e4a44b",
         "note:26.19:champion:khazix:49b122f5"
       ],
-      "causes": [
-        {
-          "text": "E 진화 사거리 200→300 등 버프가 정글 동선에 유리해 픽이 정글로 쏠렸습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "low"
-        },
-        {
-          "text": "피오라 R 회복량 375/500/625→400/525/650 상향으로 탑 1대1 경쟁에서 밀렸습니다.",
-          "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "아트록스 E 회복 계수 1.1%→1.3% 상향으로 탑 브루저 선호도가 올라갔습니다.",
-          "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "탑 순간이동 대기시간 420초→390초로 라인 유지형 탑 챔피언이 상대적으로 유리해졌습니다.",
-          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392418531",
@@ -6176,15 +5292,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=121,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-khazix"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "카직스 탑 픽률 0.2%→0.0%(-0.2%p)는 표본이 매우 작고, 피오라·아트록스 탑 버프로 비주류 픽이 밀려난 영향으로 보입니다.",
-        "summaryCites": [
-          "note:26.19:champion:fiora:4ff3c93f",
-          "note:26.19:champion:aatrox:f629d9e5"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Fiora:BOTTOM:pickRate",
@@ -6212,26 +5320,7 @@
         "note:26.19:champion:fiora:e5ba347c",
         "note:26.19:champion:fiora:4ff3c93f"
       ],
-      "causes": [
-        {
-          "text": "드레이븐 기본 공격력 62→64로 정통 원딜 경쟁력이 올라 비주류 하단 픽이 밀렸습니다.",
-          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "루시안 Q 피해량 상향으로 하단 선택지가 강화돼 피오라 원딜 수요가 줄었을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "피오라 버프가 R 회복량 중심이라 탑 1대1 구도에 유리해 사용자가 탑으로 쏠렸습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "medium"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393131254",
@@ -6248,14 +5337,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=114,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-fiora"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "피오라 원딜 픽률 0.1%→0.0%(-0.1%p)는 R 대결투 회복 상향이 탑 활용에 맞춰져 하단 실험픽이 빠진 결과이며, 표본도 3871로 작습니다.",
-        "summaryCites": [
-          "note:26.19:champion:fiora:4ff3c93f"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:MasterYi:banRate",
@@ -6297,12 +5379,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=11,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-masteryi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "마스터 이 밴률은 2.7%→2.6%(-0.1%p)로 신뢰구간 [-0.7%p, 0.5%p]이 0을 포함해 사실상 변화 없는 표본 잡음입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:MasterYi:BOTTOM:pickRate",
@@ -6344,12 +5421,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=11,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-masteryi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Khazix:MIDDLE:pickRate",
@@ -6376,20 +5448,7 @@
         "note:26.19:champion:khazix:51e4a44b",
         "note:26.19:champion:khazix:49b122f5"
       ],
-      "causes": [
-        {
-          "text": "E 도약 진화 사거리 200→300 버프로 카직스 픽이 본진인 정글로 쏠려 미드 비중이 줄었습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "low"
-        },
-        {
-          "text": "보이지 않는 위협 피해 17~136→22~141 상향은 정글 클리어에 유리해 정글 선호를 키웠을 수 있습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392418531",
@@ -6406,14 +5465,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=121,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-khazix"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "카직스 미드 픽률은 0.1%→0.0%(-0.1%p)로 원래 표본이 극히 적어, 정글형 버프(E 진화 사거리 200→300) 이후 정글 쏠림 수준의 미미한 변화입니다.",
-        "summaryCites": [
-          "note:26.19:champion:khazix:49b122f5"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Nocturne:MIDDLE:pickRate",
@@ -6438,14 +5490,7 @@
       "matchedNoteIds": [
         "note:26.19:champion:nocturne:daf7f9d0"
       ],
-      "causes": [
-        {
-          "text": "라이즈 Q 전이 피해 너프로 미드 경쟁 챔피언이 약화되며 녹턴 픽이 소폭 흡수됐을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393450312",
@@ -6462,12 +5507,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=56,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nocturne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "녹턴 미드 픽률 0.1%→0.2%(+0.1%p)는 CI가 0을 포함하고 표본이 3871로 작아 노이즈 수준이며, R 너프와 무관한 변동입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Aatrox:MIDDLE:pickRate",
@@ -6493,14 +5533,7 @@
         "note:26.19:champion:aatrox:5bc9f3f5",
         "note:26.19:champion:aatrox:f629d9e5"
       ],
-      "causes": [
-        {
-          "text": "라이즈 Q 전이 피해 10%p 하향으로 미드 AP 브루저 지분이 아트록스로 일부 옮겨갔을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392639675",
@@ -6517,12 +5550,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=266,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aatrox"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "아트록스 미드 픽률 0.2%→0.3%는 95% CI가 0을 포함하고 표본도 3871로 적어, 유의한 변화로 보기 어렵습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Rumble:MIDDLE:pickRate",
@@ -6565,12 +5593,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=68,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-rumble"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "픽률 0.3%→0.4%(+0.1%p)는 신뢰구간이 0을 포함해 유의하지 않으며, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Draven:MIDDLE:pickRate",
@@ -6612,12 +5635,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=119,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "드레이븐 미드 픽률 0.1%→0.2%(+0.1%p)는 신뢰구간이 0을 포함하고 표본도 3871로 작아 노이즈 수준이며, 이를 설명할 패치 조항을 찾지 못했습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:MasterYi:TOP:pickRate",
@@ -6659,12 +5677,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=11,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-masteryi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Poppy:MIDDLE:pickRate",
@@ -6706,12 +5719,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=78,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-poppy"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "미드 뽀삐 픽률 -0.1%p는 신뢰구간 [-0.2%p, 0.1%p]에 0이 포함되고 표본도 3871로 적어, 패치 효과로 보기 어려운 통계적 잡음입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ryze:BOTTOM:pickRate",
@@ -6738,26 +5746,7 @@
         "note:26.19:champion:ryze:2bcac5df",
         "note:26.19:champion:ryze:f4e781e8"
       ],
-      "causes": [
-        {
-          "text": "아펠리오스 화염포 Q 쿨 1초 단축 등 정통 원딜 상향으로 변칙 원딜 라이즈가 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "드레이븐 기본 공격력 62→64 상향으로 바텀 정통 원딜 선호도가 올라갔습니다.",
-          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "루시안 Q 기본 피해량 상향도 바텀 원딜 선택지를 흡수한 요인입니다.",
-          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392810915",
@@ -6774,15 +5763,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=13,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-ryze"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "라이즈 원딜 픽률 0.1%→0.0%(-0.1%p)로, 드레이븐·루시안 상향에 따른 정통 원딜 선호 증가가 배경이나 표본이 작아 노이즈 가능성이 큽니다.",
-        "summaryCites": [
-          "note:26.19:champion:draven:d1cc348b",
-          "note:26.19:champion:lucian:24a11f30"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aatrox:UTILITY:pickRate",
@@ -6808,14 +5789,7 @@
         "note:26.19:champion:aatrox:5bc9f3f5",
         "note:26.19:champion:aatrox:f629d9e5"
       ],
-      "causes": [
-        {
-          "text": "서포터 아이템 체력 재생이 50%/75%로 올라 라인 유지력이 좋아진 영향일 수 있습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392639675",
@@ -6832,12 +5806,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=266,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aatrox"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "아트록스 서포터 픽률은 0.1%로 사실상 동일하고 CI가 0을 포함(표본 3871)해 노이즈로 봅니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Vi:banRate",
@@ -6880,12 +5849,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=254,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-vi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "바이 밴률은 2.9%→3.0%로 0.1%p 변동이며 신뢰구간이 0을 포함해(-0.5~0.7%p) 통계적 잡음 수준입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Rumble:UTILITY:pickRate",
@@ -6928,12 +5892,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=68,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-rumble"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Vi:MIDDLE:pickRate",
@@ -6976,12 +5935,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=254,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-vi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Poppy:JUNGLE:pickRate",
@@ -7023,12 +5977,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=78,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-poppy"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Nasus:JUNGLE:pickRate",
@@ -7070,12 +6019,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=75,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nasus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nasus:BOTTOM:pickRate",
@@ -7117,12 +6061,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=75,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nasus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "나서스 원딜 픽률은 변화 -0.0%p, 95% CI [-0.1%p, 0.1%p]로 표본상 의미 있는 변동이 없습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nasus:UTILITY:pickRate",
@@ -7164,12 +6103,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=75,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nasus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "나서스 서포터 픽률은 0.1%로 변동 없고 신뢰구간(-0.1%p~0.1%p)이 0을 포함해, 통계적으로 유의한 변화가 아닙니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ryze:JUNGLE:pickRate",
@@ -7213,12 +6147,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=13,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-ryze"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "라이즈 정글 픽률은 변화 0.0%p, 95% CI [-0.0%p, 0.1%p]로 사실상 변동이 없어 패치노트로 설명할 변화 자체가 없습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Aurora:BOTTOM:pickRate",
@@ -7261,12 +6190,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=893,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aurora"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Lillia:TOP:pickRate",
@@ -7309,12 +6233,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=876,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lillia"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nocturne:UTILITY:pickRate",
@@ -7356,12 +6275,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=56,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nocturne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Fiora:UTILITY:pickRate",
@@ -7389,14 +6303,7 @@
         "note:26.19:champion:fiora:e5ba347c",
         "note:26.19:champion:fiora:4ff3c93f"
       ],
-      "causes": [
-        {
-          "text": "서포터 아이템 초반 체력이 30에서 0으로 줄어 비정통 서포터 실험 픽이 눌렸을 수 있습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393131254",
@@ -7413,12 +6320,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=114,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-fiora"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "피오라 서포터 픽률 변화는 0.0%p에 CI가 0을 포함해 사실상 노이즈이며, 표본도 3871로 작습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:MasterYi:UTILITY:pickRate",
@@ -7460,12 +6362,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=11,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-masteryi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "마스터 이 서포터 픽률은 0.0%→0.0%(-0.0%p, CI -0.1~0.1%p)로 사실상 변화가 없어, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Nocturne:TOP:pickRate",
@@ -7490,14 +6387,7 @@
       "matchedNoteIds": [
         "note:26.19:champion:nocturne:daf7f9d0"
       ],
-      "causes": [
-        {
-          "text": "탑 순간이동 쿨다운 단축(420초→390초)이 탑 전반의 픽 구성을 유지시켰을 수 있습니다.",
-          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393450312",
@@ -7514,12 +6404,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=56,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nocturne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "녹턴 궁극기 쿨다운 너프에도 탑 픽률은 0.2%로 동일하며, CI [-0.1%p, 0.2%p]와 표본 3871로 노이즈 수준입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Khazix:UTILITY:pickRate",
@@ -7563,12 +6448,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=121,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-khazix"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Vi:TOP:pickRate",
@@ -7611,12 +6491,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=254,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-vi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Draven:JUNGLE:pickRate",
@@ -7658,12 +6533,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=119,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "드레이븐 정글 픽률은 변화 -0.0%p, 95% CI [-0.1%p, 0.1%p]로 사실상 0에 머물러 통계적 변화가 없습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Aatrox:BOTTOM:pickRate",
@@ -7706,12 +6576,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=266,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aatrox"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "아트록스 원딜 픽률은 0.0%에서 변동이 없고 신뢰구간도 ±0.1%p로 0을 포함해, 실질적 변화로 보기 어렵습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Draven:UTILITY:pickRate",
@@ -7753,12 +6618,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=119,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Volibear:UTILITY:pickRate",
@@ -7784,14 +6644,7 @@
         "note:26.19:champion:volibear:d4b8bb1a",
         "note:26.19:champion:volibear:1f2ef092"
       ],
-      "causes": [
-        {
-          "text": "볼리베어 번개 발톱에 추가 공격력 20% 계수가 붙어 이득이 정글·탑 쪽에 쏠렸을 수 있습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392852513",
@@ -7808,14 +6661,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=106,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-volibear"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "볼리베어 서포터 픽률은 0.0%로 사실상 변동 없고 CI가 0을 포함해 통계적 변화가 아닙니다. 공격력 계수 추가 버프는 정글·탑에 유리해 서포터 채택으로 이어지지 않았습니다.",
-        "summaryCites": [
-          "note:26.19:champion:volibear:1f2ef092"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Fiora:MIDDLE:pickRate",
@@ -7860,12 +6706,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=114,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-fiora"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "피오라 미드 픽률은 0.1%에서 0.1%로 사실상 변동이 없고 신뢰구간(-0.1%p~0.2%p)이 0을 포함해, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:MasterYi:MIDDLE:pickRate",
@@ -7907,12 +6748,7 @@
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=11,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-masteryi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "마스터 이 미드 픽률은 0.2%로 변동 0.0%p이고 신뢰구간도 0을 포함해, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Poppy:banRate",
@@ -7953,7 +6789,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=78,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-poppy"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Fiora:winRate",
@@ -7997,7 +6834,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=114,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-fiora"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aphelios:pickRate",
@@ -8042,7 +6880,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=523,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aphelios"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aphelios:BOTTOM:pickRate",
@@ -8087,7 +6926,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=523,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aphelios"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Draven:banRate",
@@ -8128,7 +6968,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=119,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Khazix:JUNGLE:pickRate",
@@ -8171,7 +7012,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=121,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-khazix"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Khazix:pickRate",
@@ -8214,7 +7056,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=121,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-khazix"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ryze:MIDDLE:pickRate",
@@ -8257,7 +7100,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=13,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-ryze"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ryze:pickRate",
@@ -8300,7 +7144,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=13,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-ryze"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aphelios:banRate",
@@ -8345,7 +7190,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=523,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aphelios"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aurora:pickRate",
@@ -8387,7 +7233,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=893,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aurora"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nasus:pickRate",
@@ -8428,7 +7275,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=75,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Khazix:banRate",
@@ -8471,7 +7319,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=121,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-khazix"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Vi:JUNGLE:pickRate",
@@ -8513,7 +7362,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=254,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-vi"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Elise:pickRate",
@@ -8555,7 +7405,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=60,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-elise"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Vi:pickRate",
@@ -8597,7 +7448,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=254,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-vi"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aurora:MIDDLE:pickRate",
@@ -8639,7 +7491,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=893,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aurora"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nasus:banRate",
@@ -8680,7 +7533,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=75,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aatrox:pickRate",
@@ -8722,7 +7576,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=266,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aatrox"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Draven:pickRate",
@@ -8763,7 +7618,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=119,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Poppy:pickRate",
@@ -8804,7 +7660,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=78,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-poppy"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aatrox:TOP:pickRate",
@@ -8846,7 +7703,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=266,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aatrox"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Elise:JUNGLE:pickRate",
@@ -8888,7 +7746,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=60,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-elise"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Draven:BOTTOM:pickRate",
@@ -8929,7 +7788,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=119,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Poppy:UTILITY:pickRate",
@@ -8970,7 +7830,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=78,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-poppy"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nasus:MIDDLE:pickRate",
@@ -9011,7 +7872,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=75,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Volibear:pickRate",
@@ -9053,7 +7915,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=106,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-volibear"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Fiora:TOP:pickRate",
@@ -9097,7 +7960,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=114,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-fiora"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Fiora:pickRate",
@@ -9141,7 +8005,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=114,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-fiora"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Lillia:pickRate",
@@ -9183,7 +8048,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=876,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lillia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Volibear:TOP:pickRate",
@@ -9225,7 +8091,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=106,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-volibear"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Lillia:JUNGLE:pickRate",
@@ -9267,7 +8134,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=876,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lillia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nasus:TOP:pickRate",
@@ -9308,7 +8176,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=75,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aatrox:banRate",
@@ -9350,7 +8219,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=266,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aatrox"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Lillia:banRate",
@@ -9392,7 +8262,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=876,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lillia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Elise:UTILITY:pickRate",
@@ -9434,7 +8305,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=60,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-elise"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ryze:banRate",
@@ -9477,7 +8349,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=13,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-ryze"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aurora:TOP:pickRate",
@@ -9519,7 +8392,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=893,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aurora"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Draven:TOP:pickRate",
@@ -9560,7 +8434,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=119,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aatrox:JUNGLE:pickRate",
@@ -9602,7 +8477,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=266,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aatrox"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Volibear:banRate",
@@ -9644,7 +8520,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=106,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-volibear"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Volibear:JUNGLE:pickRate",
@@ -9686,7 +8563,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=106,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-volibear"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Elise:TOP:pickRate",
@@ -9728,7 +8606,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=60,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-elise"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aurora:UTILITY:pickRate",
@@ -9770,7 +8649,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=893,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aurora"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Volibear:MIDDLE:pickRate",
@@ -9812,7 +8692,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=106,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-volibear"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "summary:avgDurationSec",
@@ -19271,7 +18152,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=121,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-khazix"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aurora:BOTTOM:winRate",
@@ -19313,7 +18195,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=893,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aurora"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aatrox:BOTTOM:winRate",
@@ -19355,7 +18238,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=266,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aatrox"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Malphite:BOTTOM:winRate",
@@ -19787,7 +18671,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=876,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lillia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Darius:MIDDLE:winRate",
@@ -20570,7 +19455,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=266,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aatrox"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Vi:MIDDLE:winRate",
@@ -20612,7 +19498,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=254,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-vi"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Fiddlesticks:TOP:winRate",
@@ -20926,7 +19813,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=75,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:LeeSin:MIDDLE:winRate",
@@ -21202,7 +20090,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=893,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aurora"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Diana:BOTTOM:winRate",
@@ -21283,7 +20172,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=106,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-volibear"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Kled:UTILITY:winRate",
@@ -21714,7 +20604,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=56,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nocturne"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Darius:JUNGLE:winRate",
@@ -22108,7 +20999,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=121,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-khazix"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Brand:UTILITY:winRate",
@@ -22191,7 +21083,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=114,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-fiora"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:AurelionSol:TOP:winRate",
@@ -22272,7 +21165,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=106,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-volibear"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Katarina:TOP:winRate",
@@ -22706,7 +21600,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=114,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-fiora"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Olaf:BOTTOM:winRate",
@@ -22825,7 +21720,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=11,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-masteryi"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Sion:JUNGLE:winRate",
@@ -23766,7 +22662,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=114,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-fiora"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Kayn:UTILITY:winRate",
@@ -23847,7 +22744,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=68,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-rumble"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Vex:BOTTOM:winRate",
@@ -24124,7 +23022,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=121,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-khazix"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Kayn:TOP:winRate",
@@ -24283,7 +23182,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=60,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-elise"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Cassiopeia:UTILITY:winRate",
@@ -24832,7 +23732,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=254,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-vi"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Seraphine:BOTTOM:winRate",
@@ -25577,7 +24478,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=13,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-ryze"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Yone:BOTTOM:winRate",
@@ -25696,7 +24598,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=11,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-masteryi"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Sion:UTILITY:winRate",
@@ -26127,7 +25030,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=75,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Graves:BOTTOM:winRate",
@@ -26246,7 +25150,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=119,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Hwei:TOP:winRate",
@@ -26639,7 +25544,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=236,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lucian"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Ahri:TOP:winRate",
@@ -27694,7 +26600,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=11,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-masteryi"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Leblanc:UTILITY:winRate",
@@ -28944,7 +27851,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=119,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Gwen:MIDDLE:winRate",
@@ -29220,7 +28128,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=68,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-rumble"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Vex:TOP:winRate",
@@ -29963,7 +28872,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=56,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nocturne"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Mel:MIDDLE:winRate",
@@ -30199,7 +29109,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=75,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Zac:MIDDLE:winRate",
@@ -30553,7 +29464,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=60,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-elise"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:TwistedFate:BOTTOM:winRate",
@@ -30750,7 +29662,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=11,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-masteryi"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Diana:JUNGLE:winRate",
@@ -30908,7 +29821,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=11,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-masteryi"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Swain:MIDDLE:winRate",
@@ -31417,7 +30331,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=78,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-poppy"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Pantheon:MIDDLE:winRate",
@@ -31732,7 +30647,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=236,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lucian"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Sejuani:JUNGLE:winRate",
@@ -32202,7 +31118,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=78,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-poppy"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Kaisa:TOP:winRate",
@@ -32556,7 +31473,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=266,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aatrox"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Singed:BOTTOM:winRate",
@@ -32753,7 +31671,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=75,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Trundle:UTILITY:winRate",
@@ -33379,7 +32298,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=56,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nocturne"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ziggs:BOTTOM:winRate",
@@ -34084,7 +33004,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=266,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aatrox"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Syndra:BOTTOM:winRate",
@@ -34789,7 +33710,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=893,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aurora"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Lillia:winRate",
@@ -34831,7 +33753,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=876,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lillia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Kayn:JUNGLE:winRate",
@@ -34989,7 +33912,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=78,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-poppy"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Aatrox:MIDDLE:winRate",
@@ -35031,7 +33955,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=266,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aatrox"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ziggs:MIDDLE:winRate",
@@ -35112,7 +34037,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=876,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-lillia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Malzahar:TOP:winRate",
@@ -35232,7 +34158,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=254,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-vi"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Vex:MIDDLE:winRate",
@@ -35390,7 +34317,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=78,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-poppy"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Syndra:UTILITY:winRate",
@@ -35900,7 +34828,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=68,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-rumble"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Seraphine:winRate",
@@ -35981,7 +34910,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=68,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-rumble"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Fizz:TOP:winRate",
@@ -36334,7 +35264,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=11,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-masteryi"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Velkoz:winRate",
@@ -36455,7 +35386,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=13,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-ryze"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zilean:UTILITY:winRate",
@@ -37668,7 +36600,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=13,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-ryze"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Mordekaiser:TOP:winRate",
@@ -38217,7 +37150,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=60,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-elise"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Renekton:winRate",
@@ -38376,7 +37310,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=106,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-volibear"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Skarner:JUNGLE:winRate",
@@ -38457,7 +37392,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=106,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-volibear"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Zilean:winRate",
@@ -38772,7 +37708,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=68,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-rumble"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Varus:BOTTOM:winRate",
@@ -39359,7 +38296,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=75,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Tryndamere:winRate",
@@ -39478,7 +38416,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=119,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Nocturne:TOP:winRate",
@@ -39519,7 +38458,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=56,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nocturne"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Swain:TOP:winRate",
@@ -40731,7 +39671,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=893,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aurora"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Akshan:MIDDLE:winRate",
@@ -40928,7 +39869,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=119,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Cassiopeia:MIDDLE:winRate",
@@ -44130,7 +43072,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=13,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-ryze"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Orianna:TOP:winRate",
@@ -44249,7 +43192,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=119,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Corki:MIDDLE:winRate",
@@ -44369,7 +43313,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=254,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-vi"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Poppy:MIDDLE:winRate",
@@ -44410,7 +43355,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=78,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-poppy"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Ashe:MIDDLE:winRate",
@@ -45115,7 +44061,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=106,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-volibear"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Kled:JUNGLE:winRate",
@@ -45273,7 +44220,8 @@
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=56,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nocturne"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Rammus:BOTTOM:winRate",

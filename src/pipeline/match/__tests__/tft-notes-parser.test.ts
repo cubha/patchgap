@@ -177,3 +177,16 @@ describe("parseTftPatchNotes — 18.2 실측 fixture", () => {
     expect(parsed().stats.lines).toBeGreaterThan(150);
   });
 });
+
+// 2026-09-27 감사: 18.3 원문 「징수의 총 공격력: 40% ⇒ 35%」가 카탈로그 이름 「황금 징수의 총」과 달라
+// 미해소로 버려졌다(원문 서술상 이번 패치의 핵심 너프). 원문 표기 → 카탈로그 이름 별칭으로 해소한다.
+describe("resolveTftEntity — 원문 표기 별칭", () => {
+  const catalog = { units: [], traits: [], augments: [], items: ["황금 징수의 총"] };
+  it("원문이 줄여 쓴 이름을 카탈로그 이름으로 해소한다", () => {
+    expect(resolveTftEntity(null, "징수의 총 공격력: 40% ⇒ 35%", catalog)).toEqual({ entity: "황금 징수의 총", kind: "item", stat: "공격력" });
+  });
+  it("카탈로그에 대상 이름이 없으면 별칭도 등록하지 않는다 — 지어내지 않는다", () => {
+    expect(resolveTftEntity(null, "징수의 총 공격력: 40% ⇒ 35%", { units: [], traits: [], augments: [], items: [] })).toBeNull();
+  });
+});
+

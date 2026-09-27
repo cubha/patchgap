@@ -18,7 +18,7 @@ import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import PubgDetailSplash, { type PubgDetailStat } from "@/components/pubg/PubgDetailSplash";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
-import { isReportable, loadPubg, loadPubgAssets } from "@/lib/pubgData";
+import { isReportable, loadPubg, loadPubgAssets, pubgPair } from "@/lib/pubgData";
 import { displayStatusOf } from "@/pipeline/shared/display-status";
 import { weaponKeyFromSlug, weaponSlug } from "@/lib/pubgRoutes";
 import { publicWeaponPath } from "@/pipeline/pubg/asset-path";
@@ -41,9 +41,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const bundle = loadPubg();
   const weaponKey = weaponKeyFromSlug(key, bundle?.after.weapons.map((w) => w.weaponKey) ?? []);
   const name = bundle?.after.weapons.find((w) => w.weaponKey === weaponKey)?.weaponName ?? "무기";
+  const pair = pubgPair();
+  const span = pair ? `${pair.from} → ${pair.to}` : "패치 비교";
   return {
-    title: `${name} · PUBG 42.3 → 43.1 · patchgap`,
-    description: `${name}의 42.3 → 43.1 획득 점유율 변화와 판정 근거.`,
+    title: `${name} · PUBG ${span} · patchgap`,
+    description: `${name}의 ${span} 획득 점유율 변화와 판정 근거.`,
   };
 }
 

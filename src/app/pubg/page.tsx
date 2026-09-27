@@ -21,7 +21,7 @@ import SubmarineSection from "@/components/gamedata/SubmarineSection";
 import { gameDataEntityCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import PubgWeaponGrid from "@/components/pubg/PubgWeaponGrid";
-import { loadPubg, loadPubgAssets, loadPubgMaps, isReportable } from "@/lib/pubgData";
+import { loadPubg, loadPubgAssets, loadPubgMaps, isReportable, pubgPair } from "@/lib/pubgData";
 import { mapHref, weaponHref } from "@/lib/pubgRoutes";
 import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
 import { publicMapPath } from "@/pipeline/pubg/asset-path";
@@ -37,10 +37,13 @@ import EntityIndexSection from "@/components/EntityIndexSection";
 import { groupBriefingItems } from "@/components/briefingRows";
 import { pubgNotesAsPatchNotes } from "@/pipeline/match/pubg-delta";
 
+// 패치 번호는 산출물에서 읽는다(`pubgPair`) — 하드코딩하면 다음 패치에서 설명문만 옛 패치를 말한다.
+const PAIR = pubgPair();
+
 export const metadata: Metadata = {
   // 패치쌍은 헤더 셀렉터가 말한다 — 탭 제목에서도 뺀다(2026-09-21, TFT와 같은 형식).
   title: "배틀그라운드 — patchgap",
-  description: "PUBG: BATTLEGROUNDS 43.1 패치노트의 공지와 실제 관측 데이터를 대조합니다.",
+  description: `PUBG: BATTLEGROUNDS ${PAIR ? `${PAIR.to} ` : ""}패치노트의 공지와 실제 관측 데이터를 대조합니다.`,
 };
 
 export default function PubgPage() {

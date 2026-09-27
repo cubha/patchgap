@@ -30,7 +30,7 @@ name: collect-pubg
 # 전부 같은 브랜치에 `data/aggregated/**`를 커밋하므로, 동시에 끝나면 한쪽 push가 non-fast-forward로
 # 거부된다. 그 실패는 "수집은 됐는데 배포는 안 된" 상태를 남긴다.
 #
-# 필요 secrets: PUBG_API_KEY(필수) · DISCORD_WEBHOOK_URL_PUBG(선택) · DISCORD_ROLE_ID_PUBG(선택)
+# 필요 secrets: PUBG_API_KEY(필수) · ANTHROPIC_API_KEY(선택 — 없으면 원인 추정만 생략) · DISCORD_WEBHOOK_URL_PUBG(선택) · DISCORD_ROLE_ID_PUBG(선택)
 # 필요 variables: PATCHGAP_SITE_URL
 
 on:
@@ -121,10 +121,12 @@ jobs:
           PER_DAY: ${{ github.event.inputs.per_day || '120' }}
         run: npx tsx scripts/run-pubg-collect.ts --days "$DAYS" --per-day "$PER_DAY"
 
-      # 표본 임계 가드 — LoL·TFT와 같은 자리·같은 이유다(2026-09-10 선례: 얇은 표본이 커밋·배포까지
-      # 나갔다). PUBG 단위는 **official 매치**다. 실측 기준선이 42.3=1,715 / 43.1=1,614이라
-      # 그 절반인 800을 하한으로 잡는다. 날짜·패치 라벨은 축약본 안에 있으므로 여기서 직접 센다.
-      - name: Sample size guard
+      # 표본 경보 — **막지 않는다**(2026-09-27, LoL #55·TFT와 동형). 전에는 official 매치 800 미만이면
+      # 집계·브리핑·커밋을 전부 보류했는데, 그 커밋이 새 패치 쌍의 산출물이고 화면은 그 쌍의 노트를 보여준다
+      # — 표본(관측 축)이 선언 축을 인질로 잡는 구조였다(사용자 확정 8). 표본이 얇은 무기는 판정기가
+      # 개체 단위로 거른다(`PICKUP_MIN_N`=300 미만이면 insufficient-sample, pubg-delta.ts).
+      # 실측 기준선 42.3=1,715 / 43.1=1,614매치 — 그 절반 800을 경보선으로 둔다.
+      - name: Sample size alert
         id: sample_guard
         if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
         env:
@@ -135,7 +137,7 @@ jobs:
           # 날짜 목록은 workflow 입력이 아니라 determine 산출이지만, JS 리터럴에 꿰매지 않는
           # 규약은 그대로 지킨다(collect.yml·collect-tft.yml과 같은 이유). process.env로 넘긴다.
           # 텔레메트리 라벨도 determine이 준다 — 여기 박아 두면 다음 패치에서 이 한 줄만
-          # 갱신을 놓쳐 표본이 조용히 0/0으로 세어지고 가드가 항상 막는다(2026-09-21 지적).
+          # 갱신을 놓쳐 표본이 조용히 0/0으로 세어진다(2026-09-21 지적).
           COUNT='const fs=require("fs");const days=new Set(process.env.DAYS.split(","));
           const dir="data/raw/pubg/telemetry-reduced";
           let before=0, after=0;
@@ -148,15 +150,16 @@ jobs:
           console.log(before+" "+after);'
           read -r BEFORE AFTER < <(node -e "$COUNT")
           echo "[sample_guard] official 매치 before=${BEFORE} after=${AFTER}"
+          if ! [[ "$BEFORE" =~ ^[0-9]+$ && "$AFTER" =~ ^[0-9]+$ ]]; then
+            echo "::error::축약본 표본을 숫자로 세지 못했다(got '${BEFORE}' '${AFTER}')"
+            exit 1
+          fi
           if [ "$BEFORE" -lt 800 ] || [ "$AFTER" -lt 800 ]; then
-            echo "sample_ok=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::PUBG official 매치 표본 부족(800 미만) — 집계·브리핑·커밋을 보류한다. 축약본은 캐시에 남으므로 다음 실행이 이어 받는다."
-          else
-            echo "sample_ok=true" >> "$GITHUB_OUTPUT"
+            echo "::warning::PUBG official 매치 표본이 얇다(800 미만). 노트와 판정은 그대로 반영하고, 획득 300 미만 무기는 표본 부족으로 판정된다. 축약본은 캐시에 남아 다음 실행이 이어 받는다."
           fi
 
       - name: Aggregate + verdict (F2/F4)
-        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true' && steps.sample_guard.outputs.sample_ok == 'true'
+        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
         env:
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
@@ -169,8 +172,33 @@ jobs:
       # 게이트가 `notes_ready == 'true'`를 포함해야 한다: 이 단계가 `notes-{to}.json`을 읽고,
       # 없으면 던진다(노트는 수기 입력이라 며칠 늦게 들어온다 — 위 헤더 참고). `continue-on-error`는
       # LoL·TFT와 같은 이유다.
+      # LLM 2단(원인 추정) — 2026-09-27 전까지 CI에 없었다. `run-pubg-aggregate`가 `deltas.json`을 새로
+      # 쓰므로, 이 스텝이 없으면 다음 패치부터 원인이 전부 사라지고 화면은 회색만 남는다(LoL·TFT는 판정
+      # 스텝 안에서 돈다). 키가 없거나 실패해도 판정·커밋은 계속한다 — 원인은 얹는 축이다.
+      - name: Restore data/cache/llm (LLM 2단 파일 캐시)
+        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
+        uses: actions/cache@v4
+        with:
+          path: data/cache/llm
+          key: patchgap-llm-pubg-${{ steps.determine.outputs.to }}-${{ github.run_id }}
+          restore-keys: |
+            patchgap-llm-pubg-${{ steps.determine.outputs.to }}-
+            patchgap-llm-pubg-
+
+      - name: LLM causes (F4 2단)
+        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "[pubg-llm] ANTHROPIC_API_KEY 없음 — 원인 추정 생략(화면은 회색)"
+            exit 0
+          fi
+          npx tsx scripts/run-pubg-llm.ts
+        continue-on-error: true
+
       - name: Detect submarine patches (F9)
-        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true' && steps.sample_guard.outputs.sample_ok == 'true'
+        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
         env:
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
@@ -182,7 +210,7 @@ jobs:
         continue-on-error: true
 
       - name: Discord briefing (PUBG 채널)
-        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true' && steps.sample_guard.outputs.sample_ok == 'true' && env.HAS_DISCORD_PUBG == 'true'
+        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true' && env.HAS_DISCORD_PUBG == 'true'
         env:
           DISCORD_WEBHOOK_URL_PUBG: ${{ secrets.DISCORD_WEBHOOK_URL_PUBG }}
           DISCORD_ROLE_ID_PUBG: ${{ secrets.DISCORD_ROLE_ID_PUBG }}
@@ -205,8 +233,35 @@ jobs:
             "${SITE_ARGS[@]}"
         continue-on-error: true
 
+      # 데이터 불변식 — **경보형**(2026-09-27). collect-tft.yml의 같은 스텝 주석 참고(봇 push는 CI를
+      # 트리거하지 않는다 · 차단형이면 선언 축을 다시 인질로 잡는다).
+      - name: Data invariants (경보 — 커밋은 막지 않는다)
+        id: invariants
+        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
+        run: |
+          LOG="$RUNNER_TEMP/invariants.log"
+          if npx vitest run --reporter=dot > "$LOG" 2>&1; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            tail -60 "$LOG"
+            echo "::warning::데이터 불변식 실패 — 커밋은 진행한다(선언 축 최신 유지). 코드 PR로 고친다."
+            { echo "## ⚠️ 데이터 불변식 실패 (collect-pubg)"; echo '```'; tail -40 "$LOG"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Discord invariants alert (불변식 실패 시)
+        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true' && steps.invariants.outputs.ok == 'false' && env.HAS_DISCORD_PUBG == 'true'
+        env:
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+          DISCORD_WEBHOOK_URL_PUBG: ${{ secrets.DISCORD_WEBHOOK_URL_PUBG }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          BODY=$(node -e "console.log(JSON.stringify({content: \`⚠️ patchgap collect-pubg: \${process.env.PATCH_TO} 산출물이 데이터 불변식을 통과하지 못했습니다. 커밋은 진행했습니다 — 실행 요약: \${process.env.RUN_URL}\`}))")
+          curl -sf -X POST "$DISCORD_WEBHOOK_URL_PUBG" -H "Content-Type: application/json" -d "$BODY"
+        continue-on-error: true
+
       - name: Commit + push generated data
-        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true' && steps.sample_guard.outputs.sample_ok == 'true'
+        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
         env:
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}

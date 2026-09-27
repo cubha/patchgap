@@ -93,6 +93,25 @@ function MetricBlock({ record }: { record: DeltaRecord }) {
       <span className="mt-1 font-mono text-xs leading-relaxed break-all text-muted">
         집계 경로: {record.evidence.aggregatePath}
       </span>
+      {/* 원천 매치(2026-09-27) — PUBG 무기 상세와 같은 한 줄 표기(앞 3건 + 나머지 수). 없으면 줄을
+          그리지 않는다(지어내지 않는다 — 이 필드 이전의 집계 파일이면 비어 있다). */}
+      {/* `break-all`을 걸지 않는다 — 매치 ID가 토큰 중간에서 끊겨 읽거나 복사할 수 없게 된다(LoL
+          `SourceMatchesPanel`이 2026-09-05에 고친 결함, 인수검증 V2에서 여기서 재발). ID마다 nowrap으로 감싸
+          구분자(·) 자리에서만 줄이 바뀐다. */}
+      {record.evidence.matchIds.length > 0 ? (
+        <span className="flex flex-wrap gap-x-1 font-mono text-xs leading-relaxed text-muted">
+          <span>표본 매치:</span>
+          {record.evidence.matchIds.slice(0, 3).map((id, i) => (
+            <span key={id} className="whitespace-nowrap">
+              {id}
+              {i < Math.min(3, record.evidence.matchIds.length) - 1 ? " ·" : ""}
+            </span>
+          ))}
+          {record.evidence.matchIds.length > 3 ? (
+            <span className="whitespace-nowrap">외 {record.evidence.matchIds.length - 3}건</span>
+          ) : null}
+        </span>
+      ) : null}
     </div>
   );
 }

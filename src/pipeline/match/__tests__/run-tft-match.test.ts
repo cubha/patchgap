@@ -2,7 +2,7 @@
 // main()이 돌지 않는다(run-notify.test.ts와 같은 패턴).
 import { describe, it, expect } from "vitest";
 
-import { agreesWithNote, directionMajority, parseArgs } from "../../../../scripts/run-tft-match";
+import { agreesWithNote, directionMajority, judgeTftDeltas, parseArgs } from "../../../../scripts/run-tft-match";
 import { assignStatus } from "../verdict";
 import type { DeltaRecord, PatchNoteItem } from "../../types";
 
@@ -106,3 +106,54 @@ describe("parseArgs", () => {
     expect(parseArgs(["--from", "18.1", "--to", "18.2"])).toMatchObject({ from: "18.1", to: "18.2" });
   });
 });
+
+describe("judgeTftDeltas — 이름 정확일치 짝짓기 + 방향 정합 기록", () => {
+  const base: DeltaRecord = {
+    id: "unit:A:top4Rate",
+    entityType: "unit",
+    entityKey: "A",
+    entityName: "아리",
+    metric: "top4Rate",
+    before: 0.5,
+    after: 0.6,
+    delta: 0.1,
+    ci: [0.05, 0.15],
+    n: { before: 4000, after: 4000 },
+    q: 0.001,
+    status: "no-change",
+    matchedNoteId: null,
+    matchedNoteIds: [],
+    causes: [],
+    evidence: { matchIds: [], aggregatePath: "p", noteAnchor: null },
+  };
+  const note = (id: string, direction: PatchNoteItem["direction"]): PatchNoteItem => ({
+    id,
+    patch: "18.3",
+    section: "champion",
+    entity: "아리",
+    skill: null,
+    stat: "공격력",
+    before: "1",
+    after: "2",
+    direction,
+    summary: "s",
+    anchorUrl: `https://x/#${id}`,
+    anchorKind: "entity",
+    modeScope: "core",
+  });
+
+  it("상향 1 + 하향 1(동률) 노트에 유의한 변화 → 판정은 공지·불일치지만 중립이 기록된다", () => {
+    const { rows } = judgeTftDeltas([base], [note("n1", "buff"), note("n2", "nerf")]);
+    expect(rows[0].status).toBe("announced-inconsistent");
+    expect(rows[0].directionAgreement).toBe("neutral");
+    expect(rows[0].matchedNoteIds).toEqual(["n1", "n2"]);
+    expect(rows[0].evidence.noteAnchor).toBe("https://x/#n1");
+  });
+
+  it("짝이 없으면 directionAgreement가 없다", () => {
+    const { rows, matched } = judgeTftDeltas([{ ...base, entityName: "없는이름" }], [note("n1", "buff")]);
+    expect(matched).toBe(0);
+    expect("directionAgreement" in rows[0]).toBe(false);
+  });
+});
+

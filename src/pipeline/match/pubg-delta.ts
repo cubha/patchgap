@@ -308,3 +308,46 @@ export function pubgNotesAsPatchNotes(
     modeScope: "core" as const,
   }));
 }
+
+/**
+ * 노트가 스폰을 바꾼 무기들이 잃은(얻은) 점유율을 **나머지 무기에 균등 재분배했을 때** 나머지 각 무기의
+ * 기대 상대 변화(2026-09-27). 점유율은 제로섬이라 직접 변경을 안 받은 무기도 움직이지만, 그 폭은 이
+ * 값 수준이다 — 43.1: RPD·M249 7.00%→5.21%, 기대치 약 +1.9%. 재분배 원천은 점유율로 검증 가능한 노트
+ * (`expectedRelChange !== null`)의 무기뿐이다(반동·ADS 조항은 스폰을 바꾸지 않는다).
+ */
+export function redistributionExpectation(
+  before: Pick<PubgPatchAggregate, "weapons">,
+  after: Pick<PubgPatchAggregate, "weapons">,
+  notes: readonly PubgNoteItem[]
+): number {
+  const sources = new Set(notes.filter((n) => n.expectedRelChange !== null).flatMap((n) => n.weaponKeys));
+  if (sources.size === 0) return 0;
+  const shareOf = (agg: Pick<PubgPatchAggregate, "weapons">, key: string) =>
+    agg.weapons.find((w) => w.weaponKey === key)?.share ?? 0;
+  let released = 0;
+  let sourceBefore = 0;
+  for (const key of sources) {
+    released += shareOf(before, key) - shareOf(after, key);
+    sourceBefore += shareOf(before, key);
+  }
+  const rest = 1 - sourceBefore;
+  return rest > 0 ? released / rest : 0;
+}
+
+/** 관측이 재분배 기대치의 이 배수를 넘으면 재분배로 설명되는 폭이 아니다. */
+export const REDISTRIBUTION_OVERCLAIM_FACTOR = 2;
+
+/**
+ * 재분배 기대치로 설명되지 않는 크기의 변화에 붙은 원인은 확신도를 `low`로 낮춘다(2026-09-27).
+ * 지시문도 같은 말을 하지만 **문구는 계약이 아니다** — 43.1 원인 3건이 기대치 10배의 변화를
+ * 「제로섬 반사」로 high 단정했다. 기대치가 0이면(재분배 원천 없음) 건드리지 않는다.
+ */
+export function capOverclaimedConfidence<T extends Pick<PubgDeltaRow, "relChange" | "causes">>(
+  row: T,
+  expectation: number
+): T {
+  if (!row.causes || row.relChange === null || expectation === 0) return row;
+  if (Math.abs(row.relChange) <= REDISTRIBUTION_OVERCLAIM_FACTOR * Math.abs(expectation)) return row;
+  return { ...row, causes: row.causes.map((cause) => ({ ...cause, confidence: "low" as const })) };
+}
+

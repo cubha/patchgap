@@ -8,7 +8,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { MatchStatus } from "@/pipeline/types";
-import { isReportable } from "@/pipeline/shared/pubg-status";
 import type { PubgPatchAggregate } from "@/pipeline/aggregate/pubg-weapons";
 import type { PubgAccuracyStat } from "@/pipeline/aggregate/pubg-accuracy";
 import type { PubgMapAggregate, PubgMapDeltaRow } from "@/pipeline/aggregate/pubg-maps";
@@ -65,18 +64,31 @@ function readJson<T>(file: string): T | null {
 }
 
 /**
- * 네 파일이 모두 있고 **판정이 1건 이상 근거를 가질 때만** 번들을 반환한다.
- * 하나라도 없으면 null — 호출부는 null이면 PUBG를 화면에서 완전히 뺀다.
+ * 지금 화면이 보여주는 패치 쌍 — `deltas.json`의 `meta`가 단일 소스다(2026-09-27). 전에는 로더와 페이지
+ * 메타데이터가 `42.3`·`43.1`을 하드코딩해, 43.2 노트와 판정이 커밋돼도 화면은 43.1에 머물렀다(결정 8 —
+ * 선언 축은 항상 최신 — 을 코드가 깨는 자리).
+ */
+export function pubgPair(): { from: string; to: string } | null {
+  const deltas = readJson<PubgDeltasFile>("deltas.json");
+  return deltas ? { from: deltas.meta.from, to: deltas.meta.to } : null;
+}
+
+/**
+ * 판정·양쪽 집계·노트 네 파일이 모두 있을 때 번들을 반환한다. 하나라도 없으면 null — 호출부는 null이면
+ * PUBG를 화면에서 완전히 뺀다.
+ *
+ * **보고 자격 판정이 0건이어도 반환한다**(2026-09-27). 전에는 0건이면 null이었는데, 새 패치의 표본이
+ * 얇아 판정이 전부 표본 부족이면 **패치노트까지** 화면에서 사라졌다 — 관측 축이 선언 축을 인질로 잡는
+ * 구조였다(결정 8).
  */
 export function loadPubg(): PubgBundle | null {
   const deltas = readJson<PubgDeltasFile>("deltas.json");
-  const before = readJson<PubgPatchAggregate>("weapons-42.3.json");
-  const after = readJson<PubgPatchAggregate>("weapons-43.1.json");
-  const notesFile = readJson<{ items: PubgNoteItem[] }>("notes-43.1.json");
-  if (!deltas || !before || !after || !notesFile) return null;
-
-  const verdicts = deltas.rows.filter((row) => isReportable(row.status)).length;
-  if (verdicts === 0) return null;
+  if (!deltas) return null;
+  const { from, to } = deltas.meta;
+  const before = readJson<PubgPatchAggregate>(`weapons-${from}.json`);
+  const after = readJson<PubgPatchAggregate>(`weapons-${to}.json`);
+  const notesFile = readJson<{ items: PubgNoteItem[] }>(`notes-${to}.json`);
+  if (!before || !after || !notesFile) return null;
 
   const accuracyFile = readJson<PubgAccuracyComparisonFile>("accuracy-comparison.json");
 
@@ -116,10 +128,12 @@ export interface PubgMapBundle {
  * 0개 생성될 뿐이고 나머지 화면은 그대로 산다.
  */
 export function loadPubgMaps(): PubgMapBundle | null {
-  const before = readJson<PubgMapAggregate>("maps-42.3.json");
-  const after = readJson<PubgMapAggregate>("maps-43.1.json");
   const deltas = readJson<PubgMapDeltasFile>("map-deltas.json");
-  if (!before || !after || !deltas) return null;
+  if (!deltas) return null;
+  // 쌍은 산출물 meta에서 읽는다 — 하드코딩하면 다음 패치에서 조용히 옛 쌍을 보여준다(`pubgPair` 참고).
+  const before = readJson<PubgMapAggregate>(`maps-${deltas.meta.from}.json`);
+  const after = readJson<PubgMapAggregate>(`maps-${deltas.meta.to}.json`);
+  if (!before || !after) return null;
   return { before, after, deltas };
 }
 

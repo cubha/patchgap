@@ -9,7 +9,8 @@
 import { isCoreNote } from "../shared/mode-scope";
 import type { DeltaRecord, PatchNoteItem } from "../types";
 import type { DdragonData } from "./ddragon";
-import type { GameLlmProfile } from "./llm-profile";
+import { resolveNoteEntity } from "./entity-match";
+import { isAnomalyOrGapTarget, isCitableBalanceNote, type GameLlmProfile } from "./llm-profile";
 
 const SYSTEM_INSTRUCTIONS = [
   "당신은 리그 오브 레전드 패치 분석가입니다.",
@@ -90,13 +91,17 @@ function buildUserPrompt(delta: DeltaRecord): string {
 }
 
 function resolvesToSameEntity(note: PatchNoteItem, delta: DeltaRecord, ddragon: DdragonData): boolean {
+  // 짝짓기(entity-match.ts)와 **같은 해소 규칙** — 합친 이름(「세계 지도집과 룬 나침반」)도 조각으로 푼다.
   if (delta.entityType === "champion" && note.section === "champion") {
-    const champion = ddragon.champions.byKoName(note.entity);
-    return champion?.id === delta.entityKey;
+    const champions = resolveNoteEntity(note.entity, (name) => {
+      const c = ddragon.champions.byKoName(name);
+      return c ? [c] : [];
+    });
+    return (champions ?? []).some((c) => c.id === delta.entityKey);
   }
   if (delta.entityType === "item" && note.section === "item") {
-    const candidates = ddragon.items.byKoName(note.entity);
-    return candidates.some((item) => String(item.id) === delta.entityKey);
+    const candidates = resolveNoteEntity(note.entity, (name) => ddragon.items.byKoName(name));
+    return (candidates ?? []).some((item) => String(item.id) === delta.entityKey);
   }
   return false;
 }
@@ -123,8 +128,10 @@ export function lolLlmProfile(ddragon: DdragonData): GameLlmProfile {
     systemInstructions: SYSTEM_INSTRUCTIONS,
     // 소환사의 협곡(core) 노트만 보여준다 — 근거는 위 `coreCandidatesOf` 주석.
     candidatesOf: (notes) => notes.filter(isCoreNote),
-    isCitable: isCoreNote,
+    isCitable: isCitableBalanceNote,
     isSameEntity: (note, delta) => resolvesToSameEntity(note, delta, ddragon),
     buildUserPrompt,
+    // 화면이 「미공지」·「이상 관측」이라 부르는 행만 — 근거는 llm-profile.ts `isAnomalyOrGapTarget`.
+    isTarget: isAnomalyOrGapTarget,
   };
 }
