@@ -85,7 +85,27 @@ async function main(): Promise<void> {
     console.log("[pubg-llm] --dry-run — 파일을 쓰지 않는다");
     return;
   }
-  fs.writeFileSync(deltasPath, `${JSON.stringify({ ...deltas, rows: result.deltas }, null, 2)}\n`);
+  // 실행 요약을 meta에 싣는다(2026-09-27 인수검증 V9) — LoL·TFT 산출물은 `meta.llm.prose`로 문장 위생을
+  // 남기는데 PUBG만 없어, 표현 규칙(요약 100자·원인 80자·완곡 종결)을 산출물에서 확인할 수 없었다.
+  const s = result.summary;
+  const llm = {
+    calls: s.calls,
+    cacheHits: s.cacheHits,
+    skipped: s.skipped,
+    proseRepairs: s.proseRepairs,
+    usage: s.usage,
+    prose: s.prose,
+    redistribution,
+    confidenceCapped: cappedCount,
+  };
+  console.log(
+    `[pubg-llm] 문장 위생: 요약 ${s.prose.summaryCount}건 중 100자 초과 ${s.prose.summaryOverLength}건 · ` +
+      `원인 ${s.prose.causeCount}건 중 80자 초과 ${s.prose.causeOverLength}건 · 명사형 종결 ${s.prose.causeNounEnding}건`
+  );
+  fs.writeFileSync(
+    deltasPath,
+    `${JSON.stringify({ ...deltas, meta: { ...deltas.meta, llm }, rows: result.deltas }, null, 2)}\n`
+  );
   console.log(`[pubg-llm] 기록: ${path.relative(ROOT, deltasPath)}`);
 }
 

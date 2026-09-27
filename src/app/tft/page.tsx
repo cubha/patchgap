@@ -20,7 +20,7 @@ import { tftEntityHref } from "@/lib/tftRoutes";
 import { tftEntityRows } from "@/components/tft/entityRows";
 import { entityTypeLabel, metricLabel } from "@/lib/format";
 import { loadTft, loadTftAssets } from "@/lib/tftData";
-import { displayStatusOf } from "@/pipeline/shared/display-status";
+import { displayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
 import type { DeltaRecord } from "@/pipeline/types";
@@ -99,7 +99,7 @@ function topRows(rows: DeltaRecord[], limit: number): DeltaRecord[] {
  * 전에는 한 유닛이 지표 수만큼 행으로 흩어졌고, 판정 뱃지가 맨 뒤 열이었으며, 이름에 링크가
  * 없었다(2026-09-23 acceptance-critic V1·V2·V3). 셋 다 §8-1·§8-2 위반이다.
  */
-function briefingGroups(rows: DeltaRecord[]): BriefingGroup[] {
+function briefingGroups(rows: DeltaRecord[], qAlpha?: number): BriefingGroup[] {
   return groupBriefingItems(
     rows.map((row) => {
       const d = deltaDisplay(row.metric, row.delta ?? 0);
@@ -109,7 +109,7 @@ function briefingGroups(rows: DeltaRecord[]): BriefingGroup[] {
         entityName: row.entityName,
         entityType: row.entityType,
         typeLabel: entityTypeLabel(row.entityType),
-        status: displayStatusOf(row.status),
+        status: displayStatus(row, qAlpha),
         field: metricLabel(row.metric),
         change: `${formatMetricValue(row.metric, row.before ?? 0)} → ${formatMetricValue(row.metric, row.after ?? 0)}`,
         delta: { text: d.text, improved: d.improved },
@@ -135,8 +135,10 @@ export default function TftPage() {
   // 수치 축(F9) — 산출물이 없으면 섹션이 통째로 빠진다.
   const submarine = summarizeGameData(loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to));
   const reportable = deltas.rows.filter((row) => isReportableRecord(row, deltas.meta.qAlpha));
-  const unannounced = reportable.filter((row) => displayStatusOf(row.status) === "unannounced");
-  const announced = reportable.filter((row) => displayStatusOf(row.status) !== "unannounced");
+  // 대조표(`entityRows`)와 **같은 함수**로 표시 키를 낸다 — 상태값만 보는 `displayStatusOf`는 방향 중립
+  // (동률 노트)을 모르므로, 같은 대상이 홈에선 「이상 관측」, 대조표에선 「공지」로 갈렸다(인수검증 V1, 오른).
+  const unannounced = reportable.filter((row) => displayStatus(row, deltas.meta.qAlpha) === "unannounced");
+  const announced = reportable.filter((row) => displayStatus(row, deltas.meta.qAlpha) !== "unannounced");
   const matches = before.matches + after.matches;
   // 시안 04-applied의 헤드라인 — 이 사이트가 무엇을 하는 곳인지 한 문장으로 말한다.
   // 숫자는 아래 3타일과 **같은 출처**를 쓴다(따로 세면 화면이 스스로를 반박한다).
@@ -217,8 +219,9 @@ export default function TftPage() {
           {/* 3타일은 세 게임 공통 컴포넌트가 그린다(UX-BRIEF §8-1) — 라벨·부제·클릭 대상이
               게임마다 달랐다. TFT 대조표는 아직 상태 칩이 없어 앵커 없이 보낸다. */}
           <StatTiles
-            announcedCount={notes.items.length}
+            announcedCount={noteEntities}
             patch={deltas.meta.to}
+            itemCount={notes.items.length}
             significantCount={reportable.length}
             gapCount={unannounced.length}
             game="tft"
@@ -247,7 +250,7 @@ export default function TftPage() {
                 >
                   <div className={PANEL_SCROLL_BODY}>
                   <BriefingRowList
-                    groups={briefingGroups(topRows(announced, 15))}
+                    groups={briefingGroups(topRows(announced, 15), deltas.meta.qAlpha)}
                     hrefOf={(g) => tftEntityHref(`${g.entityType}:${g.entityKey}`)}
                     iconOf={rowIcon}
                     causeOf={causeLine}
@@ -279,7 +282,7 @@ export default function TftPage() {
                   >
                     <div className={PANEL_SCROLL_BODY}>
                     <BriefingRowList
-                      groups={briefingGroups(topRows(unannounced, 15))}
+                      groups={briefingGroups(topRows(unannounced, 15), deltas.meta.qAlpha)}
                       hrefOf={(g) => tftEntityHref(`${g.entityType}:${g.entityKey}`)}
                       iconOf={rowIcon}
                       causeOf={causeLine}

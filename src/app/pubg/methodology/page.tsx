@@ -15,7 +15,12 @@ import MethodologyLayout, { type MethodologySlots } from "@/components/methodolo
 import StatusBadge from "@/components/StatusBadge";
 import { PubgSampleNotice, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { loadPubg } from "@/lib/pubgData";
-import { ANNOUNCED_RATIO_BAND, PICKUP_MIN_N } from "@/pipeline/match/pubg-delta";
+import {
+  ANNOUNCED_RATIO_BAND,
+  PICKUP_MIN_N,
+  REDISTRIBUTION_OVERCLAIM_FACTOR,
+  redistributionExpectation,
+} from "@/pipeline/match/pubg-delta";
 
 export const metadata: Metadata = {
   title: "PUBG 방법론 · patchgap",
@@ -50,6 +55,16 @@ export default function PubgMethodologyPage() {
     (sum, row) => sum + (row.causes?.filter((cause) => cause.verified).length ?? 0),
     0
   );
+  // 재분배 상한(2026-09-27) — 원인 영역이 「제로섬 반사」를 단정하던 문장을 대체한다. 기대치와 그것을 넘는
+  // 무기 수는 **이 패치의 데이터에서** 계산한다(run-pubg-llm.ts의 확신도 게이트와 같은 함수·같은 배수).
+  const redistribution = redistributionExpectation(before, after, notes);
+  const beyondRedistribution = deltas.rows.filter(
+    (row) =>
+      (row.causes ?? []).length > 0 &&
+      row.relChange !== null &&
+      redistribution !== 0 &&
+      Math.abs(row.relChange) > REDISTRIBUTION_OVERCLAIM_FACTOR * Math.abs(redistribution)
+  ).length;
   const hidden = (counts["below-threshold"] ?? 0) + (counts["no-change"] ?? 0) + (counts["insufficient-sample"] ?? 0);
 
   const statusRows = [
@@ -184,13 +199,16 @@ export default function PubgMethodologyPage() {
             않습니다.
           </dd>
         </div>
-        <div>
-          <dt className="font-display font-bold text-fg">LLM 원인 추정 없음</dt>
-          <dd className="mt-1 leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
+        {/* 데이터에 의존하는 단언은 데이터로 가른다(2026-09-27 — 전에는 원인이 있는 패치에서도 「없음」을 말했다). */}
+        {verifiedCauseCount === 0 ? (
+          <div>
+            <dt className="font-display font-bold text-fg">LLM 원인 추정 없음</dt>
+            <dd className="mt-1 leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
               {deltas.meta.to} 패치노트는 무기 항목 {notes.length}건뿐이라 미공지 변화에 짝지을 후보 조항이
-            없습니다. 무기 상세에는 관측값과 판정 근거만 있습니다.
-          </dd>
-        </div>
+              없습니다. 무기 상세에는 관측값과 판정 근거만 있습니다.
+            </dd>
+          </div>
+        ) : null}
         </dl>
       </>
     ),
@@ -240,8 +258,10 @@ export default function PubgMethodologyPage() {
           {verifiedCauseCount > 0 ? (
             <>
               {" "}
-              대부분은 <strong className="text-fg">제로섬 반사</strong>입니다 — 경기관총 스폰이 줄면
-              그 자리를 다른 무기가 메우므로, 직접 너프를 받지 않은 무기의 점유율이 올라갑니다.
+              점유율은 제로섬이라 노트가 스폰을 줄인 무기의 몫은 다른 무기로 넘어가지만, 그 폭에는 상한이 있습니다 — 이
+              패치의 <strong className="text-fg">균등 재분배 기대치는 {signedPct(redistribution)}</strong>입니다. 원인이 붙은
+              무기 중 <strong className="text-fg">{beyondRedistribution}종</strong>은 변화가 그 {REDISTRIBUTION_OVERCLAIM_FACTOR}배를
+              넘어 재분배만으로 설명되지 않으므로, 원인 문장의 확신도를 기계가 「낮음」으로 내립니다.
             </>
           ) : null}
           {verifiedCauseCount === 0 ? (
