@@ -726,3 +726,42 @@ describe("parsePatchNotes — 클래식 아이템 범주(C9)", () => {
     ]);
   });
 });
+
+// 이월 R11(2026-09-28): 26.19 아레나 「증강」 h4 아래는 증강마다 `<p><strong>이름</strong></p>` + 수치 `<ul>`다.
+// 소개 문단이 있는 증강(삐뽀삐뽀) 뒤의 문단 없는 증강 6개(응징의 천사…)가 삐뽀삐뽀의 스킬로 묶였다.
+// 「증강」도 「아이템」처럼 라벨마다 대상인 범주다(증강에는 스킬이 없다).
+describe("parsePatchNotes — 아레나 증강 범주(R11)", () => {
+  const html = [
+    '<div id="patch-notes-container">',
+    '<header class="header-primary"><h2 id="patch-arena">아레나</h2></header>',
+    '<div class="content-border"><div class="white-stone accent-before"><div>',
+    '<h4 class="change-detail-title">증강</h4>',
+    "<p><mark><strong>신규 </strong></mark><strong>삐뽀삐뽀</strong></p>",
+    '<blockquote class="blockquote context"><p>주변 아군을 향해 이동할 때 이동 속도가 증가합니다.</p></blockquote>',
+    "<p><strong>응징의 천사</strong></p>",
+    "<ul><li><strong>체력 계수: 350 ⇒ </strong><strong>450</strong></li></ul>",
+    "<p><strong>거인 학살자</strong></p>",
+    "<ul><li><strong>1레벨 추가 피해량: 10~30 ⇒ </strong><strong>5~25</strong></li>",
+    "<li><strong>2레벨 추가 피해량: 15~35 ⇒ </strong><strong>10~30</strong></li></ul>",
+    '<h4 class="change-detail-title">체계</h4>',
+    "<p><strong>잃은 체력 비례 추가 기력 재생</strong></p>",
+    "<ul><li><strong>최대 추가 기력 재생: 최대 100% ⇒ </strong><strong>최대 400%</strong></li></ul>",
+    "</div></div></div>",
+    "</div>",
+  ].join("");
+  const parsed = parsePatchNotes(html, {
+    patch: "26.19",
+    sourceUrl: "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/",
+  });
+  it("증강 범주 아래 라벨은 각각 대상이다 — 소개 문단 있는 증강에 이월하지 않는다", () => {
+    const arena = parsed.items.filter((i) => i.modeScope === "arena");
+    // 소개 문단만 있고 수치 줄이 없는 대상(삐뽀삐뽀)은 줄을 만들지 않는다 — 블록에 줄이 하나라도 있으면
+    // 폴백 요약을 쓰지 않는 기존 규칙(실데이터 26.19 「마도사의 주스 상자」도 같다).
+    expect(arena.map((i) => [i.entity, i.skill, i.stat])).toEqual([
+      ["응징의 천사", null, "체력 계수"],
+      ["거인 학살자", null, "1레벨 추가 피해량"],
+      ["거인 학살자", null, "2레벨 추가 피해량"],
+      ["잃은 체력 비례 추가 기력 재생", null, "최대 추가 기력 재생"],
+    ]);
+  });
+});
