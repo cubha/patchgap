@@ -58,6 +58,12 @@ function abilityValue(raw: unknown): GameDataValue {
   return null;
 }
 
+/**
+ * TFT 노트의 「마나 조정: 40/100 ⇒ 30/100」은 (시작/최대) 두 값이다(2026-09-28, 이월 R9) — 필드별 성분 번호.
+ * 이게 없으면 a/b 값을 견주지 못해 「최대 마나 100→90」이 노트 최종값(100 유지)과 어긋나는데도 공지됨으로 나갔다.
+ */
+const MANA_COMPONENT: Record<string, number | undefined> = { initialMana: 0, mana: 1 };
+
 /** 스킬 변수 이름이 해시(`{0f6cb861}`)면 사람에게 보여줄 수 없다 — 화면 밖으로 뺀다. */
 function isHashName(name: string): boolean {
   return /^\{[0-9a-f]+\}$/.test(name);
@@ -129,7 +135,8 @@ export function diffTft(
     fieldPath: string,
     b: GameDataValue,
     a: GameDataValue,
-    keywords: readonly string[]
+    keywords: readonly string[],
+    component?: number
   ) => {
     const linked = linkedNotes({ entityName, fieldKeywords: keywords }, notes);
     out.push(
@@ -144,7 +151,7 @@ export function diffTft(
         before: b,
         after: a,
         matchedNoteIds: linked.map((l) => l.note.id),
-        noteMismatch: noteValueMismatch(linked, b, a),
+        noteMismatch: noteValueMismatch(linked, b, a, component),
       })
     );
   };
@@ -167,7 +174,7 @@ export function diffTft(
       if (sameNumber(a, b)) continue;
       const label = UNIT_STAT_LABELS[stat];
       if (!label) continue;
-      push(key, name, "unit", label[0], `stats.${stat}`, a, b, label[1]);
+      push(key, name, "unit", label[0], `stats.${stat}`, a, b, label[1], MANA_COMPONENT[stat]);
     }
 
     for (const varName of Object.keys(next.ability).sort()) {

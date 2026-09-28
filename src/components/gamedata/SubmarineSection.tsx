@@ -9,7 +9,7 @@ import Link from "next/link";
 import SectionCard from "@/components/SectionCard";
 import { statusLabel } from "@/lib/format";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
-import { mismatchCellLines, sourceLineText, submarineCellText } from "./submarineText";
+import { MIDPATCH_MISMATCH_CAVEAT, mismatchCellLines, mismatchNoteText, sourceLineText, submarineCellText } from "./submarineText";
 import type { SubmarineSummary } from "@/lib/gamedata";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 
@@ -157,8 +157,11 @@ export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionPr
                         <span className="text-fg">{line.after}</span>
                       </span>
                       <span className="font-mono text-xs tabular-nums text-muted">
-                        패치노트 {line.noteBefore} ⇒ {line.noteAfter}
+                        {mismatchNoteText(line, "패치노트")}
                       </span>
+                      {line.midpatch ? (
+                        <span className="basis-full font-body text-xs text-muted">{MIDPATCH_MISMATCH_CAVEAT}</span>
+                      ) : null}
                     </div>
                   ))}
                 </li>

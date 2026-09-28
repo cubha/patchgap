@@ -70,6 +70,19 @@ export function submarineCellLines(changes: readonly GameDataChange[]): readonly
 export interface MismatchLine extends SubmarineLine {
   readonly noteBefore: string;
   readonly noteAfter: string;
+  /** 어긋난 노트가 중간 패치 절의 것(R9) — 화면은 출처 이름을 바꾸고 사유 한 줄을 붙인다. */
+  readonly midpatch: boolean;
+}
+
+/**
+ * 중간 패치 불일치의 사유(2026-09-28, 이월 R9). 「노트가 틀렸다」가 아니다 — 중간 패치 핫픽스는 게임 파일에
+ * 늦게 실리거나 서버에만 있을 수 있고, 이 축이 대조하는 것은 게임 파일이다(TFT 18.2 마오카이: 16.18·16.19 모두 90).
+ */
+export const MIDPATCH_MISMATCH_CAVEAT = "중간 패치 값은 게임 파일에 늦게 실리거나 서버에만 있을 수 있습니다";
+
+/** 노트 쪽 값 한 줄 — 중간 패치면 출처 이름을 「중간 패치」로 바꾼다. */
+export function mismatchNoteText(line: MismatchLine, source: "노트" | "패치노트"): string {
+  return `${line.midpatch ? "중간 패치" : source} ${line.noteBefore} ⇒ ${line.noteAfter}`;
 }
 
 /**
@@ -93,6 +106,7 @@ export function mismatchCellLines(changes: readonly GameDataChange[]): readonly 
       after: gameDataValue(change.after),
       noteBefore: mismatch.noteBefore,
       noteAfter: mismatch.noteAfter,
+      midpatch: mismatch.midpatch === true,
     });
   }
   return out;
