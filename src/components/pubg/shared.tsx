@@ -4,6 +4,8 @@
 // 표본 성격 고지는 방법론에만 붙는다(브리핑·대조표는 결과만).
 import type { ReactNode } from "react";
 import SiteFooter from "@/components/SiteFooter";
+import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
+import type { ObservationFailure } from "@/pipeline/types";
 
 export function pct(value: number, digits = 1): string {
   return `${(value * 100).toFixed(digits)}%`;
@@ -62,7 +64,18 @@ export function PubgFooter({ generatedAt, nVerdicts }: { generatedAt: string; nV
 
 /** 집계 산출물이 없을 때의 정직한 빈 화면 — 정적 export라 라우트는 항상 빌드된다(게이트는
  * 드롭다운 옵션을 가릴 뿐이므로, 직접 URL로 들어온 사람에게는 이 화면이 답한다). */
-export function PubgUnavailable() {
+/** PUBG 화면을 못 그릴 때 — `failure`가 있으면 관측만 없는 상태다(C13·C14, `TftUnavailable`과 같은 규약). */
+export function PubgUnavailable({ failure }: { failure?: ObservationFailure | null } = {}) {
+  if (failure) {
+    return (
+      <div className="py-12">
+        <h1 className="font-display text-2xl font-bold text-fg">PUBG — 관측 전</h1>
+        <p role="status" data-observation={failure.reason} className="mt-3 text-sm leading-relaxed text-muted" style={{ maxWidth: "var(--measure)" }}>
+          {observationReasonLabel(failure.reason)} 이 화면은 관측이 있어야 채워집니다 — 패치노트는 PUBG 홈에서 볼 수 있습니다.
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="py-12">
       <h1 className="font-display text-2xl font-bold text-fg">PUBG 어댑터 · 미연결</h1>

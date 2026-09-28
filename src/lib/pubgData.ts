@@ -7,7 +7,8 @@
 // 배포되면 LoL 본편 신뢰도까지 깎이므로 "데이터가 없으면 아예 없다"가 기본값이다.
 import fs from "node:fs";
 import path from "node:path";
-import type { MatchStatus } from "@/pipeline/types";
+import type { MatchStatus, ObservationFailure } from "@/pipeline/types";
+import { isObservationStub } from "@/pipeline/shared/observation-stub";
 import type { PubgPatchAggregate } from "@/pipeline/aggregate/pubg-weapons";
 import type { PubgAccuracyStat } from "@/pipeline/aggregate/pubg-accuracy";
 import type { PubgMapAggregate, PubgMapDeltaRow } from "@/pipeline/aggregate/pubg-maps";
@@ -83,7 +84,8 @@ export function pubgPair(): { from: string; to: string } | null {
  */
 export function loadPubg(): PubgBundle | null {
   const deltas = readJson<PubgDeltasFile>("deltas.json");
-  if (!deltas) return null;
+  // 관측 stub(C14)이면 관측 번들이 아니다 — 선언 축은 `loadPubgDeclaration()`이 준다.
+  if (!deltas || isObservationStub(deltas.meta)) return null;
   const { from, to } = deltas.meta;
   const before = readJson<PubgPatchAggregate>(`weapons-${from}.json`);
   const after = readJson<PubgPatchAggregate>(`weapons-${to}.json`);
@@ -99,6 +101,29 @@ export function loadPubg(): PubgBundle | null {
     notes: notesFile.items,
     accuracyComparison: accuracyFile?.rows ?? null,
   };
+}
+
+/** 선언 축만 있는 최신 쌍(C13·C14) — 수기 노트와 관측이 없는 사유. */
+export interface PubgDeclaration {
+  from: string;
+  to: string;
+  generatedAt: string;
+  notes: PubgNoteItem[];
+  failure: ObservationFailure;
+}
+
+/**
+ * `deltas.json`이 관측 stub이면 그 쌍의 선언 축을 준다. 관측 쌍이거나 노트가 없으면 null. 화면은
+ * `loadPubg()`가 null일 때 이것을 본다 — 수기로 넣은 노트가 비교 구간을 기다리느라 숨지 않게(결정 8).
+ */
+export function loadPubgDeclaration(): PubgDeclaration | null {
+  const stub = readJson<{ meta: { from: string; to: string; generatedAt: string; observationFailed?: ObservationFailure } }>(
+    "deltas.json"
+  );
+  if (!stub || !stub.meta.observationFailed) return null;
+  const notesFile = readJson<{ items: PubgNoteItem[] }>(`notes-${stub.meta.to}.json`);
+  if (!notesFile) return null;
+  return { from: stub.meta.from, to: stub.meta.to, generatedAt: stub.meta.generatedAt, notes: notesFile.items, failure: stub.meta.observationFailed };
 }
 
 export interface PubgMapDeltasFile {

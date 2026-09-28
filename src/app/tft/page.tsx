@@ -19,7 +19,8 @@ import { selectTftCauseRows } from "@/components/tft/causeRows";
 import { tftEntityHref } from "@/lib/tftRoutes";
 import { tftEntityRows } from "@/components/tft/entityRows";
 import { entityTypeLabel, metricLabel } from "@/lib/format";
-import { loadTft, loadTftAssets } from "@/lib/tftData";
+import { loadTft, loadTftAssets, loadTftDeclaration, type TftDeclaration } from "@/lib/tftData";
+import DeclarationOnly from "@/components/DeclarationOnly";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
@@ -122,6 +123,9 @@ function briefingGroups(rows: DeltaRecord[], qAlpha?: number): BriefingGroup[] {
 export default function TftPage() {
   const bundle = loadTft();
   if (!bundle) {
+    // 최신 쌍이 관측 stub이면 선언 축(노트 + 수치 축)만 그린다(C13·C14) — 새 노트가 관측을 기다리며 숨지 않게.
+    const declaration = loadTftDeclaration();
+    if (declaration) return <TftDeclarationView declaration={declaration} />;
     return (
       <main>
         <Container>
@@ -317,6 +321,29 @@ export default function TftPage() {
         </div>
       </Container>
       <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.rows.length} />
+    </main>
+  );
+}
+
+/**
+ * 선언 축만 있는 쌍(C13·C14)의 홈 — 노트와 수치 축(F9)만, 관측 영역은 회색 사유. 기본 내보내기 **아래**에
+ * 두는 이유: 화면 동등성 테스트가 첫 `return (`부터의 JSX 순서를 본다(본 브리핑의 블록 순서 계약).
+ */
+function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
+  const submarine = summarizeGameData(loadGameDataDiff("tft", declaration.from, declaration.to));
+  return (
+    <main>
+      <Container>
+        <DeclarationOnly
+          from={declaration.from}
+          to={declaration.to}
+          failure={declaration.failure}
+          notes={declaration.notes.items.map((n) => ({ id: n.id, group: n.entity, summary: n.summary, anchorUrl: n.anchorUrl }))}
+          // 관측 없는 쌍엔 상세 라우트가 없다 — 링크 없이 이름만 그린다.
+          extra={submarine ? <SubmarineSection summary={submarine} hrefOf={() => null} /> : null}
+        />
+        <TftFooter generatedAt={declaration.generatedAt} nVerdicts={0} />
+      </Container>
     </main>
   );
 }

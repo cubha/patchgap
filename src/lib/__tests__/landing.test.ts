@@ -105,7 +105,9 @@ describe("landingCards — 커밋된 산출물 기준", () => {
 
   it("미공지는 유의한 관측의 부분집합이다 — 합산 타일이 자기모순을 말하지 않는다", () => {
     for (const c of cards) {
-      expect(c.unannounced, c.id).toBeLessThanOrEqual(c.significant);
+      // 관측 전 카드(C13·C14)는 두 값이 모두 null(「—」)이다 — 그때도 자기모순은 없다.
+      expect(c.unannounced === null, c.id).toBe(c.significant === null);
+      expect(c.unannounced ?? 0, c.id).toBeLessThanOrEqual(c.significant ?? 0);
     }
   });
 });

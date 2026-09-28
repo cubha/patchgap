@@ -6,8 +6,8 @@ import { AmbientProvider } from "@/components/AmbientContext";
 import GameRoot from "@/components/GameRoot";
 import Header, { type GameChrome } from "@/components/Header";
 import type { GameId } from "@/lib/game";
-import { loadPubg } from "@/lib/pubgData";
-import { loadTft } from "@/lib/tftData";
+import { loadPubg, loadPubgDeclaration } from "@/lib/pubgData";
+import { loadTft, loadTftDeclaration } from "@/lib/tftData";
 import { getDefaultPair, listPatchPairs, listPatches, loadSummary } from "@/lib/data";
 import { fmtKst } from "@/lib/format";
 import "./globals.css";
@@ -82,7 +82,7 @@ function getLolChrome(): GameChrome {
  */
 function getPubgChrome(): GameChrome | null {
   const bundle = loadPubg();
-  if (!bundle) return null;
+  if (!bundle) return declarationChrome(loadPubgDeclaration(), ["Steam", "전 지역·전 티어", "봇 포함"]);
   const pair = { from: bundle.deltas.meta.from, to: bundle.deltas.meta.to };
   return {
     pairs: [pair],
@@ -98,6 +98,27 @@ function getPubgChrome(): GameChrome | null {
 }
 
 /**
+ * 선언 축만 있는 쌍의 크롬(C13·C14) — 쌍과 시각은 말하고 표본 n은 `null`(관측 전)로 둔다. 크롬이
+ * null이면 드롭다운에서 게임이 통째로 빠져, 새 패치노트가 있는데도 들어갈 길이 사라진다.
+ */
+function declarationChrome(
+  declaration: { from: string; to: string; generatedAt: string } | null,
+  sampleChips: string[]
+): GameChrome | null {
+  if (!declaration) return null;
+  const pair = { from: declaration.from, to: declaration.to };
+  return {
+    pairs: [pair],
+    currentPair: pair,
+    nBefore: null,
+    nAfter: null,
+    aggregatedAt: declaration.generatedAt,
+    sampleChips,
+    snapshotCaption: fmtKst(declaration.generatedAt),
+  };
+}
+
+/**
  * TFT 크롬 — PUBG와 같은 출하 게이트. 집계가 없으면 null이고 드롭다운에서 빠진다.
  *
  * 표본 칩이 LoL과 같은 어휘인 이유: TFT도 `tft-league-v1` 챌린저~마스터 래더에서 시드를
@@ -106,7 +127,7 @@ function getPubgChrome(): GameChrome | null {
  */
 function getTftChrome(): GameChrome | null {
   const bundle = loadTft();
-  if (!bundle) return null;
+  if (!bundle) return declarationChrome(loadTftDeclaration(), ["KR", "Master+", "랭크"]);
   const pair = { from: bundle.deltas.meta.from, to: bundle.deltas.meta.to };
   return {
     pairs: [pair],

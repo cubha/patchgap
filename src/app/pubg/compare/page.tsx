@@ -11,7 +11,7 @@ import PageHeader from "@/components/PageHeader";
 import PubgCompareExplorer from "@/components/pubg/PubgCompareExplorer";
 import { PubgFooter, PubgUnavailable } from "@/components/pubg/shared";
 import { compareCrumbs } from "@/lib/breadcrumbs";
-import { isReportable, loadPubg, loadPubgAssets, pubgPair } from "@/lib/pubgData";
+import { isReportable, loadPubg, loadPubgAssets, pubgPair, loadPubgDeclaration } from "@/lib/pubgData";
 import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 
 // 쌍은 산출물에서 읽는다(`pubgPair`) — 하드코딩하면 다음 패치에서 설명문만 옛 쌍을 말한다.
@@ -30,7 +30,7 @@ export default function PubgComparePage() {
     return (
       <main>
         <Container>
-          <PubgUnavailable />
+          <PubgUnavailable failure={loadPubgDeclaration()?.failure} />
         </Container>
       </main>
     );

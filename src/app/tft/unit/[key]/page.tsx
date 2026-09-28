@@ -22,7 +22,7 @@ import { TFT_METRICS, effectStrength, tftEntityRows } from "@/components/tft/ent
 import { TftFooter, TftUnavailable, deltaDisplay, formatMetricValue } from "@/components/tft/shared";
 import { entityTypeLabel, isLowerBetter, metricLabel, statusLabel } from "@/lib/format";
 import { loadGameDataDiff } from "@/lib/gamedata";
-import { loadTft, loadTftAssets, type TftBundle } from "@/lib/tftData";
+import { loadTft, loadTftAssets, type TftBundle, loadTftDeclaration } from "@/lib/tftData";
 import type { DeltaMetric, DeltaRecord } from "@/pipeline/types";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import { entityKeyFromSlug as unslug, entitySlug } from "@/lib/tftRoutes";
@@ -123,7 +123,7 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
     return (
       <main>
         <Container>
-          <TftUnavailable />
+          <TftUnavailable failure={loadTftDeclaration()?.failure} />
         </Container>
       </main>
     );

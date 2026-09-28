@@ -13,7 +13,7 @@ import { tftEntityRows } from "@/components/tft/entityRows";
 import { loadGameDataDiff } from "@/lib/gamedata";
 import { TftFooter, TftSampleNotice, TftUnavailable } from "@/components/tft/shared";
 import { compareCrumbs } from "@/lib/breadcrumbs";
-import { loadTft, loadTftAssets } from "@/lib/tftData";
+import { loadTft, loadTftAssets, loadTftDeclaration } from "@/lib/tftData";
 import type { MatchStatus } from "@/pipeline/types";
 
 export const metadata = {
@@ -27,7 +27,7 @@ export default function TftComparePage() {
     return (
       <main>
         <Container>
-          <TftUnavailable />
+          <TftUnavailable failure={loadTftDeclaration()?.failure} />
         </Container>
       </main>
     );

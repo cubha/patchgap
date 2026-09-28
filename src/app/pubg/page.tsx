@@ -20,8 +20,9 @@ import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
 import { gameDataEntityCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
+import DeclarationOnly from "@/components/DeclarationOnly";
 import PubgWeaponGrid from "@/components/pubg/PubgWeaponGrid";
-import { loadPubg, loadPubgAssets, loadPubgMaps, isReportable, pubgPair } from "@/lib/pubgData";
+import { loadPubg, loadPubgAssets, loadPubgDeclaration, loadPubgMaps, isReportable, pubgPair, type PubgDeclaration } from "@/lib/pubgData";
 import { mapHref, weaponHref } from "@/lib/pubgRoutes";
 import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
 import { publicMapPath } from "@/pipeline/pubg/asset-path";
@@ -49,6 +50,9 @@ export const metadata: Metadata = {
 export default function PubgPage() {
   const bundle = loadPubg();
   if (!bundle) {
+    // `deltas.json`이 관측 stub이면 수기 노트만 그린다(C13·C14) — 비교 구간을 기다리며 노트가 숨지 않게.
+    const declaration = loadPubgDeclaration();
+    if (declaration) return <PubgDeclarationView declaration={declaration} />;
     return (
       <main>
         <Container>
@@ -302,6 +306,28 @@ export default function PubgPage() {
 
           <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
         </div>
+      </Container>
+    </main>
+  );
+}
+
+/**
+ * 선언 축만 있는 쌍(C13·C14)의 홈 — 노트와 수치 축(F9)만, 관측 영역은 회색 사유. 기본 내보내기 **아래**에
+ * 두는 이유: 화면 동등성 테스트가 첫 `return (`부터의 JSX 순서를 본다(본 브리핑의 블록 순서 계약).
+ */
+function PubgDeclarationView({ declaration }: { declaration: PubgDeclaration }) {
+  const submarine = summarizeGameData(loadGameDataDiff("pubg", declaration.from, declaration.to));
+  return (
+    <main>
+      <Container>
+        <DeclarationOnly
+          from={declaration.from}
+          to={declaration.to}
+          failure={declaration.failure}
+          notes={declaration.notes.map((n) => ({ id: n.id, group: null, summary: n.summary, anchorUrl: n.anchorUrl }))}
+          extra={submarine ? <SubmarineSection summary={submarine} hrefOf={() => null} /> : null}
+        />
+        <PubgFooter generatedAt={declaration.generatedAt} nVerdicts={0} />
       </Container>
     </main>
   );
