@@ -15,7 +15,12 @@
 // PUBG 델타 id는 `pubg:Item_Weapon_RPD_C:pickupShare` 꼴이고 후보셋 해시도 다르다.
 import type { PatchNoteItem } from "../types";
 import { deterministicSummary, type GameLlmProfile } from "./llm-profile";
-import { signedPercentClaimsGrounded, totalDropAttributionGrounded } from "./cause-factuality";
+import {
+  noteNumbersOf,
+  signedPercentClaimsGrounded,
+  totalDropAttributionGrounded,
+  unsignedPercentChangeClaimsGrounded,
+} from "./cause-factuality";
 import type { PubgDeltaRow } from "./pubg-delta";
 
 const SYSTEM_INSTRUCTIONS = [
@@ -126,14 +131,18 @@ export function createPubgLlmProfile(
       delta.n.after,
       ...[delta.before, delta.after].filter((v): v is number => v !== null).map((v) => Math.round(v * 10000) / 100),
     ],
-    // C3 — 부호 백분율은 이 델타·쌍 맥락의 수치여야 하고, 전체 감소 귀속은 인용 조항 무기가 과반이어야 한다.
+    // C3 — 부호 백분율은 이 델타·쌍 맥락의 수치여야 하고(부호 없는 「X% 줄어」는 노트 수치도 근거, R14), 전체 감소 귀속은 인용 조항 무기가 과반이어야 한다.
     isCauseGrounded: (text: string, note: PatchNoteItem, delta: PubgDeltaRow) => {
       const allowed = [delta.relChange, delta.relCi[0], delta.relCi[1]].filter((v): v is number => v !== null);
       if (context) allowed.push(context.redistribution, context.totalPickupsRelChange);
       const shares = context?.beforeShareByWeapon;
       const citedShare =
         shares === undefined ? null : (noteWeaponKeys.get(note.id) ?? []).reduce((sum, key) => sum + (shares.get(key) ?? 0), 0);
-      return signedPercentClaimsGrounded(text, allowed) && totalDropAttributionGrounded(text, citedShare);
+      return (
+        signedPercentClaimsGrounded(text, allowed) &&
+        unsignedPercentChangeClaimsGrounded(text, allowed, noteNumbersOf(note)) &&
+        totalDropAttributionGrounded(text, citedShare)
+      );
     },
     fallbackSummary: (delta: PubgDeltaRow) =>
       deterministicSummary({

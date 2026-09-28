@@ -72,6 +72,36 @@ export function signedPercentClaimsGrounded(text: string, allowed: readonly numb
   return true;
 }
 
+// 부호 **없는** 백분율 + 변화 동사 — 「17.9% 줄어」·「30% 감소」. 앞에 부호·숫자가 붙은 것은 ②가 보고, %p는 제외.
+const UNSIGNED_PERCENT_CHANGE =
+  /(?<![+\-−\d.])(\d+(?:\.\d+)?)%(?!p)\s*(?:가량|정도|쯤|이나|나|가|이)?\s*(?:줄|감소|늘|증가|올랐|오르|상승|떨어|하락|빠졌|빠지)/g;
+
+/**
+ * ②′ 부호 없는 「X% 줄어/늘어」(2026-09-28, 이월 R14). 변화 동사가 붙은 백분율은 변화량 주장이다 —
+ * 허용 값(비율, ②와 같은 소수 첫째 자리 비교)이거나 인용 노트가 말한 수치(`noteNumbers`, 정확히 일치)여야
+ * 한다. ②가 이 형태를 뺀 이유(노트 수치와 구분 불가)는 노트 수치를 근거 출처로 넣어 푼다.
+ */
+export function unsignedPercentChangeClaimsGrounded(
+  text: string,
+  allowed: readonly number[],
+  noteNumbers: readonly number[]
+): boolean {
+  const allowedTenths = allowed.map((v) => Math.round(Math.abs(v) * 1000));
+  for (const m of text.matchAll(UNSIGNED_PERCENT_CHANGE)) {
+    const value = Number(m[1]);
+    const tenths = Math.round(value * 10);
+    if (allowedTenths.some((a) => Math.abs(a - tenths) <= 1)) continue;
+    if (noteNumbers.includes(value)) continue;
+    return false;
+  }
+  return true;
+}
+
+/** 노트 한 건이 말한 수치 전부(before·after·요약) — ②′의 근거 출처. */
+export function noteNumbersOf(note: ArrowSource): number[] {
+  return [...numbersOf(note.before ?? ""), ...numbersOf(note.after ?? ""), ...numbersOf(note.summary)];
+}
+
 const TOTAL_DROP = /전체\s*(?:무기\s*)?획득(?:[^.。]|\.\d)*?(?:감소|줄)/;
 
 /** 전체 감소를 한 조항 탓으로 돌리려면 그 조항 무기가 이전 전체 획득의 과반이어야 한다. */
