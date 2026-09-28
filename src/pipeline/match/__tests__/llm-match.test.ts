@@ -17,6 +17,7 @@ import {
   verifyCauses,
   namesOtherEntityThanCited,
   verifySummaryCites,
+  summaryCitesAllMismatched,
 } from "../llm-match";
 import { lolLlmProfile, SYSTEM_INSTRUCTIONS_TEXT } from "../llm-profile-lol";
 import type { DdragonChampion, DdragonData, DdragonItem } from "../ddragon";
@@ -814,5 +815,29 @@ describe("요약 100자 폴백·재요청 누수(C1)", () => {
     const repaired = { summary: "짧아진 요약입니다.", summaryCites: ["note:b"], causes: [] };
     expect(mergeRepairedProse(original, repaired, () => true)).toMatchObject({ summary: "짧아진 요약입니다.", summaryCites: ["note:b"] });
     expect(mergeRepairedProse(original, repaired, () => false)).toMatchObject({ summary: long, summaryCites: ["note:a"] });
+  });
+});
+
+// C4(2026-09-28): 요약도 원인과 같은 「문장 ↔ 인용 대상」 게이트를 받는다. 단 요약은 여러 노트를 한 문장에
+// 엮으므로 **인용 전부가** 다른 대상을 말할 때만 미검증으로 돌린다(현 데이터 오탐 0/93 실측 기준).
+describe("요약 ↔ 인용 대상 게이트(C4)", () => {
+  const aatrox = note({ id: "n1", entity: "아트록스" });
+  const graves = note({ id: "n2", entity: "그레이브즈" });
+  const pool = [aatrox, graves];
+  it("인용 전부가 문장이 말하지 않는 대상이면 참(=미검증 사유)", () => {
+    expect(summaryCitesAllMismatched("그레이브즈 Q 상향으로 정글 경쟁이 달라졌습니다.", ["n1"], pool, null)).toBe(true);
+  });
+  it("인용 하나라도 문장과 맞으면 거짓", () => {
+    expect(summaryCitesAllMismatched("그레이브즈와 아트록스 변경이 겹쳤습니다.", ["n1", "n2"], pool, null)).toBe(false);
+  });
+  it("인용이 없으면 거짓 — 델타 수치만의 요약이다", () => {
+    expect(summaryCitesAllMismatched("그레이브즈 얘기입니다.", [], pool, null)).toBe(false);
+  });
+  it("엔진이 요약을 미검증으로 내보낸다", async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "llm-c4-"));
+    const parseFn = vi.fn().mockResolvedValue(fakeResponse({ causes: [], summary: "그레이브즈 Q 상향 영향입니다.", summaryCites: ["n1"] }));
+    const out = await inferIndirectCandidates([delta({ id: "d1", entityName: "리신", status: "unannounced" })], pool, lolLlmProfile(makeDdragon()), { client: fakeClient(parseFn), cacheDir: dir });
+    fs.rmSync(dir, { recursive: true, force: true });
+    expect(out.deltas[0].llm?.summaryVerified).toBe(false);
   });
 });
