@@ -14,7 +14,7 @@ import { detailCrumbs } from "@/lib/breadcrumbs";
 import SectionCard from "@/components/SectionCard";
 import PubgDetailSplash, { type PubgDetailStat } from "@/components/pubg/PubgDetailSplash";
 import { PubgFooter, PubgUnavailable, pct } from "@/components/pubg/shared";
-import { loadPubg, loadPubgAssets, loadPubgMaps, pubgPair } from "@/lib/pubgData";
+import { loadPubg, loadPubgAssets, loadPubgMaps, pubgPair, loadPubgDeclaration } from "@/lib/pubgData";
 import { mapKeyFromSlug, mapSlug, weaponHref } from "@/lib/pubgRoutes";
 import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
 import { publicMapPath } from "@/pipeline/pubg/asset-path";
@@ -63,7 +63,7 @@ export default async function PubgMapPage({ params }: PageProps) {
     return (
       <main>
       <Container>
-        <PubgUnavailable />
+        <PubgUnavailable failure={loadPubgDeclaration()?.failure} />
       </Container>
     </main>
     );

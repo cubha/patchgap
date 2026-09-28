@@ -610,3 +610,105 @@ describe("resolveDirection — 최신 패치 실측 사례", () => {
   });
 });
 
+
+// C12(2026-09-28 잔여 로드맵): 「소모」 맨몸 부분일치는 26.16 core 「미니언 처치 시 중첩 소모 15 및 20 ⇒
+// 18 및 21」(원거리 딜러 마법 저항력)을 nerf로 뒤집는다 — 중첩을 더 쓰는 것은 자원 비용이 아니다.
+// 자원 소모(체력·마나·기력)만 낮을수록 좋다. 「판매」「환급」은 받는 쪽 값이라 클수록 좋다.
+describe("resolveDirection — 소모 키워드 좁히기(C12)", () => {
+  it("중첩 소모는 자원 비용이 아니다 — 늘면 buff(기본 규칙)", () => {
+    expect(resolveDirection("미니언 처치 시 중첩 소모", "15 및 20", "18 및 21", null)).toBe("buff");
+  });
+  it("체력·마나·기력 소모는 여전히 낮을수록 좋다", () => {
+    expect(resolveDirection("주술 불길한 거래 체력 소모", "체력 3", "체력 2", null)).toBe("buff");
+    expect(resolveDirection("마나 소모량", "40", "45", null)).toBe("nerf");
+    expect(resolveDirection("기력 소모량", "60/60/60/60/60", "60/55/50/45/40", null)).toBe("buff");
+  });
+  it("판매·환급 가격은 클수록 좋다", () => {
+    expect(resolveDirection("판매 가격", "1골드", "2골드", null)).toBe("buff");
+    expect(resolveDirection("환급 골드", "3골드", "2골드", null)).toBe("nerf");
+  });
+});
+
+// C9(2026-09-28 잔여 로드맵): 26.19 아레나는 대상 이름이 `h4` 하나이고 바로 뒤에 스킬 라벨 `p>strong`이
+// 온다 — 소개 문단(blockquote.context)이 없어서 위 규칙이 새 대상을 열지 못해 36줄이 첫 대상
+// 「아펠리오스」로, 클래식 17줄이 「질리언」으로 묶였다. 「h4 + 다음 형제 p>strong」도 새 대상을 연다.
+// 범주 h4(「체계」 등)가 이 모양이면 앞 대상을 끊고, 그 아래 첫 라벨이 대상이 된다.
+const H4_ENTITY_HTML = [
+  '<div id="patch-notes-container">',
+  '<header class="header-primary"><h2 id="patch-arena">아레나</h2></header>',
+  '<div class="content-border"><div class="white-stone accent-before"><div>',
+  '<h4 class="change-detail-title">아펠리오스</h4>',
+  "<p><strong>기본 능력치</strong></p>",
+  "<ul><li>체력 증가량: 102 ⇒ 114</li></ul>",
+  '<h4 class="change-detail-title">바드</h4>',
+  "<p><strong>기본 지속 효과 - 방랑자의 부름</strong></p>",
+  "<ul><li>업그레이드 단계당 고대의 종 요구치: 4 ⇒ 3</li></ul>",
+  '<h4 class="change-detail-title">벨베스</h4>',
+  "<p><strong>E - 여제의 소용돌이</strong></p>",
+  "<ul><li>기본 공격당 적중 시 효과 효율: 12~24 ⇒ 8~16</li></ul>",
+  "<p><strong>R - 끝없는 연회</strong></p>",
+  "<ul><li>기본 지속 효과 추가 공격력 계수: 3 ⇒ 1</li></ul>",
+  "</div></div></div>",
+  '<header class="header-primary"><h2 id="patch-classic">클래식</h2></header>',
+  '<div class="content-border"><div class="white-stone accent-before"><div>',
+  '<h4 class="change-detail-title">챔피언</h4>',
+  "<p><strong>질리언</strong></p>",
+  '<blockquote class="blockquote context"><p>클래식 질리언.</p></blockquote>',
+  "<p><strong>Q - 시한 폭탄</strong></p>",
+  "<ul><li>피해량: 10 ⇒ 20</li></ul>",
+  '<h4 class="change-detail-title">체계</h4>',
+  "<p><strong>포탑 방패</strong></p>",
+  "<ul><li>방어력: 10 ⇒ 20</li></ul>",
+  "</div></div></div>",
+  "</div>",
+].join("");
+
+describe("parsePatchNotes — h4 대상 라벨(C9)", () => {
+  const parsed = parsePatchNotes(H4_ENTITY_HTML, {
+    patch: "26.19",
+    sourceUrl: "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/",
+  });
+  it("h4 뒤에 스킬 라벨이 오면 그 h4가 새 대상이다 — 첫 대상으로 이월하지 않는다", () => {
+    const arena = parsed.items.filter((i) => i.modeScope === "arena");
+    expect(arena.map((i) => [i.entity, i.skill])).toEqual([
+      ["아펠리오스", "기본 능력치"],
+      ["바드", "기본 지속 효과 - 방랑자의 부름"],
+      ["벨베스", "E - 여제의 소용돌이"],
+      ["벨베스", "R - 끝없는 연회"],
+    ]);
+  });
+  it("범주 h4가 새 묶음을 열면 앞 대상에 이월하지 않는다", () => {
+    const classic = parsed.items.filter((i) => i.modeScope === "classic");
+    expect(classic.map((i) => i.entity)).toEqual(["질리언", "포탑 방패"]);
+  });
+});
+
+// C9 보강: 26.19 클래식 「아이템」 범주 아래 라벨은 아이템 이름이다(스킬이 없다) — 소개 문단 없이 이어져도
+// 각각 대상이다. 「망토와 단검」 뒤의 「달빛 마법검」·「즈롯 차원문」이 첫 아이템의 스킬로 묶이지 않는다.
+describe("parsePatchNotes — 클래식 아이템 범주(C9)", () => {
+  const html = [
+    '<div id="patch-notes-container">',
+    '<header class="header-primary"><h2 id="patch-classic">클래식</h2></header>',
+    '<div class="content-border"><div class="white-stone accent-before"><div>',
+    '<h4 class="change-detail-title">아이템</h4>',
+    "<p><strong>망토와 단검</strong></p>",
+    "<ul><li>조합식: 민첩성의 망토 + 단검. 총 1,130골드</li></ul>",
+    "<p><strong>달빛 마법검</strong></p>",
+    "<ul><li>조합식: 추적자의 팔목 보호대 + 음전자 망토. 총 2,300골드</li></ul>",
+    '<h4 class="change-detail-title">챔피언</h4>',
+    "<p><strong>피즈</strong></p>",
+    '<blockquote class="blockquote context"><p>피즈.</p></blockquote>',
+    "<p><strong>Q - 성게 찌르기</strong></p>",
+    "<ul><li>피해량: 10 ⇒ 20</li></ul>",
+    "</div></div></div>",
+    "</div>",
+  ].join("");
+  const parsed = parsePatchNotes(html, { patch: "26.19", sourceUrl: "https://example.com/26-19/" });
+  it("아이템 범주 아래 라벨은 각각 대상이고, 챔피언 범주로 돌아가면 스킬 규칙이 다시 선다", () => {
+    expect(parsed.items.map((i) => [i.entity, i.skill])).toEqual([
+      ["망토와 단검", null],
+      ["달빛 마법검", null],
+      ["피즈", "Q - 성게 찌르기"],
+    ]);
+  });
+});

@@ -87,6 +87,8 @@ import { notesCacheFile } from "../shared/paths";
  * 낮을수록 좋은 스탯 — 값이 늘면 nerf, 줄면 buff로 반전한다(그 외 스탯은 늘면 buff).
  * 가격·기준치·요구치·소모·지연은 2026-09-27 감사에서 추가했다 — TFT 18.3에서 「목숨값 가격 1→2골드」가
  * buff, 「빛비늘 정수 지연 라운드 8→6」이 nerf로 찍히는 등 약 9줄이 반대였다(TFT 파서도 이 함수를 쓴다).
+ * 「소모」는 **자원 소모(체력·마나·기력)**로 좁혔다(2026-09-28, C12) — 맨몸 「소모」는 26.16 core
+ * 「미니언 처치 시 중첩 소모 15 및 20 ⇒ 18 및 21」을 nerf로 뒤집었다. 중첩을 더 쓰는 것은 비용이 아니다.
  */
 const LOWER_IS_BETTER_KEYWORDS = [
   "재사용 대기시간",
@@ -97,15 +99,16 @@ const LOWER_IS_BETTER_KEYWORDS = [
   "가격",
   "기준치",
   "요구치",
-  "소모",
+  "체력 소모",
   "지연",
 ];
 
 /**
  * 위 목록의 뜻을 **다시 뒤집는** 접미 — 「재사용 대기시간 반환」은 돌려받는 양이라 클수록 좋다
- * (26.19 아레나 1.5→2.5초가 nerf로 찍혔다).
+ * (26.19 아레나 1.5→2.5초가 nerf로 찍혔다). 「판매」「환급」도 받는 쪽 값이다 — 「판매 가격」이 「가격」에
+ * 걸려 반대로 찍히지 않게 한다(C12).
  */
-const HIGHER_IS_BETTER_OVERRIDES = ["반환"];
+const HIGHER_IS_BETTER_OVERRIDES = ["반환", "판매", "환급"];
 
 /** 원문이 수치를 바꾸되 "효과는 같다"고 밝힌 줄 — 방향이 아니라 조정이다(TFT 18.3 니달리 관통력). */
 const SAME_EFFECT_PATTERN = /(?:효과|성능)[은는]?\s*(?:전과|이전과|기존과)?\s*동일/u;
@@ -448,7 +451,11 @@ function isNarrativeStrong($: cheerio.CheerioAPI, node: AnyNode): boolean {
  */
 function startsNewEntity($: cheerio.CheerioAPI, node: AnyNode): boolean {
   const host = node.type === "tag" && node.name === "strong" ? $(node).parent() : $(node);
-  return host.next().is("blockquote.context");
+  if (host.next().is("blockquote.context")) return true;
+  // C9(2026-09-28): 26.19 아레나·클래식은 대상 이름이 `h4` 하나이고 소개 문단 없이 바로 스킬 라벨
+  // `p>strong`이 온다(26.16 23·26.17 7·26.18 2·26.19 24건). 그 모양의 h4도 새 대상(또는 새 범주)을 연다 —
+  // 없으면 36줄이 첫 대상 「아펠리오스」로 이월됐다. 스킬 라벨(`p>strong`) 자신에는 적용하지 않는다.
+  return node.type === "tag" && node.name === "h4" && host.next().is("p") && host.next().children("strong").length > 0;
 }
 
 /**
@@ -473,6 +480,8 @@ function parseNoteBlock(
 
   let currentSkill: string | null = null;
   let lastLabelAnchorId: string | null = null;
+  // 클래식 「아이템」 범주 아래인가(C9) — 아이템에는 스킬이 없어 라벨마다 대상이다.
+  let inItemCategory = false;
   const rawLines: RawNoteLine[] = [];
 
   block
@@ -498,12 +507,18 @@ function parseNoteBlock(
       const label = $(node).text().trim();
       if (label.length === 0) return;
       // 새 엔티티가 시작되는가 — 라벨이 자기 소개 문단(blockquote.context)을 데리고 있으면 그렇다.
-      const opensEntity = h3.length === 0 && startsNewEntity($, node);
+      const opensEntity = h3.length === 0 && (startsNewEntity($, node) || (inItemCategory && node.type === "tag" && node.name === "strong"));
       if (opts.skipCategoryLabels && (entity === null || opensEntity) && classicCategoryFor(label) !== null) {
+        inItemCategory = classicCategoryFor(label) === "item";
         // 클래식/아레나 섹션의 범주 라벨("챔피언"/"아이템"/"룬 및 진척도"/"체계" 등)은 엔티티
         // 자체가 아니다 — 건너뛴다. `classicCategoryFor`를 재사용해 인식 범위를 한 곳에 고정한다
         // (전에는 "챔피언"/"아이템"만 걸러 "룬 및 진척도"/"체계" 라벨 자체가 엔티티로 오인되고
         // 그 뒤 진짜 엔티티명이 skill 자리로 밀리는 결함이 있었다 — scope-critic 라운드 2).
+        // 범주가 새 묶음을 열면 앞 대상을 끊는다(C9) — 그 아래 첫 라벨이 대상이 된다.
+        if (opensEntity) {
+          entity = null;
+          currentSkill = null;
+        }
         return;
       }
       lastLabelAnchorId = $(node).attr("id") ?? null;

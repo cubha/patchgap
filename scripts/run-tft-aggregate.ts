@@ -21,14 +21,35 @@ import { isMainModule, parseCliArgs } from "./shared/cli";
 interface CliArgs {
   patch: string;
   dataRoot: string;
+  /** 이 시각 이하 매치만 집계한다(C8). 없으면 전부. */
+  untilMs: number | null;
 }
 
 export function parseArgs(argv: string[]): CliArgs {
   const raw = parseCliArgs("run-tft-aggregate", argv, [
     { name: "patch", type: "patch", required: true },
     { name: "dataRoot", type: "string", default: "data" },
+    { name: "until", type: "string" },
   ]);
-  return { patch: String(raw.patch), dataRoot: String(raw.dataRoot) };
+  const until = raw.until === undefined ? null : Date.parse(String(raw.until));
+  if (until !== null && Number.isNaN(until)) throw new Error(`run-tft-aggregate: --until이 시각이 아니다: ${String(raw.until)}`);
+  return { patch: String(raw.patch), dataRoot: String(raw.dataRoot), untilMs: until };
+}
+
+/**
+ * `--until` 시각 이하 매치만 남긴다(경계 포함, 2026-09-28 C8). 18.2 원본은 커밋 집계(2026-09-20 12:57Z)
+ * 뒤에 4매치가 더 붙어 있어, 자르지 않고 재집계하면 이미 화면에 나간 쌍의 숫자가 바뀐다.
+ */
+export function cutAtUntil(slim: TftMatchSlim[], untilMs: number | null): TftMatchSlim[] {
+  return untilMs === null ? slim : slim.filter((m) => m.gameDatetimeMs <= untilMs);
+}
+
+/**
+ * 관측 시점 — 집계에 들어간 가장 늦은 매치 시각(ISO). C13 재수집 판단(`planTftRun`)이 이 값으로
+ * 「관측이 N일차 이후 표본을 담았나」를 본다. 실행 날짜가 아니라 **표본의** 시각이다.
+ */
+export function observedUntilOf(slim: TftMatchSlim[]): string {
+  return new Date(Math.max(...slim.map((m) => m.gameDatetimeMs))).toISOString();
 }
 
 export function readRawMatches(file: string, patch: string): { slim: TftMatchSlim[]; dropped: number } {
@@ -72,8 +93,13 @@ async function main(): Promise<void> {
     throw new Error(`원본이 없다: ${rawFile} — 먼저 npm run pipeline:tft-collect 를 돌린다.`);
   }
 
-  const { slim, dropped } = readRawMatches(rawFile, args.patch);
-  console.log(`[tft-aggregate] ${args.patch}: 매치 ${slim.length} · 버림 ${dropped}`);
+  const read = readRawMatches(rawFile, args.patch);
+  const slim = cutAtUntil(read.slim, args.untilMs);
+  const { dropped } = read;
+  console.log(
+    `[tft-aggregate] ${args.patch}: 매치 ${slim.length} · 버림 ${dropped}` +
+      (args.untilMs === null ? "" : ` · --until로 제외 ${read.slim.length - slim.length}`)
+  );
   if (slim.length === 0) throw new Error("읽을 수 있는 매치가 0건이다 — 변환이 깨졌는지 확인한다.");
 
   const agg = aggregateTftBoards(slim, args.patch);
@@ -97,6 +123,7 @@ async function main(): Promise<void> {
     `${JSON.stringify(
       {
         patch: agg.patch,
+        observedUntil: observedUntilOf(slim),
         matches: agg.matches,
         boards: agg.boards,
         droppedMatches: dropped,

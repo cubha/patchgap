@@ -108,7 +108,7 @@ function daysBetweenKst(fromKst: string, toKst: string): number {
 
 /**
  * 오늘 수집을 돌려야 하나 — `collect.yml`의 heredoc이 하던 판정을 **검증 받는 자리로** 옮긴 것이다.
- * 순수 함수라 단위 테스트가 고정한다(TFT `determineTftRun`·PUBG `determinePubgRun`과 같은 자리).
+ * 순수 함수라 단위 테스트가 고정한다(TFT `planTftRun`·PUBG `planPubgRun`과 같은 자리).
  */
 export function determineLolRun(input: LolRunInput): LolRunDecision {
   const sorted = Object.keys(input.calendar).sort(comparePatchId);

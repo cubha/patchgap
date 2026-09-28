@@ -1,4 +1,9 @@
 @import "tailwindcss";
+/* 문서 폴더는 스캔하지 않는다(2026-09-28, C16). Tailwind v4 자동 소스 감지가 repo 전체를 훑어
+   `docs/plan/*.md`에 적힌 클래스 문자열(`mt-[120px]`·`pt-[152px]`)로 **아무도 쓰지 않는 유틸**을
+   번들에 만들었고, design-lint가 그것을 임의 값 위반으로 잡았다. 번들에 남는 `#fff`는 Tailwind 자체의
+   `@property` 초기값이라 소스에서 고칠 대상이 아니다(DESIGN-TOKENS.md 「알려진 lint 예외」). */
+@source not "../../docs";
 @import "../styles/tokens.css";
 @import "../styles/ambient.css";
 @import "../styles/panel.css";

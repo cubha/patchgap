@@ -25,19 +25,6 @@ export const TFT_PATCH_WINDOWS: readonly TftPatchWindow[] = [
 ];
 
 /**
- * 패치가 라이브된 뒤 **이만큼 지나야** 수집한다.
- *
- * 사유(2026-09-27 정정): 처음 적힌 사유는 "하루 약 227매치라 당일 수집하면 판정이 전부
- * `insufficient-sample`로 떨어진다"였는데 **실측이 반박했다** — 18.3을 1.4일차(333매치)에 강제
- * 수집하니 표본 부족 0건이었다. 세는 단위를 틀렸기 때문이다: TFT의 표본은 매치가 아니라 **보드
- * (참가자)**라 333매치 × 8 = 2,664보드이고, 유닛별 등장 보드는 수백 단위가 된다(헤카림 398).
- * 규칙을 남기는 이유는 표본 크기가 아니라 **표본의 대표성**이다 — 패치 직후 며칠은 메타가 안정되지
- * 않아 초반 관측이 패치 전체를 대표하지 못한다. 7일이라는 값은 그 판단의 근사치이고 실측 근거는 없다.
- * (18.2 = 11일에 2,496매치 — 하루 약 227매치는 사실이다.)
- */
-export const TFT_MIN_LIVE_DAYS = 7;
-
-/**
  * 열린 창이 이보다 오래 열려 있으면 **캘린더가 낡았다고 본다**.
  *
  * 관측 주기는 15일(18.1 8/25 → 18.2 9/9)이다. 그 1.5배를 넘도록 다음 패치가 캘린더에
@@ -74,109 +61,113 @@ export function isOpenEnded(patch: string, windows: readonly TftPatchWindow[] = 
   return w ? w.endMs === null : false;
 }
 
-export interface TftRunInput {
+// ── 선언 축 / 관측 축 실행 계획(2026-09-28, C13·C14 — 사용자 결정 D5·D6) ─────────────────────
+//
+// **왜 갈랐나.** 이전 판정(`determineTftRun`, 삭제)은 7일 대기와 키 프리플라이트가 실행 **전체**를 막았다 — 그 안에
+// 패치노트(선언 축)가 들어 있어 TFT 새 패치 노트가 일주일간 화면에 안 나왔고(F1), 키가 만료되면 노트까지
+// 멈췄다(2026-09-28 실측: 9/26부터 매일 401 → 전 단계 스킵). 결정 8 「선언 축은 항상 최신, 관측 축이
+// 인질로 잡지 않는다」 위반이다. 선언 축은 공개 자원(패치노트 웹페이지·CDragon)만 쓰므로 키가 필요 없다.
+//
+// **N일차의 근거(F11 실측)**: 초반 k일 관측과 이후 독립 표본의 순위상관 — 세트 중간(18.2) 3일 0.942 →
+// 7일 0.961로 거의 평탄, 세트 개시(18.1)는 9일에도 잡음 기준에 못 미쳤다. 순방률·평균 등수엔 초반
+// 드리프트가 없었다. 그래서 세트 중간 3일 · 세트 개시(X.1) 9일.
+
+/** 세트 중간 패치의 첫 관측일(라이브 후 일수). */
+export const TFT_OBSERVATION_DAY_MID_SET = 3;
+/** 세트 개시 패치(X.1)의 첫 관측일 — 새 세트는 메타가 늦게 선다. */
+export const TFT_OBSERVATION_DAY_SET_LAUNCH = 9;
+
+/**
+ * 이 패치쌍 판정 파일의 상태. `stub`은 관측 없이 선언 축만 담은 파일(`meta.observationFailed`)이고
+ * **"산출물 없음"과 같게** 취급된다(관측이 스스로 갱신되도록). `observed`의 `observedUntilMs`는 관측에
+ * 들어간 마지막 매치 시각이며, 기록이 없던 옛 산출물은 `null`이다.
+ */
+export type DeltasState = { kind: "none" } | { kind: "stub" } | { kind: "observed"; observedUntilMs: number | null };
+export type TftRunMode = "skip" | "declaration" | "observation";
+
+export interface TftPlanInput {
   nowMs: number;
-  /** 이 패치쌍의 판정 산출물이 이미 있는가(`aggregated/tft/deltas-{from}-{to}.json`). */
-  hasOutputs: boolean;
-  /** workflow_dispatch 수동 지정 — 캘린더 판정을 이긴다. */
+  /** `notes-{to}.json`이 있는가. */
+  notesExist: boolean;
+  deltas: DeltasState;
+  /** workflow_dispatch 수동 지정 — 캘린더 판정을 이기고 관측한다. */
   manualPatch?: string;
-  /** 산출물이 있어도, 표본 대기 중이어도 다시 돌린다. */
+  /** 산출물이 있어도, N일차 전이어도 관측한다. */
   force?: boolean;
-  /** 표본 대기 일수 오버라이드(테스트·수동 실행용). 기본 `TFT_MIN_LIVE_DAYS`. */
-  minLiveDays?: number;
 }
 
-export interface TftRunDecision {
-  shouldRun: boolean;
+export interface TftRunPlan {
+  mode: TftRunMode;
   patch: string | null;
   from: string | null;
   to: string | null;
-  /**
-   * **초록불 침묵 경보.** 열린 창(`endMs: null`)의 산출물이 이미 있다는 것은 대개
-   * "다음 패치가 나왔는데 `TFT_PATCH_WINDOWS`를 아무도 안 고쳤다"는 뜻이다. 그 상태로 두면
-   * 워크플로가 **영원히 초록불로 스킵**하고 사람은 정기 수집이 도는 줄 안다 — 실패보다 나쁘다.
-   */
+  /** 위 `TftRunDecision.staleCalendar`와 같은 뜻 — 초록불 침묵 경보. */
   staleCalendar: boolean;
   reason: string;
 }
 
+/** 세트 개시 패치(마이너 1)는 9일, 그 밖은 3일. */
+export function observationDayOf(patch: string): number {
+  const minor = patch.split(".")[1];
+  return minor === "1" ? TFT_OBSERVATION_DAY_SET_LAUNCH : TFT_OBSERVATION_DAY_MID_SET;
+}
+
 /**
- * 워크플로 `determine` 스텝의 순수 두뇌. I/O(산출물 존재 확인)는 호출부가 하고, 여기서는
- * 판정만 한다 — 그래야 이 규칙이 단위 테스트로 고정된다.
- *
- * 캘린더 밖 시각은 **실패가 아니라 no-op**이다(LoL `determine`과 같은 규약). 패치가 없는 주에
- * 빨간 X가 뜨면 진짜 실패와 구분되지 않는다.
+ * 워크플로 `determine` 스텝의 순수 두뇌(C13 이후). 키 판정은 여기 없다 — 관측 계획이 나왔을 때만
+ * 호출부가 프리플라이트를 돌리고, 실패하면 `applyTftKeyFailure`로 강등한다. 선언 계획은 키를 안 본다.
  */
-export function determineTftRun(input: TftRunInput, windows: readonly TftPatchWindow[] = TFT_PATCH_WINDOWS): TftRunDecision {
+export function planTftRun(input: TftPlanInput, windows: readonly TftPatchWindow[] = TFT_PATCH_WINDOWS): TftRunPlan {
   const patch = input.manualPatch ?? liveTftPatch(input.nowMs, windows);
+  const base = { patch, from: null, to: null, staleCalendar: false };
   if (patch === null) {
-    return {
-      shouldRun: false,
-      patch: null,
-      from: null,
-      to: null,
-      staleCalendar: false,
-      reason: `캘린더에 이 시각(${new Date(input.nowMs).toISOString()})의 라이브 패치가 없다 — no-op`,
-    };
+    return { ...base, mode: "skip", reason: `캘린더에 이 시각(${new Date(input.nowMs).toISOString()})의 라이브 패치가 없다 — no-op` };
   }
-
   const from = previousTftPatch(patch, windows);
-  const ageDays = windowAgeDays(patch, input.nowMs, windows);
-  const stale =
-    isOpenEnded(patch, windows) && input.hasOutputs && ageDays !== null && ageDays > TFT_STALE_AFTER_DAYS;
-
   if (from === null) {
-    return {
-      shouldRun: false,
-      patch,
-      from: null,
-      to: patch,
-      staleCalendar: stale,
-      reason: `${patch}의 직전 패치가 캘린더에 없다 — 대조 쌍이 없어 판정할 수 없다`,
-    };
+    return { ...base, to: patch, mode: "skip", reason: `${patch}의 직전 패치가 캘린더에 없다 — 대조 쌍이 없어 판정할 수 없다` };
   }
+  const pair = { patch, from, to: patch };
+  const w = windows.find((x) => x.patch === patch);
+  const ageDays = windowAgeDays(patch, input.nowMs, windows) ?? 0;
+  const n = observationDayOf(patch);
+  const observedLate =
+    input.deltas.kind === "observed" &&
+    input.deltas.observedUntilMs !== null &&
+    w !== undefined &&
+    input.deltas.observedUntilMs >= w.startMs + n * DAY_MS;
+  const staleCalendar = isOpenEnded(patch, windows) && input.deltas.kind === "observed" && ageDays > TFT_STALE_AFTER_DAYS;
 
-  // 표본 대기 — 패치 직후엔 새 구간이 거의 비어 있어 수집해도 판정이 서지 않는다.
-  // 수동 지정(`manualPatch`)과 `force`는 이 게이트를 넘는다: 사람이 의도적으로 부른 것이다.
-  const minLive = input.minLiveDays ?? TFT_MIN_LIVE_DAYS;
-  if (
-    input.force !== true &&
-    input.manualPatch === undefined &&
-    ageDays !== null &&
-    ageDays < minLive
-  ) {
-    return {
-      shouldRun: false,
-      patch,
-      from,
-      to: patch,
-      staleCalendar: stale,
-      reason:
-        `${patch}가 라이브된 지 ${ageDays.toFixed(1)}일 — 표본이 쌓일 시간(${minLive}일)이 아직 부족하다. ` +
-        `KR Master+ 래더는 하루 약 227매치라 지금 수집하면 판정이 전부 표본부족으로 떨어진다`,
-    };
+  if (input.force === true || input.manualPatch !== undefined) {
+    return { ...pair, staleCalendar, mode: "observation", reason: `수동 실행 — ${from} → ${patch} 관측` };
   }
-
-  if (input.hasOutputs && input.force !== true) {
-    return {
-      shouldRun: false,
-      patch,
-      from,
-      to: patch,
-      staleCalendar: stale,
-      reason: stale
-        ? `${from} → ${patch} 산출물이 이미 있는데 ${patch} 창이 아직 열려 있다 — ` +
-          `캘린더가 낡았을 수 있다. 다음 패치를 TFT_PATCH_WINDOWS에 추가하라`
-        : `${from} → ${patch} 산출물이 이미 있다 — 중복 실행으로 판단해 건너뛴다`,
-    };
+  if (ageDays >= n) {
+    if (input.deltas.kind === "observed" && observedLate) {
+      return { ...pair, staleCalendar, mode: "skip", reason: `${from} → ${patch} 관측이 ${n}일차 이후 표본으로 이미 있다 — 중복 실행으로 판단해 건너뛴다` };
+    }
+    const why =
+      input.deltas.kind === "observed"
+        ? `관측 시점이 ${n}일차 이전이거나 기록이 없다 — 한 번 더 모은다`
+        : `관측 산출물이 없다(${input.deltas.kind === "stub" ? "선언 축 stub만 있음" : "파일 없음"})`;
+    return { ...pair, staleCalendar, mode: "observation", reason: `${patch} 라이브 ${ageDays.toFixed(1)}일째(관측 ${n}일차 이후) — ${why}` };
   }
+  // N일차 전 — 관측은 아직, 선언 축만 챙긴다.
+  if (input.deltas.kind === "none" || !input.notesExist) {
+    return { ...pair, staleCalendar, mode: "declaration", reason: `${patch} 라이브 ${ageDays.toFixed(1)}일째 — 패치노트를 즉시 반영하고 관측은 ${n}일차부터` };
+  }
+  return { ...pair, staleCalendar, mode: "skip", reason: `${patch} 라이브 ${ageDays.toFixed(1)}일째 — 선언 축은 반영됐고 관측은 ${n}일차부터` };
+}
 
-  return {
-    shouldRun: true,
-    patch,
-    from,
-    to: patch,
-    staleCalendar: stale,
-    reason: `${from} → ${patch} 수집·판정을 실행한다`,
-  };
+/**
+ * 관측 계획인데 키가 죽었을 때(401 만료·403 미승인). **실제 관측 산출물은 stub으로 덮지 않는다** —
+ * 있는 관측을 지우는 것은 화면을 뒤로 돌리는 것이다. 관측도 선언도 없으면 선언(stub)으로 강등한다.
+ */
+export function applyTftKeyFailure(plan: TftRunPlan, deltas: DeltasState, notesExist: boolean): TftRunPlan {
+  if (plan.mode !== "observation") return plan;
+  if (deltas.kind === "observed") {
+    return { ...plan, mode: "skip", reason: `${plan.reason} — 그러나 키가 없어 관측할 수 없다. 기존 관측을 유지한다` };
+  }
+  if (deltas.kind === "stub" && notesExist) {
+    return { ...plan, mode: "skip", reason: `${plan.reason} — 그러나 키가 없어 관측할 수 없다. 선언 축은 이미 반영됐다` };
+  }
+  return { ...plan, mode: "declaration", reason: `${plan.reason} — 그러나 키가 없어 관측할 수 없다. 선언 축만 반영한다` };
 }

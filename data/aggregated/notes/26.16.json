@@ -2159,7 +2159,7 @@
       "stat": "억제기 포탑 체력",
       "before": "3,500",
       "after": "4,000",
-      "direction": "adjust",
+      "direction": "buff",
       "summary": "억제기 포탑 체력: 3,500 ⇒ 4,000",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-16-notes/#patch-classic",
       "anchorKind": "section",
@@ -3872,11 +3872,11 @@
       "modeScope": "arena"
     },
     {
-      "id": "note:26.16:other:칠흑의-양날-도끼:50918531",
+      "id": "note:26.16:other:월식:e12ba2b9",
       "patch": "26.16",
       "section": "other",
-      "entity": "칠흑의 양날 도끼",
-      "skill": "월식",
+      "entity": "월식",
+      "skill": null,
       "stat": "피해량",
       "before": "대상 최대 체력의 [근접 6% || 원거리 4%]",
       "after": "대상 최대 체력의 [근접 8% || 원거리 5%]",
@@ -3887,11 +3887,11 @@
       "modeScope": "arena"
     },
     {
-      "id": "note:26.16:other:칠흑의-양날-도끼:8827536f",
+      "id": "note:26.16:other:스테락의-도전:2815b355",
       "patch": "26.16",
       "section": "other",
-      "entity": "칠흑의 양날 도끼",
-      "skill": "스테락의 도전",
+      "entity": "스테락의 도전",
+      "skill": null,
       "stat": "추가 공격력",
       "before": "기본 공격력의 45%",
       "after": "기본 공격력의 50%",
@@ -3902,11 +3902,11 @@
       "modeScope": "arena"
     },
     {
-      "id": "note:26.16:other:칠흑의-양날-도끼:5c42b2a7",
+      "id": "note:26.16:other:갈라진-하늘:a66083dc",
       "patch": "26.16",
       "section": "other",
-      "entity": "칠흑의 양날 도끼",
-      "skill": "갈라진 하늘",
+      "entity": "갈라진 하늘",
+      "skill": null,
       "stat": "체력 회복량",
       "before": "기본 공격력의 [근접 100% || 원거리 50%] + 잃은 체력의 6%",
       "after": "기본 공격력의 [근접 90% || 원거리 45%] + 잃은 체력의 4%",
@@ -3917,11 +3917,11 @@
       "modeScope": "arena"
     },
     {
-      "id": "note:26.16:other:칠흑의-양날-도끼:62e35991",
+      "id": "note:26.16:other:갈라진-하늘:3ba2291b",
       "patch": "26.16",
       "section": "other",
-      "entity": "칠흑의 양날 도끼",
-      "skill": "갈라진 하늘",
+      "entity": "갈라진 하늘",
+      "skill": null,
       "stat": "체력",
       "before": "350",
       "after": "400",
@@ -3932,11 +3932,11 @@
       "modeScope": "arena"
     },
     {
-      "id": "note:26.16:other:칠흑의-양날-도끼:e3616802",
+      "id": "note:26.16:other:공허의-불길:2ff44884",
       "patch": "26.16",
       "section": "other",
-      "entity": "칠흑의 양날 도끼",
-      "skill": "공허의 불길",
+      "entity": "공허의 불길",
+      "skill": null,
       "stat": "오라 추가 체력 계수",
       "before": "7%",
       "after": "10%",

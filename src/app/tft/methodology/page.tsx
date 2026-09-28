@@ -7,7 +7,7 @@ import MethodologyLayout, { type MethodologySlots } from "@/components/methodolo
 import { computeLlmCauseStats, dominantConfidence } from "@/components/methodology/llmStats";
 import { TftUnavailable } from "@/components/tft/shared";
 import { fmtKst } from "@/lib/format";
-import { loadTft } from "@/lib/tftData";
+import { loadTft, loadTftDeclaration } from "@/lib/tftData";
 
 export const metadata = { title: "TFT 방법론 — patchgap" };
 
@@ -26,7 +26,7 @@ export default function TftMethodologyPage() {
     return (
       <main>
         <Container>
-          <TftUnavailable />
+          <TftUnavailable failure={loadTftDeclaration()?.failure} />
         </Container>
       </main>
     );

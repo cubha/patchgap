@@ -18,7 +18,7 @@ import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import PubgDetailSplash, { type PubgDetailStat } from "@/components/pubg/PubgDetailSplash";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
-import { isReportable, loadPubg, loadPubgAssets, pubgPair } from "@/lib/pubgData";
+import { isReportable, loadPubg, loadPubgAssets, pubgPair, loadPubgDeclaration } from "@/lib/pubgData";
 import { displayStatusOf } from "@/pipeline/shared/display-status";
 import { weaponKeyFromSlug, weaponSlug } from "@/lib/pubgRoutes";
 import { publicWeaponPath } from "@/pipeline/pubg/asset-path";
@@ -56,7 +56,7 @@ export default async function PubgWeaponPage({ params }: PageProps) {
     return (
       <main>
       <Container>
-        <PubgUnavailable />
+        <PubgUnavailable failure={loadPubgDeclaration()?.failure} />
       </Container>
     </main>
     );

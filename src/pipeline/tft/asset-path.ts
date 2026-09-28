@@ -38,6 +38,11 @@ export function remoteTftImageUrl(version: string, kind: TftAssetKind, full: str
  * 모르기 때문이다 — 이름 변환 규칙을 화면에 심으면 다음 세트에서 조용히 깨진다.
  */
 export function publicTftAssetPath(kind: TftAssetKind, entityKey: string): string {
+  // 키는 파일명 조각이자 `run-tft-assets.ts`의 **쓰기 경로**다. 데이터가 어긋나 `../`·`/`가 섞이면
+  // `public/` 밖에 쓰게 된다 — 지금 키는 전부 영숫자·밑줄이라(실측 0건 위반) 조용히 거르지 않고 던진다.
+  if (!/^[A-Za-z0-9_]+$/.test(entityKey)) {
+    throw new Error(`TFT 자산 키가 허용 형식(영숫자·밑줄) 밖이다: ${JSON.stringify(entityKey)}`);
+  }
   return `/dd/tft/${kind}/${entityKey}.png`;
 }
 

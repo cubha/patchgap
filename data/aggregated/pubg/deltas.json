@@ -31,15 +31,15 @@
       ]
     },
     "llm": {
-      "calls": 1,
+      "calls": 0,
       "cacheHits": 5,
       "skipped": 0,
-      "proseRepairs": 1,
+      "proseRepairs": 0,
       "usage": {
-        "inputTokens": 334,
+        "inputTokens": 0,
         "cacheReadInputTokens": 0,
-        "cacheCreationInputTokens": 2449,
-        "outputTokens": 292
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 0
       },
       "prose": {
         "summaryCount": 5,
@@ -50,7 +50,9 @@
         "causeOverLength": 0,
         "causeHedged": 2,
         "causeHedgedConfident": 0,
-        "causeNounEnding": 0
+        "causeNounEnding": 0,
+        "causeUnnamedTarget": 2,
+        "summaryDeterministic": 0
       },
       "redistribution": 0.019325389298748864,
       "confidenceCapped": 5

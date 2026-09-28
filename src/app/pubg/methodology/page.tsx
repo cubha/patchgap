@@ -14,7 +14,7 @@ import Container from "@/components/Container";
 import MethodologyLayout, { type MethodologySlots } from "@/components/methodology/MethodologyLayout";
 import StatusBadge from "@/components/StatusBadge";
 import { PubgSampleNotice, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
-import { loadPubg } from "@/lib/pubgData";
+import { loadPubg, loadPubgDeclaration } from "@/lib/pubgData";
 import {
   ANNOUNCED_RATIO_BAND,
   PICKUP_MIN_N,
@@ -41,7 +41,7 @@ export default function PubgMethodologyPage() {
     return (
       <main>
         <Container>
-          <PubgUnavailable />
+          <PubgUnavailable failure={loadPubgDeclaration()?.failure} />
         </Container>
       </main>
     );

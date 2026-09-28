@@ -14,8 +14,8 @@
 // 되고, 그건 이 프로젝트가 반복해서 고쳐온 결함군이다(채점표 B2 "페이지 간 수치 정합").
 import "server-only";
 import { computeHeadline } from "@/components/home/logic";
-import { isReportable, loadPubg } from "./pubgData";
-import { loadTft } from "./tftData";
+import { isReportable, loadPubg, loadPubgDeclaration } from "./pubgData";
+import { loadTft, loadTftDeclaration } from "./tftData";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { isGapStatus } from "@/pipeline/shared/status-order";
 import { getDefaultPair, listPatches, loadDeltas, loadNotes, loadSummary } from "./data";
@@ -38,10 +38,10 @@ export interface GameLandingCard {
   sample: string;
   /** 패치노트가 공지한 변화 수. */
   announced: number;
-  /** 통계 게이트를 통과한 관측 수. */
-  significant: number;
-  /** 그중 패치노트에 없던 것. */
-  unannounced: number;
+  /** 통계 게이트를 통과한 관측 수. `null` = 관측 전(선언 축만 있는 쌍, C13·C14) — 0이 아니다. */
+  significant: number | null;
+  /** 그중 패치노트에 없던 것. `null` = 관측 전. */
+  unannounced: number | null;
   /** 이 게임이 분석한 매치 총수 — 합산 타일의 재료. */
   matches: number;
 }
@@ -86,7 +86,10 @@ function lolSummary(): LandingSummary | null {
 
 function pubgSummary(): LandingSummary | null {
   const bundle = loadPubg();
-  if (!bundle) return null;
+  if (!bundle) {
+    const declaration = loadPubgDeclaration();
+    return declaration ? declarationSummary(declaration, declaration.notes.length) : null;
+  }
   const { deltas, before, after, notes } = bundle;
   const reportable = deltas.rows.filter((row) => isReportable(row.status));
   const matches = before.nMatches + after.nMatches;
@@ -105,9 +108,20 @@ function pubgSummary(): LandingSummary | null {
   };
 }
 
+/**
+ * 선언 축만 있는 쌍의 카드(C13·C14) — 공지 수는 말하고 관측 수는 `null`(「—」)로 둔다. 0으로 두면
+ * 관측된 사실처럼 읽힌다.
+ */
+function declarationSummary(declaration: { from: string; to: string }, announced: number): LandingSummary {
+  return { pair: { from: declaration.from, to: declaration.to }, sample: "관측 전", announced, significant: null, unannounced: null, matches: 0 };
+}
+
 function tftSummary(): LandingSummary | null {
   const bundle = loadTft();
-  if (!bundle) return null;
+  if (!bundle) {
+    const declaration = loadTftDeclaration();
+    return declaration ? declarationSummary(declaration, declaration.notes.items.length) : null;
+  }
   const { deltas, before, after, notes } = bundle;
   // **LoL과 같은 술어를 쓴다** — PUBG가 상태만 보는 `isReportable`을 쓰는 것은 그쪽
   // `classify()`가 유의성·바닥을 이미 상태에 접어 넣었기 때문이고, TFT는 `DeltaRecord`를
@@ -160,8 +174,8 @@ export function landingTotals(cards: readonly GameLandingCard[]): LandingTotals 
   return cards.reduce<LandingTotals>(
     (acc, card) => ({
       matches: acc.matches + card.matches,
-      significant: acc.significant + card.significant,
-      unannounced: acc.unannounced + card.unannounced,
+      significant: acc.significant + (card.significant ?? 0),
+      unannounced: acc.unannounced + (card.unannounced ?? 0),
     }),
     { matches: 0, significant: 0, unannounced: 0 }
   );

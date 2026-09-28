@@ -90,6 +90,9 @@ jobs:
 
       # 판정 규칙은 `src/pipeline/collect/pubg/patch-calendar.ts`(순수 함수·단위 테스트)가 갖는다.
       # 이 스텝은 그것을 부르는 얇은 진입점이다 — 실파일이라 tsc·eslint·vitest가 전부 본다.
+      # 출력(2026-09-28, C13·C14): `mode` = skip | declaration | observation. 선언 계획은 수기 노트가 들어온
+      # 즉시 관측 stub(`deltas.json`)을 커밋해 노트를 화면에 올린다 — 전에는 비교 구간이 닫힐 때(패치+7일)까지
+      # 실행 전체가 스킵돼 노트가 일주일간 안 보였다(결정 8). 관측(수확 창)은 규칙 그대로다.
       - name: Determine patch pair (캘린더 + 보존창 + 중복 가드)
         id: determine
         env:
@@ -198,7 +201,7 @@ jobs:
         continue-on-error: true
 
       - name: Detect submarine patches (F9)
-        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
+        if: steps.determine.outputs.mode == 'declaration' || (steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true')
         env:
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
@@ -233,11 +236,33 @@ jobs:
             "${SITE_ARGS[@]}"
         continue-on-error: true
 
+      # 관측 stub(C14) — collect-tft.yml의 같은 스텝 주석 참고. PUBG는 `deltas.json`이 한 파일이라 이전 쌍의
+      # 관측을 새 쌍의 stub이 대신한다(화면은 최신 쌍의 노트를 보여준다). 같은 쌍의 실제 관측은 덮지 않는다.
+      - name: Observation stub (선언 축만)
+        if: steps.determine.outputs.mode == 'declaration'
+        env:
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+          STUB_REASON: ${{ steps.determine.outputs.stub_reason }}
+        run: npx tsx scripts/write-observation-stub.ts --game pubg --from "$PATCH_FROM" --to "$PATCH_TO" --reason "$STUB_REASON"
+
+      # 관측이 죽으면(C14) 관측 산출물을 되돌리고 선언 축(stub)만 커밋한다 — 잡은 빨간 X로 남는다.
+      - name: Observation crashed → declaration stub
+        id: crash_stub
+        if: failure() && steps.determine.outputs.mode == 'observation' && steps.determine.outputs.notes_ready == 'true'
+        env:
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: |
+          git restore --source=HEAD --staged --worktree data/aggregated/pubg data/aggregated/gamedata/pubg
+          git clean -fdq data/aggregated/pubg data/aggregated/gamedata/pubg
+          npx tsx scripts/write-observation-stub.ts --game pubg --from "$PATCH_FROM" --to "$PATCH_TO" --reason crashed --detail "run ${{ github.run_id }}"
+
       # 데이터 불변식 — **경보형**(2026-09-27). collect-tft.yml의 같은 스텝 주석 참고(봇 push는 CI를
       # 트리거하지 않는다 · 차단형이면 선언 축을 다시 인질로 잡는다).
       - name: Data invariants (경보 — 커밋은 막지 않는다)
         id: invariants
-        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
+        if: ${{ !cancelled() && (steps.determine.outputs.mode == 'declaration' || steps.determine.outputs.notes_ready == 'true') && (success() || steps.crash_stub.outcome == 'success') }}
         run: |
           LOG="$RUNNER_TEMP/invariants.log"
           if npx vitest run --reporter=dot > "$LOG" 2>&1; then
@@ -250,7 +275,7 @@ jobs:
           fi
 
       - name: Discord invariants alert (불변식 실패 시)
-        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true' && steps.invariants.outputs.ok == 'false' && env.HAS_DISCORD_PUBG == 'true'
+        if: ${{ !cancelled() && steps.invariants.outputs.ok == 'false' && env.HAS_DISCORD_PUBG == 'true' }}
         env:
           PATCH_TO: ${{ steps.determine.outputs.to }}
           DISCORD_WEBHOOK_URL_PUBG: ${{ secrets.DISCORD_WEBHOOK_URL_PUBG }}
@@ -261,8 +286,9 @@ jobs:
         continue-on-error: true
 
       - name: Commit + push generated data
-        if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
+        if: ${{ !cancelled() && (steps.determine.outputs.mode == 'declaration' || steps.determine.outputs.notes_ready == 'true') && (success() || steps.crash_stub.outcome == 'success') }}
         env:
+          MODE: ${{ steps.crash_stub.outcome == 'success' && 'declaration after crash' || steps.determine.outputs.mode }}
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
         run: |
@@ -274,7 +300,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "변경분 없음 — 커밋 생략"
           else
-            git commit -m "chore(data): auto-collect pubg ${PATCH_FROM} -> ${PATCH_TO}
+            git commit -m "chore(data): auto-collect pubg ${PATCH_FROM} -> ${PATCH_TO} (${MODE})
 
             GitHub Actions collect-pubg.yml(run_id=${{ github.run_id }})가 생성."
             # [skip ci]를 넣지 않는다 — Vercel이 이 커밋을 감지해 재빌드해야 한다.

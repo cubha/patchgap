@@ -14,7 +14,8 @@
 // **캐시는 다른 게임과 섞이지 않는다**: 키가 `sha256(model|PROMPT_VERSION|deltaId|candSetHash)`인데
 // PUBG 델타 id는 `pubg:Item_Weapon_RPD_C:pickupShare` 꼴이고 후보셋 해시도 다르다.
 import type { PatchNoteItem } from "../types";
-import type { GameLlmProfile } from "./llm-profile";
+import { deterministicSummary, type GameLlmProfile } from "./llm-profile";
+import { signedPercentClaimsGrounded, totalDropAttributionGrounded } from "./cause-factuality";
 import type { PubgDeltaRow } from "./pubg-delta";
 
 const SYSTEM_INSTRUCTIONS = [
@@ -78,6 +79,11 @@ export interface PubgPromptContext {
   redistribution: number;
   /** 전체 무기 획득 수의 상대 변화(표본 구성·루팅 변화가 점유율을 흔드는 정도). */
   totalPickupsRelChange: number;
+  /**
+   * 이전 패치 무기별 획득 점유율(2026-09-28, C3) — 「전체 획득 감소」를 한 조항 탓으로 돌리는 원인을
+   * 검산한다. 프롬프트에는 싣지 않는다(캐시 키·지시문 불변).
+   */
+  beforeShareByWeapon?: ReadonlyMap<string, number>;
 }
 
 export function createPubgLlmProfile(
@@ -87,6 +93,8 @@ export function createPubgLlmProfile(
   return {
     game: "pubg",
     systemInstructions: SYSTEM_INSTRUCTIONS,
+    // 지시문의 제로섬 전제를 상한 있는 서술로 바꿨다(2026-09-27) — PUBG만 다시 묻는다.
+    promptRevision: "pubg-redistribution-bound",
     // PUBG 노트에는 게임 모드 구분이 없다 — 전부 본 게임 조항이다.
     candidatesOf: (notes) => [...notes],
     isCitable: () => true,
@@ -113,5 +121,28 @@ export function createPubgLlmProfile(
             ]
           : []),
       ].join("\n"),
+    ownNumbersOf: (delta: PubgDeltaRow) => [
+      delta.n.before,
+      delta.n.after,
+      ...[delta.before, delta.after].filter((v): v is number => v !== null).map((v) => Math.round(v * 10000) / 100),
+    ],
+    // C3 — 부호 백분율은 이 델타·쌍 맥락의 수치여야 하고, 전체 감소 귀속은 인용 조항 무기가 과반이어야 한다.
+    isCauseGrounded: (text: string, note: PatchNoteItem, delta: PubgDeltaRow) => {
+      const allowed = [delta.relChange, delta.relCi[0], delta.relCi[1]].filter((v): v is number => v !== null);
+      if (context) allowed.push(context.redistribution, context.totalPickupsRelChange);
+      const shares = context?.beforeShareByWeapon;
+      const citedShare =
+        shares === undefined ? null : (noteWeaponKeys.get(note.id) ?? []).reduce((sum, key) => sum + (shares.get(key) ?? 0), 0);
+      return signedPercentClaimsGrounded(text, allowed) && totalDropAttributionGrounded(text, citedShare);
+    },
+    fallbackSummary: (delta: PubgDeltaRow) =>
+      deterministicSummary({
+        name: delta.weaponName,
+        metricKo: "획득 점유율",
+        before: fmtShare(delta.before),
+        after: fmtShare(delta.after),
+        change: `상대 ${fmtRel(delta.relChange)}`,
+        status: delta.status,
+      }),
   };
 }

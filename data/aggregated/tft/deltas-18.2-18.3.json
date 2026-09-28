@@ -3,7 +3,7 @@
     "game": "tft",
     "from": "18.2",
     "to": "18.3",
-    "generatedAt": "2026-09-26T19:22:57.066Z",
+    "generatedAt": "2026-09-28T10:01:28.523Z",
     "qAlpha": 0.1,
     "boards": {
       "before": 19968,
@@ -24,26 +24,28 @@
       "no-change": 307
     },
     "llm": {
-      "calls": 43,
-      "cacheHits": 0,
+      "calls": 0,
+      "cacheHits": 37,
       "skipped": 0,
-      "proseRepairs": 6,
+      "proseRepairs": 0,
       "usage": {
-        "inputTokens": 6510,
-        "cacheReadInputTokens": 361746,
-        "cacheCreationInputTokens": 8613,
-        "outputTokens": 34151
+        "inputTokens": 0,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 0
       },
       "prose": {
         "summaryCount": 37,
-        "summaryOverLength": 2,
+        "summaryOverLength": 0,
         "summaryHedged": 9,
-        "maxSummaryLength": 117,
+        "maxSummaryLength": 93,
         "causeCount": 132,
         "causeOverLength": 0,
         "causeHedged": 27,
         "causeHedgedConfident": 0,
-        "causeNounEnding": 1
+        "causeNounEnding": 0,
+        "causeUnnamedTarget": 1,
+        "summaryDeterministic": 2
       }
     }
   },
@@ -138,7 +140,7 @@
           "confidence": "low"
         },
         {
-          "text": "사냥꾼 추가 공격력 너프(65%→60%)로 공격력 캐리 조합이 밀리며 주문력 딜러 자리가 넓어진 반사이익.",
+          "text": "사냥꾼 추가 공격력이 65%에서 60%로 줄며 딜러 자리가 넓어진 반사이익을 얻었습니다.",
           "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
           "verified": true,
           "confidence": "low"
@@ -162,9 +164,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "피들스틱 평균 등수가 4.46등→4.23등으로 개선됐으나 직접 조항은 없고, 스태틱의 단검 주문력 상향(15%→25%)에 따른 간접 수혜로 보입니다.",
+        "summary": "피들스틱 평균 등수가 4.46등에서 4.23등으로 개선됐고, 기원자·사냥꾼 너프로 경쟁 딜러가 밀린 반사이익으로 보입니다.",
         "summaryCites": [
-          "note:tft:18.3:item:스태틱의-단검:ccfc29ef"
+          "note:tft:18.3:system:기원자:3f993458",
+          "note:tft:18.3:system:사냥꾼:616a50ac"
         ],
         "summaryVerified": true
       }
@@ -290,12 +293,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "헤카림 순방률이 46.5%→53.3%(+6.8%p) 올랐지만 직접 조항은 없고, 전열 강화(람머스 보호막·진형 유지 공격력 11%)의 파급으로 보입니다. 표본 398, CI 하한 1.4%p로 유의폭은 좁습니다.",
-        "summaryCites": [
-          "note:tft:18.3:champion:람머스:9b820b51",
-          "note:tft:18.3:system:진형-유지:5b4cf303"
-        ],
-        "summaryVerified": true
+        "summary": "헤카림 순방률이 46.5%에서 53.3%로 바뀌었습니다(+6.8%p). 패치노트에 직접 조항이 없습니다.",
+        "summaryCites": [],
+        "summaryVerified": true,
+        "summaryDeterministic": true
       }
     },
     {
@@ -1766,14 +1767,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "레오나 등장률이 6.5%→4.6%(-1.9%p)로 하락했습니다. 영원한 서약 마나 15→10, 엄호대 방어 120→115 하향과 알리스타·람머스 강화로 전방 자리를 내준 결과입니다.",
-        "summaryCites": [
-          "note:tft:18.3:item:영원한-서약:2e842b57",
-          "note:tft:18.3:system:엄호대:ad7723b2",
-          "note:tft:18.3:champion:알리스타:d527c10f",
-          "note:tft:18.3:champion:람머스:9b820b51"
-        ],
-        "summaryVerified": true
+        "summary": "레오나 등장률이 6.5%에서 4.6%로 바뀌었습니다(-1.9%p). 패치노트에 직접 조항이 없습니다.",
+        "summaryCites": [],
+        "summaryVerified": true,
+        "summaryDeterministic": true
       }
     },
     {

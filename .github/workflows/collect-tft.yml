@@ -61,7 +61,8 @@ on:
     # **매일 21:00 UTC(06:00 KST).** LoL처럼 주 1회 고정 요일을 쓰지 않는 이유: TFT 패치는
     # 요일이 일정하지 않다(18.1 화 18:00Z · 18.2 수 18:00Z, 실측). 대신 `determine`이 싸다
     # (API 호출 1회 + 파일 존재 확인) — 조건이 아니면 그 자리에서 no-op으로 끝난다.
-    # 실제 수집 발화는 캘린더의 표본 대기(TFT_MIN_LIVE_DAYS=7)가 정한다.
+    # 무엇을 돌지는 `planTftRun`이 정한다(2026-09-28, C13): 새 패치는 **탐지 즉시 선언 축**(노트·F9·관측 stub),
+    # 관측(매치 수집·판정)은 세트 중간 3일차·세트 개시 9일차부터, 기록된 관측 시점 기준으로 한 번.
     - cron: "0 21 * * *"
 
 concurrency:
@@ -104,11 +105,14 @@ jobs:
       # 권한은 `tft-preflight.ts`가 갖는다. 이 스텝은 그 둘을 부르는 얇은 진입점일 뿐이다.
       # LoL처럼 heredoc으로 임시 .ts를 만들지 않는다 — 그러면 tsc·eslint·vitest 어느 게이트도
       # 그 코드를 보지 못한다(수집 실행 여부를 정하는 코드가 검증 밖에 있게 된다).
-      - name: Determine patch (프리플라이트 + 캘린더 + 중복 가드)
+      # 출력(2026-09-28, C13·C14): `mode` = skip | declaration | observation. `declare=true`면 선언 축 스텝
+      # (노트·F9·불변식·커밋)이, `should_run=true`면 관측 스텝(수집·집계·판정·브리핑)이 돈다. 키 프리플라이트는
+      # **관측 계획일 때만** 돈다 — 전에는 맨 앞이라 401 하나로 패치노트까지 멈췄다(9/26~ 실측).
+      - name: Determine patch (캘린더 계획 + 관측일 때만 프리플라이트)
         id: determine
         env:
-          # 프리플라이트가 실제로 키를 써서 TFT 엔드포인트를 두드린다(tft-preflight.ts) —
-          # 그래서 이 스텝에는 키가 필요하다. `RIOT_API_KEY`는 폴백 경로.
+          # 관측 계획이면 프리플라이트가 실제로 키를 써서 TFT 엔드포인트를 두드린다(tft-preflight.ts).
+          # `RIOT_API_KEY`는 폴백 경로.
           RIOT_TFT_API_KEY: ${{ secrets.RIOT_TFT_API_KEY }}
           RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
           MANUAL_PATCH: ${{ github.event.inputs.patch }}
@@ -140,7 +144,7 @@ jobs:
       # `run-tft-notes`는 같은 세트 스냅숏이 없으면 **던진다** — 조용히 34% 틀린 채 초록으로
       # 지나가지 않게 하려는 것이고, 이 스텝이 그 전제를 매 패치 충족시킨다.
       - name: Fetch TFT value snapshot (F9 · Community Dragon)
-        if: steps.determine.outputs.should_run == 'true'
+        if: steps.determine.outputs.declare == 'true'
         env:
           PATCH_TO: ${{ steps.determine.outputs.to }}
         run: |
@@ -150,7 +154,7 @@ jobs:
           npx tsx scripts/run-cdragon.ts --patch "$PATCH_TO"
 
       - name: Fetch + parse patch notes (F3)
-        if: steps.determine.outputs.should_run == 'true'
+        if: steps.determine.outputs.declare == 'true'
         env:
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
@@ -241,7 +245,7 @@ jobs:
       # `continue-on-error`는 LoL과 같은 이유다: 잠수함은 있으면 더 보여주는 축이라 수집·판정·
       # 커밋을 막을 이유가 없다. 버전 인자는 주지 않는다(직전 쌍 산출물 + 방금 받은 스냅숏에서 해소).
       - name: Detect submarine patches (F9)
-        if: steps.determine.outputs.should_run == 'true'
+        if: steps.determine.outputs.declare == 'true'
         env:
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
@@ -275,13 +279,40 @@ jobs:
             "${SITE_ARGS[@]}"
         continue-on-error: true
 
+      # 관측 stub(2026-09-28, C14 — 사용자 결정 D5). 선언 계획이면 관측 대신 사유를 담은 판정 파일을 쓴다 —
+      # 화면은 판정 파일로 쌍을 고르므로, 없으면 방금 받은 노트가 안 보인다. 같은 쌍의 실제 관측은 덮지 않는다.
+      - name: Observation stub (선언 축만)
+        if: steps.determine.outputs.mode == 'declaration'
+        env:
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+          STUB_REASON: ${{ steps.determine.outputs.stub_reason }}
+        run: npx tsx scripts/write-observation-stub.ts --game tft --from "$PATCH_FROM" --to "$PATCH_TO" --reason "$STUB_REASON"
+
+      # 관측이 죽으면(C14): 관측 산출물을 되돌리고 선언 축(노트 + stub)만 다시 만들어 커밋한다. **잡은 빨간 X로
+      # 남는다** — 이 스텝이 성공해도 앞 스텝의 실패가 잡 결론을 정한다. 코드 결함은 드러나야 하고, 그 사이
+      # 패치노트는 화면에 있어야 한다(결정 8). 같은 쌍의 실제 관측이 이미 커밋돼 있으면 stub이 덮지 않는다.
+      - name: Observation crashed → declaration stub
+        id: crash_stub
+        if: failure() && steps.determine.outputs.mode == 'observation'
+        env:
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
+        run: |
+          git restore --source=HEAD --staged --worktree data/aggregated/tft public/dd/tft data/aggregated/gamedata/tft
+          git clean -fdq data/aggregated/tft public/dd/tft data/aggregated/gamedata/tft
+          npx tsx scripts/run-tft-notes.ts --patch "$PATCH_TO"
+          # 수치 축(F9)도 선언 축이다 — 위에서 되돌렸으므로 다시 낸다(실패해도 stub은 쓴다).
+          npx tsx scripts/run-gamedata-diff.ts --game tft --from "$PATCH_FROM" --to "$PATCH_TO" || echo "::warning::F9 재산출 실패 — 노트·stub만 커밋한다"
+          npx tsx scripts/write-observation-stub.ts --game tft --from "$PATCH_FROM" --to "$PATCH_TO" --reason crashed --detail "run ${{ github.run_id }}"
+
       # 데이터 불변식 — **경보형**(2026-09-27). 봇의 GITHUB_TOKEN push는 CI를 트리거하지 않아서, 봇이
       # 만든 데이터에는 불변식이 한 번도 돌지 않았다(26.19 노트 오귀속이 이틀간 사이트에 떠 있었고 아무도
       # 몰랐다). 차단형이면 다시 패치노트를 인질로 잡으므로(결정 8) 커밋은 진행하고 알리기만 한다.
       # 전체 스위트를 돈다 — 코드는 main과 같으므로 여기서 깨지는 것은 곧 **이 실행이 만든 데이터**다.
       - name: Data invariants (경보 — 커밋은 막지 않는다)
         id: invariants
-        if: steps.determine.outputs.should_run == 'true'
+        if: ${{ !cancelled() && steps.determine.outputs.declare == 'true' && (success() || steps.crash_stub.outcome == 'success') }}
         run: |
           LOG="$RUNNER_TEMP/invariants.log"
           if npx vitest run --reporter=dot > "$LOG" 2>&1; then
@@ -294,7 +325,7 @@ jobs:
           fi
 
       - name: Discord invariants alert (불변식 실패 시)
-        if: steps.determine.outputs.should_run == 'true' && steps.invariants.outputs.ok == 'false' && env.HAS_DISCORD_TFT == 'true'
+        if: ${{ !cancelled() && steps.invariants.outputs.ok == 'false' && env.HAS_DISCORD_TFT == 'true' }}
         env:
           PATCH_TO: ${{ steps.determine.outputs.to }}
           DISCORD_WEBHOOK_URL_TFT: ${{ secrets.DISCORD_WEBHOOK_URL_TFT }}
@@ -305,8 +336,9 @@ jobs:
         continue-on-error: true
 
       - name: Commit + push generated data
-        if: steps.determine.outputs.should_run == 'true'
+        if: ${{ !cancelled() && steps.determine.outputs.declare == 'true' && (success() || steps.crash_stub.outcome == 'success') }}
         env:
+          MODE: ${{ steps.crash_stub.outcome == 'success' && 'declaration after crash' || steps.determine.outputs.mode }}
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
         run: |
@@ -319,7 +351,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "변경분 없음 — 커밋 생략"
           else
-            git commit -m "chore(data): auto-collect tft ${PATCH_FROM} -> ${PATCH_TO}
+            git commit -m "chore(data): auto-collect tft ${PATCH_FROM} -> ${PATCH_TO} (${MODE})
 
             GitHub Actions collect-tft.yml(run_id=${{ github.run_id }})가 생성."
             # [skip ci]를 넣지 않는다 — Vercel이 이 커밋을 감지해 재빌드해야 한다.

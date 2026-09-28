@@ -17,6 +17,7 @@ import {
   verifyCauses,
   namesOtherEntityThanCited,
   verifySummaryCites,
+  summaryCitesAllMismatched,
 } from "../llm-match";
 import { lolLlmProfile, SYSTEM_INSTRUCTIONS_TEXT } from "../llm-profile-lol";
 import type { DdragonChampion, DdragonData, DdragonItem } from "../ddragon";
@@ -306,6 +307,20 @@ describe("inferIndirectCandidates", () => {
     const revised = await inferIndirectCandidates(deltas, notes, profile, { client, cacheDir: tmpCacheDir, promptRevision: "r2" });
     expect(revised.summary.cacheHits).toBe(0);
     expect(revised.summary.calls).toBe(1);
+  });
+
+  // C5(2026-09-28): 개정 태그를 호출부 옵션이 아니라 프로필 속성으로 — 지시문과 태그가 같은 파일에 산다.
+  it("프로필의 promptRevision도 캐시 키를 바꾼다 — 비어 있으면 기존 키 그대로", async () => {
+    const parseFn = vi.fn().mockResolvedValue(fakeResponse({ causes: [], summary: "요약", summaryCites: [] }));
+    const client = fakeClient(parseFn);
+    const deltas = [delta({ id: "d1", status: "unannounced" })];
+    const notes = [note({})];
+    const base = lolLlmProfile(makeDdragon());
+    await inferIndirectCandidates(deltas, notes, base, { client, cacheDir: tmpCacheDir });
+    const empty = await inferIndirectCandidates(deltas, notes, { ...base, promptRevision: "" }, { client, cacheDir: tmpCacheDir });
+    expect(empty.summary.cacheHits).toBe(1);
+    const revised = await inferIndirectCandidates(deltas, notes, { ...base, promptRevision: "r2" }, { client, cacheDir: tmpCacheDir });
+    expect(revised.summary.cacheHits).toBe(0);
   });
 
   it("캐시 파일이 있으면 API 호출 0", async () => {
@@ -738,5 +753,134 @@ describe("프롬프트 v5 — 길이 상한과 완곡 표현(2026-09-19 항목7)
   it("PROMPT_VERSION이 올라가 옛 캐시를 재사용하지 않는다", () => {
     // 프롬프트를 바꾸고 버전을 안 올리면, 캐시된 답이 그것을 만들지 않은 프롬프트에 귀속된다.
     expect(PROMPT_VERSION).toBe("v5");
+  });
+});
+
+// C1(2026-09-28 잔여 로드맵, 사용자 결정 D1): 요약 100자 초과 0은 ACCEPT-prose-v5 A1의 **합격 조건**이다.
+//  ① 캐시 적중 경로가 위반 항목을 매 실행마다 다시 물었다(비용 누수) → 재요청 시도 수를 캐시에 적고 1회로 닫는다.
+//  ② 재요청 요약의 인용이 바뀌면 원본 긴 요약을 지켰다(회귀 원인) → 새 인용이 검증을 통과하면 문장·인용 쌍째 채택.
+//  ③ 그래도 초과면 자르지도 회색으로 돌리지도 않고 **델타 수치만의 결정론 요약**(summaryCites=[]).
+describe("요약 100자 폴백·재요청 누수(C1)", () => {
+  let dir: string;
+  beforeEach(() => {
+    dir = fs.mkdtempSync(path.join(os.tmpdir(), "llm-c1-"));
+  });
+  afterEach(() => {
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+  const long = "가".repeat(120);
+  const withProfile = () => ({ ...lolLlmProfile(makeDdragon()), fallbackSummary: () => "결정론 요약입니다." });
+
+  it("캐시 적중 재요청은 한 번뿐이다 — 고쳐지지 않아도 다음 실행에서 다시 묻지 않는다", async () => {
+    const parseFn = vi.fn().mockResolvedValue(fakeResponse({ causes: [], summary: long, summaryCites: [] }));
+    const client = fakeClient(parseFn);
+    const deltas = [delta({ id: "d1", status: "unannounced" })];
+    const notes = [note({})];
+    await inferIndirectCandidates(deltas, notes, withProfile(), { client, cacheDir: dir }); // 최초 + 재요청 1
+    parseFn.mockClear();
+    const second = await inferIndirectCandidates(deltas, notes, withProfile(), { client, cacheDir: dir });
+    expect(parseFn).not.toHaveBeenCalled();
+    expect(second.summary.calls).toBe(0);
+  });
+
+  it("시도 기록이 없는 옛 캐시는 한 번 더 묻고, 그 뒤로는 묻지 않는다", async () => {
+    const parseFn = vi.fn().mockResolvedValue(fakeResponse({ causes: [], summary: long, summaryCites: [] }));
+    const client = fakeClient(parseFn);
+    const deltas = [delta({ id: "d1", status: "unannounced" })];
+    const notes = [note({})];
+    await inferIndirectCandidates(deltas, notes, withProfile(), { client, cacheDir: dir });
+    // 옛 캐시 흉내 — 시도 기록을 지운다.
+    for (const f of fs.readdirSync(dir)) {
+      const p = path.join(dir, f);
+      const j = JSON.parse(fs.readFileSync(p, "utf8"));
+      delete j.proseRepairAttempts;
+      fs.writeFileSync(p, JSON.stringify(j));
+    }
+    parseFn.mockClear();
+    const legacy = await inferIndirectCandidates(deltas, notes, withProfile(), { client, cacheDir: dir });
+    expect(legacy.summary.calls).toBe(1);
+    const after = await inferIndirectCandidates(deltas, notes, withProfile(), { client, cacheDir: dir });
+    expect(after.summary.calls).toBe(0);
+  });
+
+  it("재요청 후에도 100자를 넘으면 결정론 수치 요약으로 바꾼다(인용 없음·검증 통과·표시)", async () => {
+    const parseFn = vi.fn().mockResolvedValue(fakeResponse({ causes: [], summary: long, summaryCites: ["note:26.17:champion:aatrox:00000001"] }));
+    const client = fakeClient(parseFn);
+    const out = await inferIndirectCandidates([delta({ id: "d1", status: "unannounced" })], [note({})], withProfile(), { client, cacheDir: dir });
+    expect(out.deltas[0].llm).toMatchObject({ summary: "결정론 요약입니다.", summaryCites: [], summaryVerified: true, summaryDeterministic: true });
+  });
+
+  it("재요청 요약의 인용이 바뀌어도 새 인용이 검증을 통과하면 문장·인용을 쌍째 채택한다", () => {
+    const original = { summary: long, summaryCites: ["note:a"], causes: [] };
+    const repaired = { summary: "짧아진 요약입니다.", summaryCites: ["note:b"], causes: [] };
+    expect(mergeRepairedProse(original, repaired, (text, cites) => text.length < 100 && cites.length === 1)).toMatchObject({ summary: "짧아진 요약입니다.", summaryCites: ["note:b"] });
+    expect(mergeRepairedProse(original, repaired, () => false)).toMatchObject({ summary: long, summaryCites: ["note:a"] });
+  });
+});
+
+// C4(2026-09-28): 요약도 원인과 같은 「문장 ↔ 인용 대상」 게이트를 받는다. 단 요약은 여러 노트를 한 문장에
+// 엮으므로 **인용 전부가** 다른 대상을 말할 때만 미검증으로 돌린다(현 데이터 오탐 0/93 실측 기준).
+describe("요약 ↔ 인용 대상 게이트(C4)", () => {
+  const aatrox = note({ id: "n1", entity: "아트록스" });
+  const graves = note({ id: "n2", entity: "그레이브즈" });
+  const pool = [aatrox, graves];
+  it("인용 전부가 문장이 말하지 않는 대상이면 참(=미검증 사유)", () => {
+    expect(summaryCitesAllMismatched("그레이브즈 Q 상향으로 정글 경쟁이 달라졌습니다.", ["n1"], pool, null)).toBe(true);
+  });
+  it("인용 하나라도 문장과 맞으면 거짓", () => {
+    expect(summaryCitesAllMismatched("그레이브즈와 아트록스 변경이 겹쳤습니다.", ["n1", "n2"], pool, null)).toBe(false);
+  });
+  it("인용이 없으면 거짓 — 델타 수치만의 요약이다", () => {
+    expect(summaryCitesAllMismatched("그레이브즈 얘기입니다.", [], pool, null)).toBe(false);
+  });
+  it("엔진이 요약을 미검증으로 내보낸다", async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "llm-c4-"));
+    const parseFn = vi.fn().mockResolvedValue(fakeResponse({ causes: [], summary: "그레이브즈 Q 상향 영향입니다.", summaryCites: ["n1"] }));
+    const out = await inferIndirectCandidates([delta({ id: "d1", entityName: "리신", status: "unannounced" })], pool, lolLlmProfile(makeDdragon()), { client: fakeClient(parseFn), cacheDir: dir });
+    fs.rmSync(dir, { recursive: true, force: true });
+    expect(out.deltas[0].llm?.summaryVerified).toBe(false);
+  });
+});
+
+describe("verifyCauses — 사실성 검사 연결(C3)", () => {
+  const graves = note({ id: "n2", entity: "그레이브즈", stat: "피해량", before: "45", after: "40", summary: "피해량: 45 ⇒ 40" });
+  it("인용 노트에 없는 「A→B」를 단정한 원인은 검증 실패", () => {
+    const [bad, good] = verifyCauses(
+      [
+        { text: "그레이브즈 피해량 50→40 너프로 정글 수요가 옮겨갔습니다.", candidateNoteId: "n2", confidence: "medium" },
+        { text: "그레이브즈 피해량 45→40 너프로 정글 수요가 옮겨갔습니다.", candidateNoteId: "n2", confidence: "medium" },
+      ],
+      [graves],
+      delta({ entityName: "리신" }),
+      lolLlmProfile(makeDdragon())
+    );
+    expect(bad.verified).toBe(false);
+    expect(good.verified).toBe(true);
+  });
+  it("프로필의 게임 고유 검사(isCauseGrounded)가 거짓이면 검증 실패", () => {
+    const profile = { ...lolLlmProfile(makeDdragon()), isCauseGrounded: () => false };
+    const [c] = verifyCauses([{ text: "그레이브즈 너프 영향입니다.", candidateNoteId: "n2", confidence: "low" }], [graves], delta({ entityName: "리신" }), profile);
+    expect(c.verified).toBe(false);
+  });
+});
+
+describe("계측 — 대상 이름 없는 원인(C6)", () => {
+  it("검증 통과 원인 중 인용 대상 이름을 말하지 않는 문장 수를 센다", async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "llm-c6-"));
+    const graves = note({ id: "n2", entity: "그레이브즈" });
+    const parseFn = vi.fn().mockResolvedValue(
+      fakeResponse({
+        summary: "요약입니다.",
+        summaryCites: [],
+        causes: [
+          { text: "그레이브즈 너프로 정글이 바뀌었습니다.", candidateNoteId: "n2", confidence: "low" },
+          { text: "정글 경쟁 구도가 바뀌었습니다.", candidateNoteId: "n2", confidence: "low" },
+        ],
+      })
+    );
+    const out = await inferIndirectCandidates([delta({ id: "d1", entityName: "리신", status: "unannounced" })], [graves], lolLlmProfile(makeDdragon()), { client: fakeClient(parseFn), cacheDir: dir });
+    fs.rmSync(dir, { recursive: true, force: true });
+    expect(out.summary.prose.causeUnnamedTarget).toBe(1);
+    expect(out.summary.prose.summaryDeterministic).toBe(0);
   });
 });

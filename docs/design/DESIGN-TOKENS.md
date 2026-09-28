@@ -233,3 +233,12 @@
 > 드러낸다 — 역시 신규 토큰 0개.
 
 > 스택별 주입 구문(Tailwind v4 `@theme`·CSS 변수)은 `/init-project` Phase 4-5-a에서 처리한다. 이 파일은 값만 정의한다.
+
+## 알려진 lint 예외 (렌더 산출물)
+
+<!-- design-lint:ignore -->
+- 전역 CSS 번들의 `#fff` / `#ffffff` — Tailwind v4가 자체 `@property`(`--tw-ring-offset-color` 등)의
+  초기값으로 내보내는 값이다. 소스에 없는 값이라 토큰으로 바꿀 대상이 아니다(2026-09-28, C16).
+- 같은 번들에 있던 `mt-[120px]`·`pt-[152px]`는 예외가 아니라 결함이었다 — `docs/`의 문자열로 생긴 유령
+  유틸이라 `globals.css`의 `@source not "../../docs"`로 제거했다.
+<!-- /design-lint:ignore -->

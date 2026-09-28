@@ -61,6 +61,8 @@ export interface PubgDeltaRow {
     summary?: string;
     summaryCites?: string[];
     summaryVerified?: boolean;
+    /** 결정론 수치 요약으로 바뀌었다(C1·D1) — `DeltaRecord.llm.summaryDeterministic`과 같은 계약. */
+    summaryDeterministic?: boolean;
   };
 }
 

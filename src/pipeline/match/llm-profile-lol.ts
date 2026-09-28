@@ -10,7 +10,7 @@ import { isCoreNote } from "../shared/mode-scope";
 import type { DeltaRecord, PatchNoteItem } from "../types";
 import type { DdragonData } from "./ddragon";
 import { resolveNoteEntity } from "./entity-match";
-import { isAnomalyOrGapTarget, isCitableBalanceNote, type GameLlmProfile } from "./llm-profile";
+import { deltaRecordNumbers, deterministicSummary, displayedDelta, isAnomalyOrGapTarget, isCitableBalanceNote, signed, type GameLlmProfile } from "./llm-profile";
 
 const SYSTEM_INSTRUCTIONS = [
   "당신은 리그 오브 레전드 패치 분석가입니다.",
@@ -131,6 +131,16 @@ export function lolLlmProfile(ddragon: DdragonData): GameLlmProfile {
     isCitable: isCitableBalanceNote,
     isSameEntity: (note, delta) => resolvesToSameEntity(note, delta, ddragon),
     buildUserPrompt,
+    ownNumbersOf: deltaRecordNumbers,
+    fallbackSummary: (delta: DeltaRecord) =>
+      deterministicSummary({
+        name: delta.entityName,
+        metricKo: METRIC_KO[delta.metric] ?? delta.metric,
+        before: fmtValue(delta.metric, delta.before),
+        after: fmtValue(delta.metric, delta.after),
+        change: signed(fmtValue(delta.metric, displayedDelta(delta.before, delta.after, RATE_METRICS.has(delta.metric) ? 0.001 : 1), true)),
+        status: delta.status,
+      }),
     // 화면이 「미공지」·「이상 관측」이라 부르는 행만 — 근거는 llm-profile.ts `isAnomalyOrGapTarget`.
     isTarget: isAnomalyOrGapTarget,
   };

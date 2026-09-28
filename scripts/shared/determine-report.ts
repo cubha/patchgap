@@ -96,7 +96,7 @@ export function reportSkip(
   reason: SkipReason,
   detail: string,
 ): void {
-  emitOutputs(game, { should_run: "false", skip_reason: reason });
+  emitOutputs(game, { should_run: "false", skip_reason: reason, mode: "skip", declare: "false" });
   const action = SKIP_ACTION[reason];
   warn(`${GAME_LABEL[game]} 수집 건너뜀 [${reason}] ${detail} — ${action}`);
   appendSummary(`### ${GAME_LABEL[game]} — 건너뜀 \`${reason}\``);
@@ -108,8 +108,40 @@ export function reportSkip(
 
 /** 수집을 진행한다. 요약에도 남긴다 — "돌았다"와 "안 돌았다"가 같은 자리에서 읽혀야 한다. */
 export function reportRun(game: DetermineGame, values: Record<string, string>): void {
-  emitOutputs(game, { ...values, should_run: "true", skip_reason: "" });
+  // 관측 실행은 선언 축(노트·F9)도 함께 돈다 — `declare`가 두 경로의 공통 스텝을 연다(C13).
+  emitOutputs(game, { ...values, should_run: "true", skip_reason: "", mode: "observation", declare: "true" });
   const pair = values.from && values.to ? ` ${values.from} → ${values.to}` : "";
   appendSummary(`### ${GAME_LABEL[game]} — 수집 진행${pair}`);
+  appendSummary("");
+}
+
+/**
+ * **선언 축만 돈다**(2026-09-28, C13·C14 — 사용자 결정 D5·D6). 패치노트·수치 스냅숏(F9)은 즉시 반영하고,
+ * 관측(매치 수집·판정) 대신 사유를 담은 stub 판정 파일을 쓴다. `stubReason`은 stub에 적히는 사유이고,
+ * 키 문제로 강등된 경우 `keyIssue`가 사람의 조치를 요약에 함께 남긴다(초록불이 고장을 덮지 않게).
+ */
+export function reportDeclaration(
+  game: DetermineGame,
+  values: Record<string, string>,
+  stubReason: string,
+  detail: string,
+  keyIssue?: SkipReason,
+): void {
+  emitOutputs(game, {
+    ...values,
+    should_run: "false",
+    skip_reason: keyIssue ?? "",
+    mode: "declaration",
+    declare: "true",
+    stub_reason: stubReason,
+  });
+  const pair = values.from && values.to ? ` ${values.from} → ${values.to}` : "";
+  appendSummary(`### ${GAME_LABEL[game]} — 선언 축만 반영${pair} (관측: \`${stubReason}\`)`);
+  appendSummary("");
+  appendSummary(`- ${detail}`);
+  if (keyIssue !== undefined) {
+    warn(`${GAME_LABEL[game]} 관측 건너뜀 [${keyIssue}] — ${SKIP_ACTION[keyIssue]}. 패치노트는 반영한다.`);
+    appendSummary(`- **관측 ${keyIssue}: ${SKIP_ACTION[keyIssue]}**`);
+  }
   appendSummary("");
 }

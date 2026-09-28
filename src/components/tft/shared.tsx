@@ -7,6 +7,8 @@ import type { ReactNode } from "react";
 import SiteFooter from "@/components/SiteFooter";
 import { metricLabel, isLowerBetter } from "@/lib/format";
 import type { DeltaMetric } from "@/pipeline/types";
+import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
+import type { ObservationFailure } from "@/pipeline/types";
 
 /** 0.5231 → "52.3%". */
 export function pct(value: number, digits = 1): string {
@@ -70,7 +72,21 @@ export function TftMetricCaption({ metric }: { metric: DeltaMetric }) {
   );
 }
 
-export function TftUnavailable() {
+/**
+ * TFT 화면을 못 그릴 때. `failure`가 있으면 **관측만 없는** 상태다(C13·C14) — 최신 쌍의 패치노트는
+ * 홈에 반영돼 있으므로 「미연결」이 아니라 관측 사유를 회색으로 말한다(한 문구가 두 상태를 덮지 않게).
+ */
+export function TftUnavailable({ failure }: { failure?: ObservationFailure | null } = {}) {
+  if (failure) {
+    return (
+      <div className="flex flex-col gap-3 pt-40 pb-8">
+        <h1 className="font-display text-3xl font-bold text-fg">전략적 팀 전투 — 관측 전</h1>
+        <p role="status" data-observation={failure.reason} className="max-w-2xl text-sm leading-relaxed text-muted">
+          {observationReasonLabel(failure.reason)} 이 화면은 관측이 있어야 채워집니다 — 패치노트는 TFT 홈에서 볼 수 있습니다.
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-3 pt-40 pb-8">
       <h1 className="font-display text-3xl font-bold text-fg">전략적 팀 전투 — 아직 연결되지 않았습니다</h1>

@@ -180,3 +180,48 @@ export function determinePubgRun(
   }
   return { ...pair, shouldRun: true, reason: `${previous.patch} → ${latest.patch} 수집(라이브 ${age}일째)`, staleCalendar };
 }
+
+// ── 선언 축 / 관측 축 실행 계획(2026-09-28, C13·C14 — 사용자 결정 D5·D6) ─────────────────────
+//
+// 위 `determinePubgRun`은 비교 구간이 닫힐 때까지(패치+7일) 실행 **전체**를 스킵해, 사람이 넣은 노트가
+// 일주일간 화면에 안 나왔다 — 결정 8 위반(TFT와 같은 결함). 관측 규칙은 그대로 두고 그 위에 선언 축을
+// 얹는다: 노트가 있고 이 쌍의 산출물이 없으면 **즉시** 관측 stub(`meta.observationFailed`)을 쓴다.
+
+/** 이 패치쌍의 `deltas.json` 상태 — meta 쌍이 다르면 `none`. stub은 산출물로 치지 않는다. */
+export type PubgDeltasState = { kind: "none" } | { kind: "stub" } | { kind: "observed" };
+
+export interface PubgPlanInput {
+  nowMs: number;
+  /** 수기 노트 `notes-{to}.json`이 있는가. */
+  notesExist: boolean;
+  deltas: PubgDeltasState;
+  force?: boolean;
+}
+
+export interface PubgRunPlan extends PubgRunDecision {
+  mode: "skip" | "declaration" | "observation";
+  /** 관측 계획에서 집계·판정까지 갈 수 있나(노트 있음). 없으면 수집만 하고 집계는 보류한다. */
+  notesReady: boolean;
+  /** 336시간 보존창을 넘겨 이 쌍은 관측이 영영 불가하다(stub 사유 `window-lost`). */
+  windowLost: boolean;
+}
+
+export function planPubgRun(input: PubgPlanInput, windows: readonly PubgPatchWindow[] = PUBG_PATCH_WINDOWS): PubgRunPlan {
+  const decision = determinePubgRun(
+    { nowMs: input.nowMs, outputsExist: input.deltas.kind === "observed", force: input.force },
+    windows
+  );
+  const latest = windows[windows.length - 1];
+  const windowLost = latest !== undefined && daysSincePatch(latest.liveFrom, input.nowMs) > HARVEST_LATEST_DAY;
+  if (decision.shouldRun) return { ...decision, mode: "observation", notesReady: input.notesExist, windowLost };
+  if (decision.to !== null && input.deltas.kind === "none" && input.notesExist) {
+    return {
+      ...decision,
+      mode: "declaration",
+      notesReady: true,
+      windowLost,
+      reason: `${decision.reason} — 패치노트는 즉시 반영한다(관측 stub)`,
+    };
+  }
+  return { ...decision, mode: "skip", notesReady: input.notesExist, windowLost };
+}

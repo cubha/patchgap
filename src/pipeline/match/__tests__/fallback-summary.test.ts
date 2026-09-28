@@ -1,0 +1,76 @@
+// src/pipeline/match/__tests__/fallback-summary.test.ts
+// 결정론 수치 요약(C1·D1, 2026-09-28)은 **그 자체가** 100자 상한을 지켜야 한다 — 폴백이 상한을 넘으면
+// 폴백의 존재 이유가 사라진다. 커밋된 전 쌍의 전 행(가장 긴 이름·지표 포함)으로 고정한다.
+import fs from "node:fs";
+import path from "node:path";
+import { describe, expect, it } from "vitest";
+import { lolLlmProfile } from "../llm-profile-lol";
+import { tftLlmProfile } from "../llm-profile-tft";
+import { createPubgLlmProfile } from "../llm-profile-pubg";
+import { SUMMARY_MAX_CHARS, isNounEnding } from "../llm-match";
+import type { DdragonData } from "../ddragon";
+import type { DeltaRecord } from "../../types";
+import type { PubgDeltaRow } from "../pubg-delta";
+
+const AGG = path.join(process.cwd(), "data", "aggregated");
+const rowsOf = <T,>(file: string): T[] => (JSON.parse(fs.readFileSync(file, "utf8")) as { rows: T[] }).rows;
+const lolFiles = fs.readdirSync(path.join(AGG, "deltas")).filter((f) => /^\d+\.\d+_\d+\.\d+\.json$/.test(f)).map((f) => path.join(AGG, "deltas", f));
+const tftFiles = fs.readdirSync(path.join(AGG, "tft")).filter((f) => f.startsWith("deltas-")).map((f) => path.join(AGG, "tft", f));
+
+describe("결정론 수치 요약 — 상한·문장 규칙", () => {
+  it("LoL 전 행이 100자 이하이고 명사형으로 끝나지 않는다", () => {
+    const profile = lolLlmProfile({} as unknown as DdragonData);
+    const bad = lolFiles.flatMap((f) => rowsOf<DeltaRecord>(f)).map((r) => profile.fallbackSummary?.(r) ?? "").filter((t) => t.length > SUMMARY_MAX_CHARS || isNounEnding(t));
+    expect(bad).toEqual([]);
+  });
+  it("TFT 전 행이 100자 이하이고 명사형으로 끝나지 않는다", () => {
+    const bad = tftFiles.flatMap((f) => rowsOf<DeltaRecord>(f)).map((r) => tftLlmProfile.fallbackSummary?.(r) ?? "").filter((t) => t.length > SUMMARY_MAX_CHARS || isNounEnding(t));
+    expect(bad).toEqual([]);
+  });
+  it("PUBG 전 행이 100자 이하다", () => {
+    const profile = createPubgLlmProfile(new Map());
+    const bad = rowsOf<PubgDeltaRow>(path.join(AGG, "pubg", "deltas.json")).map((r) => profile.fallbackSummary?.(r) ?? "").filter((t) => t.length > SUMMARY_MAX_CHARS);
+    expect(bad).toEqual([]);
+  });
+  it("수치와 상태 꼬리를 담는다", () => {
+    const text = tftLlmProfile.fallbackSummary?.({
+      entityName: "헤카림", metric: "top4Rate", before: 0.5, after: 0.62, delta: 0.12, status: "unannounced",
+    } as DeltaRecord);
+    expect(text).toBe("헤카림 순방률이 50.0%에서 62.0%로 바뀌었습니다(+12.0%p). 패치노트에 직접 조항이 없습니다.");
+  });
+});
+
+describe("결정론 요약 — 주격 조사", () => {
+  it("받침 없는 지표는 「가」, 있는 지표는 「이」", () => {
+    const base = { entityName: "x", before: 4.1, after: 4.3, delta: 0.2, status: "unannounced" } as DeltaRecord;
+    expect(tftLlmProfile.fallbackSummary?.({ ...base, metric: "avgPlacement" })).toContain("평균 등수가 ");
+    expect(tftLlmProfile.fallbackSummary?.({ ...base, metric: "top4Rate" })).toContain("순방률이 ");
+    expect(tftLlmProfile.fallbackSummary?.({ ...base, metric: "playRate" })).toContain("등장률이 ");
+  });
+});
+
+describe("결정론 요약 — 부호·방향 조사(재생성 실측 2026-09-28)", () => {
+  const base = { entityName: "원시", status: "unannounced" } as DeltaRecord;
+  it("이미 부호가 붙은 변화량에 부호를 또 붙이지 않는다(「++0.27등」 금지)", () => {
+    const t = tftLlmProfile.fallbackSummary?.({ ...base, metric: "avgPlacement", before: 4.21, after: 4.48, delta: 0.27 }) ?? "";
+    expect(t).toContain("(+0.27등)");
+    expect(t).not.toContain("++");
+  });
+  it("「로/으로」를 끝소리로 고른다 — 「4.48등으로」·「12.2%로」", () => {
+    expect(tftLlmProfile.fallbackSummary?.({ ...base, metric: "avgPlacement", before: 4.21, after: 4.48, delta: 0.27 })).toContain("4.48등으로");
+    expect(tftLlmProfile.fallbackSummary?.({ ...base, metric: "top4Rate", before: 0.5, after: 0.122, delta: -0.378 })).toContain("12.2%로");
+  });
+});
+
+describe("결정론 요약 — 표시값끼리 자기 일관(scope-critic 2026-09-28)", () => {
+  it("변화량은 **표시된** 두 값의 차이다 — 16.2%→7.9%면 −8.3%p(원값 차이 −8.4%p를 쓰면 문장이 스스로 어긋난다)", () => {
+    const t = tftLlmProfile.fallbackSummary?.({ entityName: "요정", status: "announced-inconsistent", metric: "playRate", before: 0.16244, after: 0.07886, delta: -0.08358 } as DeltaRecord);
+    expect(t).toContain("16.2%에서 7.9%로");
+    expect(t).toContain("(-8.3%p)");
+  });
+  it("LoL 비율도 같은 규칙", () => {
+    const t = lolLlmProfile({} as unknown as DdragonData).fallbackSummary?.({ entityName: "노틸러스", status: "unannounced", metric: "banRate", before: 0.08849, after: 0.12151, delta: 0.03302 } as DeltaRecord);
+    expect(t).toContain("8.8%에서 12.2%로");
+    expect(t).toContain("(+3.4%p)");
+  });
+});

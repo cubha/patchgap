@@ -5,11 +5,6 @@ import {
   liveTftPatch,
   previousTftPatch,
   isOpenEnded,
-  windowAgeDays,
-  determineTftRun,
-  TFT_MIN_LIVE_DAYS,
-  TFT_STALE_AFTER_DAYS,
-  type TftRunDecision,
 } from "../tft-patch-calendar";
 
 const D = (iso: string) => Date.parse(iso);
@@ -71,87 +66,5 @@ describe("isOpenEnded — 캘린더 스테일 감지의 재료", () => {
   });
 });
 
-describe("표본 대기 — 패치 당일 수집은 빈 판정을 만든다", () => {
-  // KR Master+ 래더는 하루 약 227매치다(18.2 = 11일에 2,496). LoL(하루 1만)과 달라서
-  // 같은 cron 설계를 그대로 쓰면 TFT에서만 조용히 표본부족 판정이 쌓인다.
-  const justLanded = { nowMs: D("2026-09-10T00:00:00Z"), hasOutputs: false, force: false };
-
-  it("**라이브 직후엔 돌지 않는다**", () => {
-    const d = determineTftRun(justLanded);
-    expect(d.shouldRun).toBe(false);
-    expect(d.reason).toMatch(/표본이 쌓일 시간/);
-  });
-
-  it(`${TFT_MIN_LIVE_DAYS}일이 지나면 돈다`, () => {
-    const d = determineTftRun({ ...justLanded, nowMs: D("2026-09-09T18:00:00Z") + TFT_MIN_LIVE_DAYS * 864e5 });
-    expect(d.shouldRun).toBe(true);
-  });
-
-  it("force는 대기를 넘는다 — 사람이 의도적으로 부른 것이다", () => {
-    expect(determineTftRun({ ...justLanded, force: true }).shouldRun).toBe(true);
-  });
-
-  it("수동 패치 지정도 대기를 넘는다", () => {
-    expect(determineTftRun({ ...justLanded, manualPatch: "18.2" }).shouldRun).toBe(true);
-  });
-
-  it("windowAgeDays가 창이 열린 뒤 경과일을 준다", () => {
-    expect(windowAgeDays("18.2", D("2026-09-19T18:00:00Z"))).toBeCloseTo(10, 5);
-    expect(windowAgeDays("99.9", D("2026-09-19T18:00:00Z"))).toBeNull();
-  });
-});
-
-describe("determineTftRun — 워크플로 determine 스텝의 순수 두뇌", () => {
-  const base = { nowMs: D("2026-09-20T00:00:00Z"), hasOutputs: false, manualPatch: undefined, force: false };
-
-  it("라이브 패치 + 산출물 없음 + 대기 충족 → 실행", () => {
-    const d: TftRunDecision = determineTftRun(base);
-    expect(d.shouldRun).toBe(true);
-    expect(d.patch).toBe("18.2");
-    expect(d.from).toBe("18.1");
-    expect(d.to).toBe("18.2");
-  });
-
-  it("산출물이 이미 있으면 스킵 — 같은 브리핑을 다시 보내지 않는다", () => {
-    const d = determineTftRun({ ...base, hasOutputs: true });
-    expect(d.shouldRun).toBe(false);
-  });
-
-  it("**정상 정상상태는 스테일이 아니다** — 이걸 틀리면 패치 주기 내내 매일 거짓 경보가 뜬다", () => {
-    // 18.2는 지금 정상적으로 라이브이고 산출물도 있다. 그건 건강한 상태지 캘린더 누락이 아니다.
-    const d = determineTftRun({ ...base, hasOutputs: true });
-    expect(d.staleCalendar).toBe(false);
-  });
-
-  it(`**창이 ${TFT_STALE_AFTER_DAYS}일 넘게 열려 있으면 캘린더가 낡았다는 신호다**`, () => {
-    // 관측 주기 15일의 1.5배. 다음 패치가 나왔는데 TFT_PATCH_WINDOWS를 아무도 안 고치면
-    // 워크플로가 영원히 초록불로 스킵하고 사람은 정기 수집이 도는 줄 안다.
-    const late = D("2026-09-09T18:00:00Z") + (TFT_STALE_AFTER_DAYS + 1) * 864e5;
-    const d = determineTftRun({ ...base, nowMs: late, hasOutputs: true });
-    expect(d.staleCalendar).toBe(true);
-    expect(d.reason).toMatch(/캘린더/);
-  });
-
-  it("산출물이 없으면 오래된 창이어도 스테일이 아니다 — 아직 수집 안 한 것뿐", () => {
-    const late = D("2026-09-09T18:00:00Z") + (TFT_STALE_AFTER_DAYS + 1) * 864e5;
-    expect(determineTftRun({ ...base, nowMs: late }).staleCalendar).toBe(false);
-  });
-
-  it("force면 산출물이 있어도 실행한다", () => {
-    const d = determineTftRun({ ...base, hasOutputs: true, force: true });
-    expect(d.shouldRun).toBe(true);
-  });
-
-  it("수동 패치 지정이 캘린더 판정을 이긴다", () => {
-    const d = determineTftRun({ ...base, manualPatch: "18.1" });
-    expect(d.patch).toBe("18.1");
-    expect(d.shouldRun).toBe(false); // 18.1은 from이 없다 → 판정 불가
-    expect(d.reason).toMatch(/직전 패치/);
-  });
-
-  it("캘린더 밖 시각이면 조용히 no-op — 실패가 아니다", () => {
-    const d = determineTftRun({ ...base, nowMs: D("2026-08-01T00:00:00Z") });
-    expect(d.shouldRun).toBe(false);
-    expect(d.patch).toBeNull();
-  });
-});
+// 「표본 대기(7일)」·`determineTftRun` 테스트는 2026-09-28 명세 변경으로 `tft-run-plan.test.ts`로 옮겼다
+// (사용자 결정 D6 — 선언 축은 탐지 즉시, 관측은 세트 중간 3일·세트 개시 9일, 관측 시점 기록 기준).

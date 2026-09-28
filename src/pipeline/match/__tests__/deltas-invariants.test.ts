@@ -112,7 +112,9 @@ describe("커밋된 판정 산출물 불변식", () => {
   // 나갔다(나피리 밴률 "녹턴 R…" → 라이즈 노트). 결함을 그 형태 그대로 인코딩한다 — 수정 전 26.19에서 6건.
   it("검증 통과 원인의 문장이 인용 노트와 다른 대상을 말하지 않는다", () => {
     for (const pair of pairs) {
-      const all = [...pair.notes.values()];
+      // 엔진 게이트와 같은 풀(core 노트 = LoL `candidatesOf`)로 본다. 모드 노트까지 넣으면 C9 재묶음으로
+      // 생긴 아레나 대상 「오른」이 문장의 「(유지력이) 오른」에 걸린다(2026-09-28) — 엔진은 보지 않는 이름이다.
+      const all = [...pair.notes.values()].filter(isCoreNote);
       const bad = pair.rows.flatMap((row) =>
         row.causes
           .filter((cause) => cause.verified && cause.candidateNoteId !== null)

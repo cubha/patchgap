@@ -7,7 +7,7 @@
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { gameDataEntityCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { gapEntityKeys, gapUnionCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import {
   TftFooter,
   TftSampleNotice,
@@ -19,7 +19,8 @@ import { selectTftCauseRows } from "@/components/tft/causeRows";
 import { tftEntityHref } from "@/lib/tftRoutes";
 import { tftEntityRows } from "@/components/tft/entityRows";
 import { entityTypeLabel, metricLabel } from "@/lib/format";
-import { loadTft, loadTftAssets } from "@/lib/tftData";
+import { loadTft, loadTftAssets, loadTftDeclaration, type TftDeclaration } from "@/lib/tftData";
+import DeclarationOnly from "@/components/DeclarationOnly";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
@@ -122,6 +123,9 @@ function briefingGroups(rows: DeltaRecord[], qAlpha?: number): BriefingGroup[] {
 export default function TftPage() {
   const bundle = loadTft();
   if (!bundle) {
+    // 최신 쌍이 관측 stub이면 선언 축(노트 + 수치 축)만 그린다(C13·C14) — 새 노트가 관측을 기다리며 숨지 않게.
+    const declaration = loadTftDeclaration();
+    if (declaration) return <TftDeclarationView declaration={declaration} />;
     return (
       <main>
         <Container>
@@ -143,6 +147,8 @@ export default function TftPage() {
   // 시안 04-applied의 헤드라인 — 이 사이트가 무엇을 하는 곳인지 한 문장으로 말한다.
   // 숫자는 아래 3타일과 **같은 출처**를 쓴다(따로 세면 화면이 스스로를 반박한다).
   const noteEntities = new Set(notes.items.map((n) => n.entity)).size;
+  // 「미공지 Gap」은 대상을 센다 — 타일은 통계 Gap 대상, 탭은 거기에 수치 축 대상을 **합집합**으로(C15·D2).
+  const gapKeys = gapEntityKeys(unannounced);
 
   // 전 대상 색인(§8-1) — 이 패치 보드 집계에 등장한 **모든** 유닛·특성·아이템.
   // 이름은 판정 산출물이 이미 들고 있다(실측 233종 중 232종). 못 찾는 1종은 키를 그대로 쓴다.
@@ -223,7 +229,8 @@ export default function TftPage() {
             patch={deltas.meta.to}
             itemCount={notes.items.length}
             significantCount={reportable.length}
-            gapCount={unannounced.length}
+            // 대상 수(C15, 사용자 확정 7) — 전에는 행 수라 LoL(대상 수)과 단위가 달랐다.
+            gapCount={gapKeys.size}
             game="tft"
           />
 
@@ -240,7 +247,7 @@ export default function TftPage() {
               위치를 아는 쪽만 정할 수 있다(2026-09-24). */}
           <BriefingTabs
               contentCount={announced.length}
-              gapCount={unannounced.length + gameDataEntityCount(submarine)}
+              gapCount={gapUnionCount(gapKeys, submarine)}
               content={
                 <SectionCard
                   eyebrow="대조"
@@ -317,6 +324,29 @@ export default function TftPage() {
         </div>
       </Container>
       <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.rows.length} />
+    </main>
+  );
+}
+
+/**
+ * 선언 축만 있는 쌍(C13·C14)의 홈 — 노트와 수치 축(F9)만, 관측 영역은 회색 사유. 기본 내보내기 **아래**에
+ * 두는 이유: 화면 동등성 테스트가 첫 `return (`부터의 JSX 순서를 본다(본 브리핑의 블록 순서 계약).
+ */
+function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
+  const submarine = summarizeGameData(loadGameDataDiff("tft", declaration.from, declaration.to));
+  return (
+    <main>
+      <Container>
+        <DeclarationOnly
+          from={declaration.from}
+          to={declaration.to}
+          failure={declaration.failure}
+          notes={declaration.notes.items.map((n) => ({ id: n.id, group: n.entity, summary: n.summary, anchorUrl: n.anchorUrl }))}
+          // 관측 없는 쌍엔 상세 라우트가 없다 — 링크 없이 이름만 그린다.
+          extra={submarine ? <SubmarineSection summary={submarine} hrefOf={() => null} /> : null}
+        />
+        <TftFooter generatedAt={declaration.generatedAt} nVerdicts={0} />
+      </Container>
     </main>
   );
 }

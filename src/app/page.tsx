@@ -128,13 +128,13 @@ export default function LandingPage() {
                       </span>
                       <span>
                         <strong className="block font-display text-lg font-bold tabular-nums text-fg">
-                          {fmtInt(card.significant)}
+                          {card.significant === null ? "—" : fmtInt(card.significant)}
                         </strong>
                         <span className="text-xs text-muted">{TILE_LABELS.significant}</span>
                       </span>
                       <span>
                         <strong className="block font-display text-lg font-bold tabular-nums text-accent">
-                          {fmtInt(card.unannounced)}
+                          {card.unannounced === null ? "—" : fmtInt(card.unannounced)}
                         </strong>
                         <span className="text-xs text-muted">{TILE_LABELS.gap}</span>
                       </span>

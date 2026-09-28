@@ -487,6 +487,11 @@ export interface DeltaRecord {
     summary?: string;
     summaryCites?: string[];
     summaryVerified?: boolean;
+    /**
+     * 요약이 재요청 뒤에도 100자를 넘어 **델타 수치만의 결정론 요약**으로 바뀌었다(2026-09-28, C1·D1).
+     * 이때 `summaryCites=[]`·`summaryVerified=true`다(수치는 이 델타 자신의 것이라 근거가 있다).
+     */
+    summaryDeterministic?: boolean;
   };
 }
 
@@ -525,4 +530,26 @@ export interface DeltasFileMeta {
 export interface DeltasFile {
   meta: DeltasFileMeta;
   rows: DeltaRecord[];
+}
+
+/**
+ * 관측 축이 이 패치쌍을 채우지 못한 사유(2026-09-28, C13·C14 — 사용자 결정 D5·D6).
+ *  - `awaiting-observation`: 선언 축은 탐지 즉시 반영하고 관측은 N일차부터(정상 대기).
+ *  - `key-expired`·`product-unapproved`·`key-missing`: 관측할 차례인데 키가 없다(사람 조치 필요 여부가 다르다).
+ *  - `crashed`: 관측 단계가 죽었다(빨간 X는 유지되고, 선언 축만 커밋된다).
+ *  - `window-lost`: 원천 보존창을 넘겨 관측이 영영 불가능하다(PUBG 336시간).
+ */
+export type ObservationFailReason =
+  | "awaiting-observation"
+  | "key-expired"
+  | "product-unapproved"
+  | "key-missing"
+  | "crashed"
+  | "window-lost";
+
+/** 판정 파일 `meta.observationFailed` — 이 값이 있으면 rows는 비어 있고 관측 영역은 회색 사유로 그린다. */
+export interface ObservationFailure {
+  reason: ObservationFailReason;
+  detail: string;
+  at: string;
 }
