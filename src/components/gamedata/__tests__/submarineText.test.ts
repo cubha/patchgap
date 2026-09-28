@@ -6,7 +6,13 @@
 // 막히고 표시 축에서는 아무도 안 막아 프로덕션에 나갔던 적이 있다(2026-09-21, 커밋 2f1fe9e).
 import { describe, it, expect } from "vitest";
 
-import { submarineCellLines, submarineCellText } from "../submarineText";
+import {
+  MIDPATCH_MISMATCH_CAVEAT,
+  mismatchCellLines,
+  mismatchNoteText,
+  submarineCellLines,
+  submarineCellText,
+} from "../submarineText";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 
 function change(over: Partial<GameDataChange>): GameDataChange {
@@ -102,5 +108,18 @@ describe("submarineCellLines — 갈 곳이 없으면 접지 않는다", () => {
   it("여기서도 float32 잡음은 함수가 접는다", () => {
     expect(submarineCellLines([change({ field: "공격 속도", before: 0.800000011920929, after: 0.8500000238418579 })]))
       .toEqual([{ field: "공격 속도", before: "0.8", after: "0.85" }]);
+  });
+});
+
+// 이월 R9: 중간 패치 노트와 어긋난 불일치는 출처를 「중간 패치」로 말하고 사유를 붙인다(노트가 틀렸다는 주장이 아니다).
+describe("mismatchCellLines — 중간 패치 불일치(R9)", () => {
+  const base = { field: "최대 마나", fieldPath: "stats.mana", before: 100, after: 90, matchedNoteIds: ["m"] };
+  it("midpatch 표식이면 「중간 패치 100 ⇒ 100」, 아니면 원래 출처 이름", () => {
+    const [mid] = mismatchCellLines([change({ ...base, noteMismatch: { noteId: "m", noteBefore: "100", noteAfter: "100", midpatch: true } })]);
+    const [plain] = mismatchCellLines([change({ ...base, noteMismatch: { noteId: "m", noteBefore: "100", noteAfter: "100" } })]);
+    expect(mid.midpatch).toBe(true);
+    expect(mismatchNoteText(mid, "패치노트")).toBe("중간 패치 100 ⇒ 100");
+    expect(mismatchNoteText(plain, "패치노트")).toBe("패치노트 100 ⇒ 100");
+    expect(MIDPATCH_MISMATCH_CAVEAT).toMatch(/게임 파일/);
   });
 });

@@ -16,8 +16,10 @@ describe("상한은 데이터량이 아니라 구조로 보장된다", () => {
     // 2026-09-23 §8-3: 세 대조표의 표 본문이 게임별 Explorer로 옮겨갔다 — 규약을 재는 대상도
     // 따라간다. 셋 다 `PANEL_SPLIT_BODY`(= `PANEL_SCROLL_BODY` + 분할 높이)를 쓴다.
     ["src/components/tft/TftCompareExplorer.tsx", "TFT 대조표 — 대상이 늘면 무한정 늘어난다"],
-    ["src/app/tft/page.tsx", "TFT 브리핑 표 2종"],
-    ["src/app/tft/unit/[key]/page.tsx", "TFT 상세 — 한 엔티티에 노트가 여러 건일 수 있다"],
+    // 2026-09-28 명세 변경(이월 R8): TFT 브리핑·상세 본문이 컴포넌트로 옮겼다(최신 쌍과 과거 쌍 라우트가 같은
+    // 본문을 쓴다) — 상한을 재는 대상도 본문 파일로 따라간다.
+    ["src/components/tft/TftBriefing.tsx", "TFT 브리핑 표 2종"],
+    ["src/components/tft/TftUnitDetail.tsx", "TFT 상세 — 한 엔티티에 노트가 여러 건일 수 있다"],
     ["src/app/pubg/page.tsx", "PUBG 브리핑 — 공지 표·미공지 목록·맵 그리드"],
     ["src/components/pubg/PubgCompareExplorer.tsx", "PUBG 대조표 — 무기 수가 는다"],
     // 2026-09-21 — 이 목록이 **파일 이름을 손으로 세는 게이트**라 F9 신설 컴포넌트가 그대로

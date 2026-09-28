@@ -56,11 +56,37 @@ const closureOf = (entry: string, depth = 2): string => {
   return visit(entry, depth);
 };
 
+/**
+ * 게임 브리핑 본문의 소스 파일. LoL은 2026-09-28(PR-C B3)부터 본문이 `components/home/LolBriefing.tsx`에
+ * 있다 — 최신 쌍(`/lol/`)과 과거 쌍(`/lol/history/[pair]/`)이 같은 본문을 쓰려고 옮겼다(명세 변경: 검사 대상
+ * 파일만 바뀌고 검사 내용은 그대로).
+ */
+// 2026-09-28 명세 변경(이월 R8): TFT도 과거 쌍 라우트(`/tft/history/[pair]/`)가 생겨 본문이
+// `components/tft/TftBriefing.tsx`로 옮겼다 — LoL과 같은 이유·같은 처리(검사 대상 파일만 바뀌고 검사 내용은 그대로).
+const BRIEFING_BODY: Partial<Record<string, string>> = {
+  lol: "src/components/home/LolBriefing.tsx",
+  tft: "src/components/tft/TftBriefing.tsx",
+};
+const briefingSource = (id: string): string => BRIEFING_BODY[id] ?? `src/app/${id}/page.tsx`;
+
+// 2026-09-28 명세 변경(이월 R8): 상세 검사 대상을 페이지 → 본문 컴포넌트로 옮긴다(검사 내용은 그대로).
+/**
+ * 상세 화면 본문의 소스 파일. LoL·TFT 상세 본문이 컴포넌트로 옮겼다 — 평소 상세와
+ * 과거 쌍 상세(`history/[pair]/item|unit/…`)가 같은 본문을 쓴다. 페이지는 얇은 위임이라, 검사는 본문 파일에 한다
+ * (검사 내용은 그대로). 위임이 실제로 그 본문인지는 `detail body delegation` 검사가 따로 본다.
+ */
+const DETAIL_BODY: Partial<Record<string, string>> = {
+  "src/app/lol/item/[id]/page.tsx": "src/components/detail/LolItemDetail.tsx",
+  "src/app/tft/unit/[key]/page.tsx": "src/components/tft/TftUnitDetail.tsx",
+};
+const detailSource = (page: string): string => DETAIL_BODY[page] ?? page;
+
 describe("§8-1 골격 — 세 게임이 같은 컴포넌트를 쓴다", () => {
   for (const id of GAME_IDS) {
-    const home = `src/app/${id}/page.tsx`;
+    const home = briefingSource(id);
 
     it(`${id} 홈이 존재한다`, () => {
+      expect(exists(`src/app/${id}/page.tsx`)).toBe(true);
       expect(exists(home)).toBe(true);
     });
 
@@ -143,7 +169,7 @@ describe("§8-1 상세 머리 — 유형과 판정이 머리에 있다", () => {
       "src/app/pubg/weapon/[key]/page.tsx",
     ];
     for (const page of pages) {
-      const src = read(page);
+      const src = read(detailSource(page));
       const aside = src.indexOf("titleAside");
       expect(aside, `${page}: titleAside 없음`).toBeGreaterThanOrEqual(0);
       // 유형 라벨과 뱃지가 그 안에 있어야 한다 — 머리 바깥으로 밀면 이 검사가 실패한다.
@@ -256,7 +282,7 @@ describe("§8-1 섹션 순서 — 세 브리핑이 같은 순서다", () => {
 
   for (const id of GAME_IDS) {
     it(`${id} 브리핑이 타일 → 본문 → 전 대상 색인 → 푸터 순이다`, () => {
-      const src = read(`src/app/${id}/page.tsx`);
+      const src = read(briefingSource(id));
       // LoL은 타일·본문을 각각 `HeroSummary`·`ReleaseNoteStream`을 거쳐 쓴다(§8-1이 인정한 경유).
       const tiles = src.includes("StatTiles") ? "StatTiles" : "HeroSummary";
       const body = src.includes("BriefingTabs") ? "BriefingTabs" : "ReleaseNoteStream";
@@ -272,12 +298,14 @@ describe("§8-1 섹션 순서 — 세 브리핑이 같은 순서다", () => {
     });
   }
 
-  it("탭 순서는 공용 컴포넌트가 소유한다 — 공지 먼저, 미공지 Gap 나중", () => {
-    const tabs = read("src/components/BriefingTabs.tsx");
-    expect(tabs.indexOf("패치 내역") >= 0 || tabs.indexOf("패치 내용") >= 0).toBe(true);
-    expect(tabs.indexOf("미공지 Gap")).toBeGreaterThan(
-      Math.max(tabs.indexOf("패치 내역"), tabs.indexOf("패치 내용"))
-    );
+  // 2026-09-28 명세 재변경(R2, 사용자 결정): PR-C B1(발견 먼저)을 되돌린다 — 「패치내용 먼저 유지가 맞음.
+  // 미공지 gap이 없을수도잇잖아」. Gap이 0건인 패치에서 빈 탭이 첫 화면이 되면 안 된다. 순서·기본값은
+  // 공용 상수 하나가 소유한다(LoL 스트림도 같은 상수를 본다).
+  it("탭 순서는 공용 컴포넌트가 소유한다 — 패치 내용 먼저, 미공지 Gap 나중, 기본 선택도 패치 내용", async () => {
+    const { BRIEFING_TAB_ORDER, DEFAULT_BRIEFING_TAB } = await import("@/components/BriefingTabs");
+    expect(BRIEFING_TAB_ORDER).toEqual(["content", "gap"]);
+    expect(DEFAULT_BRIEFING_TAB).toBe("content");
+    expect(read("src/components/home/ReleaseNoteStream.tsx")).toContain("useState<StreamTab>(DEFAULT_BRIEFING_TAB)");
   });
 });
 
@@ -287,7 +315,7 @@ describe("§8-1 전 대상 색인 — 세 브리핑이 같은 슬롯을 쓴다",
       // 대조표는 세 게임 모두 **판정된 것만** 올린다. 그래서 판정이 서지 않은 대상의 상세로 가는
       // 길이 여기밖에 없다 — PUBG에서 실제로 그 지적이 나왔고(2026-09-18 P1) 무기 47종 그리드가
       // 그 답이었다. 같은 구멍이 LoL·TFT에도 있었다.
-      expect(read(`src/app/${id}/page.tsx`)).toContain("EntityIndexSection");
+      expect(read(briefingSource(id))).toContain("EntityIndexSection");
     });
   }
 
@@ -295,7 +323,7 @@ describe("§8-1 전 대상 색인 — 세 브리핑이 같은 슬롯을 쓴다",
     const owner = read("src/components/EntityIndexSection.tsx");
     expect(owner).toContain(ENTITY_INDEX_TITLE);
     for (const id of GAME_IDS) {
-      expect(read(`src/app/${id}/page.tsx`)).not.toContain(`title="${ENTITY_INDEX_TITLE}"`);
+      expect(read(briefingSource(id))).not.toContain(`title="${ENTITY_INDEX_TITLE}"`);
     }
   });
 });
@@ -331,14 +359,17 @@ describe("§8-4 방법론 — 세 게임이 같은 9슬롯을 쓴다", () => {
 });
 
 describe("§8-5 상세 — 세 게임이 같은 머리를 쓴다", () => {
-  /** 동적 세그먼트(`[id]`·`[key]`)를 가진 라우트 = 상세. */
+  /**
+   * 동적 세그먼트(`[id]`·`[key]`)를 가진 라우트 = 상세. 단 `history/[pair]`는 **과거 쌍 브리핑**이다
+   * (2026-09-28 PR-C B3 — 명세 변경: 대상 상세가 아니라 브리핑 본문 `LolBriefing`을 그린다).
+   */
   const detailPagesOf = (id: string): string[] => {
     const out: string[] = [];
     const walk = (dir: string) => {
       for (const e of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
         const rel = `${dir}/${e.name}`;
         if (e.isDirectory()) {
-          if (e.name !== "__tests__") walk(rel);
+          if (e.name !== "__tests__" && e.name !== "history") walk(rel);
         } else if (e.name === "page.tsx" && /\[[^\]]+\]/.test(dir)) {
           out.push(rel);
         }
@@ -358,11 +389,20 @@ describe("§8-5 상세 — 세 게임이 같은 머리를 쓴다", () => {
       // (LoL) / `← 대조표 / 유닛`(TFT) / `브리핑 / 대조표 / Groza`(PUBG)로 셋이 달랐다.
       // 「방송 규칙 보기 →」는 LoL 상세에만 있었다.
       for (const page of detailPagesOf(id)) {
-        expect(read(page), page).toContain("PageHeader");
-        expect(read(page), page).toContain("detailCrumbs");
+        expect(read(detailSource(page)), page).toContain("PageHeader");
+        expect(read(detailSource(page)), page).toContain("detailCrumbs");
       }
     });
   }
+
+  it("상세 페이지가 본문 컴포넌트에 실제로 위임한다 — 매핑이 공회전하지 않게", () => {
+    // 2026-09-28(이월 R8): 위 검사들이 본문 파일을 읽으므로, 페이지가 그 본문을 쓰지 않게 되면 검사가 헛돈다.
+    for (const [page, body] of Object.entries(DETAIL_BODY)) {
+      const name = path.basename(body as string, ".tsx");
+      expect(read(page), page).toMatch(new RegExp(`import ${name} from "@/components/`));
+    }
+    expect(read("src/app/tft/page.tsx")).toMatch(/import TftBriefing from "@\/components\/tft\/TftBriefing"/);
+  });
 
   it("이동 경로 형식은 하나뿐이다 — 화면이 마디를 직접 조립하지 않는다", () => {
     const owners = new Set(["src/components/Breadcrumb.tsx", "src/lib/breadcrumbs.ts"]);
@@ -385,10 +425,12 @@ describe("§8-5 상세 — 세 게임이 같은 머리를 쓴다", () => {
 
   it("상세 제목에 지표를 붙이지 않는다 — 라우트 단위가 대상이다(§8-7 #10)", () => {
     // LoL 상세가 `{이름} — {지표}`를 h1에 쓰고 있었고 라우트도 지표 단위였다.
-    const lol = read("src/app/lol/item/[id]/page.tsx");
+    // 2026-09-28 명세 변경(이월 R8): 제목은 본문 컴포넌트가, 정적 파라미터는 페이지가 소유한다 — 각각 제 파일에서 본다.
+    const lol = read(detailSource("src/app/lol/item/[id]/page.tsx"));
+    expect(lol).toContain("PageHeader");
     expect(lol).not.toContain("{delta.entityName} — {displayMetricLabel(delta)}");
     // 정준 라우트는 대상 키다 — 별칭(구 지표 경로)은 `detailRouteSlugs`가 따로 만든다.
-    expect(lol).toContain("detailRouteSlugs");
+    expect(read("src/app/lol/item/[id]/page.tsx")).toContain("detailRouteSlugs");
   });
 });
 
@@ -586,12 +628,14 @@ describe("§8-1 행 정렬 — 뱃지 칸이 고정폭이다", () => {
 
   it("2컬럼 골격의 소유자는 BriefingTabs다 — 페이지가 그리드를 만들지 않는다", () => {
     // 페이지가 그리드를 쥐면 우측 패널이 좌측 **탭 바** 상단에 맞아 카드끼리 어긋난다.
-    // 탭 바는 1행, 카드와 사이드는 같은 2행에 서야 한다 — 그 배치는 탭 바 위치를 아는 쪽만 안다.
+    // 2026-09-28 명세 변경(PR-C B2): 탭 바가 카드 **안**으로 들어가(`tabs-in-card.test.tsx`) 카드와 사이드가
+    // 한 행에 선다 — 행을 나누던 `row-start` 배치는 필요 없어졌다. 그리드 소유자가 여기라는 규칙은 그대로.
     const tabs = read("src/components/BriefingTabs.tsx");
-    expect(tabs).toMatch(/lg:row-start-1/);
-    expect(tabs).toMatch(/lg:col-start-2 lg:row-start-2/);
+    expect(tabs).toMatch(/lg:grid-cols-\[2fr_1fr\]/);
+    expect(tabs).toMatch(/BriefingTabBar[\s\S]*?\{panel\}/);
+    // 2026-09-28 명세 변경(이월 R8): TFT 브리핑 본문은 `TftBriefing`이다(`briefingSource`).
     for (const g of ["tft", "pubg"]) {
-      const page = read(`src/app/${g}/page.tsx`);
+      const page = read(briefingSource(g));
       expect(page).toMatch(/<BriefingTabs[\s\S]*?aside=\{/);
       expect(page).not.toMatch(/grid-cols-\[2fr_1fr\]/);
     }

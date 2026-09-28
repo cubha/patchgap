@@ -9,10 +9,11 @@
 // **어떻게 푸나.** 게임 파일(DDragon)이 답을 갖고 있다: 16.18.1 → 16.19.1에서 세계 지도집 체력 30 → 0,
 // 룬 나침반 100 → 60(F7 실측). 바뀐 단계마다 **이전·이후 값이 둘 다 맞는 아이템이 정확히 하나**일 때만
 // 그 단계를 그 아이템에 배정한다. 바뀐 단계 하나라도 배정이 안 되면 그 대상은 **현행 유지** — 지어내지
-// 않는다. DDragon에 없는 수치(「체력 재생」 등)는 같은 대상에서 검증된 단계 배정을 그대로 따른다
-// (같은 줄 묶음이 같은 단계 순서를 쓴다는 원문 형식에 기댄다 — 검증된 배정이 없으면 역시 현행 유지).
+// 않는다. DDragon 스탯 표에 없는 수치(「체력 재생」 등)는 같은 대상에서 검증된 단계 배정을 따르되, 설명문에
+// 값이 있으면 그것으로 교차 검증한다(R10 — 어긋나면 현행 유지, 검증된 배정이 없으면 역시 현행 유지).
 import { contentHash, resolveDirection, slugify } from "./patchnotes-parser";
 import { splitCombinedEntity } from "./entity-match";
+import { DESC_HP_REGEN_KEY, DESC_MP_REGEN_KEY } from "./ddragon";
 import type { PatchNoteItem } from "../types";
 
 /** 아이템 이름 → DDragon 수치(`FlatHPPoolMod` 등). 한 버전의 표. */
@@ -40,6 +41,44 @@ const STAT_KEY: Record<string, { key: string; scale: number }> = {
   "공격 속도": { key: "PercentAttackSpeedMod", scale: 100 },
   "치명타 확률": { key: "FlatCritChanceMod", scale: 100 },
 };
+
+/**
+ * 설명문에서만 읽히는 수치(2026-09-28, 이월 R10) — 배정을 **만들지 않고** 이미 검증된 배정을 교차 검증한다.
+ * 설명문이 빈 아이템이 있어(16.19 세계 지도집) 값이 없으면 「모름」이다. 값이 있는데 배정과 어긋나면 분해하지 않는다.
+ */
+const CROSS_CHECK_KEY: Record<string, string> = {
+  "체력 재생": DESC_HP_REGEN_KEY,
+  "마나 재생": DESC_MP_REGEN_KEY,
+};
+
+/** 검증된 배정을 설명문 값으로 대조한다. 어긋나면 사유, 아니면 대조한 단계 수. */
+function crossCheck(
+  group: readonly PatchNoteItem[],
+  stageMap: ReadonlyMap<number, string>,
+  before: ItemStatTable,
+  after: ItemStatTable
+): string | number {
+  let checked = 0;
+  for (const note of group) {
+    const key = note.stat === null ? undefined : CROSS_CHECK_KEY[note.stat];
+    if (!key) continue;
+    const b = stagesOf(note.before);
+    const a = stagesOf(note.after);
+    for (const [i, part] of stageMap) {
+      if (b[i] === undefined || a[i] === undefined || b[i] === a[i]) continue;
+      const pb = before.byName(part);
+      const pa = after.byName(part);
+      const vb = pb.length === 1 ? pb[0].stats[key] : undefined;
+      const va = pa.length === 1 ? pa[0].stats[key] : undefined;
+      if (vb === undefined || va === undefined) continue; // 모름 — 반증도 확인도 아니다.
+      if (vb !== numberOf(b[i]) || va !== numberOf(a[i])) {
+        return `${note.stat} ${i + 1}단계(${b[i]} ⇒ ${a[i]})가 ${part} 설명문 값(${vb}% ⇒ ${va}%)과 어긋난다`;
+      }
+      checked += 1;
+    }
+  }
+  return checked;
+}
 
 const numberOf = (token: string): number | null => {
   const m = /-?\d+(?:\.\d+)?/.exec(token.replace(/,/g, ""));
@@ -117,6 +156,12 @@ export function splitCombinedNotes(
       continue;
     }
 
+    const checked = crossCheck(group, stageMap, before, after);
+    if (typeof checked === "string") {
+      report.push({ entity, outcome: "kept", reason: checked });
+      continue;
+    }
+
     const planned = new Map<string, PatchNoteItem[]>();
     let unmapped: string | null = null;
     for (const note of group) {
@@ -151,7 +196,12 @@ export function splitCombinedNotes(
       continue;
     }
     for (const [id, subs] of planned) replacement.set(id, subs);
-    report.push({ entity, outcome: "split", reason: `단계 배정 ${[...stageMap].map(([i, p]) => `${i + 1}→${p}`).join(", ")}` });
+    const assigned = [...stageMap].map(([i, p]) => `${i + 1}→${p}`).join(", ");
+    report.push({
+      entity,
+      outcome: "split",
+      reason: checked > 0 ? `단계 배정 ${assigned} · 설명문 교차 검증 ${checked}단계 일치` : `단계 배정 ${assigned}`,
+    });
   }
 
   const items = notes.flatMap((note) => replacement.get(note.id) ?? [note]);

@@ -67,6 +67,12 @@ export interface BuildBriefingOptions {
   noteCount?: number | null;
   /** footer "n={nFrom}/{nTo}"의 매치 수 — 마찬가지로 deltas 파일에 없어 호출부가 summary.json에서 읽어 주입한다. */
   matchCounts?: { from: number | null; to: number | null };
+  /**
+   * 헤드라인 「미공지 N건」 — 사이트 「미공지 Gap」 타일과 같은 수(통계 Gap 대상 ∪ 수치 축 대상, 2026-09-28 D2).
+   * 수치 축은 deltas 파일 밖(`gamedata/`)이라 호출부(run-notify)가 `pipeline/shared/gap-total`로 세어 주입한다.
+   * 없으면 통계 Gap 대상만 센다(수치 축 산출물이 없는 쌍 · 테스트).
+   */
+  gapEntityCount?: number;
 }
 
 /** 챔피언 포지션별 행(id 4세그먼트: champion:{ddragonId}:{pos}:{metric})은 entityName에 포지션이
@@ -166,7 +172,7 @@ export function buildBriefingEmbeds(deltas: DeltasFile, options: BuildBriefingOp
   // (403 중 321건은 어느 목록에도 렌더되지 않는 바닥 미달, 31 vs 29는 행 수 vs 엔티티 수).
   // 디스코드 방을 공개하면 심사자가 두 수치를 나란히 보게 되므로, 세는 곳을 하나로 합쳤다.
   const significantCount = countReportable(deltas.rows, qAlpha);
-  const gapEntityCount = countGapEntities(deltas.rows);
+  const gapEntityCount = options.gapEntityCount ?? countGapEntities(deltas.rows);
 
   return assembleBriefing<DeltaRecord>(
     {

@@ -629,6 +629,33 @@ describe("resolveDirection — 소모 키워드 좁히기(C12)", () => {
   });
 });
 
+// 2026-09-28 이월 종결 중 발견(R17 실측): TFT 18.2 중간 패치 드레이븐 「요구 횟수 5회 ⇒ 6회」·「요구 피해량 8,000 ⇒
+// 10,000」 4줄이 buff로 찍혔다 — 「요구치」만 낮을수록 좋은 키워드였다. 요구량은 형태와 무관하게 낮을수록 좋다.
+describe("resolveDirection — 요구량(요구 횟수·피해량·처치 횟수)", () => {
+  it("요구량이 늘면 하향이다", () => {
+    expect(resolveDirection("현상금 사냥꾼 4단계 유닛 보상의 스킬 사용 요구 횟수", "5회", "6회", null)).toBe("nerf");
+    expect(resolveDirection("현상금 사냥꾼 7골드 획득 요구 피해량", "8,000", "10,000", null)).toBe("nerf");
+    expect(resolveDirection("현상금 사냥꾼 12골드 획득 요구 처치 횟수", "6회", "8회", null)).toBe("nerf");
+  });
+  it("요구치는 그대로 낮을수록 좋다", () => {
+    expect(resolveDirection("업그레이드 단계당 고대의 종 요구치", "4", "3", null)).toBe("buff");
+  });
+});
+
+// 이월 R12(2026-09-28): 「기준치」는 두 뜻이다. 모아야 하는 양(TFT 「황금 나비정령 등장 기준치」·오른 「유물
+// 기준치」)은 낮을수록 좋지만, 효과가 걸리는 **체력 문턱**(세릴다의 원한 「둔화 기준치 50%⇒60%」 = 체력 60%
+// 이하 적을 둔화)은 높을수록 넓게 걸려 좋다. 원문(26.17 캐시)에서 같은 아이템의 방어구 관통력도 40%⇒45% 상향이다.
+describe("resolveDirection — 효과 문턱 기준치(R12)", () => {
+  it("둔화·처형 문턱은 높을수록 좋다", () => {
+    expect(resolveDirection("둔화 기준치", "50%", "60%", null)).toBe("buff");
+    expect(resolveDirection("처형 기준치", "10%", "8%", null)).toBe("nerf");
+  });
+  it("모아야 하는 양의 기준치는 여전히 낮을수록 좋다", () => {
+    expect(resolveDirection("황금 나비정령 등장 기준치 첫 번째", "200,000", "170,000", null)).toBe("buff");
+    expect(resolveDirection("두 번째 유물 기준치", "대장간의 힘 155,000", "대장간의 힘 140,000", null)).toBe("buff");
+  });
+});
+
 // C9(2026-09-28 잔여 로드맵): 26.19 아레나는 대상 이름이 `h4` 하나이고 바로 뒤에 스킬 라벨 `p>strong`이
 // 온다 — 소개 문단(blockquote.context)이 없어서 위 규칙이 새 대상을 열지 못해 36줄이 첫 대상
 // 「아펠리오스」로, 클래식 17줄이 「질리언」으로 묶였다. 「h4 + 다음 형제 p>strong」도 새 대상을 연다.
@@ -710,5 +737,58 @@ describe("parsePatchNotes — 클래식 아이템 범주(C9)", () => {
       ["달빛 마법검", null],
       ["피즈", "Q - 성게 찌르기"],
     ]);
+  });
+});
+
+// 이월 R11(2026-09-28): 26.19 아레나 「증강」 h4 아래는 증강마다 `<p><strong>이름</strong></p>` + 수치 `<ul>`다.
+// 소개 문단이 있는 증강(삐뽀삐뽀) 뒤의 문단 없는 증강 6개(응징의 천사…)가 삐뽀삐뽀의 스킬로 묶였다.
+// 「증강」도 「아이템」처럼 라벨마다 대상인 범주다(증강에는 스킬이 없다).
+describe("parsePatchNotes — 아레나 증강 범주(R11)", () => {
+  const html = [
+    '<div id="patch-notes-container">',
+    '<header class="header-primary"><h2 id="patch-arena">아레나</h2></header>',
+    '<div class="content-border"><div class="white-stone accent-before"><div>',
+    '<h4 class="change-detail-title">증강</h4>',
+    "<p><mark><strong>신규 </strong></mark><strong>삐뽀삐뽀</strong></p>",
+    '<blockquote class="blockquote context"><p>주변 아군을 향해 이동할 때 이동 속도가 증가합니다.</p></blockquote>',
+    "<p><strong>응징의 천사</strong></p>",
+    "<ul><li><strong>체력 계수: 350 ⇒ </strong><strong>450</strong></li></ul>",
+    "<p><strong>거인 학살자</strong></p>",
+    "<ul><li><strong>1레벨 추가 피해량: 10~30 ⇒ </strong><strong>5~25</strong></li>",
+    "<li><strong>2레벨 추가 피해량: 15~35 ⇒ </strong><strong>10~30</strong></li></ul>",
+    '<h4 class="change-detail-title">체계</h4>',
+    "<p><strong>잃은 체력 비례 추가 기력 재생</strong></p>",
+    "<ul><li><strong>최대 추가 기력 재생: 최대 100% ⇒ </strong><strong>최대 400%</strong></li></ul>",
+    "</div></div></div>",
+    "</div>",
+  ].join("");
+  const parsed = parsePatchNotes(html, {
+    patch: "26.19",
+    sourceUrl: "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/",
+  });
+  it("증강 범주 아래 라벨은 각각 대상이다 — 소개 문단 있는 증강에 이월하지 않는다", () => {
+    const arena = parsed.items.filter((i) => i.modeScope === "arena");
+    // 소개 문단만 있고 수치 줄이 없는 대상(삐뽀삐뽀)은 줄을 만들지 않는다 — 블록에 줄이 하나라도 있으면
+    // 폴백 요약을 쓰지 않는 기존 규칙(실데이터 26.19 「마도사의 주스 상자」도 같다).
+    expect(arena.map((i) => [i.entity, i.skill, i.stat])).toEqual([
+      ["응징의 천사", null, "체력 계수"],
+      ["거인 학살자", null, "1레벨 추가 피해량"],
+      ["거인 학살자", null, "2레벨 추가 피해량"],
+      ["잃은 체력 비례 추가 기력 재생", null, "최대 추가 기력 재생"],
+    ]);
+  });
+  // 실데이터 재묶음에서 발견(26.17~26.19 ARAM): 「버그 수정」 h4 + 바로 ul(라벨 없음) — 범주가 아닌 h4는 증강
+  // 묶음을 끝내고 그 자체가 대상이다. 안 끊으면 버그 수정 줄이 마지막 증강의 스킬로 붙는다.
+  it("증강 묶음 뒤의 범주 아닌 h4(버그 수정)는 새 대상이다 — 마지막 증강에 붙지 않는다", () => {
+    const withBugfix = html.replace(
+      '<h4 class="change-detail-title">체계</h4>',
+      '<h4 class="change-detail-title">버그 수정</h4><ul><li>광대 대학의 문구 색상 버그를 수정했습니다.</li></ul><h4 class="change-detail-title">체계</h4>'
+    );
+    const items = parsePatchNotes(withBugfix, {
+      patch: "26.19",
+      sourceUrl: "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/",
+    }).items.filter((i) => i.modeScope === "arena");
+    expect(items.find((i) => i.summary.includes("광대 대학"))?.entity).toBe("버그 수정");
+    expect(items.find((i) => i.summary.includes("광대 대학"))?.skill).toBeNull();
   });
 });

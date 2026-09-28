@@ -89,7 +89,7 @@ export function buildPubgBriefingEmbeds(
   const significantCount = rows.filter((r) => isReportable(r.status)).length;
   // 미공지 N — 행이 아니라 **무기** 수. 지금은 무기당 지표가 하나뿐이라 값이 같지만, 지표가
   // 늘면 갈라진다(LoL `countGapEntities`가 엔티티로 세는 것과 같은 이유).
-  const gapEntityCount = new Set(unannounced.map((r) => r.weaponKey)).size;
+  const gapEntityCount = options.gapEntityCount ?? new Set(unannounced.map((r) => r.weaponKey)).size;
 
   return assembleBriefing<PubgDeltaRow>(
     { from, to, generatedAt, unannounced, anomalies, significantCount, gapEntityCount, buildField: buildPubgField },

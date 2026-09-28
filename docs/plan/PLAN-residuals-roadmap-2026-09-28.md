@@ -47,7 +47,7 @@
 | B1 | C7 TFT 마나 시작/최대 위치별 의미(시작↑좋음·최대↓좋음·혼재=조정) | [TDD] | 마오카이 2·아칼리·레오나 방향 교정 |
 | B2 | C7 `#patch-midpatch-updates` 체이닝 | [TDD] | 추가 패치 줄 구분 |
 | B3 | C11 `, <라벨>: X ⇒ Y` 줄 분할 | [TDD] | 3줄 분할 |
-| B4 | C2 DDragon 수치 대조로 합친 이름 노트 분해(불일치면 현행 유지) + linkedNotes 재생성 + from DDragon 부재 시 크게 실패 | [TDD] | 세계 지도집·룬 나침반·세계의 결실 분해 |
+| B4 | C2 DDragon 수치 대조로 합친 이름 노트 분해(불일치면 현행 유지) + linkedNotes 재생성 + DDragon 부재 시 크게 실패 → **경보(`::warning::`)·원문 유지**로 변경(PR-B Phase 3 scope-critic: 분해는 부가 교정이라 선언 축을 막지 않는다, 가드 `combined-note-split-local.test.ts`) | [TDD] | 세계 지도집·룬 나침반·세계의 결실 분해 |
 | B5 | 재생성: TFT 18.1→18.2 · 18.2→18.3 · LoL 26.18→26.19 (쌍별 실행, 상한 400) | — | 불변식 전부 통과 |
 
 ## PR-C — 브랜치 준비만, 10/6 머지
@@ -64,4 +64,32 @@
 - `tft-patch-calendar.test.ts` 7일 대기·`determineTftRun` 블록 삭제 → `tft-run-plan.test.ts`로 대체 (A11, D6이 7일 대기를 폐기)
 - `landing.test.ts` 「미공지 ⊆ 유의」 검사를 관측 전(null) 허용으로 (A12 — 관측 없는 카드는 0이 아니라 null)
 - `deltas-invariants.test.ts` 「인용 어긋남」 이름 풀을 core 노트로 (A6 — 엔진 `candidatesOf`와 같은 풀. 모드 대상 「오른」이 「(유지력이) 오른」에 걸림)
-- `screen-parity.test.ts` 섹션 순서 (PR-C)
+- `screen-parity.test.ts` 섹션 순서·2컬럼 골격(카드·사이드 한 행)·상세 계약에서 `history` 제외 (PR-C)
+- `home/__tests__/render.test.tsx` 기본 탭 전제 5건 — 패치 내용 탭을 먼저 연다 (PR-C B1)
+- `pubg/__tests__/page-order.test.tsx` 순서 검사 — 패치 내용 탭을 연 뒤 (PR-C B1)
+- `components/__tests__/header-pair-select.test.tsx` 표시 전용 → LoL 실제 이동 (PR-C B3)
+- `landing.test.ts` 「미공지 ⊆ 유의」 삭제 — 미공지 Gap이 수치 축 합집합이라 부분집합 아님, null 대칭만 유지 (PR-C D2)
+
+## 이월 잔여 — 종결 (2026-09-28, `PLAN-residuals-closeout-2026-09-28.md`)
+PR-A·B·C 구현 뒤 남긴 R1~R20을 같은 날 닫았다. 근거·커밋은 `verify-spec/residuals-closeout.md` 각 절.
+
+| R | 내용 | 결과 |
+|---|---|---|
+| R1 | push·PR·머지 | PR-A #57 머지(81c6bb0) · PR-B #58 · PR-C — 머지 결과는 closeout §R1 |
+| R2 | B1 섹션 순서 | **되돌림**(사용자 결정: 「패치내용 먼저 유지가 맞음. 미공지 gap이 없을수도잇잖아」) |
+| R3 | TFT 재수집·Actions 실측 | 새 키(9/28 12:39Z)로 workflow_dispatch 실측 — 결과는 closeout §R3 |
+| R4 | UX-BRIEF 표 | 갱신(섹션 순서 종결·탭 카드 안) |
+| R5 | PR-C 렌더 대조 | closeout §R5 |
+| R6 | design-lint 렌더 재실행 | closeout §R6 |
+| R7 | flip 원인 문장 | 18.1→18.2 재질의(103회) 후 flip 17건 전수 대조 — 수치·방향 어긋남 0 |
+| R8 | 과거 쌍 문맥 | LoL·TFT 과거 쌍 브리핑·대조표·상세 라우트, 링크가 쌍 안에 머문다(+196 페이지) |
+| R9 | TFT 스냅숏 중간 패치 | **외부 조건으로 재분류** — CDragon 16.18 재수집·16.19 모두 중간 패치 이전 값(핫픽스가 게임 파일에 없다). 게임 파일 관측 축에 노트 값을 덮어쓰지 않는다. 대신 거짓 「공지됨」을 없앴다: a/b 성분 대조로 「공지값 불일치(중간 패치)」 + 사유 표시. 게임 파일에 실리면 다음 수집이 그대로 반영한다 |
+| R10 | 재생 단계 검증 | DDragon 설명문 교차 검증 코드화(26.19 룬 나침반 일치) |
+| R11 | 증강 묶임 | 「증강」 범주 규칙, 4패치 모드 노트 재묶음(core 0) |
+| R12 | 둔화 기준치 | 원문 확인 → buff(체력 문턱), 규칙화 |
+| R13 | 반올림 0.1 | PR-A 2602cee에서 이미 해소(목록이 낡았음) — 현 데이터 3건 일치 확인 |
+| R14 | 부호 없는 「X% 줄어」 | 검사 추가, 세 게임 공통 경로 |
+| R15 | 프롬프트 무가드 | 골든에 시스템 프롬프트 래퍼·두 상태 분기·재요청 문구 |
+| R16 | 모바일 select 이유 | 모바일에서 글로 표시 |
+| R17 | 짝 없는 중간 패치 줄 | 실측상 의도대로(11줄 독립). 실측 중 드레이븐 요구량 4줄 방향 오류 발견·교정 |
+| R18~R20 | 절차 기록(RED 이탈·maxWorkers 원인·B4 N4 재분류) | 할 일이 아니라 기록 — `verify-spec/residuals-closeout.md` §기록으로 이동 |

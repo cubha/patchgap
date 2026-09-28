@@ -400,3 +400,70 @@ describe("run-notify: 관측 stub은 브리핑하지 않는다(C14, 2026-09-28)"
     fs.rmSync(root, { recursive: true, force: true });
   });
 });
+
+// D2(2026-09-28, PR-C Phase 3 scope-critic) — 디스코드 헤드라인 「미공지 N건」은 사이트 「미공지 Gap」 타일과
+// **같은 수**다: 통계 Gap 대상 ∪ 수치 축 대상(잠수함). 전에는 통계만 세어 사이트 36 · 디스코드 35였다.
+describe("run-notify: 미공지 수 = 사이트 「미공지 Gap」(수치 축 합집합)", () => {
+  let tmpDir: string;
+  beforeEach(() => {
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "patchgap-run-notify-gap-"));
+  });
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+  it("LoL: 통계 Gap 1 + 다른 대상 잠수함 1 + 같은 대상 잠수함 1 → 미공지 2건", async () => {
+    const from = "26.1";
+    const to = "26.2";
+    const gapRow = {
+      id: "champion:Ahri:all:winRate",
+      entityType: "champion",
+      entityKey: "Ahri",
+      entityName: "아리",
+      metric: "winRate",
+      status: "unannounced",
+      before: 0.5,
+      after: 0.53,
+      delta: 0.03,
+      ci: [0.01, 0.05],
+      q: 0.01,
+      nBefore: 5000,
+      nAfter: 5000,
+      matchedNoteIds: [],
+      causes: [],
+      evidence: {},
+    };
+    const deltasFile = path.join(tmpDir, "aggregated", "deltas", `${from}_${to}.json`);
+    fs.mkdirSync(path.dirname(deltasFile), { recursive: true });
+    fs.writeFileSync(
+      deltasFile,
+      JSON.stringify({ meta: { from, to, generatedAt: "2026-09-28T00:00:00.000Z", n: 1, counts: {}, qAlpha: 0.1 }, rows: [gapRow] }),
+      "utf8"
+    );
+    const change = (entityKey: string) => ({
+      id: `gdc:lol:${to}:${entityKey}:hp`,
+      entityKey,
+      entityName: entityKey,
+      entityType: "champion",
+      field: "체력",
+      fieldPath: "stats.hp",
+      before: 600,
+      after: 610,
+      relChange: 0.0167,
+      matchedNoteIds: [],
+    });
+    const gdFile = path.join(tmpDir, "aggregated", "gamedata", "lol", `${from}_${to}.json`);
+    fs.mkdirSync(path.dirname(gdFile), { recursive: true });
+    fs.writeFileSync(
+      gdFile,
+      JSON.stringify({ meta: { from, to, changeCount: 2, source: "test" }, changes: [change("Ahri"), change("Garen")] }),
+      "utf8"
+    );
+
+    const result = await runNotify(
+      { game: "lol", from, to, top: 5, dryRun: true, site: "https://example.com" },
+      { dataRoot: tmpDir, env: {} }
+    );
+    expect(result.embeds[0]?.description).toContain("미공지 2건");
+  });
+});

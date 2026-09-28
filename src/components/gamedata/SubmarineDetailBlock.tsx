@@ -14,7 +14,7 @@
 // 값 포맷은 `submarineText`가 소유한다 — 여기서 `change.before`를 직접 찍지 않는다(float32 잡음).
 import { gameDataValue, statusLabel } from "@/lib/format";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
-import { mismatchCellLines, sourceLineText, type SourcePatchPair } from "./submarineText";
+import { MIDPATCH_MISMATCH_CAVEAT, mismatchCellLines, mismatchNoteText, sourceLineText, type SourcePatchPair } from "./submarineText";
 import type { GameDataChange, GameDataSource } from "@/pipeline/gamedata/types";
 
 function relText(rel: number | null): string | null {
@@ -109,8 +109,11 @@ export default function SubmarineDetailBlock({
                   {line.before} → <span className="text-fg">{line.after}</span>
                 </span>
                 <span className="font-mono text-xs tabular-nums text-muted">
-                  패치노트 {line.noteBefore} ⇒ {line.noteAfter}
+                  {mismatchNoteText(line, "패치노트")}
                 </span>
+                {line.midpatch ? (
+                  <span className="basis-full font-body text-xs text-muted">{MIDPATCH_MISMATCH_CAVEAT}</span>
+                ) : null}
               </li>
             ))}
           </ul>

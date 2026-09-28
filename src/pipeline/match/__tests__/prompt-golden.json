@@ -3,21 +3,27 @@
     {
       "promptRevision": "",
       "instructionsSha256": "4c4c18ad99676fa24e5707fd5c3c08a2f6701f6c5a592073800a4177ae4108da",
-      "userPromptSha256": "af27cb3550ad70b4b795a0576d90528099cd53330b5156d956423b21a9b53aba"
+      "userPromptSha256": "3b5320f1530de78b3206441bc61c7a6b069ff5597122c206855a2cb322de6df6",
+      "systemPromptSha256": "9806f6924cec9308ca9cecbccf53810cf9e5711afb1b880f93716da3da09b6e3"
     }
   ],
   "tft": [
     {
       "promptRevision": "",
       "instructionsSha256": "b38265cf75a0bbdb676e0e5cbb2e404bef3f738a9a05599fcd9e8ebc01acb9b8",
-      "userPromptSha256": "fe0e36b9ce544a6eeb375d3d56b4ea4d1a628a923ae63d415c03866cb8754003"
+      "userPromptSha256": "4d87e068a4edb11eeb79581dc7581e30d7743207ad2f6a399e01db57de674975",
+      "systemPromptSha256": "35af054b4b865251bf55bc1bdc6a45da7f389b50908490390a5daaa4c90500cc"
     }
   ],
   "pubg": [
     {
       "promptRevision": "pubg-redistribution-bound",
       "instructionsSha256": "310a2d4b5489e297b69f7e819ddaa9d6586b3b12cf6ac5eb0386b70d70afe156",
-      "userPromptSha256": "d06d6530a6c22159acdf33834dc81315cc1a7801d10d7ea8b48f014235142245"
+      "userPromptSha256": "9c13537b405fd8499d77f93f67726f6cc28675aae0410de35fdf6933fa8b08da",
+      "systemPromptSha256": "ba75e95dfa3a21449d0ca9f6a273729fd4d613b19dbf2af010c8cacccae29b1f"
     }
-  ]
+  ],
+  "engine": {
+    "repairNoteSha256": "358fb7b458963f1b4ec8254acd29861bcdee42d965c54813e58db4ff9ed05eb9"
+  }
 }

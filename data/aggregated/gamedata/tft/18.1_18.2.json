@@ -8,7 +8,7 @@
       "from": "16.17",
       "to": "16.18"
     },
-    "generatedAt": "2026-09-28T10:10:28.309Z",
+    "generatedAt": "2026-09-28T13:03:59.141Z",
     "changeCount": 44,
     "submarineCount": 31
   },
@@ -179,7 +179,13 @@
       "relChange": -0.1,
       "matchedNoteIds": [
         "note:tft:18.2:champion:마오카이:d7ea1995"
-      ]
+      ],
+      "noteMismatch": {
+        "noteId": "note:tft:18.2:champion:마오카이:d7ea1995",
+        "noteBefore": "100",
+        "noteAfter": "100",
+        "midpatch": true
+      }
     },
     {
       "id": "gdc:tft:18.2:DA_18_MasterYi_AD:stats.armor",

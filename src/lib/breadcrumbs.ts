@@ -5,23 +5,27 @@
 // 조립하는 한 또 갈린다 — 여기서 만든다.
 import type { Crumb } from "@/components/Breadcrumb";
 import { sectionHref, type GameId } from "@/lib/game";
+import { pairSectionHref } from "@/lib/pairRoutes";
 
 const BRIEFING = "브리핑";
 const COMPARE = "대조표";
 
+// `pairBase`(2026-09-28, 이월 R8): 과거 쌍 화면(`/{game}/history/{쌍}`)이면 마디가 **그 쌍의** 브리핑·대조표로
+// 간다 — 과거 쌍 상세에서 「대조표」를 누르면 최신 쌍 대조표로 튀던 맥락 이탈을 막는다. 없으면 평소 주소.
+
 /** 대조표 화면 — 마지막 마디가 현재 위치다. */
-export function compareCrumbs(game: GameId): Crumb[] {
-  return [{ label: BRIEFING, href: sectionHref(game, "") }, { label: COMPARE }];
+export function compareCrumbs(game: GameId, pairBase: string | null = null): Crumb[] {
+  return [{ label: BRIEFING, href: pairSectionHref(game, "", pairBase) }, { label: COMPARE }];
 }
 
 /**
  * 상세 화면 — 마지막 마디는 **대상 이름**이다. 엔티티 유형(챔피언·유닛·무기)은 마디가 아니다:
  * 제목 옆 라벨이 이미 말하고, 그 마디를 눌러도 갈 곳이 없다(유형별 목록 화면이 없다).
  */
-export function detailCrumbs(game: GameId, entityName: string): Crumb[] {
+export function detailCrumbs(game: GameId, entityName: string, pairBase: string | null = null): Crumb[] {
   return [
-    { label: BRIEFING, href: sectionHref(game, "") },
-    { label: COMPARE, href: sectionHref(game, "compare") },
+    { label: BRIEFING, href: pairSectionHref(game, "", pairBase) },
+    { label: COMPARE, href: pairSectionHref(game, "compare", pairBase) },
     { label: entityName },
   ];
 }

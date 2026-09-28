@@ -19,6 +19,8 @@ export interface NoteLike {
   /** 노트가 **적은** 값. 있으면 실제 수치와 견줄 수 있다(`noteValueMismatch`). */
   readonly before?: string | null;
   readonly after?: string | null;
+  /** 원문 앵커 — 중간 패치 절(`#patch-midpatch-updates`)이면 불일치에 표식을 단다(R9). */
+  readonly anchorUrl?: string;
 }
 
 /**
@@ -129,6 +131,20 @@ export interface NoteValueMismatch {
   readonly noteId: string;
   readonly noteBefore: string;
   readonly noteAfter: string;
+  /**
+   * 어긋난 노트가 **중간 패치** 절의 것이다(2026-09-28, 이월 R9). 중간 패치 핫픽스는 게임 파일(CDragon)에 늦게
+   * 실리거나 서버에만 있을 수 있다 — 화면은 「노트가 틀렸다」가 아니라 이 사정을 함께 말한다.
+   */
+  readonly midpatch?: true;
+}
+
+const MIDPATCH_ANCHOR = "#patch-midpatch-updates";
+
+/** 「40/100」의 `index`번째 성분. 성분이 하나뿐인 값(「최대 마나: 90 ⇒ 100」)은 그대로, 성분 수가 모자라면 null. */
+function componentOf(raw: string, index: number): string | null {
+  const parts = raw.split("/").map((t) => t.trim());
+  if (parts.length === 1) return raw;
+  return index < parts.length ? parts[index] : null;
 }
 
 /** `1,000%` → `1000`. 숫자 토큰이 **정확히 하나**일 때만 값으로 본다. */
@@ -172,18 +188,31 @@ function sameValue(noteText: string, game: number): boolean {
 export function noteValueMismatch(
   linked: readonly LinkedNote[],
   before: number | string | null,
-  after: number | string | null
+  after: number | string | null,
+  /**
+   * 노트 값이 「a/b」처럼 여러 필드를 한 줄에 적을 때 이 필드의 성분 번호(TFT 「마나 조정 시작/최대」, R9).
+   * 없으면 성분 값은 견주지 않는다 — 레벨 배열과 구분할 수 없다.
+   */
+  component?: number
 ): NoteValueMismatch | null {
   if (typeof before !== "number" || typeof after !== "number") return null;
   let candidate: NoteValueMismatch | null = null;
   for (const { note, via } of linked) {
     if (via !== "keyword") continue;
-    const noteBefore = note.before ?? null;
-    const noteAfter = note.after ?? null;
+    const rawBefore = note.before ?? null;
+    const rawAfter = note.after ?? null;
+    if (rawBefore === null || rawAfter === null) continue;
+    const noteBefore = component === undefined ? rawBefore : componentOf(rawBefore, component);
+    const noteAfter = component === undefined ? rawAfter : componentOf(rawAfter, component);
     if (noteBefore === null || noteAfter === null) continue;
     if (soleNumber(noteBefore) === null || soleNumber(noteAfter) === null) continue;
     if (sameValue(noteBefore, before) && sameValue(noteAfter, after)) return null;
-    candidate ??= { noteId: note.id, noteBefore, noteAfter };
+    candidate ??= {
+      noteId: note.id,
+      noteBefore,
+      noteAfter,
+      ...(note.anchorUrl?.includes(MIDPATCH_ANCHOR) ? { midpatch: true as const } : {}),
+    };
   }
   return candidate;
 }

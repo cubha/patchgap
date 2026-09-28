@@ -19,6 +19,10 @@ export function entityKeyFromSlug(slug: string): string {
   return slug.replace(/~/g, ":");
 }
 
-export function tftEntityHref(key: string): string {
-  return `/tft/unit/${entitySlug(key)}/`;
+/**
+ * 대상 상세 링크. `pairBase`(2026-09-28, 이월 R8)가 있으면 그 과거 쌍의 상세(`/tft/history/{쌍}/unit/…`)로 —
+ * 과거 쌍 화면에서 누른 링크가 최신 쌍 상세로 튀지 않게 한다(LoL `lolEntityHref`와 같은 규칙).
+ */
+export function tftEntityHref(key: string, pairBase: string | null = null): string {
+  return `${pairBase ?? "/tft"}/unit/${entitySlug(key)}/`;
 }

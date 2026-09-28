@@ -10,7 +10,13 @@
 // 서버 전용 의존이 없다 — LoL 대조표(`DeltaTable.tsx`)가 `"use client"`라 여기에 `server-only`가
 // 섞이면 번들이 깨진다.
 import { statusLabel } from "@/lib/format";
-import { mismatchCellLines, submarineCellLines, submarineCellText } from "./submarineText";
+import {
+  MIDPATCH_MISMATCH_CAVEAT,
+  mismatchCellLines,
+  mismatchNoteText,
+  submarineCellLines,
+  submarineCellText,
+} from "./submarineText";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 
 function Line({ field, before, after }: { field: string; before: string; after: string }) {
@@ -35,8 +41,11 @@ function MismatchLines({ changes }: { changes: readonly GameDataChange[] }) {
           </span>
           {/* 노트가 적은 값을 같은 칸에서 말해야 "불일치"가 주장이 아니라 대조가 된다. */}
           <span className="whitespace-nowrap font-mono text-[0.65rem] tabular-nums text-muted">
-            노트 {line.noteBefore} ⇒ {line.noteAfter}
+            {mismatchNoteText(line, "노트")}
           </span>
+          {line.midpatch ? (
+            <span className="font-body text-[0.65rem] text-muted">{MIDPATCH_MISMATCH_CAVEAT}</span>
+          ) : null}
         </div>
       ))}
     </div>

@@ -36,6 +36,7 @@ import { isReportableRecord } from "@/components/compare/entityRows";
 import DeltaValue from "@/components/DeltaValue";
 import { metricLabel } from "@/lib/format";
 import { lolEntityHref } from "@/lib/detailRoutes";
+import { usePairBase } from "@/components/PairBaseContext";
 import { isCosmeticGroup, isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
 import CosmeticSkinPreview, { type CosmeticSkinItem } from "./CosmeticSkinPreview";
 import { spellIconKey } from "@/pipeline/match/spell-icon";
@@ -213,6 +214,9 @@ export default function ReleaseNoteRow({
   skinPreviews,
 }: ReleaseNoteRowProps) {
   const isUnannounced = group.kind === "unannounced";
+  // 과거 쌍 화면이면 대상 링크가 그 쌍의 상세로 간다(2026-09-28, 이월 R8). 이 카드는 클라이언트 스트림
+  // (`ReleaseNoteStream`) 안에서만 그려지므로 훅을 쓸 수 있다.
+  const pairBase = usePairBase();
 
   // B4 — 그룹 전체가 치장이면 이 카드엔 뱃지가 하나도 붙지 않는다.
   const cosmeticGroup = !isUnannounced && isCosmeticGroup(group.notes);
@@ -269,7 +273,7 @@ export default function ReleaseNoteRow({
         noteDeltas
       );
   const headerBadge = headerRecord && !cosmeticGroup ? displayStatus(headerRecord, qAlpha) : null;
-  const headerHref = headerRecord ? lolEntityHref(headerRecord) : null;
+  const headerHref = headerRecord ? lolEntityHref(headerRecord, pairBase) : null;
 
   // 미공지 행 강조(2026-09-13·6차 연속) — 채움 없이 왼쪽 골드 보더 하나로만 표시한다.
   // 이력: 원래 불투명 `bg-surface-warm`이었고(미공지는 스트림 최상단 정렬이라 스크롤 없이 보이는
@@ -352,13 +356,13 @@ export default function ReleaseNoteRow({
             ) : null}
             {/* B2 — 원인이 규명된 Gap은 인과 체인을, 아닌 Gap은 네 상태를 구분한 문구를 쓴다. */}
             {causeEntry ? (
-              <CauseChain entry={causeEntry} href={lolEntityHref(gapRepresentative!)} />
+              <CauseChain entry={causeEntry} href={lolEntityHref(gapRepresentative!, pairBase)} />
             ) : gapCause ? (
               <p className={`mt-2 text-xs ${CAUSE_TONE[gapCause.mode]}`}>
                 {gapCause.mode === "verified" ? "추정 원인: " : gapCause.mode === "weak" ? "가능성(신뢰도 낮음): " : null}
                 {gapCause.text}{" "}
                 <Link
-                  href={lolEntityHref(gapRepresentative!)}
+                  href={lolEntityHref(gapRepresentative!, pairBase)}
                   className="font-bold text-accent hover:underline"
                 >
                   근거 보기 →
@@ -377,7 +381,7 @@ export default function ReleaseNoteRow({
                       </span>
                     </div>
                     <DeltaValue delta={row.delta} ci={row.ci} kind={metricKind(row.metric)} />
-                    <Link href={lolEntityHref(row)} className="text-xs font-bold text-accent hover:underline">
+                    <Link href={lolEntityHref(row, pairBase)} className="text-xs font-bold text-accent hover:underline">
                       근거 보기 →
                     </Link>
                   </li>

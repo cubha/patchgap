@@ -85,7 +85,8 @@ import { notesCacheFile } from "../shared/paths";
 
 /**
  * 낮을수록 좋은 스탯 — 값이 늘면 nerf, 줄면 buff로 반전한다(그 외 스탯은 늘면 buff).
- * 가격·기준치·요구치·소모·지연은 2026-09-27 감사에서 추가했다 — TFT 18.3에서 「목숨값 가격 1→2골드」가
+ * 가격·기준치·요구치·소모·지연은 2026-09-27 감사에서 추가했다(「요구치」는 2026-09-28 「요구」로 넓혔다 — TFT 드레이븐
+ * 「요구 횟수·요구 피해량」이 buff로 찍혔다) — TFT 18.3에서 「목숨값 가격 1→2골드」가
  * buff, 「빛비늘 정수 지연 라운드 8→6」이 nerf로 찍히는 등 약 9줄이 반대였다(TFT 파서도 이 함수를 쓴다).
  * 「소모」는 **자원 소모(체력·마나·기력)**로 좁혔다(2026-09-28, C12) — 맨몸 「소모」는 26.16 core
  * 「미니언 처치 시 중첩 소모 15 및 20 ⇒ 18 및 21」을 nerf로 뒤집었다. 중첩을 더 쓰는 것은 비용이 아니다.
@@ -98,7 +99,7 @@ const LOWER_IS_BETTER_KEYWORDS = [
   "비용",
   "가격",
   "기준치",
-  "요구치",
+  "요구",
   "체력 소모",
   "지연",
 ];
@@ -106,9 +107,11 @@ const LOWER_IS_BETTER_KEYWORDS = [
 /**
  * 위 목록의 뜻을 **다시 뒤집는** 접미 — 「재사용 대기시간 반환」은 돌려받는 양이라 클수록 좋다
  * (26.19 아레나 1.5→2.5초가 nerf로 찍혔다). 「판매」「환급」도 받는 쪽 값이다 — 「판매 가격」이 「가격」에
- * 걸려 반대로 찍히지 않게 한다(C12).
+ * 걸려 반대로 찍히지 않게 한다(C12). 「둔화·처형 기준」은 효과가 걸리는 **체력 문턱**이라 높을수록 넓게 걸린다
+ * (2026-09-28, 이월 R12 — 26.17 아레나 세릴다의 원한 「둔화 기준치 50% ⇒ 60%」가 nerf로 찍혔다. 원문상 같은
+ * 아이템의 방어구 관통력도 40% ⇒ 45% 상향). 모아야 하는 양의 「기준치」(TFT 나비정령·오른 유물)는 그대로다.
  */
-const HIGHER_IS_BETTER_OVERRIDES = ["반환", "판매", "환급"];
+const HIGHER_IS_BETTER_OVERRIDES = ["반환", "판매", "환급", "둔화 기준", "처형 기준"];
 
 /** 원문이 수치를 바꾸되 "효과는 같다"고 밝힌 줄 — 방향이 아니라 조정이다(TFT 18.3 니달리 관통력). */
 const SAME_EFFECT_PATTERN = /(?:효과|성능)[은는]?\s*(?:전과|이전과|기존과)?\s*동일/u;
@@ -210,6 +213,22 @@ function classicCategoryFor(label: string): ClassicCategory {
   if (label.includes("룬")) return "rune";
   if (label === "체계") return "mechanics";
   return null;
+}
+
+/**
+ * 모드 섹션에서 **범주 라벨로만** 쓰이는 h4(섹션 분류에는 안 쓴다) — 아레나 「증강」(2026-09-28, 이월 R11).
+ * `classicCategoryFor`에 넣지 않는 이유: 그 함수는 클래식 섹션의 챔피언/아이템/룬/체계 분류 상태 기계다.
+ */
+const MODE_ONLY_CATEGORY_LABELS = new Set(["증강"]);
+
+/** 범주 라벨인가(건너뛸 대상). */
+function isCategoryLabel(label: string): boolean {
+  return classicCategoryFor(label) !== null || MODE_ONLY_CATEGORY_LABELS.has(label);
+}
+
+/** 그 범주 아래 라벨이 전부 대상인가 — 아이템·증강에는 스킬이 없다(C9 · R11). */
+function labelsAreEntities(label: string): boolean {
+  return classicCategoryFor(label) === "item" || MODE_ONLY_CATEGORY_LABELS.has(label);
 }
 
 type SectionStrategy =
@@ -501,7 +520,7 @@ function parseNoteBlock(
 
   let currentSkill: string | null = null;
   let lastLabelAnchorId: string | null = null;
-  // 클래식 「아이템」 범주 아래인가(C9) — 아이템에는 스킬이 없어 라벨마다 대상이다.
+  // 클래식 「아이템」·아레나 「증강」 범주 아래인가(C9·R11) — 스킬이 없어 라벨마다 대상이다.
   let inItemCategory = false;
   const rawLines: RawNoteLine[] = [];
 
@@ -528,9 +547,13 @@ function parseNoteBlock(
       const label = $(node).text().trim();
       if (label.length === 0) return;
       // 새 엔티티가 시작되는가 — 라벨이 자기 소개 문단(blockquote.context)을 데리고 있으면 그렇다.
-      const opensEntity = h3.length === 0 && (startsNewEntity($, node) || (inItemCategory && node.type === "tag" && node.name === "strong"));
-      if (opts.skipCategoryLabels && (entity === null || opensEntity) && classicCategoryFor(label) !== null) {
-        inItemCategory = classicCategoryFor(label) === "item";
+      // 아이템·증강 묶음 아래에선 라벨(strong)마다 대상이고, 범주 아닌 h4(「버그 수정」)는 묶음을 끝내는 새 대상이다(R11).
+      const isH4 = node.type === "tag" && node.name === "h4";
+      const opensEntity =
+        h3.length === 0 &&
+        (startsNewEntity($, node) || (inItemCategory && node.type === "tag" && (node.name === "strong" || node.name === "h4")));
+      if (opts.skipCategoryLabels && (entity === null || opensEntity) && isCategoryLabel(label)) {
+        inItemCategory = labelsAreEntities(label);
         // 클래식/아레나 섹션의 범주 라벨("챔피언"/"아이템"/"룬 및 진척도"/"체계" 등)은 엔티티
         // 자체가 아니다 — 건너뛴다. `classicCategoryFor`를 재사용해 인식 범위를 한 곳에 고정한다
         // (전에는 "챔피언"/"아이템"만 걸러 "룬 및 진척도"/"체계" 라벨 자체가 엔티티로 오인되고
@@ -543,6 +566,7 @@ function parseNoteBlock(
         return;
       }
       lastLabelAnchorId = $(node).attr("id") ?? null;
+      if (isH4 && inItemCategory) inItemCategory = false;
       if (entity === null || opensEntity) {
         entity = label;
         currentSkill = null; // 앞 엔티티의 마지막 스킬이 새 엔티티의 첫 줄로 새지 않게 한다.

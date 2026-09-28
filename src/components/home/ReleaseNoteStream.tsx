@@ -45,7 +45,7 @@ import { segmentStream } from "./streamSegments";
 import AnnouncedCoverageLine from "./AnnouncedCoverageLine";
 import MiscChangesSection from "./MiscChangesSection";
 import type { MiscSection } from "./miscSections";
-import { BriefingTabBar } from "@/components/BriefingTabs";
+import { BriefingTabBar, DEFAULT_BRIEFING_TAB } from "@/components/BriefingTabs";
 
 type StreamTab = "content" | "gap";
 
@@ -134,11 +134,10 @@ export interface ReleaseNoteStreamProps {
    */
   gapLead?: ReactNode;
   /**
-   * `gapLead`가 든 **수치 축** 대상 수 — 잠수함 + 공지값 불일치. `gapCount`(두 갈래 합)에서
-   * 빼 지표 축 건수를 낸다. 이름이 `submarineCount`가 아닌 이유: 2026-09-21에 수치 축이
-   * 두 갈래가 됐고, 이름이 한쪽만 가리키면 다음 사람이 불일치를 빼먹는다.
+   * 지표 축(통계 Gap) **대상** 수 — Gap 탭 아래 갈래의 머리 숫자. 전에는 `gapCount - gameDataCount`로 냈는데,
+   * 탭 배지가 두 축의 **합집합**이 되면서(2026-09-28, D2) 겹치는 대상이 있으면 뺄셈이 틀린다 — 따로 받는다.
    */
-  gameDataCount?: number;
+  metricGapCount?: number;
 }
 
 function groupKey(group: ReleaseStreamGroup): string {
@@ -164,10 +163,10 @@ export default function ReleaseNoteStream({
   miscSections = [],
   announcedCoverage,
   gapLead,
-  gameDataCount = 0,
+  metricGapCount = 0,
 }: ReleaseNoteStreamProps) {
   const { selectedLane } = useAmbient();
-  const [tab, setTab] = useState<StreamTab>("content");
+  const [tab, setTab] = useState<StreamTab>(DEFAULT_BRIEFING_TAB);
 
   const laneFiltered = useMemo(() => {
     if (selectedLane === "all") return entries;
@@ -231,7 +230,7 @@ export default function ReleaseNoteStream({
           <div className="flex items-baseline gap-2 border-b border-border-soft px-5 py-3">
             <span className="text-xs font-bold text-muted">발견 · 지표 축</span>
             <h3 className="font-display text-sm font-bold text-fg">패치노트에 없는데 움직인 것</h3>
-            <span className="ml-auto font-mono text-xs text-muted">{gapCount - gameDataCount}건</span>
+            <span className="ml-auto font-mono text-xs text-muted">{metricGapCount}건</span>
           </div>
         </>
       ) : null}

@@ -2642,11 +2642,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:75028f72",
+      "id": "note:26.16:other:노련한-저격수-및-로켓-배송-퀘스트:51746dec",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "노련한 저격수 및 로켓 배송 퀘스트",
+      "entity": "노련한 저격수 및 로켓 배송 퀘스트",
+      "skill": null,
       "stat": "저격 거리",
       "before": "700",
       "after": "600",
@@ -2657,11 +2657,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:527a834b",
+      "id": "note:26.16:other:영혼의-포식자:be5be69f",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "영혼의 포식자",
+      "entity": "영혼의 포식자",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2672,11 +2672,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:f4726e52",
+      "id": "note:26.16:other:밤의-추적:be5be69f",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "밤의 추적",
+      "entity": "밤의 추적",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2687,11 +2687,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:7364d3c9",
+      "id": "note:26.16:other:데굴데굴-눈덩이:be5be69f",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "데굴데굴 눈덩이!",
+      "entity": "데굴데굴 눈덩이!",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2702,11 +2702,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:7364d3c9-2",
+      "id": "note:26.16:other:데굴데굴-눈덩이:be5be69f-2",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "데굴데굴 눈덩이!",
+      "entity": "데굴데굴 눈덩이!",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2717,11 +2717,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:8d7949f9",
+      "id": "note:26.16:other:상어-미끼:4a747139",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "상어 미끼",
+      "entity": "상어 미끼",
+      "skill": null,
       "stat": "기본 피해량",
       "before": "80~300",
       "after": "120~350",
@@ -2732,11 +2732,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:7c8efa45",
+      "id": "note:26.16:other:상어-미끼:a30c94f2",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "상어 미끼",
+      "entity": "상어 미끼",
+      "skill": null,
       "stat": "잃은 체력 비례 피해량",
       "before": "20%",
       "after": "30%",
@@ -2747,11 +2747,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:bca0dfbb",
+      "id": "note:26.16:other:치명적-미사일:1966ed04",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "치명적 미사일",
+      "entity": "치명적 미사일",
+      "skill": null,
       "stat": "폭죽당 피해량",
       "before": "15~85",
       "after": "15~65",
@@ -2762,11 +2762,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:d92aaed6",
+      "id": "note:26.16:other:연쇄-반응:a1cf9554",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "연쇄 반응",
+      "entity": "연쇄 반응",
+      "skill": null,
       "stat": "등급",
       "before": "프리즘",
       "after": "골드",
@@ -2777,11 +2777,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:00b99e55",
+      "id": "note:26.16:other:자연의-회복:be5be69f",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "자연의 회복",
+      "entity": "자연의 회복",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2792,11 +2792,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:00b99e55-2",
+      "id": "note:26.16:other:자연의-회복:be5be69f-2",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "자연의 회복",
+      "entity": "자연의 회복",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2807,11 +2807,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:00b99e55-3",
+      "id": "note:26.16:other:자연의-회복:be5be69f-3",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "자연의 회복",
+      "entity": "자연의 회복",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2822,11 +2822,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:3ead3084",
+      "id": "note:26.16:other:갈라진-하늘-업그레이드:be5be69f",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "갈라진 하늘 업그레이드",
+      "entity": "갈라진 하늘 업그레이드",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2837,11 +2837,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:3ead3084-2",
+      "id": "note:26.16:other:갈라진-하늘-업그레이드:be5be69f-2",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "갈라진 하늘 업그레이드",
+      "entity": "갈라진 하늘 업그레이드",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2852,11 +2852,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:7ef6db38",
+      "id": "note:26.16:other:굶주린-히드라-업그레이드:be5be69f",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "굶주린 히드라 업그레이드",
+      "entity": "굶주린 히드라 업그레이드",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2867,11 +2867,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.16:other:증강:7ef6db38-2",
+      "id": "note:26.16:other:굶주린-히드라-업그레이드:be5be69f-2",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "굶주린 히드라 업그레이드",
+      "entity": "굶주린 히드라 업그레이드",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -3947,11 +3947,11 @@
       "modeScope": "arena"
     },
     {
-      "id": "note:26.16:other:증강:7ce7cee1",
+      "id": "note:26.16:other:마트료시카:124b99c4",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "마트료시카",
+      "entity": "마트료시카",
+      "skill": null,
       "stat": "부활 대기시간",
       "before": "2초",
       "after": "3초",
@@ -3962,11 +3962,11 @@
       "modeScope": "arena"
     },
     {
-      "id": "note:26.16:other:증강:3f2e8272",
+      "id": "note:26.16:other:불의의-습격:be5be69f",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "불의의 습격",
+      "entity": "불의의 습격",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -3977,11 +3977,11 @@
       "modeScope": "arena"
     },
     {
-      "id": "note:26.16:other:증강:e2a949a1",
+      "id": "note:26.16:other:불의의-습격:039165aa",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "불의의 습격",
+      "entity": "불의의 습격",
+      "skill": null,
       "stat": "이동 속도 증가",
       "before": "50%/75%",
       "after": "75%",
@@ -3992,11 +3992,11 @@
       "modeScope": "arena"
     },
     {
-      "id": "note:26.16:other:증강:7f85cba6",
+      "id": "note:26.16:other:삼종신기:a629d658",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "삼종신기",
+      "entity": "삼종신기",
+      "skill": null,
       "stat": "주문력 계수",
       "before": "60%",
       "after": "50%",
@@ -4007,11 +4007,11 @@
       "modeScope": "arena"
     },
     {
-      "id": "note:26.16:other:증강:d3bd5f09",
+      "id": "note:26.16:other:삼종신기:18440c37",
       "patch": "26.16",
       "section": "other",
-      "entity": "증강",
-      "skill": "삼종신기",
+      "entity": "삼종신기",
+      "skill": null,
       "stat": "공격력 계수",
       "before": "75%",
       "after": "60%",

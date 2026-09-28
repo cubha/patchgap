@@ -12,7 +12,7 @@ import type { TftAssetManifest } from "@/pipeline/tft/asset-path";
 import type { DeltaRecord, DeltasRunLlmMeta, MatchStatus, ObservationFailure, PatchNoteItem } from "@/pipeline/types";
 import { isObservationStub } from "@/pipeline/shared/observation-stub";
 import type { NamedStat } from "@/pipeline/match/tft-delta";
-import { latestPatchId } from "@/pipeline/collect/staleness";
+import { comparePatchId } from "@/pipeline/collect/calendar-overlay";
 
 const TFT_DIR = path.join(process.cwd(), "data", "aggregated", "tft");
 
@@ -80,30 +80,50 @@ function readJson<T>(file: string): T | null {
  */
 const TFT_DELTAS_FILE_PATTERN = /^deltas-(\d+\.\d+)-(\d+\.\d+)\.json$/;
 
-/** 가장 최근 쌍의 판정 파일 이름. 없으면 null. */
-function latestDeltasFileName(): string | null {
-  if (!fs.existsSync(TFT_DIR)) return null;
+/** TFT 패치 쌍 — 판정 파일 이름(`deltas-{from}-{to}.json`)에서 읽는다. */
+export interface TftPair {
+  from: string;
+  to: string;
+}
+
+/**
+ * 판정 파일이 있는 쌍 전부, **최신 우선**(2026-09-28, 이월 R8 — 과거 쌍 라우트·헤더 select의 목록).
+ * 관측 stub 쌍도 들어간다: 최신이 stub이면 `/tft/`가 선언 축을 그리고(C13·C14), 그 쌍이 곧 목록 첫 칸이다 —
+ * `latestDeltasFileName`이 이 목록의 첫 칸을 쓰므로 「최신」의 정의가 한 곳이다.
+ */
+export function listTftPairs(): TftPair[] {
+  if (!fs.existsSync(TFT_DIR)) return [];
   // **문자열 정렬을 쓰지 않는다**(2026-09-24 수정). 이전엔 `.sort().at(-1)`이었는데 사전순이라
   // `deltas-18.10-…`이 `deltas-18.9-…`보다 **앞**에 온다 — 마이너가 두 자리가 되는 순간
   // 화면이 "최신"이라고 말하면서 옛 패치를 보여준다. 실패가 조용해서 더 나쁘다.
   // LoL(`data.ts`)은 이미 숫자 비교(`comparePatchDesc`)를 쓰고 있었고 TFT만 예외였다.
-  const byTo = new Map<string, string>();
+  const pairs: TftPair[] = [];
   for (const file of fs.readdirSync(TFT_DIR)) {
     const m = TFT_DELTAS_FILE_PATTERN.exec(file);
-    if (m) byTo.set(m[2], file);
+    if (m) pairs.push({ from: m[1], to: m[2] });
   }
-  const latestTo = latestPatchId([...byTo.keys()]);
-  return latestTo === null ? null : (byTo.get(latestTo) ?? null);
+  return pairs.sort((a, b) => comparePatchId(b.to, a.to) || comparePatchId(b.from, a.from));
+}
+
+function deltasFileName(pair: TftPair): string {
+  return `deltas-${pair.from}-${pair.to}.json`;
+}
+
+/** 가장 최근 쌍의 판정 파일 이름. 없으면 null. */
+function latestDeltasFileName(): string | null {
+  const latest = listTftPairs()[0];
+  return latest ? deltasFileName(latest) : null;
 }
 
 /**
- * 가장 최근 쌍의 **관측** 번들. 없으면 null(빈 데이터 빌드 보장).
+ * 가장 최근 쌍(또는 지정한 쌍)의 **관측** 번들. 없으면 null(빈 데이터 빌드 보장).
  *
  * 가장 최근 쌍이 관측 stub(`meta.observationFailed`, C14)이면 **null**이다 — 관측이 없는데 관측 화면을
  * 그리면 보드·판정이 0으로 읽힌다. 그 쌍의 선언 축은 `loadTftDeclaration()`이 준다.
  */
-export function loadTft(): TftBundle | null {
-  const latest = latestDeltasFileName();
+export function loadTft(pair?: TftPair): TftBundle | null {
+  // `pair`(2026-09-28, 이월 R8) — 과거 쌍 라우트가 그 쌍을 지정한다. 없으면 최신 쌍.
+  const latest = pair ? deltasFileName(pair) : latestDeltasFileName();
   if (!latest) return null;
 
   const deltas = readJson<TftDeltasFile>(path.join(TFT_DIR, latest));
@@ -130,8 +150,8 @@ export interface TftDeclaration {
  * 가장 최근 쌍이 관측 stub이면 그 선언 축(노트 + 사유)을 준다. 관측 쌍이거나 노트가 없으면 null.
  * 화면은 `loadTft()`가 null일 때 이것을 본다 — 새 패치노트가 관측을 기다리느라 숨지 않게(결정 8).
  */
-export function loadTftDeclaration(): TftDeclaration | null {
-  const latest = latestDeltasFileName();
+export function loadTftDeclaration(pair?: TftPair): TftDeclaration | null {
+  const latest = pair ? deltasFileName(pair) : latestDeltasFileName();
   if (!latest) return null;
   const stub = readJson<{ meta: { from: string; to: string; generatedAt: string; observationFailed?: ObservationFailure } }>(
     path.join(TFT_DIR, latest)

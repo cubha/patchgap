@@ -53,9 +53,16 @@ export interface HeroSummaryProps {
    * 구조적으로 없앤다. 넘기지 않으면 아무것도 렌더하지 않는다.
    */
   action?: ReactNode;
+  /**
+   * 「미공지 Gap」 타일 수 — (통계 Gap 대상) ∪ (수치 축 대상)(2026-09-28, D2 · 탭 배지와 같은 수). 없으면
+   * 통계 Gap 대상 수(`stats.unannouncedCount`)를 쓴다(수치 축이 없는 화면·테스트).
+   */
+  gapCount?: number;
+  /** 과거 쌍 화면의 기준 경로(2026-09-28, 이월 R8) — 미공지 타일이 그 쌍의 대조표로 가게 `StatTiles`로 넘긴다. */
+  pairBase?: string | null;
 }
 
-export default function HeroSummary({ stats, patch, action }: HeroSummaryProps) {
+export default function HeroSummary({ stats, patch, action, gapCount, pairBase = null }: HeroSummaryProps) {
   const { noteEntityCount, noteItemCount, statCount, unannouncedCount } = stats;
 
   return (
@@ -89,8 +96,9 @@ export default function HeroSummary({ stats, patch, action }: HeroSummaryProps) 
         patch={patch}
         itemCount={noteItemCount}
         significantCount={statCount}
-        gapCount={unannouncedCount}
+        gapCount={gapCount ?? unannouncedCount}
         game="lol"
+        pairBase={pairBase}
       />
     </div>
   );

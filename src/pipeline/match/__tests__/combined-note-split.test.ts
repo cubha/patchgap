@@ -5,6 +5,7 @@
 // 맞는 아이템**에만 단계를 배정하고 하위 노트로 나눈다. 하나라도 안 맞으면 현행 유지(지어내지 않는다).
 import { describe, expect, it } from "vitest";
 import { splitCombinedNotes, type ItemStatTable } from "../combined-note-split";
+import { DESC_HP_REGEN_KEY, DESC_MP_REGEN_KEY, descriptionStats } from "../ddragon";
 import type { PatchNoteItem } from "../../types";
 
 const table = (rows: Record<string, Record<string, number>>): ItemStatTable => ({
@@ -77,5 +78,53 @@ describe("ddragonPairForPatch", () => {
   });
   it("같은 마이너에 버전이 여럿이면 가장 새 것", () => {
     expect(ddragonPairForPatch(["16.19.2", "16.19.1", "16.18.1"], "26.19")).toEqual({ from: "16.18.1", to: "16.19.2" });
+  });
+});
+
+// 이월 R10(2026-09-28): 「체력 재생」 단계 배정은 스탯 표에 없어 검증되지 않았다. DDragon **설명문**의
+// 「기본 체력 재생 X%」(16.18 룬 나침반 50% → 16.19 75%)를 교차 검증에 쓴다. 설명문이 빈 아이템(세계 지도집)은
+// 「모름」이지 0이 아니다 — 배정을 **만들지는 않고**, 값이 있는데 배정과 어긋나면 분해하지 않는다.
+describe("splitCombinedNotes — 설명문 재생 값 교차 검증(R10)", () => {
+  const hp = note("체력", "30/100/200", "0/60/200");
+  const regen = note("체력 재생", "25%/50%/75%", "50%/75%/75%");
+  const withRegen = (base: Record<string, Record<string, number>>, regenByName: Record<string, number>) =>
+    table(Object.fromEntries(Object.entries(base).map(([k, v]) => [k, regenByName[k] === undefined ? v : { ...v, [DESC_HP_REGEN_KEY]: regenByName[k] }])));
+  const hpBefore = { "세계 지도집": { FlatHPPoolMod: 30 }, "룬 나침반": { FlatHPPoolMod: 100 } };
+  const hpAfter = { "세계 지도집": {}, "룬 나침반": { FlatHPPoolMod: 60 } };
+
+  it("설명문 값이 배정과 맞으면 분해한다 — 설명문이 없는 아이템은 모름으로 둔다", () => {
+    const { items, report } = splitCombinedNotes(
+      [hp, regen],
+      withRegen(hpBefore, { "룬 나침반": 50 }),
+      withRegen(hpAfter, { "룬 나침반": 75 })
+    );
+    expect(items.filter((n) => n.stat === "체력 재생").map((n) => [n.entity, n.before, n.after])).toEqual([
+      ["세계 지도집", "25%", "50%"],
+      ["룬 나침반", "50%", "75%"],
+    ]);
+    expect(report[0]).toMatchObject({ outcome: "split" });
+    expect(report[0].reason).toMatch(/설명문/);
+  });
+
+  it("설명문 값이 배정과 어긋나면 현행 유지 — 형식 가정으로 밀어붙이지 않는다", () => {
+    const { items, report } = splitCombinedNotes(
+      [hp, regen],
+      withRegen(hpBefore, { "룬 나침반": 50 }),
+      withRegen(hpAfter, { "룬 나침반": 50 })
+    );
+    expect(items).toEqual([hp, regen]);
+    expect(report[0]).toMatchObject({ outcome: "kept" });
+    expect(report[0].reason).toMatch(/설명문/);
+  });
+});
+
+describe("descriptionStats — DDragon 설명문의 기본 재생 백분율(R10)", () => {
+  it("「기본 체력 재생 75%」·「기본 마나 재생 50%」를 읽는다", () => {
+    // 16.19.1 룬 나침반(3866) 설명문 실물 형식.
+    const html = "<mainText><stats>체력 <attention>60</attention><br>기본 체력 재생 <attention>75%</attention><br>기본 마나 재생 <attention>50%</attention><br>10초당 골드 <attention>5</attention></stats></mainText>";
+    expect(descriptionStats(html)).toEqual({ [DESC_HP_REGEN_KEY]: 75, [DESC_MP_REGEN_KEY]: 50 });
+  });
+  it("설명문이 비면 빈 표다(0이 아니다)", () => {
+    expect(descriptionStats("")).toEqual({});
   });
 });

@@ -2,7 +2,7 @@
   "meta": {
     "from": "26.16",
     "to": "26.17",
-    "generatedAt": "2026-09-19T05:32:29.020Z",
+    "generatedAt": "2026-09-28T11:16:16.503Z",
     "n": 1966,
     "counts": {
       "unannounced": 15,
@@ -15,25 +15,27 @@
     },
     "qAlpha": 0.1,
     "llm": {
-      "calls": 2,
-      "cacheHits": 118,
+      "calls": 0,
+      "cacheHits": 41,
       "skipped": 0,
       "usage": {
-        "inputTokens": 250,
-        "cacheReadInputTokens": 12474,
+        "inputTokens": 0,
+        "cacheReadInputTokens": 0,
         "cacheCreationInputTokens": 0,
-        "outputTokens": 1408
+        "outputTokens": 0
       },
       "prose": {
-        "summaryCount": 120,
+        "summaryCount": 41,
         "summaryOverLength": 0,
-        "summaryHedged": 26,
-        "maxSummaryLength": 94,
-        "causeCount": 225,
+        "summaryHedged": 7,
+        "maxSummaryLength": 90,
+        "causeCount": 100,
         "causeOverLength": 0,
-        "causeHedged": 78,
+        "causeHedged": 29,
         "causeHedgedConfident": 0,
-        "causeNounEnding": 0
+        "causeNounEnding": 0,
+        "causeUnnamedTarget": 0,
+        "summaryDeterministic": 0
       },
       "proseRepairs": 0
     }
@@ -2425,20 +2427,7 @@
         "note:26.17:champion:qiyana:5a6d587d",
         "note:26.17:champion:qiyana:9d50d4d6"
       ],
-      "causes": [
-        {
-          "text": "그레이브즈 Q 폭발 피해 계수 하향으로 비워진 밴 슬롯이 키아나로 옮겨갔을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "제라스 Q 피해량과 체력 하향으로 미드 밴 우선순위가 재배치된 영향으로 보입니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8367245341",
@@ -2455,15 +2444,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=246,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-qiyana"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "키아나 밴률이 26.8%→42.4%(+15.7%p)로 급등했고, 그레이브즈·제라스 하향에 따른 밴 슬롯 이동이 일부 작용한 것으로 보입니다.",
-        "summaryCites": [
-          "note:26.17:champion:graves:0bc5877b",
-          "note:26.17:champion:xerath:43a6f4aa"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Nocturne:winRate",
@@ -2489,32 +2470,7 @@
         "note:26.17:champion:nocturne:9c41fff1",
         "note:26.17:champion:nocturne:fd4d5d23"
       ],
-      "causes": [
-        {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 이를 핵심 아이템으로 쓰는 녹턴의 딜이 줄었습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향이 겹쳐 녹턴의 생존력까지 함께 떨어졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "트런들 W 공격 속도 90%→110% 상향으로 정글 경쟁 구도가 불리해졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "초가스 E 피해량 상향으로 상위 티어 정글·탑 매치업 부담이 커졌습니다.",
-          "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8366198290",
@@ -2531,15 +2487,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=56,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nocturne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "녹턴 승률 48.9%→40.1%(-8.8%p) 급락은 주력 아이템 갈라진 하늘의 공격력·체력 동시 하향 여파가 큽니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nasus:MIDDLE:winRate",
@@ -2564,26 +2512,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:nasus:0915ac64"
       ],
-      "causes": [
-        {
-          "text": "갈라진 하늘 체력 450→400 너프로 나서스의 라인 유지력이 함께 떨어졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 공격력 45→40 너프가 나서스 코어 아이템 파워를 낮췄을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "이렐리아 Q 계수 70%→80% 버프로 미드 근접 맞대결 난이도가 올라갔습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363817081",
@@ -2600,15 +2529,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=75,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nasus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "나서스 미드 승률이 49.2%→42.2%(-7.1%p)로 떨어졌으나 CI가 0을 포함해 불확실하며, 갈라진 하늘 체력·공격력 너프가 지속력 하락에 겹친 것으로 보입니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:4c4f025e",
-          "note:26.17:item:sundered-sky:0aec77fe"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Yasuo:banRate",
@@ -2669,6 +2590,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=157,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yasuo"
       },
+      "directionAgreement": "inconsistent",
       "llm": {
         "skipped": false,
         "summary": "야스오 밴률이 10.9%→16.1%(+5.2%p)로 올랐습니다. 폭풍갈퀴 공격 속도 25% 상향이 코어 빌드를 강화한 영향입니다.",
@@ -2704,26 +2626,7 @@
         "note:26.17:champion:leblanc:887dc51f",
         "note:26.17:champion:leblanc:76a8a16c"
       ],
-      "causes": [
-        {
-          "text": "아우렐리온 솔 W 쿨감 버프로 미드 경쟁 픽이 강해져 르블랑 상대 난도가 올랐습니다.",
-          "candidateNoteId": "note:26.17:champion:aurelionsol:30712737",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "이렐리아 Q 계수 70%→80% 버프로 근접 미드 상대 시 르블랑의 라인 우위가 줄었습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "키아나 Q 피해량 버프로 암살자 미드 경쟁이 심화된 영향일 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363755873",
@@ -2740,16 +2643,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=7,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-leblanc"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "르블랑 승률 -5.1%p는 CI가 0을 포함해 불확실하며, 아우렐리온 솔·이렐리아·키아나 버프로 미드 경쟁이 거세진 영향으로 보입니다.",
-        "summaryCites": [
-          "note:26.17:champion:aurelionsol:30712737",
-          "note:26.17:champion:irelia:9035ffdc",
-          "note:26.17:champion:qiyana:5a6d587d"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Yone:TOP:winRate",
@@ -2774,32 +2668,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yone:c6a149c7"
       ],
-      "causes": [
-        {
-          "text": "이렐리아 Q 계수 70%→80% 등 상향으로 탑 맞대결 난이도가 올라갔습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "트런들 W 공격 속도 최대 90%→110%로 탑 근접 대치에서 요네가 밀립니다.",
-          "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "초가스 E 기본 피해 10 상향으로 탑 라인전 카운터 픽이 강해졌습니다.",
-          "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 브루저형 빌드 가치가 내려갔습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8366970663",
@@ -2816,15 +2685,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=777,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yone"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "요네 탑 승률이 51.7%→47.0%(-4.7%p)로 떨어졌지만 CI가 0을 포함하며, 이렐리아·트런들 상향 등 탑 경쟁 픽 강화가 배경으로 보입니다.",
-        "summaryCites": [
-          "note:26.17:champion:irelia:9035ffdc",
-          "note:26.17:champion:trundle:85be03ea"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:AurelionSol:winRate",
@@ -2850,20 +2711,7 @@
         "note:26.17:champion:aurelionsol:7b32ba55",
         "note:26.17:champion:aurelionsol:30712737"
       ],
-      "causes": [
-        {
-          "text": "제라스 Q 피해량과 체력 너프로 미드 포킹 AP 경쟁자가 약화된 영향일 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "제라스 체력 596→575 너프로 장거리 마법사 구도에서 아우렐리온 솔이 반사이익을 얻은 듯합니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:080e761c",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8364955312",
@@ -2880,14 +2728,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=136,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-aurelionsol"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "승률 4.7%p 상승했으나 CI가 -4.2~13.5%p로 0을 포함해 표본 변동 범위이며, 제라스 너프의 반사이익도 일부 작용한 것으로 보입니다.",
-        "summaryCites": [
-          "note:26.17:champion:xerath:43a6f4aa"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Qiyana:pickRate",
@@ -2913,26 +2754,7 @@
         "note:26.17:champion:qiyana:5a6d587d",
         "note:26.17:champion:qiyana:9d50d4d6"
       ],
-      "causes": [
-        {
-          "text": "제라스 Q 피해량과 체력이 깎이며 미드 경쟁 픽이 빠진 자리를 키아나가 흡수했습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "그레이브즈 Q 공격력 계수 너프로 정글 상위권이 약해져 키아나 정글 채택이 늘었습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:39e7c86f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "녹턴 체력·방어력 하향도 정글 픽 분산에 기여했습니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8367245341",
@@ -2949,14 +2771,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=246,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-qiyana"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "키아나 픽률이 16.1%→20.4%(+4.4%p)로 올랐습니다. 제라스 Q·체력 너프로 미드 경쟁 픽이 빠진 영향이 큽니다.",
-        "summaryCites": [
-          "note:26.17:champion:xerath:43a6f4aa"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Qiyana:JUNGLE:winRate",
@@ -2982,32 +2797,7 @@
         "note:26.17:champion:qiyana:5a6d587d",
         "note:26.17:champion:qiyana:9d50d4d6"
       ],
-      "causes": [
-        {
-          "text": "정글 최상위권 그레이브즈의 Q 폭발 피해 계수가 10%p 깎여 키아나가 상대적 이득을 봤습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "그레이브즈 Q 최초 피해 계수도 65%→55%로 하락해 정글 경쟁 구도가 키아나에 유리해졌습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:39e7c86f",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "녹턴 기본 방어력 38→36 너프로 동선 경쟁·초반 교전에서 키아나가 앞섭니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 너프로 정글 브루저군이 약화됐습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8367245341",
@@ -3024,15 +2814,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=246,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-qiyana"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "키아나 정글 승률 51.2%→55.6%(+4.3%p)는 몬스터 피해 너프에도 그레이브즈 Q 계수 하향 등 경쟁 정글러 약화가 상쇄한 결과입니다.",
-        "summaryCites": [
-          "note:26.17:champion:graves:0bc5877b",
-          "note:26.17:champion:graves:39e7c86f"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Qiyana:MIDDLE:winRate",
@@ -3058,20 +2840,7 @@
         "note:26.17:champion:qiyana:5a6d587d",
         "note:26.17:champion:qiyana:9d50d4d6"
       ],
-      "causes": [
-        {
-          "text": "제라스 Q 피해량과 체력 너프로 미드 견제형 상대가 약해져 키아나가 반사이익을 얻은 것으로 보입니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "제라스 기본 체력 596→575 하락으로 키아나의 강한 폭발 딜 진입이 더 쉬워졌습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:080e761c",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8367245341",
@@ -3088,15 +2857,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=246,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-qiyana"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "키아나 미드 승률 48.5%→52.7%(+4.2%p)이나 95% CI가 0을 포함해 변동일 수 있고, 제라스 Q·체력 너프가 미드 구도상 간접 이득을 준 정도입니다.",
-        "summaryCites": [
-          "note:26.17:champion:xerath:43a6f4aa",
-          "note:26.17:champion:xerath:080e761c"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Qiyana:winRate",
@@ -3122,26 +2883,7 @@
         "note:26.17:champion:qiyana:5a6d587d",
         "note:26.17:champion:qiyana:9d50d4d6"
       ],
-      "causes": [
-        {
-          "text": "정글 경쟁자 그레이브즈의 Q 폭발 피해 계수가 10% 하향돼 키아나 픽 가치가 올랐습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "녹턴이 기본 체력 655→640, 방어력 38→36으로 약화되며 정글 대결 구도가 키아나에 유리해졌습니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "미드 상대 제라스가 체력 596→575, Q 피해 5 하향돼 키아나의 접근 암살이 쉬워졌습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:080e761c",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8367245341",
@@ -3158,14 +2900,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=246,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-qiyana"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "키아나 승률이 51.3%→55.0%(+3.7%p) 상승했고, 그레이브즈 Q 계수 하향 등 경쟁 챔피언 약화가 함께 작용했습니다.",
-        "summaryCites": [
-          "note:26.17:champion:graves:0bc5877b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Qiyana:JUNGLE:pickRate",
@@ -3191,32 +2926,7 @@
         "note:26.17:champion:qiyana:5a6d587d",
         "note:26.17:champion:qiyana:9d50d4d6"
       ],
-      "causes": [
-        {
-          "text": "그레이브즈 Q 폭발 피해 계수가 10%p 하향돼 AD 정글 자리가 비었고, 그 수요가 키아나로 이동했습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "그레이브즈 Q 최초 피해 계수도 65%→55%로 낮아져 초반 정글 주도권이 약화됐습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:39e7c86f",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "녹턴 방어력 38→36 하향으로 암살형 정글 경쟁자가 줄었습니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "녹턴 체력 655→640 하향이 겹쳐 정글 픽 분포가 키아나 쪽으로 기울었을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8367245341",
@@ -3233,15 +2943,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=246,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-qiyana"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "키아나 정글 몬스터 피해 계수가 내려갔는데도 픽률이 11.4%→15.0%(+3.6%p) 올랐습니다. 그레이브즈 Q 계수 하향으로 생긴 AD 정글 공백이 주된 배경입니다.",
-        "summaryCites": [
-          "note:26.17:champion:graves:0bc5877b",
-          "note:26.17:champion:graves:39e7c86f"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Thresh:banRate",
@@ -3283,6 +2985,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=412,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-thresh"
       },
+      "directionAgreement": "inconsistent",
       "llm": {
         "skipped": false,
         "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
@@ -3330,6 +3033,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=412,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-thresh"
       },
+      "directionAgreement": "inconsistent",
       "llm": {
         "skipped": false,
         "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
@@ -3384,6 +3088,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=412,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-thresh"
       },
+      "directionAgreement": "inconsistent",
       "llm": {
         "skipped": false,
         "summary": "쓰레쉬 E 피해량 너프에도 픽률이 7.3%→10.5%(+3.3%p) 상승했고, 폭풍갈퀴 공속 버프에 따른 바텀 메타 변화 외에 설명 조항이 없습니다.",
@@ -3417,14 +3122,7 @@
         "note:26.17:champion:xerath:080e761c",
         "note:26.17:champion:xerath:43a6f4aa"
       ],
-      "causes": [
-        {
-          "text": "쓰레쉬 E 피해량 감소로 원거리 포킹 조합의 하위 서포터 압박이 줄어 제라스 생존이 쉬워졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:thresh:83ce59dd",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8360568505",
@@ -3441,15 +3139,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=101,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-xerath"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "제라스는 체력·Q 피해량 너프에도 승률이 46.9%→50.0%로 올랐지만, 95% CI가 [-3.5%p, 9.7%p]로 0을 포함해 표본 변동 범위입니다.",
-        "summaryCites": [
-          "note:26.17:champion:xerath:080e761c",
-          "note:26.17:champion:xerath:43a6f4aa"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Yasuo:MIDDLE:winRate",
@@ -3474,26 +3164,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yasuo:66635940"
       ],
-      "causes": [
-        {
-          "text": "갈라진 하늘 공격력 45→40 하향이 야스오 빌드 위력을 낮췄을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향으로 야스오 중후반 생존력이 약해졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "요네도 같은 치명타 피해 감소 완화를 받아 미드 픽 경쟁이 심해졌습니다.",
-          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363498717",
@@ -3510,15 +3181,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=157,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yasuo"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "야스오 미드 승률 -3.1%p는 CI가 0을 포함해 유의하지 않으며, 갈라진 하늘 공격력·체력 하향이 일부 영향으로 보입니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Leblanc:MIDDLE:winRate",
@@ -3546,26 +3209,7 @@
         "note:26.17:champion:leblanc:887dc51f",
         "note:26.17:champion:leblanc:76a8a16c"
       ],
-      "causes": [
-        {
-          "text": "이렐리아 Q 계수 70%→80%, R 계수 70%→100% 버프로 미드 맞라인이 불리해졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "키아나 Q 피해량·계수 버프로 미드 암살자 경쟁 구도가 르블랑에 불리해진 영향으로 보입니다.",
-          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "아우렐리온 솔 Q 마나 소모 감소·W 쿨감 버프로 미드 라인전 대치 난도가 올라갔습니다.",
-          "candidateNoteId": "note:26.17:champion:aurelionsol:7b32ba55",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363755873",
@@ -3582,12 +3226,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=7,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-leblanc"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "르블랑 미드 승률 -3.0%p는 95% CI [-11.1%p, 5.2%p]가 0을 포함해 유의하지 않고, 표본이 239→359로 늘어 유입 희석 영향이 큽니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Yone:MIDDLE:winRate",
@@ -3612,26 +3251,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yone:c6a149c7"
       ],
-      "causes": [
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 치명타 빌드 요네의 초중반 딜이 올랐습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "제라스 체력 596→575 너프로 미드 경쟁 구도가 요네에게 유리해졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:080e761c",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "제라스 Q 피해량 하향도 미드 대치 구도를 요네 쪽으로 기울였을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8366970663",
@@ -3648,14 +3268,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=777,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yone"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "요네 미드 승률 48.1%→50.8%(+2.8%p)는 폭풍갈퀴 공격 속도 25% 상향 수혜로 보이나, 95% CI가 0을 포함해 확정적이지 않습니다.",
-        "summaryCites": [
-          "note:26.17:item:stormrazor:0a1d6b43"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Yasuo:winRate",
@@ -3680,32 +3293,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yasuo:66635940"
       ],
-      "causes": [
-        {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 야스오의 검술 빌드 화력이 줄었습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향이 야스오의 교전 생존력을 깎았습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "이렐리아 Q 계수 70%→80% 상향으로 근접 라인 대결 구도가 불리해졌습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "이렐리아 R 주문력 계수 70%→100%로 카운터 픽의 한타 폭발력이 커졌습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:1f26947d",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363498717",
@@ -3722,15 +3310,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=157,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yasuo"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "야스오 승률이 52.8%→50.2%(-2.6%p)로 내렸지만 CI가 0을 포함해 유의하지 않고, 갈라진 하늘 하향과 이렐리아 상향이 일부 영향으로 보입니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:champion:irelia:9035ffdc"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nasus:banRate",
@@ -3755,20 +3335,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:nasus:0915ac64"
       ],
-      "causes": [
-        {
-          "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 대체 탑 브루저 위협이 줄어 나서스 밴이 몰렸을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "트런들 W 공격속도 90→110% 버프로 탑 밴 구도가 흔들리며 나서스 밴 지분이 변동했습니다.",
-          "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363817081",
@@ -3785,14 +3352,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=75,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nasus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "나서스 밴률이 11.2%→13.8%(+2.5%p) 올랐지만 생명력 흡수 너프와 방향이 반대라, 갈라진 하늘 너프 등 탑 메타 변화가 간접 원인으로 보입니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Vayne:TOP:winRate",
@@ -3822,26 +3382,7 @@
         "note:26.17:champion:vayne:1da6ddd1",
         "note:26.17:champion:vayne:02ad4f34"
       ],
-      "causes": [
-        {
-          "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 탑 브루저 상대가 약해졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "나서스 생명력 흡수 12/18/24%→10/15/20% 너프로 탑 맞라인 지속력이 줄었습니다.",
-          "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향이 베인 빌드 효율을 일부 보전했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8358882973",
@@ -3858,15 +3399,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=67,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "베인 탑 승률 2.4%p 상승은 CI [-4.3%p, 9.1%p]로 유의하지 않고, 갈라진 하늘·나서스 너프로 맞라인이 약해진 영향으로 보입니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:champion:nasus:0915ac64"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Nasus:TOP:winRate",
@@ -3891,26 +3424,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:nasus:0915ac64"
       ],
-      "causes": [
-        {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 탑 브루저 대치 압박이 줄어 나서스 성장이 수월해졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향으로 나서스 상대 탑 챔피언의 라인 유지력이 낮아졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "베인 W 고정 피해 하향으로 탑 베인 등 최대 체력 비례 카운터의 위협이 줄었습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363817081",
@@ -3927,15 +3441,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=75,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nasus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "나서스는 생명력 흡수 하향에도 승률이 2.1%p 올랐는데, 갈라진 하늘 공격력·체력 동시 하향으로 탑 상대 압박이 줄어든 영향입니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Thresh:UTILITY:winRate",
@@ -3960,14 +3466,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:thresh:83ce59dd"
       ],
-      "causes": [
-        {
-          "text": "베인 W 고정 피해 너프로 바텀 듀오 화력이 줄어 쓰레쉬 승률도 함께 눌렸을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8368725194",
@@ -3984,14 +3483,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=412,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-thresh"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "쓰레쉬 승률 -1.9%p는 CI가 [-6.6%p, 2.9%p]로 0을 포함해 유의하지 않고, 바텀 듀오인 베인 W 너프 여파가 겹친 정도입니다.",
-        "summaryCites": [
-          "note:26.17:champion:vayne:1da6ddd1"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Thresh:winRate",
@@ -4016,20 +3508,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:thresh:83ce59dd"
       ],
-      "causes": [
-        {
-          "text": "바텀 파트너 베인의 W 고정 피해 하향으로 쓰레쉬 조합의 라인전 마무리력이 약해졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 바텀 원딜 선호 구도가 바뀌며 쓰레쉬 시너지가 흔들렸을 여지가 있습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8368725194",
@@ -4046,12 +3525,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=412,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-thresh"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "쓰레쉬 승률 -1.8%p는 95% CI가 [-6.5%p, 2.9%p]로 0을 포함해 통계적으로 유의하지 않은 변동입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Graves:winRate",
@@ -4077,20 +3551,7 @@
         "note:26.17:champion:graves:39e7c86f",
         "note:26.17:champion:graves:0bc5877b"
       ],
-      "causes": [
-        {
-          "text": "트런들 W 공격 속도 30/50/70/90/110%로 상향돼 정글 경쟁에서 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 AD 정글 코어 빌드 효율이 낮아졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8362227218",
@@ -4107,15 +3568,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=104,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "그레이브즈 승률 -1.7%p는 CI[-5.8, 2.4]로 유의하지 않고, 트런들 공속 상향과 갈라진 하늘 너프가 간접 요인입니다.",
-        "summaryCites": [
-          "note:26.17:champion:trundle:85be03ea",
-          "note:26.17:item:sundered-sky:0aec77fe"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Yasuo:TOP:winRate",
@@ -4140,14 +3593,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yasuo:66635940"
       ],
-      "causes": [
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 야스오의 초반 교전력이 올랐을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363498717",
@@ -4164,14 +3610,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=157,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yasuo"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "야스오(탑) 승률 49.1%→50.7%(+1.6%p)는 CI [-7.8%p, 11.1%p]로 유의하지 않으며, 폭풍갈퀴 공격 속도 25% 상향이 일부 기여 요인입니다.",
-        "summaryCites": [
-          "note:26.17:item:stormrazor:0a1d6b43"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Graves:JUNGLE:winRate",
@@ -4197,26 +3636,7 @@
         "note:26.17:champion:graves:39e7c86f",
         "note:26.17:champion:graves:0bc5877b"
       ],
-      "causes": [
-        {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 그레이브즈 주력 빌드 딜이 줄었습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향으로 정글 교전 생존력이 함께 떨어졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "트런들 W 공격 속도 최대 110%로 상향되어 정글 경쟁 구도가 불리해졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8362227218",
@@ -4233,15 +3653,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=104,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "그레이브즈 정글 승률 -1.6%p는 갈라진 하늘 공격력·체력 동시 하향의 빌드 약화가 주원인이며, CI가 0을 포함해 변동폭은 제한적입니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Irelia:winRate",
@@ -4268,20 +3680,7 @@
         "note:26.17:champion:irelia:4b925bed",
         "note:26.17:champion:irelia:1f26947d"
       ],
-      "causes": [
-        {
-          "text": "갈라진 하늘 공격력 45→40 너프로 이렐리아 핵심 코어 성능이 떨어졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 너프가 이렐리아 브루저 빌드의 생존력을 낮췄습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "medium"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8360218585",
@@ -4298,15 +3697,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=39,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-irelia"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "이렐리아 버프에도 승률 -1.3%p인 건 코어템 갈라진 하늘 공격력·체력 너프 영향이며, CI가 ±6%p대라 유의하지 않습니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Nasus:winRate",
@@ -4331,32 +3722,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:nasus:0915ac64"
       ],
-      "causes": [
-        {
-          "text": "나서스가 자주 올리는 갈라진 하늘의 공격력이 45에서 40으로 줄어 성장 후 딜이 약해졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 체력이 450에서 400으로 감소해 나서스의 라인 유지력이 낮아졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "트런들 W 공격 속도가 최대 110%로 상향돼 탑 맞대결 구도가 나서스에게 불리해졌습니다.",
-          "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "초가스 E 피해량이 10 상승해 탑 대치 상대로서 나서스를 더 강하게 압박합니다.",
-          "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363817081",
@@ -4373,17 +3739,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=75,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nasus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "나서스 승률 -0.9%p는 CI가 0을 포함해 통계적으로 뚜렷하지 않고, 갈라진 하늘 공격력·체력 너프와 트런들·초가스 탑 강화가 겹친 영향으로 보입니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e",
-          "note:26.17:champion:trundle:85be03ea",
-          "note:26.17:champion:chogath:44d563a2"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Qiyana:MIDDLE:pickRate",
@@ -4409,20 +3765,7 @@
         "note:26.17:champion:qiyana:5a6d587d",
         "note:26.17:champion:qiyana:9d50d4d6"
       ],
-      "causes": [
-        {
-          "text": "제라스 체력 596→575 너프로 미드 라인 경쟁 챔피언 입지가 약화됐습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:080e761c",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "제라스 Q 피해량 하향으로 빠진 미드 지분이 키아나로 이동한 것으로 보입니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8367245341",
@@ -4439,15 +3782,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=246,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-qiyana"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "키아나 미드 픽률이 3.7%→4.5%(+0.8%p) 상승했고, 제라스 체력·Q 피해량 너프로 생긴 미드 공백이 유입 경로로 보입니다.",
-        "summaryCites": [
-          "note:26.17:champion:xerath:080e761c",
-          "note:26.17:champion:xerath:43a6f4aa"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Yone:banRate",
@@ -4472,20 +3807,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yone:c6a149c7"
       ],
-      "causes": [
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 치명타 기반 요네의 초중반 위력이 올라 밴 대상이 됐습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "야스오도 치명타 피해량 감소 -10%→-5%로 완화돼 치명타 딜러 계열 전반의 선호도가 올랐습니다.",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8366970663",
@@ -4502,14 +3824,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=777,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yone"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "요네 밴률 5.1%→5.9%(+0.8%p)는 폭풍갈퀴 공격 속도 25% 상향 등 치명타 빌드 강화가 겹친 결과입니다.",
-        "summaryCites": [
-          "note:26.17:item:stormrazor:0a1d6b43"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Yasuo:pickRate",
@@ -4534,20 +3849,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yasuo:66635940"
       ],
-      "causes": [
-        {
-          "text": "요네도 치명타 피해량 감소가 -10%에서 -5%로 완화돼, 같은 유저층 픽이 요네로 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 다른 원거리 딜러 선호가 늘어난 영향으로 보입니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363498717",
@@ -4564,14 +3866,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=157,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yasuo"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "야스오 픽률 -0.7%p는 95% CI가 0을 포함해 유의하지 않으며, 요네의 동일 상향에 따른 픽 분산 정도만 추정됩니다.",
-        "summaryCites": [
-          "note:26.17:champion:yone:c6a149c7"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Yone:pickRate",
@@ -4596,14 +3891,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yone:c6a149c7"
       ],
-      "causes": [
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 치명타 코어를 쓰는 요네의 선호도가 올랐습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8366970663",
@@ -4620,14 +3908,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=777,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yone"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "요네 픽률 0.5%p 상승은 95% CI가 [-0.5%p, 1.5%p]로 0을 포함해 유의하지 않으며, 폭풍갈퀴 공격 속도 25% 상향이 소폭 기여했을 수 있습니다.",
-        "summaryCites": [
-          "note:26.17:item:stormrazor:0a1d6b43"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Yone:TOP:pickRate",
@@ -4652,26 +3933,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yone:c6a149c7"
       ],
-      "causes": [
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 요네의 핵심 치명타 빌드 효율이 올라갔습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "갈라진 하늘 공격력 45→40 너프로 경쟁 탑 브루저가 약화돼 반사이익을 얻었습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "야스오도 같은 치명타 피해 감소 조정을 받아 두 검사 모두 픽 수요가 이동했습니다.",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8366970663",
@@ -4688,14 +3950,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=777,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yone"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "요네 탑 픽률 5.5%→5.9%(CI가 0을 포함해 유의하지 않음)로, 폭풍갈퀴 공격 속도 25% 상향에 따른 빌드 효율 상승이 주요 배경입니다.",
-        "summaryCites": [
-          "note:26.17:item:stormrazor:0a1d6b43"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Yone:winRate",
@@ -4720,20 +3975,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yone:c6a149c7"
       ],
-      "causes": [
-        {
-          "text": "갈라진 하늘 공격력 45→40 하향이 요네 코어 빌드 딜을 약간 깎았을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향으로 요네의 전투 지속력이 소폭 감소했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8366970663",
@@ -4750,15 +3992,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=777,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yone"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "요네 승률 -0.4%p는 CI [-3.8%p, 2.9%p]로 유의하지 않으며, 갈라진 하늘 공격력·체력 하향이 소폭 영향을 줬을 수 있습니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Xerath:BOTTOM:winRate",
@@ -4801,12 +4035,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=101,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-xerath"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Vayne:winRate",
@@ -4836,14 +4065,7 @@
         "note:26.17:champion:vayne:1da6ddd1",
         "note:26.17:champion:vayne:02ad4f34"
       ],
-      "causes": [
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 버프가 베인의 하향을 일부 상쇄했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8358882973",
@@ -4860,14 +4082,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=67,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "베인 승률은 47.8%→47.4%로 -0.4%p지만 CI가 ±6%p대여서 유의하지 않고, 폭풍갈퀴 공격 속도 25% 버프가 하향을 일부 상쇄한 수준입니다.",
-        "summaryCites": [
-          "note:26.17:item:stormrazor:0a1d6b43"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Trundle:pickRate",
@@ -4892,20 +4107,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:trundle:85be03ea"
       ],
-      "causes": [
-        {
-          "text": "나서스 생명력 흡수 10/15/20%로 하향돼 탑 스케일링 픽 수요가 트런들로 옮겨갔을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "녹턴 방어력 36·체력 640 하향으로 정글 대안 선택지에서 트런들 지분이 늘어난 흐름으로 보입니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363817081",
@@ -4922,15 +4124,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=48,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-trundle"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "트런들 픽률 1.0%→1.3%(+0.3%p, CI 하한 0.0%p)는 나서스·녹턴 하향에 따른 탑·정글 대체 수요로 설명됩니다.",
-        "summaryCites": [
-          "note:26.17:champion:nasus:0915ac64",
-          "note:26.17:champion:nocturne:9c41fff1"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Chogath:TOP:pickRate",
@@ -4955,26 +4149,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:chogath:44d563a2"
       ],
-      "causes": [
-        {
-          "text": "나서스 기본 지속 생명력 흡수가 10/15/20%로 하향돼 탑 스케일링 탱커 수요가 초가스로 이동했습니다.",
-          "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "갈라진 하늘 공격력 45→40 하향으로 탑 브루저 빌드가 약화되며 반사이익을 봤습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향도 같은 방향으로 탑 브루저 선호도를 낮췄을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8367044760",
@@ -4991,15 +4166,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=31,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-chogath"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "초가스 탑 픽률이 0.8%→1.2%로 올랐습니다. 나서스 생명력 흡수 하향과 갈라진 하늘 약화로 탑 대체 수요가 흡수된 결과입니다.",
-        "summaryCites": [
-          "note:26.17:champion:nasus:0915ac64",
-          "note:26.17:item:sundered-sky:0aec77fe"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nasus:MIDDLE:pickRate",
@@ -5024,20 +4191,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:nasus:0915ac64"
       ],
-      "causes": [
-        {
-          "text": "이렐리아 Q·R 계수 상향으로 미드 근접 딜탱 자리 경쟁이 심해져 나서스 픽이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "키아나 Q 피해량 상향이 미드 픽 분포를 흡수한 영향으로 보입니다.",
-          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363817081",
@@ -5054,12 +4208,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=75,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nasus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "나서스 미드 픽률 -0.3%p는 95% CI [-0.8%p, 0.2%p]로 0을 포함해, 유의한 변화로 보기 어렵습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:AurelionSol:BOTTOM:pickRate",
@@ -5085,20 +4234,7 @@
         "note:26.17:champion:aurelionsol:7b32ba55",
         "note:26.17:champion:aurelionsol:30712737"
       ],
-      "causes": [
-        {
-          "text": "베인 W 고정 피해가 최대 체력 6~10%에서 4~10%로 깎여 원딜 자리 일부가 대체 픽으로 넘어갔을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "그레이브즈 Q 폭발 계수 10%p 하락으로 AD 계열 픽 경쟁이 약해졌습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8364955312",
@@ -5115,14 +4251,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=136,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-aurelionsol"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "아우렐리온 솔 원딜 픽률 0.9%→1.2%(CI 0 포함)은 베인 W 너프 등 원딜 경쟁군 약화에 따른 반사 이익으로 보입니다.",
-        "summaryCites": [
-          "note:26.17:champion:vayne:1da6ddd1"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Yasuo:BOTTOM:pickRate",
@@ -5147,20 +4276,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yasuo:66635940"
       ],
-      "causes": [
-        {
-          "text": "갈라진 하늘 공격력 45→40 너프로 야스오의 아이템 선택지 가치가 떨어졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향도 같은 맥락에서 선호도를 낮추는 요인입니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363498717",
@@ -5177,15 +4293,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=157,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yasuo"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "야스오 원딜 픽률 -0.3%p는 신뢰구간이 [-0.6%p, 0.1%p]로 0을 포함해 유의하지 않으며, 갈라진 하늘 하향이 소폭 영향을 줬을 수 있습니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:AurelionSol:pickRate",
@@ -5211,20 +4319,7 @@
         "note:26.17:champion:aurelionsol:7b32ba55",
         "note:26.17:champion:aurelionsol:30712737"
       ],
-      "causes": [
-        {
-          "text": "제라스 Q 피해량 너프로 미드 경쟁자가 약화되며 아우렐리온 솔이 반사이득을 얻었을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "제라스 체력 596→575 너프로 장거리 포킹 미드 입지가 좁아진 영향입니다.",
-          "candidateNoteId": "note:26.17:champion:xerath:080e761c",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8364955312",
@@ -5241,15 +4336,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=136,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-aurelionsol"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "제라스 체력·Q 너프로 미드 경쟁자가 줄며 픽률이 0.2%p 올랐으나, CI가 0을 걸쳐 유의하지 않습니다.",
-        "summaryCites": [
-          "note:26.17:champion:xerath:080e761c",
-          "note:26.17:champion:xerath:43a6f4aa"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Yone:MIDDLE:pickRate",
@@ -5274,14 +4361,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yone:c6a149c7"
       ],
-      "causes": [
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 치명타 빌드 요네의 초반 아이템 가치가 올랐습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8366970663",
@@ -5298,14 +4378,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=777,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yone"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "요네 미드 픽률 9.8%→10.1%(0.2%p)는 CI가 0을 포함해 통계적 변화로 보기 어렵고, 폭풍갈퀴 공격 속도 상향이 소폭 영향을 줬을 수 있습니다.",
-        "summaryCites": [
-          "note:26.17:item:stormrazor:0a1d6b43"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Yasuo:MIDDLE:pickRate",
@@ -5330,20 +4403,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yasuo:66635940"
       ],
-      "causes": [
-        {
-          "text": "요네도 치명타 피해량 감소가 -5%로 완화돼, 유사 픽 수요가 요네로 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 버프는 야스오에 유리해 픽률 하락 요인으로 보기 어렵습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363498717",
@@ -5360,14 +4420,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=157,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yasuo"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "야스오 미드 픽률 -0.2%p는 CI가 [-0.9%p, 0.4%p]로 0을 포함해 유의한 변화가 아니며, 요네 동일 완화로 수요 분산 여지가 있습니다.",
-        "summaryCites": [
-          "note:26.17:champion:yone:c6a149c7"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Yasuo:TOP:pickRate",
@@ -5392,20 +4445,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yasuo:66635940"
       ],
-      "causes": [
-        {
-          "text": "요네도 치명타 피해량 감소가 -10%에서 -5%로 완화돼, 같은 탑 라인 수요를 나눠 가졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "이렐리아가 Q 계수 80%, R 주문력 계수 100%로 강화되며 탑 라인 선택지 경쟁이 심해졌습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363498717",
@@ -5422,14 +4462,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=157,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yasuo"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "야스오 탑 픽률 -0.2%p는 95% CI [-0.6%p, 0.2%p]로 0을 포함해 통계적 변화로 보기 어렵고, 이렐리아 강화로 인한 탑 경쟁이 일부 작용했습니다.",
-        "summaryCites": [
-          "note:26.17:champion:irelia:9035ffdc"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Yone:BOTTOM:pickRate",
@@ -5454,20 +4487,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yone:c6a149c7"
       ],
-      "causes": [
-        {
-          "text": "갈라진 하늘 공격력 45→40 너프로 요네의 주력 빌드 가치가 낮아졌을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향으로 원딜 라인 요네의 생존력이 떨어졌습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8366970663",
@@ -5484,15 +4504,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=777,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yone"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "요네 원딜 픽률 -0.2%p는 95% CI [-0.5%p, 0.1%p]로 0을 포함해 유의하지 않으며, 갈라진 하늘 공격력·체력 너프가 약한 간접 요인입니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Trundle:UTILITY:pickRate",
@@ -5534,12 +4546,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=48,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-trundle"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Trundle:JUNGLE:pickRate",
@@ -5564,32 +4571,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:trundle:85be03ea"
       ],
-      "causes": [
-        {
-          "text": "녹턴이 방어력 38→36으로 약화되며 정글 지분이 트런들로 일부 이동했습니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "그레이브즈 Q 폭발 계수 너프로 정글 상위권이 빠지며 트런들 선택이 늘었습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "키아나 Q 몬스터 피해 175%→160%로 정글 수행력이 떨어진 반사이익으로 보입니다.",
-          "candidateNoteId": "note:26.17:champion:qiyana:9d50d4d6",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25%가 공속 기반 트런들 빌드 가치를 올렸습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8363817081",
@@ -5606,15 +4588,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=48,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-trundle"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "트런들 정글 픽률이 0.3%→0.5%로 올랐고, 녹턴 체력·방어력 너프와 그레이브즈 Q 계수 너프로 생긴 정글 공백이 주된 배경입니다.",
-        "summaryCites": [
-          "note:26.17:champion:nocturne:9c41fff1",
-          "note:26.17:champion:graves:0bc5877b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Chogath:BOTTOM:pickRate",
@@ -5639,14 +4613,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:chogath:44d563a2"
       ],
-      "causes": [
-        {
-          "text": "폭풍갈퀴 공격 속도 20%→25% 버프로 정석 원딜 구도가 강해져, 변칙 원딜 초가스 채택이 줄었을 수 있습니다.",
-          "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8367044760",
@@ -5663,14 +4630,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=31,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-chogath"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "초가스 원딜 픽률 0.2%→0.1%(-0.1%p)로, CI 상한이 0에 닿는 극소 표본 변동이며 폭풍갈퀴 버프로 인한 정석 원딜 선호 외에 설명 조항이 없습니다.",
-        "summaryCites": [
-          "note:26.17:item:stormrazor:0a1d6b43"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Nocturne:MIDDLE:pickRate",
@@ -5713,12 +4673,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=56,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nocturne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Nocturne:TOP:pickRate",
@@ -5744,20 +4699,7 @@
         "note:26.17:champion:nocturne:9c41fff1",
         "note:26.17:champion:nocturne:fd4d5d23"
       ],
-      "causes": [
-        {
-          "text": "탑 경쟁자 나서스의 생명력 흡수 너프로 탑 픽 분포가 소폭 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "야스오 치명타 피해량 감소 폭 조정 등 탑 상위픽 변동의 반사 효과로 보입니다.",
-          "candidateNoteId": "note:26.17:champion:yasuo:66635940",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8366198290",
@@ -5774,12 +4716,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=56,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nocturne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "녹턴 탑 픽률 0.1%→0.2%(+0.1%p)는 CI[-0.0%p,0.2%p]가 0을 포함해 사실상 노이즈이며, 체력·방어력 너프와 방향만 어긋난 수준입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:AurelionSol:MIDDLE:pickRate",
@@ -5805,26 +4742,7 @@
         "note:26.17:champion:aurelionsol:7b32ba55",
         "note:26.17:champion:aurelionsol:30712737"
       ],
-      "causes": [
-        {
-          "text": "르블랑 W 피해량 계수 80%→90% 버프로 미드 픽이 몰리며 아우렐리온 솔 지분이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "이렐리아 Q 계수 70%→80%, R 계수 70%→100% 버프로 미드 경쟁 픽이 늘었습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "키아나 Q 피해량 상향으로 미드 암살자 선택지가 강화됐습니다.",
-          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8364955312",
@@ -5841,15 +4759,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=136,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-aurelionsol"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "아우렐리온 솔 W·Q 버프에도 픽률 -0.1%p로 CI[-0.4, 0.2]가 0을 포함해 유의하지 않으며, 르블랑·이렐리아 미드 버프의 경쟁 압박이 겹친 정도입니다.",
-        "summaryCites": [
-          "note:26.17:champion:leblanc:887dc51f",
-          "note:26.17:champion:irelia:9035ffdc"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Vayne:MIDDLE:pickRate",
@@ -5879,26 +4789,7 @@
         "note:26.17:champion:vayne:1da6ddd1",
         "note:26.17:champion:vayne:02ad4f34"
       ],
-      "causes": [
-        {
-          "text": "이렐리아 Q·W·R 계수 상향으로 미드 AD 브루저 수요가 옮겨갔을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "키아나 Q 피해량 80~200으로 상향되며 미드 AD 틈새 픽 경쟁에서 앞섰습니다.",
-          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "르블랑 W 계수 90% 상향으로 미드 선택지가 재편됐습니다.",
-          "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8358882973",
@@ -5915,15 +4806,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=67,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "베인 미드 픽률 -0.1%p는 CI가 0을 포함해 유의성이 약하며, 이렐리아·키아나 상향에 따른 미드 틈새 픽 이탈로 보입니다.",
-        "summaryCites": [
-          "note:26.17:champion:irelia:9035ffdc",
-          "note:26.17:champion:qiyana:5a6d587d"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Qiyana:TOP:pickRate",
@@ -5949,20 +4832,7 @@
         "note:26.17:champion:qiyana:5a6d587d",
         "note:26.17:champion:qiyana:9d50d4d6"
       ],
-      "causes": [
-        {
-          "text": "이렐리아 Q 계수 70%→80% 등 상향으로 탑 근접 암살 픽 경쟁에서 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "트런들 W 공격 속도 최대 90%→110% 상향으로 탑 선택지가 분산됐습니다.",
-          "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8367245341",
@@ -5979,15 +4849,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=246,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-qiyana"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "키아나 탑 픽률 -0.1%p는 CI [-0.3%p, 0.2%p]로 유의하지 않은 변동이며, 이렐리아·트런들 상향에 따른 탑 경쟁 심화가 일부 영향일 수 있습니다.",
-        "summaryCites": [
-          "note:26.17:champion:irelia:9035ffdc",
-          "note:26.17:champion:trundle:85be03ea"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Irelia:TOP:winRate",
@@ -6014,20 +4876,7 @@
         "note:26.17:champion:irelia:4b925bed",
         "note:26.17:champion:irelia:1f26947d"
       ],
-      "causes": [
-        {
-          "text": "이렐리아 핵심템 갈라진 하늘 공격력 45→40 하향이 스킬 버프를 상쇄했습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "갈라진 하늘 체력 450→400 하향으로 탑 라인 생존력이 줄어 이득이 희석됐습니다.",
-          "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
-          "verified": true,
-          "confidence": "medium"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8360218585",
@@ -6044,15 +4893,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=39,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-irelia"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "이렐리아 승률은 51.6%로 변동이 없었고, 갈라진 하늘 공격력·체력 하향이 스킬 버프를 상쇄했습니다.",
-        "summaryCites": [
-          "note:26.17:item:sundered-sky:0aec77fe",
-          "note:26.17:item:sundered-sky:4c4f025e"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Nocturne:banRate",
@@ -6095,12 +4936,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=56,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nocturne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "밴률 변화가 0.0%p이고 신뢰구간도 ±0.3%p로 0을 포함해, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Qiyana:UTILITY:pickRate",
@@ -6143,12 +4979,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=246,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-qiyana"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Xerath:UTILITY:pickRate",
@@ -6191,12 +5022,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=101,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-xerath"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Vayne:UTILITY:pickRate",
@@ -6243,12 +5069,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=67,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:AurelionSol:UTILITY:pickRate",
@@ -6291,12 +5112,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=136,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-aurelionsol"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Yone:JUNGLE:pickRate",
@@ -6321,20 +5137,7 @@
       "matchedNoteIds": [
         "note:26.17:champion:yone:c6a149c7"
       ],
-      "causes": [
-        {
-          "text": "그레이브즈 Q 폭발 계수 너프로 정글 상위권이 빠지며 요네 정글 시도가 소폭 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "녹턴 체력·방어력 하향도 정글 구도를 흔든 부수 요인입니다.",
-          "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8366970663",
@@ -6351,15 +5154,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=777,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yone"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "요네 정글 픽률 0.0%→0.1%(변화 0.0%p, CI에 0 포함)로 사실상 노이즈이며, 그레이브즈·녹턴 정글 하향의 반사 효과일 수 있습니다.",
-        "summaryCites": [
-          "note:26.17:champion:graves:0bc5877b",
-          "note:26.17:champion:nocturne:fd4d5d23"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Graves:UTILITY:pickRate",
@@ -6402,12 +5197,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=104,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "그레이브즈 서포터 픽률은 0.0%p 변화로 신뢰구간(-0.0~0.1%p)이 0을 포함해 사실상 변동이 없으며, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Trundle:banRate",
@@ -6449,12 +5239,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=48,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-trundle"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "트런들 밴률은 0.1%로 변동 없고 신뢰구간도 ±0.1%p라, W 공격속도 상향에도 밴 지표는 반응하지 않은 통계적 무변화입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Irelia:MIDDLE:pickRate",
@@ -6481,20 +5266,7 @@
         "note:26.17:champion:irelia:4b925bed",
         "note:26.17:champion:irelia:1f26947d"
       ],
-      "causes": [
-        {
-          "text": "르블랑 W 계수 상향으로 미드 표가 분산돼 이렐리아 픽률이 정체됐을 수 있습니다.",
-          "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "키아나 Q 피해량 상향도 미드 선택지를 늘려 이렐리아 반등을 눌렀을 여지가 있습니다.",
-          "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8360218585",
@@ -6511,12 +5283,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=39,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-irelia"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "이렐리아 미드 픽률은 1.9%로 변동 -0.0%p, CI [-0.4%p, 0.4%p]라 사실상 무변동이며 버프 효과가 픽에 반영되지 않았습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Qiyana:BOTTOM:pickRate",
@@ -6559,12 +5326,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=246,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-qiyana"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Nasus:JUNGLE:pickRate",
@@ -6606,12 +5368,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=75,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nasus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Graves:TOP:pickRate",
@@ -6654,12 +5411,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=104,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "그레이브즈 탑 픽률은 -0.0%p로 신뢰구간이 0을 포함해 사실상 변동이 없습니다. 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Graves:MIDDLE:pickRate",
@@ -6702,12 +5454,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=104,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Vayne:JUNGLE:pickRate",
@@ -6754,12 +5501,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=67,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "베인 정글 픽률은 0.0%에서 0.0%로 변화 -0.0%p, CI[-0.1%p, 0.0%p]로 사실상 무변화라 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nasus:UTILITY:pickRate",
@@ -6801,12 +5543,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=75,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nasus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:AurelionSol:banRate",
@@ -6849,12 +5586,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=136,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-aurelionsol"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Irelia:BOTTOM:pickRate",
@@ -6898,12 +5630,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=39,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-irelia"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Thresh:TOP:pickRate",
@@ -6945,12 +5672,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=412,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-thresh"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "탑 쓰레쉬 픽률은 변화 -0.0%p, CI [-0.1%p, 0.0%p]로 사실상 0이며 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Yasuo:JUNGLE:pickRate",
@@ -6992,12 +5714,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=157,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yasuo"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Irelia:JUNGLE:pickRate",
@@ -7041,12 +5758,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=39,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-irelia"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Irelia:UTILITY:pickRate",
@@ -7090,12 +5802,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=39,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-irelia"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "이렐리아 서포터 픽률은 변화 -0.0%p, CI [-0.1%p, 0.0%p]로 사실상 0% 수준이라 패치노트에서 설명할 조항을 찾지 못했습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:AurelionSol:JUNGLE:pickRate",
@@ -7138,12 +5845,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=136,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-aurelionsol"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nocturne:BOTTOM:pickRate",
@@ -7186,12 +5888,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=56,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nocturne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Nocturne:UTILITY:pickRate",
@@ -7234,12 +5931,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=56,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nocturne"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "녹턴 서포터 픽률 변화는 -0.0%p로 신뢰구간이 0을 포함해 사실상 변동이 없습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Trundle:MIDDLE:pickRate",
@@ -7281,12 +5973,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=48,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-trundle"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "미드 트런들 픽률은 0.0%대로 변화폭이 -0.0%p(CI -0.1~0.0%p)에 그쳐, 이 변화를 설명할 패치 조항을 찾지 못했습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Yasuo:UTILITY:pickRate",
@@ -7328,12 +6015,7 @@
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=157,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yasuo"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "야스오 서포터 픽률은 0.1%→0.0%로 변화폭이 신뢰구간(-0.1%p~0.1%p) 안에 있어 통계적 노이즈이며, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Chogath:UTILITY:pickRate",
@@ -7374,7 +6056,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=31,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-chogath"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Graves:BOTTOM:pickRate",
@@ -7416,7 +6099,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=104,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:AurelionSol:TOP:pickRate",
@@ -7458,7 +6142,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=136,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-aurelionsol"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Vayne:banRate",
@@ -7504,7 +6189,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=67,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Leblanc:banRate",
@@ -7548,7 +6234,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=7,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-leblanc"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Graves:JUNGLE:pickRate",
@@ -7590,7 +6277,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=104,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Graves:pickRate",
@@ -7632,7 +6320,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=104,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Chogath:pickRate",
@@ -7673,7 +6362,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=31,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-chogath"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Chogath:JUNGLE:pickRate",
@@ -7714,7 +6404,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=31,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-chogath"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Xerath:banRate",
@@ -7756,7 +6447,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=101,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-xerath"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Vayne:pickRate",
@@ -7802,7 +6494,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=67,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Irelia:banRate",
@@ -7845,7 +6538,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=39,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-irelia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Vayne:TOP:pickRate",
@@ -7891,7 +6585,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=67,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Graves:banRate",
@@ -7933,7 +6628,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=104,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "item:6610:adoptionRate",
@@ -7975,7 +6671,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/items.json#rows[itemId=6610]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-Sundered-Sky"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nasus:pickRate",
@@ -8016,7 +6713,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=75,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nasus:TOP:pickRate",
@@ -8057,7 +6755,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=75,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Leblanc:pickRate",
@@ -8101,7 +6800,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=7,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-leblanc"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Irelia:TOP:pickRate",
@@ -8144,7 +6844,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=39,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-irelia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Irelia:pickRate",
@@ -8187,7 +6888,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=39,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-irelia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Xerath:pickRate",
@@ -8229,7 +6931,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=101,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-xerath"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Chogath:banRate",
@@ -8270,7 +6973,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=31,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-chogath"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Leblanc:MIDDLE:pickRate",
@@ -8314,7 +7018,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=7,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-leblanc"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nocturne:JUNGLE:pickRate",
@@ -8356,7 +7061,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=56,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nocturne"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Xerath:BOTTOM:pickRate",
@@ -8398,7 +7104,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=101,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-xerath"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nocturne:pickRate",
@@ -8440,7 +7147,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=56,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nocturne"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Xerath:MIDDLE:pickRate",
@@ -8482,7 +7190,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=101,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-xerath"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Vayne:BOTTOM:pickRate",
@@ -8528,7 +7237,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=67,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Trundle:TOP:pickRate",
@@ -8569,7 +7279,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=48,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-trundle"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Leblanc:TOP:pickRate",
@@ -8613,7 +7324,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=7,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-leblanc"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Leblanc:UTILITY:pickRate",
@@ -8657,7 +7369,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=7,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-leblanc"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Chogath:MIDDLE:pickRate",
@@ -8698,7 +7411,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=31,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-chogath"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nasus:BOTTOM:pickRate",
@@ -8739,7 +7453,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=75,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "lane:BOTTOM:goldAt14",
@@ -19056,7 +17771,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=39,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-irelia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Poppy:BOTTOM:winRate",
@@ -19566,7 +18282,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=136,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-aurelionsol"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Darius:BOTTOM:winRate",
@@ -19764,7 +18481,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=56,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nocturne"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Lillia:TOP:winRate",
@@ -20624,7 +19342,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=777,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yone"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ornn:MIDDLE:winRate",
@@ -21524,7 +20243,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=104,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Graves:BOTTOM:winRate",
@@ -21566,7 +20286,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=104,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:TwistedFate:JUNGLE:winRate",
@@ -22037,7 +20758,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=136,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-aurelionsol"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Akshan:BOTTOM:winRate",
@@ -23522,7 +22244,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=104,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Karma:MIDDLE:winRate",
@@ -23841,7 +22564,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=67,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ashe:UTILITY:winRate",
@@ -24740,7 +23464,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=31,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-chogath"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Nocturne:MIDDLE:winRate",
@@ -24782,7 +23507,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=56,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nocturne"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Chogath:UTILITY:winRate",
@@ -24823,7 +23549,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=31,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-chogath"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Pyke:MIDDLE:winRate",
@@ -24986,7 +23713,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=67,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zac:BOTTOM:winRate",
@@ -25067,7 +23795,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=136,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-aurelionsol"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Warwick:JUNGLE:winRate",
@@ -25382,7 +24111,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=56,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nocturne"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Naafiri:MIDDLE:winRate",
@@ -27181,7 +25911,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=7,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-leblanc"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Rumble:UTILITY:winRate",
@@ -27496,7 +26227,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=246,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-qiyana"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Kayle:MIDDLE:winRate",
@@ -27577,7 +26309,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=136,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-aurelionsol"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Sejuani:TOP:winRate",
@@ -27658,7 +26391,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=246,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-qiyana"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Pantheon:MIDDLE:winRate",
@@ -28363,7 +27097,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=101,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-xerath"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Draven:TOP:winRate",
@@ -29579,7 +28314,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=67,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nunu:MIDDLE:winRate",
@@ -29738,7 +28474,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=56,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nocturne"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Syndra:UTILITY:winRate",
@@ -29818,7 +28555,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=157,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yasuo"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Brand:MIDDLE:winRate",
@@ -29937,7 +28675,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=31,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-chogath"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Skarner:JUNGLE:winRate",
@@ -30680,7 +29419,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=31,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-chogath"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Heimerdinger:winRate",
@@ -30799,7 +29539,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=75,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Poppy:MIDDLE:winRate",
@@ -30999,7 +29740,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=7,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-leblanc"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Akshan:MIDDLE:winRate",
@@ -31119,7 +29861,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=101,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-xerath"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Mel:BOTTOM:winRate",
@@ -31825,7 +30568,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=39,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-irelia"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Teemo:UTILITY:winRate",
@@ -32568,7 +31312,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=157,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yasuo"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zilean:UTILITY:winRate",
@@ -32921,7 +31666,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=75,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Ambessa:JUNGLE:winRate",
@@ -34132,7 +32878,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=48,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-trundle"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Elise:JUNGLE:winRate",
@@ -34251,7 +32998,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=777,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yone"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Gangplank:MIDDLE:winRate",
@@ -34372,7 +33120,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=39,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-irelia"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Volibear:winRate",
@@ -34530,7 +33279,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=48,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-trundle"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Taliyah:UTILITY:winRate",
@@ -35156,7 +33906,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=31,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-chogath"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Locke:JUNGLE:winRate",
@@ -35314,7 +34065,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=75,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nasus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ornn:TOP:winRate",
@@ -36448,7 +35200,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=136,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-aurelionsol"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Tristana:TOP:winRate",
@@ -37074,7 +35827,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=31,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-chogath"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Viego:BOTTOM:winRate",
@@ -38324,7 +37078,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=48,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-trundle"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:MasterYi:TOP:winRate",
@@ -38560,7 +37315,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=48,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-trundle"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Vladimir:TOP:winRate",
@@ -38953,7 +37709,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=246,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-qiyana"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Nautilus:BOTTOM:winRate",
@@ -39150,7 +37907,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=412,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-thresh"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Yasuo:JUNGLE:winRate",
@@ -39191,7 +37949,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=157,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-yasuo"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Graves:MIDDLE:winRate",
@@ -39233,7 +37992,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=104,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-graves"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Kalista:UTILITY:winRate",
@@ -39510,7 +38270,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=39,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-irelia"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Orianna:UTILITY:winRate",
@@ -40141,7 +38902,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=67,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-vayne"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Sivir:TOP:winRate",
@@ -40729,7 +39491,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=56,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-nocturne"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Yorick:UTILITY:winRate",
@@ -41082,7 +39845,8 @@
         ],
         "aggregatePath": "data/aggregated/26.17/champions.json#rows[championId=48,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-17-notes/#patch-trundle"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Illaoi:UTILITY:winRate",

@@ -141,7 +141,9 @@ export function isGameHome(pathname: string): boolean {
 export function isItemDetailPath(pathname: string): boolean {
   const segments = segmentsOf(pathname);
   const game = gameFromPathname(pathname);
-  if (game === "lol") return segments[1] === "item";
-  if (game === "tft") return segments[1] === "unit";
+  // 과거 쌍 상세(`/lol/history/{쌍}/item/…`, 2026-09-28 이월 R8)도 같은 화면이다 — 스플래시가 꺼지면 안 된다.
+  const section = segments[1] === "history" ? segments[3] : segments[1];
+  if (game === "lol") return section === "item";
+  if (game === "tft") return section === "unit";
   return false;
 }

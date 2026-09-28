@@ -103,11 +103,12 @@ describe("landingCards — 커밋된 산출물 기준", () => {
     }
   });
 
-  it("미공지는 유의한 관측의 부분집합이다 — 합산 타일이 자기모순을 말하지 않는다", () => {
+  // 명세 변경(2026-09-28, PR-C D2): 「미공지 Gap」은 게임 홈 타일과 같은 값 = 통계 Gap 대상 ∪ 수치 축 대상
+  // (잠수함은 통계 관측이 아니다)이라 더는 「유의한 관측」의 부분집합이 아니다. 홈 타일과의 일치는
+  // `app/__tests__/gap-tile-tab.test.tsx`가 렌더로 고정한다. 여기엔 관측 전 쌍의 null 대칭만 남긴다.
+  it("관측 전 카드는 유의·미공지가 함께 「—」다 — 한쪽만 0으로 말하지 않는다", () => {
     for (const c of cards) {
-      // 관측 전 카드(C13·C14)는 두 값이 모두 null(「—」)이다 — 그때도 자기모순은 없다.
       expect(c.unannounced === null, c.id).toBe(c.significant === null);
-      expect(c.unannounced ?? 0, c.id).toBeLessThanOrEqual(c.significant ?? 0);
     }
   });
 });

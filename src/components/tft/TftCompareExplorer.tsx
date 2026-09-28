@@ -39,6 +39,7 @@ import { deltaDisplay, formatMetricValue } from "@/components/tft/shared";
 import { entityTypeLabel, isLowerBetter, metricLabel } from "@/lib/format";
 import { PANEL_SPLIT_BODY } from "@/lib/panelScroll";
 import { tftEntityHref } from "@/lib/tftRoutes";
+import { usePairBase } from "@/components/PairBaseContext";
 import { DISPLAY_SORT_PRIORITY, type DisplayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import type { DeltaMetric, PatchNoteItem } from "@/pipeline/types";
@@ -102,6 +103,8 @@ function matchedNoteIdsOf(row: TftEntityRow): string[] {
 
 export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftCompareExplorerProps) {
   const haveAssets = useMemo(() => new Set(assetKeys), [assetKeys]);
+  // 과거 쌍 대조표면 상세 링크가 그 쌍의 상세로 간다(2026-09-28, 이월 R8 — LoL `DeltaTable`과 같은 컨텍스트).
+  const pairBase = usePairBase();
   const [filter, setFilter] = useState<CompareFilterKey>("all");
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<CompareSortKey>("priority");
@@ -248,7 +251,7 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
                 >
                   <td className="px-4 py-3">
                     {/* 아이콘은 LoL 대조표(`DeltaTable`)와 같은 자리다 — TFT만 비어 있었다. */}
-                    <Link href={tftEntityHref(row.key)} className="flex items-center gap-3 group">
+                    <Link href={tftEntityHref(row.key, pairBase)} className="flex items-center gap-3 group">
                       <EntityIcon
                         game="tft"
                         entityType={row.entityType}
@@ -296,7 +299,7 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
                       {/* 원인 **문장**은 표에 넣지 않는다 — 산문을 칸에 밀어넣으면 행 높이가
                           제각각이 된다. "있다"는 사실만 알리고 읽을 자리(상세)로 보낸다. */}
                       {verifiedCauseCount(row) > 0 ? (
-                        <Link href={tftEntityHref(row.key)} className="font-mono text-xs whitespace-nowrap text-accent hover:underline">
+                        <Link href={tftEntityHref(row.key, pairBase)} className="font-mono text-xs whitespace-nowrap text-accent hover:underline">
                           추정 원인 {verifiedCauseCount(row)}
                         </Link>
                       ) : null}

@@ -243,3 +243,25 @@ describe("noteValueMismatch — 공지했는데 값이 다르다", () => {
     expect(linkNotes(input, NOTES_2617)).toEqual(linkedNotes(input, NOTES_2617).map((l) => l.note.id));
   });
 });
+
+// 이월 R9: TFT 「마나 조정 40/100 ⇒ 30/100」은 (시작/최대) 두 값이다 — 성분 번호로 골라 견준다.
+describe("noteValueMismatch — a/b 성분 대조(R9)", () => {
+  const mana = (anchorUrl?: string): NoteLike => ({
+    id: "m1", entity: "마오카이", skill: null, stat: "마나 조정", before: "40/100", after: "30/100",
+    ...(anchorUrl ? { anchorUrl } : {}),
+  });
+  const link = (n: NoteLike) => linkedNotes({ entityName: "마오카이", fieldKeywords: ["마나"] }, [n]);
+
+  it("성분 1(최대)이 어긋나면 그 성분 값으로 불일치를 말한다", () => {
+    expect(noteValueMismatch(link(mana()), 100, 90, 1)).toEqual({ noteId: "m1", noteBefore: "100", noteAfter: "100" });
+  });
+  it("성분 0(시작)이 맞으면 불일치가 아니다", () => {
+    expect(noteValueMismatch(link(mana()), 40, 30, 0)).toBeNull();
+  });
+  it("성분을 안 주면 a/b는 여전히 견주지 않는다(레벨 배열과 같은 이유)", () => {
+    expect(noteValueMismatch(link(mana()), 100, 90)).toBeNull();
+  });
+  it("중간 패치 절의 노트면 midpatch 표식을 붙인다", () => {
+    expect(noteValueMismatch(link(mana("https://x/#patch-midpatch-updates")), 100, 90, 1)).toMatchObject({ midpatch: true });
+  });
+});

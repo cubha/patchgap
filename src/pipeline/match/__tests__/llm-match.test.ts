@@ -884,3 +884,22 @@ describe("계측 — 대상 이름 없는 원인(C6)", () => {
     expect(out.summary.prose.summaryDeterministic).toBe(0);
   });
 });
+
+// 2026-09-28 이월 R14 후속(scope-critic): 부호 없는 「X% 줄어」 검사를 PUBG 프로필에서 **공통 경로**로 옮긴다.
+// LoL·TFT 제외 근거가 추정이었다 — 실측 검증 통과 원인 897건 중 이 형태 1건(통과). 근거 = 형제 노트 수치 + 델타 자신 수치.
+describe("verifyCauses — 부호 없는 변화량 백분율(R14, 세 게임 공통)", () => {
+  const graves = note({ id: "n2", entity: "그레이브즈", stat: "피해량", before: "45", after: "40", summary: "피해량: 45 ⇒ 40 (약 11% 감소)" });
+  it("LoL: 노트에도 델타에도 없는 「X% 줄어」는 검증 실패, 노트 수치면 통과", () => {
+    const [bad, good] = verifyCauses(
+      [
+        { text: "그레이브즈 피해량이 25% 줄어 정글 수요가 옮겨갔습니다.", candidateNoteId: "n2", confidence: "medium" },
+        { text: "그레이브즈 피해량이 11% 감소해 정글 수요가 옮겨갔습니다.", candidateNoteId: "n2", confidence: "medium" },
+      ],
+      [graves],
+      delta({ entityName: "리신" }),
+      lolLlmProfile(makeDdragon())
+    );
+    expect(bad.verified).toBe(false);
+    expect(good.verified).toBe(true);
+  });
+});

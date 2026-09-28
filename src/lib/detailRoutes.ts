@@ -69,7 +69,17 @@ export function detailRouteSlugs(rowsByPair: ReadonlyArray<readonly DeltaRecord[
   return Array.from(slugs);
 }
 
-/** 대상 상세로 가는 정준 링크. 화면은 전부 이것을 쓴다(구 지표 링크는 별칭으로만 남는다). */
-export function lolEntityHref(row: Pick<DeltaRecord, "entityType" | "entityKey">): string {
-  return itemHref(`${row.entityType}:${row.entityKey}`);
+/**
+ * 대상 상세로 가는 정준 링크. 화면은 전부 이것을 쓴다(구 지표 링크는 별칭으로만 남는다).
+ *
+ * `pairBase`(2026-09-28, 이월 R8) — 과거 쌍 화면(`/lol/history/{쌍}`)이면 그 쌍의 상세로 보낸다. 없으면 평소
+ * `/lol/item/…`인데, 그 화면은 「판정이 선 첫 쌍」을 고르므로 과거 쌍에서 눌렀을 때 맥락이 최신 쪽으로 튀었다.
+ * 과거 쌍 상세는 **그 쌍의 정준 슬러그만** 만든다(`app/lol/history/[pair]/item/[id]` — 별칭은 디스코드 링크용이다).
+ */
+export function lolEntityHref(
+  row: Pick<DeltaRecord, "entityType" | "entityKey">,
+  pairBase: string | null = null
+): string {
+  const key = `${row.entityType}:${row.entityKey}`;
+  return pairBase === null ? itemHref(key) : `${pairBase}/item/${itemSlug(key)}/`;
 }

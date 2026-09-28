@@ -2,7 +2,12 @@
 // C3(2026-09-28 잔여 로드맵) — 원인 문장의 인과 **사실성** 결정론 검사 3종. 인용 노트 실재·대상 일치는
 // 이미 본다. 여기서는 문장이 **숫자로 단정한 것**이 근거와 맞는지만 본다(해석은 LLM 몫으로 남긴다).
 import { describe, expect, it } from "vitest";
-import { arrowClaimsGrounded, signedPercentClaimsGrounded, totalDropAttributionGrounded } from "../cause-factuality";
+import {
+  arrowClaimsGrounded,
+  signedPercentClaimsGrounded,
+  totalDropAttributionGrounded,
+  unsignedPercentChangeClaimsGrounded,
+} from "../cause-factuality";
 
 const note = (before: string, after: string, summary = `x: ${before} ⇒ ${after}`) => ({ before, after, summary });
 
@@ -37,6 +42,29 @@ describe("② 부호 붙은 「±X%」 ↔ 상대 변화·재분배 기대치(PU
   });
   it("부호 없는 백분율(노트 수치 「30% 감소」)은 판단하지 않는다", () => {
     expect(signedPercentClaimsGrounded("RPD·M249 스폰 30% 감소분이", [0.0193])).toBe(true);
+  });
+});
+
+// 2026-09-28 이월 R14: 부호 없는 「17.9% 줄어」는 ②가 보지 않았다. 변화 동사가 붙은 백분율은 **변화량 주장**
+// 이므로, 이 델타·쌍 맥락의 허용 값이거나 인용 노트가 말한 수치여야 한다.
+describe("②′ 부호 없는 「X% 줄어/늘어」 ↔ 허용 값 또는 인용 노트 수치(PUBG)", () => {
+  it("허용 값(전체 획득 −17.9%)과 맞으면 통과", () => {
+    expect(unsignedPercentChangeClaimsGrounded("전체 획득 수가 17.9% 줄어든 영향입니다.", [-0.179], [])).toBe(true);
+  });
+  it("허용 값에도 노트 수치에도 없으면 실패", () => {
+    expect(unsignedPercentChangeClaimsGrounded("전체 획득 수가 12.0% 줄어든 영향입니다.", [-0.179, 0.0193], [30])).toBe(false);
+  });
+  it("인용 노트가 말한 수치(「스폰 30% 감소」)면 통과", () => {
+    expect(unsignedPercentChangeClaimsGrounded("RPD·M249 스폰이 30% 감소해 몫이 옮겨졌습니다.", [0.0193], [30])).toBe(true);
+  });
+  it("변화 동사가 없는 백분율(점유율 값)은 판단하지 않는다", () => {
+    expect(unsignedPercentChangeClaimsGrounded("점유율 5.6% 수준입니다.", [], [])).toBe(true);
+  });
+  it("부호가 붙은 것은 ②의 몫이라 여기서 보지 않는다(이중 판정 금지)", () => {
+    expect(unsignedPercentChangeClaimsGrounded("−12.0% 줄었습니다.", [0.179], [])).toBe(true);
+  });
+  it("%p(퍼센트포인트)는 비율 변화가 아니라 보지 않는다", () => {
+    expect(unsignedPercentChangeClaimsGrounded("2.1%p 늘었습니다.", [], [])).toBe(true);
   });
 });
 

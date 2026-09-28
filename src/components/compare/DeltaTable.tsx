@@ -24,6 +24,7 @@ import { PANEL_SPLIT_BODY } from "@/lib/panelScroll";
 import type { LaneAxis } from "@/lib/lane";
 import { metricLabel, positionLabel } from "@/lib/format";
 import { lolEntityHref } from "@/lib/detailRoutes";
+import { usePairBase } from "@/components/PairBaseContext";
 import EntityIcon from "@/components/EntityIcon";
 import LaneGlyph from "@/components/LaneGlyph";
 import StatusBadge from "@/components/StatusBadge";
@@ -55,6 +56,8 @@ function Observation({
   lane: LaneAxis | null;
   labelled: boolean;
 }) {
+  // 과거 쌍 대조표면 그 쌍의 상세로(2026-09-28, 이월 R8).
+  const pairBase = usePairBase();
   const delta = record.delta ?? 0;
   const up = delta > 0;
   const kind = metricKind(record.metric);
@@ -62,7 +65,7 @@ function Observation({
   const deltaText = kind === "pp" ? fmtPp(delta) : String(delta);
   return (
     <Link
-      href={lolEntityHref(record)}
+      href={lolEntityHref(record, pairBase)}
       className="group/cell flex flex-col gap-0.5 rounded-sm px-1 py-0.5 hover:bg-accent/10"
       aria-label={`${record.entityName} ${lane && lane !== "all" ? `${positionLabel(lane)} ` : ""}${metricLabel(record.metric)} 상세`}
     >
@@ -113,6 +116,7 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
   );
   // 포커스 스크롤 규약은 `useRowFocus`가 소유한다 — 세 게임 표가 같은 훅을 쓴다(사본 금지).
   const { scrollerRef, headRef: theadRef } = useRowFocus<HTMLDivElement, HTMLTableSectionElement>(focusKey);
+  const pairBase = usePairBase();
 
 
   const fromLabel = pair?.from ?? "이전";
@@ -176,7 +180,7 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                       {/* 잠수함 전용 행은 관측이 하나도 없어 상세로 갈 자리가 없다 —
                           없는 링크를 만들지 않고 이름만 그린다(2026-09-21). */}
                       {row.representative ? (
-                        <Link href={lolEntityHref(row.representative)} className="font-bold text-fg hover:text-accent hover:underline">
+                        <Link href={lolEntityHref(row.representative, pairBase)} className="font-bold text-fg hover:text-accent hover:underline">
                           {row.entityName}
                         </Link>
                       ) : (

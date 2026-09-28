@@ -18,8 +18,9 @@ import Link from "next/link";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { gameDataEntityCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
+import { pubgGapRows, pubgGapTotal } from "@/lib/gapTotals";
 import DeclarationOnly from "@/components/DeclarationOnly";
 import PubgWeaponGrid from "@/components/pubg/PubgWeaponGrid";
 import { loadPubg, loadPubgAssets, loadPubgDeclaration, loadPubgMaps, isReportable, pubgPair, type PubgDeclaration } from "@/lib/pubgData";
@@ -77,8 +78,9 @@ export default function PubgPage() {
   // 수치 축(F9) — 산출물이 없으면 섹션이 통째로 빠진다. 세 게임이 같은 컴포넌트를 쓴다.
   const submarine = summarizeGameData(loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to));
   const submarineKeys = new Set(submarine?.submarines.map((change) => change.entityKey) ?? []);
-  const unannounced = reportable.filter((row) => row.status === "unannounced");
-  const announced = reportable.filter((row) => row.status !== "unannounced");
+  const unannounced = pubgGapRows(deltas.rows);
+  const gapTotal = pubgGapTotal(deltas.rows, submarine);
+  const announced = reportable.filter((row) => !unannounced.includes(row));
   // 표 아래 원문 링크 1개 — 모든 공지 행이 같은 패치노트 페이지를 가리킨다(43.1 노트는 5항목 1페이지).
   const noteSource = announced.find((row) => row.evidence.noteAnchor)?.evidence.noteAnchor ?? null;
 
@@ -159,7 +161,7 @@ export default function PubgPage() {
             announcedCount={notes.length}
             patch={deltas.meta.to}
             significantCount={reportable.length}
-            gapCount={unannounced.length}
+            gapCount={gapTotal}
             game="pubg"
           />
 
@@ -171,12 +173,12 @@ export default function PubgPage() {
               위치를 아는 쪽만 정할 수 있다(2026-09-24). */}
           <BriefingTabs
               contentCount={announced.length}
-              gapCount={unannounced.length + gameDataEntityCount(submarine)}
+              gapCount={gapTotal}
               content={
                 <SectionCard
                   eyebrow="대조"
                   title="공지된 변경은 실제로 그렇게 됐나"
-                  variant="glass"
+                  variant="embedded"
                   action={<span className="font-mono text-xs text-muted">{announced.length}건</span>}
                 >
                   {/* 단위 1줄 — 매치당 총 획득이 함께 내려가(490 → 427) 이 한 줄이 없으면 모든 무기가 하향으로
@@ -213,14 +215,17 @@ export default function PubgPage() {
               gap={
                 // 미공지 Gap은 **두 갈래**다(2026-09-21): 위가 수치 축(게임사가 무엇을 바꿨나),
                 // 아래가 지표 축(공지에 없는데 움직였나). 위계의 근거는 증거 등급이다.
-                <div className="flex flex-col gap-6">
+                <div>
+                {/* 수치 축 — 탭 카드 안 위쪽 갈래(LoL 스트림과 같은 자리, B2). */}
                 {submarine ? (
-                  <SubmarineSection summary={submarine} hrefOf={(change) => weaponHref(change.entityKey)} />
+                  <div className="border-b border-border-soft p-5">
+                    <SubmarineSection summary={submarine} hrefOf={(change) => weaponHref(change.entityKey)} />
+                  </div>
                 ) : null}
                 <SectionCard
                   eyebrow="발견 · 지표 축"
                   title="공지에 없는데 움직였습니다"
-                  variant="glass"
+                  variant="embedded"
                   action={<span className="font-mono text-xs text-muted">{unannounced.length}건</span>}
                 >
                   <div className={PANEL_SCROLL_BODY}>

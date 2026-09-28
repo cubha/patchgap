@@ -10,6 +10,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { panelSurfaceClass } from "@/lib/panelSurface";
 
 export type BriefingTabKey = "content" | "gap";
 
@@ -19,8 +20,16 @@ const TAB_LABELS: Record<BriefingTabKey, string> = {
   gap: "미공지 Gap",
 };
 
+/**
+ * 탭 순서와 기본 선택 — **패치 내용 먼저**(읽는 순서: 무엇이 공지됐나 → 말 안 한 건 뭔가). 2026-09-28 PR-C에서
+ * 「발견 먼저」로 뒤집었다가 사용자 결정으로 되돌렸다: 미공지 Gap이 0건인 패치에서 빈 탭이 첫 화면이 되면
+ * 안 된다. 세 게임이 이 상수 하나를 본다 — LoL 스트림도 자기 상태의 기본값을 여기서 가져간다.
+ */
+export const BRIEFING_TAB_ORDER: readonly BriefingTabKey[] = ["content", "gap"];
+export const DEFAULT_BRIEFING_TAB: BriefingTabKey = "content";
+
 export interface BriefingTabsProps {
-  /** 공지 대조(메인) — 세 게임 모두 기본 선택이다(읽는 순서: 무엇이 공지됐나 → 말 안 한 건 뭔가). */
+  /** 공지 대조 — 첫 탭·기본 선택(`BRIEFING_TAB_ORDER`). */
   content: ReactNode;
   /** 미공지 Gap — 수치 축(잠수함)이 위, 지표 축이 아래. */
   gap: ReactNode;
@@ -35,9 +44,8 @@ export interface BriefingTabsProps {
    * 탭 바가 1행, 카드와 사이드가 같은 2행에 서야 카드 상단끼리 맞는다 — 그 배치는 탭 바의
    * 위치를 아는 이 컴포넌트만 정할 수 있다. 호출부에 남기면 세 게임이 각자 틀린다.
    *
-   * (LoL은 탭 바가 카드 **안**에 있어 이 문제가 없다 — `ReleaseNoteStream`. 세 게임의 탭
-   * 위치를 통일하는 건 더 큰 변경이라 이번에 하지 않았고, 여기서는 **카드 상단 정렬**이라는
-   * 관측 가능한 결과만 세 게임이 같게 만든다.)
+   * (2026-09-28 PR-C B2: 이제 이 컴포넌트가 유리 카드를 소유하고 탭 바를 그 **안** 첫 줄에 둔다 —
+   * LoL `ReleaseNoteStream`과 같은 구조라, 카드와 사이드가 한 행에 서면 카드 상단끼리 맞는다.)
    */
   aside?: ReactNode;
 }
@@ -63,7 +71,7 @@ export function BriefingTabBar({
   const counts: Record<BriefingTabKey, number> = { content: contentCount, gap: gapCount };
   return (
     <div className={className} role="tablist" aria-label="브리핑 보기">
-      {(Object.keys(TAB_LABELS) as BriefingTabKey[]).map((key) => {
+      {BRIEFING_TAB_ORDER.map((key) => {
         const isActive = key === tab;
         return (
           <button
@@ -92,30 +100,32 @@ export default function BriefingTabs({
   gapCount,
   aside,
 }: BriefingTabsProps) {
-  const [tab, setTab] = useState<BriefingTabKey>("content");
+  const [tab, setTab] = useState<BriefingTabKey>(DEFAULT_BRIEFING_TAB);
   const panel = tab === "content" ? content : gap;
-  const bar = (
-    <BriefingTabBar tab={tab} onSelect={setTab} contentCount={contentCount} gapCount={gapCount} />
+  // 탭 바는 **카드 안 맨 위**(2026-09-28, B2 · D4) — LoL 스트림과 같은 구조. 전에는 탭 바가 카드 위에 떠
+  // 있어 탭 위치가 게임마다 달랐다. 패널은 `SectionCard variant="embedded"`로 들어와 카드 속 카드를 만들지 않는다.
+  const card = (
+    <section className={`${panelSurfaceClass("glass")} flex flex-col overflow-hidden rounded-lg`}>
+      <BriefingTabBar
+        tab={tab}
+        onSelect={setTab}
+        contentCount={contentCount}
+        gapCount={gapCount}
+        className="flex gap-2 border-b border-border-soft px-5 pt-4"
+      />
+      {panel}
+    </section>
   );
 
   // 사이드가 없으면 단일 컬럼 — 없는 열을 만들지 않는다.
-  if (!aside) {
-    return (
-      <div className="flex flex-col">
-        {bar}
-        <div className="pt-4">{panel}</div>
-      </div>
-    );
-  }
+  if (!aside) return card;
 
-  // 행을 **명시**한다: 1행 = 탭 바(좌측만) · 2행 = 카드 | 사이드. 둘 다 `pt-4`라 상단이 맞는다.
-  // 행 간격을 0으로 두는 이유: 간격을 주면 그 값이 `pt-4`에 더해져 또 어긋난다.
-  // 모바일(lg 미만)은 배치 지시가 걸리지 않아 DOM 순서대로 쌓인다(탭 → 카드 → 사이드).
+  // 카드와 사이드가 같은 행에 서서 **카드 상단끼리** 맞는다(탭 바가 카드 안이라 행을 나눌 필요가 없다).
+  // 모바일(lg 미만)은 DOM 순서대로 쌓인다(카드 → 사이드).
   return (
-    <div className="grid grid-cols-1 gap-x-6 lg:grid-cols-[2fr_1fr] lg:items-start">
-      <div className="lg:col-start-1 lg:row-start-1">{bar}</div>
-      <div className="pt-4 lg:col-start-1 lg:row-start-2">{panel}</div>
-      <div className="flex flex-col gap-6 pt-6 lg:col-start-2 lg:row-start-2 lg:pt-4">{aside}</div>
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr] lg:items-start">
+      {card}
+      <div className="flex flex-col gap-6">{aside}</div>
     </div>
   );
 }
