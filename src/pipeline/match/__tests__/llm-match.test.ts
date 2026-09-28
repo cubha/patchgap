@@ -754,3 +754,65 @@ describe("프롬프트 v5 — 길이 상한과 완곡 표현(2026-09-19 항목7)
     expect(PROMPT_VERSION).toBe("v5");
   });
 });
+
+// C1(2026-09-28 잔여 로드맵, 사용자 결정 D1): 요약 100자 초과 0은 ACCEPT-prose-v5 A1의 **합격 조건**이다.
+//  ① 캐시 적중 경로가 위반 항목을 매 실행마다 다시 물었다(비용 누수) → 재요청 시도 수를 캐시에 적고 1회로 닫는다.
+//  ② 재요청 요약의 인용이 바뀌면 원본 긴 요약을 지켰다(회귀 원인) → 새 인용이 검증을 통과하면 문장·인용 쌍째 채택.
+//  ③ 그래도 초과면 자르지도 회색으로 돌리지도 않고 **델타 수치만의 결정론 요약**(summaryCites=[]).
+describe("요약 100자 폴백·재요청 누수(C1)", () => {
+  let dir: string;
+  beforeEach(() => {
+    dir = fs.mkdtempSync(path.join(os.tmpdir(), "llm-c1-"));
+  });
+  afterEach(() => {
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+  const long = "가".repeat(120);
+  const withProfile = () => ({ ...lolLlmProfile(makeDdragon()), fallbackSummary: () => "결정론 요약입니다." });
+
+  it("캐시 적중 재요청은 한 번뿐이다 — 고쳐지지 않아도 다음 실행에서 다시 묻지 않는다", async () => {
+    const parseFn = vi.fn().mockResolvedValue(fakeResponse({ causes: [], summary: long, summaryCites: [] }));
+    const client = fakeClient(parseFn);
+    const deltas = [delta({ id: "d1", status: "unannounced" })];
+    const notes = [note({})];
+    await inferIndirectCandidates(deltas, notes, withProfile(), { client, cacheDir: dir }); // 최초 + 재요청 1
+    parseFn.mockClear();
+    const second = await inferIndirectCandidates(deltas, notes, withProfile(), { client, cacheDir: dir });
+    expect(parseFn).not.toHaveBeenCalled();
+    expect(second.summary.calls).toBe(0);
+  });
+
+  it("시도 기록이 없는 옛 캐시는 한 번 더 묻고, 그 뒤로는 묻지 않는다", async () => {
+    const parseFn = vi.fn().mockResolvedValue(fakeResponse({ causes: [], summary: long, summaryCites: [] }));
+    const client = fakeClient(parseFn);
+    const deltas = [delta({ id: "d1", status: "unannounced" })];
+    const notes = [note({})];
+    await inferIndirectCandidates(deltas, notes, withProfile(), { client, cacheDir: dir });
+    // 옛 캐시 흉내 — 시도 기록을 지운다.
+    for (const f of fs.readdirSync(dir)) {
+      const p = path.join(dir, f);
+      const j = JSON.parse(fs.readFileSync(p, "utf8"));
+      delete j.proseRepairAttempts;
+      fs.writeFileSync(p, JSON.stringify(j));
+    }
+    parseFn.mockClear();
+    const legacy = await inferIndirectCandidates(deltas, notes, withProfile(), { client, cacheDir: dir });
+    expect(legacy.summary.calls).toBe(1);
+    const after = await inferIndirectCandidates(deltas, notes, withProfile(), { client, cacheDir: dir });
+    expect(after.summary.calls).toBe(0);
+  });
+
+  it("재요청 후에도 100자를 넘으면 결정론 수치 요약으로 바꾼다(인용 없음·검증 통과·표시)", async () => {
+    const parseFn = vi.fn().mockResolvedValue(fakeResponse({ causes: [], summary: long, summaryCites: ["note:26.17:champion:aatrox:00000001"] }));
+    const client = fakeClient(parseFn);
+    const out = await inferIndirectCandidates([delta({ id: "d1", status: "unannounced" })], [note({})], withProfile(), { client, cacheDir: dir });
+    expect(out.deltas[0].llm).toMatchObject({ summary: "결정론 요약입니다.", summaryCites: [], summaryVerified: true, summaryDeterministic: true });
+  });
+
+  it("재요청 요약의 인용이 바뀌어도 새 인용이 검증을 통과하면 문장·인용을 쌍째 채택한다", () => {
+    const original = { summary: long, summaryCites: ["note:a"], causes: [] };
+    const repaired = { summary: "짧아진 요약입니다.", summaryCites: ["note:b"], causes: [] };
+    expect(mergeRepairedProse(original, repaired, () => true)).toMatchObject({ summary: "짧아진 요약입니다.", summaryCites: ["note:b"] });
+    expect(mergeRepairedProse(original, repaired, () => false)).toMatchObject({ summary: long, summaryCites: ["note:a"] });
+  });
+});
