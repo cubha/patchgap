@@ -56,4 +56,18 @@ describe("헤더 패치쌍 select", () => {
     const describedBy = select.getAttribute("aria-describedby");
     expect(container.querySelector(`#${describedBy}`)?.textContent).toMatch(/하나뿐/);
   });
+  // 2026-09-28 이월 R16: 닫힌 이유가 title(hover)뿐이면 터치 화면에서 안 보인다.
+  it("닫힌 select의 이유는 모바일에서 글로 보이고(md 이상만 sr-only), 라벨 밖이라 접근성 이름에 섞이지 않는다", () => {
+    pathname = "/tft/";
+    const { container } = render(<Header chrome={{ lol: lolChrome, tft: tftChrome, pubg: null }} />);
+    const hint = container.querySelector("#pair-select-hint") as HTMLElement;
+    expect(hint.className.split(/\s+/)).not.toContain("sr-only");
+    expect(hint.className.split(/\s+/)).toContain("md:sr-only");
+    expect(hint.closest("label")).toBeNull();
+  });
+  it("열린 select(LoL)의 안내는 스크린리더 전용이다 — 조작 가능한 컨트롤 옆에 글을 늘어놓지 않는다", () => {
+    pathname = "/lol/";
+    const { container } = render(<Header chrome={{ lol: lolChrome, tft: null, pubg: null }} />);
+    expect((container.querySelector("#pair-select-hint") as HTMLElement).className).toBe("sr-only");
+  });
 });

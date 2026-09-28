@@ -280,10 +280,16 @@ export default function Header({ chrome }: HeaderProps) {
                   <option>데이터 없음</option>
                 )}
               </select>
-              <span id="pair-select-hint" className="sr-only">
-                {pairHint}
-              </span>
             </label>
+            {/* 닫힌 select의 이유는 hover(title)로만 보이면 터치 화면에서 사라진다(2026-09-28, 이월 R16) —
+                모바일에선 select 옆에 글로 보이고, md 이상은 title·스크린리더로 둔다(헤더 한 줄 유지). 라벨 밖에 두는 이유:
+                안에 두면 이 글이 select의 접근성 이름에 섞인다(설명은 aria-describedby로만). */}
+            <span
+              id="pair-select-hint"
+              className={pairDisabled ? "text-xs text-muted md:sr-only" : "sr-only"}
+            >
+              {pairHint}
+            </span>
 
             {/* 2026-09-12(6차, /verify-impl 재검증): bg-[color-mix(...)](arbitrary bracket)를
                 .meta-chip(src/styles/panel.css, --chip-fill 토큰)으로 교체 — verify.sh Spec
