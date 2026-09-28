@@ -4,7 +4,7 @@
 // 표본·기저·게이트 카드는 방법론으로 옮겨 이 화면에 **없어야** 하고, 다른 게임과의 비교 문구도 없어야
 // 한다. 무기 상세 진입 링크는 전 무기(47종) 존재.
 import { describe, expect, it, vi } from "vitest";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 
 // 페이지가 `@/lib/gamedata`(수치 축 로더)를 거쳐 "server-only"를 side-effect import한다 — 실제
 // 패키지는 jsdom에서 무조건 throw하므로 빈 모듈로 바꾼다(`src/lib/__tests__/data.test.ts`와 같은 규약).
@@ -16,6 +16,9 @@ import PubgComparePage from "../compare/page";
 describe("/pubg/ 정보 위계", () => {
   it("판정 타일 → 패치 내용 탭 → 대조 표(단위 캡션) → 무기별 상세 → 맵 순", () => {
     const { container } = render(<PubgPage />);
+    // 2026-09-28 명세 변경(PR-C B1): 기본 탭이 「미공지 Gap」이다 — 대조 표 순서를 보려면 패치 내용 탭을 연다.
+    const contentTab = Array.from(container.querySelectorAll('button[role="tab"]')).find((b) => b.textContent?.startsWith("패치 내용"));
+    if (contentTab) fireEvent.click(contentTab);
     const text = container.textContent ?? "";
     const at = (needle: string) => {
       const i = text.indexOf(needle);

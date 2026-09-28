@@ -19,8 +19,16 @@ const TAB_LABELS: Record<BriefingTabKey, string> = {
   gap: "미공지 Gap",
 };
 
+/**
+ * 탭 순서와 기본 선택 — **발견 먼저**(2026-09-28, PR-C B1 · 사용자 결정 D4, 10/6 머지). 이 제품이 새로 말하는
+ * 것은 「패치노트에 없는데 움직인 것」이다. 심사 기간(9/21~10/5)엔 출품 스크린샷을 지키려고 「공지 먼저」를
+ * 유지했다. 세 게임이 이 상수 하나를 본다 — LoL 스트림도 자기 상태의 기본값을 여기서 가져간다.
+ */
+export const BRIEFING_TAB_ORDER: readonly BriefingTabKey[] = ["gap", "content"];
+export const DEFAULT_BRIEFING_TAB: BriefingTabKey = "gap";
+
 export interface BriefingTabsProps {
-  /** 공지 대조(메인) — 세 게임 모두 기본 선택이다(읽는 순서: 무엇이 공지됐나 → 말 안 한 건 뭔가). */
+  /** 공지 대조 — 두 번째 탭(발견 먼저, `BRIEFING_TAB_ORDER`). */
   content: ReactNode;
   /** 미공지 Gap — 수치 축(잠수함)이 위, 지표 축이 아래. */
   gap: ReactNode;
@@ -63,7 +71,7 @@ export function BriefingTabBar({
   const counts: Record<BriefingTabKey, number> = { content: contentCount, gap: gapCount };
   return (
     <div className={className} role="tablist" aria-label="브리핑 보기">
-      {(Object.keys(TAB_LABELS) as BriefingTabKey[]).map((key) => {
+      {BRIEFING_TAB_ORDER.map((key) => {
         const isActive = key === tab;
         return (
           <button
@@ -92,7 +100,7 @@ export default function BriefingTabs({
   gapCount,
   aside,
 }: BriefingTabsProps) {
-  const [tab, setTab] = useState<BriefingTabKey>("content");
+  const [tab, setTab] = useState<BriefingTabKey>(DEFAULT_BRIEFING_TAB);
   const panel = tab === "content" ? content : gap;
   const bar = (
     <BriefingTabBar tab={tab} onSelect={setTab} contentCount={contentCount} gapCount={gapCount} />

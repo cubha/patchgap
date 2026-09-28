@@ -45,7 +45,7 @@ import { segmentStream } from "./streamSegments";
 import AnnouncedCoverageLine from "./AnnouncedCoverageLine";
 import MiscChangesSection from "./MiscChangesSection";
 import type { MiscSection } from "./miscSections";
-import { BriefingTabBar } from "@/components/BriefingTabs";
+import { BriefingTabBar, DEFAULT_BRIEFING_TAB } from "@/components/BriefingTabs";
 
 type StreamTab = "content" | "gap";
 
@@ -167,7 +167,7 @@ export default function ReleaseNoteStream({
   gameDataCount = 0,
 }: ReleaseNoteStreamProps) {
   const { selectedLane } = useAmbient();
-  const [tab, setTab] = useState<StreamTab>("content");
+  const [tab, setTab] = useState<StreamTab>(DEFAULT_BRIEFING_TAB);
 
   const laneFiltered = useMemo(() => {
     if (selectedLane === "all") return entries;
