@@ -108,3 +108,11 @@ export function gameDataEntityCount(summary: SubmarineSummary | null): number {
   if (!summary) return 0;
   return summary.entities.length + summary.mismatches.length;
 }
+
+// C15 — 구현 전 시그니처
+export function gapEntityKeys(_rows: readonly { entityType: string; entityKey: string }[]): Set<string> {
+  throw new Error("TODO(C15): gapEntityKeys");
+}
+export function gapUnionCount(_gapKeys: ReadonlySet<string>, _submarine: SubmarineSummary | null): number {
+  throw new Error("TODO(C15): gapUnionCount");
+}
