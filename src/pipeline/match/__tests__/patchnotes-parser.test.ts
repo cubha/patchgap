@@ -610,3 +610,21 @@ describe("resolveDirection — 최신 패치 실측 사례", () => {
   });
 });
 
+
+// C12(2026-09-28 잔여 로드맵): 「소모」 맨몸 부분일치는 26.16 core 「미니언 처치 시 중첩 소모 15 및 20 ⇒
+// 18 및 21」(원거리 딜러 마법 저항력)을 nerf로 뒤집는다 — 중첩을 더 쓰는 것은 자원 비용이 아니다.
+// 자원 소모(체력·마나·기력)만 낮을수록 좋다. 「판매」「환급」은 받는 쪽 값이라 클수록 좋다.
+describe("resolveDirection — 소모 키워드 좁히기(C12)", () => {
+  it("중첩 소모는 자원 비용이 아니다 — 늘면 buff(기본 규칙)", () => {
+    expect(resolveDirection("미니언 처치 시 중첩 소모", "15 및 20", "18 및 21", null)).toBe("buff");
+  });
+  it("체력·마나·기력 소모는 여전히 낮을수록 좋다", () => {
+    expect(resolveDirection("주술 불길한 거래 체력 소모", "체력 3", "체력 2", null)).toBe("buff");
+    expect(resolveDirection("마나 소모량", "40", "45", null)).toBe("nerf");
+    expect(resolveDirection("기력 소모량", "60/60/60/60/60", "60/55/50/45/40", null)).toBe("buff");
+  });
+  it("판매·환급 가격은 클수록 좋다", () => {
+    expect(resolveDirection("판매 가격", "1골드", "2골드", null)).toBe("buff");
+    expect(resolveDirection("환급 골드", "3골드", "2골드", null)).toBe("nerf");
+  });
+});
