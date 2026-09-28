@@ -51,7 +51,14 @@ import BrandMark from "@/components/BrandMark";
 import Container from "@/components/Container";
 import { GAMES, gameFromPathname, gameHref, sectionHref, sectionOfPathname, type GameId } from "@/lib/game";
 import { fmtInt, fmtKst } from "@/lib/format";
-import { lolPairHref, pairFromPathname } from "@/lib/pairRoutes";
+import {
+  hasPairRoutes,
+  historySectionOf,
+  pairBasePath,
+  pairFromPathname,
+  pairSectionHref,
+  pairSelectHref,
+} from "@/lib/pairRoutes";
 
 /** 내비 섹션 — 게임과 무관하게 항상 이 3개다. 게임은 아래 드롭다운이 바꾼다. */
 const NAV_SECTIONS = [
@@ -152,17 +159,25 @@ export default function Header({ chrome }: HeaderProps) {
   const current = game === null ? null : chrome[game];
 
   const pairs = current?.pairs ?? [];
-  // 과거 쌍 라우트(`/lol/history/[pair]/`)에 있으면 그 쌍이 지금 보는 쌍이다(2026-09-28, B3).
-  const historyPair = game === "lol" ? pairFromPathname(pathname, pairs) : null;
+  // 과거 쌍 라우트(`/{game}/history/[pair]/` 그리고 그 아래 대조표·상세)에 있으면 그 쌍이 지금 보는 쌍이다
+  // (2026-09-28, B3 → 이월 R8에서 하위 경로·TFT까지). 게임을 먼저 거른다 — 다른 게임의 쌍 목록으로 읽지 않게.
+  const routable = game !== null && hasPairRoutes(game) ? game : null;
+  const historyPair = routable !== null ? pairFromPathname(pathname, pairs) : null;
+  const pairBase = routable !== null && historyPair !== null ? pairBasePath(routable, historyPair) : null;
+  // 과거 쌍 경로면 쌍 **아래** 섹션이 활성 탭이다(`/lol/history/X/compare/` → 대조표). 평소엔 `sectionOfPathname`.
+  const navSection = historySectionOf(pathname) ?? section;
   const currentPair = historyPair ?? current?.currentPair ?? null;
   // 이동할 라우트가 있는 게임만 연다(2026-09-28, B3 · D3). 전에는 LoL 쌍이 3개라 열렸는데 onChange가
-  // 없어 골라도 아무 일도 없었다(F3에서 닫았다). 지금 라우트가 있는 것은 LoL뿐 — 나머지는 닫고 이유를 말한다.
-  const pairRoutable = game === "lol" && pairs.length > 1;
+  // 없어 골라도 아무 일도 없었다(F3에서 닫았다). 이월 R8에서 TFT도 쌍별 라우트를 가져 열린다 — 쌍이 하나뿐인 게임은
+  // 닫고 이유를 말한다(PUBG).
+  const pairRoutable = routable !== null && pairs.length > 1;
   const pairDisabled = !pairRoutable;
   const pairHint = pairRoutable
-    ? "패치쌍을 고르면 그 쌍의 브리핑으로 이동합니다."
+    ? navSection === "compare"
+      ? "패치쌍을 고르면 그 쌍의 대조표로 이동합니다."
+      : "패치쌍을 고르면 그 쌍의 브리핑으로 이동합니다."
     : pairs.length > 1
-      ? "과거 패치쌍 보기는 리그 오브 레전드에서만 제공합니다."
+      ? "이 게임은 과거 패치쌍 화면을 아직 제공하지 않습니다."
       : "비교할 패치쌍이 하나뿐입니다.";
   const currentIndex = currentPair
     ? pairs.findIndex((p) => p.from === currentPair.from && p.to === currentPair.to)
@@ -232,11 +247,14 @@ export default function Header({ chrome }: HeaderProps) {
 
         <nav className="flex min-h-8 items-center gap-5" aria-label="주요 내비게이션">
           {NAV_SECTIONS.map((item) => {
-            const active = section === item.section;
+            const active = navSection === item.section;
+            // 과거 쌍 화면에선 브리핑·대조표가 **그 쌍 안**에 머문다(이월 R8). 방법론은 쌍이 없어 평소 주소다.
+            const href =
+              item.section === "methodology" ? sectionHref(game, item.section) : pairSectionHref(game, item.section, pairBase);
             return (
               <Link
                 key={item.section}
-                href={sectionHref(game, item.section)}
+                href={href}
                 aria-current={active ? "page" : undefined}
                 className={`border-b-2 pt-1.5 pb-1 text-sm font-bold ${
                   active
@@ -267,7 +285,8 @@ export default function Header({ chrome }: HeaderProps) {
                 value={currentIndex >= 0 ? currentIndex : 0}
                 onChange={(event) => {
                   const next = pairs[Number(event.target.value)];
-                  if (pairRoutable && next) router.push(lolPairHref(next, pairs));
+                  // 같은 섹션의 그 쌍으로 — 상세에서 골랐다면 그 쌍의 브리핑(`pairSelectHref` 주석).
+                  if (routable !== null && pairRoutable && next) router.push(pairSelectHref(routable, next, pairs, navSection));
                 }}
               >
                 {pairs.length > 0 ? (
