@@ -48,3 +48,16 @@ describe("결정론 요약 — 주격 조사", () => {
     expect(tftLlmProfile.fallbackSummary?.({ ...base, metric: "playRate" })).toContain("등장률이 ");
   });
 });
+
+describe("결정론 요약 — 부호·방향 조사(재생성 실측 2026-09-28)", () => {
+  const base = { entityName: "원시", status: "unannounced" } as DeltaRecord;
+  it("이미 부호가 붙은 변화량에 부호를 또 붙이지 않는다(「++0.27등」 금지)", () => {
+    const t = tftLlmProfile.fallbackSummary?.({ ...base, metric: "avgPlacement", before: 4.21, after: 4.48, delta: 0.27 }) ?? "";
+    expect(t).toContain("(+0.27등)");
+    expect(t).not.toContain("++");
+  });
+  it("「로/으로」를 끝소리로 고른다 — 「4.48등으로」·「12.2%로」", () => {
+    expect(tftLlmProfile.fallbackSummary?.({ ...base, metric: "avgPlacement", before: 4.21, after: 4.48, delta: 0.27 })).toContain("4.48등으로");
+    expect(tftLlmProfile.fallbackSummary?.({ ...base, metric: "top4Rate", before: 0.5, after: 0.122, delta: -0.378 })).toContain("12.2%로");
+  });
+});

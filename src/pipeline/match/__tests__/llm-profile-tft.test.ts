@@ -160,3 +160,20 @@ describe("인용 가능성 — 치장 노트 제외", () => {
   });
 });
 
+
+import { directionParticle } from "../llm-profile";
+describe("directionParticle — 「로/으로」", () => {
+  it.each([
+    ["4.48등", "으로"],
+    ["12.2%", "로"],
+    ["11초", "로"],
+    ["3200", "으로"], // 삼천이백 — 끝소리 「백」
+    ["30", "으로"],
+    ["16", "으로"],
+    ["1", "로"],
+    ["서울", "로"],
+    ["N/A", "로"],
+  ])("%s → %s", (word, particle) => {
+    expect(directionParticle(word)).toBe(particle);
+  });
+});

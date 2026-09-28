@@ -2,7 +2,7 @@
   "meta": {
     "from": "26.18",
     "to": "26.19",
-    "generatedAt": "2026-09-26T19:13:09.344Z",
+    "generatedAt": "2026-09-28T09:46:08.068Z",
     "n": 1931,
     "counts": {
       "unannounced": 27,
@@ -15,25 +15,27 @@
     },
     "qAlpha": 0.1,
     "llm": {
-      "calls": 3,
-      "cacheHits": 55,
+      "calls": 2,
+      "cacheHits": 56,
       "skipped": 0,
       "usage": {
-        "inputTokens": 602,
-        "cacheReadInputTokens": 15882,
+        "inputTokens": 480,
+        "cacheReadInputTokens": 7941,
         "cacheCreationInputTokens": 7941,
-        "outputTokens": 2134
+        "outputTokens": 1335
       },
       "prose": {
         "summaryCount": 56,
-        "summaryOverLength": 2,
+        "summaryOverLength": 0,
         "summaryHedged": 14,
-        "maxSummaryLength": 111,
+        "maxSummaryLength": 100,
         "causeCount": 168,
         "causeOverLength": 0,
         "causeHedged": 54,
         "causeHedgedConfident": 0,
-        "causeNounEnding": 0
+        "causeNounEnding": 0,
+        "causeUnnamedTarget": 18,
+        "summaryDeterministic": 1
       },
       "proseRepairs": 2
     }
@@ -1191,12 +1193,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "노틸러스 밴률이 8.8%→12.2%(+3.5%p)로 올랐으나 직접 조항은 없고, 서포터 아이템 체력·재생 조정(체력 30→0, 재생 25%→50%)이 탱커 서포터 선호를 키운 간접 영향으로 보입니다.",
-        "summaryCites": [
-          "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
-          "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0"
-        ],
-        "summaryVerified": true
+        "summary": "노틸러스 밴률이 8.8%에서 12.2%로 바뀌었습니다(+3.5%p). 패치노트에 직접 조항이 없습니다.",
+        "summaryCites": [],
+        "summaryVerified": true,
+        "summaryDeterministic": true
       }
     },
     {
@@ -1871,7 +1871,7 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "탑 순간이동 쿨타임 420초→390초 단축으로 라인 복귀·합류가 빨라져 암베사 탑이 수혜를 봤습니다.",
+          "text": "탑 순간이동 쿨다운 420초→390초로 라인 복귀가 빨라져 주도권이 커졌습니다.",
           "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
           "verified": true,
           "confidence": "medium"
@@ -1883,13 +1883,13 @@
           "confidence": "medium"
         },
         {
-          "text": "럼블 과열 공격 속도 50~130%→30~100% 너프로 대표적 탑 카운터가 약해졌습니다.",
+          "text": "럼블 과열 공격 속도가 50~130%에서 30~100%로 줄어 탑 경쟁자가 약화됐습니다.",
           "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "나서스 Q 추가 피해 10 감소로 탑 맞라인 경쟁자가 약화됐습니다.",
+          "text": "나서스 Q 추가 피해량 10 감소로 탑 맞라인 상대가 약화됐습니다.",
           "candidateNoteId": "note:26.19:champion:nasus:b5997156",
           "verified": true,
           "confidence": "low"
@@ -1913,11 +1913,12 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "암베사 탑 승률 48.6%→58.9%(+10.3%p)는 직접 조항 없이 탑 순간이동 쿨타임 단축(420→390초)과 럼블·나서스 너프의 반사이익입니다. 표본 258로 CI가 넓습니다.",
+        "summary": "암베사 탑 승률이 48.6%→58.9%(+10.3%p)로 급등했습니다. 직접 조항은 없고, 나서스·럼블·뽀삐 너프와 탑 순간이동 쿨다운 감소가 간접 요인으로 보입니다.",
         "summaryCites": [
-          "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+          "note:26.19:champion:nasus:b5997156",
           "note:26.19:champion:rumble:17e40d96",
-          "note:26.19:champion:nasus:b5997156"
+          "note:26.19:champion:poppy:d2a46ee3",
+          "note:26.19:system:순간이동-재사용-대기시간:c9025e15"
         ],
         "summaryVerified": true
       }
