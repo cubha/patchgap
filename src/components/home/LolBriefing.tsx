@@ -18,7 +18,8 @@ import DiscordPanel from "@/components/home/DiscordPanel";
 import LaneGapPanel from "@/components/home/LaneGapPanel";
 import StreamColumnLayout from "@/components/home/StreamColumnLayout";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { gapEntityKeys, gapUnionCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { lolGapTotal } from "@/lib/gapTotals";
 import type { CosmeticSkinItem } from "@/components/home/CosmeticSkinPreview";
 import { computeHeadline, isGapStatus } from "@/components/home/logic";
 import { isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
@@ -69,12 +70,8 @@ export default function LolBriefing({ pair }: { pair: PatchPair | null }) {
   const ddragon = loadDdragonSafe();
 
   const headline = computeHeadline(deltas, notesTo, deltas?.meta.qAlpha);
-  // 「미공지 Gap」 타일·탭은 같은 수 — (통계 Gap 대상) ∪ (수치 축 대상)(2026-09-28, D2). 통계 쪽 정의는
-  // `countGapEntities`(= headline.unannouncedCount)와 같은 규칙(`isGapStatus`)이다.
-  const gapTotal = gapUnionCount(
-    gapEntityKeys((deltas?.rows ?? []).filter((row) => isGapStatus(row.status))),
-    submarine
-  );
+  // 「미공지 Gap」 타일·탭·랜딩 카드는 같은 수 — `lib/gapTotals`가 소유한다(2026-09-28, D2).
+  const gapTotal = lolGapTotal(deltas?.rows ?? [], submarine);
 
   // 전 대상 색인(§8-1) — 이 패치 집계에 등장한 **모든** 챔피언·아이템. 이름은 Data Dragon이 주고,
   // 상세가 실재하는 대상만 링크한다(없는 경로는 정적 export에서 곧 404다).

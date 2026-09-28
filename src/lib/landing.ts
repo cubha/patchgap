@@ -17,7 +17,8 @@ import { computeHeadline } from "@/components/home/logic";
 import { isReportable, loadPubg, loadPubgDeclaration } from "./pubgData";
 import { loadTft, loadTftDeclaration } from "./tftData";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
-import { isGapStatus } from "@/pipeline/shared/status-order";
+import { loadGameDataDiff, summarizeGameData } from "./gamedata";
+import { lolGapTotal, pubgGapTotal, tftGapTotal } from "./gapTotals";
 import { getDefaultPair, listPatches, loadDeltas, loadNotes, loadSummary } from "./data";
 import { fmtInt } from "./format";
 import { GAMES, sectionHref, type GameId } from "./game";
@@ -40,7 +41,10 @@ export interface GameLandingCard {
   announced: number;
   /** 통계 게이트를 통과한 관측 수. `null` = 관측 전(선언 축만 있는 쌍, C13·C14) — 0이 아니다. */
   significant: number | null;
-  /** 그중 패치노트에 없던 것. `null` = 관측 전. */
+  /**
+   * 「미공지 Gap」 대상 수 — 게임 홈 타일과 같은 값(`lib/gapTotals`): 통계 Gap 대상 ∪ 수치 축 대상.
+   * 수치 축(잠수함)을 포함하므로 `significant`의 부분집합이 **아니다**. `null` = 관측 전.
+   */
   unannounced: number | null;
   /** 이 게임이 분석한 매치 총수 — 합산 타일의 재료. */
   matches: number;
@@ -79,7 +83,7 @@ function lolSummary(): LandingSummary | null {
     sample: `KR · Master+ · ${fmtInt(nAfter)}매치`,
     announced: headline.noteEntityCount,
     significant: headline.statCount,
-    unannounced: headline.unannouncedCount,
+    unannounced: lolGapTotal(deltas.rows, summarizeGameData(loadGameDataDiff("lol", pair.from, pair.to))),
     matches,
   };
 }
@@ -99,11 +103,8 @@ function pubgSummary(): LandingSummary | null {
     sample: `Steam · 전 지역 · ${fmtInt(matches)}매치`,
     announced: notes.length,
     significant: reportable.length,
-    // **`status === "unannounced"`로 세지 않는다**(2026-09-20). 미공지의 정의는
-    // `isGapStatus` 하나가 갖는다 — `unannounced` + `indirect-effect`(원인이 규명됐는가만
-    // 다를 뿐 같은 뿌리). 원시 status로 세면 화면(`displayStatusOf`)과 랜딩이 같은 것을 두고
-    // 다른 수를 말하게 되고, 그게 이 저장소가 반복해서 고쳐 온 결함군이다.
-    unannounced: reportable.filter((row) => isGapStatus(row.status)).length,
+    // 게임 홈 「미공지 Gap」 타일과 **같은 함수**(2026-09-28, D2) — 통계 Gap 무기 ∪ 수치 축 무기.
+    unannounced: pubgGapTotal(deltas.rows, summarizeGameData(loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to))),
     matches,
   };
 }
@@ -134,9 +135,9 @@ function tftSummary(): LandingSummary | null {
     sample: `KR · Master+ · ${fmtInt(matches)}매치`,
     announced: notes.items.length,
     significant: reportable.length,
-    // TFT는 LLM 2단·3단을 돌므로 `indirect-effect`가 실제로 생긴다(2026-09-20) — 원시 status로
-    // 세면 랜딩 카드가 TFT 홈 타일보다 **적게** 말한다. 정의는 `isGapStatus`가 소유한다.
-    unannounced: reportable.filter((row) => isGapStatus(row.status)).length,
+    // 게임 홈 「미공지 Gap」 타일과 **같은 함수**(2026-09-28, D2) — 대조표 표시 상태 기준 통계 Gap 대상
+    // ∪ 수치 축 대상. 전에는 원시 status 행 수라 홈 타일(대상 수·합집합)과 달랐다.
+    unannounced: tftGapTotal(deltas.rows, deltas.meta.qAlpha, summarizeGameData(loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to))),
     matches,
   };
 }

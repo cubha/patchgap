@@ -7,7 +7,7 @@
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { gapEntityKeys, gapUnionCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import {
   TftFooter,
   TftSampleNotice,
@@ -19,6 +19,7 @@ import { selectTftCauseRows } from "@/components/tft/causeRows";
 import { tftEntityHref } from "@/lib/tftRoutes";
 import { tftEntityRows } from "@/components/tft/entityRows";
 import { entityTypeLabel, metricLabel } from "@/lib/format";
+import { tftGapRows, tftGapTotal } from "@/lib/gapTotals";
 import { loadTft, loadTftAssets, loadTftDeclaration, type TftDeclaration } from "@/lib/tftData";
 import DeclarationOnly from "@/components/DeclarationOnly";
 import { displayStatus } from "@/pipeline/shared/display-status";
@@ -141,14 +142,14 @@ export default function TftPage() {
   const reportable = deltas.rows.filter((row) => isReportableRecord(row, deltas.meta.qAlpha));
   // 대조표(`entityRows`)와 **같은 함수**로 표시 키를 낸다 — 상태값만 보는 `displayStatusOf`는 방향 중립
   // (동률 노트)을 모르므로, 같은 대상이 홈에선 「이상 관측」, 대조표에선 「공지」로 갈렸다(인수검증 V1, 오른).
-  const unannounced = reportable.filter((row) => displayStatus(row, deltas.meta.qAlpha) === "unannounced");
+  const unannounced = tftGapRows(deltas.rows, deltas.meta.qAlpha);
   const announced = reportable.filter((row) => displayStatus(row, deltas.meta.qAlpha) !== "unannounced");
   const matches = before.matches + after.matches;
   // 시안 04-applied의 헤드라인 — 이 사이트가 무엇을 하는 곳인지 한 문장으로 말한다.
   // 숫자는 아래 3타일과 **같은 출처**를 쓴다(따로 세면 화면이 스스로를 반박한다).
   const noteEntities = new Set(notes.items.map((n) => n.entity)).size;
   // 「미공지 Gap」은 대상을 센다 — 타일은 통계 Gap 대상, 탭은 거기에 수치 축 대상을 **합집합**으로(C15·D2).
-  const gapKeys = gapEntityKeys(unannounced);
+  const gapTotal = tftGapTotal(deltas.rows, deltas.meta.qAlpha, submarine);
 
   // 전 대상 색인(§8-1) — 이 패치 보드 집계에 등장한 **모든** 유닛·특성·아이템.
   // 이름은 판정 산출물이 이미 들고 있다(실측 233종 중 232종). 못 찾는 1종은 키를 그대로 쓴다.
@@ -230,7 +231,7 @@ export default function TftPage() {
             itemCount={notes.items.length}
             significantCount={reportable.length}
             // 대상 수(C15, 사용자 확정 7)이자 탭 배지와 같은 합집합(D2, 2026-09-28).
-            gapCount={gapUnionCount(gapKeys, submarine)}
+            gapCount={gapTotal}
             game="tft"
           />
 
@@ -247,7 +248,7 @@ export default function TftPage() {
               위치를 아는 쪽만 정할 수 있다(2026-09-24). */}
           <BriefingTabs
               contentCount={announced.length}
-              gapCount={gapUnionCount(gapKeys, submarine)}
+              gapCount={gapTotal}
               content={
                 <SectionCard
                   eyebrow="대조"

@@ -18,8 +18,9 @@ import Link from "next/link";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { gapEntityKeys, gapUnionCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
+import { pubgGapRows, pubgGapTotal } from "@/lib/gapTotals";
 import DeclarationOnly from "@/components/DeclarationOnly";
 import PubgWeaponGrid from "@/components/pubg/PubgWeaponGrid";
 import { loadPubg, loadPubgAssets, loadPubgDeclaration, loadPubgMaps, isReportable, pubgPair, type PubgDeclaration } from "@/lib/pubgData";
@@ -77,13 +78,9 @@ export default function PubgPage() {
   // 수치 축(F9) — 산출물이 없으면 섹션이 통째로 빠진다. 세 게임이 같은 컴포넌트를 쓴다.
   const submarine = summarizeGameData(loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to));
   const submarineKeys = new Set(submarine?.submarines.map((change) => change.entityKey) ?? []);
-  const unannounced = reportable.filter((row) => row.status === "unannounced");
-  // 「미공지 Gap」 타일·탭 = (통계 Gap 무기) ∪ (수치 축 무기)(2026-09-28, D2 — 세 게임 공용 헬퍼).
-  const gapTotal = gapUnionCount(
-    gapEntityKeys(unannounced.map((row) => ({ entityType: "weapon", entityKey: row.weaponKey }))),
-    submarine
-  );
-  const announced = reportable.filter((row) => row.status !== "unannounced");
+  const unannounced = pubgGapRows(deltas.rows);
+  const gapTotal = pubgGapTotal(deltas.rows, submarine);
+  const announced = reportable.filter((row) => !unannounced.includes(row));
   // 표 아래 원문 링크 1개 — 모든 공지 행이 같은 패치노트 페이지를 가리킨다(43.1 노트는 5항목 1페이지).
   const noteSource = announced.find((row) => row.evidence.noteAnchor)?.evidence.noteAnchor ?? null;
 
