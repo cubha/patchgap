@@ -9,6 +9,8 @@ import { z } from "zod";
 import { DATA_ROOT, aggregatedDir, deltasFile, notesFile } from "../src/pipeline/shared/paths";
 import { buildBriefingEmbeds, sendWebhook, type DiscordEmbed } from "../src/pipeline/discord/webhook";
 import { buildPubgBriefingEmbeds, type PubgBriefingSourceFile } from "../src/pipeline/discord/pubg-briefing";
+import { lolGapTotal, numericAxisKeys, pubgGapTotal, tftGapTotal } from "../src/pipeline/shared/gap-total";
+import type { GameDataDiffFile } from "../src/pipeline/gamedata/types";
 import { isNotifyGameId, mentionPayload, resolveDiscordTarget, type NotifyGameId } from "../src/pipeline/discord/targets";
 import { countRelevantNoteEntities } from "../src/pipeline/shared/notes-count";
 import type { DeltasFile, PatchId, PatchNoteItem } from "../src/pipeline/types";
@@ -164,7 +166,8 @@ function loadGameSource(
     const deltas = loadDeltasFile(from, to, dataRoot);
     const noteCount = loadNoteCount(to, dataRoot);
     const matchCounts = { from: loadMatchCount(from, dataRoot), to: loadMatchCount(to, dataRoot) };
-    return { buildEmbeds: (o) => buildBriefingEmbeds(deltas, { ...o, noteCount, matchCounts }) };
+    const gapEntityCount = lolGapTotal(deltas.rows, loadNumericAxisKeys("lol", from, to, dataRoot));
+    return { buildEmbeds: (o) => buildBriefingEmbeds(deltas, { ...o, noteCount, matchCounts, gapEntityCount }) };
   }
 
   if (game === "tft") {
@@ -180,7 +183,8 @@ function loadGameSource(
     refuseObservationStub(deltas.meta, file);
     const noteCount = typeof deltas.meta.noteCount === "number" ? deltas.meta.noteCount : null;
     const matchCounts = { from: deltas.meta.matches?.before ?? null, to: deltas.meta.matches?.after ?? null };
-    return { buildEmbeds: (o) => buildBriefingEmbeds(deltas, { ...o, noteCount, matchCounts }) };
+    const gapEntityCount = tftGapTotal(deltas.rows, deltas.meta.qAlpha, loadNumericAxisKeys("tft", from, to, dataRoot));
+    return { buildEmbeds: (o) => buildBriefingEmbeds(deltas, { ...o, noteCount, matchCounts, gapEntityCount }) };
   }
 
   // ── PUBG ────────────────────────────────────────────────────────────────────
@@ -212,7 +216,18 @@ function loadGameSource(
     from: loadPubgMatchCount(from, dataRoot),
     to: loadPubgMatchCount(to, dataRoot),
   };
-  return { buildEmbeds: (o) => buildPubgBriefingEmbeds(deltas, { ...o, noteCount, matchCounts }) };
+  const gapEntityCount = pubgGapTotal(deltas.rows, loadNumericAxisKeys("pubg", from, to, dataRoot));
+  return { buildEmbeds: (o) => buildPubgBriefingEmbeds(deltas, { ...o, noteCount, matchCounts, gapEntityCount }) };
+}
+
+/**
+ * 수치 축(잠수함 + 공지값 불일치) 대상 키 — 사이트 「미공지 Gap」과 같은 수를 내려고 읽는다(D2). 경로는
+ * 화면 로더(`lib/gamedata.ts` `gameDataDiffFile`)와 같다. 없으면 빈 집합(그 쌍엔 수치 축이 없다).
+ */
+function loadNumericAxisKeys(game: NotifyGameId, from: PatchId, to: PatchId, dataRoot: string): Set<string> {
+  const file = path.join(dataRoot, "aggregated", "gamedata", game, `${from}_${to}.json`);
+  if (!fs.existsSync(file)) return new Set();
+  return numericAxisKeys(JSON.parse(fs.readFileSync(file, "utf8")) as GameDataDiffFile);
 }
 
 /** PUBG footer "n=/"용 매치 수 — `weapons-{patch}.json`의 `nMatches`. 없으면 null(지어내지 않음). */

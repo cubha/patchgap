@@ -30,3 +30,7 @@
 ## Phase 3 반영(2026-09-28)
 - scope-critic(C4): select 목적지 ↔ 정적 라우트 목록 일치 가드 신설 — `app/lol/history/[pair]/__tests__/static-params.test.ts`(select가 보내는 모든 과거 쌍 href가 `generateStaticParams`에 있다).
 - 무시(사유): 「`/lol/` 메타데이터 없음 vs history 동적 제목」 — 이동 전 `/lol/page.tsx`에도 없었다(회귀 아님, 레이아웃 기본 제목). 「과거 쌍 안 대상 링크가 쌍 문맥을 잃는다」 — 404는 아니고(상세는 존재), D3 범위는 브리핑 라우트다. §C4 미확인에 이미 기록, 쌍별 상세 라우트는 이월(아래 잔여).
+- scope-critic(C1~C3) — 반영: 디스코드 헤드라인 「미공지 N건」이 통계만 세어 사이트와 어긋남(LoL 35 vs 36). 정의를 순수 계층 `pipeline/shared/gap-total.ts`로 내리고(`lib/gapTotals`는 어댑터), `run-notify`가 `gamedata/{game}/{from}_{to}.json`의 수치 축 키로 같은 함수를 불러 `gapEntityCount`를 주입. RED(`run-notify.test.ts` 합집합 케이스) 선커밋. 실데이터 dry-run: LoL 36 · TFT 34 · PUBG 5 = 사이트 타일. TFT 디스코드도 이제 `displayStatus` 기준(대조표와 같은 술어).
+  - 유지(사유): LoL 스트림 지표 축 머리 숫자 `metricGapCount = headline.unannouncedCount` — 「지표 축」 갈래의 수라 통계만이 맞다(수치 축은 같은 카드 위쪽 갈래가 따로 센다).
+- acceptance-critic — UNMET 0 · UNREQUESTED 0. V1(UX-BRIEF·BriefingTabs 주석에 「탭 위치 통일 미착수」 잔존) 반영. V2(10/6 전 머지 금지) — `git merge-base`로 HEAD가 origin/main에 없음 확인, 원격 브랜치 없음(미푸시). V3 PLAN 「명세 변경한 기존 테스트」에 PR-C 파일 4건 등재.
+- 게이트 안정화: `vitest.config.ts` `maxWorkers: 12`. 기본 워커 19에서 `GateGrid.test.tsx` 워커 시작 60s 타임아웃이 **격리 실행에서도 결정론적으로** 재현(테스트는 전부 통과·오류 1건). PR-B tip(160파일)에선 무발생 — PR-C 파일 추가로 동시 jsdom 기동이 임계를 넘은 것으로 추정(원인 확정 아님). 8=144s · 12=105s 무오류.

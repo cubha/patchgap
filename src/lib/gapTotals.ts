@@ -1,40 +1,24 @@
 // src/lib/gapTotals.ts
-// 「미공지 Gap」 수의 **단일 소유자**(2026-09-28, PR-C D2). 게임 홈의 타일·탭과 랜딩 카드가 같은 함수를
-// 부른다 — 같은 라벨이 화면마다 다른 수를 말하던 결함군(LoL 타일 35 vs 탭 36, 랜딩 vs 홈)을 구조로 막는다.
-// 정의: (그 게임 화면이 「미공지」로 그리는 통계 Gap **대상**) ∪ (수치 축 대상: 잠수함 + 값 어긋남).
+// 화면 쪽 어댑터 — 「미공지 Gap」 정의는 `pipeline/shared/gap-total.ts`가 소유한다(디스코드 브리핑도 같은
+// 함수를 쓴다). 여기는 화면이 이미 들고 있는 `SubmarineSummary`를 수치 축 키로 바꿔 넘길 뿐이다.
 import type { DeltaRecord } from "@/pipeline/types";
 import type { PubgDeltaRow } from "@/pipeline/match/pubg-delta";
-import { displayStatus } from "@/pipeline/shared/display-status";
-import { isReportableRecord } from "@/pipeline/shared/reportable";
-import { isGapStatus } from "@/pipeline/shared/status-order";
-import { isReportable } from "@/pipeline/shared/pubg-status";
-import { gapEntityKeys, gapUnionCount, type SubmarineSummary } from "./gamedata";
+import * as gap from "@/pipeline/shared/gap-total";
+import type { SubmarineSummary } from "./gamedata";
 
-/** LoL — 히어로 헤드라인(`countGapEntities`)과 같은 규칙(`isGapStatus`). */
-export function lolGapTotal(rows: readonly DeltaRecord[], submarine: SubmarineSummary | null): number {
-  return gapUnionCount(gapEntityKeys(rows.filter((row) => isGapStatus(row.status))), submarine);
-}
+export { tftGapRows, pubgGapRows } from "@/pipeline/shared/gap-total";
 
-/**
- * TFT 통계 Gap 행 — 보고 자격 + 대조표와 **같은** 표시 상태(`displayStatus`) 「미공지」. 상태값만 보는
- * 술어는 방향 중립(동률 노트)을 몰라 같은 대상을 홈·대조표에서 다르게 불렀다(인수검증 V1, 오른).
- */
-export function tftGapRows(rows: readonly DeltaRecord[], qAlpha: number): DeltaRecord[] {
-  return rows.filter((row) => isReportableRecord(row, qAlpha) && displayStatus(row, qAlpha) === "unannounced");
-}
-
-export function tftGapTotal(rows: readonly DeltaRecord[], qAlpha: number, submarine: SubmarineSummary | null): number {
-  return gapUnionCount(gapEntityKeys(tftGapRows(rows, qAlpha)), submarine);
-}
-
-/** PUBG 통계 Gap 행 — 보고 자격 + `isGapStatus`(미공지 정의의 소유자). */
-export function pubgGapRows(rows: readonly PubgDeltaRow[]): PubgDeltaRow[] {
-  return rows.filter((row) => isReportable(row.status) && isGapStatus(row.status));
-}
-
-export function pubgGapTotal(rows: readonly PubgDeltaRow[], submarine: SubmarineSummary | null): number {
-  return gapUnionCount(
-    gapEntityKeys(pubgGapRows(rows).map((row) => ({ entityType: "weapon", entityKey: row.weaponKey }))),
-    submarine
+function keysOf(submarine: SubmarineSummary | null): Set<string> {
+  return new Set(
+    [...(submarine?.entities ?? []), ...(submarine?.mismatches ?? [])].map((e) => `${e.entityType}:${e.entityKey}`)
   );
 }
+
+export const lolGapTotal = (rows: readonly DeltaRecord[], submarine: SubmarineSummary | null) =>
+  gap.lolGapTotal(rows, keysOf(submarine));
+
+export const tftGapTotal = (rows: readonly DeltaRecord[], qAlpha: number, submarine: SubmarineSummary | null) =>
+  gap.tftGapTotal(rows, qAlpha, keysOf(submarine));
+
+export const pubgGapTotal = (rows: readonly PubgDeltaRow[], submarine: SubmarineSummary | null) =>
+  gap.pubgGapTotal(rows, keysOf(submarine));
