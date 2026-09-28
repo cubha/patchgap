@@ -1,9 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { latestPatchId } from "@/pipeline/collect/staleness";
+
+vi.mock("server-only", () => ({}));
+import { listTftPairs } from "@/lib/tftData";
 
 /**
  * `loadTft`이 고르는 「최신 쌍」 규칙 — **파일명 사전순이 아니라 숫자 비교**다.
@@ -53,5 +56,20 @@ describe("TFT 최신 델타 쌍 선택", () => {
     const picked = pick(fs.readdirSync(dir));
     expect(picked).toBeDefined();
     expect(PATTERN.test(picked as string)).toBe(true);
+  });
+});
+
+// 2026-09-28 이월 R8: 「최신」의 정의가 쌍 목록(`listTftPairs`, 과거 쌍 라우트·헤더 select가 씀)의 첫 칸으로 옮겼다.
+// 위 재현 규칙과 실제 목록의 첫 칸이 같아야 `/tft/`와 과거 쌍 라우트가 같은 쌍을 「최신」이라 부른다.
+describe("listTftPairs — 쌍 목록(최신 우선)", () => {
+  it("실제 산출물에서 첫 칸이 위 규칙의 최신과 같고, 나머지는 숫자 내림차순이다", () => {
+    const dir = path.join(process.cwd(), "data", "aggregated", "tft");
+    if (!fs.existsSync(dir)) return;
+    const pairs = listTftPairs();
+    expect(pairs.length).toBeGreaterThan(1);
+    expect(`deltas-${pairs[0].from}-${pairs[0].to}.json`).toBe(pick(fs.readdirSync(dir)));
+    for (let i = 1; i < pairs.length; i += 1) {
+      expect(latestPatchId([pairs[i - 1].to, pairs[i].to])).toBe(pairs[i - 1].to);
+    }
   });
 });

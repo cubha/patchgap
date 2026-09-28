@@ -11,7 +11,8 @@ import Link from "next/link";
 
 import { panelSurfaceClass } from "@/lib/panelSurface";
 import { fmtInt } from "@/lib/format";
-import { sectionHref, type GameId } from "@/lib/game";
+import type { GameId } from "@/lib/game";
+import { pairSectionHref } from "@/lib/pairRoutes";
 
 /** 세 게임 공통 라벨. 화면에서 이 어휘를 다시 쓰지 않는다(§8-5). */
 export const TILE_LABELS = {
@@ -41,11 +42,16 @@ export interface StatTilesProps {
    * 그것을 채웠다). 문자열을 받는 한 네 번째 게임도 같은 방식으로 틀린다.
    */
   game: GameId;
+  /** 과거 쌍 화면이면 그 쌍의 기준 경로(2026-09-28, 이월 R8) — 타일이 **그 쌍의** 대조표로 간다. */
+  pairBase?: string | null;
 }
 
-/** 미공지 타일의 착지점 — 세 게임 모두 **그 게임 대조표의 「미공지」 칩**이다(칩 키 = 해시). */
-export function gapHrefOf(game: GameId): string {
-  return `${sectionHref(game, "compare")}#unannounced`;
+/**
+ * 미공지 타일의 착지점 — 세 게임 모두 **그 게임 대조표의 「미공지」 칩**이다(칩 키 = 해시).
+ * 과거 쌍 화면에서는 그 쌍의 대조표다 — 최신 쌍 대조표로 보내면 타일 숫자와 착지 화면의 숫자가 갈린다.
+ */
+export function gapHrefOf(game: GameId, pairBase: string | null = null): string {
+  return `${pairSectionHref(game, "compare", pairBase)}#unannounced`;
 }
 
 export default function StatTiles({
@@ -55,6 +61,7 @@ export default function StatTiles({
   significantCount,
   gapCount,
   game,
+  pairBase = null,
 }: StatTilesProps) {
   const subtitle = itemCount === null
     ? `${patch} 패치노트`
@@ -77,7 +84,7 @@ export default function StatTiles({
         <span className="mt-1 block text-xs text-muted">{TILE_LABELS.significant}</span>
       </div>
       {/* hover 채움은 반투명으로 — `bg-surface-warm`(불투명)은 hover 순간 이 타일만 유리가 꺼져 보인다. */}
-      <Link href={gapHrefOf(game)} className="p-5 transition-colors hover:bg-accent/10">
+      <Link href={gapHrefOf(game, pairBase)} className="p-5 transition-colors hover:bg-accent/10">
         <strong className="block font-display text-3xl font-bold tabular-nums text-accent">
           {fmtInt(gapCount)}
         </strong>
