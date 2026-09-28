@@ -144,4 +144,28 @@ describe("crawlTft", () => {
     const r = await crawlTft({ client: fakeClient(MATCHES), windows: WINDOWS, targetPerPatch: 1, outDir: dir });
     expect(r.storedByPatch["18.1"]).toBe(1);
   });
+
+  // 2026-09-28 R3 실측: Actions 첫 실제 수집(run 36424128722)이 120분 잡 제한에 걸려 취소됐고, 캐시 저장
+  // (post 스텝)도 건너뛰어 모은 매치가 전부 사라졌다. 마감 시각을 받으면 **루프를 정상 종료**하고 그 사실을 돌려준다.
+  it("마감 시각이 지나면 남은 매치를 받지 않고 멈추며 stoppedAtDeadline을 알린다 — 받은 것은 파일에 남는다", async () => {
+    let t = 0;
+    const r = await crawlTft({
+      client: fakeClient(MATCHES), windows: WINDOWS, targetPerPatch: 10, outDir: dir,
+      deadlineAt: 2, now: () => t++,
+    });
+    expect(r.stoppedAtDeadline).toBe(true);
+    const stored = Object.values(r.storedByPatch).reduce((a, b) => a + b, 0);
+    expect(stored).toBeLessThan(3);
+    const lines = WINDOWS.flatMap((w) => {
+      const f = rawTftFile(w.patch, dir);
+      return fs.existsSync(f) ? fs.readFileSync(f, "utf8").split("\n").filter((l) => l.trim()) : [];
+    });
+    expect(lines.length).toBe(stored);
+  });
+
+  it("마감이 없거나 안 지났으면 stoppedAtDeadline은 false", async () => {
+    const r = await crawlTft({ client: fakeClient(MATCHES), windows: WINDOWS, targetPerPatch: 10, outDir: dir, deadlineAt: Number.MAX_SAFE_INTEGER });
+    expect(r.stoppedAtDeadline).toBe(false);
+    expect(r.storedByPatch["18.1"]).toBe(2);
+  });
 });
