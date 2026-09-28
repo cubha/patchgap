@@ -158,6 +158,20 @@ export function splitCombinedNotes(
   return { items, report };
 }
 
-export function ddragonPairForPatch(_versions: readonly string[], _patch: string): { from: string; to: string } | null {
-  throw new Error("TODO: ddragonPairForPatch");
+/**
+ * 이 패치(LoL `26.N`)와 직전 패치의 DDragon 버전 쌍(2026-09-28, scope-critic). DDragon 버전 `16.N.x`의 마이너가
+ * 패치 번호와 같다(실측 26.16~26.19 ↔ 16.16.1~16.19.1 — `gamedata/lol/*.json` `meta.source`). 「로컬 최신 두
+ * 버전」은 패치를 몰라, 노트가 DDragon보다 먼저 나오거나 옛 패치를 다시 파싱하면 엉뚱한 쌍으로 나눴다.
+ * 한쪽이라도 없으면 `null` — 추측하지 않는다(호출부가 경보하고 원문을 둔다).
+ */
+export function ddragonPairForPatch(versions: readonly string[], patch: string): { from: string; to: string } | null {
+  const minor = Number(patch.split(".")[1]);
+  if (!Number.isInteger(minor)) return null;
+  const newestOf = (m: number) =>
+    versions
+      .filter((v) => Number(v.split(".")[1]) === m)
+      .sort((a, b) => Number(b.split(".")[2] ?? 0) - Number(a.split(".")[2] ?? 0))[0];
+  const to = newestOf(minor);
+  const from = newestOf(minor - 1);
+  return to && from ? { from, to } : null;
 }
