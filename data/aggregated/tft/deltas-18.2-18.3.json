@@ -3,7 +3,7 @@
     "game": "tft",
     "from": "18.2",
     "to": "18.3",
-    "generatedAt": "2026-09-28T09:48:11.416Z",
+    "generatedAt": "2026-09-28T09:49:31.931Z",
     "qAlpha": 0.1,
     "boards": {
       "before": 19968,
@@ -24,15 +24,15 @@
       "no-change": 307
     },
     "llm": {
-      "calls": 3,
+      "calls": 0,
       "cacheHits": 37,
       "skipped": 0,
-      "proseRepairs": 3,
+      "proseRepairs": 0,
       "usage": {
-        "inputTokens": 805,
-        "cacheReadInputTokens": 17226,
-        "cacheCreationInputTokens": 8613,
-        "outputTokens": 1665
+        "inputTokens": 0,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 0
       },
       "prose": {
         "summaryCount": 37,

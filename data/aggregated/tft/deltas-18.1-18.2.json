@@ -3,7 +3,7 @@
     "game": "tft",
     "from": "18.1",
     "to": "18.2",
-    "generatedAt": "2026-09-28T09:47:37.082Z",
+    "generatedAt": "2026-09-28T09:49:28.565Z",
     "qAlpha": 0.1,
     "boards": {
       "before": 17856,
@@ -24,15 +24,15 @@
       "no-change": 254
     },
     "llm": {
-      "calls": 6,
+      "calls": 0,
       "cacheHits": 98,
       "skipped": 0,
-      "proseRepairs": 6,
+      "proseRepairs": 0,
       "usage": {
-        "inputTokens": 1609,
-        "cacheReadInputTokens": 85210,
-        "cacheCreationInputTokens": 17042,
-        "outputTokens": 4386
+        "inputTokens": 0,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 0
       },
       "prose": {
         "summaryCount": 97,
@@ -642,7 +642,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "약탈자 평균 등수가 4.65등에서 4.48등로 바뀌었습니다(-0.18등). 패치노트에 직접 조항이 없습니다.",
+        "summary": "약탈자 평균 등수가 4.65등에서 4.48등으로 바뀌었습니다(-0.18등). 패치노트에 직접 조항이 없습니다.",
         "summaryCites": [],
         "summaryVerified": true,
         "summaryDeterministic": true
@@ -2736,7 +2736,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "원시 평균 등수가 4.21등에서 4.48등로 바뀌었습니다(++0.27등). 패치노트에 직접 조항이 없습니다.",
+        "summary": "원시 평균 등수가 4.21등에서 4.48등으로 바뀌었습니다(+0.27등). 패치노트에 직접 조항이 없습니다.",
         "summaryCites": [],
         "summaryVerified": true,
         "summaryDeterministic": true

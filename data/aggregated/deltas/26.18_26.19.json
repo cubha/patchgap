@@ -2,7 +2,7 @@
   "meta": {
     "from": "26.18",
     "to": "26.19",
-    "generatedAt": "2026-09-28T09:46:08.068Z",
+    "generatedAt": "2026-09-28T09:49:25.336Z",
     "n": 1931,
     "counts": {
       "unannounced": 27,
@@ -15,14 +15,14 @@
     },
     "qAlpha": 0.1,
     "llm": {
-      "calls": 2,
+      "calls": 0,
       "cacheHits": 56,
       "skipped": 0,
       "usage": {
-        "inputTokens": 480,
-        "cacheReadInputTokens": 7941,
-        "cacheCreationInputTokens": 7941,
-        "outputTokens": 1335
+        "inputTokens": 0,
+        "cacheReadInputTokens": 0,
+        "cacheCreationInputTokens": 0,
+        "outputTokens": 0
       },
       "prose": {
         "summaryCount": 56,
@@ -37,7 +37,7 @@
         "causeUnnamedTarget": 18,
         "summaryDeterministic": 1
       },
-      "proseRepairs": 2
+      "proseRepairs": 0
     }
   },
   "rows": [
