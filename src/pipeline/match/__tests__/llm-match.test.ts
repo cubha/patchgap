@@ -841,3 +841,25 @@ describe("요약 ↔ 인용 대상 게이트(C4)", () => {
     expect(out.deltas[0].llm?.summaryVerified).toBe(false);
   });
 });
+
+describe("verifyCauses — 사실성 검사 연결(C3)", () => {
+  const graves = note({ id: "n2", entity: "그레이브즈", stat: "피해량", before: "45", after: "40", summary: "피해량: 45 ⇒ 40" });
+  it("인용 노트에 없는 「A→B」를 단정한 원인은 검증 실패", () => {
+    const [bad, good] = verifyCauses(
+      [
+        { text: "그레이브즈 피해량 50→40 너프로 정글 수요가 옮겨갔습니다.", candidateNoteId: "n2", confidence: "medium" },
+        { text: "그레이브즈 피해량 45→40 너프로 정글 수요가 옮겨갔습니다.", candidateNoteId: "n2", confidence: "medium" },
+      ],
+      [graves],
+      delta({ entityName: "리신" }),
+      lolLlmProfile(makeDdragon())
+    );
+    expect(bad.verified).toBe(false);
+    expect(good.verified).toBe(true);
+  });
+  it("프로필의 게임 고유 검사(isCauseGrounded)가 거짓이면 검증 실패", () => {
+    const profile = { ...lolLlmProfile(makeDdragon()), isCauseGrounded: () => false };
+    const [c] = verifyCauses([{ text: "그레이브즈 너프 영향입니다.", candidateNoteId: "n2", confidence: "low" }], [graves], delta({ entityName: "리신" }), profile);
+    expect(c.verified).toBe(false);
+  });
+});
