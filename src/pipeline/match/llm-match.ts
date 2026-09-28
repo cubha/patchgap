@@ -251,6 +251,23 @@ export function namesOtherEntityThanCited(
   );
 }
 
+/**
+ * 요약 ↔ 인용 대상 게이트(2026-09-28, C4). 요약은 여러 노트를 한 문장에 엮으므로 **인용 전부가** 문장이
+ * 말하지 않는 다른 대상일 때만 참이다(원인 게이트 `namesOtherEntityThanCited`를 인용마다 적용). 인용이
+ * 없으면 델타 수치만의 요약이라 거짓. 없는 id는 `verifySummaryCites`가 이미 거르므로 여기선 건너뛴다.
+ */
+export function summaryCitesAllMismatched(
+  summary: string,
+  cites: readonly string[],
+  candidates: readonly PatchNoteItem[],
+  ownName: string | null
+): boolean {
+  const byId = new Map(candidates.map((note) => [note.id, note] as const));
+  const cited = cites.map((id) => byId.get(id)).filter((note): note is PatchNoteItem => note !== undefined);
+  if (cited.length === 0) return false;
+  return cited.every((note) => namesOtherEntityThanCited(summary, note, candidates, ownName));
+}
+
 /** 델타 자신의 표시 이름 — LoL·TFT `entityName`, PUBG `weaponName`. 엔진은 `LlmDelta`만 알므로 좁혀 읽는다. */
 function ownNameOf(delta: LlmDelta): string | null {
   if ("entityName" in delta && typeof delta.entityName === "string") return delta.entityName;
@@ -618,7 +635,9 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
       skipped: false,
       summary: parsed.summary,
       summaryCites: parsed.summaryCites,
-      summaryVerified: verifySummaryCites(parsed.summaryCites, candidates, profile),
+      summaryVerified:
+        verifySummaryCites(parsed.summaryCites, candidates, profile) &&
+        !summaryCitesAllMismatched(parsed.summary, parsed.summaryCites, candidates, ownNameOf(delta)),
     };
   };
 
