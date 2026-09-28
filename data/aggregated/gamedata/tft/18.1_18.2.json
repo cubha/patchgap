@@ -8,7 +8,7 @@
       "from": "16.17",
       "to": "16.18"
     },
-    "generatedAt": "2026-09-21T10:32:31.560Z",
+    "generatedAt": "2026-09-28T10:10:28.309Z",
     "changeCount": 44,
     "submarineCount": 31
   },
@@ -164,8 +164,7 @@
       "after": 30,
       "relChange": -0.25,
       "matchedNoteIds": [
-        "note:tft:18.2:champion:마오카이:78dc9945",
-        "note:tft:18.2:champion:마오카이:c1cfbbf3"
+        "note:tft:18.2:champion:마오카이:d7ea1995"
       ]
     },
     {
@@ -179,8 +178,7 @@
       "after": 90,
       "relChange": -0.1,
       "matchedNoteIds": [
-        "note:tft:18.2:champion:마오카이:78dc9945",
-        "note:tft:18.2:champion:마오카이:c1cfbbf3"
+        "note:tft:18.2:champion:마오카이:d7ea1995"
       ]
     },
     {
