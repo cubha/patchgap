@@ -48,6 +48,18 @@ describe("TFT 커밋 산출물 불변식", () => {
     for (const pair of tftPairs) expect(`${pair.name}: 노트 ${pair.notes.length > 0 ? "있음" : "없음"}`).toBe(`${pair.name}: 노트 있음`);
   });
 
+  it("관측 stub 쌍은 rows가 비어 있고 사유가 있다 — 지어낸 관측이 없다(C14)", () => {
+    const stubs = fs
+      .readdirSync(path.join(AGG, "tft"))
+      .filter((f) => /^deltas-.*\.json$/.test(f))
+      .map((f) => readJson<{ meta: { observationFailed?: { reason?: string } }; rows: unknown[] }>(path.join(AGG, "tft", f)))
+      .filter((d) => d.meta.observationFailed !== undefined);
+    for (const stub of stubs) {
+      expect(stub.rows).toEqual([]);
+      expect(typeof stub.meta.observationFailed?.reason).toBe("string");
+    }
+  });
+
   it("짝지은 노트 id가 전부 실재하고, 짝이 있으면 원문 앵커가 있다", () => {
     for (const pair of tftPairs) {
       const ids = new Set(pair.notes.map((n) => n.id));
@@ -84,10 +96,13 @@ describe("PUBG 커밋 산출물 불변식", () => {
   const has = fs.existsSync(deltasFile);
 
   it.runIf(has)("화면이 읽는 쌍의 파일(양쪽 무기 집계·이후 패치 노트)이 전부 있다 — 없으면 PUBG가 통째로 사라진다", () => {
-    const { meta } = readJson<{ meta: { from: string; to: string } }>(deltasFile);
-    const missing = [`weapons-${meta.from}.json`, `weapons-${meta.to}.json`, `notes-${meta.to}.json`].filter(
-      (f) => !fs.existsSync(path.join(dir, f))
-    );
+    const { meta } = readJson<{ meta: { from: string; to: string; observationFailed?: unknown } }>(deltasFile);
+    // 관측 stub(C14, 2026-09-28 명세 변경)은 **관측이 없는 것이 정상**이라 무기 집계를 요구하지 않는다 —
+    // 대신 선언 축(노트)은 반드시 있어야 한다(없으면 빈 쌍만 화면에 올라간다).
+    const required = meta.observationFailed
+      ? [`notes-${meta.to}.json`]
+      : [`weapons-${meta.from}.json`, `weapons-${meta.to}.json`, `notes-${meta.to}.json`];
+    const missing = required.filter((f) => !fs.existsSync(path.join(dir, f)));
     expect(missing).toEqual([]);
   });
 
