@@ -84,6 +84,12 @@ export interface GameLlmProfile<TDelta extends LlmDelta = DeltaRecord> {
   buildUserPrompt(delta: TDelta): string;
 
   /**
+   * LLM 요약이 재요청 뒤에도 100자를 넘을 때 쓰는 **델타 수치만의** 결정론 요약(2026-09-28, C1·D1).
+   * 100자 이하여야 한다(각 프로필 테스트가 최장 이름으로 고정). 없으면 엔진은 LLM 요약을 그대로 둔다.
+   */
+  fallbackSummary?(delta: TDelta): string;
+
+  /**
    * 이 델타를 LLM 2단에 보낼까. 없으면 엔진 기본값(`unannounced` ∨ `announced-inconsistent`) — PUBG는
    * 판정기가 불일치를 이미 비율 밴드로 확정하므로 기본값이 맞다.
    */
@@ -113,3 +119,30 @@ export function isCitableBalanceNote(note: PatchNoteItem): boolean {
   return isCoreNote(note) && !isCosmeticNote(note);
 }
 
+
+/**
+ * 결정론 수치 요약(2026-09-28, C1·D1) — LLM 요약이 재요청 뒤에도 100자를 넘을 때 쓴다. 델타 **자신의**
+ * 수치만 말하므로 인용이 없고 지어낸 것이 없다. 방향 동사를 쓰지 않는 이유: 평균 등수처럼 낮을수록 좋은
+ * 지표에서 「올랐다」는 뜻이 뒤집힌다 — 수치와 부호가 방향을 이미 말한다.
+ */
+export function deterministicSummary(input: {
+  name: string;
+  metricKo: string;
+  before: string;
+  after: string;
+  change: string;
+  status: string;
+}): string {
+  const tail =
+    input.status === "unannounced"
+      ? "패치노트에 직접 조항이 없습니다."
+      : input.status === "announced-inconsistent"
+        ? "노트가 예고한 방향과 다르게 움직였습니다."
+        : "";
+  return `${input.name} ${input.metricKo}이 ${input.before}에서 ${input.after}로 바뀌었습니다(${input.change}). ${tail}`.trim();
+}
+
+/** 부호를 붙인 변화량 문자열 — 결정론 요약용(`+0.4%p`·`-0.12등`). */
+export function signed(text: string): string {
+  return text.startsWith("-") ? text : `+${text}`;
+}

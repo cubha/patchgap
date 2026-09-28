@@ -172,7 +172,16 @@ interface CacheFileShape {
   generatedAt: string;
   parsed: LlmOutput;
   usage: LlmUsageTotals;
+  /**
+   * 문장 규칙 재요청을 이 항목에 몇 번 했나(2026-09-28, C1). 캐시 적중 경로는 이 값이 1 미만일 때만
+   * 되묻는다 — 없으면 고쳐지지 않는 위반을 **매 실행마다** 다시 물었다(실행당 약 11건, 영구 누수).
+   * 필드가 없는 옛 캐시는 0으로 읽혀 한 번 더 묻는다(사용자 결정 D1의 「1회 추가 재요청」).
+   */
+  proseRepairAttempts?: number;
 }
+
+/** 재요청은 캐시 항목 하나당 이 횟수까지. */
+const MAX_PROSE_REPAIR_ATTEMPTS = 1;
 
 function readCache(cacheDir: string, key: string): CacheFileShape | null {
   const filePath = path.join(cacheDir, `${key}.json`);
@@ -361,11 +370,18 @@ export function countProseViolations(parsed: LlmOutput): number {
  * 원인 개수가 달라지면 병합을 포기한다(null). 원인은 인용 id로 짝짓는다(위치가 아니라). 요약은 `summaryCites`가
  * 그대로일 때만 새 문장을 쓴다 — 문장과 인용은 한 쌍이라 한쪽만 바꾸면 인용이 문장을 벗어난다.
  */
-export function mergeRepairedProse(original: LlmOutput, repaired: LlmOutput): LlmOutput | null {
+export function mergeRepairedProse(
+  original: LlmOutput,
+  repaired: LlmOutput,
+  acceptSummaryCites: (cites: readonly string[]) => boolean = () => false
+): LlmOutput | null {
   if (repaired.causes.length !== original.causes.length) return null;
   const citesUnchanged =
     repaired.summaryCites.length === original.summaryCites.length &&
     repaired.summaryCites.every((id, index) => id === original.summaryCites[index]);
+  // 인용이 바뀐 재요청 요약도, 새 인용이 검증을 통과하면 문장·인용을 **쌍째** 채택한다(2026-09-28, C1).
+  // 원본을 지키면 긴 요약이 그대로 남았다 — ACCEPT-prose-v5 A1(요약 100자 초과 0) 회귀의 원인이다.
+  const adoptSummary = citesUnchanged || acceptSummaryCites(repaired.summaryCites);
   // 원인 문장은 **인용 id로** 짝짓는다(2026-09-27). 위치로 짝지으면 재요청이 순서를 바꿨을 때 문장이
   // 다른 노트의 인용을 달고 나간다 — 26.19 나피리 밴률 등 LoL 3행·TFT 4행이 그렇게 verified로 나갔다.
   // 같은 id가 여럿이면 등장 순서대로 소비한다. 짝이 없는 원인은 원본 문장을 지킨다(위반이 남더라도
@@ -377,8 +393,8 @@ export function mergeRepairedProse(original: LlmOutput, repaired: LlmOutput): Ll
     pool.set(cause.candidateNoteId, texts);
   }
   return {
-    summary: citesUnchanged ? repaired.summary : original.summary,
-    summaryCites: original.summaryCites,
+    summary: adoptSummary ? repaired.summary : original.summary,
+    summaryCites: adoptSummary ? repaired.summaryCites : original.summaryCites,
     causes: original.causes.map((cause) => ({
       candidateNoteId: cause.candidateNoteId,
       confidence: cause.confidence,
@@ -586,6 +602,25 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
   };
   const client = options.client ?? new Anthropic();
   const resultById = new Map<string, TDelta>();
+  const acceptCites = (cites: readonly string[]) => verifySummaryCites(cites, candidates, profile);
+
+  /**
+   * 화면에 나갈 요약을 확정한다(C1). 재요청까지 거쳐도 100자를 넘으면 **자르지 않고**(인용·수치를 잃는다)
+   * **회색으로도 돌리지 않고**(회색은 「근거 미검증」이라 길이 위반에 쓰면 뜻이 바뀐다) 델타 수치만의
+   * 결정론 요약으로 바꾼다 — 지시문 규칙 6이 이미 허용하는 형태(`summaryCites=[]`)다. 캐시는 원문을 지킨다.
+   */
+  const finalizeSummary = (parsed: LlmOutput, delta: TDelta): NonNullable<TDelta["llm"]> => {
+    const fallback = parsed.summary.length > SUMMARY_MAX_CHARS ? profile.fallbackSummary?.(delta) : undefined;
+    if (fallback !== undefined) {
+      return { skipped: false, summary: fallback, summaryCites: [], summaryVerified: true, summaryDeterministic: true };
+    }
+    return {
+      skipped: false,
+      summary: parsed.summary,
+      summaryCites: parsed.summaryCites,
+      summaryVerified: verifySummaryCites(parsed.summaryCites, candidates, profile),
+    };
+  };
 
   for (const delta of targets) {
     const key = cacheKeyFor(model, promptVersion, delta.id, candSetHash);
@@ -598,7 +633,8 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
       // 위반은 영원히 고쳐지지 않는다** — 재생성해도 캐시를 그대로 읽기 때문이다. 프롬프트를 고쳐
       // PROMPT_VERSION을 올리면 236건이 전량 무효가 되지만, 이 경로는 위반한 13건만 다시 묻고
       // 결과를 **같은 키에 되쓴다**. 길이 재요청이 이미 v5 키에 되쓰고 있으므로 새 규약은 아니다.
-      if (countProseViolations(cachedParsed) > 0 && summary.calls < maxTotalCalls) {
+      const attempts = cached.proseRepairAttempts ?? 0;
+      if (countProseViolations(cachedParsed) > 0 && attempts < MAX_PROSE_REPAIR_ATTEMPTS && summary.calls < maxTotalCalls) {
         try {
           summary.calls += 1;
           summary.proseRepairs += 1;
@@ -612,27 +648,26 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
           );
           addUsage(summary.usage, repaired.usage);
           const merged =
-            repaired.parsed === null ? null : mergeRepairedProse(cachedParsed, repaired.parsed);
+            repaired.parsed === null ? null : mergeRepairedProse(cachedParsed, repaired.parsed, acceptCites);
           if (merged !== null && countProseViolations(merged) < countProseViolations(cachedParsed)) {
             cachedParsed = merged;
-            writeCache(cacheDir, key, { ...cached, generatedAt: new Date().toISOString(), parsed: cachedParsed });
           }
+          // 고쳐졌든 아니든 시도를 적는다 — 적지 않으면 다음 실행이 같은 것을 또 묻는다(C1).
+          writeCache(cacheDir, key, {
+            ...cached,
+            generatedAt: new Date().toISOString(),
+            parsed: cachedParsed,
+            proseRepairAttempts: attempts + 1,
+          });
         } catch {
           // 재요청 실패는 치명적이지 않다 — 캐시된 원문을 그대로 쓴다(위생 집계가 그것을 센다).
         }
       }
 
-      const causes = verifyCauses(cachedParsed.causes, candidates, delta, profile);
-      const summaryVerified = verifySummaryCites(cachedParsed.summaryCites, candidates, profile);
       resultById.set(delta.id, {
         ...delta,
-        causes,
-        llm: {
-          skipped: false,
-          summary: cachedParsed.summary,
-          summaryCites: cachedParsed.summaryCites,
-          summaryVerified,
-        },
+        causes: verifyCauses(cachedParsed.causes, candidates, delta, profile),
+        llm: finalizeSummary(cachedParsed, delta),
       });
       continue;
     }
@@ -653,6 +688,7 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
       const usage = emptyUsage();
       addUsage(usage, first.usage);
       let parsed = first.parsed;
+      let repairAttempts = 0;
 
       // 길이 재요청(v5, 1회 한정) — 프롬프트 문구로는 2~4%가 남는다는 것이 v4의 실측이다. 상한을
       // 넘긴 응답에 대해서만 "몇 자인지"를 짚어 다시 묻고, **위반이 더 적은 쪽**을 택한다. 응답을
@@ -660,6 +696,7 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
       if (parsed !== null && countProseViolations(parsed) > 0 && summary.calls < maxTotalCalls) {
         summary.calls += 1;
         summary.proseRepairs += 1;
+        repairAttempts += 1;
         const repaired = await callLlmForDelta(
           client,
           model,
@@ -669,7 +706,7 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
           buildProseRepairNote(parsed)
         );
         addUsage(usage, repaired.usage);
-        const merged = repaired.parsed === null ? null : mergeRepairedProse(parsed, repaired.parsed);
+        const merged = repaired.parsed === null ? null : mergeRepairedProse(parsed, repaired.parsed, acceptCites);
         if (merged !== null && countProseViolations(merged) < countProseViolations(parsed)) {
           parsed = merged;
         }
@@ -696,19 +733,13 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
         generatedAt: new Date().toISOString(),
         parsed,
         usage,
+        proseRepairAttempts: repairAttempts,
       });
 
-      const causes = verifyCauses(parsed.causes, candidates, delta, profile);
-      const summaryVerified = verifySummaryCites(parsed.summaryCites, candidates, profile);
       resultById.set(delta.id, {
         ...delta,
-        causes,
-        llm: {
-          skipped: false,
-          summary: parsed.summary,
-          summaryCites: parsed.summaryCites,
-          summaryVerified,
-        },
+        causes: verifyCauses(parsed.causes, candidates, delta, profile),
+        llm: finalizeSummary(parsed, delta),
       });
     } catch (error) {
       const reason =

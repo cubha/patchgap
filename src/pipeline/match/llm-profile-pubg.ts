@@ -14,7 +14,7 @@
 // **캐시는 다른 게임과 섞이지 않는다**: 키가 `sha256(model|PROMPT_VERSION|deltaId|candSetHash)`인데
 // PUBG 델타 id는 `pubg:Item_Weapon_RPD_C:pickupShare` 꼴이고 후보셋 해시도 다르다.
 import type { PatchNoteItem } from "../types";
-import type { GameLlmProfile } from "./llm-profile";
+import { deterministicSummary, type GameLlmProfile } from "./llm-profile";
 import type { PubgDeltaRow } from "./pubg-delta";
 
 const SYSTEM_INSTRUCTIONS = [
@@ -115,5 +115,14 @@ export function createPubgLlmProfile(
             ]
           : []),
       ].join("\n"),
+    fallbackSummary: (delta: PubgDeltaRow) =>
+      deterministicSummary({
+        name: delta.weaponName,
+        metricKo: "획득 점유율",
+        before: fmtShare(delta.before),
+        after: fmtShare(delta.after),
+        change: `상대 ${fmtRel(delta.relChange)}`,
+        status: delta.status,
+      }),
   };
 }

@@ -17,7 +17,7 @@
 
 import { isCoreNote } from "../shared/mode-scope";
 import type { DeltaRecord, PatchNoteItem } from "../types";
-import { isAnomalyOrGapTarget, isCitableBalanceNote, type GameLlmProfile } from "./llm-profile";
+import { deterministicSummary, isAnomalyOrGapTarget, isCitableBalanceNote, signed, type GameLlmProfile } from "./llm-profile";
 
 const SYSTEM_INSTRUCTIONS = [
   "당신은 전략적 팀 전투(TFT) 패치 분석가입니다.",
@@ -119,6 +119,15 @@ export const tftLlmProfile: GameLlmProfile = {
   isCitable: isCitableBalanceNote,
   isSameEntity: (note: PatchNoteItem, delta: DeltaRecord) => note.entity === delta.entityName,
   buildUserPrompt,
+  fallbackSummary: (delta: DeltaRecord) =>
+    deterministicSummary({
+      name: delta.entityName,
+      metricKo: METRIC_KO[delta.metric] ?? delta.metric,
+      before: fmtValue(delta.metric, delta.before),
+      after: fmtValue(delta.metric, delta.after),
+      change: signed(fmtValue(delta.metric, delta.delta, true)),
+      status: delta.status,
+    }),
   // 화면이 「미공지」·「이상 관측」이라 부르는 행만 — 근거는 llm-profile.ts `isAnomalyOrGapTarget`.
   isTarget: isAnomalyOrGapTarget,
 };

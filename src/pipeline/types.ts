@@ -487,6 +487,11 @@ export interface DeltaRecord {
     summary?: string;
     summaryCites?: string[];
     summaryVerified?: boolean;
+    /**
+     * 요약이 재요청 뒤에도 100자를 넘어 **델타 수치만의 결정론 요약**으로 바뀌었다(2026-09-28, C1·D1).
+     * 이때 `summaryCites=[]`·`summaryVerified=true`다(수치는 이 델타 자신의 것이라 근거가 있다).
+     */
+    summaryDeterministic?: boolean;
   };
 }
 
