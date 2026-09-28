@@ -25,19 +25,6 @@ export const TFT_PATCH_WINDOWS: readonly TftPatchWindow[] = [
 ];
 
 /**
- * 패치가 라이브된 뒤 **이만큼 지나야** 수집한다.
- *
- * 사유(2026-09-27 정정): 처음 적힌 사유는 "하루 약 227매치라 당일 수집하면 판정이 전부
- * `insufficient-sample`로 떨어진다"였는데 **실측이 반박했다** — 18.3을 1.4일차(333매치)에 강제
- * 수집하니 표본 부족 0건이었다. 세는 단위를 틀렸기 때문이다: TFT의 표본은 매치가 아니라 **보드
- * (참가자)**라 333매치 × 8 = 2,664보드이고, 유닛별 등장 보드는 수백 단위가 된다(헤카림 398).
- * 규칙을 남기는 이유는 표본 크기가 아니라 **표본의 대표성**이다 — 패치 직후 며칠은 메타가 안정되지
- * 않아 초반 관측이 패치 전체를 대표하지 못한다. 7일이라는 값은 그 판단의 근사치이고 실측 근거는 없다.
- * (18.2 = 11일에 2,496매치 — 하루 약 227매치는 사실이다.)
- */
-export const TFT_MIN_LIVE_DAYS = 7;
-
-/**
  * 열린 창이 이보다 오래 열려 있으면 **캘린더가 낡았다고 본다**.
  *
  * 관측 주기는 15일(18.1 8/25 → 18.2 9/9)이다. 그 1.5배를 넘도록 다음 패치가 캘린더에
@@ -74,116 +61,9 @@ export function isOpenEnded(patch: string, windows: readonly TftPatchWindow[] = 
   return w ? w.endMs === null : false;
 }
 
-export interface TftRunInput {
-  nowMs: number;
-  /** 이 패치쌍의 판정 산출물이 이미 있는가(`aggregated/tft/deltas-{from}-{to}.json`). */
-  hasOutputs: boolean;
-  /** workflow_dispatch 수동 지정 — 캘린더 판정을 이긴다. */
-  manualPatch?: string;
-  /** 산출물이 있어도, 표본 대기 중이어도 다시 돌린다. */
-  force?: boolean;
-  /** 표본 대기 일수 오버라이드(테스트·수동 실행용). 기본 `TFT_MIN_LIVE_DAYS`. */
-  minLiveDays?: number;
-}
-
-export interface TftRunDecision {
-  shouldRun: boolean;
-  patch: string | null;
-  from: string | null;
-  to: string | null;
-  /**
-   * **초록불 침묵 경보.** 열린 창(`endMs: null`)의 산출물이 이미 있다는 것은 대개
-   * "다음 패치가 나왔는데 `TFT_PATCH_WINDOWS`를 아무도 안 고쳤다"는 뜻이다. 그 상태로 두면
-   * 워크플로가 **영원히 초록불로 스킵**하고 사람은 정기 수집이 도는 줄 안다 — 실패보다 나쁘다.
-   */
-  staleCalendar: boolean;
-  reason: string;
-}
-
-/**
- * 워크플로 `determine` 스텝의 순수 두뇌. I/O(산출물 존재 확인)는 호출부가 하고, 여기서는
- * 판정만 한다 — 그래야 이 규칙이 단위 테스트로 고정된다.
- *
- * 캘린더 밖 시각은 **실패가 아니라 no-op**이다(LoL `determine`과 같은 규약). 패치가 없는 주에
- * 빨간 X가 뜨면 진짜 실패와 구분되지 않는다.
- */
-export function determineTftRun(input: TftRunInput, windows: readonly TftPatchWindow[] = TFT_PATCH_WINDOWS): TftRunDecision {
-  const patch = input.manualPatch ?? liveTftPatch(input.nowMs, windows);
-  if (patch === null) {
-    return {
-      shouldRun: false,
-      patch: null,
-      from: null,
-      to: null,
-      staleCalendar: false,
-      reason: `캘린더에 이 시각(${new Date(input.nowMs).toISOString()})의 라이브 패치가 없다 — no-op`,
-    };
-  }
-
-  const from = previousTftPatch(patch, windows);
-  const ageDays = windowAgeDays(patch, input.nowMs, windows);
-  const stale =
-    isOpenEnded(patch, windows) && input.hasOutputs && ageDays !== null && ageDays > TFT_STALE_AFTER_DAYS;
-
-  if (from === null) {
-    return {
-      shouldRun: false,
-      patch,
-      from: null,
-      to: patch,
-      staleCalendar: stale,
-      reason: `${patch}의 직전 패치가 캘린더에 없다 — 대조 쌍이 없어 판정할 수 없다`,
-    };
-  }
-
-  // 표본 대기 — 패치 직후엔 새 구간이 거의 비어 있어 수집해도 판정이 서지 않는다.
-  // 수동 지정(`manualPatch`)과 `force`는 이 게이트를 넘는다: 사람이 의도적으로 부른 것이다.
-  const minLive = input.minLiveDays ?? TFT_MIN_LIVE_DAYS;
-  if (
-    input.force !== true &&
-    input.manualPatch === undefined &&
-    ageDays !== null &&
-    ageDays < minLive
-  ) {
-    return {
-      shouldRun: false,
-      patch,
-      from,
-      to: patch,
-      staleCalendar: stale,
-      reason:
-        `${patch}가 라이브된 지 ${ageDays.toFixed(1)}일 — 표본이 쌓일 시간(${minLive}일)이 아직 부족하다. ` +
-        `KR Master+ 래더는 하루 약 227매치라 지금 수집하면 판정이 전부 표본부족으로 떨어진다`,
-    };
-  }
-
-  if (input.hasOutputs && input.force !== true) {
-    return {
-      shouldRun: false,
-      patch,
-      from,
-      to: patch,
-      staleCalendar: stale,
-      reason: stale
-        ? `${from} → ${patch} 산출물이 이미 있는데 ${patch} 창이 아직 열려 있다 — ` +
-          `캘린더가 낡았을 수 있다. 다음 패치를 TFT_PATCH_WINDOWS에 추가하라`
-        : `${from} → ${patch} 산출물이 이미 있다 — 중복 실행으로 판단해 건너뛴다`,
-    };
-  }
-
-  return {
-    shouldRun: true,
-    patch,
-    from,
-    to: patch,
-    staleCalendar: stale,
-    reason: `${from} → ${patch} 수집·판정을 실행한다`,
-  };
-}
-
 // ── 선언 축 / 관측 축 실행 계획(2026-09-28, C13·C14 — 사용자 결정 D5·D6) ─────────────────────
 //
-// **왜 갈랐나.** 위 `determineTftRun`은 7일 대기와 키 프리플라이트가 실행 **전체**를 막았다 — 그 안에
+// **왜 갈랐나.** 이전 판정(`determineTftRun`, 삭제)은 7일 대기와 키 프리플라이트가 실행 **전체**를 막았다 — 그 안에
 // 패치노트(선언 축)가 들어 있어 TFT 새 패치 노트가 일주일간 화면에 안 나왔고(F1), 키가 만료되면 노트까지
 // 멈췄다(2026-09-28 실측: 9/26부터 매일 401 → 전 단계 스킵). 결정 8 「선언 축은 항상 최신, 관측 축이
 // 인질로 잡지 않는다」 위반이다. 선언 축은 공개 자원(패치노트 웹페이지·CDragon)만 쓰므로 키가 필요 없다.

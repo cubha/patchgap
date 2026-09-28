@@ -6,18 +6,24 @@
 // 써서 실행하고 지운다. 그 방식은 **tsc·eslint·vitest 어느 게이트도 그 코드를 보지 못한다** —
 // 수집 실행 여부를 정하는 코드가 검증 밖에 있는 셈이다. `scripts/**`는 tsconfig include 대상이라
 // (CLAUDE.md §TypeScript 규칙) 실파일로 두면 타입 체크를 받고, 판정 규칙 자체는
-// `determineTftRun`이 순수 함수로 들고 있어 단위 테스트로 고정된다.
+// `planTftRun`이 순수 함수로 들고 있어 단위 테스트로 고정된다.
 //
 // 이 파일이 하는 일은 **I/O뿐**이다 — 판정은 `tft-patch-calendar.ts`, 권한은 `tft-preflight.ts`.
 import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";
 
-import { determineTftRun } from "../src/pipeline/collect/tft-patch-calendar";
+import {
+  applyTftKeyFailure,
+  planTftRun,
+  TFT_STALE_AFTER_DAYS,
+  type DeltasState,
+} from "../src/pipeline/collect/tft-patch-calendar";
+import { deltasStateOf } from "../src/pipeline/shared/observation-stub";
 import { loadTftWindows } from "./shared/calendar";
 import { runTftPreflight } from "../src/pipeline/collect/tft-preflight";
 import { isMainModule } from "./shared/cli";
-import { reportRun, reportSkip, warn } from "./shared/determine-report";
+import { reportDeclaration, reportRun, reportSkip, warn, type SkipReason } from "./shared/determine-report";
 
 function trimmed(name: string): string | undefined {
   const v = (process.env[name] ?? "").trim();
@@ -43,6 +49,24 @@ function manualPatchOf(): string | undefined {
   return raw;
 }
 
+/** 이 쌍의 판정 파일 상태 — 관측이면 보드 파일의 `observedUntil`(C8)까지 읽는다. */
+export function readTftDeltasState(dataRoot: string, from: string, to: string): DeltasState {
+  const dir = path.join(dataRoot, "aggregated", "tft");
+  const file = path.join(dir, `deltas-${from}-${to}.json`);
+  const parsed = fs.existsSync(file) ? (JSON.parse(fs.readFileSync(file, "utf8")) as unknown) : null;
+  const state = deltasStateOf(parsed, from, to);
+  if (state.kind !== "observed") return state;
+  const boardsFile = path.join(dir, `boards-${to}.json`);
+  const boards = fs.existsSync(boardsFile) ? (JSON.parse(fs.readFileSync(boardsFile, "utf8")) as { observedUntil?: string }) : {};
+  const until = boards.observedUntil === undefined ? NaN : Date.parse(boards.observedUntil);
+  return { kind: "observed", observedUntilMs: Number.isNaN(until) ? null : until };
+}
+
+/**
+ * 판정 순서(2026-09-28, C13·C14): ① 캘린더로 계획(선언/관측/건너뜀) → ② **관측 계획일 때만** 키를 본다 →
+ * 키가 죽었으면 `applyTftKeyFailure`로 강등(실제 관측은 유지, 없으면 선언 stub). 전에는 키 검사가 맨
+ * 앞이라 401 하나로 패치노트까지 멈췄다(2026-09-26~ 실측) — 선언 축은 공개 자원만 써서 키가 필요 없다.
+ */
 export async function main(): Promise<void> {
   const dataRoot = trimmed("TFT_DATA_ROOT") ?? "data";
   const manualPatch = manualPatchOf();
@@ -53,55 +77,53 @@ export async function main(): Promise<void> {
   // 키가 하나로 합쳐질 수 있어서다. 그때 403이면 프리플라이트가 그대로 알려 준다.
   const apiKey = trimmed("RIOT_TFT_API_KEY") ?? trimmed("RIOT_API_KEY");
 
-  // ① 권한을 먼저 본다. 캘린더가 "돌아야 한다"고 해도 키가 죽어 있으면 수집 루프
-  //    한가운데서 죽을 뿐이다 — 들어가기 전에 싼 호출 하나로 판별한다.
-  if (!apiKey) {
-    reportSkip("tft", "key-missing", "RIOT_TFT_API_KEY·RIOT_API_KEY 둘 다 설정돼 있지 않다.");
-    return;
-  }
-  const preflight = await runTftPreflight({ apiKey, platform });
-  if (!preflight.proceed) {
-    if (preflight.fatal) {
-      // 진짜 오류는 삼키지 않는다 — 조용히 스킵하면 "돌고 있다"는 착각을 만든다.
-      throw new Error(preflight.message);
-    }
-    // **401과 403은 조치가 정반대다** — 만료는 사람이 재발급해야 하고, 미승인은 사람이 할 일이
-    // 없다. 프리플라이트가 이미 둘을 갈라 놓았으므로 그 판별을 요약까지 그대로 들고 간다.
-    reportSkip(
-      "tft",
-      preflight.kind === "product-unapproved" ? "product-unapproved" : "key-expired",
-      preflight.message,
-    );
-    return;
-  }
-
-  // ② 캘린더 판정. 산출물 존재 확인만 여기서 하고(파일 I/O) 규칙은 순수 함수가 갖는다.
   const nowMs = Date.now();
-  // 캘린더도 같은 dataRoot에서 읽는다(산출물과 어긋나지 않게).
   const windows = loadTftWindows(dataRoot);
-  const probe = determineTftRun({ nowMs, hasOutputs: false, manualPatch, force }, windows);
-  const hasOutputs =
-    probe.from !== null &&
-    probe.to !== null &&
-    fs.existsSync(path.join(dataRoot, "aggregated", "tft", `deltas-${probe.from}-${probe.to}.json`));
+  // 쌍을 먼저 알아야 산출물 상태를 읽을 수 있다 — 상태 없이 한 번 물어 쌍만 얻는다.
+  const probe = planTftRun({ nowMs, notesExist: false, deltas: { kind: "none" }, manualPatch, force }, windows);
+  const notesExist =
+    probe.to !== null && fs.existsSync(path.join(dataRoot, "aggregated", "tft", `notes-${probe.to}.json`));
+  const deltas: DeltasState =
+    probe.from !== null && probe.to !== null ? readTftDeltasState(dataRoot, probe.from, probe.to) : { kind: "none" };
+  let plan = planTftRun({ nowMs, notesExist, deltas, manualPatch, force }, windows);
+  console.log(`[tft-determine] ${plan.reason}`);
 
-  const decision = determineTftRun({ nowMs, hasOutputs, manualPatch, force }, windows);
-  console.log(`[tft-determine] ${decision.reason}`);
-
-  if (decision.staleCalendar) {
+  if (plan.staleCalendar) {
     // 초록불 침묵 경보 — 이 조건이 뜨면 대개 다음 패치가 이미 나왔다는 뜻이다.
     warn(
-      `TFT 패치 캘린더가 낡았을 수 있다: ${decision.patch} 창이 열려 있는데(endMs=null) ` +
-        `산출물이 이미 있다. src/pipeline/collect/tft-patch-calendar.ts의 TFT_PATCH_WINDOWS에 ` +
-        `다음 패치를 추가하라 — 추가하지 않으면 이 워크플로는 계속 초록불로 스킵한다.`
+      `TFT 패치 캘린더가 낡았을 수 있다: ${plan.patch} 창이 열려 있는데(endMs=null) 관측 산출물이 ` +
+        `${TFT_STALE_AFTER_DAYS}일 넘게 그대로다. 감시자(patch-watch.yml)가 다음 패치를 탐지했는지 확인하라.`
     );
   }
 
-  if (!decision.shouldRun || decision.from === null || decision.to === null) {
-    reportSkip("tft", "no-run-condition", decision.reason);
+  // ② 관측 계획일 때만 키를 본다.
+  let keyIssue: SkipReason | undefined;
+  if (plan.mode === "observation") {
+    if (!apiKey) {
+      keyIssue = "key-missing";
+    } else {
+      const preflight = await runTftPreflight({ apiKey, platform });
+      if (!preflight.proceed) {
+        // 진짜 오류는 삼키지 않는다 — 조용히 스킵하면 "돌고 있다"는 착각을 만든다.
+        if (preflight.fatal) throw new Error(preflight.message);
+        // **401과 403은 조치가 정반대다** — 만료는 사람이 재발급해야 하고, 미승인은 사람이 할 일이 없다.
+        keyIssue = preflight.kind === "product-unapproved" ? "product-unapproved" : "key-expired";
+        console.log(`[tft-determine] 프리플라이트: ${preflight.message}`);
+      }
+    }
+    if (keyIssue !== undefined) plan = applyTftKeyFailure(plan, deltas, notesExist);
+  }
+
+  if (plan.mode === "skip" || plan.from === null || plan.to === null) {
+    reportSkip("tft", keyIssue ?? "no-run-condition", plan.reason);
     return;
   }
-  reportRun("tft", { patch: decision.patch ?? "", from: decision.from, to: decision.to });
+  const values = { patch: plan.patch ?? "", from: plan.from, to: plan.to };
+  if (plan.mode === "declaration") {
+    reportDeclaration("tft", values, keyIssue ?? "awaiting-observation", plan.reason, keyIssue);
+    return;
+  }
+  reportRun("tft", values);
 }
 
 if (isMainModule(import.meta.url)) {
