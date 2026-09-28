@@ -87,6 +87,8 @@ export function createPubgLlmProfile(
   return {
     game: "pubg",
     systemInstructions: SYSTEM_INSTRUCTIONS,
+    // 지시문의 제로섬 전제를 상한 있는 서술로 바꿨다(2026-09-27) — PUBG만 다시 묻는다.
+    promptRevision: "pubg-redistribution-bound",
     // PUBG 노트에는 게임 모드 구분이 없다 — 전부 본 게임 조항이다.
     candidatesOf: (notes) => [...notes],
     isCitable: () => true,

@@ -55,6 +55,13 @@ export interface GameLlmProfile<TDelta extends LlmDelta = DeltaRecord> {
   readonly systemInstructions: string;
 
   /**
+   * 이 게임 지시문의 개정 태그(2026-09-28, C5). 캐시 키가 지시문 본문을 보지 않으므로 지시문을 고치면
+   * **같은 파일에서** 이 값을 올린다 — `__tests__/prompt-golden.test.ts`가 태그를 안 올린 수정을 잡는다.
+   * 비어 있으면 키는 이 속성이 생기기 전과 같다(캐시 보존).
+   */
+  readonly promptRevision?: string;
+
+  /**
    * LLM에게 **보여줄** 후보만 남긴다. 이 결과가 `candidateSetHash`를 결정하므로,
    * 여기를 건드리면 그 게임의 LLM 캐시가 전량 무효가 된다.
    */

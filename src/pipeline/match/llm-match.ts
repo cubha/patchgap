@@ -563,7 +563,9 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
   const maxDeltas = options.maxDeltas ?? DEFAULT_MAX_DELTAS;
   const maxTotalCalls = options.maxTotalCalls ?? DEFAULT_MAX_TOTAL_CALLS;
   const cacheDir = options.cacheDir ?? llmCacheDir();
-  const promptVersion = options.promptRevision ? `${PROMPT_VERSION}+${options.promptRevision}` : PROMPT_VERSION;
+  // 호출부 옵션이 있으면 그것이 우선(일회성 실험용), 평소 태그는 프로필이 지시문 옆에서 든다(C5).
+  const revision = options.promptRevision || profile.promptRevision;
+  const promptVersion = revision ? `${PROMPT_VERSION}+${revision}` : PROMPT_VERSION;
   const model = options.model ?? LLM_MODEL;
 
   const candidates = profile.candidatesOf(notes);

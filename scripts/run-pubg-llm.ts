@@ -68,8 +68,7 @@ async function main(): Promise<void> {
 
   const inferred = await inferIndirectCandidates(deltas.rows, candidates, profile, {
     maxDeltas: args.llmMax as number,
-    // 지시문의 제로섬 전제를 상한 있는 서술로 바꿨다(2026-09-27) — PUBG만 다시 묻는다.
-    promptRevision: "pubg-redistribution-bound",
+    // 개정 태그는 프로필이 지시문 옆에서 든다(`llm-profile-pubg.ts`, C5).
   });
   const capped = inferred.deltas.map((row) => capOverclaimedConfidence(row, redistribution));
   const cappedCount = capped.filter((row, i) => row !== inferred.deltas[i]).length;

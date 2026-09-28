@@ -13,7 +13,7 @@ import { describe, expect, it } from "vitest";
 import { lolLlmProfile } from "../llm-profile-lol";
 import { tftLlmProfile } from "../llm-profile-tft";
 import { createPubgLlmProfile } from "../llm-profile-pubg";
-import type { DdragonData } from "../../types";
+import type { DdragonData } from "../ddragon";
 
 interface GoldenEntry {
   promptRevision: string;
