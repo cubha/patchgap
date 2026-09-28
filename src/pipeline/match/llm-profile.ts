@@ -150,7 +150,14 @@ export function deterministicSummary(input: {
       : input.status === "announced-inconsistent"
         ? "노트가 예고한 방향과 다르게 움직였습니다."
         : "";
-  return `${input.name} ${input.metricKo}이 ${input.before}에서 ${input.after}로 바뀌었습니다(${input.change}). ${tail}`.trim();
+  return `${input.name} ${input.metricKo}${subjectParticle(input.metricKo)} ${input.before}에서 ${input.after}로 바뀌었습니다(${input.change}). ${tail}`.trim();
+}
+
+/** 주격 조사 — 마지막 음절에 받침이 있으면 「이」, 없으면 「가」(「평균 등수가」·「순방률이」). 한글이 아니면 「이」. */
+export function subjectParticle(word: string): "이" | "가" {
+  const code = word.charCodeAt(word.length - 1) - 0xac00;
+  if (code < 0 || code > 11171) return "이";
+  return code % 28 === 0 ? "가" : "이";
 }
 
 /** 부호를 붙인 변화량 문자열 — 결정론 요약용(`+0.4%p`·`-0.12등`). */

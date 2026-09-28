@@ -39,3 +39,12 @@ describe("결정론 수치 요약 — 상한·문장 규칙", () => {
     expect(text).toBe("헤카림 순방률이 50.0%에서 62.0%로 바뀌었습니다(+12.0%p). 패치노트에 직접 조항이 없습니다.");
   });
 });
+
+describe("결정론 요약 — 주격 조사", () => {
+  it("받침 없는 지표는 「가」, 있는 지표는 「이」", () => {
+    const base = { entityName: "x", before: 4.1, after: 4.3, delta: 0.2, status: "unannounced" } as DeltaRecord;
+    expect(tftLlmProfile.fallbackSummary?.({ ...base, metric: "avgPlacement" })).toContain("평균 등수가 ");
+    expect(tftLlmProfile.fallbackSummary?.({ ...base, metric: "top4Rate" })).toContain("순방률이 ");
+    expect(tftLlmProfile.fallbackSummary?.({ ...base, metric: "playRate" })).toContain("등장률이 ");
+  });
+});
