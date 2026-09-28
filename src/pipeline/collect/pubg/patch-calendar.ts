@@ -180,3 +180,19 @@ export function determinePubgRun(
   }
   return { ...pair, shouldRun: true, reason: `${previous.patch} → ${latest.patch} 수집(라이브 ${age}일째)`, staleCalendar };
 }
+
+// ── C13·C14 계획 — 구현 전 시그니처 ──
+export type PubgDeltasState = { kind: "none" } | { kind: "stub" } | { kind: "observed" };
+export interface PubgPlanInput {
+  nowMs: number;
+  notesExist: boolean;
+  deltas: PubgDeltasState;
+  force?: boolean;
+}
+export interface PubgRunPlan extends PubgRunDecision {
+  mode: "skip" | "declaration" | "observation";
+  notesReady: boolean;
+}
+export function planPubgRun(_input: PubgPlanInput, _windows: readonly PubgPatchWindow[] = PUBG_PATCH_WINDOWS): PubgRunPlan {
+  throw new Error("TODO(C13): planPubgRun");
+}
