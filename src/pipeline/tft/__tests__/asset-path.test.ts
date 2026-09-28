@@ -3,7 +3,7 @@
 // 「럭스 (검은 가시)」)은 화면이 폴백 박스를 그렸다. CDragon 원본 JSON은 아이콘을 게임 파일 경로
 // (`…/x.tex`)로 주고, 공개 미러는 같은 경로를 소문자 + `.png`로 서빙한다.
 import { describe, expect, it } from "vitest";
-import { cdragonTftImageUrl, cdragonIconOf } from "../asset-path";
+import { cdragonTftImageUrl, cdragonIconOf, publicTftAssetPath } from "../asset-path";
 
 describe("cdragonTftImageUrl", () => {
   it("게임 파일 경로(.tex)를 공개 미러 png URL로 바꾼다", () => {
@@ -28,5 +28,16 @@ describe("cdragonIconOf", () => {
   });
   it("아이콘이 없으면 null — 지어내지 않는다", () => {
     expect(cdragonIconOf("item", {})).toBeNull();
+  });
+});
+
+// 자산 키 가드(2026-09-28, 잔여 로드맵 PR-A). 키는 파일명 조각이 되어 `public/` 아래 쓰기 경로
+// (`scripts/run-tft-assets.ts`)로 들어간다 — 데이터가 어긋나 `../`가 섞이면 저장소 밖에 쓴다.
+describe("publicTftAssetPath 키 가드", () => {
+  it("영숫자·밑줄 키는 로컬 경로를 만든다", () => {
+    expect(publicTftAssetPath("unit", "DA_18_Rakan")).toBe("/dd/tft/unit/DA_18_Rakan.png");
+  });
+  it.each(["../etc/passwd", "a/b", "a.b", "", "DA 18"])("허용 밖 키(%j)는 던진다", (key) => {
+    expect(() => publicTftAssetPath("item", key)).toThrow(/자산 키/);
   });
 });
