@@ -8,7 +8,7 @@
       "from": "16.18.1",
       "to": "16.19.1"
     },
-    "generatedAt": "2026-09-26T08:51:40.948Z",
+    "generatedAt": "2026-09-28T10:40:39.556Z",
     "changeCount": 13,
     "submarineCount": 1
   },
@@ -179,8 +179,8 @@
       "after": null,
       "relChange": null,
       "matchedNoteIds": [
-        "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
-        "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa"
+        "note:26.19:item:세계-지도집:29bcd928",
+        "note:26.19:item:세계-지도집:89a1d0fa"
       ]
     },
     {
@@ -194,8 +194,8 @@
       "after": 60,
       "relChange": -0.4,
       "matchedNoteIds": [
-        "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
-        "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa"
+        "note:26.19:item:룬-나침반:6931f115",
+        "note:26.19:item:룬-나침반:90ffd219"
       ]
     }
   ]

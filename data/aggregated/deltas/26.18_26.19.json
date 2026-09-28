@@ -2,11 +2,11 @@
   "meta": {
     "from": "26.18",
     "to": "26.19",
-    "generatedAt": "2026-09-28T10:01:21.532Z",
+    "generatedAt": "2026-09-28T10:40:30.280Z",
     "n": 1931,
     "counts": {
-      "unannounced": 27,
-      "indirect-effect": 29,
+      "unannounced": 28,
+      "indirect-effect": 28,
       "announced-inconsistent": 69,
       "announced-consistent": 45,
       "below-threshold": 230,
@@ -15,107 +15,32 @@
     },
     "qAlpha": 0.1,
     "llm": {
-      "calls": 0,
-      "cacheHits": 56,
+      "calls": 1,
+      "cacheHits": 55,
       "skipped": 0,
       "usage": {
-        "inputTokens": 0,
-        "cacheReadInputTokens": 0,
+        "inputTokens": 123,
+        "cacheReadInputTokens": 8037,
         "cacheCreationInputTokens": 0,
-        "outputTokens": 0
+        "outputTokens": 508
       },
       "prose": {
         "summaryCount": 56,
         "summaryOverLength": 0,
-        "summaryHedged": 14,
-        "maxSummaryLength": 100,
-        "causeCount": 168,
+        "summaryHedged": 17,
+        "maxSummaryLength": 99,
+        "causeCount": 162,
         "causeOverLength": 0,
-        "causeHedged": 54,
+        "causeHedged": 68,
         "causeHedgedConfident": 0,
         "causeNounEnding": 0,
-        "causeUnnamedTarget": 18,
-        "summaryDeterministic": 1
+        "causeUnnamedTarget": 4,
+        "summaryDeterministic": 0
       },
       "proseRepairs": 0
     }
   },
   "rows": [
-    {
-      "id": "champion:Ambessa:winRate",
-      "entityType": "champion",
-      "entityKey": "Ambessa",
-      "entityName": "암베사",
-      "metric": "winRate",
-      "before": 0.4836392657621708,
-      "after": 0.5593667546174143,
-      "delta": 0.07572748885524344,
-      "ci": [
-        0.018287980530548996,
-        0.13207692558001158
-      ],
-      "n": {
-        "before": 1253,
-        "after": 379
-      },
-      "q": 0.06092090757376234,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "상단 포지션 순간이동 쿨다운이 420초→390초로 줄어 탑 라인 주도권 챔피언인 암베사가 이득을 봅니다.",
-          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "나서스 Q 추가 피해량 10 감소로 탑 맞상대가 약화됐습니다.",
-          "candidateNoteId": "note:26.19:champion:nasus:b5997156",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "럼블 과열 공격 속도가 50~130%에서 30~100%로 줄어 탑 경쟁 구도가 완화됐습니다.",
-          "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "뽀삐 Q 몬스터·미니언 피해 상한 너프로 탑 라인 대항마 입지가 줄었습니다.",
-          "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8393456728",
-          "KR_8393045928",
-          "KR_8392993985",
-          "KR_8392852513",
-          "KR_8393016874",
-          "KR_8393116822",
-          "KR_8392639675",
-          "KR_8392314346",
-          "KR_8392391125",
-          "KR_8392369843"
-        ],
-        "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=799,scope=all]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "암베사 승률이 48.4%→55.9%(+7.6%p)로 올랐습니다. 직접 변경은 없고, 나서스·럼블·뽀삐 너프와 상단 순간이동 390초 단축이 간접 요인으로 보입니다.",
-        "summaryCites": [
-          "note:26.19:champion:nasus:b5997156",
-          "note:26.19:champion:rumble:17e40d96",
-          "note:26.19:champion:poppy:d2a46ee3",
-          "note:26.19:system:순간이동-재사용-대기시간:c9025e15"
-        ],
-        "summaryVerified": true
-      }
-    },
     {
       "id": "champion:Zoe:banRate",
       "entityType": "champion",
@@ -139,7 +64,7 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "오로라 E 기본 피해량 70~230→80~240 상향으로 미드 밴 우선순위가 옮겨갔을 수 있습니다.",
+          "text": "오로라 E 기본 피해량 70~230→80~240 상향으로 미드 밴 우선순위가 오로라로 옮겨갔을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
           "verified": true,
           "confidence": "low"
@@ -151,7 +76,7 @@
           "confidence": "low"
         },
         {
-          "text": "릴리아 R 수면 2초→2.5초 상향으로 정글 위협이 커져 밴 분산이 일어났을 수 있습니다.",
+          "text": "릴리아 R 수면 2초→2.5초 상향으로 정글 밴 수요가 늘어 조이 밴이 밀렸을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:lillia:9a5c8c9b",
           "verified": true,
           "confidence": "low"
@@ -175,7 +100,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "조이 직접 변경은 없으며, 오로라 E·R 상향 등 경쟁 챔피언 버프로 밴 표가 분산되며 밴률이 19.5%→12.6%로 내려간 것으로 보입니다.",
+        "summary": "조이 밴률이 19.5%→12.6%(-6.9%p)로 떨어졌고, 직접 변경은 없으나 오로라 E·R 상향 등 밴 우선순위 이동이 원인으로 보입니다.",
         "summaryCites": [
           "note:26.19:champion:aurora:537dcee9",
           "note:26.19:champion:aurora:8770c9ea"
@@ -206,20 +131,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "오로라 E 기본 피해량이 10 상향돼 미드 밴 우선순위가 그쪽으로 옮겨갔을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "오로라 R 영역 지속시간 상향으로 미드 위협도가 올라가 밴 표가 분산됐습니다.",
+          "text": "오로라 궁극기 지속시간 버프로 미드 밴 우선순위가 옮겨갔을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "아펠리오스 전 무기 대폭 상향으로 밴 자원이 원거리 딜러 쪽으로 이동했습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
+          "text": "릴리아 궁극기 수면 2.5초 강화로 밴 표가 분산된 것으로 보입니다.",
+          "candidateNoteId": "note:26.19:champion:lillia:9a5c8c9b",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "피오라 대결투 회복량 상향이 밴 우선순위를 가져간 영향으로 보입니다.",
+          "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
           "verified": true,
           "confidence": "low"
         }
@@ -242,10 +167,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카시오페아 밴률이 11.2%→4.4%(-6.8%p)로 급감했으나 직접 변경은 없고, 오로라·아펠리오스 상향으로 밴 표가 분산된 영향으로 보입니다.",
+        "summary": "카시오페아 밴률이 11.2%→4.4%(-6.8%p)로 급락했습니다. 직접 변경은 없고 오로라·릴리아 버프로 밴 표가 분산된 영향으로 보입니다.",
         "summaryCites": [
           "note:26.19:champion:aurora:8770c9ea",
-          "note:26.19:champion:aphelios:ccd9a119"
+          "note:26.19:champion:lillia:9a5c8c9b"
         ],
         "summaryVerified": true
       }
@@ -273,15 +198,15 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "서포터 아이템 체력 재생이 초반 50%로 상향돼 라인 유지력이 오른 블리츠크랭크 선호가 커졌을 수 있습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
+          "text": "서포터 아이템 체력이 30에서 0으로 사라져 그랩 한 방에 죽을 위험이 커진 영향으로 보입니다.",
+          "candidateNoteId": "note:26.19:item:세계-지도집:29bcd928",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "신규 스킨·크로마 출시가 픽/밴 관심을 끌어올린 영향으로 보입니다.",
-          "candidateNoteId": null,
-          "verified": false,
+          "text": "룬 나침반 체력 100→60 너프로 후방 챔피언의 그랩 생존력이 떨어졌습니다.",
+          "candidateNoteId": "note:26.19:item:룬-나침반:6931f115",
+          "verified": true,
           "confidence": "low"
         }
       ],
@@ -303,9 +228,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "블리츠크랭크 밴률이 7.1%→13.3%(+6.2%p)로 급등했지만 직접 조항은 없고, 서포터 아이템 체력 재생 상향 등 간접 요인만 추정됩니다.",
+        "summary": "블리츠크랭크 밴률이 7.1%→13.3%(+6.2%p)로 급등했고, 서포터 아이템 체력 너프(룬 나침반 100→60, 세계 지도집 30→0)가 그랩 위협을 키운 영향으로 보입니다.",
         "summaryCites": [
-          "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa"
+          "note:26.19:item:룬-나침반:6931f115",
+          "note:26.19:item:세계-지도집:29bcd928"
         ],
         "summaryVerified": true
       }
@@ -333,19 +259,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "카직스 기본 지속 효과 피해량과 E 진화 사거리가 상향돼 밴 우선순위가 카직스로 옮겨갔을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "엘리스 W 공격 속도 70~130%로 상향, 정글 밴 표가 엘리스 쪽으로 분산된 것으로 보입니다.",
+          "text": "엘리스 W 공격 속도 상향으로 정글 밴 표가 분산됐을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:elise:a7bec286",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "릴리아 R 수면 2.5초로 증가해 정글 밴 경쟁 구도가 바뀐 영향으로 보입니다.",
+          "text": "카직스 기본 지속 효과 피해량 상향이 정글 밴 우선순위를 가져갔습니다.",
+          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "릴리아 R 수면 2초→2.5초로 위협도가 올라 밴 대상이 이동했습니다.",
           "candidateNoteId": "note:26.19:champion:lillia:9a5c8c9b",
           "verified": true,
           "confidence": "low"
@@ -369,11 +295,78 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "니달리 밴률이 28.7%→22.6%로 6.1%p 하락했는데, 카직스·엘리스·릴리아 정글 상향으로 밴 표가 분산된 간접 영향으로 보입니다.",
+        "summary": "니달리 밴률 28.7%→22.6%(-6.1%p). 직접 조항은 없고, 엘리스·카직스·릴리아 정글 상향으로 밴 표가 분산된 것으로 보입니다.",
+        "summaryCites": [
+          "note:26.19:champion:elise:a7bec286",
+          "note:26.19:champion:khazix:defcade0",
+          "note:26.19:champion:lillia:9a5c8c9b"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Rengar:banRate",
+      "entityType": "champion",
+      "entityKey": "Rengar",
+      "entityName": "렝가",
+      "metric": "banRate",
+      "before": 0.0962,
+      "after": 0.03823301472487729,
+      "delta": -0.0579669852751227,
+      "ci": [
+        -0.06612539689905989,
+        -0.04936101077044143
+      ],
+      "n": {
+        "before": 10000,
+        "after": 3871
+      },
+      "q": 0,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "카직스 기본 지속 피해량이 17~136에서 22~141로 올라 암살자 정글 밴 우선순위가 카직스로 이동했습니다.",
+          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "카직스 E 진화 사거리가 200에서 300으로 늘며 체감 위협이 커져 렝가 대신 밴 표를 가져갔을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:khazix:49b122f5",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "엘리스 W 공격 속도 10%p 상향 등 정글 상향이 겹쳐 밴 슬롯 경쟁이 분산됐습니다.",
+          "candidateNoteId": "note:26.19:champion:elise:a7bec286",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8393456728",
+          "KR_8392938200",
+          "KR_8392895061",
+          "KR_8392595827",
+          "KR_8392430899",
+          "KR_8392369843",
+          "KR_8392728598",
+          "KR_8393475977",
+          "KR_8392333426",
+          "KR_8393404610"
+        ],
+        "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=107,scope=all]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "렝가 직접 변경 없이 밴률이 9.6%→3.8%로 급락했는데, 카직스 기본 지속 피해·E 진화 사거리 상향 등 정글 상향들이 밴 우선순위를 가져간 것으로 보입니다.",
         "summaryCites": [
           "note:26.19:champion:khazix:defcade0",
-          "note:26.19:champion:elise:a7bec286",
-          "note:26.19:champion:lillia:9a5c8c9b"
+          "note:26.19:champion:khazix:49b122f5"
         ],
         "summaryVerified": true
       }
@@ -401,20 +394,14 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "카직스 E 진화 사거리 200→300 버프로 정글 암살자 밴 우선순위가 분산된 것으로 보입니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:49b122f5",
+          "text": "카직스 기본 지속 피해량과 진화 도약 사거리 상향으로 밴 표가 암살자 쪽으로 분산됐을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "릴리아 R 수면 2→2.5초 버프가 밴 슬롯 경쟁을 키운 요인일 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:lillia:9a5c8c9b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "오로라 E 피해량 상향으로 미드 밴 표가 옮겨갔을 가능성이 있습니다.",
-          "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
+          "text": "피오라 궁극기 회복량·범위 상향으로 상체 밴 우선순위가 옮겨간 영향으로 보입니다.",
+          "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
           "verified": true,
           "confidence": "low"
         }
@@ -437,10 +424,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "키아나 직접 변경은 없고, 카직스·릴리아 등 정글/미드 강자 버프로 밴 표가 분산되며 밴률이 50.8%→45.1%(-5.7%p)로 내려간 것으로 보입니다.",
+        "summary": "키아나 밴률이 50.8%→45.1%(-5.7%p)로 내려갔습니다. 직접 조항은 없고, 카직스·피오라 상향에 따른 밴 표 분산이 유력합니다.",
         "summaryCites": [
-          "note:26.19:champion:khazix:49b122f5",
-          "note:26.19:champion:lillia:9a5c8c9b"
+          "note:26.19:champion:khazix:defcade0",
+          "note:26.19:champion:fiora:4ff3c93f"
         ],
         "summaryVerified": true
       }
@@ -468,20 +455,14 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "라이즈 Q 전이 피해량이 10%p 하향되며 미드 메이지 선택지가 줄어, 르블랑 견제 밴이 늘었을 수 있습니다.",
+          "text": "라이즈 Q 전이 피해 10%p 하향으로 미드 메이지 선택지가 줄며 르블랑 선호·견제가 늘었을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "라이즈 E 마나 소모 5 증가로 라인전 부담이 커져 미드 밴 우선순위가 르블랑으로 이동한 정황입니다.",
-          "candidateNoteId": "note:26.19:champion:ryze:f4e781e8",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "럼블 과열 공격 속도 하향으로 미드 경쟁 챔피언이 약화된 반사 효과로 보입니다.",
-          "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+          "text": "오로라 E 피해 10 상향 등 미드 경쟁자 강화로 밴 카드 배분이 바뀐 영향으로 보입니다.",
+          "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
           "verified": true,
           "confidence": "low"
         }
@@ -504,10 +485,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "르블랑 직접 변경은 없고, 라이즈 Q·E 하향으로 미드 밴 우선순위가 옮겨가며 밴률이 5.5%p(33.2%→38.7%) 올랐습니다.",
+        "summary": "르블랑 밴률이 33.2%→38.7%(+5.5%p) 올랐으나 직접 조항은 없고, 라이즈 Q 전이 피해 너프 등 미드 구도 변화가 간접 요인으로 추정됩니다.",
         "summaryCites": [
-          "note:26.19:champion:ryze:2bcac5df",
-          "note:26.19:champion:ryze:f4e781e8"
+          "note:26.19:champion:ryze:2bcac5df"
         ],
         "summaryVerified": true
       }
@@ -533,7 +513,26 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [],
+      "causes": [
+        {
+          "text": "서포터 아이템 체력이 30에서 0으로 줄어 탱커형 서폿이 약해지면서 유나라 선호가 올랐을 수 있습니다.",
+          "candidateNoteId": "note:26.19:item:세계-지도집:29bcd928",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "아펠리오스 등 원딜 상향으로 봇 캐리 구도가 강해지며 유나라 우선 밴이 늘어난 것으로 보입니다.",
+          "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "루시안 Q 피해량 증가로 공격적 봇 조합이 늘며 유나라 밴 가치가 함께 상승했습니다.",
+          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8393387810",
@@ -552,8 +551,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
+        "summary": "유나라 밴률이 12.9%→17.8%(+4.9%p)로 올랐습니다. 직접 변경은 없고, 봇 라인 상향과 서폿 아이템 체력 삭감의 파급 효과로 보입니다.",
+        "summaryCites": [
+          "note:26.19:champion:lucian:24a11f30",
+          "note:26.19:item:세계-지도집:29bcd928"
+        ],
         "summaryVerified": true
       }
     },
@@ -580,20 +582,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "드레이븐 기본 공격력 62→64 버프로 공격적 봇 조합이 늘며 훅 서포트 쓰레쉬 동반 픽이 증가했습니다.",
-          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+          "text": "세계 지도집 체력 재생 25%→50% 상향으로 라인 유지력이 좋은 걸기형 서포터가 이득을 볼 수 있습니다.",
+          "candidateNoteId": "note:26.19:item:세계-지도집:89a1d0fa",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "루시안 Q 피해량 상향으로 초반 주도권 봇 조합 수요가 커져 쓰레쉬 픽이 늘었을 수 있습니다.",
+          "text": "룬 나침반 체력 재생 50%→75% 상향이 서포터 아이템 선택 구도에 영향을 준 것으로 보입니다.",
+          "candidateNoteId": "note:26.19:item:룬-나침반:90ffd219",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "루시안 Q 피해량 상향 등 바텀 원거리 딜러 강화로 공격적 서포터 수요가 늘었을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "서포트 아이템 체력 재생 25%/50%→50%/75% 상향으로 라인 유지력이 좋아져 서포트 픽 분포가 흔들렸습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
           "verified": true,
           "confidence": "low"
         }
@@ -616,77 +618,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "쓰레쉬 픽률이 10.5%→15.3%(+4.8%p)로 올랐습니다. 직접 조항은 없고 드레이븐·루시안 봇 버프에 따른 동반 픽 상승이 유력합니다.",
+        "summary": "쓰레쉬 픽률이 10.5%→15.3%(+4.8%p) 올랐습니다. 서포터 아이템 체력 재생 상향과 바텀 원딜 강화의 파급 효과로 추정됩니다.",
         "summaryCites": [
-          "note:26.19:champion:draven:d1cc348b",
-          "note:26.19:champion:lucian:24a11f30"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Thresh:UTILITY:pickRate",
-      "entityType": "champion",
-      "entityKey": "Thresh",
-      "entityName": "쓰레쉬",
-      "metric": "pickRate",
-      "before": 0.1053,
-      "after": 0.15267372771893567,
-      "delta": 0.047373727718935665,
-      "ci": [
-        0.034774632349139814,
-        0.06043877329801596
-      ],
-      "n": {
-        "before": 10000,
-        "after": 3871
-      },
-      "q": 0,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "서포터 아이템 체력 재생이 25%/50%→50%/75%로 올라 라인 유지력이 좋아지며 훅 서포터 선호가 커졌습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "드레이븐 공격력 62→64 버프로 공격적 봇 조합이 늘며 쓰레쉬 동반 픽이 증가했습니다.",
-          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "루시안 Q 피해량 상향으로 초반 교전형 원딜이 늘어 쓰레쉬 수요가 함께 올랐습니다.",
-          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8393230642",
-          "KR_8392993985",
-          "KR_8393116822",
-          "KR_8393128844",
-          "KR_8392570867",
-          "KR_8393228337",
-          "KR_8392309099",
-          "KR_8393435386",
-          "KR_8393241441",
-          "KR_8392775121"
-        ],
-        "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=412,scope=position,position=UTILITY]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "쓰레쉬 직접 변경은 없고, 서포터 아이템 체력 재생 상향과 드레이븐·루시안 버프로 공격형 봇 조합이 늘며 픽률이 4.7%p 올랐습니다.",
-        "summaryCites": [
-          "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
-          "note:26.19:champion:draven:d1cc348b",
+          "note:26.19:item:세계-지도집:89a1d0fa",
+          "note:26.19:item:룬-나침반:90ffd219",
           "note:26.19:champion:lucian:24a11f30"
         ],
         "summaryVerified": true
@@ -715,14 +650,14 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "녹턴 R 재사용 대기시간이 140/115/90초에서 160/130/100초로 늘어, 밴 표가 리 신으로 몰렸을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
+          "text": "카직스 기본 지속 효과 피해량 상향으로 초반 교전형 정글 선호가 커지며 리 신 밴이 늘었을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "마스터 이 Q 쿨 환급이 스킬 가속 비례에서 고정 1초로 바뀌며 정글 밴 우선순위가 재편된 영향으로 보입니다.",
-          "candidateNoteId": "note:26.19:champion:masteryi:871d9688",
+          "text": "녹턴 R 재사용 대기시간 너프로 밴 우선순위가 리 신 쪽으로 옮겨간 영향으로 보입니다.",
+          "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
           "verified": true,
           "confidence": "low"
         }
@@ -745,8 +680,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "리 신 밴률이 51.6%→56.4%(+4.7%p)로 올랐습니다. 직접 변경은 없고 녹턴 궁 쿨 너프 등 정글 밴 대상 재편이 원인으로 추정됩니다.",
+        "summary": "리 신 밴률이 51.6%→56.4%(+4.7%p) 올랐으나 직접 조항은 없고, 카직스 상향·녹턴 R 너프에 따른 정글 밴 우선순위 이동이 유력한 간접 요인입니다.",
         "summaryCites": [
+          "note:26.19:champion:khazix:defcade0",
           "note:26.19:champion:nocturne:daf7f9d0"
         ],
         "summaryVerified": true
@@ -775,19 +711,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "피오라 R 회복량·범위·기본 체력이 동시에 상향되며 탑 밴 표를 흡수했습니다.",
+          "text": "피오라 R 회복량·범위 강화로 탑 밴 우선순위가 피오라로 옮겨갔을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "아트록스 E 회복 계수와 W 쿨타임 상향으로 탑 밴 우선순위가 이동한 것으로 보입니다.",
+          "text": "아트록스 E 회복 계수와 W 쿨감 버프로 탑 밴 표가 분산된 영향으로 보입니다.",
           "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "탑 순간이동 쿨타임 단축으로 라인 주도권 구도가 바뀌며 카밀 경계도가 낮아졌습니다.",
+          "text": "상단 순간이동 쿨타임 420초→390초로 탑 메타가 흔들리며 밴 구도가 재편됐습니다.",
           "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
           "verified": true,
           "confidence": "low"
@@ -811,7 +747,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카밀 직접 변경은 없고, 피오라·아트록스 상향과 탑 순간이동 쿨 단축으로 밴 표가 옮겨가 밴률이 9.6%→4.9%로 떨어졌습니다.",
+        "summary": "카밀 밴률이 9.6%→4.9%(-4.6%p)로 급락했습니다. 직접 조항은 없고 피오라·아트록스 버프와 탑 순간이동 쿨감으로 밴 표가 분산된 영향으로 보입니다.",
         "summaryCites": [
           "note:26.19:champion:fiora:4ff3c93f",
           "note:26.19:champion:aatrox:f629d9e5",
@@ -843,20 +779,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "릴리아 R 수면 지속시간 2초→2.5초로 늘어, 이를 훔치는 사일러스 궁극기 가치가 상승했습니다.",
+          "text": "릴리아 R 수면 지속시간이 2초→2.5초로 늘어, 이를 훔쳐 쓰는 사일러스의 한타 가치가 올랐을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:lillia:9a5c8c9b",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "피오라 R 회복량 상향으로 사일러스가 복사할 궁극기 풀이 강해졌습니다.",
-          "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+          "text": "오로라 R 영역 지속시간 증가로 미드 대치 구도에서 궁 강탈 가치가 커진 영향으로 보입니다.",
+          "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "오로라 R 영역 지속시간 상향도 복사 대상 궁극기 가치를 올렸습니다.",
-          "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
+          "text": "라이즈 Q 전이 피해 너프로 미드 메이지 선호가 이동하며 사일러스 밴이 몰렸을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
           "verified": true,
           "confidence": "low"
         }
@@ -879,7 +815,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "사일러스 밴률이 17.0%→21.6%(+4.6%p) 상승했고, 릴리아 R 수면 2.5초 등 복사 대상 궁극기 버프가 영향을 준 것으로 보입니다.",
+        "summary": "사일러스 밴률이 17.0%→21.6%(+4.6%p)로 올랐고, 릴리아 R 수면 2.5초 연장 등 강탈 가치가 높은 궁극기 버프가 배경으로 보입니다.",
         "summaryCites": [
           "note:26.19:champion:lillia:9a5c8c9b"
         ],
@@ -909,20 +845,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "녹턴 R 쿨다운이 160/130/100초로 늘며 다이브 정글 선택지가 줄어, 나피리로 밴 압력이 몰린 것으로 보입니다.",
+          "text": "녹턴 R 재사용 대기시간이 140/115/90초에서 160/130/100초로 늘며 밴 대상이 나피리로 옮겨갔을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "나서스 Q 추가 피해가 10 감소해 탑 대체 픽으로 나피리 수요가 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:nasus:b5997156",
+          "text": "뽀삐 Q 정글 몬스터 피해 상한 너프로 정글 밴 우선순위가 재편된 영향으로 보입니다.",
+          "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "탑 퀘스트 순간이동 쿨이 390초로 줄어 라인 주도권형 탑 챔피언 가치가 올랐습니다.",
-          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+          "text": "마스터 이 Q 쿨 환급이 스킬 가속 비례에서 고정 1초로 바뀌며 정글 밴 구도가 흔들린 듯합니다.",
+          "candidateNoteId": "note:26.19:champion:masteryi:871d9688",
           "verified": true,
           "confidence": "low"
         }
@@ -945,10 +881,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "나피리 직접 변경은 없고, 녹턴 R 쿨 증가·나서스 Q 너프로 경쟁 픽이 약해지며 밴률이 7.2%→11.4%(+4.2%p) 오른 것으로 보입니다.",
+        "summary": "나피리 밴률이 7.2%→11.4%(+4.2%p)로 올랐습니다. 직접 변경은 없고 녹턴 R 너프 등 정글 밴 구도 변화가 원인으로 추정됩니다.",
         "summaryCites": [
-          "note:26.19:champion:nocturne:daf7f9d0",
-          "note:26.19:champion:nasus:b5997156"
+          "note:26.19:champion:nocturne:daf7f9d0"
         ],
         "summaryVerified": true
       }
@@ -976,13 +911,13 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "녹턴 R 재사용 대기시간이 140/115/90초에서 160/130/100초로 늘며 정글 암살자 수요가 샤코로 옮겨갔을 수 있습니다.",
+          "text": "녹턴 R 쿨다운이 140/115/90초에서 160/130/100초로 늘며 암살 정글 수요가 샤코로 옮겨갔을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "마스터 이 Q 재사용 대기시간 환급이 스킬 가속 비례에서 1초 고정으로 조정돼 밴 우선순위가 재편됐습니다.",
+          "text": "마스터 이 Q 쿨 환급이 스킬 가속 비례에서 고정 1초로 바뀌어 정글 밴 우선순위가 재편된 영향으로 보입니다.",
           "candidateNoteId": "note:26.19:champion:masteryi:871d9688",
           "verified": true,
           "confidence": "low"
@@ -1006,7 +941,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "샤코 밴률이 4.7%→8.7%(+4.0%p) 올랐지만 직접 조항은 없고, 녹턴 궁 재사용 대기시간 너프 등 정글 구도 변화가 간접 요인일 수 있습니다.",
+        "summary": "샤코 밴률이 4.7%→8.7%(+4.0%p)로 올랐습니다. 직접 조항은 없고, 녹턴 R 쿨 증가 등 정글 너프에 따른 밴 우선순위 이동이 유력합니다.",
         "summaryCites": [
           "note:26.19:champion:nocturne:daf7f9d0"
         ],
@@ -1034,26 +969,7 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "라이즈 Q 전이 피해 너프로 미드 대항 챔프가 약해져 제드 밴이 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "룬 나침반 초반 체력 30→0 너프로 라인전 생존력이 떨어져 암살자 견제 심리가 커졌습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카직스 기본 지속 효과 피해 상향 등 암살자 상향이 겹치며 암살자 밴 수요가 분산되지 않았습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8392667197",
@@ -1072,10 +988,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "제드 밴률이 12.0%→15.9%(+3.9%p)로 올랐지만 직접 조항은 없고, 라이즈 Q 전이 너프 등 미드 경쟁 구도 변화가 원인으로 추정됩니다.",
-        "summaryCites": [
-          "note:26.19:champion:ryze:2bcac5df"
-        ],
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -1102,13 +1016,13 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "오로라 E 기본 피해량 70~230→80~240 상향으로 미드 AP 경쟁에서 갈리오 지분이 밀렸을 수 있습니다.",
+          "text": "오로라 E 기본 피해량이 10 상승해 미드 경쟁 구도에서 갈리오 지분을 가져갔을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "오로라 R 영역 지속시간 1.75/2.5/3.25초→2.25/2.75/3.25초 상향으로 미드 픽 선호가 이동한 것으로 보입니다.",
+          "text": "오로라 R 영역 지속시간 증가로 미드 선호도가 올라간 영향으로 보입니다.",
           "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
           "verified": true,
           "confidence": "low"
@@ -1132,10 +1046,78 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "갈리오 픽률이 12.3%→8.7%(-3.6%p)로 떨어졌고, 직접 조항은 없으며 오로라 E·R 상향에 따른 미드 경쟁 심화가 유력한 배경입니다.",
+        "summary": "갈리오 픽률이 12.3%→8.7%(-3.6%p)로 떨어졌고, 오로라 E·R 버프에 따른 미드 경쟁 심화가 원인일 수 있습니다.",
         "summaryCites": [
           "note:26.19:champion:aurora:537dcee9",
           "note:26.19:champion:aurora:8770c9ea"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Viktor:pickRate",
+      "entityType": "champion",
+      "entityKey": "Viktor",
+      "entityName": "빅토르",
+      "metric": "pickRate",
+      "before": 0.1096,
+      "after": 0.1451821234823043,
+      "delta": 0.0355821234823043,
+      "ci": [
+        0.023138846306061764,
+        0.048496411769995605
+      ],
+      "n": {
+        "before": 10000,
+        "after": 3871
+      },
+      "q": 0,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "라이즈 Q 전이 추가 피해량이 10%p씩 하향돼 미드 AP 지분이 빅토르로 이동했을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "라이즈 E 마나 소모량 5 증가로 라인 지속력이 떨어져 미드 대체 픽 수요가 커졌습니다.",
+          "candidateNoteId": "note:26.19:champion:ryze:f4e781e8",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "럼블 과열 공격 속도가 50~130%에서 30~100%로 너프돼 AP 미드 경쟁자가 줄었습니다.",
+          "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8392581092",
+          "KR_8392418531",
+          "KR_8393183665",
+          "KR_8393187808",
+          "KR_8392532803",
+          "KR_8393208324",
+          "KR_8393228337",
+          "KR_8392687359",
+          "KR_8392333426",
+          "KR_8393085329"
+        ],
+        "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=112,scope=all]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "빅토르 직접 변경은 없고, 라이즈 Q·E 너프와 럼블 과열 너프로 인한 미드 AP 수요 이동이 픽률 3.6%p 상승의 유력한 배경입니다.",
+        "summaryCites": [
+          "note:26.19:champion:ryze:2bcac5df",
+          "note:26.19:champion:ryze:f4e781e8",
+          "note:26.19:champion:rumble:17e40d96"
         ],
         "summaryVerified": true
       }
@@ -1163,14 +1145,14 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "서포터 아이템 체력 재생이 초반 50%로 올라 노틸러스 같은 탱커 서포터의 라인 유지력이 좋아졌을 수 있습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
+          "text": "아펠리오스 다수 상향으로 원딜 주도 바텀 구도가 강해지며, 이니시 서포터 노틸러스 선호도가 함께 오른 것으로 보입니다.",
+          "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "서포터 아이템 초반 체력이 30→0으로 줄어, 물몸 서포터보다 자체 내구력이 있는 노틸러스의 상대 가치가 올랐습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+          "text": "서포터 아이템 체력이 100에서 60으로 줄어 라인 유지력이 약한 서폿이 밀리고, 하드 CC 탱커 노틸러스 가치가 상대적으로 부각됐습니다.",
+          "candidateNoteId": "note:26.19:item:룬-나침반:6931f115",
           "verified": true,
           "confidence": "low"
         }
@@ -1193,10 +1175,12 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "노틸러스 밴률이 8.8%에서 12.2%로 바뀌었습니다(+3.4%p). 패치노트에 직접 조항이 없습니다.",
-        "summaryCites": [],
-        "summaryVerified": true,
-        "summaryDeterministic": true
+        "summary": "노틸러스 밴률이 8.8%→12.2%(+3.5%p)로 올랐지만 직접 변경은 없고, 아펠리오스 상향과 서포터 아이템 체력 너프가 간접 요인으로 보입니다.",
+        "summaryCites": [
+          "note:26.19:champion:aphelios:fa3a30c8",
+          "note:26.19:item:룬-나침반:6931f115"
+        ],
+        "summaryVerified": true
       }
     },
     {
@@ -1220,7 +1204,26 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [],
+      "causes": [
+        {
+          "text": "카직스 기본 지속 피해량이 17~136에서 22~141로 올라 정글 픽 경쟁에서 밀렸을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "엘리스 W 공격 속도가 60~120%에서 70~130%로 상향돼 정글 선호도가 분산됐습니다.",
+          "candidateNoteId": "note:26.19:champion:elise:a7bec286",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "릴리아 R 수면 지속시간 2초→2.5초 상향으로 정글 픽 파이가 나뉘었습니다.",
+          "candidateNoteId": "note:26.19:champion:lillia:9a5c8c9b",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
       "evidence": {
         "matchIds": [
           "KR_8392492171",
@@ -1239,8 +1242,86 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
+        "summary": "로크 픽률이 13.7%→10.3%(-3.4%p)로 떨어졌습니다. 직접 조항은 없고 카직스·엘리스·릴리아 정글 상향에 밀린 것으로 보입니다.",
+        "summaryCites": [
+          "note:26.19:champion:khazix:defcade0",
+          "note:26.19:champion:elise:a7bec286",
+          "note:26.19:champion:lillia:9a5c8c9b"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Olaf:pickRate",
+      "entityType": "champion",
+      "entityKey": "Olaf",
+      "entityName": "올라프",
+      "metric": "pickRate",
+      "before": 0.0948,
+      "after": 0.06044949625419788,
+      "delta": -0.03435050374580211,
+      "ci": [
+        -0.043566013740877686,
+        -0.024631781200307554
+      ],
+      "n": {
+        "before": 10000,
+        "after": 3871
+      },
+      "q": 0,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "피오라 R 회복량 상향으로 탑 브루저 경쟁에서 올라프가 밀린 것으로 보입니다.",
+          "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "아트록스 E 회복 계수 상향(1.1%→1.3%)이 같은 탑 지속 브루저 픽을 흡수했습니다.",
+          "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "카직스 기본 지속 효과 피해량 상향으로 정글 올라프 지분이 줄었습니다.",
+          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "엘리스 W 공격 속도 10%p 상향도 정글 경쟁 픽을 늘렸습니다.",
+          "candidateNoteId": "note:26.19:champion:elise:a7bec286",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8392492171",
+          "KR_8392418531",
+          "KR_8393183665",
+          "KR_8392895061",
+          "KR_8392521012",
+          "KR_8392626312",
+          "KR_8393193525",
+          "KR_8392964305",
+          "KR_8392412650",
+          "KR_8392664601"
+        ],
+        "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=2,scope=all]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "올라프 픽률이 9.5%→6.0%(-3.4%p)로 떨어졌습니다. 직접 변경은 없고 아트록스·피오라·카직스 버프에 탑·정글 지분을 내준 영향으로 보입니다.",
+        "summaryCites": [
+          "note:26.19:champion:aatrox:f629d9e5",
+          "note:26.19:champion:fiora:4ff3c93f",
+          "note:26.19:champion:khazix:defcade0"
+        ],
         "summaryVerified": true
       }
     },
@@ -1267,20 +1348,14 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "오로라 E 기본 피해량 70~230에서 80~240으로 상향돼 미드 밴 우선순위를 가져갔을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "오로라 R 영역 지속시간 1.75초에서 2.25초로 늘어 미드 밴 표가 분산됐을 여지가 있습니다.",
+          "text": "오로라 R 지속시간 버프로 미드 밴 우선순위가 옮겨가 신드라 밴이 분산됐을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "카직스 기본 지속 효과 피해량 상향으로 정글 밴이 늘며 미드 밴 슬롯이 줄었을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
+          "text": "오로라 E 피해량 증가도 미드 밴 경쟁에서 신드라를 밀어냈을 여지가 있습니다.",
+          "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
           "verified": true,
           "confidence": "low"
         }
@@ -1303,10 +1378,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "신드라 직접 변경은 없고, 오로라 E·R 상향으로 미드 밴 표가 옮겨가며 밴률이 13.8%→10.5%로 내려간 것으로 보입니다.",
+        "summary": "신드라는 직접 변경이 없는데 밴률이 13.8%→10.5%(-3.3%p)로 내렸고, 오로라 버프에 따른 미드 밴 우선순위 이동이 유력한 설명입니다.",
         "summaryCites": [
-          "note:26.19:champion:aurora:537dcee9",
-          "note:26.19:champion:aurora:8770c9ea"
+          "note:26.19:champion:aurora:8770c9ea",
+          "note:26.19:champion:aurora:537dcee9"
         ],
         "summaryVerified": true
       }
@@ -1334,20 +1409,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "피오라 R 회복량이 375/500/625→400/525/650으로 상향돼 탑 밴 표가 그쪽으로 옮겨갔을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "아트록스 W 쿨타임 단축 버프로 탑 위협 순위가 바뀌며 올라프 밴 우선순위가 밀렸습니다.",
-          "candidateNoteId": "note:26.19:champion:aatrox:5bc9f3f5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카직스 기본 지속 효과 피해량 상향으로 정글 밴 표가 분산됐습니다.",
+          "text": "카직스 기본 지속 피해량 상향으로 정글 밴 우선순위가 옮겨갔을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:khazix:defcade0",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "엘리스 W 공격속도 70~130% 상향으로 정글 밴 표가 분산된 것으로 보입니다.",
+          "candidateNoteId": "note:26.19:champion:elise:a7bec286",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "피오라 R 회복량 상향으로 탑 밴 대상이 피오라 쪽으로 이동했을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
           "verified": true,
           "confidence": "low"
         }
@@ -1370,10 +1445,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "올라프 직접 변경은 없고, 피오라·아트록스 등 탑 버프로 밴 표가 이동하며 밴률이 9.8%→6.6%로 내려간 것으로 보입니다.",
+        "summary": "올라프 밴률이 9.8%→6.6%(-3.1%p)로 떨어졌습니다. 직접 변경은 없고 카직스·엘리스 등 정글 버프로 밴 표가 분산된 영향으로 보입니다.",
         "summaryCites": [
-          "note:26.19:champion:fiora:4ff3c93f",
-          "note:26.19:champion:aatrox:5bc9f3f5"
+          "note:26.19:champion:khazix:defcade0",
+          "note:26.19:champion:elise:a7bec286"
         ],
         "summaryVerified": true
       }
@@ -1401,20 +1476,14 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "오로라 E 기본 피해량 70~230→80~240 상향으로 미드 메이지 픽이 오로라로 옮겨갔을 수 있습니다.",
+          "text": "오로라 E 기본 피해량이 10 상승해 미드 픽이 오로라로 분산됐을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "오로라 R 영역 지속시간 1.75/2.5→2.25/2.75초 상향도 같은 미드 자리 경쟁을 키웠습니다.",
+          "text": "오로라 R 영역 지속시간이 1~2레벨에서 늘어 미드 선호도가 오르며 신드라 지분을 잠식했습니다.",
           "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "루시안 Q 피해량 상향으로 미드 딜러 선택지가 넓어진 영향도 있습니다.",
-          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
           "verified": true,
           "confidence": "low"
         }
@@ -1437,7 +1506,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "신드라 픽률이 13.1%→10.0%(-3.1%p)로 내려갔고, 직접 조항 대신 오로라 E·R 상향에 따른 미드 경쟁 심화가 유력합니다.",
+        "summary": "신드라는 직접 변경이 없었지만 픽률이 13.1%→10.0%(-3.1%p)로 떨어졌고, 오로라 E·R 버프로 미드 픽이 분산된 영향으로 보입니다.",
         "summaryCites": [
           "note:26.19:champion:aurora:537dcee9",
           "note:26.19:champion:aurora:8770c9ea"
@@ -1468,20 +1537,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "카직스 기본 지속 효과 피해량 상향으로 정글 밴 우선순위가 이동한 것으로 보입니다.",
+          "text": "카직스 기본 지속 효과 피해량 17~136→22~141 상향으로 정글 밴 우선순위가 카직스 쪽으로 이동했을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:khazix:defcade0",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "릴리아 R 수면 2초→2.5초 상향이 밴 슬롯 경쟁에서 벨베스를 밀어냈을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:lillia:9a5c8c9b",
+          "text": "엘리스 W 공격 속도 60~120%→70~130% 상향으로 정글 밴 표가 분산됐습니다.",
+          "candidateNoteId": "note:26.19:champion:elise:a7bec286",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "엘리스 W 공격 속도 10%p 상향도 정글 밴 분산 요인입니다.",
-          "candidateNoteId": "note:26.19:champion:elise:a7bec286",
+          "text": "릴리아 R 수면 지속시간 2초→2.5초 상향으로 밴 대상이 릴리아로 옮겨갔습니다.",
+          "candidateNoteId": "note:26.19:champion:lillia:9a5c8c9b",
           "verified": true,
           "confidence": "low"
         }
@@ -1504,11 +1573,78 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "벨베스 밴률 4.7%→1.7%(-3.0%p)는 직접 조항 없이, 카직스·릴리아·엘리스 정글 상향으로 밴 우선순위가 옮겨간 영향으로 보입니다.",
+        "summary": "벨베스 직접 변경은 없고, 카직스·엘리스·릴리아 등 정글 상향으로 밴 표가 분산되며 밴률이 4.7%→1.7%로 떨어진 것으로 보입니다.",
         "summaryCites": [
           "note:26.19:champion:khazix:defcade0",
-          "note:26.19:champion:lillia:9a5c8c9b",
-          "note:26.19:champion:elise:a7bec286"
+          "note:26.19:champion:elise:a7bec286",
+          "note:26.19:champion:lillia:9a5c8c9b"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Locke:MIDDLE:pickRate",
+      "entityType": "champion",
+      "entityKey": "Locke",
+      "entityName": "로크",
+      "metric": "pickRate",
+      "before": 0.1164,
+      "after": 0.08783260139498837,
+      "delta": -0.028567398605011632,
+      "ci": [
+        -0.03923814261240192,
+        -0.017398533958652776
+      ],
+      "n": {
+        "before": 10000,
+        "after": 3871
+      },
+      "q": 0.00002436484436961715,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "오로라 E 기본 피해량 70~230→80~240 상향으로 미드 픽 경쟁에서 밀렸을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "오로라 R 영역 지속시간 1.75/2.5초→2.25/2.75초 상향이 미드 선호도를 흡수한 것으로 보입니다.",
+          "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "루시안 Q 피해량 대폭 상향으로 미드 루시안 픽이 늘며 로크 지분이 줄었을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8392492171",
+          "KR_8393305545",
+          "KR_8393146622",
+          "KR_8393099955",
+          "KR_8392470133",
+          "KR_8393016874",
+          "KR_8393148907",
+          "KR_8392349751",
+          "KR_8393288253",
+          "KR_8393213611"
+        ],
+        "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=805,scope=position,position=MIDDLE]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "로크 미드 픽률이 11.6%→8.8%(-2.9%p)로 떨어졌습니다. 직접 변경은 없고 오로라 E·R 상향 등 미드 경쟁자 버프가 유력한 배경입니다.",
+        "summaryCites": [
+          "note:26.19:champion:aurora:537dcee9",
+          "note:26.19:champion:aurora:8770c9ea"
         ],
         "summaryVerified": true
       }
@@ -1536,14 +1672,14 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "루시안 패시브 강화 평타 피해가 15(+공격력 20%)에서 5(+15%)로 너프되며 바텀 원딜 지분이 진으로 옮겨갔을 수 있습니다.",
+          "text": "루시안 패시브 강화 적중 피해가 15(+20%)에서 5(+15%)로 줄어, 경쟁 원딜 이탈 수요가 진으로 옮겨갔을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:lucian:98722aa4",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "서포터 아이템 초반 체력이 30/100에서 0/60으로 줄어 라인전 압박이 강한 진의 가치가 올랐습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+          "text": "서포터 시작 아이템 체력이 100에서 60으로 줄어 라인 교전 부담이 커지자, 사거리 우위의 진 선호가 올랐을 여지가 있습니다.",
+          "candidateNoteId": "note:26.19:item:룬-나침반:6931f115",
           "verified": true,
           "confidence": "low"
         }
@@ -1566,10 +1702,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "진은 직접 변경이 없는데 픽률이 22.0%→24.6%(+2.6%p) 상승했고, 루시안 패시브 너프와 서포터 아이템 초반 체력 감소가 간접 요인으로 보입니다.",
+        "summary": "진 픽률이 22.0%→24.6%(+2.6%p)로 올랐지만 직접 조항은 없고, 루시안 패시브 너프에 따른 원딜 수요 이동이 약한 단서입니다.",
         "summaryCites": [
-          "note:26.19:champion:lucian:98722aa4",
-          "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0"
+          "note:26.19:champion:lucian:98722aa4"
         ],
         "summaryVerified": true
       }
@@ -1597,14 +1732,8 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "루시안 패시브 강화 평타 피해가 15(+공격력 20%)에서 5(+15%)로 줄어, 바텀 경쟁자 지분이 진으로 옮겨갔을 수 있습니다.",
+          "text": "루시안 패시브 강화 평타 피해가 15(+20%)→5(+15%)로 줄어, 원딜 경쟁자 이탈 수요가 진으로 옮겨갔을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:lucian:98722aa4",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "서포터 아이템 초반 체력이 30에서 0으로 줄어 라인전 리스크가 커지면서, 안전한 장거리 원딜 선호가 늘었을 여지가 있습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
           "verified": true,
           "confidence": "low"
         }
@@ -1627,7 +1756,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "진 픽률이 21.8%에서 24.4%로 2.5%p 올랐지만 직접 조항은 없고, 루시안 패시브 피해 감소 등 바텀 경쟁 구도 변화가 약한 근거입니다.",
+        "summary": "진 픽률이 21.8%→24.4%(+2.5%p)로 올랐으나 직접 조항은 없고, 루시안 패시브 피해 너프에 따른 원딜 선택 이동이 약한 단서입니다.",
         "summaryCites": [
           "note:26.19:champion:lucian:98722aa4"
         ],
@@ -1657,20 +1786,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "오로라 E 기본 피해량 70~230→80~240 상향으로 미드 AP 유연픽 수요가 오로라로 이동했습니다.",
+          "text": "세계 지도집 체력이 30에서 0으로 삭제돼 서포터 니코의 초반 라인 생존력이 떨어졌습니다.",
+          "candidateNoteId": "note:26.19:item:세계-지도집:29bcd928",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "룬 나침반 체력이 100에서 60으로 줄어 물몸 서포터 니코가 손해를 봤을 수 있습니다.",
+          "candidateNoteId": "note:26.19:item:룬-나침반:6931f115",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "오로라 E 피해량 10 증가 등 미드 마법사 버프로 니코의 픽 순위가 밀렸습니다.",
           "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "오로라 R 영역 지속시간 1.75초→2.25초 상향이 같은 역할군 경쟁에서 니코를 밀어냈을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "세계 지도집 체력 30/100/200→0/60/200 너프로 서포터 니코의 라인전 체력 여유가 줄었습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
           "verified": true,
           "confidence": "low"
         }
@@ -1693,84 +1822,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "니코 픽률이 5.4%→2.9%(-2.5%p)로 떨어졌지만 직접 조항은 없고, 오로라 E·R 상향에 따른 미드 AP 수요 이동이 유력한 간접 요인입니다.",
+        "summary": "니코 픽률이 5.4%에서 2.9%로 2.5%p 급락했습니다. 직접 변경은 없고 서포터 아이템 체력 삭감과 미드 경쟁자 버프가 영향을 준 것으로 보입니다.",
         "summaryCites": [
-          "note:26.19:champion:aurora:537dcee9",
-          "note:26.19:champion:aurora:8770c9ea"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "item:3046:adoptionRate",
-      "entityType": "item",
-      "entityKey": "3046",
-      "entityName": "유령 무희",
-      "metric": "adoptionRate",
-      "before": 0.01772,
-      "after": 0.02490312580728494,
-      "delta": 0.007183125807284939,
-      "ci": [
-        0.005460550789082803,
-        0.008971844155598069
-      ],
-      "n": {
-        "before": 100000,
-        "after": 38710
-      },
-      "q": 0,
-      "status": "unannounced",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "마스터 이 Q 재사용 대기시간 환급이 스킬 가속 비례에서 고정 1초로 바뀌며 공격 속도 아이템 비중이 커졌습니다.",
-          "candidateNoteId": "note:26.19:champion:masteryi:871d9688",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "아펠리오스 절단검 회복량과 화염포·만월총 상향으로 지속 평타 빌드 선호가 늘었습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "드레이븐 기본 공격력 62→64 상향으로 평타 중심 원거리 딜러 픽이 늘었습니다.",
-          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "루시안 Q 피해량 상향으로 평타·이동속도 아이템 수요가 증가했습니다.",
-          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8393264714",
-          "KR_8393099955",
-          "KR_8392993985",
-          "KR_8392980519",
-          "KR_8392938200",
-          "KR_8392895061",
-          "KR_8392395852",
-          "KR_8393116822",
-          "KR_8393148907",
-          "KR_8392997976"
-        ],
-        "aggregatePath": "data/aggregated/26.19/items.json#rows[itemId=3046]",
-        "noteAnchor": null
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "유령 무희 채택률이 1.8%→2.5%(+0.7%p) 올랐습니다. 직접 조항은 없고, 아펠리오스·드레이븐·루시안 등 평타 딜러 상향의 파급으로 보입니다.",
-        "summaryCites": [
-          "note:26.19:champion:aphelios:5a77f71f",
-          "note:26.19:champion:draven:d1cc348b",
-          "note:26.19:champion:lucian:24a11f30"
+          "note:26.19:item:세계-지도집:29bcd928",
+          "note:26.19:item:룬-나침반:6931f115",
+          "note:26.19:champion:aurora:537dcee9"
         ],
         "summaryVerified": true
       }
@@ -1798,25 +1854,25 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "아펠리오스 화염포 Q 쿨타임 1초 감소 등 전반 강화로, 짝꿍인 룰루 선호도와 밴이 동반 상승했습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "아펠리오스 만월총 Q 피해량 10 상승으로 하이퍼캐리 가치가 올라 보호형 서포터 룰루 밴이 늘었습니다.",
+          "text": "아펠리오스 만월총 Q 피해량 10 상향 등 전면 버프로 룰루 동반 조합 가치가 올라 밴이 몰렸습니다.",
           "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "드레이븐 기본 공격력 62→64 상향으로 초반 공격적 원딜 조합이 강해져 룰루 견제 밴이 증가했습니다.",
+          "text": "아펠리오스 화염포 Q 쿨타임 1초 감소로 하이퍼캐리 강세가 커졌습니다.",
+          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "드레이븐 기본 공격력 62→64 상향으로 공격적 원딜 조합 선호가 높아졌습니다.",
           "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "루시안 Q 기본 피해량 상향도 바텀 캐리 강세에 힘을 보태 룰루 밴 압력을 키웠습니다.",
+          "text": "루시안 Q 피해량 상향으로 초반 바텀 주도권 조합이 강해졌습니다.",
           "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
           "verified": true,
           "confidence": "low"
@@ -1840,10 +1896,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "룰루 밴률이 14.8%→26.7%(+11.9%p)로 급등했습니다. 아펠리오스 화염포·만월총 Q 강화로 캐리 보호형 서포터 가치가 오른 파급효과입니다.",
+        "summary": "룰루 밴률이 14.8%→26.7%(+11.9%p)로 급등했습니다. 직접 변경은 없고, 아펠리오스 전면 버프로 동반 원딜 조합 견제가 커진 영향입니다.",
         "summaryCites": [
-          "note:26.19:champion:aphelios:ccd9a119",
-          "note:26.19:champion:aphelios:fa3a30c8"
+          "note:26.19:champion:aphelios:fa3a30c8",
+          "note:26.19:champion:aphelios:ccd9a119"
         ],
         "summaryVerified": true
       }
@@ -1871,26 +1927,26 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "탑 순간이동 쿨다운 420초→390초로 라인 복귀가 빨라져 주도권이 커졌습니다.",
+          "text": "탑 순간이동 쿨타임 420초→390초로 단축돼 라인 주도권형 암베사의 스노볼이 강화됐습니다.",
           "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "탑 강화 순간이동도 300~210초로 줄어 사이드 주도권형 챔피언의 가치가 올랐습니다.",
-          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:f037ef05",
+          "text": "나서스 Q 추가 피해 10 감소로 탑 맞상대 강도가 낮아졌습니다.",
+          "candidateNoteId": "note:26.19:champion:nasus:b5997156",
           "verified": true,
-          "confidence": "medium"
+          "confidence": "low"
         },
         {
-          "text": "럼블 과열 공격 속도가 50~130%에서 30~100%로 줄어 탑 경쟁자가 약화됐습니다.",
+          "text": "럼블 과열 공격 속도 50~130%→30~100% 너프로 탑 경쟁 구도가 완화됐습니다.",
           "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "나서스 Q 추가 피해량 10 감소로 탑 맞라인 상대가 약화됐습니다.",
-          "candidateNoteId": "note:26.19:champion:nasus:b5997156",
+          "text": "뽀삐 Q 몬스터/미니언 피해 상한 하향으로 탑 상대 풀이 약해졌습니다.",
+          "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
           "verified": true,
           "confidence": "low"
         }
@@ -1913,59 +1969,58 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "암베사 탑 승률이 48.6%→58.9%(+10.3%p)로 급등했습니다. 직접 조항은 없고, 나서스·럼블·뽀삐 너프와 탑 순간이동 쿨다운 감소가 간접 요인으로 보입니다.",
+        "summary": "암베사 탑 승률이 48.6%→58.9%(+10.3%p)로 급등했습니다. 탑 순간이동 390초 단축과 나서스·럼블 너프가 겹친 결과이며, 표본 258로 변동폭은 유의해야 합니다.",
         "summaryCites": [
+          "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
           "note:26.19:champion:nasus:b5997156",
-          "note:26.19:champion:rumble:17e40d96",
-          "note:26.19:champion:poppy:d2a46ee3",
-          "note:26.19:system:순간이동-재사용-대기시간:c9025e15"
+          "note:26.19:champion:rumble:17e40d96"
         ],
         "summaryVerified": true
       }
     },
     {
-      "id": "champion:Rengar:banRate",
+      "id": "champion:Ambessa:winRate",
       "entityType": "champion",
-      "entityKey": "Rengar",
-      "entityName": "렝가",
-      "metric": "banRate",
-      "before": 0.0962,
-      "after": 0.03823301472487729,
-      "delta": -0.0579669852751227,
+      "entityKey": "Ambessa",
+      "entityName": "암베사",
+      "metric": "winRate",
+      "before": 0.4836392657621708,
+      "after": 0.5593667546174143,
+      "delta": 0.07572748885524344,
       "ci": [
-        -0.06612539689905989,
-        -0.04936101077044143
+        0.018287980530548996,
+        0.13207692558001158
       ],
       "n": {
-        "before": 10000,
-        "after": 3871
+        "before": 1253,
+        "after": 379
       },
-      "q": 0,
+      "q": 0.06092090757376234,
       "status": "indirect-effect",
       "matchedNoteId": null,
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "카직스 E 진화 사거리가 200→300으로 늘며 암살 정글 밴 우선순위가 카직스로 옮겨갔습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:49b122f5",
+          "text": "상단 포지션 순간이동 대기시간 420초→390초 단축으로 라인 주도권형 탑 챔피언인 암베사가 이득을 봅니다.",
+          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "카직스 기본 지속 효과 피해량이 5 상향돼 초반 갱 위협이 커졌고, 밴 표가 분산됐습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "릴리아 R 수면 지속시간 2→2.5초 상향으로 밴 대상이 릴리아 쪽으로 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:lillia:9a5c8c9b",
+          "text": "강력 순간이동도 330~240초→300~210초로 줄어 탑 운영 챔피언의 합류 가치가 올랐습니다.",
+          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:f037ef05",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "엘리스 W 공격 속도 10%p 상향으로 정글 밴 경쟁자가 늘었습니다.",
-          "candidateNoteId": "note:26.19:champion:elise:a7bec286",
+          "text": "나서스 Q 추가 피해량 너프로 주요 탑 상대군이 약화됐습니다.",
+          "candidateNoteId": "note:26.19:champion:nasus:b5997156",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "럼블 과열 공격 속도 50~130%→30~100% 너프로 탑 맞라인 압박이 줄었습니다.",
+          "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
           "verified": true,
           "confidence": "low"
         }
@@ -1973,25 +2028,26 @@
       "evidence": {
         "matchIds": [
           "KR_8393456728",
-          "KR_8392938200",
-          "KR_8392895061",
-          "KR_8392595827",
-          "KR_8392430899",
-          "KR_8392369843",
-          "KR_8392728598",
-          "KR_8393475977",
-          "KR_8392333426",
-          "KR_8393404610"
+          "KR_8393045928",
+          "KR_8392993985",
+          "KR_8392852513",
+          "KR_8393016874",
+          "KR_8393116822",
+          "KR_8392639675",
+          "KR_8392314346",
+          "KR_8392391125",
+          "KR_8392369843"
         ],
-        "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=107,scope=all]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-khazix"
+        "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=799,scope=all]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-systems"
       },
       "llm": {
         "skipped": false,
-        "summary": "렝가 직접 변경은 없고, 카직스 E 사거리 300·기본 지속 피해 상향 등 정글 버프로 밴 표가 분산되며 밴률이 5.8%p 떨어졌습니다.",
+        "summary": "암베사 승률 48.4%→55.9%(+7.6%p)는 상단 순간이동 대기시간 420초→390초 단축과 나서스·럼블 너프의 간접 수혜로 보입니다.",
         "summaryCites": [
-          "note:26.19:champion:khazix:49b122f5",
-          "note:26.19:champion:khazix:defcade0"
+          "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+          "note:26.19:champion:nasus:b5997156",
+          "note:26.19:champion:rumble:17e40d96"
         ],
         "summaryVerified": true
       }
@@ -2019,19 +2075,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "아펠리오스가 화염포 Q 쿨 1초 감소 등 전반적 상향을 받아 밴 우선순위를 가져갔습니다.",
+          "text": "아펠리오스가 화염포 Q 쿨 1초 단축 등 전면 상향을 받아 원딜 밴 지분을 흡수했습니다.",
           "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "루시안 Q 피해량이 최대 30 상승해 원거리 딜러 밴 표가 분산됐습니다.",
+          "text": "루시안 Q 기본 피해량이 최대 30 상승해 밴 우선순위가 이즈리얼보다 앞섰습니다.",
           "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
           "verified": true,
-          "confidence": "medium"
+          "confidence": "low"
         },
         {
-          "text": "드레이븐 기본 공격력 62→64 상향으로 밴 대상이 이동했을 수 있습니다.",
+          "text": "드레이븐 기본 공격력 62→64 상향으로 바텀 밴 표가 분산됐을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
           "verified": true,
           "confidence": "low"
@@ -2055,9 +2111,82 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "이즈리얼 직접 변경은 없지만 아펠리오스·루시안 등 원거리 딜러 상향으로 밴 표가 분산되며 밴률이 11.1%→6.1%로 떨어졌습니다.",
+        "summary": "이즈리얼 직접 변경은 없고, 아펠리오스·루시안 등 원딜 상향으로 밴 표가 분산되며 밴률이 11.1%→6.1%(-4.9%p)로 떨어졌습니다.",
         "summaryCites": [
           "note:26.19:champion:aphelios:ccd9a119",
+          "note:26.19:champion:lucian:24a11f30"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "champion:Thresh:UTILITY:pickRate",
+      "entityType": "champion",
+      "entityKey": "Thresh",
+      "entityName": "쓰레쉬",
+      "metric": "pickRate",
+      "before": 0.1053,
+      "after": 0.15267372771893567,
+      "delta": 0.047373727718935665,
+      "ci": [
+        0.034774632349139814,
+        0.06043877329801596
+      ],
+      "n": {
+        "before": 10000,
+        "after": 3871
+      },
+      "q": 0,
+      "status": "indirect-effect",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "드레이븐 기본 공격력 62→64 상향으로 공격적 라인전 조합의 훅 서포터 수요가 늘었습니다.",
+          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "루시안 Q 기본 피해량 상향으로 초반 주도권 원딜과 짝이 맞는 쓰레쉬 픽이 증가했습니다.",
+          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "아펠리오스 만월총 Q 피해량 등 다수 상향으로 보호·이니시 서포터 동반 픽이 늘었습니다.",
+          "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "세계 지도집 체력 30→0 조정으로 서포터 아이템 선택 구도가 바뀌며 픽 분포가 이동했습니다.",
+          "candidateNoteId": "note:26.19:item:세계-지도집:29bcd928",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8393230642",
+          "KR_8392993985",
+          "KR_8393116822",
+          "KR_8393128844",
+          "KR_8392570867",
+          "KR_8393228337",
+          "KR_8392309099",
+          "KR_8393435386",
+          "KR_8393241441",
+          "KR_8392775121"
+        ],
+        "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=412,scope=position,position=UTILITY]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "쓰레쉬 픽률 10.5%→15.3%(+4.7%p)는 드레이븐 공격력 상향과 루시안 Q 피해량 상향 등 공격적 원딜 버프에 따른 동반 픽 증가로 설명됩니다.",
+        "summaryCites": [
+          "note:26.19:champion:draven:d1cc348b",
           "note:26.19:champion:lucian:24a11f30"
         ],
         "summaryVerified": true
@@ -2086,26 +2215,26 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "상단 순간이동 보상 쿨다운이 420초→390초로 줄며 스플릿 주도형 탑 갱플랭크의 가치가 올랐습니다.",
+          "text": "상단 순간이동 대기시간 420초→390초로 단축되며 탑 캐리 챔피언의 가치가 올라 갱플랭크 밴이 늘었습니다.",
           "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "강력 순간이동도 300~210초로 단축돼 사이드 운영 중심 픽의 압박이 커졌습니다.",
+          "text": "탑 강력 순간이동도 300~210초로 줄어 글로벌 압박형 갱플랭크의 체감 위협이 커졌습니다.",
           "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:f037ef05",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "럼블 과열 공격 속도 너프로 경쟁 탑 라이너가 약해지며 갱플랭크 우선 밴이 늘었습니다.",
-          "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+          "text": "나서스 Q 추가 피해 10 감소로 탑 밴 표가 다른 챔피언으로 옮겨갔을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:nasus:b5997156",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "나서스 Q 추가 피해 10 감소로 탑 대항마가 줄어든 영향이 있어 보입니다.",
-          "candidateNoteId": "note:26.19:champion:nasus:b5997156",
+          "text": "럼블 과열 공격속도 너프로 탑 경쟁자가 줄며 갱플랭크 밴 비중이 올랐습니다.",
+          "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
           "verified": true,
           "confidence": "low"
         }
@@ -2128,77 +2257,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "갱플랭크 직접 변경은 없지만 상단 순간이동 쿨다운 단축(420초→390초, 강력 300~210초)으로 스플릿 가치가 올라 밴률이 4.4%p 상승했습니다.",
+        "summary": "갱플랭크 직접 변경은 없지만, 상단 순간이동 대기시간 단축(420→390초, 강력 300~210초)으로 탑 캐리 가치가 올라 밴률이 4.4%p 상승했습니다.",
         "summaryCites": [
           "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
           "note:26.19:system:순간이동-재사용-대기시간:f037ef05"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Viktor:pickRate",
-      "entityType": "champion",
-      "entityKey": "Viktor",
-      "entityName": "빅토르",
-      "metric": "pickRate",
-      "before": 0.1096,
-      "after": 0.1451821234823043,
-      "delta": 0.0355821234823043,
-      "ci": [
-        0.023138846306061764,
-        0.048496411769995605
-      ],
-      "n": {
-        "before": 10000,
-        "after": 3871
-      },
-      "q": 0,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "미드 경쟁자 라이즈의 Q 전이 추가 피해가 10%p 하향되며 그 수요가 빅토르로 이동했습니다.",
-          "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "라이즈 E 마나 소모 5 증가로 라인전 지속력이 떨어져 메이지 픽이 빅토르로 분산됐습니다.",
-          "candidateNoteId": "note:26.19:champion:ryze:f4e781e8",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "럼블 과열 공격 속도가 크게 하향돼 미드 AP 대안으로 빅토르 선호가 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8392581092",
-          "KR_8392418531",
-          "KR_8393183665",
-          "KR_8393187808",
-          "KR_8392532803",
-          "KR_8393208324",
-          "KR_8393228337",
-          "KR_8392687359",
-          "KR_8392333426",
-          "KR_8393085329"
-        ],
-        "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=112,scope=all]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-ryze"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "빅토르 직접 변경은 없으나 라이즈 Q 전이 피해·E 마나 너프로 미드 메이지 수요가 옮겨와 픽률이 3.6%p 올랐습니다.",
-        "summaryCites": [
-          "note:26.19:champion:ryze:2bcac5df",
-          "note:26.19:champion:ryze:f4e781e8"
         ],
         "summaryVerified": true
       }
@@ -2226,20 +2288,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "피오라가 R 회복량·범위·기본 체력까지 상향돼 탑 결투가 픽을 흡수했습니다.",
+          "text": "피오라 R 회복량·범위·기본 체력이 함께 상향돼 탑 결투형 픽 수요가 피오라로 이동했습니다.",
           "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "아트록스가 E 회복 계수와 W 쿨감 상향으로 탑 선호도가 올라 카밀 지분을 잠식했습니다.",
+          "text": "아트록스 E 회복 계수와 W 쿨다운 상향으로 탑 브루저 선호도가 분산됐습니다.",
           "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "카직스 기본 지속 효과·E 사거리 상향으로 정글 카밀 수요가 줄었을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
+          "text": "상단 순간이동 쿨다운 단축으로 라인전 유지형 탑이 유리해져 카밀의 상대적 이점이 줄었을 수 있습니다.",
+          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
           "verified": true,
           "confidence": "low"
         }
@@ -2262,89 +2324,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카밀 픽률이 13.9%→10.4%(-3.5%p)로 하락했습니다. 직접 조항은 없고 피오라·아트록스 탑 상향이 픽을 가져갔습니다.",
+        "summary": "카밀 픽률 13.9%→10.4%(-3.5%p). 직접 변경은 없고 피오라 R 상향과 아트록스 회복·쿨다운 버프로 탑 수요가 이동한 결과입니다.",
         "summaryCites": [
-          "note:26.19:champion:fiora:4ff3c93f",
-          "note:26.19:champion:aatrox:f629d9e5"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Olaf:pickRate",
-      "entityType": "champion",
-      "entityKey": "Olaf",
-      "entityName": "올라프",
-      "metric": "pickRate",
-      "before": 0.0948,
-      "after": 0.06044949625419788,
-      "delta": -0.03435050374580211,
-      "ci": [
-        -0.043566013740877686,
-        -0.024631781200307554
-      ],
-      "n": {
-        "before": 10000,
-        "after": 3871
-      },
-      "q": 0,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "카직스 기본 지속 효과 피해량이 17~136에서 22~141로 올라 정글 픽이 쏠렸습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "엘리스 W 공격 속도가 10%p씩 상향돼 정글 경쟁에서 올라프 자리를 잠식했습니다.",
-          "candidateNoteId": "note:26.19:champion:elise:a7bec286",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "릴리아 R 수면 2초→2.5초 버프로 정글 선호도가 이동했습니다.",
-          "candidateNoteId": "note:26.19:champion:lillia:9a5c8c9b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "피오라 R 회복량·체력 증가량 상향으로 탑 브루저 경쟁에서 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "아트록스 E 회복 계수와 W 쿨감 버프가 탑 대체재로 흡수했습니다.",
-          "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8392492171",
-          "KR_8392418531",
-          "KR_8393183665",
-          "KR_8392895061",
-          "KR_8392521012",
-          "KR_8392626312",
-          "KR_8393193525",
-          "KR_8392964305",
-          "KR_8392412650",
-          "KR_8392664601"
-        ],
-        "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=2,scope=all]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-khazix"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "올라프 직접 조정은 없지만, 카직스·엘리스 정글 버프와 피오라·아트록스 탑 버프에 밀려 픽률이 3.4%p 하락했습니다.",
-        "summaryCites": [
-          "note:26.19:champion:khazix:defcade0",
-          "note:26.19:champion:elise:a7bec286",
           "note:26.19:champion:fiora:4ff3c93f",
           "note:26.19:champion:aatrox:f629d9e5"
         ],
@@ -2374,26 +2355,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "피오라 R 회복량·계수 상향으로 탑 브루저 지분을 가져가며 올라프 픽이 밀렸습니다.",
+          "text": "피오라가 궁극기 회복량·체력 성장까지 폭넓게 강화되며 탑 1티어로 올라서 올라프 자리를 밀어냈습니다.",
           "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "피오라 레벨당 체력 99→105로 라인전이 강해져 탑 선택지에서 우선순위가 올라갔습니다.",
-          "candidateNoteId": "note:26.19:champion:fiora:c754a41b",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "아트록스 E 회복 계수 1.1%→1.3%, W 쿨 감소로 탑 근접 딜러 수요를 흡수했습니다.",
+          "text": "아트록스 E 회복 계수와 W 쿨 감소로 라인 지속력이 올라 탑 브루저 픽이 아트록스로 쏠렸습니다.",
           "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "아트록스 W 쿨 20초→18초(1레벨) 상향이 탑 라인 주도권 경쟁에서 올라프를 눌렀습니다.",
-          "candidateNoteId": "note:26.19:champion:aatrox:5bc9f3f5",
+          "text": "탑 순간이동 쿨 390초 단축으로 합류형 탑 챔피언이 선호돼 올라프 수요가 줄었을 수 있습니다.",
+          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
           "verified": true,
           "confidence": "low"
         }
@@ -2416,7 +2391,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "올라프 탑 픽률이 8.7%→5.3%(-3.3%p)로 떨어졌습니다. 피오라·아트록스 탑 버프가 같은 근접 브루저 자리를 대체했습니다.",
+        "summary": "올라프 탑 픽률이 8.7%→5.3%로 떨어졌습니다. 직접 변경은 없고 피오라·아트록스 버프로 탑 경쟁에서 밀린 결과입니다.",
         "summaryCites": [
           "note:26.19:champion:fiora:4ff3c93f",
           "note:26.19:champion:aatrox:f629d9e5"
@@ -2447,20 +2422,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "서포터 아이템 초반 체력이 30/100/200에서 0/60/200으로 줄어 라인 유지력이 중요한 돌진형 탱커 서포터가 손해를 봅니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+          "text": "서포터 아이템 룬 나침반 체력이 100에서 60으로 줄어 돌진형 개시 서폿인 렐의 생존력이 약화됐습니다.",
+          "candidateNoteId": "note:26.19:item:룬-나침반:6931f115",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "체력 재생이 50%/75%로 올라 소모전형 서포터가 상대적으로 이득을 보며 탱커 서포터 선호가 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
+          "text": "세계 지도집 체력이 30에서 0이 되며 초반 체력 의존도가 큰 렐의 교전 안정성이 떨어졌습니다.",
+          "candidateNoteId": "note:26.19:item:세계-지도집:29bcd928",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "아펠리오스 등 자체 생존력이 오른 원거리 딜러가 부상하며 보호형 서포터 수요가 분산됐을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
+          "text": "아펠리오스 등 원딜 상향으로 바텀 조합 선호가 이동해 렐 선택이 밀렸을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
           "verified": true,
           "confidence": "low"
         }
@@ -2483,9 +2458,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "렐 픽률이 11.7%→8.4%(-3.3%p)로 하락했으며, 서포터 아이템 초반 체력이 30/100/200→0/60/200으로 깎인 영향이 가장 유력합니다.",
+        "summary": "렐 픽률 11.7%→8.4%(-3.3%p)는 룬 나침반 체력 100→60, 세계 지도집 체력 30→0 등 서폿 아이템 체력 너프가 주원인입니다.",
         "summaryCites": [
-          "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0"
+          "note:26.19:item:룬-나침반:6931f115",
+          "note:26.19:item:세계-지도집:29bcd928"
         ],
         "summaryVerified": true
       }
@@ -2513,20 +2489,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "서포터 아이템 초반 체력이 30/100 → 0/60으로 줄어 라인전 맷집이 핵심인 렐의 선호도가 떨어졌습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+          "text": "룬 나침반 체력이 100에서 60으로 줄어 체력 기반 탱커 서포터 렐의 초반 버티기가 약화됐습니다.",
+          "candidateNoteId": "note:26.19:item:룬-나침반:6931f115",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "체력 재생 보정(25%/50% → 50%/75%)은 유지력형 서포터에 유리해 돌진형 렐의 상대적 입지가 좁아졌습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
+          "text": "세계 지도집 체력이 30에서 0으로 삭제되며 라인전 전투형 서포터의 이득이 줄었습니다.",
+          "candidateNoteId": "note:26.19:item:세계-지도집:29bcd928",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "아펠리오스 절단검 회복 강화 등 원딜 버프로 자체 유지력이 높은 조합 선호가 커졌습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
+          "text": "아펠리오스·루시안·드레이븐 등 원딜 버프로 원딜 주도형 조합이 늘며 렐 선호가 밀렸습니다.",
+          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
           "verified": true,
           "confidence": "low"
         }
@@ -2549,76 +2525,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "렐 픽률이 11.7%→8.4%(-3.3%p)로 떨어졌습니다. 서포터 아이템 초반 체력 30/100→0/60 너프가 탱커 서포터 입지를 좁힌 영향입니다.",
+        "summary": "렐 픽률이 11.7%→8.4%(-3.3%p)로 내려갔습니다. 룬 나침반·세계 지도집 체력 너프로 탱커 서포터 입지가 좁아진 영향입니다.",
         "summaryCites": [
-          "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "champion:Locke:MIDDLE:pickRate",
-      "entityType": "champion",
-      "entityKey": "Locke",
-      "entityName": "로크",
-      "metric": "pickRate",
-      "before": 0.1164,
-      "after": 0.08783260139498837,
-      "delta": -0.028567398605011632,
-      "ci": [
-        -0.03923814261240192,
-        -0.017398533958652776
-      ],
-      "n": {
-        "before": 10000,
-        "after": 3871
-      },
-      "q": 0.00002436484436961715,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "오로라 E 기본 피해량이 10 상승해 미드 경쟁 구도에서 로크 지분을 잠식했습니다.",
-          "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "오로라 R 영역 지속시간이 1~2레벨에서 늘어 미드 선호도가 로크 쪽에서 이동했습니다.",
-          "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "루시안 Q 피해량 상승으로 미드 루시안 픽이 늘며 로크 픽률을 일부 흡수했을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8392492171",
-          "KR_8393305545",
-          "KR_8393146622",
-          "KR_8393099955",
-          "KR_8392470133",
-          "KR_8393016874",
-          "KR_8393148907",
-          "KR_8392349751",
-          "KR_8393288253",
-          "KR_8393213611"
-        ],
-        "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=805,scope=position,position=MIDDLE]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aurora"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "로크 미드 픽률이 11.6%→8.8%(-2.9%p)로 하락했고, 직접 조항 없이 오로라 E 피해량·R 지속시간 버프에 따른 미드 경쟁 심화가 주원인입니다.",
-        "summaryCites": [
-          "note:26.19:champion:aurora:537dcee9",
-          "note:26.19:champion:aurora:8770c9ea"
+          "note:26.19:item:룬-나침반:6931f115",
+          "note:26.19:item:세계-지도집:29bcd928"
         ],
         "summaryVerified": true
       }
@@ -2646,26 +2556,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "아펠리오스가 무기 전반(화염포 Q 쿨 1초 감소 등) 버프를 받아 원딜 픽 지분을 가져갔습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "만월총 Q 피해량이 10 상승해 아펠리오스 초반 체감이 좋아지며 경쟁 픽으로 부상했습니다.",
+          "text": "아펠리오스가 만월총 Q 피해량 등 전 무기 버프를 받아 원딜 픽이 분산됐습니다.",
           "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "루시안 Q 기본 피해량이 최대 30 증가해 하단 원딜 선택지가 분산됐습니다.",
-          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+          "text": "드레이븐 기본 공격력 62→64 상향으로 초반 강한 원딜 선호가 늘었습니다.",
+          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "드레이븐 기본 공격력 62→64 상향도 원딜 픽 분산에 일부 작용했을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+          "text": "루시안 Q 피해량 상향으로 바텀 경쟁 픽이 늘었을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
           "verified": true,
           "confidence": "low"
         }
@@ -2688,11 +2592,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "유나라 픽률이 27.1%→24.3%(-2.8%p)로 하락했습니다. 직접 변경은 없고, 아펠리오스 전 무기 버프와 루시안 Q 상향에 원딜 지분을 내준 결과입니다.",
+        "summary": "유나라 직접 변경은 없고, 아펠리오스·드레이븐 등 경쟁 원딜 상향으로 픽률이 27.1%→24.3%(-2.8%p) 하락했습니다.",
         "summaryCites": [
-          "note:26.19:champion:aphelios:ccd9a119",
           "note:26.19:champion:aphelios:fa3a30c8",
-          "note:26.19:champion:lucian:24a11f30"
+          "note:26.19:champion:draven:d1cc348b"
         ],
         "summaryVerified": true
       }
@@ -2720,19 +2623,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "피오라 R 회복량·체력 상향으로 탑 브루저 선호가 피오라로 이동했습니다.",
+          "text": "피오라 R 회복량·범위 상향으로 탑 브루저 픽 경쟁에서 암베사 지분이 밀렸습니다.",
           "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "아트록스 W 쿨타임·E 회복 상향으로 탑 라인 경쟁에서 암베사 지분이 밀렸습니다.",
+          "text": "아트록스 W 쿨타임·E 회복 상향으로 탑 1군 선호가 아트록스로 이동했습니다.",
           "candidateNoteId": "note:26.19:champion:aatrox:5bc9f3f5",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "피오라 성장 체력 99→105로 탑 대면 구도가 불리해진 영향이 있어 보입니다.",
+          "text": "피오라 성장 체력 증가가 라인전 안정성을 높여 암베사 대체 픽으로 작용했습니다.",
           "candidateNoteId": "note:26.19:champion:fiora:c754a41b",
           "verified": true,
           "confidence": "low"
@@ -2756,9 +2659,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "암베사 직접 변경은 없지만 피오라 R 회복 강화와 아트록스 W·E 상향으로 탑 경쟁이 심화돼 픽률이 2.7%p 하락했습니다.",
+        "summary": "암베사 픽률 -2.7%p는 직접 변경 없이, 피오라 R 회복·체력 상향과 아트록스 W/E 상향으로 탑 경쟁 픽이 이동한 결과입니다.",
         "summaryCites": [
           "note:26.19:champion:fiora:4ff3c93f",
+          "note:26.19:champion:fiora:c754a41b",
           "note:26.19:champion:aatrox:5bc9f3f5"
         ],
         "summaryVerified": true
@@ -2787,19 +2691,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "아펠리오스가 화염포 Q 쿨타임 1초 감소 등 전 무기 버프를 받아 원딜 픽이 분산됐습니다.",
+          "text": "아펠리오스가 화염포 Q 쿨타임 1초 감소 등 다방면 상향을 받아 원거리 딜러 경쟁에서 유나라 지분을 잠식했습니다.",
           "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "루시안 Q 기본 피해량이 최대 30 상승해 바텀 경쟁 픽으로 수요가 이동했습니다.",
+          "text": "루시안 Q 기본 피해량이 최대 30 상승해 봇 라인 선택지가 루시안 쪽으로 이동했습니다.",
           "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "드레이븐 기본 공격력 62→64 상승이 원딜 선택지를 나눈 것으로 보입니다.",
+          "text": "드레이븐 기본 공격력 62→64 상향도 원딜 픽 경쟁을 키운 요인으로 보입니다.",
           "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
           "verified": true,
           "confidence": "low"
@@ -2823,10 +2727,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "유나라 픽률 27.2%→24.4%(-2.7%p). 직접 변경 없이 아펠리오스·루시안 버프로 원딜 수요가 분산된 결과입니다.",
+        "summary": "유나라 직접 변경은 없으나 아펠리오스·루시안·드레이븐 상향으로 원딜 경쟁이 심화되며 픽률이 27.2%→24.4%(-2.7%p)로 하락했습니다.",
         "summaryCites": [
           "note:26.19:champion:aphelios:ccd9a119",
-          "note:26.19:champion:lucian:24a11f30"
+          "note:26.19:champion:lucian:24a11f30",
+          "note:26.19:champion:draven:d1cc348b"
         ],
         "summaryVerified": true
       }
@@ -2854,19 +2759,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "라이즈 Q 전이 추가 피해량이 10%p 하향돼 미드 스케일링 메이지 수요가 빅토르로 이동했습니다.",
+          "text": "라이즈 Q 전이 추가 피해량이 25~100%에서 15~90%로 너프되며 미드 AP 수요가 빅토르로 이동했습니다.",
           "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "라이즈 E 마나 소모량 5 증가로 라인전 부담이 커져 대체 픽 수요가 늘었습니다.",
+          "text": "라이즈 E 마나 소모량이 5씩 증가해 라인전 지속력이 떨어진 점도 반사 수혜로 작용했습니다.",
           "candidateNoteId": "note:26.19:champion:ryze:f4e781e8",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "럼블 과열 공격 속도 하향으로 미드 AP 픽 일부가 빅토르로 옮겨갔습니다.",
+          "text": "럼블 과열 공격 속도가 50~130%에서 30~100%로 깎여 미드 AP 경쟁자가 줄었을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
           "verified": true,
           "confidence": "low"
@@ -2890,7 +2795,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "빅토르 직접 변경은 없지만 라이즈 Q 전이 피해·E 마나 너프로 미드 메이지 수요가 이동해 픽률이 8.6%→11.2%로 올랐습니다.",
+        "summary": "빅토르 미드 픽률 2.7%p 상승은 직접 변경이 아니라 라이즈 Q 전이 피해·E 마나 너프로 미드 AP 수요가 옮겨온 결과입니다.",
         "summaryCites": [
           "note:26.19:champion:ryze:2bcac5df",
           "note:26.19:champion:ryze:f4e781e8"
@@ -2921,20 +2826,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "서포터 아이템 초반 체력이 30/100에서 0/60으로 줄어 알리스타 같은 탱커 서포터의 라인 압박력이 약화됐습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+          "text": "서포터 아이템 룬 나침반 체력이 100에서 60으로 줄어 인게이지 탱커 서포터의 초반 라인 버티기가 약해졌습니다.",
+          "candidateNoteId": "note:26.19:item:룬-나침반:6931f115",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "체력 재생이 25%/50%에서 50%/75%로 올라 유지력 기반 서포터가 상대적으로 이득을 봤습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
+          "text": "세계 지도집 체력이 30에서 0이 되며 체력 기반 탱커 서포터 가치가 더 떨어졌습니다.",
+          "candidateNoteId": "note:26.19:item:세계-지도집:29bcd928",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "아펠리오스·드레이븐·루시안 등 원거리 딜러 버프로 공격적 라인전 조합 선호가 옮겨갔을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
+          "text": "아펠리오스 등 원거리 딜러 상향으로 라인전 주도권이 옮겨가 알리스타 선호가 낮아졌을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
           "verified": true,
           "confidence": "low"
         }
@@ -2957,9 +2862,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "알리스타 픽률이 13.2%→10.8%(-2.4%p) 하락했습니다. 서포터 아이템 초반 체력이 30/100→0/60으로 깎인 영향이 큽니다.",
+        "summary": "알리스타 픽률 13.2%→10.8%(-2.4%p)은 룬 나침반·세계 지도집 체력 너프로 탱커 서포터 초반 내구도가 약해진 영향입니다.",
         "summaryCites": [
-          "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0"
+          "note:26.19:item:룬-나침반:6931f115",
+          "note:26.19:item:세계-지도집:29bcd928"
         ],
         "summaryVerified": true
       }
@@ -2987,26 +2893,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "오로라 E 기본 피해량 10 상향으로 미드 AP 지분이 늘며 갈리오 픽이 밀렸습니다.",
+          "text": "상단 포지션 순간이동 대기시간이 420초→390초로 줄어 순간이동 합류 가치가 탑으로 쏠렸습니다.",
+          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "오로라 E 피해량 70~230→80~240 버프로 미드 AP 경쟁 픽이 늘어난 영향으로 보입니다.",
           "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "오로라 R 영역 지속시간이 1~2레벨에서 늘어 미드 선호도가 갈리오에서 이동했습니다.",
-          "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "루시안 Q 피해량 상향으로 미드 루시안 픽이 늘어 갈리오 자리를 잠식했을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "라이즈 Q 전이 피해 너프로 AP 미드가 줄면서 대응픽 갈리오 수요도 감소한 듯합니다.",
-          "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
+          "text": "오로라 R 영역 지속시간 증가로 미드 선호도가 이동한 영향일 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
           "verified": true,
           "confidence": "low"
         }
@@ -3025,14 +2925,13 @@
           "KR_8393057127"
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=3,scope=position,position=MIDDLE]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aurora"
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-systems"
       },
       "llm": {
         "skipped": false,
-        "summary": "갈리오 미드 픽률이 9.5%→7.2%(-2.3%p)로 떨어졌습니다. 오로라 E·R 상향에 따른 미드 AP 경쟁 심화가 주 요인입니다.",
+        "summary": "갈리오 미드 픽률이 9.5%→7.2%(-2.3%p) 하락했습니다. 상단 순간이동 대기시간 390초 단축으로 순간이동 합류 역할이 탑으로 옮겨간 영향입니다.",
         "summaryCites": [
-          "note:26.19:champion:aurora:537dcee9",
-          "note:26.19:champion:aurora:8770c9ea"
+          "note:26.19:system:순간이동-재사용-대기시간:c9025e15"
         ],
         "summaryVerified": true
       }
@@ -3060,26 +2959,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "오로라 E 기본 피해량 70~230→80~240 상향으로 미드 메이지 선택이 오로라로 쏠렸습니다.",
+          "text": "오로라 E 기본 피해량 10 상승으로 미드 AP 지분이 오로라로 이동했습니다.",
           "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "오로라 R 영역 지속시간 1.75초→2.25초(1레벨) 상향이 미드 경쟁에서 신드라 수요를 잠식했습니다.",
+          "text": "오로라 R 영역 지속시간 1·2레벨 증가로 미드 픽 경쟁에서 신드라가 밀렸습니다.",
           "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "루시안 Q 기본 피해량 80~220→90~250 상향으로 미드 루시안 픽이 늘었을 수 있습니다.",
+          "text": "루시안 Q 피해량 상향이 미드 루시안 픽을 늘려 신드라 지분을 일부 흡수한 것으로 보입니다.",
           "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카직스 기본 지속 효과 피해량 상향으로 물몸 미드인 신드라의 부담이 커졌습니다.",
-          "candidateNoteId": "note:26.19:champion:khazix:defcade0",
           "verified": true,
           "confidence": "low"
         }
@@ -3102,7 +2995,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "신드라 미드 픽률이 10.7%→8.4%(-2.3%p)로 떨어졌습니다. 직접 변경은 없고 오로라 E·R 상향에 따른 미드 경쟁 심화가 유력합니다.",
+        "summary": "신드라 미드 픽률 -2.3%p는 직접 변경 없이, 오로라 E·R 상향 등 미드 경쟁 챔피언 버프로 지분이 이동한 결과입니다.",
         "summaryCites": [
           "note:26.19:champion:aurora:537dcee9",
           "note:26.19:champion:aurora:8770c9ea"
@@ -3133,13 +3026,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "서포터 아이템 체력이 초중반 30/100 → 0/60으로 줄어 라인전 탱킹에 의존하는 알리스타가 직격타를 받았습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+          "text": "룬 나침반 체력이 100에서 60으로 줄어 탱커 서포터인 알리스타의 초반 라인 버티기가 약화됐습니다.",
+          "candidateNoteId": "note:26.19:item:룬-나침반:6931f115",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "아펠리오스 절단검 회복량 등 원딜 강화로 자체 생존형 바텀 조합 선호가 늘며 알리스타 수요가 밀렸습니다.",
+          "text": "세계 지도집 체력이 30에서 0이 되어 체력 기반 서포터의 가치가 낮아졌습니다.",
+          "candidateNoteId": "note:26.19:item:세계-지도집:29bcd928",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "아펠리오스 절단검 회복 상향 등 원거리 딜러 강화로 자체 유지력이 좋은 조합이 선호될 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
           "verified": true,
           "confidence": "low"
@@ -3163,9 +3062,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "서포터 아이템 체력이 30/100/200에서 0/60/200으로 줄며 라인전 탱킹 기반이 약해져 알리스타 픽률이 13.2%→10.8%로 하락했습니다.",
+        "summary": "알리스타 픽률이 13.2%에서 10.8%로 2.3%p 내렸는데, 룬 나침반·세계 지도집의 체력 삭감이 탱커 서포터 선호를 낮춘 영향입니다.",
         "summaryCites": [
-          "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0"
+          "note:26.19:item:룬-나침반:6931f115",
+          "note:26.19:item:세계-지도집:29bcd928"
         ],
         "summaryVerified": true
       }
@@ -3193,14 +3093,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "서포터 아이템 체력이 30/100/200에서 0/60/200으로 줄어 근접 서포터 카밀의 초반 라인 버티기가 약해졌습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+          "text": "서포터 아이템 룬 나침반 체력이 100에서 60으로 줄어 라인 교전형 카밀의 초반 생존력이 약해졌습니다.",
+          "candidateNoteId": "note:26.19:item:룬-나침반:6931f115",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "상단 순간이동 재사용 대기시간이 420초에서 390초로 단축돼 카밀 픽이 탑으로 회귀했습니다.",
-          "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+          "text": "세계 지도집 체력이 30에서 0으로 삭제돼 체력 의존도가 높은 비정통 서포터가 손해를 봤습니다.",
+          "candidateNoteId": "note:26.19:item:세계-지도집:29bcd928",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "아펠리오스 절단검 회복 강화 등 원딜 버프로 정통 서포터 조합 선호가 커졌을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
           "verified": true,
           "confidence": "low"
         }
@@ -3223,9 +3129,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카밀 서포터 픽률이 6.9%→4.6%(-2.3%p) 하락했습니다. 서포터 아이템 초반 체력 너프(30/100/200→0/60/200)가 근접 서포터 입지를 줄인 영향입니다.",
+        "summary": "카밀 서포터 픽률이 6.9%→4.6%(-2.3%p)로 하락했습니다. 서포터 아이템 룬 나침반·세계 지도집의 체력 너프가 원인입니다.",
         "summaryCites": [
-          "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0"
+          "note:26.19:item:룬-나침반:6931f115",
+          "note:26.19:item:세계-지도집:29bcd928"
         ],
         "summaryVerified": true
       }
@@ -3253,26 +3160,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "피오라 대결투 회복량·계수 상향으로 탑 브루저 슬롯 경쟁에서 암베사가 밀렸습니다.",
+          "text": "피오라 R 회복량·범위·기본 체력이 동시에 상향돼 탑 듀얼리스트 픽이 피오라로 쏠렸습니다.",
           "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "피오라 체력 성장 99→105로 라인전 안정성이 올라 탑 선호도가 옮겨갔습니다.",
-          "candidateNoteId": "note:26.19:champion:fiora:c754a41b",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "아트록스 E 회복 계수 1.1%→1.3% 버프로 동일 역할군 픽이 분산됐습니다.",
-          "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "아트록스 W 쿨 초반 20초→18초 단축도 탑 근접 딜러 수요를 가져갔습니다.",
+          "text": "아트록스 W 쿨타임 단축과 E 회복 상향으로 탑 브루저 선택지가 암베사를 대체했습니다.",
           "candidateNoteId": "note:26.19:champion:aatrox:5bc9f3f5",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "아트록스 E 체력 회복 계수 상향(추가 체력 100당 1.1%→1.3%)이 라인전 우위를 키웠습니다.",
+          "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
           "verified": true,
           "confidence": "low"
         }
@@ -3295,12 +3196,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "암베사 탑 픽률이 8.9%→6.7%(-2.2%p)로 하락했습니다. 직접 조항은 없고, 피오라 궁 회복·체력 성장 상향과 아트록스 W·E 버프로 탑 브루저 픽이 분산된 영향입니다.",
+        "summary": "암베사 탑 픽률이 8.9%→6.7%(-2.2%p)로 떨어졌습니다. 피오라 R 대폭 상향과 아트록스 W·E 버프로 탑 근접 딜러 수요가 이동한 영향입니다.",
         "summaryCites": [
           "note:26.19:champion:fiora:4ff3c93f",
-          "note:26.19:champion:fiora:c754a41b",
-          "note:26.19:champion:aatrox:f629d9e5",
-          "note:26.19:champion:aatrox:5bc9f3f5"
+          "note:26.19:champion:aatrox:5bc9f3f5",
+          "note:26.19:champion:aatrox:f629d9e5"
         ],
         "summaryVerified": true
       }
@@ -3328,25 +3228,19 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "아펠리오스가 화염포 Q 쿨타임 1초 감소 등 전 무기 상향을 받아 원딜 픽을 흡수했습니다.",
+          "text": "아펠리오스가 화염포 Q 쿨다운 1초 단축 등 전 무기 상향을 받아 원딜 픽을 흡수했습니다.",
           "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "아펠리오스 만월총 Q 피해량 10 증가로 초반 지표가 올라 카이사 수요가 분산됐습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
+          "text": "루시안 Q 기본 피해량이 최대 30 상승해 바텀 경쟁 픽으로 수요가 이동했습니다.",
+          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "루시안 Q 기본 피해량 10~30 증가로 바텀 경쟁 픽이 강해졌습니다.",
-          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "드레이븐 기본 공격력 62→64 상향도 원딜 선택지 이동에 일부 작용했을 수 있습니다.",
+          "text": "드레이븐 기본 공격력 62→64 상향으로 초반 강한 원딜 선호가 늘었을 수 있습니다.",
           "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
           "verified": true,
           "confidence": "low"
@@ -3370,10 +3264,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카이사 직접 너프는 없으나 아펠리오스 전 무기 상향(화염포 Q 쿨 1초 감소, 만월총 Q +10)으로 원딜 픽이 분산되며 픽률이 2.2%p 하락했습니다.",
+        "summary": "카이사 직접 변경은 없지만 아펠리오스 전 무기 상향과 루시안 Q 피해량 증가로 원딜 픽이 분산되며 픽률이 20.9%→18.7%로 내려갔습니다.",
         "summaryCites": [
           "note:26.19:champion:aphelios:ccd9a119",
-          "note:26.19:champion:aphelios:fa3a30c8"
+          "note:26.19:champion:lucian:24a11f30"
         ],
         "summaryVerified": true
       }
@@ -3401,20 +3295,26 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "아펠리오스가 무기 전반에 버프를 받아 원거리 딜러 픽이 분산됐습니다.",
+          "text": "아펠리오스가 만월총 Q 피해량 등 전 무기 버프를 받아 원딜 픽이 분산됐습니다.",
           "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "루시안 Q 기본 피해량이 최대 30 상승해 바텀 경쟁 픽으로 올라섰습니다.",
-          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+          "text": "화염포 황혼파 쿨타임 1초 단축으로 아펠리오스 선호도가 올라 카이사 지분을 잠식했습니다.",
+          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "드레이븐 기본 공격력 62→64 상향도 바텀 선택지를 나눈 요인입니다.",
+          "text": "드레이븐 기본 공격력 62→64 버프로 바텀 경쟁 픽이 늘었습니다.",
           "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "루시안 Q 기본 피해량 상향으로 바텀 대체 픽 수요가 이동했을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
           "verified": true,
           "confidence": "low"
         }
@@ -3437,9 +3337,11 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "카이사 직접 변경은 없고, 아펠리오스·루시안 버프로 바텀 경쟁이 심해지며 픽률이 2.1%p 하락했습니다.",
+        "summary": "카이사 직접 변경은 없고, 아펠리오스 전 무기 버프와 드레이븐·루시안 상향으로 바텀 경쟁이 심해져 픽률이 2.1%p 하락했습니다.",
         "summaryCites": [
           "note:26.19:champion:aphelios:fa3a30c8",
+          "note:26.19:champion:aphelios:ccd9a119",
+          "note:26.19:champion:draven:d1cc348b",
           "note:26.19:champion:lucian:24a11f30"
         ],
         "summaryVerified": true
@@ -3468,14 +3370,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "서포터 아이템 초반 체력이 30/100 → 0/60으로 줄어, 물몸 마법사 서포터인 니코의 라인 생존력이 크게 떨어졌습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+          "text": "룬 나침반 체력 100→60으로 물몸 마법사 서포터의 라인 생존력이 크게 떨어졌습니다.",
+          "candidateNoteId": "note:26.19:item:룬-나침반:6931f115",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "아펠리오스·드레이븐·루시안 등 원딜 버프로 봇 조합이 공격적 서포터 쪽으로 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
+          "text": "세계 지도집 체력 30→0 삭제가 겹치며 초반 교전 체력 여유가 사라졌습니다.",
+          "candidateNoteId": "note:26.19:item:세계-지도집:29bcd928",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "아펠리오스·드레이븐·루시안 버프로 원딜 주도 조합이 부각돼 마법사 서포터 수요가 줄었을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
           "verified": true,
           "confidence": "low"
         }
@@ -3498,9 +3406,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "니코 서포터 픽률이 4.2%→2.1%(-2.1%p)로 반토막 났는데, 서포터 아이템 초반 체력 감소(30/100→0/60) 너프가 물몸 라인전 부담을 키운 것이 주원인입니다.",
+        "summary": "니코 서포터 픽률이 4.2%→2.1%로 반토막 났습니다. 룬 나침반·세계 지도집 체력 삭감이 물몸 서포터 생존력을 깎은 영향입니다.",
         "summaryCites": [
-          "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0"
+          "note:26.19:item:룬-나침반:6931f115",
+          "note:26.19:item:세계-지도집:29bcd928"
         ],
         "summaryVerified": true
       }
@@ -3528,20 +3437,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "서포터 아이템 체력 재생이 25%/50%→50%/75%로 올라 라인 유지력이 중요한 브라움이 이득을 봅니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
+          "text": "아펠리오스 화염포 Q 쿨타임 1초 단축 등 연쇄 상향으로 원딜 픽이 늘며 보호형 서포터 브라움 수요가 증가했습니다.",
+          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "드레이븐 기본 공격력 62→64 상향으로 공격적 원딜이 늘며 보호형 서포터 수요가 커졌습니다.",
+          "text": "드레이븐 기본 공격력 62→64 상향으로 초반 라인전 공격형 원딜이 늘어 브라움과의 조합 채택이 늘었습니다.",
           "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "아펠리오스 절단검 회복량 등 전방위 상향으로 짝 서포터인 브라움 픽이 동반 상승했습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
+          "text": "세계 지도집 체력 재생 25%→50% 조정이 라인 유지력 중심 탱커 서포터 선택에 영향을 줬을 수 있습니다.",
+          "candidateNoteId": "note:26.19:item:세계-지도집:89a1d0fa",
           "verified": true,
           "confidence": "low"
         }
@@ -3560,13 +3469,14 @@
           "KR_8393509477"
         ],
         "aggregatePath": "data/aggregated/26.19/champions.json#rows[championId=201,scope=all]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-items"
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-aphelios"
       },
       "llm": {
         "skipped": false,
-        "summary": "브라움 픽률 5.1%→7.1%(+2.0%p)는 서포터 아이템 체력 재생 상향(25%/50%→50%/75%)에 따른 라인전 유지력 강화가 주된 배경입니다.",
+        "summary": "브라움 픽률 5.1%→7.1%(+2.0%p)는 직접 조항 없이, 아펠리오스 화염포 Q 쿨타임 단축과 드레이븐 공격력 64 상향에 따른 원딜 조합 수요 증가로 설명됩니다.",
         "summaryCites": [
-          "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa"
+          "note:26.19:champion:aphelios:ccd9a119",
+          "note:26.19:champion:draven:d1cc348b"
         ],
         "summaryVerified": true
       }
@@ -3594,26 +3504,26 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "드레이븐 공격력 62→64 상향으로 공격적 원딜 조합이 늘며, 짝으로 자주 서는 브라움 픽이 동반 상승했습니다.",
+          "text": "드레이븐 기본 공격력 62→64로 초반 바텀 공격적 조합이 늘며 브라움 수요가 증가했습니다.",
           "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "아펠리오스 만월총 Q 피해량 등 다수 상향으로 보호형 서포터 수요가 커졌습니다.",
-          "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
+          "text": "아펠리오스 화염포 Q 쿨타임 1초 단축 등 전반 상향으로 보호형 서포터 선호가 커졌습니다.",
+          "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
           "verified": true,
-          "confidence": "medium"
+          "confidence": "low"
         },
         {
-          "text": "루시안 Q 피해량 상향으로 초반 교전형 바텀이 늘어 브라움의 맞교전 가치가 올랐습니다.",
+          "text": "루시안 Q 피해량 상향으로 공격적 바텀 구도가 늘어난 영향으로 보입니다.",
           "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "서포터 아이템 체력 재생이 25%/50%→50%/75%로 올라 라인 유지력이 좋아졌습니다.",
-          "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
+          "text": "룬 나침반 체력 재생 50%→75%로 라인 버티기가 쉬워져 근접 서포터 운용이 편해졌습니다.",
+          "candidateNoteId": "note:26.19:item:룬-나침반:90ffd219",
           "verified": true,
           "confidence": "low"
         }
@@ -3636,10 +3546,76 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "브라움 직접 변경은 없지만 드레이븐 공격력 상향과 아펠리오스 다수 버프로 원딜 메타가 강해지며 픽률이 5.1%→7.1% 올랐습니다.",
+        "summary": "브라움 픽률이 5.1%→7.1%(+2.0%p) 상승했습니다. 드레이븐 공격력 62→64 등 원거리 딜러 상향으로 보호형 서포터 수요가 커진 결과입니다.",
+        "summaryCites": [
+          "note:26.19:champion:draven:d1cc348b"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "item:3046:adoptionRate",
+      "entityType": "item",
+      "entityKey": "3046",
+      "entityName": "유령 무희",
+      "metric": "adoptionRate",
+      "before": 0.01772,
+      "after": 0.02490312580728494,
+      "delta": 0.007183125807284939,
+      "ci": [
+        0.005460550789082803,
+        0.008971844155598069
+      ],
+      "n": {
+        "before": 100000,
+        "after": 38710
+      },
+      "q": 0,
+      "status": "indirect-effect",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "드레이븐 기본 공격력 62→64 상향으로 픽이 늘며 유령 무희 채택이 함께 증가했습니다.",
+          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "아펠리오스 절단검 회복량 등 다수 상향으로 원거리 딜러 픽이 늘어난 영향입니다.",
+          "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
+          "verified": true,
+          "confidence": "medium"
+        },
+        {
+          "text": "루시안 Q 기본 피해량 상향으로 공격속도·치명타 빌드 수요가 늘었을 수 있습니다.",
+          "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8393264714",
+          "KR_8393099955",
+          "KR_8392993985",
+          "KR_8392980519",
+          "KR_8392938200",
+          "KR_8392895061",
+          "KR_8392395852",
+          "KR_8393116822",
+          "KR_8393148907",
+          "KR_8392997976"
+        ],
+        "aggregatePath": "data/aggregated/26.19/items.json#rows[itemId=3046]",
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-draven"
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "유령 무희 채택률 1.8%→2.5%(+0.7%p)는 드레이븐 공격력 상향과 아펠리오스 다수 상향으로 원거리 딜러 픽이 늘어난 파급 효과입니다.",
         "summaryCites": [
           "note:26.19:champion:draven:d1cc348b",
-          "note:26.19:champion:aphelios:fa3a30c8"
+          "note:26.19:champion:aphelios:5a77f71f"
         ],
         "summaryVerified": true
       }
@@ -3667,20 +3643,20 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "녹턴 R 재사용 대기시간이 140/115/90초에서 160/130/100초로 늘어, 궁 쿨 감소를 노리던 마공학판 수요가 줄었습니다.",
-          "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
+          "text": "세계 지도집 체력 재생이 25%→50%로 오르며 서포터 아이템 선택이 그쪽으로 이동했습니다.",
+          "candidateNoteId": "note:26.19:item:세계-지도집:89a1d0fa",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "럼블 과열 공격 속도가 50~130%에서 30~100%로 줄어 공속 기반 마공학판 빌드 가치가 낮아졌습니다.",
-          "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+          "text": "룬 나침반도 체력 재생 50%→75% 버프를 받아 라인 유지력 기준 경쟁에서 밀렸습니다.",
+          "candidateNoteId": "note:26.19:item:룬-나침반:90ffd219",
           "verified": true,
-          "confidence": "low"
+          "confidence": "medium"
         },
         {
-          "text": "바이 기본 공격력이 63에서 61로 조정되며 초반 AD 전사 빌드 선택이 흔들렸습니다.",
-          "candidateNoteId": "note:26.19:champion:vi:90715c64",
+          "text": "세계 지도집 체력이 30→0으로 빠졌지만 재생 보강으로 초반 지속력 체감은 유지됐습니다.",
+          "candidateNoteId": "note:26.19:item:세계-지도집:29bcd928",
           "verified": true,
           "confidence": "low"
         }
@@ -3699,13 +3675,14 @@
           "KR_8393450312"
         ],
         "aggregatePath": "data/aggregated/26.19/items.json#rows[itemId=3073]",
-        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-nocturne"
+        "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/#patch-items"
       },
       "llm": {
         "skipped": false,
-        "summary": "실험적 마공학판 채택률이 1.9%→1.4%(-0.5%p)로 하락했습니다. 녹턴 R 쿨다운 너프(140/115/90→160/130/100초)로 주요 사용층 수요가 줄어든 영향입니다.",
+        "summary": "실험적 마공학판 채택률 1.9%→1.4%(-0.5%p)는 세계 지도집·룬 나침반의 체력 재생 버프로 서포터 아이템 선택이 이동한 결과입니다.",
         "summaryCites": [
-          "note:26.19:champion:nocturne:daf7f9d0"
+          "note:26.19:item:세계-지도집:89a1d0fa",
+          "note:26.19:item:룬-나침반:90ffd219"
         ],
         "summaryVerified": true
       }
@@ -3733,26 +3710,26 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "피오라 R 대결투 회복량이 375/500/625→400/525/650으로 올라 치유 감소 대응 수요가 늘었습니다.",
+          "text": "피오라 R 대결투 회복량이 375~625에서 400~650으로 올라 치유 감소 대응 수요가 커졌습니다.",
           "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "아트록스 E 회복 계수가 추가 체력 100당 1.1%→1.3%로 강화돼 치유 감소 카운터 가치가 올랐습니다.",
+          "text": "아트록스 E 회복 계수가 추가 체력 100당 1.1%→1.3%로 증가해 대인 치유 억제 아이템 가치가 올랐습니다.",
           "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "엘리스 W 공격 속도 10%p 상향 등 지속 평타 위협이 늘어 방어력 아이템 채택이 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:elise:a7bec286",
+          "text": "드레이븐 기본 공격력 62→64 등 AD 딜러 강화로 방어력 아이템 선택이 늘었습니다.",
+          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "드레이븐 기본 공격력 62→64로 원거리 딜러 압박이 커져 방어력 구매가 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+          "text": "아펠리오스 절단검 회복량 상향으로 원거리 딜러 상대 치유 감소 수요가 증가했습니다.",
+          "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
           "verified": true,
           "confidence": "low"
         }
@@ -3775,7 +3752,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "가시 갑옷 채택률이 1.0%→1.5% 올랐습니다. 피오라 R·아트록스 E 회복 상향으로 치유 감소 수요가 커진 영향입니다.",
+        "summary": "가시 갑옷 채택률 1.0%→1.5%(+0.5%p) 상승은 피오라 R과 아트록스 E 회복 상향에 따른 치유 감소 수요 증가로 설명됩니다.",
         "summaryCites": [
           "note:26.19:champion:fiora:4ff3c93f",
           "note:26.19:champion:aatrox:f629d9e5"
