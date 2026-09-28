@@ -17,6 +17,8 @@ const TFT_DIR = path.join(process.cwd(), "data", "aggregated", "tft");
 
 export interface TftBoardsFile {
   patch: string;
+  /** 집계에 들어간 가장 늦은 매치 시각(ISO, 2026-09-28 C8·C13). 옛 산출물엔 없다. */
+  observedUntil?: string;
   matches: number;
   boards: number;
   droppedMatches: number;
