@@ -13,6 +13,7 @@ import { isNotifyGameId, mentionPayload, resolveDiscordTarget, type NotifyGameId
 import { countRelevantNoteEntities } from "../src/pipeline/shared/notes-count";
 import type { DeltasFile, PatchId, PatchNoteItem } from "../src/pipeline/types";
 import { isMainModule, parseCliArgs } from "./shared/cli";
+import { isObservationStub } from "../src/pipeline/shared/observation-stub";
 
 /** `src/pipeline/shared/notes-count.ts`(ST-11 `home/logic.ts`의 `countRelevantNoteEntities`와
  * 동일 규칙을 공용화, 2026-09-05 리팩토링)의 별칭 — 기존 export 이름을 그대로 유지한다(테스트가
@@ -139,6 +140,16 @@ export function loadMatchCount(patch: PatchId, dataRoot: string = DATA_ROOT): nu
  * 문구·예산·필드 상한은 세 게임이 공유한다 — `discord/webhook.ts`의 `assembleBriefing`이
  * 그것을 소유하고, 여기서 갈리는 것은 **어떤 행을 고르고 어떻게 한 줄로 쓰는가**뿐이다.
  */
+/**
+ * 관측 stub(C14, `meta.observationFailed`)은 브리핑하지 않는다 — rows가 비어 「유의한 관측 0건」 브리핑이
+ * 관측된 사실처럼 나간다. 워크플로는 관측 모드에서만 이 스크립트를 부르지만, 손으로 부를 때도 막는다.
+ */
+function refuseObservationStub(meta: unknown, file: string): void {
+  if (isObservationStub(meta)) {
+    throw new Error(`run-notify: ${file}는 관측 stub이다(관측 전) — 브리핑할 관측이 없다`);
+  }
+}
+
 interface GameBriefingSource {
   buildEmbeds(options: { siteUrl: string; topN: number }): DiscordEmbed[];
 }
@@ -166,6 +177,7 @@ function loadGameSource(
     const deltas = JSON.parse(fs.readFileSync(file, "utf8")) as DeltasFile & {
       meta: { noteCount?: number; matches?: { before?: number; after?: number } };
     };
+    refuseObservationStub(deltas.meta, file);
     const noteCount = typeof deltas.meta.noteCount === "number" ? deltas.meta.noteCount : null;
     const matchCounts = { from: deltas.meta.matches?.before ?? null, to: deltas.meta.matches?.after ?? null };
     return { buildEmbeds: (o) => buildBriefingEmbeds(deltas, { ...o, noteCount, matchCounts }) };
@@ -181,6 +193,7 @@ function loadGameSource(
     throw new Error(`run-notify: ${file} 없음 — PUBG 집계·판정 산출물이 없다`);
   }
   const deltas = JSON.parse(fs.readFileSync(file, "utf8")) as PubgBriefingSourceFile;
+  refuseObservationStub(deltas.meta, file);
   if (deltas.meta.from !== from || deltas.meta.to !== to) {
     throw new Error(
       `run-notify: PUBG 산출물은 ${deltas.meta.from} → ${deltas.meta.to}인데 --from ${from} --to ${to}가 들어왔다. ` +

@@ -385,3 +385,18 @@ describe("PUBG 브리핑 — 낡은 산출물을 조용히 재전송하지 않�
     expect(result.embeds[0].title).toBe("patchgap · 42.3 → 43.1");
   });
 });
+
+describe("run-notify: 관측 stub은 브리핑하지 않는다(C14, 2026-09-28)", () => {
+  it("TFT stub 판정 파일이면 던진다 — 「관측 0건」이 관측된 사실처럼 나가지 않게", async () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "patchgap-run-notify-stub-"));
+    const file = path.join(root, "aggregated", "tft", "deltas-18.3-18.4.json");
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.writeFileSync(
+      file,
+      JSON.stringify({ meta: { game: "tft", from: "18.3", to: "18.4", generatedAt: "x", noteCount: 3, observationFailed: { reason: "key-expired", detail: "", at: "x" } }, rows: [] })
+    );
+    const args = parseArgs(["--from", "18.3", "--to", "18.4", "--game", "tft", "--dry-run"]);
+    await expect(runNotify(args, { dataRoot: root, env: {} })).rejects.toThrow(/관측 stub/);
+    fs.rmSync(root, { recursive: true, force: true });
+  });
+});
