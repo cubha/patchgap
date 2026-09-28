@@ -152,7 +152,10 @@ export default function Header({ chrome }: HeaderProps) {
 
   const pairs = current?.pairs ?? [];
   const currentPair = current?.currentPair ?? null;
-  const pairDisabled = pairs.length <= 1;
+  // 표시 전용(2026-09-28, F3 — 사용자 결정 D3). LoL 쌍이 3개라 열렸는데 onChange가 없어 골라도 아무 일도
+  // 없었다 — 무동작 컨트롤은 심사자에게 보이는 결함이다. 쌍별 라우트(B3)가 생기기 전까지 닫고 이유를 말한다.
+  const pairDisabled = true;
+  const pairHint = pairs.length > 1 ? "과거 패치쌍 보기는 준비 중입니다 — 지금은 최신 쌍만 보여줍니다." : "비교할 패치쌍이 하나뿐입니다.";
   const currentIndex = currentPair
     ? pairs.findIndex((p) => p.from === currentPair.from && p.to === currentPair.to)
     : -1;
@@ -250,6 +253,8 @@ export default function Header({ chrome }: HeaderProps) {
               <select
                 className="min-h-8 rounded-sm border border-border bg-surface px-2 text-xs font-bold text-fg disabled:cursor-not-allowed disabled:opacity-70"
                 disabled={pairDisabled}
+                aria-describedby="pair-select-hint"
+                title={pairHint}
                 defaultValue={currentIndex >= 0 ? currentIndex : 0}
               >
                 {pairs.length > 0 ? (
@@ -262,6 +267,9 @@ export default function Header({ chrome }: HeaderProps) {
                   <option>데이터 없음</option>
                 )}
               </select>
+              <span id="pair-select-hint" className="sr-only">
+                {pairHint}
+              </span>
             </label>
 
             {/* 2026-09-12(6차, /verify-impl 재검증): bg-[color-mix(...)](arbitrary bracket)를
