@@ -51,6 +51,7 @@ import BrandMark from "@/components/BrandMark";
 import Container from "@/components/Container";
 import { GAMES, gameFromPathname, gameHref, sectionHref, sectionOfPathname, type GameId } from "@/lib/game";
 import { fmtInt, fmtKst } from "@/lib/format";
+import { lolPairHref, pairFromPathname } from "@/lib/pairRoutes";
 
 /** 내비 섹션 — 게임과 무관하게 항상 이 3개다. 게임은 아래 드롭다운이 바꾼다. */
 const NAV_SECTIONS = [
@@ -62,7 +63,7 @@ const NAV_SECTIONS = [
 /** 패치 쌍을 소유하는 섹션 — 여기서만 패치쌍 select·표본 칩·n/집계 캡션을 렌더한다(그 외
  * 라우트는 특정 패치 쌍에 묶여 있지 않거나, 항목상세처럼 다른 쌍을 보여줄 수 있어 이 헤더의
  * 전역 기본 쌍 캡션을 그대로 붙이면 틀린 숫자를 주장하게 된다). */
-const PAIR_SCOPED_SECTIONS = ["", "compare"] as const;
+const PAIR_SCOPED_SECTIONS = ["", "compare", "history"] as const;
 
 export interface PatchPairOption {
   from: string;
@@ -151,20 +152,28 @@ export default function Header({ chrome }: HeaderProps) {
   const current = game === null ? null : chrome[game];
 
   const pairs = current?.pairs ?? [];
-  const currentPair = current?.currentPair ?? null;
-  // 표시 전용(2026-09-28, F3 — 사용자 결정 D3). LoL 쌍이 3개라 열렸는데 onChange가 없어 골라도 아무 일도
-  // 없었다 — 무동작 컨트롤은 심사자에게 보이는 결함이다. 쌍별 라우트(B3)가 생기기 전까지 닫고 이유를 말한다.
-  const pairDisabled = true;
-  const pairHint = pairs.length > 1 ? "과거 패치쌍 보기는 준비 중입니다 — 지금은 최신 쌍만 보여줍니다." : "비교할 패치쌍이 하나뿐입니다.";
+  // 과거 쌍 라우트(`/lol/history/[pair]/`)에 있으면 그 쌍이 지금 보는 쌍이다(2026-09-28, B3).
+  const historyPair = game === "lol" ? pairFromPathname(pathname, pairs) : null;
+  const currentPair = historyPair ?? current?.currentPair ?? null;
+  // 이동할 라우트가 있는 게임만 연다(2026-09-28, B3 · D3). 전에는 LoL 쌍이 3개라 열렸는데 onChange가
+  // 없어 골라도 아무 일도 없었다(F3에서 닫았다). 지금 라우트가 있는 것은 LoL뿐 — 나머지는 닫고 이유를 말한다.
+  const pairRoutable = game === "lol" && pairs.length > 1;
+  const pairDisabled = !pairRoutable;
+  const pairHint = pairRoutable
+    ? "패치쌍을 고르면 그 쌍의 브리핑으로 이동합니다."
+    : pairs.length > 1
+      ? "과거 패치쌍 보기는 리그 오브 레전드에서만 제공합니다."
+      : "비교할 패치쌍이 하나뿐입니다.";
   const currentIndex = currentPair
     ? pairs.findIndex((p) => p.from === currentPair.from && p.to === currentPair.to)
     : -1;
 
   const pairCaptionParts: string[] = [];
-  if (current && current.nBefore !== null && current.nAfter !== null) {
+  // n·집계 캡션은 **기본 쌍**의 값이다 — 과거 쌍 화면에서 띄우면 보고 있는 쌍과 다른 숫자를 주장한다.
+  if (historyPair === null && current && current.nBefore !== null && current.nAfter !== null) {
     pairCaptionParts.push(`n=${fmtInt(current.nBefore)} / ${fmtInt(current.nAfter)} 매치`);
   }
-  if (current?.aggregatedAt) {
+  if (historyPair === null && current?.aggregatedAt) {
     pairCaptionParts.push(`집계 ${fmtKst(current.aggregatedAt)}`);
   }
   const pairCaption = pairCaptionParts.length > 0 ? pairCaptionParts.join(" · ") : null;
@@ -255,7 +264,11 @@ export default function Header({ chrome }: HeaderProps) {
                 disabled={pairDisabled}
                 aria-describedby="pair-select-hint"
                 title={pairHint}
-                defaultValue={currentIndex >= 0 ? currentIndex : 0}
+                value={currentIndex >= 0 ? currentIndex : 0}
+                onChange={(event) => {
+                  const next = pairs[Number(event.target.value)];
+                  if (pairRoutable && next) router.push(lolPairHref(next, pairs));
+                }}
               >
                 {pairs.length > 0 ? (
                   pairs.map((pair, i) => (

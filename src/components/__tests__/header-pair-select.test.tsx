@@ -34,7 +34,7 @@ describe("헤더 패치쌍 select", () => {
     pathname = "/lol/";
     push.mockClear();
     const { container } = render(<Header chrome={{ lol: lolChrome, tft: null, pubg: null }} />);
-    const select = container.querySelector("select") as HTMLSelectElement;
+    const select = container.querySelector("select[aria-describedby=\"pair-select-hint\"]") as HTMLSelectElement;
     expect(select.disabled).toBe(false);
     fireEvent.change(select, { target: { value: "1" } });
     expect(push).toHaveBeenCalledWith("/lol/history/26.17-26.18/");
@@ -43,7 +43,7 @@ describe("헤더 패치쌍 select", () => {
     pathname = "/lol/history/26.16-26.17/";
     push.mockClear();
     const { container } = render(<Header chrome={{ lol: lolChrome, tft: null, pubg: null }} />);
-    const select = container.querySelector("select") as HTMLSelectElement;
+    const select = container.querySelector("select[aria-describedby=\"pair-select-hint\"]") as HTMLSelectElement;
     expect(select.value).toBe("2");
     fireEvent.change(select, { target: { value: "0" } });
     expect(push).toHaveBeenCalledWith("/lol/");
@@ -51,7 +51,7 @@ describe("헤더 패치쌍 select", () => {
   it("쌍이 하나뿐인 게임은 닫혀 있고 이유를 설명과 연결한다", () => {
     pathname = "/tft/";
     const { container } = render(<Header chrome={{ lol: lolChrome, tft: tftChrome, pubg: null }} />);
-    const select = container.querySelector("select") as HTMLSelectElement;
+    const select = container.querySelector("select[aria-describedby=\"pair-select-hint\"]") as HTMLSelectElement;
     expect(select.disabled).toBe(true);
     const describedBy = select.getAttribute("aria-describedby");
     expect(container.querySelector(`#${describedBy}`)?.textContent).toMatch(/하나뿐/);

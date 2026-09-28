@@ -342,14 +342,17 @@ describe("§8-4 방법론 — 세 게임이 같은 9슬롯을 쓴다", () => {
 });
 
 describe("§8-5 상세 — 세 게임이 같은 머리를 쓴다", () => {
-  /** 동적 세그먼트(`[id]`·`[key]`)를 가진 라우트 = 상세. */
+  /**
+   * 동적 세그먼트(`[id]`·`[key]`)를 가진 라우트 = 상세. 단 `history/[pair]`는 **과거 쌍 브리핑**이다
+   * (2026-09-28 PR-C B3 — 명세 변경: 대상 상세가 아니라 브리핑 본문 `LolBriefing`을 그린다).
+   */
   const detailPagesOf = (id: string): string[] => {
     const out: string[] = [];
     const walk = (dir: string) => {
       for (const e of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
         const rel = `${dir}/${e.name}`;
         if (e.isDirectory()) {
-          if (e.name !== "__tests__") walk(rel);
+          if (e.name !== "__tests__" && e.name !== "history") walk(rel);
         } else if (e.name === "page.tsx" && /\[[^\]]+\]/.test(dir)) {
           out.push(rel);
         }
