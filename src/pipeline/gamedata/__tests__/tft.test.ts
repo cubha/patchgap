@@ -166,3 +166,24 @@ describe("diffTft — 아이템 효과는 한국어 낱말로 노트를 찾는�
     }
   });
 });
+
+// 이월 R9(2026-09-28): 18.2 마오카이 노트는 본 패치 「40/100 ⇒ 30/90」에 중간 패치 「30/90 ⇒ 30/100」을 이은
+// 「마나 조정 40/100 ⇒ 30/100」(시작/최대)이다. CDragon 16.18은 중간 패치 이전 값(최대 90)이고 새로 받아도, 16.19도
+// 90이다. 「a/b」 값을 대조하지 못해 「최대 마나 100→90(공지됨)」이라는 틀린 말이 나갔다.
+describe("diffTft — 마나 조정 a/b 대조와 중간 패치(R9)", () => {
+  const changes = diffTft(snapshot("16.17"), snapshot("16.18"), notes("18.2"), "18.2");
+  const maokai = (fieldPath: string) => changes.find((c) => c.entityName === "마오카이" && c.fieldPath === fieldPath);
+
+  it("★ 최대 마나 100→90은 노트 최종값(100 ⇒ 100)과 어긋난다 — 공지값 불일치, 중간 패치 표식", () => {
+    expect(maokai("stats.mana")?.noteMismatch).toEqual({
+      noteId: "note:tft:18.2:champion:마오카이:d7ea1995",
+      noteBefore: "100",
+      noteAfter: "100",
+      midpatch: true,
+    });
+  });
+  it("시작 마나 40→30은 노트(40 ⇒ 30)와 맞는다 — 불일치 아님", () => {
+    expect(maokai("stats.initialMana")?.noteMismatch).toBeUndefined();
+    expect(maokai("stats.initialMana")?.matchedNoteIds.length).toBeGreaterThan(0);
+  });
+});
