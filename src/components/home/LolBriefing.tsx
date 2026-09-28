@@ -2,6 +2,8 @@
 // LoL 브리핑 본문 — 프로토타입 01(docs/design/prototype/01-briefing-home.html) 구현. F5/ST-11.
 // **쌍을 인자로 받는다**(2026-09-28, PR-C B3): 최신 쌍은 `/lol/`(app/lol/page.tsx)이, 과거 쌍은
 // `/lol/history/[pair]/`가 같은 본문을 그린다 — 과거 쌍 화면이 따로 자라 규칙이 갈라지지 않게.
+// **과거 쌍 맥락**(2026-09-28, 이월 R8): 과거 쌍 화면은 `pairBase`(`/lol/history/{쌍}`)를 넘긴다 — 대상 링크·미공지
+// 타일이 그 쌍의 상세·대조표로 간다. 서버 쪽 링크(색인·타일)는 인자로, 클라이언트 스트림 카드는 `PairBaseProvider`로 받는다.
 // 헤더는 ST-10부터 src/app/layout.tsx가 전역 렌더한다(여기서 다시 렌더하면 중복).
 // 데이터 로드는 이 서버 컴포넌트에서만 한다(src/lib/data.ts, 빌드 타임 fs) — 하위 home/*
 // 컴포넌트는 전부 props만 받는 순수 렌더(상태 없음, 서버/클라이언트 경계 없음).
@@ -55,8 +57,9 @@ import SiteFooter from "@/components/SiteFooter";
 import EntityIndexSection, { EntityIndexGrid } from "@/components/EntityIndexSection";
 import { buildEntityIndex } from "@/components/home/entityIndex";
 import { detailEntityKeys, lolEntityHref } from "@/lib/detailRoutes";
+import { PairBaseProvider } from "@/components/PairBaseContext";
 
-export default function LolBriefing({ pair }: { pair: PatchPair | null }) {
+export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair | null; pairBase?: string | null }) {
 
   const deltas = pair ? loadDeltas(pair.from, pair.to) : null;
   // 잠수함 패치(F9) — 판정 산출물과 별도 파일이고, 없으면 섹션이 통째로 빠진다.
@@ -86,7 +89,7 @@ export default function LolBriefing({ pair }: { pair: PatchPair | null }) {
         name: ddragon?.champions.byKey(row.championId)?.name ?? row.championName,
       })),
     hasDetail,
-    (type, key) => lolEntityHref({ entityType: type as DeltaRecord["entityType"], entityKey: key })
+    (type, key) => lolEntityHref({ entityType: type as DeltaRecord["entityType"], entityKey: key }, pairBase)
   );
   const itemIndex = buildEntityIndex(
     (pair ? (loadItems(pair.to)?.rows ?? []) : []).map((row) => ({
@@ -96,7 +99,7 @@ export default function LolBriefing({ pair }: { pair: PatchPair | null }) {
       name: ddragon?.items.byId(row.itemId)?.name ?? String(row.itemId),
     })),
     hasDetail,
-    (type, key) => lolEntityHref({ entityType: type as DeltaRecord["entityType"], entityKey: key })
+    (type, key) => lolEntityHref({ entityType: type as DeltaRecord["entityType"], entityKey: key }, pairBase)
   );
 
   // 2026-09-18(ST-8): 공지 그룹은 3티어(불일치 → 일치 → 관측 없음 → 치장)로, Gap 그룹은 그대로.
@@ -173,81 +176,83 @@ export default function LolBriefing({ pair }: { pair: PatchPair | null }) {
   }
 
   return (
-    <div className="flex flex-1 flex-col">
-      {/* 크롬(패치 쌍·고정 표본·n/집계 캡션)은 2026-09-12(3차)부터 layout.tsx의 Header가
-          1줄로 통합해 그린다 — 이 페이지가 별도로 FilterBar를 렌더하지 않는다. */}
-      <main className="flex-1">
-        {/* 2026-09-12(5차, R6): pt-8→pt-14 — 사용자 지적("모든 섹션판넬이 화면 상단에 너무가까워서
-            BG를 가리니까")에 대한 배치 조정. HeroSummary.tsx의 gap-5→gap-8과 합쳐 최초 불투명
-            패널(릴리즈노트 스트림) 등장을 늦춰 앰비언트 배경의 상단 밴드가 더 오래 노출되게 한다.
-            pb-8은 그대로 유지(하단은 지적 대상이 아니었음 — Container className="width" prop과
-            같은 선례로 pt/pb를 분리).
+    <PairBaseProvider value={pairBase}>
+      <div className="flex flex-1 flex-col">
+        {/* 크롬(패치 쌍·고정 표본·n/집계 캡션)은 2026-09-12(3차)부터 layout.tsx의 Header가
+            1줄로 통합해 그린다 — 이 페이지가 별도로 FilterBar를 렌더하지 않는다. */}
+        <main className="flex-1">
+          {/* 2026-09-12(5차, R6): pt-8→pt-14 — 사용자 지적("모든 섹션판넬이 화면 상단에 너무가까워서
+              BG를 가리니까")에 대한 배치 조정. HeroSummary.tsx의 gap-5→gap-8과 합쳐 최초 불투명
+              패널(릴리즈노트 스트림) 등장을 늦춰 앰비언트 배경의 상단 밴드가 더 오래 노출되게 한다.
+              pb-8은 그대로 유지(하단은 지적 대상이 아니었음 — Container className="width" prop과
+              같은 선례로 pt/pb를 분리).
 
-            2026-09-13(7차, R8 — 배치안 아티팩트 A안, 사용자 확정 "+120px"): pt-14(56px)→
-            pt-44(176px, +120px). 처음엔 패널에만 marginTop을 줘 "헤드라인은 그대로, 패널만
-            아래로" 였는데, 사용자가 "히어로 영역 텍스트도 똑같이 내려와야" — 즉 헤드라인+패널을
-            한 블록으로 같이 내리는 쪽을 원했다. Container 최상단 패딩을 올리면 이 블록 전체가
-            같이 내려가므로 그 요구를 그대로 만족한다. 176px은 Tailwind 표준 스케일(11rem)이라
-            arbitrary 불필요. */}
-        <Container className="flex flex-col gap-6 pt-44 pb-8">
-          <HeroSummary stats={headline} patch={pair?.to ?? ""} gapCount={gapTotal} />
-          <StreamColumnLayout
-            leftHeader={<StreamLaneFilter />}
-            left={
-              <ReleaseNoteStream
-                entries={streamEntries}
-                spellIcons={spellIcons?.icons ?? null}
-                noteDeltas={noteDeltas}
-                noteDeltaRows={noteDeltaRows}
-                patch={pair?.to ?? null}
-                qAlpha={deltas?.meta.qAlpha}
-                contentCount={contentLineCount}
-                gapCount={gapTotal}
-                causes={indirectCauses}
-                skinPreviews={skinPreviews}
-                miscSections={miscSections}
-                /* 세 게임이 같은 자리에서 같은 말을 한다(§8-1) — "공지했는데 아무 일도
-                   없었다"는 사실을 LoL만 말하고 있었다(2026-09-23 화면 대조 V5). */
-                announcedCoverage={{
-                  noteTargets: headline.noteEntityCount,
-                  observed: headline.statCount,
-                }}
-                /* 수치 축(2026-09-21) — 미공지 Gap 탭의 **위쪽 갈래**. 세 번째 탭이 아닌
-                   이유는 잠수함도 미공지이기 때문이다(잠수함 > 미공지 위계를 같은 탭 안에서
-                   위아래로 표현한다). 산출물이 없는 쌍에서는 통째로 빠진다.
-                   상세 링크를 걸지 않는 이유: LoL 잠수함 전용 엔티티(폭풍갈퀴)는 델타가
-                   0건이라 `/lol/item/[id]` 라우트가 없다 — 없는 링크를 만들지 않는다. */
-                gapLead={submarine ? <SubmarineSection summary={submarine} /> : undefined}
-                metricGapCount={headline.unannouncedCount}
-              />
-            }
-            right={
-              <>
-                <SideMatchAverages
-                  summaryTo={summaryTo?.data ?? null}
-                  summaryFrom={summaryFrom?.data ?? null}
-                  objectivesTo={objectivesTo?.data ?? null}
-                  objectivesFrom={objectivesFrom?.data ?? null}
+              2026-09-13(7차, R8 — 배치안 아티팩트 A안, 사용자 확정 "+120px"): pt-14(56px)→
+              pt-44(176px, +120px). 처음엔 패널에만 marginTop을 줘 "헤드라인은 그대로, 패널만
+              아래로" 였는데, 사용자가 "히어로 영역 텍스트도 똑같이 내려와야" — 즉 헤드라인+패널을
+              한 블록으로 같이 내리는 쪽을 원했다. Container 최상단 패딩을 올리면 이 블록 전체가
+              같이 내려가므로 그 요구를 그대로 만족한다. 176px은 Tailwind 표준 스케일(11rem)이라
+              arbitrary 불필요. */}
+          <Container className="flex flex-col gap-6 pt-44 pb-8">
+            <HeroSummary stats={headline} patch={pair?.to ?? ""} gapCount={gapTotal} pairBase={pairBase} />
+            <StreamColumnLayout
+              leftHeader={<StreamLaneFilter />}
+              left={
+                <ReleaseNoteStream
+                  entries={streamEntries}
+                  spellIcons={spellIcons?.icons ?? null}
+                  noteDeltas={noteDeltas}
+                  noteDeltaRows={noteDeltaRows}
+                  patch={pair?.to ?? null}
+                  qAlpha={deltas?.meta.qAlpha}
+                  contentCount={contentLineCount}
+                  gapCount={gapTotal}
+                  causes={indirectCauses}
+                  skinPreviews={skinPreviews}
+                  miscSections={miscSections}
+                  /* 세 게임이 같은 자리에서 같은 말을 한다(§8-1) — "공지했는데 아무 일도
+                     없었다"는 사실을 LoL만 말하고 있었다(2026-09-23 화면 대조 V5). */
+                  announcedCoverage={{
+                    noteTargets: headline.noteEntityCount,
+                    observed: headline.statCount,
+                  }}
+                  /* 수치 축(2026-09-21) — 미공지 Gap 탭의 **위쪽 갈래**. 세 번째 탭이 아닌
+                     이유는 잠수함도 미공지이기 때문이다(잠수함 > 미공지 위계를 같은 탭 안에서
+                     위아래로 표현한다). 산출물이 없는 쌍에서는 통째로 빠진다.
+                     상세 링크를 걸지 않는 이유: LoL 잠수함 전용 엔티티(폭풍갈퀴)는 델타가
+                     0건이라 `/lol/item/[id]` 라우트가 없다 — 없는 링크를 만들지 않는다. */
+                  gapLead={submarine ? <SubmarineSection summary={submarine} /> : undefined}
+                  metricGapCount={headline.unannouncedCount}
                 />
-                <LaneGapPanel rows={laneDistribution} />
-                <DiscordPanel game="lol" generatedAt={deltas?.meta.generatedAt ?? null} />
-              </>
-            }
-          />
+              }
+              right={
+                <>
+                  <SideMatchAverages
+                    summaryTo={summaryTo?.data ?? null}
+                    summaryFrom={summaryFrom?.data ?? null}
+                    objectivesTo={objectivesTo?.data ?? null}
+                    objectivesFrom={objectivesFrom?.data ?? null}
+                  />
+                  <LaneGapPanel rows={laneDistribution} />
+                  <DiscordPanel game="lol" generatedAt={deltas?.meta.generatedAt ?? null} />
+                </>
+              }
+            />
 
-          {/* 전 대상 색인(§8-1) — 대조표는 판정이 선 것만 올리므로 전수 진입점은 여기뿐이다. */}
-          <EntityIndexSection
-            groups={[
-              { label: "챔피언", total: championIndex.length, body: <EntityIndexGrid items={championIndex} /> },
-              { label: "아이템", total: itemIndex.length, body: <EntityIndexGrid items={itemIndex} /> },
-            ]}
-          />
-        </Container>
-        <Container>
-          {/* 푸터는 세 게임 공통이다(UX-BRIEF §8-1) — LoL만 전 화면에 없었다(2026-09-22 실측). */}
-          <SiteFooter game="lol" generatedAt={deltas?.meta.generatedAt ?? null} nVerdicts={deltas?.rows.length ?? null} />
-        </Container>
-      </main>
-    </div>
+            {/* 전 대상 색인(§8-1) — 대조표는 판정이 선 것만 올리므로 전수 진입점은 여기뿐이다. */}
+            <EntityIndexSection
+              groups={[
+                { label: "챔피언", total: championIndex.length, body: <EntityIndexGrid items={championIndex} /> },
+                { label: "아이템", total: itemIndex.length, body: <EntityIndexGrid items={itemIndex} /> },
+              ]}
+            />
+          </Container>
+          <Container>
+            {/* 푸터는 세 게임 공통이다(UX-BRIEF §8-1) — LoL만 전 화면에 없었다(2026-09-22 실측). */}
+            <SiteFooter game="lol" generatedAt={deltas?.meta.generatedAt ?? null} nVerdicts={deltas?.rows.length ?? null} />
+          </Container>
+        </main>
+      </div>
+    </PairBaseProvider>
   );
 }

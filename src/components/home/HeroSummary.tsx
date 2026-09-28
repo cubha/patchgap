@@ -58,9 +58,11 @@ export interface HeroSummaryProps {
    * 통계 Gap 대상 수(`stats.unannouncedCount`)를 쓴다(수치 축이 없는 화면·테스트).
    */
   gapCount?: number;
+  /** 과거 쌍 화면의 기준 경로(2026-09-28, 이월 R8) — 미공지 타일이 그 쌍의 대조표로 가게 `StatTiles`로 넘긴다. */
+  pairBase?: string | null;
 }
 
-export default function HeroSummary({ stats, patch, action, gapCount }: HeroSummaryProps) {
+export default function HeroSummary({ stats, patch, action, gapCount, pairBase = null }: HeroSummaryProps) {
   const { noteEntityCount, noteItemCount, statCount, unannouncedCount } = stats;
 
   return (
@@ -96,6 +98,7 @@ export default function HeroSummary({ stats, patch, action, gapCount }: HeroSumm
         significantCount={statCount}
         gapCount={gapCount ?? unannouncedCount}
         game="lol"
+        pairBase={pairBase}
       />
     </div>
   );
