@@ -9,6 +9,7 @@ import { fetchPatchNotesHtml, parsePatchNotes } from "../src/pipeline/match/patc
 import { notesFile } from "../src/pipeline/shared/paths";
 import type { PatchNoteSection } from "../src/pipeline/types";
 import { isMainModule, parseCliArgs } from "./shared/cli";
+import { splitCombinedWithLocalDdragon } from "./run-match";
 
 interface CliArgs {
   patch: string;
@@ -37,7 +38,9 @@ async function main(): Promise<void> {
       `(${fetched.html.length} bytes)`
   );
 
-  const parsed = parsePatchNotes(fetched.html, { patch: args.patch, sourceUrl: fetched.sourceUrl });
+  const rawParsed = parsePatchNotes(fetched.html, { patch: args.patch, sourceUrl: fetched.sourceUrl });
+  // 합친 이름 아이템 노트는 DDragon 수치로 나눈다(C2) — run-match의 fetch 경로와 같은 함수.
+  const parsed = { ...rawParsed, items: splitCombinedWithLocalDdragon(rawParsed.items) };
 
   const bySection = new Map<PatchNoteSection, number>();
   for (const item of parsed.items) {

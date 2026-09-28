@@ -9,7 +9,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { fetchPatchNotesHtml, parsePatchNotes } from "../src/pipeline/match/patchnotes-parser";
 import { notesFile } from "../src/pipeline/shared/paths";
-import { loadDdragon } from "../src/pipeline/match/ddragon";
+import { listDdragonVersions, loadDdragon, loadItemStatTable } from "../src/pipeline/match/ddragon";
+import { splitCombinedNotes } from "../src/pipeline/match/combined-note-split";
 import { lolLlmProfile } from "../src/pipeline/match/llm-profile-lol";
 import { buildDeltas, carryOverMatchIds, loadAggregatedPatch, type AggregatedPatch } from "../src/pipeline/match/delta";
 import type { DdragonData } from "../src/pipeline/match/ddragon";
@@ -58,6 +59,23 @@ export function parseArgs(argv: string[]): RunMatchArgs {
   };
 }
 
+/**
+ * 합친 이름 아이템 노트 분해(C2) — 로컬 DDragon **최신 두 버전**(= 이번 패치와 직전 패치, `data/ddragon`은 커밋된다)
+ * 으로 단계값을 아이템에 배정한다. 두 버전이 없으면 **분해하지 않고 경보**한다 — 노트(선언 축)를 막지 않는다(결정 8).
+ */
+export function splitCombinedWithLocalDdragon(items: PatchNoteItem[]): PatchNoteItem[] {
+  const [to, from] = listDdragonVersions();
+  if (!to || !from) {
+    console.log(`::warning::[run-match] DDragon 버전이 둘 미만이라 합친 이름 노트를 나누지 못했다(C2) — 원문 그대로 둔다`);
+    return items;
+  }
+  const { items: split, report } = splitCombinedNotes(items, loadItemStatTable(from), loadItemStatTable(to));
+  for (const r of report) {
+    console.log(`${r.outcome === "kept" ? "::warning::" : ""}[run-match] 합친 이름 노트 ${r.entity}: ${r.outcome} — ${r.reason} (${from} → ${to})`);
+  }
+  return split;
+}
+
 /** notes/{patch}.json이 있으면 그대로 로드, 없으면 fetch+parse 후 저장(run-fetch-notes.ts와 동일 스키마). */
 export async function loadOrFetchNotes(patch: PatchId): Promise<PatchNoteItem[]> {
   const file = notesFile(patch);
@@ -68,7 +86,8 @@ export async function loadOrFetchNotes(patch: PatchId): Promise<PatchNoteItem[]>
 
   console.log(`[run-match] notes/${patch}.json 없음 — 라이브 fetch 시도`);
   const fetched = await fetchPatchNotesHtml(patch);
-  const result = parsePatchNotes(fetched.html, { patch, sourceUrl: fetched.sourceUrl });
+  const parsedNotes = parsePatchNotes(fetched.html, { patch, sourceUrl: fetched.sourceUrl });
+  const result = { ...parsedNotes, items: splitCombinedWithLocalDdragon(parsedNotes.items) };
 
   const bySection = new Map<PatchNoteSection, number>();
   for (const item of result.items) bySection.set(item.section, (bySection.get(item.section) ?? 0) + 1);
