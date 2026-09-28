@@ -27,8 +27,14 @@ export type PairSection = "" | "compare";
 
 const PATCH = /^\d{2}\.\d{1,2}$/;
 
+/**
+ * 슬러그에는 **점을 쓰지 않는다** — `26_16-26_17`(2026-09-28, 이월 R8 후속). Next는 링크의 마지막 세그먼트에
+ * 점이 있으면 파일로 보고 후행 슬래시를 뗀다(`next/dist/client/normalize-trailing-slash.js` `/\.[^/]+\/?$/`).
+ * `26.16-26.17`은 빌드 HTML에 `href="/lol/history/26.16-26.17"`(슬래시 없음)로 나갔고, `out/`에는 디렉터리
+ * (`…/index.html`)만 있다 — 정적 호스팅이 그 주소를 디렉터리로 풀어 줄지에 기대지 않는다.
+ */
 export function pairSlug(pair: PairLike): string {
-  return `${pair.from}-${pair.to}`;
+  return `${pair.from.replace(/\./g, "_")}-${pair.to.replace(/\./g, "_")}`;
 }
 
 function isSamePair(a: PairLike, b: PairLike): boolean {
@@ -36,7 +42,7 @@ function isSamePair(a: PairLike, b: PairLike): boolean {
 }
 
 /**
- * 과거 쌍 라우트의 **기준 경로**(후행 슬래시 없음) — `/lol/history/26.16-26.17`. 그 쌍 화면 안의 링크(상세·대조표)는
+ * 과거 쌍 라우트의 **기준 경로**(후행 슬래시 없음) — `/lol/history/26_16-26_17`. 그 쌍 화면 안의 링크(상세·대조표)는
  * 전부 이 아래로 간다. 화면이 이 문자열을 받아 링크를 만들므로, 최신 쌍 화면에선 `null`을 넘긴다(= 평소 주소).
  */
 export function pairBasePath(game: PairRouteGame, pair: PairLike): string {
@@ -66,7 +72,10 @@ export function pairSectionHref(game: GameId, section: PairSection, base: string
 
 /** 슬러그 → 실재하는 쌍. 형식이 틀리거나 목록에 없으면 null(지어내지 않는다). */
 export function pairFromSlug(slug: string, pairs: readonly PairLike[]): PairLike | null {
-  const [from, to, ...rest] = slug.split("-");
+  const [rawFrom, rawTo, ...rest] = slug.split("-");
+  // 점 형식(`26.16`)도 받는다 — 옛 주소를 손으로 친 경우. 만드는 쪽은 언제나 `_` 형식이다.
+  const from = rawFrom?.replace(/_/g, ".");
+  const to = rawTo?.replace(/_/g, ".");
   if (rest.length > 0 || !from || !to || !PATCH.test(from) || !PATCH.test(to)) return null;
   return pairs.find((p) => p.from === from && p.to === to) ?? null;
 }
@@ -79,7 +88,7 @@ export interface HistoryPath {
   rest: string[];
 }
 
-/** `/lol/history/26.16-26.17/item/x/` → `{ game:"lol", slug:"26.16-26.17", rest:["item","x"] }`. 과거 쌍 경로가 아니면 null. */
+/** `/lol/history/26_16-26_17/item/x/` → `{ game:"lol", slug:"26_16-26_17", rest:["item","x"] }`. 과거 쌍 경로가 아니면 null. */
 export function parseHistoryPath(pathname: string): HistoryPath | null {
   const segments = pathname.split("/").filter((seg) => seg.length > 0);
   const [game, history, slug, ...rest] = segments;

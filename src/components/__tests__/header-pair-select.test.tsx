@@ -37,10 +37,10 @@ describe("헤더 패치쌍 select", () => {
     const select = container.querySelector("select[aria-describedby=\"pair-select-hint\"]") as HTMLSelectElement;
     expect(select.disabled).toBe(false);
     fireEvent.change(select, { target: { value: "1" } });
-    expect(push).toHaveBeenCalledWith("/lol/history/26.17-26.18/");
+    expect(push).toHaveBeenCalledWith("/lol/history/26_17-26_18/");
   });
   it("LoL 과거 쌍 경로에서는 그 쌍이 선택돼 있고, 최신 쌍을 고르면 브리핑 홈으로 간다", () => {
-    pathname = "/lol/history/26.16-26.17/";
+    pathname = "/lol/history/26_16-26_17/";
     push.mockClear();
     const { container } = render(<Header chrome={{ lol: lolChrome, tft: null, pubg: null }} />);
     const select = container.querySelector("select[aria-describedby=\"pair-select-hint\"]") as HTMLSelectElement;
@@ -93,27 +93,27 @@ describe("헤더 — 과거 쌍 하위 경로(이월 R8)", () => {
   const lolOnly = { lol: lolChrome, tft: null, pubg: null };
 
   it("LoL 과거 쌍 대조표: 그 쌍이 선택돼 있고, 대조표 탭이 활성이며, 다른 쌍을 고르면 그 쌍의 대조표로 간다", () => {
-    const { select, nav } = renderAt("/lol/history/26.16-26.17/compare/", lolOnly);
+    const { select, nav } = renderAt("/lol/history/26_16-26_17/compare/", lolOnly);
     expect(select.value).toBe("2");
     expect(nav("대조표").current).toBe("page");
     fireEvent.change(select, { target: { value: "1" } });
-    expect(push).toHaveBeenCalledWith("/lol/history/26.17-26.18/compare/");
+    expect(push).toHaveBeenCalledWith("/lol/history/26_17-26_18/compare/");
     fireEvent.change(select, { target: { value: "0" } });
     expect(push).toHaveBeenLastCalledWith("/lol/compare/");
   });
 
   it("LoL 과거 쌍 화면의 내비는 그 쌍 안에 머문다 — 방법론만 평소 주소", () => {
-    const { nav } = renderAt("/lol/history/26.16-26.17/item/champion~Ahri/", lolOnly);
-    expect(nav("브리핑").href).toBe("/lol/history/26.16-26.17");
-    expect(nav("대조표").href).toBe("/lol/history/26.16-26.17/compare");
+    const { nav } = renderAt("/lol/history/26_16-26_17/item/champion~Ahri/", lolOnly);
+    expect(nav("브리핑").href).toBe("/lol/history/26_16-26_17");
+    expect(nav("대조표").href).toBe("/lol/history/26_16-26_17/compare");
     expect(nav("방법론").href).toBe("/lol/methodology");
   });
 
   it("LoL 과거 쌍 상세에서 쌍을 바꾸면 그 쌍의 브리핑으로 간다 — 그 쌍에 없을 수 있는 상세로 보내지 않는다", () => {
-    const { select } = renderAt("/lol/history/26.16-26.17/item/champion~Ahri/", lolOnly);
+    const { select } = renderAt("/lol/history/26_16-26_17/item/champion~Ahri/", lolOnly);
     expect(select.value).toBe("2");
     fireEvent.change(select, { target: { value: "1" } });
-    expect(push).toHaveBeenCalledWith("/lol/history/26.17-26.18/");
+    expect(push).toHaveBeenCalledWith("/lol/history/26_17-26_18/");
     fireEvent.change(select, { target: { value: "0" } });
     expect(push).toHaveBeenLastCalledWith("/lol/");
   });
@@ -121,7 +121,7 @@ describe("헤더 — 과거 쌍 하위 경로(이월 R8)", () => {
   it("LoL 최신 대조표에서 과거 쌍을 고르면 그 쌍의 대조표로 간다(같은 섹션)", () => {
     const { select, container } = renderAt("/lol/compare/", lolOnly);
     fireEvent.change(select, { target: { value: "2" } });
-    expect(push).toHaveBeenCalledWith("/lol/history/26.16-26.17/compare/");
+    expect(push).toHaveBeenCalledWith("/lol/history/26_16-26_17/compare/");
     expect(container.querySelector("#pair-select-hint")?.textContent).toMatch(/대조표로 이동/);
   });
 
@@ -136,20 +136,20 @@ describe("헤더 — 과거 쌍 하위 경로(이월 R8)", () => {
     expect(select.disabled).toBe(false);
     expect((container.querySelector("#pair-select-hint") as HTMLElement).className).toBe("sr-only");
     fireEvent.change(select, { target: { value: "1" } });
-    expect(push).toHaveBeenCalledWith("/tft/history/18.1-18.2/");
+    expect(push).toHaveBeenCalledWith("/tft/history/18_1-18_2/");
   });
 
   it("TFT 과거 쌍 대조표·상세: 그 쌍이 선택되고, 내비·이동이 쌍 규칙을 따른다", () => {
     const chrome = { lol: lolChrome, tft: tftTwoPairs, pubg: null };
-    const compare = renderAt("/tft/history/18.1-18.2/compare/", chrome);
+    const compare = renderAt("/tft/history/18_1-18_2/compare/", chrome);
     expect(compare.select.value).toBe("1");
-    expect(compare.nav("브리핑").href).toBe("/tft/history/18.1-18.2");
+    expect(compare.nav("브리핑").href).toBe("/tft/history/18_1-18_2");
     fireEvent.change(compare.select, { target: { value: "0" } });
     expect(push).toHaveBeenCalledWith("/tft/compare/");
 
-    const unit = renderAt("/tft/history/18.1-18.2/unit/unit~DA_18_Rakan/", chrome);
+    const unit = renderAt("/tft/history/18_1-18_2/unit/unit~DA_18_Rakan/", chrome);
     expect(unit.select.value).toBe("1");
-    expect(unit.nav("대조표").href).toBe("/tft/history/18.1-18.2/compare");
+    expect(unit.nav("대조표").href).toBe("/tft/history/18_1-18_2/compare");
     fireEvent.change(unit.select, { target: { value: "0" } });
     expect(push).toHaveBeenCalledWith("/tft/");
   });

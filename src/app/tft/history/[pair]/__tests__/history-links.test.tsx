@@ -49,7 +49,7 @@ function checkPairLinks(hrefs: string[], slug: string) {
 
 describe("TFT 과거 쌍 — 정적 파라미터", () => {
   it("과거 쌍이 있고(18.1→18.2), 대조표는 브리핑과 같은 쌍을 만든다", () => {
-    expect(past.map(pairSlug)).toContain("18.1-18.2");
+    expect(past.map(pairSlug)).toContain("18_1-18_2");
     expect(compareParams()).toEqual(briefingParams());
     expect(briefingParams().map((p) => p.pair)).toEqual(past.map(pairSlug));
   });
