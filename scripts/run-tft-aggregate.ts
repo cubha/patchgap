@@ -31,6 +31,13 @@ export function parseArgs(argv: string[]): CliArgs {
   return { patch: String(raw.patch), dataRoot: String(raw.dataRoot) };
 }
 
+export function cutAtUntil(_slim: TftMatchSlim[], _untilMs: number | null): TftMatchSlim[] {
+  throw new Error("TODO(C8): cutAtUntil");
+}
+export function observedUntilOf(_slim: TftMatchSlim[]): string {
+  throw new Error("TODO(C8): observedUntilOf");
+}
+
 export function readRawMatches(file: string, patch: string): { slim: TftMatchSlim[]; dropped: number } {
   const slim: TftMatchSlim[] = [];
   let dropped = 0;
