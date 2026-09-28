@@ -2,7 +2,7 @@
   "meta": {
     "from": "26.17",
     "to": "26.18",
-    "generatedAt": "2026-09-19T05:31:56.008Z",
+    "generatedAt": "2026-09-28T11:16:22.159Z",
     "n": 1951,
     "counts": {
       "unannounced": 31,
@@ -15,25 +15,27 @@
     },
     "qAlpha": 0.1,
     "llm": {
-      "calls": 7,
-      "cacheHits": 103,
+      "calls": 0,
+      "cacheHits": 51,
       "skipped": 0,
       "usage": {
-        "inputTokens": 869,
-        "cacheReadInputTokens": 43155,
+        "inputTokens": 0,
+        "cacheReadInputTokens": 0,
         "cacheCreationInputTokens": 0,
-        "outputTokens": 4057
+        "outputTokens": 0
       },
       "prose": {
-        "summaryCount": 110,
+        "summaryCount": 51,
         "summaryOverLength": 0,
-        "summaryHedged": 18,
-        "maxSummaryLength": 99,
-        "causeCount": 198,
+        "summaryHedged": 9,
+        "maxSummaryLength": 95,
+        "causeCount": 119,
         "causeOverLength": 0,
-        "causeHedged": 92,
+        "causeHedged": 52,
         "causeHedgedConfident": 0,
-        "causeNounEnding": 0
+        "causeNounEnding": 0,
+        "causeUnnamedTarget": 3,
+        "summaryDeterministic": 0
       },
       "proseRepairs": 0
     }
@@ -3215,6 +3217,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=245,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
       },
+      "directionAgreement": "inconsistent",
       "llm": {
         "skipped": false,
         "summary": "에코는 Q 계수·마나 상향을 받았는데도 미드 승률이 57.4%→47.8%로 떨어졌고, 카사딘·카시오페아 상향에 따른 미드 경쟁 심화가 유력합니다(CI 하한 -1.5%p).",
@@ -3249,20 +3252,7 @@
         "note:26.18:champion:masteryi:d392c3c6",
         "note:26.18:champion:masteryi:c898ee27"
       ],
-      "causes": [
-        {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초 버프가 핵심 코어인 마스터 이의 지속 전투력을 올렸습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "high"
-        },
-        {
-          "text": "R 이동 속도 5%p 상향으로 갱킹·추격 성공률이 올라 승률 상승을 보탰습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "medium"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375366030",
@@ -3279,15 +3269,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=11,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "마스터 이 정글 승률이 45.9%→54.4%(+8.4%p)로 올랐습니다. 구인수 중첩 4초 버프와 R 이속 상향이 주 동력이나, CI가 0을 포함해 표본 변동도 섞였습니다.",
-        "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b",
-          "note:26.18:champion:masteryi:c898ee27"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ekko:winRate",
@@ -3313,26 +3295,7 @@
         "note:26.18:champion:ekko:dfd6f002",
         "note:26.18:champion:ekko:433f5bb2"
       ],
-      "causes": [
-        {
-          "text": "마스터 이 방어력 성장 상승으로 정글 경쟁에서 에코가 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "비에고 지속 효과 회복 강화로 정글 픽 경쟁이 심화된 영향으로 보입니다.",
-          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카사딘 Q 계수 상승으로 미드 에코의 입지가 좁아졌을 가능성이 있습니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375326470",
@@ -3349,15 +3312,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=245,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "에코 Q 버프에도 승률 53.1%→47.5%(-5.6%p). 마스터 이·비에고 정글 버프에 밀린 영향으로 보입니다.",
-        "summaryCites": [
-          "note:26.18:champion:masteryi:d392c3c6",
-          "note:26.18:champion:viego:caf9b23d"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Seraphine:UTILITY:winRate",
@@ -3382,20 +3337,7 @@
       "matchedNoteIds": [
         "note:26.18:champion:seraphine:4519a08c"
       ],
-      "causes": [
-        {
-          "text": "경쟁 서포터 노틸러스가 Q 피해량과 기본 공격력 너프를 받아 세라핀의 상대적 입지가 올랐습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "바드 방어력이 34+레벨당 5에서 32+레벨당 4.7로 내려가 서포터 경쟁군이 약화됐습니다.",
-          "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375326470",
@@ -3412,14 +3354,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=147,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-seraphine"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "세라핀은 E 쿨다운 너프에도 승률이 5.5%p 올랐는데, 노틸러스 Q·공격력 너프 등 경쟁 서포터 약화가 주 요인이며 CI가 0을 포함해 표본 변동도 섞였습니다.",
-        "summaryCites": [
-          "note:26.18:champion:nautilus:878378b8"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Zaahen:TOP:winRate",
@@ -3445,20 +3380,7 @@
         "note:26.18:champion:zaahen:3d1ae789",
         "note:26.18:champion:zaahen:bce84005"
       ],
-      "causes": [
-        {
-          "text": "노틸러스 기본 공격력 61→58 너프로 탑 라인 대치 상대가 약해진 영향일 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "구인수의 격노검 들끓는 일격 중첩 3초→4초 버프가 지속 평타 딜에 간접 이득을 줍니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375340607",
@@ -3475,12 +3397,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=904,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "자헨 탑 승률 47.8%→53.0%(+5.2%p)이나 95% CI가 [-3.5%p, 13.8%p]로 0을 포함해 유의하지 않습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Syndra:MIDDLE:winRate",
@@ -3506,26 +3423,7 @@
         "note:26.18:champion:syndra:5db255ef",
         "note:26.18:champion:syndra:cb99a266"
       ],
-      "causes": [
-        {
-          "text": "카사딘 R 기본 피해량 70/90/110→80/95/110 상향으로 미드 대치 구도에서 신드라가 불리해졌습니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d9a6b909",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "에코 Q 마나 소모 10 감소로 미드 라인전 주도권 경쟁이 심해졌습니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카사딘 Q 주문력 계수 70%→80% 상향이 신드라 상대 라인전 압박을 키웠을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375323215",
@@ -3542,15 +3440,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=134,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "신드라 미드 승률이 52.3%→47.5%(-4.9%p)로 하락했으며, 카사딘 Q·R 상향 등 미드 경쟁 챔피언 강화가 하락폭을 키웠습니다.",
-        "summaryCites": [
-          "note:26.18:champion:kassadin:d631af52",
-          "note:26.18:champion:kassadin:d9a6b909"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:MasterYi:winRate",
@@ -3576,20 +3466,7 @@
         "note:26.18:champion:masteryi:d392c3c6",
         "note:26.18:champion:masteryi:c898ee27"
       ],
-      "causes": [
-        {
-          "text": "핵심 아이템 구인수의 격노검 들끓는 일격 중첩 지속시간이 3초에서 4초로 늘어 지속 딜이 상승했습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "high"
-        },
-        {
-          "text": "비에고 공격력 성장 버프로 정글 경쟁 구도가 바뀐 영향일 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375366030",
@@ -3606,14 +3483,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=11,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "마스터 이 승률 46.5%→50.7%(4.2%p)는 구인수의 격노검 중첩 지속시간 3초→4초 버프가 주 원인이며, CI가 0을 포함해 확정적이지는 않습니다.",
-        "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Viego:JUNGLE:winRate",
@@ -3639,20 +3509,7 @@
         "note:26.18:champion:viego:3477e7c5",
         "note:26.18:champion:viego:caf9b23d"
       ],
-      "causes": [
-        {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간이 3초→4초로 늘어, 온힛 빌드 비에고의 지속 딜이 올랐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "마스터 이 R 이동 속도 상향으로 정글 메타 구성이 바뀌며 비에고 픽 환경이 변했을 여지가 있습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375336156",
@@ -3669,14 +3526,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=234,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "비에고 정글 승률 42.8%→46.7%(+3.9%p)이나 95% CI가 0을 포함해 유의하지 않고, 구인수의 격노검 중첩 4초 상향 정도가 간접 요인입니다.",
-        "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nautilus:winRate",
@@ -3702,20 +3552,7 @@
         "note:26.18:champion:nautilus:b6aff2b2",
         "note:26.18:champion:nautilus:878378b8"
       ],
-      "causes": [
-        {
-          "text": "바드 방어력 하향으로 서포터 구도가 흔들리며 노틸러스 픽 환경이 바뀌었을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "구인수의 격노검 중첩 지속 4초 상향으로 지속 딜 원딜이 강해져 라인전 주도권이 밀렸습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375347592",
@@ -3732,14 +3569,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=111,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "노틸러스 승률이 50.7%→47.3%(-3.3%p)로 하락했고, 바드 방어력 하향 등 서포터 환경 변화가 겹친 것으로 보입니다.",
-        "summaryCites": [
-          "note:26.18:champion:bard:453ef7b4"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nautilus:UTILITY:winRate",
@@ -3782,12 +3612,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=111,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "노틸러스 서포터 승률이 50.6%→47.4%(-3.3%p, CI 상한 0.0%p)로 내려갔지만, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Cassiopeia:winRate",
@@ -3820,20 +3645,7 @@
         "note:26.18:champion:cassiopeia:64976414",
         "note:26.18:champion:cassiopeia:8209fcaf"
       ],
-      "causes": [
-        {
-          "text": "에코 Q 계수·마나 개선으로 미드 경쟁이 강해져 카시오페아 픽 환경이 나빠졌을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카사딘 Q 계수 70%→80% 상향으로 미드 대치 구도에서 카시오페아가 불리해진 영향으로 보입니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375316705",
@@ -3850,15 +3662,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=69,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "카시오페아 승률 -3.1%p는 CI가 0을 포함해 유의하지 않으며, 에코·카사딘 미드 상향에 따른 간접 압박 정도로 봅니다.",
-        "summaryCites": [
-          "note:26.18:champion:ekko:433f5bb2",
-          "note:26.18:champion:kassadin:d631af52"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zaahen:winRate",
@@ -3884,20 +3688,7 @@
         "note:26.18:champion:zaahen:3d1ae789",
         "note:26.18:champion:zaahen:bce84005"
       ],
-      "causes": [
-        {
-          "text": "95% CI가 -5.1~11.0%p로 0을 포함해, 3.0%p 상승은 표본 변동 범위 안입니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "medium"
-        },
-        {
-          "text": "노틸러스 공격력 61→58 너프로 근접 맞대결 부담이 줄었을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375340607",
@@ -3914,12 +3705,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=904,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "자헨 승률 48.9%→51.9%(+3.0%p)지만 CI가 -5.1~11.0%p로 0을 포함해 유의한 변화로 보기 어렵습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Seraphine:winRate",
@@ -3944,20 +3730,7 @@
       "matchedNoteIds": [
         "note:26.18:champion:seraphine:4519a08c"
       ],
-      "causes": [
-        {
-          "text": "카시오페아 E 강화 계수 55%→45% 너프로 경쟁 메이지가 약화된 반사이익으로 보입니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:620aea16",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "신드라 W 쿨타임 1초 증가 너프로 미드 경쟁 구도가 완화됐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375326470",
@@ -3974,15 +3747,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=147,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-seraphine"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "E 너프에도 승률 3.0%p 상승했으나 CI가 0을 포함해 유의하지 않으며, 카시오페아·신드라 너프에 따른 반사이익으로 보입니다.",
-        "summaryCites": [
-          "note:26.18:champion:cassiopeia:620aea16",
-          "note:26.18:champion:syndra:cb99a266"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Viego:winRate",
@@ -4008,20 +3773,7 @@
         "note:26.18:champion:viego:3477e7c5",
         "note:26.18:champion:viego:caf9b23d"
       ],
-      "causes": [
-        {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초로 늘어, 이를 핵심으로 쓰는 비에고의 지속 딜이 강화됐습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "마스터 이 궁극기 이동 속도 버프로 정글 구도가 흔들린 여파가 일부 섞였을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375336156",
@@ -4038,14 +3790,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=234,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "비에고 승률 44.1%→46.5%(+2.5%p)는 구인수의 격노검 중첩 지속시간 4초 연장 수혜가 크지만, CI가 0을 포함해 확정적이진 않습니다.",
-        "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zeri:winRate",
@@ -4072,14 +3817,7 @@
         "note:26.18:champion:zeri:e371a79d",
         "note:26.18:champion:zeri:3f709c34"
       ],
-      "causes": [
-        {
-          "text": "구인수의 격노검 중첩 지속 3초→4초로 경쟁 원거리 딜러가 강해져 제리 입지가 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375326366",
@@ -4096,12 +3834,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=221,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zeri"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "제리 승률 -2.4%p는 95% CI [-6.6%p, 1.9%p]가 0을 포함해 통계적으로 유의하지 않은 변동입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Cassiopeia:MIDDLE:winRate",
@@ -4134,20 +3867,7 @@
         "note:26.18:champion:cassiopeia:64976414",
         "note:26.18:champion:cassiopeia:8209fcaf"
       ],
-      "causes": [
-        {
-          "text": "카사딘 Q 계수 80%로 상향돼 미드 경쟁이 강화된 영향으로 보입니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "에코 Q 계수 70%·마나 10 감소 버프로 미드 픽 경쟁이 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375316705",
@@ -4164,15 +3884,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=69,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "카시오페아 미드 승률 -2.2%p는 95% CI[-8.0, 3.5]가 0을 포함해 통계적으로 확정되지 않으며, 카사딘·에코 버프에 따른 미드 경쟁 변화가 일부 작용한 정도입니다.",
-        "summaryCites": [
-          "note:26.18:champion:kassadin:d631af52",
-          "note:26.18:champion:ekko:433f5bb2"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zeri:BOTTOM:winRate",
@@ -4199,14 +3911,7 @@
         "note:26.18:champion:zeri:e371a79d",
         "note:26.18:champion:zeri:3f709c34"
       ],
-      "causes": [
-        {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초 버프가 제리 W 너프를 일부 상쇄했습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "medium"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375326366",
@@ -4223,14 +3928,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=221,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zeri"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "제리 승률 -2.0%p는 CI가 0을 포함해 유의하지 않으며, 구인수의 격노검 중첩 4초 버프가 W 너프를 상쇄했습니다.",
-        "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zaahen:pickRate",
@@ -4256,26 +3954,7 @@
         "note:26.18:champion:zaahen:3d1ae789",
         "note:26.18:champion:zaahen:bce84005"
       ],
-      "causes": [
-        {
-          "text": "카시오페아 Q 기본 피해가 10 낮아져 미드 경쟁자가 약화되며 자헨 픽이 반사 이익을 얻었습니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "신드라 W 쿨타임이 1초씩 늘어 미드 선호도가 내려간 자리를 자헨이 대체한 것으로 보입니다.",
-          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "제리 W 계수가 120%에서 100%로 하향되며 딜러 픽 구도가 자헨 쪽으로 이동했습니다.",
-          "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375340607",
@@ -4292,16 +3971,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=904,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "자헨 픽률이 2.4%→3.9%(+1.6%p)로 올랐습니다. 카시오페아·신드라·제리 너프로 인한 경쟁 챔피언 이탈이 유력한 배경입니다.",
-        "summaryCites": [
-          "note:26.18:champion:cassiopeia:91d07d6f",
-          "note:26.18:champion:syndra:cb99a266",
-          "note:26.18:champion:zeri:d0cacf0b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Zaahen:TOP:pickRate",
@@ -4327,26 +3997,7 @@
         "note:26.18:champion:zaahen:3d1ae789",
         "note:26.18:champion:zaahen:bce84005"
       ],
-      "causes": [
-        {
-          "text": "노틸러스 기본 공격력이 61에서 58로 내려가 탑 라인전 경쟁자가 약해졌을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카시오페아 지속 효과 이동 속도가 6~40%에서 5~36%로 하향돼 탑 AP 대체재 가치가 떨어졌습니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:a01d452d",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "노틸러스 Q 후반 피해량이 265에서 245로 줄어 탑 픽 선호도가 분산됐습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375340607",
@@ -4363,15 +4014,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=904,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "자헨 탑 픽률이 2.1%→3.3%(+1.2%p)로 올랐고, 노틸러스 공격력·Q 하향 등 탑 경쟁 픽 약화가 반사이익으로 작용한 것으로 보입니다.",
-        "summaryCites": [
-          "note:26.18:champion:nautilus:b6aff2b2",
-          "note:26.18:champion:nautilus:878378b8"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Syndra:MIDDLE:pickRate",
@@ -4397,26 +4040,7 @@
         "note:26.18:champion:syndra:5db255ef",
         "note:26.18:champion:syndra:cb99a266"
       ],
-      "causes": [
-        {
-          "text": "카사딘 Q 계수와 R 기본 피해 상향으로 미드 픽이 카사딘 쪽으로 분산됐습니다.",
-          "candidateNoteId": "note:26.18:champion:kassadin:d9a6b909",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "에코 Q 계수 상향과 마나 소모 감소로 미드 라인 경쟁 픽이 늘었습니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "카시오페아 Q·R 계수 상향으로 주문력 미드 수요 일부가 이동했을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:957165bc",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375323215",
@@ -4433,15 +4057,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=134,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "신드라 미드 픽률이 11.8%→10.7%(-1.0%p) 하락했고, 카사딘·에코 상향으로 미드 픽 수요가 분산된 영향입니다.",
-        "summaryCites": [
-          "note:26.18:champion:kassadin:d9a6b909",
-          "note:26.18:champion:ekko:433f5bb2"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nautilus:banRate",
@@ -4467,20 +4083,7 @@
         "note:26.18:champion:nautilus:b6aff2b2",
         "note:26.18:champion:nautilus:878378b8"
       ],
-      "causes": [
-        {
-          "text": "자헨 Q2 피해량 상향으로 밴 우선순위가 자헨 쪽으로 옮겨갔을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "비에고 지속 효과 회복 상향으로 정글 밴 슬롯 경쟁이 심해진 영향으로 보입니다.",
-          "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375347592",
@@ -4497,15 +4100,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=111,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "노틸러스 밴률 -0.7%p는 CI가 0을 포함해 유의하지 않으며, 자헨·비에고 상향에 밴 슬롯이 분산된 정도로 해석됩니다.",
-        "summaryCites": [
-          "note:26.18:champion:zaahen:bce84005",
-          "note:26.18:champion:viego:caf9b23d"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:MasterYi:pickRate",
@@ -4531,14 +4126,7 @@
         "note:26.18:champion:masteryi:d392c3c6",
         "note:26.18:champion:masteryi:c898ee27"
       ],
-      "causes": [
-        {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3→4초 상향으로 핵심 코어 효율이 올라 픽률이 상승했습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "high"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375366030",
@@ -4555,14 +4143,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=11,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "마스터 이 픽률이 2.4%→2.9%(+0.5%p) 올랐습니다. 핵심템 구인수의 격노검 중첩 지속시간 3→4초 상향이 주된 동인입니다.",
-        "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ekko:MIDDLE:pickRate",
@@ -4588,26 +4169,7 @@
         "note:26.18:champion:ekko:dfd6f002",
         "note:26.18:champion:ekko:433f5bb2"
       ],
-      "causes": [
-        {
-          "text": "신드라 W 쿨타임 1초 증가 등 너프로 미드 지분이 에코로 이동했습니다.",
-          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "카시오페아 Q 기본 피해 10 감소로 초반 라인전이 약해져 대체 픽 수요가 늘었습니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "세라핀 E 쿨타임이 11초로 고정되며 미드 경쟁군이 약화됐습니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375326470",
@@ -4624,15 +4186,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=245,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "에코 미드 픽률이 2.7%→3.2%(+0.5%p) 상승했고, 신드라 W 쿨타임 증가와 카시오페아 Q 피해 감소 등 경쟁 미드 너프가 반사 수요를 만들었습니다.",
-        "summaryCites": [
-          "note:26.18:champion:syndra:cb99a266",
-          "note:26.18:champion:cassiopeia:91d07d6f"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Seraphine:UTILITY:pickRate",
@@ -4657,26 +4211,7 @@
       "matchedNoteIds": [
         "note:26.18:champion:seraphine:4519a08c"
       ],
-      "causes": [
-        {
-          "text": "노틸러스 공격력 61→58, Q 피해량 하향으로 서포터 경쟁자가 약화되며 세라핀 수요가 이동했습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "바드 방어력 34→32(레벨당 5→4.7) 너프도 서포터 픽 분배를 세라핀 쪽으로 밀었습니다.",
-          "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "E 재사용 대기시간 고정 11초 너프는 픽률 하락 요인이지만, 0.4%p 변화는 CI에 0이 포함돼 유의하지 않습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "medium"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375326470",
@@ -4693,16 +4228,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=147,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-seraphine"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "세라핀 E 너프에도 픽률 3.4%→3.7%; 노틸러스·바드 등 경쟁 서포터 너프 영향이며 CI에 0이 포함돼 유의하지 않습니다.",
-        "summaryCites": [
-          "note:26.18:champion:seraphine:4519a08c",
-          "note:26.18:champion:nautilus:b6aff2b2",
-          "note:26.18:champion:bard:453ef7b4"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Seraphine:banRate",
@@ -4727,26 +4253,7 @@
       "matchedNoteIds": [
         "note:26.18:champion:seraphine:4519a08c"
       ],
-      "causes": [
-        {
-          "text": "노틸러스 공격력 61→58 너프로 서포터 경쟁자가 약화되며 세라핀 기용·견제가 늘었습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "바드 방어력 34→32 너프로 서포터 선택지가 줄어 세라핀 밴 우선순위가 올랐을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "신드라 W 쿨타임 1초 증가 너프로 미드 메이지 수요가 세라핀 쪽으로 이동했습니다.",
-          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375326470",
@@ -4763,15 +4270,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=147,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-seraphine"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "세라핀은 E 쿨타임 고정 너프에도 밴률이 0.4%→0.6%로 올랐는데, 노틸러스·바드 등 경쟁 서포터 너프에 따른 반사 이익으로 보입니다.",
-        "summaryCites": [
-          "note:26.18:champion:nautilus:b6aff2b2",
-          "note:26.18:champion:bard:453ef7b4"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Cassiopeia:TOP:pickRate",
@@ -4821,12 +4320,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=69,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zaahen:JUNGLE:pickRate",
@@ -4869,12 +4363,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=904,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Viego:banRate",
@@ -4900,14 +4389,7 @@
         "note:26.18:champion:viego:3477e7c5",
         "note:26.18:champion:viego:caf9b23d"
       ],
-      "causes": [
-        {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간이 3초→4초로 늘어 비에고 코어 빌드가 강해졌습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "medium"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375336156",
@@ -4924,14 +4406,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=234,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "비에고 밴률 0.7%→0.9%(+0.2%p)는 코어 아이템 구인수의 격노검 중첩 지속시간 3초→4초 버프로 설명됩니다.",
-        "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Seraphine:BOTTOM:pickRate",
@@ -4956,14 +4431,7 @@
       "matchedNoteIds": [
         "note:26.18:champion:seraphine:4519a08c"
       ],
-      "causes": [
-        {
-          "text": "구인수의 격노검 중첩 지속시간 3초→4초 버프로 정통 AD 원딜의 입지가 커져 세라핀 원딜이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375326470",
@@ -4980,14 +4448,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=147,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-seraphine"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "세라핀 원딜 픽률이 0.8%→0.5%로 내려갔고, 구인수 격노검 버프로 AD 원딜이 강해진 영향이 의심됩니다.",
-        "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Viego:MIDDLE:pickRate",
@@ -5013,26 +4474,7 @@
         "note:26.18:champion:viego:3477e7c5",
         "note:26.18:champion:viego:caf9b23d"
       ],
-      "causes": [
-        {
-          "text": "신드라 W 쿨타임 1초 증가 등 너프로 미드 AP 지분이 줄며 비에고 미드가 반사 이익을 얻었습니다.",
-          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "카시오페아 Q 기본 피해 10 감소 등 연속 너프로 미드 선택지가 빠졌습니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "구인수의 격노검 중첩 지속시간 3초→4초 버프가 비에고 빌드 가치를 올렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375336156",
@@ -5049,15 +4491,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=234,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "비에고 미드 픽률 0.4%→0.7%(+0.2%p)는 신드라 W 쿨타임 증가와 카시오페아 Q 피해 감소 등 미드 AP 너프의 반사 이익입니다.",
-        "summaryCites": [
-          "note:26.18:champion:syndra:cb99a266",
-          "note:26.18:champion:cassiopeia:91d07d6f"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zeri:banRate",
@@ -5084,14 +4518,7 @@
         "note:26.18:champion:zeri:e371a79d",
         "note:26.18:champion:zeri:3f709c34"
       ],
-      "causes": [
-        {
-          "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초 버프가 제리 주력 빌드를 강화했습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375326366",
@@ -5108,14 +4535,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=221,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zeri"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "제리 밴률 0.7%→0.9%(+0.2%p)는 CI가 0을 포함해 유의하지 않으며, 구인수의 격노검 버프가 W 너프를 일부 상쇄했을 수 있습니다.",
-        "summaryCites": [
-          "note:26.18:item:guinsoos-rageblade:f624219b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Bard:winRate",
@@ -5140,20 +4560,7 @@
       "matchedNoteIds": [
         "note:26.18:champion:bard:453ef7b4"
       ],
-      "causes": [
-        {
-          "text": "경쟁 서포터 노틸러스의 공격력·Q 피해 하향이 바드 하락폭을 상쇄했을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "세라핀 E 쿨다운 고정 너프로 서포터 구도가 바뀌며 바드 승률이 유지된 영향으로 보입니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375345676",
@@ -5170,12 +4577,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=432,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-bard"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "바드 승률 -0.2%p는 CI가 [-4.2%p, 3.9%p]로 넓어 방어력 너프 효과를 확인할 수 없는 노이즈 수준입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Bard:UTILITY:winRate",
@@ -5217,12 +4619,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=432,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-bard"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Seraphine:pickRate",
@@ -5247,20 +4644,7 @@
       "matchedNoteIds": [
         "note:26.18:champion:seraphine:4519a08c"
       ],
-      "causes": [
-        {
-          "text": "신드라 W 쿨타임 1초 증가 너프로 미드 경쟁자가 약화되며 세라핀이 반사 이익을 얻었을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카시오페아 Q 기본 피해량 하향으로 같은 AP 미드 픽 수요가 일부 이동한 영향으로 보입니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375326470",
@@ -5277,15 +4661,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=147,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-seraphine"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "세라핀 E 쿨타임 너프에도 픽률은 4.2%→4.3%로 0.2%p 올랐지만 CI가 0을 포함해 유의하지 않고, 신드라·카시오페아 너프에 따른 반사 이익 수준입니다.",
-        "summaryCites": [
-          "note:26.18:champion:syndra:cb99a266",
-          "note:26.18:champion:cassiopeia:91d07d6f"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Ekko:UTILITY:pickRate",
@@ -5328,12 +4704,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=245,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:MasterYi:MIDDLE:pickRate",
@@ -5359,26 +4730,7 @@
         "note:26.18:champion:masteryi:d392c3c6",
         "note:26.18:champion:masteryi:c898ee27"
       ],
-      "causes": [
-        {
-          "text": "신드라 W 쿨타임 1초 증가로 미드 견제가 약해져 마스터 이 미드 시도가 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카시오페아 Q 기본 피해 10 감소 등 미드 AP 너프가 틈새 픽 여지를 넓혔습니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "세라핀 E 쿨타임이 11초로 고정되며 미드 라인전 압박이 줄었습니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375366030",
@@ -5395,15 +4747,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=11,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "마스터 이 미드 픽률 0.1%p 상승은 CI 하한이 0%p라 노이즈 수준이며, 신드라·카시오페아 너프에 따른 틈새 픽 정도로 봅니다.",
-        "summaryCites": [
-          "note:26.18:champion:syndra:cb99a266",
-          "note:26.18:champion:cassiopeia:91d07d6f"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "item:3124:adoptionRate",
@@ -5428,20 +4772,7 @@
       "matchedNoteIds": [
         "note:26.18:item:guinsoos-rageblade:f624219b"
       ],
-      "causes": [
-        {
-          "text": "주요 사용 챔피언 제리의 W 계수 너프가 구인수 버프 효과를 상쇄했을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "마스터 이 R 이동 속도 버프는 구인수 수요를 소폭 밀어올리는 방향으로 작용합니다.",
-          "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375327276",
@@ -5458,14 +4789,7 @@
         "aggregatePath": "data/aggregated/26.18/items.json#rows[itemId=3124]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-Guinsoos-Rageblade"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "채택률 3.1%→3.1%(-0.1%p)로 95% CI [-0.2%p, 0.1%p]가 0을 포함해 사실상 무변화이며, 제리 W 너프가 버프 효과를 상쇄한 것으로 보입니다.",
-        "summaryCites": [
-          "note:26.18:champion:zeri:d0cacf0b"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Syndra:UTILITY:pickRate",
@@ -5491,20 +4815,7 @@
         "note:26.18:champion:syndra:5db255ef",
         "note:26.18:champion:syndra:cb99a266"
       ],
-      "causes": [
-        {
-          "text": "세라핀 E 쿨다운이 11초로 고정 너프되며 AP 서포터 수요가 신드라로 일부 옮겨갔을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "바드 방어력이 32+레벨당 4.7로 하향돼 서포터 풀 하단이 흔들렸습니다.",
-          "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375323215",
@@ -5521,14 +4832,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=134,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "신드라 서포터 픽률 +0.1%p는 CI [-0.0%p, 0.2%p]로 유의하지 않은 변동이며, 세라핀 E 쿨다운 너프에 따른 AP 서포터 이동이 일부 영향일 수 있습니다.",
-        "summaryCites": [
-          "note:26.18:champion:seraphine:4519a08c"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Syndra:TOP:pickRate",
@@ -5554,14 +4858,7 @@
         "note:26.18:champion:syndra:5db255ef",
         "note:26.18:champion:syndra:cb99a266"
       ],
-      "causes": [
-        {
-          "text": "W 쿨다운 1초 증가로 미드 입지가 흔들리며 일부 사용자가 탑 시도로 옮겨갔을 수 있습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375323215",
@@ -5578,12 +4875,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=134,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "신드라 탑 픽률 0.1%p 상승은 CI [-0.0%p, 0.2%p]로 유의하지 않은 미미한 변동입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Ekko:BOTTOM:pickRate",
@@ -5609,14 +4901,7 @@
         "note:26.18:champion:ekko:dfd6f002",
         "note:26.18:champion:ekko:433f5bb2"
       ],
-      "causes": [
-        {
-          "text": "구인수의 격노검 중첩 지속시간 3초→4초로 정통 원딜이 강해져 에코 원딜이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375326470",
@@ -5633,12 +4918,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=245,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "에코 원딜 픽률 -0.1%p는 CI가 0을 포함하는 0.1%대 극소 표본 변동으로, 에코 Q 버프와 무관한 노이즈입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Zaahen:MIDDLE:pickRate",
@@ -5664,26 +4944,7 @@
         "note:26.18:champion:zaahen:3d1ae789",
         "note:26.18:champion:zaahen:bce84005"
       ],
-      "causes": [
-        {
-          "text": "신드라 W 쿨다운 1초 증가 너프로 미드 경쟁 픽이 줄며 자헨 지분이 늘었을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카시오페아 Q 기본 피해 10 감소로 미드 라인 경쟁자가 약화됐습니다.",
-          "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "세라핀 E 쿨다운이 전 구간 11초로 고정돼 미드 선택지가 줄었습니다.",
-          "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375340607",
@@ -5700,15 +4961,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=904,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "자헨 미드 픽률 변화 0.1%p는 CI가 [-0.0%p, 0.2%p]로 0을 포함해 미미하며, 신드라·카시오페아 너프에 따른 반사 효과 정도로 봅니다.",
-        "summaryCites": [
-          "note:26.18:champion:syndra:cb99a266",
-          "note:26.18:champion:cassiopeia:91d07d6f"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Kassadin:TOP:pickRate",
@@ -5751,12 +5004,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=38,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-kassadin"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zeri:TOP:pickRate",
@@ -5800,12 +5048,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=221,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zeri"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:MasterYi:JUNGLE:pickRate",
@@ -5831,14 +5074,7 @@
         "note:26.18:champion:masteryi:d392c3c6",
         "note:26.18:champion:masteryi:c898ee27"
       ],
-      "causes": [
-        {
-          "text": "구인수의 격노검 중첩 지속시간 3초→4초 상향이 픽률 하락을 상쇄했을 수 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375366030",
@@ -5855,12 +5091,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=11,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "마스터 이 정글 픽률 2.2%로 변화 -0.1%p, CI [-0.5%p, 0.4%p]가 0을 포함해 통계적으로 유의하지 않습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Viego:BOTTOM:pickRate",
@@ -5886,26 +5117,7 @@
         "note:26.18:champion:viego:3477e7c5",
         "note:26.18:champion:viego:caf9b23d"
       ],
-      "causes": [
-        {
-          "text": "비에고 공격력 성장 3.5→4 버프로 원거리 딜러 자리 시험 픽이 소폭 늘었을 수 있습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "low"
-        },
-        {
-          "text": "군주의 지배 회복이 공격속도·체력까지 반영돼 원딜식 빌드 실험 유인이 생겼습니다.",
-          "candidateNoteId": null,
-          "verified": false,
-          "confidence": "low"
-        },
-        {
-          "text": "구인수의 격노검 중첩 유지 3초→4초 버프가 공속 빌드 비에고 시도를 거들었을 수 있습니다.",
-          "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375336156",
@@ -5922,15 +5134,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=234,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "비에고 원딜 픽률은 0.0%→0.1%로 변화폭이 CI에 0이 포함될 만큼 미미하며, 공격력 성장·지속효과 버프에 따른 시험 픽 수준입니다.",
-        "summaryCites": [
-          "note:26.18:champion:viego:3477e7c5",
-          "note:26.18:champion:viego:caf9b23d"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zaahen:UTILITY:pickRate",
@@ -5973,12 +5177,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=904,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Ekko:TOP:pickRate",
@@ -6021,12 +5220,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=245,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Nautilus:MIDDLE:pickRate",
@@ -6069,12 +5263,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=111,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "노틸러스 미드 픽률은 0.0%→0.1%로 변화폭이 0.0%p이고 신뢰구간이 0을 포함해 통계적 노이즈 수준입니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Ekko:banRate",
@@ -6117,12 +5306,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=245,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nautilus:TOP:pickRate",
@@ -6165,12 +5349,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=111,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zaahen:BOTTOM:pickRate",
@@ -6213,12 +5392,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=904,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:MasterYi:UTILITY:pickRate",
@@ -6261,12 +5435,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=11,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Seraphine:MIDDLE:pickRate",
@@ -6308,12 +5477,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=147,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-seraphine"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Kassadin:JUNGLE:pickRate",
@@ -6339,20 +5503,7 @@
         "note:26.18:champion:kassadin:d631af52",
         "note:26.18:champion:kassadin:d9a6b909"
       ],
-      "causes": [
-        {
-          "text": "비에고 레벨당 공격력 3.5→4 버프로 정글 경쟁이 강해져 카사딘 정글 진입이 막혔을 수 있습니다.",
-          "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "에코 Q 계수·마나 버프로 AP 정글 수요가 에코 쪽으로 흡수된 영향으로 보입니다.",
-          "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8375337615",
@@ -6369,15 +5520,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=38,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-kassadin"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "카사딘 정글 픽률은 0.0%p로 사실상 무변동이며, 비에고·에코 정글 버프가 AP 정글 수요를 가져간 것으로 보입니다.",
-        "summaryCites": [
-          "note:26.18:champion:viego:3477e7c5",
-          "note:26.18:champion:ekko:433f5bb2"
-        ],
-        "summaryVerified": true
-      }
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Kassadin:BOTTOM:pickRate",
@@ -6420,12 +5563,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=38,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-kassadin"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Cassiopeia:UTILITY:pickRate",
@@ -6475,12 +5613,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=69,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "카시오페아 서포터 픽률은 0.0%→0.1%로 사실상 변동이 없고 신뢰구간[-0.1%p, 0.1%p]이 0을 포함해, 패치 영향으로 볼 근거가 없습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Nautilus:JUNGLE:pickRate",
@@ -6523,12 +5656,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=111,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "노틸러스 정글 픽률은 0.0%p 변동으로 사실상 그대로이며(CI [-0.0%p, 0.0%p]), 이 변화를 설명할 조항을 찾지 못했습니다.",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Nautilus:BOTTOM:pickRate",
@@ -6571,12 +5699,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=111,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "노틸러스 원딜 픽률은 변화 0.0%p(CI -0.0~0.0%p)로 사실상 움직임이 없어, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Viego:UTILITY:pickRate",
@@ -6619,12 +5742,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=234,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Zaahen:banRate",
@@ -6667,12 +5785,7 @@
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=904,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen"
       },
-      "llm": {
-        "skipped": false,
-        "summary": "자헨 밴률은 0.1%로 변동 없고 신뢰구간도 ±0.1%p라 유의한 변화가 아닙니다. 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
-        "summaryCites": [],
-        "summaryVerified": true
-      }
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Cassiopeia:banRate",
@@ -6721,7 +5834,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=69,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Cassiopeia:pickRate",
@@ -6770,7 +5884,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=69,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Syndra:banRate",
@@ -6812,7 +5927,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=134,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Cassiopeia:MIDDLE:pickRate",
@@ -6861,7 +5977,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=69,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Syndra:winRate",
@@ -6903,7 +6020,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=134,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Viego:pickRate",
@@ -6945,7 +6063,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=234,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nautilus:UTILITY:pickRate",
@@ -6987,7 +6106,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=111,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nautilus:pickRate",
@@ -7029,7 +6149,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=111,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Viego:JUNGLE:pickRate",
@@ -7071,7 +6192,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=234,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Bard:banRate",
@@ -7112,7 +6234,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=432,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-bard"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Bard:pickRate",
@@ -7153,7 +6276,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=432,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-bard"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Bard:UTILITY:pickRate",
@@ -7194,7 +6318,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=432,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-bard"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ekko:pickRate",
@@ -7236,7 +6361,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=245,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Syndra:pickRate",
@@ -7278,7 +6404,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=134,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ekko:JUNGLE:pickRate",
@@ -7320,7 +6447,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=245,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zeri:pickRate",
@@ -7363,7 +6491,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=221,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zeri"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:MasterYi:banRate",
@@ -7405,7 +6534,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=11,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zeri:BOTTOM:pickRate",
@@ -7448,7 +6578,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=221,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zeri"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Cassiopeia:BOTTOM:pickRate",
@@ -7497,7 +6628,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=69,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Syndra:BOTTOM:pickRate",
@@ -7539,7 +6671,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=134,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Kassadin:pickRate",
@@ -7581,7 +6714,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=38,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-kassadin"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Kassadin:MIDDLE:pickRate",
@@ -7623,7 +6757,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=38,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-kassadin"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:MasterYi:BOTTOM:pickRate",
@@ -7665,7 +6800,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=11,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Zeri:MIDDLE:pickRate",
@@ -7708,7 +6844,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=221,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zeri"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:MasterYi:TOP:pickRate",
@@ -7750,7 +6887,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=11,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Viego:TOP:pickRate",
@@ -7792,7 +6930,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=234,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Kassadin:banRate",
@@ -7834,7 +6973,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=38,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-kassadin"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "lane:MIDDLE:goldAt14",
@@ -20440,7 +19580,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=111,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nautilus:JUNGLE:winRate",
@@ -20482,7 +19623,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=111,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Nautilus:BOTTOM:winRate",
@@ -20524,7 +19666,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=111,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Yone:UTILITY:winRate",
@@ -21034,7 +20177,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=904,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Ashe:MIDDLE:winRate",
@@ -21856,7 +21000,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=38,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-kassadin"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Illaoi:BOTTOM:winRate",
@@ -22912,7 +22057,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=38,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-kassadin"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Karthus:UTILITY:winRate",
@@ -23110,7 +22256,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=234,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Akali:UTILITY:winRate",
@@ -23737,7 +22884,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=11,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ziggs:TOP:winRate",
@@ -26509,7 +25657,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=11,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Draven:MIDDLE:winRate",
@@ -27564,7 +26713,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=147,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-seraphine"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Zaahen:UTILITY:winRate",
@@ -27606,7 +26756,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=904,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Ekko:UTILITY:winRate",
@@ -27648,7 +26799,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=245,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Shen:MIDDLE:winRate",
@@ -28042,7 +27194,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=221,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zeri"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Samira:winRate",
@@ -28162,7 +27315,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=134,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Fiora:UTILITY:winRate",
@@ -28399,7 +27553,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=245,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Sejuani:TOP:winRate",
@@ -29540,7 +28695,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=69,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Amumu:winRate",
@@ -29620,7 +28776,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=147,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-seraphine"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Maokai:TOP:winRate",
@@ -29779,7 +28936,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=134,scope=position,position=UTILITY]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Kalista:TOP:winRate",
@@ -30250,7 +29408,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=11,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Gragas:UTILITY:winRate",
@@ -31313,7 +30472,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=69,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Olaf:MIDDLE:winRate",
@@ -31901,7 +31061,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=111,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-nautilus"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Yasuo:UTILITY:winRate",
@@ -32606,7 +31767,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=234,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Shyvana:TOP:winRate",
@@ -32766,7 +31928,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=221,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zeri"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Akshan:BOTTOM:winRate",
@@ -32964,7 +32127,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=245,scope=position,position=TOP]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Veigar:winRate",
@@ -33240,7 +32404,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=234,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Sylas:UTILITY:winRate",
@@ -33672,7 +32837,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=234,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-viego"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Lissandra:UTILITY:winRate",
@@ -33948,7 +33114,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=904,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Nocturne:JUNGLE:winRate",
@@ -35238,7 +34405,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=38,scope=all]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-kassadin"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Naafiri:MIDDLE:winRate",
@@ -36489,7 +35657,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=11,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-masteryi"
-      }
+      },
+      "directionAgreement": "inconsistent"
     },
     {
       "id": "champion:Ivern:winRate",
@@ -37311,7 +36480,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=134,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-syndra"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Olaf:JUNGLE:winRate",
@@ -39225,7 +38395,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=38,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-kassadin"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Nocturne:TOP:winRate",
@@ -40008,7 +39179,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=245,scope=position,position=JUNGLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-ekko"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Volibear:TOP:winRate",
@@ -40096,7 +39268,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=69,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-cassiopeia"
-      }
+      },
+      "directionAgreement": "consistent"
     },
     {
       "id": "champion:Ornn:winRate",
@@ -41620,7 +40793,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=904,scope=position,position=MIDDLE]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-zaahen"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Ashe:TOP:winRate",
@@ -42637,7 +41811,8 @@
         ],
         "aggregatePath": "data/aggregated/26.18/champions.json#rows[championId=38,scope=position,position=BOTTOM]",
         "noteAnchor": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-kassadin"
-      }
+      },
+      "directionAgreement": "neutral"
     },
     {
       "id": "champion:Volibear:MIDDLE:winRate",
