@@ -1196,7 +1196,7 @@
       "stat": "재사용 최소 지연 시간",
       "before": "0초",
       "after": "0.25초",
-      "direction": "buff",
+      "direction": "nerf",
       "summary": "재사용 최소 지연 시간: 0초 ⇒ 0.25초",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-18-notes/#patch-classic",
       "anchorKind": "section",

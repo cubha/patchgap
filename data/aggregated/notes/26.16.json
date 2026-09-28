@@ -2159,7 +2159,7 @@
       "stat": "억제기 포탑 체력",
       "before": "3,500",
       "after": "4,000",
-      "direction": "adjust",
+      "direction": "buff",
       "summary": "억제기 포탑 체력: 3,500 ⇒ 4,000",
       "anchorUrl": "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-16-notes/#patch-classic",
       "anchorKind": "section",
