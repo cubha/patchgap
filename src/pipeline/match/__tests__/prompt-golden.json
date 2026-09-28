@@ -1,0 +1,20 @@
+{
+  "lol": [
+    {
+      "promptRevision": "",
+      "instructionsSha256": "4c4c18ad99676fa24e5707fd5c3c08a2f6701f6c5a592073800a4177ae4108da"
+    }
+  ],
+  "tft": [
+    {
+      "promptRevision": "",
+      "instructionsSha256": "b38265cf75a0bbdb676e0e5cbb2e404bef3f738a9a05599fcd9e8ebc01acb9b8"
+    }
+  ],
+  "pubg": [
+    {
+      "promptRevision": "pubg-redistribution-bound",
+      "instructionsSha256": "310a2d4b5489e297b69f7e819ddaa9d6586b3b12cf6ac5eb0386b70d70afe156"
+    }
+  ]
+}

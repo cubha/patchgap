@@ -308,6 +308,20 @@ describe("inferIndirectCandidates", () => {
     expect(revised.summary.calls).toBe(1);
   });
 
+  // C5(2026-09-28): 개정 태그를 호출부 옵션이 아니라 프로필 속성으로 — 지시문과 태그가 같은 파일에 산다.
+  it("프로필의 promptRevision도 캐시 키를 바꾼다 — 비어 있으면 기존 키 그대로", async () => {
+    const parseFn = vi.fn().mockResolvedValue(fakeResponse({ causes: [], summary: "요약", summaryCites: [] }));
+    const client = fakeClient(parseFn);
+    const deltas = [delta({ id: "d1", status: "unannounced" })];
+    const notes = [note({})];
+    const base = lolLlmProfile(makeDdragon());
+    await inferIndirectCandidates(deltas, notes, base, { client, cacheDir: tmpCacheDir });
+    const empty = await inferIndirectCandidates(deltas, notes, { ...base, promptRevision: "" }, { client, cacheDir: tmpCacheDir });
+    expect(empty.summary.cacheHits).toBe(1);
+    const revised = await inferIndirectCandidates(deltas, notes, { ...base, promptRevision: "r2" }, { client, cacheDir: tmpCacheDir });
+    expect(revised.summary.cacheHits).toBe(0);
+  });
+
   it("캐시 파일이 있으면 API 호출 0", async () => {
     const parseFn = vi.fn().mockResolvedValue(fakeResponse({ causes: [], summary: "첫 호출", summaryCites: [] }));
     const client = fakeClient(parseFn);
