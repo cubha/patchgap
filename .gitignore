@@ -61,4 +61,3 @@ scratch.md.precompact-backup-*
 
 # 루트의 임시 스크린샷 — 출품용은 docs/submission/screenshots/ 에만 둔다
 /*.png
-/.scratch/
