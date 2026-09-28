@@ -2,7 +2,7 @@
   "meta": {
     "from": "26.18",
     "to": "26.19",
-    "generatedAt": "2026-09-28T09:49:25.336Z",
+    "generatedAt": "2026-09-28T10:01:21.532Z",
     "n": 1931,
     "counts": {
       "unannounced": 27,
@@ -1193,7 +1193,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "노틸러스 밴률이 8.8%에서 12.2%로 바뀌었습니다(+3.5%p). 패치노트에 직접 조항이 없습니다.",
+        "summary": "노틸러스 밴률이 8.8%에서 12.2%로 바뀌었습니다(+3.4%p). 패치노트에 직접 조항이 없습니다.",
         "summaryCites": [],
         "summaryVerified": true,
         "summaryDeterministic": true

@@ -3,7 +3,7 @@
     "game": "tft",
     "from": "18.1",
     "to": "18.2",
-    "generatedAt": "2026-09-28T09:49:28.565Z",
+    "generatedAt": "2026-09-28T10:01:25.297Z",
     "qAlpha": 0.1,
     "boards": {
       "before": 17856,
@@ -642,7 +642,7 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "약탈자 평균 등수가 4.65등에서 4.48등으로 바뀌었습니다(-0.18등). 패치노트에 직접 조항이 없습니다.",
+        "summary": "약탈자 평균 등수가 4.65등에서 4.48등으로 바뀌었습니다(-0.17등). 패치노트에 직접 조항이 없습니다.",
         "summaryCites": [],
         "summaryVerified": true,
         "summaryDeterministic": true
@@ -7606,7 +7606,7 @@
       "directionAgreement": "inconsistent",
       "llm": {
         "skipped": false,
-        "summary": "요정 등장률이 16.2%에서 7.9%로 바뀌었습니다(-8.4%p). 노트가 예고한 방향과 다르게 움직였습니다.",
+        "summary": "요정 등장률이 16.2%에서 7.9%로 바뀌었습니다(-8.3%p). 노트가 예고한 방향과 다르게 움직였습니다.",
         "summaryCites": [],
         "summaryVerified": true,
         "summaryDeterministic": true
