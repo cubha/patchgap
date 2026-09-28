@@ -26,6 +26,7 @@ import type { GameLlmProfile, LlmDelta } from "./llm-profile";
 export { LLM_MODEL, PROMPT_VERSION } from "./llm-config";
 import { splitCombinedEntity } from "./entity-match";
 import { LLM_MODEL, PROMPT_VERSION } from "./llm-config";
+import { arrowClaimsGrounded } from "./cause-factuality";
 // 2026-09-17: 50 → 120. 실측 후보가 113건(미공지 47 + 간접 2 + 공지-불일치 64)인데 상한이
 // 50이라 미공지 14건이 LLM을 **아예 거치지 못했고**, 화면은 그것을 "근거 미확인"으로 표시해
 // "검토했으나 후보 없음"과 구분되지 않았다(사용자 지적 B5).
@@ -306,6 +307,17 @@ export function verifyCauses<TDelta extends LlmDelta = DeltaRecord>(
     // 문장과 인용은 한 쌍이다 — 문장이 다른 대상을 말하면 인용 링크가 거짓 근거가 된다.
     if (note && namesOtherEntityThanCited(cause.text, note, candidates, ownNameOf(delta))) {
       return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
+    }
+    // 사실성(2026-09-28, C3) — 문장이 숫자로 단정한 「A→B」가 인용 노트(또는 같은 대상의 형제 노트)·델타
+    // 자신의 수치와 맞나. 게임 고유 검사(PUBG 부호 백분율·전체 감소 귀속)는 프로필이 든다.
+    if (note) {
+      const siblings = candidates.filter((other) => other.entity === note.entity);
+      if (
+        !arrowClaimsGrounded(cause.text, siblings, profile.ownNumbersOf?.(delta) ?? []) ||
+        (profile.isCauseGrounded !== undefined && !profile.isCauseGrounded(cause.text, note, delta))
+      ) {
+        return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
+      }
     }
     return {
       text: cause.text,

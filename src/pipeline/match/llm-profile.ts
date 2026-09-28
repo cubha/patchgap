@@ -90,6 +90,15 @@ export interface GameLlmProfile<TDelta extends LlmDelta = DeltaRecord> {
   fallbackSummary?(delta: TDelta): string;
 
   /**
+   * 원인 문장이 숫자로 인용해도 되는 **델타 자신의** 수치(표본 n·표시 단위 값, 2026-09-28 C3). 엔진의
+   * 「A→B」 사실성 검사가 인용 노트 수치와 함께 근거로 본다.
+   */
+  ownNumbersOf?(delta: TDelta): number[];
+
+  /** 게임 고유 사실성 검사(C3) — 거짓이면 그 원인은 verified=false. 없으면 공통 검사만. */
+  isCauseGrounded?(text: string, note: PatchNoteItem, delta: TDelta): boolean;
+
+  /**
    * 이 델타를 LLM 2단에 보낼까. 없으면 엔진 기본값(`unannounced` ∨ `announced-inconsistent`) — PUBG는
    * 판정기가 불일치를 이미 비율 밴드로 확정하므로 기본값이 맞다.
    */
@@ -145,4 +154,17 @@ export function deterministicSummary(input: {
 /** 부호를 붙인 변화량 문자열 — 결정론 요약용(`+0.4%p`·`-0.12등`). */
 export function signed(text: string): string {
   return text.startsWith("-") ? text : `+${text}`;
+}
+
+/**
+ * LoL·TFT 델타 자신의 수치(C3) — 표본 n, 그리고 비율 지표를 화면 단위(%, 소수 첫째 자리)로 바꾼 값.
+ * 원인 문장이 「표본이 4156→5789로」처럼 델타 수치를 말하면 그것은 지어낸 수치가 아니다.
+ */
+export function deltaRecordNumbers(delta: DeltaRecord): number[] {
+  const values = [delta.before, delta.after, delta.delta].filter((v): v is number => v !== null);
+  return [
+    delta.n.before,
+    delta.n.after,
+    ...values.flatMap((v) => [Math.round(Math.abs(v) * 1000) / 10, Math.round(Math.abs(v) * 100) / 100, Math.abs(v)]),
+  ];
 }

@@ -59,6 +59,7 @@ async function main(): Promise<void> {
   const profile = createPubgLlmProfile(new Map(notes.map((n) => [n.id, n.weaponKeys] as const)), {
     redistribution,
     totalPickupsRelChange,
+    beforeShareByWeapon: new Map(before.weapons.map((w) => [w.weaponKey, w.share] as const)),
   });
 
   const targets = deltas.rows.filter(

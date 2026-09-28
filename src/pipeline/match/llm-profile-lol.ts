@@ -10,7 +10,7 @@ import { isCoreNote } from "../shared/mode-scope";
 import type { DeltaRecord, PatchNoteItem } from "../types";
 import type { DdragonData } from "./ddragon";
 import { resolveNoteEntity } from "./entity-match";
-import { deterministicSummary, isAnomalyOrGapTarget, isCitableBalanceNote, signed, type GameLlmProfile } from "./llm-profile";
+import { deltaRecordNumbers, deterministicSummary, isAnomalyOrGapTarget, isCitableBalanceNote, signed, type GameLlmProfile } from "./llm-profile";
 
 const SYSTEM_INSTRUCTIONS = [
   "당신은 리그 오브 레전드 패치 분석가입니다.",
@@ -131,6 +131,7 @@ export function lolLlmProfile(ddragon: DdragonData): GameLlmProfile {
     isCitable: isCitableBalanceNote,
     isSameEntity: (note, delta) => resolvesToSameEntity(note, delta, ddragon),
     buildUserPrompt,
+    ownNumbersOf: deltaRecordNumbers,
     fallbackSummary: (delta: DeltaRecord) =>
       deterministicSummary({
         name: delta.entityName,

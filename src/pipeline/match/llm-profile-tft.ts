@@ -17,7 +17,7 @@
 
 import { isCoreNote } from "../shared/mode-scope";
 import type { DeltaRecord, PatchNoteItem } from "../types";
-import { deterministicSummary, isAnomalyOrGapTarget, isCitableBalanceNote, signed, type GameLlmProfile } from "./llm-profile";
+import { deltaRecordNumbers, deterministicSummary, isAnomalyOrGapTarget, isCitableBalanceNote, signed, type GameLlmProfile } from "./llm-profile";
 
 const SYSTEM_INSTRUCTIONS = [
   "당신은 전략적 팀 전투(TFT) 패치 분석가입니다.",
@@ -119,6 +119,7 @@ export const tftLlmProfile: GameLlmProfile = {
   isCitable: isCitableBalanceNote,
   isSameEntity: (note: PatchNoteItem, delta: DeltaRecord) => note.entity === delta.entityName,
   buildUserPrompt,
+  ownNumbersOf: deltaRecordNumbers,
   fallbackSummary: (delta: DeltaRecord) =>
     deterministicSummary({
       name: delta.entityName,
