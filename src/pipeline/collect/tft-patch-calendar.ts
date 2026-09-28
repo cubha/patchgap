@@ -180,3 +180,33 @@ export function determineTftRun(input: TftRunInput, windows: readonly TftPatchWi
     reason: `${from} → ${patch} 수집·판정을 실행한다`,
   };
 }
+
+// ── C13·C14 계획(2026-09-28) — 구현 전 시그니처 ──────────────────────────────────────────
+export const TFT_OBSERVATION_DAY_MID_SET = 0;
+export const TFT_OBSERVATION_DAY_SET_LAUNCH = 0;
+export type DeltasState = { kind: "none" } | { kind: "stub" } | { kind: "observed"; observedUntilMs: number | null };
+export type TftRunMode = "skip" | "declaration" | "observation";
+export interface TftPlanInput {
+  nowMs: number;
+  notesExist: boolean;
+  deltas: DeltasState;
+  manualPatch?: string;
+  force?: boolean;
+}
+export interface TftRunPlan {
+  mode: TftRunMode;
+  patch: string | null;
+  from: string | null;
+  to: string | null;
+  staleCalendar: boolean;
+  reason: string;
+}
+export function observationDayOf(_patch: string): number {
+  throw new Error("TODO(C13): observationDayOf");
+}
+export function planTftRun(_input: TftPlanInput, _windows: readonly TftPatchWindow[] = TFT_PATCH_WINDOWS): TftRunPlan {
+  throw new Error("TODO(C13): planTftRun");
+}
+export function applyTftKeyFailure(_plan: TftRunPlan, _deltas: DeltasState, _notesExist: boolean): TftRunPlan {
+  throw new Error("TODO(C13): applyTftKeyFailure");
+}
