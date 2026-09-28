@@ -44,3 +44,10 @@ describe("planPubgRun", () => {
     expect(planPubgRun({ nowMs: day(1), notesExist: true, deltas: observed, force: true }, W).mode).toBe("observation");
   });
 });
+
+describe("planPubgRun — 보존창 초과 표시", () => {
+  it("보존창을 넘긴 선언은 windowLost", () => {
+    expect(planPubgRun({ nowMs: day(12), notesExist: true, deltas: none }, W).windowLost).toBe(true);
+    expect(planPubgRun({ nowMs: day(1), notesExist: true, deltas: none }, W).windowLost).toBe(false);
+  });
+});

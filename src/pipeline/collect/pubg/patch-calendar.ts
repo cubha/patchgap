@@ -202,6 +202,8 @@ export interface PubgRunPlan extends PubgRunDecision {
   mode: "skip" | "declaration" | "observation";
   /** 관측 계획에서 집계·판정까지 갈 수 있나(노트 있음). 없으면 수집만 하고 집계는 보류한다. */
   notesReady: boolean;
+  /** 336시간 보존창을 넘겨 이 쌍은 관측이 영영 불가하다(stub 사유 `window-lost`). */
+  windowLost: boolean;
 }
 
 export function planPubgRun(input: PubgPlanInput, windows: readonly PubgPatchWindow[] = PUBG_PATCH_WINDOWS): PubgRunPlan {
@@ -209,14 +211,17 @@ export function planPubgRun(input: PubgPlanInput, windows: readonly PubgPatchWin
     { nowMs: input.nowMs, outputsExist: input.deltas.kind === "observed", force: input.force },
     windows
   );
-  if (decision.shouldRun) return { ...decision, mode: "observation", notesReady: input.notesExist };
+  const latest = windows[windows.length - 1];
+  const windowLost = latest !== undefined && daysSincePatch(latest.liveFrom, input.nowMs) > HARVEST_LATEST_DAY;
+  if (decision.shouldRun) return { ...decision, mode: "observation", notesReady: input.notesExist, windowLost };
   if (decision.to !== null && input.deltas.kind === "none" && input.notesExist) {
     return {
       ...decision,
       mode: "declaration",
       notesReady: true,
+      windowLost,
       reason: `${decision.reason} — 패치노트는 즉시 반영한다(관측 stub)`,
     };
   }
-  return { ...decision, mode: "skip", notesReady: input.notesExist };
+  return { ...decision, mode: "skip", notesReady: input.notesExist, windowLost };
 }
