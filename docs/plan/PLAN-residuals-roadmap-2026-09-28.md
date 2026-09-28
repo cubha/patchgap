@@ -59,6 +59,9 @@
 | C3 | D2 타일=탭 합집합(잠수함 포함) 세 게임 공용 헬퍼 | 타일 숫자 = 탭 숫자 |
 | C4 | B3 `/lol/history/[pair]/` 정적 라우트(`generateStaticParams`) + select 배선 | 과거 쌍 정적 생성 |
 
-## 명세 변경이 예상되는 기존 테스트 (보고 대상)
-- PUBG 불변식 「화면이 읽는 쌍의 파일이 전부 있다」 — `observationFailed` stub 허용
+## 명세 변경한 기존 테스트 (보고 대상 — 2026-09-28 구현 중 추가분 포함)
+- PUBG 불변식 「화면이 읽는 쌍의 파일이 전부 있다」 — `observationFailed` stub 허용 (A12)
+- `tft-patch-calendar.test.ts` 7일 대기·`determineTftRun` 블록 삭제 → `tft-run-plan.test.ts`로 대체 (A11, D6이 7일 대기를 폐기)
+- `landing.test.ts` 「미공지 ⊆ 유의」 검사를 관측 전(null) 허용으로 (A12 — 관측 없는 카드는 0이 아니라 null)
+- `deltas-invariants.test.ts` 「인용 어긋남」 이름 풀을 core 노트로 (A6 — 엔진 `candidatesOf`와 같은 풀. 모드 대상 「오른」이 「(유지력이) 오른」에 걸림)
 - `screen-parity.test.ts` 섹션 순서 (PR-C)
