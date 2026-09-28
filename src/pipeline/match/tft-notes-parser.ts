@@ -287,7 +287,10 @@ export function parseTftPatchNotes(html: string, options: ParseTftNotesOptions):
 
         const section = SECTION_OF[resolved.kind];
         const resolvedStat = partIndex === 0 && resolved.stat.length > 0 && resolved.stat !== resolved.entity ? resolved.stat : null;
-        const stat = parsedLine.label ?? resolvedStat ?? parsedLine.stat;
+        // 라벨이 한 겹 더 있으면(「공격력 형태: 기본 공격력: 65 ⇒ 60」) 두 라벨을 잇는다 — 앞 라벨이 대상
+        // 이름뿐이면(「소매치기: 가격: …」) 뒤 라벨만 쓴다.
+        const baseStat = resolvedStat ?? (parsedLine.stat !== resolved.entity ? parsedLine.stat : null);
+        const stat = parsedLine.label ? (baseStat ? `${baseStat} ${parsedLine.label}` : parsedLine.label) : baseStat ?? parsedLine.stat;
         const { before, after } = parsedLine;
         const direction = resolveDirection(stat, before, after, keywordHint);
 

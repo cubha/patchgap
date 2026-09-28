@@ -240,3 +240,11 @@ describe("parseTftPatchNotes — 줄 분할(C11)·중간 패치 체이닝(C7)", 
     expect(find(parsed(), "아칼리", "마나").direction).toBe("buff");
   });
 });
+
+describe("parseTftPatchNotes — 라벨이 두 겹인 줄(C11 부수)", () => {
+  const catalog: TftCatalog = { ...CATALOG, units: [...CATALOG.units, "마스터 이"] };
+  it("「공격력 형태: 기본 공격력: 65 ⇒ 60」은 두 라벨을 이은 수치 이름이고 before는 숫자만", () => {
+    const r = parseTftPatchNotes(FIXTURE, { patch: "18.2", sourceUrl: SOURCE_URL, catalog });
+    expect(find(r, "마스터 이", "기본 공격력")).toMatchObject({ stat: "공격력 형태 기본 공격력", before: "65", after: "60", direction: "nerf" });
+  });
+});
