@@ -15,7 +15,7 @@ import DiscordPanel from "@/components/home/DiscordPanel";
 import LaneGapPanel from "@/components/home/LaneGapPanel";
 import StreamColumnLayout from "@/components/home/StreamColumnLayout";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { gameDataEntityCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { gapEntityKeys, gapUnionCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import type { CosmeticSkinItem } from "@/components/home/CosmeticSkinPreview";
 import { computeHeadline, isGapStatus } from "@/components/home/logic";
 import { isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
@@ -68,6 +68,12 @@ export default function Home() {
   const ddragon = loadDdragonSafe();
 
   const headline = computeHeadline(deltas, notesTo, deltas?.meta.qAlpha);
+  // 「미공지 Gap」 타일·탭은 같은 수 — (통계 Gap 대상) ∪ (수치 축 대상)(2026-09-28, D2). 통계 쪽 정의는
+  // `countGapEntities`(= headline.unannouncedCount)와 같은 규칙(`isGapStatus`)이다.
+  const gapTotal = gapUnionCount(
+    gapEntityKeys((deltas?.rows ?? []).filter((row) => isGapStatus(row.status))),
+    submarine
+  );
 
   // 전 대상 색인(§8-1) — 이 패치 집계에 등장한 **모든** 챔피언·아이템. 이름은 Data Dragon이 주고,
   // 상세가 실재하는 대상만 링크한다(없는 경로는 정적 export에서 곧 404다).
@@ -186,7 +192,7 @@ export default function Home() {
             같이 내려가므로 그 요구를 그대로 만족한다. 176px은 Tailwind 표준 스케일(11rem)이라
             arbitrary 불필요. */}
         <Container className="flex flex-col gap-6 pt-44 pb-8">
-          <HeroSummary stats={headline} patch={pair?.to ?? ""} />
+          <HeroSummary stats={headline} patch={pair?.to ?? ""} gapCount={gapTotal} />
           <StreamColumnLayout
             leftHeader={<StreamLaneFilter />}
             left={
@@ -198,7 +204,7 @@ export default function Home() {
                 patch={pair?.to ?? null}
                 qAlpha={deltas?.meta.qAlpha}
                 contentCount={contentLineCount}
-                gapCount={headline.unannouncedCount + gameDataEntityCount(submarine)}
+                gapCount={gapTotal}
                 causes={indirectCauses}
                 skinPreviews={skinPreviews}
                 miscSections={miscSections}
@@ -214,7 +220,7 @@ export default function Home() {
                    상세 링크를 걸지 않는 이유: LoL 잠수함 전용 엔티티(폭풍갈퀴)는 델타가
                    0건이라 `/lol/item/[id]` 라우트가 없다 — 없는 링크를 만들지 않는다. */
                 gapLead={submarine ? <SubmarineSection summary={submarine} /> : undefined}
-                gameDataCount={gameDataEntityCount(submarine)}
+                metricGapCount={headline.unannouncedCount}
               />
             }
             right={

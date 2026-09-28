@@ -229,8 +229,8 @@ export default function TftPage() {
             patch={deltas.meta.to}
             itemCount={notes.items.length}
             significantCount={reportable.length}
-            // 대상 수(C15, 사용자 확정 7) — 전에는 행 수라 LoL(대상 수)과 단위가 달랐다.
-            gapCount={gapKeys.size}
+            // 대상 수(C15, 사용자 확정 7)이자 탭 배지와 같은 합집합(D2, 2026-09-28).
+            gapCount={gapUnionCount(gapKeys, submarine)}
             game="tft"
           />
 

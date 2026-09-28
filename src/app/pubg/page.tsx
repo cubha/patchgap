@@ -18,7 +18,7 @@ import Link from "next/link";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { gameDataEntityCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { gapEntityKeys, gapUnionCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import DeclarationOnly from "@/components/DeclarationOnly";
 import PubgWeaponGrid from "@/components/pubg/PubgWeaponGrid";
@@ -78,6 +78,11 @@ export default function PubgPage() {
   const submarine = summarizeGameData(loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to));
   const submarineKeys = new Set(submarine?.submarines.map((change) => change.entityKey) ?? []);
   const unannounced = reportable.filter((row) => row.status === "unannounced");
+  // 「미공지 Gap」 타일·탭 = (통계 Gap 무기) ∪ (수치 축 무기)(2026-09-28, D2 — 세 게임 공용 헬퍼).
+  const gapTotal = gapUnionCount(
+    gapEntityKeys(unannounced.map((row) => ({ entityType: "weapon", entityKey: row.weaponKey }))),
+    submarine
+  );
   const announced = reportable.filter((row) => row.status !== "unannounced");
   // 표 아래 원문 링크 1개 — 모든 공지 행이 같은 패치노트 페이지를 가리킨다(43.1 노트는 5항목 1페이지).
   const noteSource = announced.find((row) => row.evidence.noteAnchor)?.evidence.noteAnchor ?? null;
@@ -159,7 +164,7 @@ export default function PubgPage() {
             announcedCount={notes.length}
             patch={deltas.meta.to}
             significantCount={reportable.length}
-            gapCount={unannounced.length}
+            gapCount={gapTotal}
             game="pubg"
           />
 
@@ -171,7 +176,7 @@ export default function PubgPage() {
               위치를 아는 쪽만 정할 수 있다(2026-09-24). */}
           <BriefingTabs
               contentCount={announced.length}
-              gapCount={unannounced.length + gameDataEntityCount(submarine)}
+              gapCount={gapTotal}
               content={
                 <SectionCard
                   eyebrow="대조"
