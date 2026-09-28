@@ -101,3 +101,4 @@
   - V7 design-lint가 외부 CSS를 못 읽음 → 근거 보강: CSS 번들(`out/_next/static/chunks/*.css`)을 직접 입력해 재실행, error 0 · warn 2(인라인 카메라 변수).
   - V8 시안 02 라벨 구식 → 무시: UX-BRIEF 91·104행이 시안 02를 구식으로 명시.
 - 델타 재판정(2회차): A-V3·A-V5·A-V6·B-V3·B-V6·B-V7 ✅. A-V4 추가 근거 — (a) 분해 노트 id가 수치 축에 연결: `data/aggregated/gamedata/lol/26.18_26.19.json` 182·197행(`note:26.19:item:세계-지도집:*`·`룬-나침반:*`) (b) 「DDragon 부재 시 크게 실패」는 PR-B Phase 3에서 「경보·원문 유지」로 바뀐 결정 → 로드맵 PLAN B4 문구 갱신 + 가드 신설 `combined-note-split-local.test.ts`(버전 쌍 없음·item.json 없음 두 경로 모두 `::warning::[C2]` + 원문 그대로). 비평가 부기(UX-BRIEF 189행 커버리지 바 옛 5분류 문구)도 고쳤다.
+- 3회차: A-V4 ✅ — /verify-impl 코드 축 UNMET 0 · UNREQUESTED 0 · UNKNOWN 0(운영 절차 R1·R3 제외).
