@@ -157,3 +157,7 @@ export function splitCombinedNotes(
   const items = notes.flatMap((note) => replacement.get(note.id) ?? [note]);
   return { items, report };
 }
+
+export function ddragonPairForPatch(_versions: readonly string[], _patch: string): { from: string; to: string } | null {
+  throw new Error("TODO: ddragonPairForPatch");
+}

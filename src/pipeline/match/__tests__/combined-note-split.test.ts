@@ -61,3 +61,21 @@ describe("splitCombinedNotes", () => {
     expect(report).toEqual([]);
   });
 });
+
+// scope-critic(2026-09-28): 「로컬 최신 두 버전」은 패치를 모른다 — 노트가 DDragon보다 먼저 나오거나 옛 패치를
+// 다시 파싱하면 엉뚱한 쌍으로 나눈다. 패치 번호로 버전을 고른다(LoL 26.N ↔ DDragon 16.N.x, 마이너가 같은 패치).
+import { ddragonPairForPatch } from "../combined-note-split";
+describe("ddragonPairForPatch", () => {
+  const versions = ["16.20.1", "16.19.1", "16.18.1", "16.17.1"];
+  it("그 패치와 직전 패치의 버전을 고른다", () => {
+    expect(ddragonPairForPatch(versions, "26.19")).toEqual({ from: "16.18.1", to: "16.19.1" });
+    expect(ddragonPairForPatch(versions, "26.18")).toEqual({ from: "16.17.1", to: "16.18.1" });
+  });
+  it("어느 한쪽이 없으면 null — 추측하지 않는다", () => {
+    expect(ddragonPairForPatch(versions, "26.21")).toBeNull();
+    expect(ddragonPairForPatch(["16.19.1"], "26.19")).toBeNull();
+  });
+  it("같은 마이너에 버전이 여럿이면 가장 새 것", () => {
+    expect(ddragonPairForPatch(["16.19.2", "16.19.1", "16.18.1"], "26.19")).toEqual({ from: "16.18.1", to: "16.19.2" });
+  });
+});
