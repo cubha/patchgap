@@ -15,12 +15,7 @@
 // PUBG 델타 id는 `pubg:Item_Weapon_RPD_C:pickupShare` 꼴이고 후보셋 해시도 다르다.
 import type { PatchNoteItem } from "../types";
 import { deterministicSummary, type GameLlmProfile } from "./llm-profile";
-import {
-  noteNumbersOf,
-  signedPercentClaimsGrounded,
-  totalDropAttributionGrounded,
-  unsignedPercentChangeClaimsGrounded,
-} from "./cause-factuality";
+import { signedPercentClaimsGrounded, totalDropAttributionGrounded } from "./cause-factuality";
 import type { PubgDeltaRow } from "./pubg-delta";
 
 const SYSTEM_INSTRUCTIONS = [
@@ -126,23 +121,24 @@ export function createPubgLlmProfile(
             ]
           : []),
       ].join("\n"),
+    // 사용자 메시지로 준 수치 전부 — 점유율(%)·상대 변화와 CI·재분배 기대치·전체 획득 변화(%, 절댓값 소수 첫째 자리).
+    // 뒤 넷은 엔진 공통 「X% 줄어」 검사(R14)의 근거다 — 「전체 획득 수가 17.9% 줄어」가 여기서 선다.
     ownNumbersOf: (delta: PubgDeltaRow) => [
       delta.n.before,
       delta.n.after,
       ...[delta.before, delta.after].filter((v): v is number => v !== null).map((v) => Math.round(v * 10000) / 100),
+      ...[delta.relChange, delta.relCi[0], delta.relCi[1], context?.redistribution ?? null, context?.totalPickupsRelChange ?? null]
+        .filter((v): v is number => v !== null)
+        .map((v) => Math.round(Math.abs(v) * 1000) / 10),
     ],
-    // C3 — 부호 백분율은 이 델타·쌍 맥락의 수치여야 하고(부호 없는 「X% 줄어」는 노트 수치도 근거, R14), 전체 감소 귀속은 인용 조항 무기가 과반이어야 한다.
+    // C3 — 부호 백분율은 이 델타·쌍 맥락의 수치여야 하고(부호 없는 「X% 줄어」는 엔진 공통 검사 — 맥락 수치는 ownNumbersOf, R14), 전체 감소 귀속은 인용 조항 무기가 과반이어야 한다.
     isCauseGrounded: (text: string, note: PatchNoteItem, delta: PubgDeltaRow) => {
       const allowed = [delta.relChange, delta.relCi[0], delta.relCi[1]].filter((v): v is number => v !== null);
       if (context) allowed.push(context.redistribution, context.totalPickupsRelChange);
       const shares = context?.beforeShareByWeapon;
       const citedShare =
         shares === undefined ? null : (noteWeaponKeys.get(note.id) ?? []).reduce((sum, key) => sum + (shares.get(key) ?? 0), 0);
-      return (
-        signedPercentClaimsGrounded(text, allowed) &&
-        unsignedPercentChangeClaimsGrounded(text, allowed, noteNumbersOf(note)) &&
-        totalDropAttributionGrounded(text, citedShare)
-      );
+      return signedPercentClaimsGrounded(text, allowed) && totalDropAttributionGrounded(text, citedShare);
     },
     fallbackSummary: (delta: PubgDeltaRow) =>
       deterministicSummary({

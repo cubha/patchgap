@@ -22,7 +22,7 @@
 ## R14 — 부호 없는 「X% 줄어」
 - `unsignedPercentChangeClaimsGrounded`: 변화 동사가 붙은 부호 없는 백분율은 허용 값(±0.1%p) 또는 인용 노트 수치(정확 일치)여야 한다. 부호·%p는 제외(②와 이중 판정 금지). PUBG `isCauseGrounded`에 연결.
 - 실측: PUBG 캐시 재검증(호출 0 · 캐시 5) verified 변화 0 — 「스폰 30% 감소」는 노트 요약 「스폰율 30% 감소」로 통과.
-- 미확인: LoL·TFT 프로필에는 연결하지 않았다(그 게임 원인 문장의 부호 없는 백분율은 대부분 노트 수치·등장률 값이라 허용 값 집합 정의가 PUBG와 다르다).
+- Phase 3 반영(scope-critic): 「LoL·TFT 제외」 근거가 추정이었다 → 실측(LoL 3쌍·TFT 2쌍 검증 통과 원인 897건 중 이 형태 1건, 통과) 후 **엔진 공통 경로**로 옮겼다(`verifyCauses`, 근거 = 형제 노트 수치 + `ownNumbersOf`). PUBG `ownNumbersOf`에 사용자 메시지로 준 상대 변화·CI·재분배·전체 획득 변화(%)를 더해 공통 검사의 근거로 삼는다. PUBG 재검증(캐시 5·호출 0) 변화 0.
 
 ## R16 — 모바일 select 이유
 - 닫힌 select의 이유: 모바일에서 글(`text-xs text-muted md:sr-only`), md 이상은 title·스크린리더. 라벨 밖(접근성 이름 오염 방지). 열린 select는 sr-only 유지.

@@ -26,7 +26,7 @@ import type { GameLlmProfile, LlmDelta } from "./llm-profile";
 export { LLM_MODEL, PROMPT_VERSION } from "./llm-config";
 import { splitCombinedEntity } from "./entity-match";
 import { LLM_MODEL, PROMPT_VERSION } from "./llm-config";
-import { arrowClaimsGrounded } from "./cause-factuality";
+import { arrowClaimsGrounded, noteNumbersOf, unsignedPercentChangeClaimsGrounded } from "./cause-factuality";
 // 2026-09-17: 50 → 120. 실측 후보가 113건(미공지 47 + 간접 2 + 공지-불일치 64)인데 상한이
 // 50이라 미공지 14건이 LLM을 **아예 거치지 못했고**, 화면은 그것을 "근거 미확인"으로 표시해
 // "검토했으나 후보 없음"과 구분되지 않았다(사용자 지적 B5).
@@ -313,8 +313,11 @@ export function verifyCauses<TDelta extends LlmDelta = DeltaRecord>(
     // 자신의 수치와 맞나. 게임 고유 검사(PUBG 부호 백분율·전체 감소 귀속)는 프로필이 든다.
     if (note) {
       const siblings = candidates.filter((other) => other.entity === note.entity);
+      const own = profile.ownNumbersOf?.(delta) ?? [];
       if (
-        !arrowClaimsGrounded(cause.text, siblings, profile.ownNumbersOf?.(delta) ?? []) ||
+        !arrowClaimsGrounded(cause.text, siblings, own) ||
+        // 부호 없는 「X% 줄어」(R14) — 형제 노트가 말한 수치나 델타·맥락 수치여야 한다(세 게임 공통).
+        !unsignedPercentChangeClaimsGrounded(cause.text, [], [...siblings.flatMap(noteNumbersOf), ...own]) ||
         (profile.isCauseGrounded !== undefined && !profile.isCauseGrounded(cause.text, note, delta))
       ) {
         return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
