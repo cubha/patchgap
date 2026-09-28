@@ -1,5 +1,6 @@
 // scripts/run-migrate-note-directions.ts
-// 커밋된 LoL 노트의 `direction`만 현재 파서 규칙으로 다시 매기는 결정론 마이그레이션(2026-09-28, C10).
+// 커밋된 LoL 노트의 `direction`을 현재 파서 규칙으로 다시 매기고(C10), 모드 노트의 대상 묶음을
+// 바로잡는(C9) 결정론 마이그레이션(2026-09-28).
 // 실행: `npx tsx scripts/run-migrate-note-directions.ts --all` (또는 `--patch 26.17`) · `--dry-run`
 //
 // **왜 재파싱이 아니라 방향만인가**: 라이엇은 발행 후 페이지를 고친다. 원문 캐시로 다시 파싱하면
@@ -46,6 +47,38 @@ export function migrateDirections(
   return { items, changes };
 }
 
+/**
+ * 모드 노트(클래식·아레나 등) 대상 재묶음(2026-09-28, C9) — 파서가 모드 섹션의 대상 경계를 새로 잡으면
+ * 커밋본의 **모드 노트만** 재파싱 결과로 바꾼다. 짝은 (modeScope, summary, 같은 문구 내 순번)으로 짓고,
+ * 짝이 없는 커밋 항목은 그대로 둔다(원문이 사후 수정돼 사라진 줄 — 플레이 시점 기록을 지우지 않는다).
+ * core 노트는 판정·후보 해시의 입력이라 **손대지 않는다**. 모드 노트 id는 어디서도 참조되지 않는다
+ * (LLM 인용 가능 대상이 core뿐 — `isCitableBalanceNote`, 2026-09-28 실측 참조 0건).
+ */
+export function regroupModeNotes(
+  committed: readonly PatchNoteItem[],
+  reparsed: readonly PatchNoteItem[]
+): { items: PatchNoteItem[]; regrouped: number } {
+  const keyOf = (n: PatchNoteItem, seen: Map<string, number>) => {
+    const base = `${n.modeScope}|${n.summary}`;
+    const k = seen.get(base) ?? 0;
+    seen.set(base, k + 1);
+    return `${base}#${k}`;
+  };
+  const pool = new Map<string, PatchNoteItem>();
+  const seenR = new Map<string, number>();
+  for (const n of reparsed) if (n.modeScope !== "core") pool.set(keyOf(n, seenR), n);
+  const seenC = new Map<string, number>();
+  let regrouped = 0;
+  const items = committed.map((n) => {
+    if (n.modeScope === "core") return n;
+    const r = pool.get(keyOf(n, seenC));
+    if (r === undefined || (r.entity === n.entity && r.skill === n.skill)) return n;
+    regrouped += 1;
+    return { ...n, id: r.id, entity: r.entity, skill: r.skill, direction: r.direction, anchorUrl: r.anchorUrl, anchorKind: r.anchorKind };
+  });
+  return { items, regrouped };
+}
+
 const ALL_PATCHES = ["26.16", "26.17", "26.18", "26.19"];
 
 function main(): void {
@@ -61,12 +94,15 @@ function main(): void {
     const cache = notesCacheFile(patch);
     if (!fs.existsSync(cache)) throw new Error(`${patch}: 원문 캐시가 없다 (${cache}) — 방향 힌트를 복원할 수 없다`);
     const reparsed = parsePatchNotes(fs.readFileSync(cache, "utf8"), { patch, sourceUrl: data.meta.sourceUrl });
-    const { items, changes } = migrateDirections(data.items, reparsed.items);
+    const migrated = migrateDirections(data.items, reparsed.items);
+    const { changes } = migrated;
+    const { items, regrouped } = regroupModeNotes(migrated.items, reparsed.items);
+    console.log(`[migrate-directions] ${patch}: 모드 노트 대상 재묶음 ${regrouped}건`);
     const core = changes.filter((c) => c.modeScope === "core");
     console.log(`[migrate-directions] ${patch}: 변경 ${changes.length}건 (core ${core.length})`);
     for (const c of changes) console.log(`  ${c.modeScope} | ${c.label} | ${c.from} → ${c.to}`);
     if (core.length > 0) throw new Error(`${patch}: core 방향 변화 ${core.length}건 — 판정이 바뀐다. 마이그레이션을 멈춘다`);
-    if (raw["dry-run"] !== true && changes.length > 0) {
+    if (raw["dry-run"] !== true && (changes.length > 0 || regrouped > 0)) {
       fs.writeFileSync(file, JSON.stringify({ ...data, items }, null, 2), "utf8");
     }
   }

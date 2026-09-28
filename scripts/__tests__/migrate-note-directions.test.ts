@@ -20,3 +20,14 @@ describe("migrateDirections", () => {
     expect(changes).toEqual([]);
   });
 });
+
+describe("regroupModeNotes(C9)", () => {
+  it("모드 노트만 재파싱 대상으로 바꾸고, core·짝 없는 항목은 그대로 둔다", async () => {
+    const { regroupModeNotes } = await import("../run-migrate-note-directions");
+    const committed = [note("c1", "buff"), { ...note("m1", "buff", "arena"), entity: "아펠리오스", summary: "s1" }, { ...note("m2", "buff", "arena"), entity: "아펠리오스", summary: "gone" }];
+    const reparsed = [{ ...note("c1x", "buff"), entity: "딴이름" }, { ...note("m1x", "buff", "arena"), entity: "바드", summary: "s1" }];
+    const { items, regrouped } = regroupModeNotes(committed, reparsed);
+    expect(regrouped).toBe(1);
+    expect(items.map((n) => [n.id, n.entity])).toEqual([["c1", "x"], ["m1x", "바드"], ["m2", "아펠리오스"]]);
+  });
+});

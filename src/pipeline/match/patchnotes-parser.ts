@@ -480,6 +480,8 @@ function parseNoteBlock(
 
   let currentSkill: string | null = null;
   let lastLabelAnchorId: string | null = null;
+  // 클래식 「아이템」 범주 아래인가(C9) — 아이템에는 스킬이 없어 라벨마다 대상이다.
+  let inItemCategory = false;
   const rawLines: RawNoteLine[] = [];
 
   block
@@ -505,8 +507,9 @@ function parseNoteBlock(
       const label = $(node).text().trim();
       if (label.length === 0) return;
       // 새 엔티티가 시작되는가 — 라벨이 자기 소개 문단(blockquote.context)을 데리고 있으면 그렇다.
-      const opensEntity = h3.length === 0 && startsNewEntity($, node);
+      const opensEntity = h3.length === 0 && (startsNewEntity($, node) || (inItemCategory && node.type === "tag" && node.name === "strong"));
       if (opts.skipCategoryLabels && (entity === null || opensEntity) && classicCategoryFor(label) !== null) {
+        inItemCategory = classicCategoryFor(label) === "item";
         // 클래식/아레나 섹션의 범주 라벨("챔피언"/"아이템"/"룬 및 진척도"/"체계" 등)은 엔티티
         // 자체가 아니다 — 건너뛴다. `classicCategoryFor`를 재사용해 인식 범위를 한 곳에 고정한다
         // (전에는 "챔피언"/"아이템"만 걸러 "룬 및 진척도"/"체계" 라벨 자체가 엔티티로 오인되고
