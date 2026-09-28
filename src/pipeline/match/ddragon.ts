@@ -117,6 +117,7 @@ interface RawChampionFile {
 
 interface RawItemEntry {
   name: string;
+  stats?: Record<string, number>;
   into?: string[] | null;
   from?: string[] | null;
   gold: DdragonItemGold;
@@ -266,4 +267,32 @@ export function loadDdragonSafe(version?: string, options: LoadDdragonOptions = 
   } catch {
     return EMPTY_DDRAGON;
   }
+}
+
+/** 로컬 DDragon 버전 목록(내림차순). 디렉터리가 없으면 빈 배열. */
+export function listDdragonVersions(options: LoadDdragonOptions = {}): string[] {
+  const base = path.join(options.dataRoot ?? DATA_ROOT, "ddragon");
+  if (!fs.existsSync(base)) return [];
+  return fs
+    .readdirSync(base, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort(compareVersionsDesc);
+}
+
+/**
+ * 아이템 이름 → DDragon 수치 표(2026-09-28, C2 합친 이름 노트 분해용). 이름 정규화는 `byKoName`과 같다.
+ * 파일이 없으면 **던진다** — 조용히 빈 표를 주면 분해가 「검증할 수치 없음」으로 떨어져 결함이 숨는다.
+ */
+export function loadItemStatTable(version: string, options: LoadDdragonOptions = {}): {
+  byName(name: string): { id: string; stats: Record<string, number> }[];
+} {
+  const file = path.join(ddragonVersionDir(options.dataRoot ?? DATA_ROOT, version), "item.json");
+  const raw = readJsonFile<RawItemFile>(file);
+  const byName = new Map<string, { id: string; stats: Record<string, number> }[]>();
+  for (const [id, entry] of Object.entries(raw.data)) {
+    const key = normalizeKoName(entry.name);
+    byName.set(key, [...(byName.get(key) ?? []), { id, stats: entry.stats ?? {} }]);
+  }
+  return { byName: (name) => byName.get(normalizeKoName(name)) ?? [] };
 }

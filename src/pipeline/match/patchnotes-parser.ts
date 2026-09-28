@@ -275,6 +275,25 @@ export function detectKeywordHint(contextText: string | null): "buff" | "nerf" |
   return null;
 }
 
+/**
+ * TFT 유닛 「마나 조정 시작/최대」(2026-09-28, C7). 값은 `시작/최대` 두 개이고 뜻이 반대다 — 시작 마나가
+ * 높을수록, 최대 마나가 낮을수록 스킬이 빨리 나간다. 한 규칙(「마나 = 낮을수록 좋음」)은 아칼리 「0/30 ⇒
+ * 0/25」를 반대로 찍었다(§6 외부검토). 둘이 엇갈리면 조정이다. 두 값 형태가 아니면 `null`(기존 규칙으로).
+ */
+function manaAdjustDirection(stat: string | null, before: string, after: string): PatchNoteItem["direction"] | null {
+  if (stat === null || !stat.endsWith("마나 조정")) return null;
+  const b = extractNumbers(before);
+  const a = extractNumbers(after);
+  if (b.length !== 2 || a.length !== 2) return null;
+  const start = Math.sign(a[0] - b[0]); // + 좋음
+  const max = -Math.sign(a[1] - b[1]); // − 좋음
+  const signs = [start, max].filter((v) => v !== 0);
+  if (signs.length === 0) return "adjust";
+  if (signs.every((v) => v > 0)) return "buff";
+  if (signs.every((v) => v < 0)) return "nerf";
+  return "adjust";
+}
+
 export function resolveDirection(
   stat: string | null,
   before: string | null,
@@ -285,6 +304,8 @@ export function resolveDirection(
     return keywordHint ?? "unknown";
   }
   if (SAME_EFFECT_PATTERN.test(before) || SAME_EFFECT_PATTERN.test(after)) return "adjust";
+  const mana = manaAdjustDirection(stat, before, after);
+  if (mana !== null) return mana;
   const numeric = computeNumericDirection(stat, before, after);
   if (numeric !== "inconclusive") return numeric;
   return keywordHint ?? "adjust";

@@ -263,56 +263,137 @@ export function parseTftPatchNotes(html: string, options: ParseTftNotesOptions):
     // (중첩 부모 자신은 제외 — 자기 텍스트에는 ⇒가 없고 자식이 따로 잡힌다.)
     scope.find("li").each((_j, li) => {
       if ($(li).children("ul,ol").length > 0) return;
-      const text = $(li).text().replace(/\s+/g, " ").trim();
-      if (!text.includes(ARROW)) return; // ⇒ 없는 줄은 신규 추가 — before/after를 지어내지 않는다.
+      const fullText = $(li).text().replace(/\s+/g, " ").trim();
+      if (!fullText.includes(ARROW)) return; // ⇒ 없는 줄은 신규 추가 — before/after를 지어내지 않는다.
       lines += 1;
 
       const parentLi = $(li).parent().closest("li");
       const head = parentLi.length > 0 ? ownText($, parentLi[0]) : null;
 
-      const resolved = resolveWithIndex(head, text, index);
+      // 한 줄에 두 수치가 섞인 원문(C11)은 수치별로 나눈다. 대상은 첫 조각에서 한 번만 정한다 — 뒤 조각
+      // 「최대 체력 비례 피해량: 15% ⇒ 12%」에는 대상 이름이 없다.
+      const parts = splitCompoundLine(fullText);
+      const resolved = resolveWithIndex(head, parts[0], index);
       if (!resolved) {
         unresolved += 1;
         return;
       }
-      const parsedLine = splitChange(text);
-      if (!parsedLine) {
-        unresolved += 1;
-        return;
-      }
+      parts.forEach((text, partIndex) => {
+        const parsedLine = labelFromBefore(splitChange(text));
+        if (!parsedLine) {
+          unresolved += 1;
+          return;
+        }
 
-      const section = SECTION_OF[resolved.kind];
-      const stat = resolved.stat.length > 0 ? resolved.stat : parsedLine.stat;
-      const { before, after } = parsedLine;
-      const direction = resolveDirection(stat, before, after, keywordHint);
+        const section = SECTION_OF[resolved.kind];
+        const resolvedStat = partIndex === 0 && resolved.stat.length > 0 && resolved.stat !== resolved.entity ? resolved.stat : null;
+        // 라벨이 한 겹 더 있으면(「공격력 형태: 기본 공격력: 65 ⇒ 60」) 두 라벨을 잇는다 — 앞 라벨이 대상
+        // 이름뿐이면(「소매치기: 가격: …」) 뒤 라벨만 쓴다.
+        const baseStat = resolvedStat ?? (parsedLine.stat !== resolved.entity ? parsedLine.stat : null);
+        const stat = parsedLine.label ? (baseStat ? `${baseStat} ${parsedLine.label}` : parsedLine.label) : baseStat ?? parsedLine.stat;
+        const { before, after } = parsedLine;
+        const direction = resolveDirection(stat, before, after, keywordHint);
 
-      const slug = slugify(resolved.entity);
-      const hash = contentHash(null, stat, before, after);
-      const counterKey = `${section}:${slug}:${hash}`;
-      const occurrence = idCounters.get(counterKey) ?? 0;
-      idCounters.set(counterKey, occurrence + 1);
-      const id =
-        occurrence === 0
-          ? `note:tft:${patch}:${section}:${slug}:${hash}`
-          : `note:tft:${patch}:${section}:${slug}:${hash}-${occurrence + 1}`;
+        const slug = slugify(resolved.entity);
+        const hash = contentHash(null, stat, before, after);
+        const counterKey = `${section}:${slug}:${hash}`;
+        const occurrence = idCounters.get(counterKey) ?? 0;
+        idCounters.set(counterKey, occurrence + 1);
+        const id =
+          occurrence === 0
+            ? `note:tft:${patch}:${section}:${slug}:${hash}`
+            : `note:tft:${patch}:${section}:${slug}:${hash}-${occurrence + 1}`;
 
-      items.push({
-        id,
-        patch,
-        section,
-        entity: resolved.entity,
-        skill: null,
-        stat,
-        before,
-        after,
-        direction,
-        summary: text,
-        anchorUrl: sectionAnchorId ? `${sourceUrl}#${sectionAnchorId}` : sourceUrl,
-        anchorKind: sectionAnchorId ? "section" : "page",
-        modeScope: "core",
+        items.push({
+          id,
+          patch,
+          section,
+          entity: resolved.entity,
+          skill: null,
+          stat,
+          before,
+          after,
+          direction,
+          summary: text,
+          anchorUrl: sectionAnchorId ? `${sourceUrl}#${sectionAnchorId}` : sourceUrl,
+          anchorKind: sectionAnchorId ? "section" : "page",
+          modeScope: "core",
+        });
       });
     });
   });
 
-  return { items, stats: { sections, lines, unresolved } };
+  return { items: chainMidpatchUpdates(items, patch), stats: { sections, lines, unresolved } };
+}
+
+/**
+ * 한 줄에 「, <라벨>: X ⇒ Y」로 두 수치가 섞인 원문을 조각낸다(2026-09-28, C11). 18.2 「연소 가격: 5골드 ⇒
+ * 3골드, 최대 체력 비례 피해량: 15% ⇒ 12%」는 가격 기준 buff 한 줄로 찍혔다 — 피해량 하향이 사라졌다.
+ * 왼쪽 조각에 이미 ⇒가 있을 때만 자른다: 「경쟁을 넘어서, 카직스가 … 마나: 70% ⇒ 50%」의 쉼표는 이름 뒤다.
+ */
+export function splitCompoundLine(text: string): string[] {
+  const parts: string[] = [];
+  let rest = text;
+  const boundary = /,\s+(?=[^,⇒:]+:\s*[^⇒]+⇒)/g;
+  for (;;) {
+    boundary.lastIndex = 0;
+    let cut = -1;
+    for (const m of rest.matchAll(boundary)) {
+      if (m.index !== undefined && rest.slice(0, m.index).includes(ARROW)) {
+        cut = m.index;
+        break;
+      }
+    }
+    if (cut < 0) break;
+    parts.push(rest.slice(0, cut).trim());
+    rest = rest.slice(cut).replace(/^,\s+/, "");
+  }
+  parts.push(rest.trim());
+  return parts;
+}
+
+/** 「소매치기: 가격: 3골드 ⇒ 2골드」처럼 before 앞에 라벨이 한 겹 더 붙은 조각 — 그 라벨이 수치 이름이다. */
+function labelFromBefore(
+  parsed: { stat: string | null; before: string; after: string } | null
+): { stat: string | null; label: string | null; before: string; after: string } | null {
+  if (!parsed) return null;
+  const m = /^([^:\d][^:]*):\s*(.+)$/.exec(parsed.before);
+  return m ? { ...parsed, label: m[1].trim(), before: m[2].trim() } : { ...parsed, label: null };
+}
+
+const MIDPATCH_ANCHOR = "#patch-midpatch-updates";
+
+/**
+ * 중간 패치 체이닝(2026-09-28, C7). 「추가 패치」 섹션이 본 패치의 같은 수치를 다시 바꾸면(중간 패치의
+ * before = 본 패치의 after) 두 줄을 **순변화 한 줄**로 잇는다 — 18.2 마오카이 마나 40/100 ⇒ 30/90 ⇒ 30/100.
+ * 두 줄로 두면 방향이 서로 반대로 찍혀 판정이 「방향 동률」로 떨어졌다. 요약은 두 단계를 다 보여 준다
+ * (선언 축의 이력을 지우지 않는다). 원문 앵커는 마지막으로 말한 쪽(중간 패치)이다.
+ */
+export function chainMidpatchUpdates(items: readonly PatchNoteItem[], patch: string): PatchNoteItem[] {
+  const norm = (v: string | null) => (v ?? "").replace(/\s+/g, "");
+  const consumed = new Set<string>();
+  const chained = new Map<string, PatchNoteItem>();
+  for (const mid of items.filter((i) => i.anchorUrl.endsWith(MIDPATCH_ANCHOR))) {
+    const base = items.find(
+      (i) =>
+        !i.anchorUrl.endsWith(MIDPATCH_ANCHOR) &&
+        !consumed.has(i.id) &&
+        i.entity === mid.entity &&
+        i.stat === mid.stat &&
+        norm(i.after) === norm(mid.before)
+    );
+    if (!base) continue;
+    consumed.add(base.id);
+    consumed.add(mid.id);
+    const hash = contentHash(null, mid.stat, base.before, mid.after);
+    chained.set(base.id, {
+      ...mid,
+      id: `note:tft:${patch}:${mid.section}:${slugify(mid.entity)}:${hash}`,
+      before: base.before,
+      after: mid.after,
+      direction: resolveDirection(mid.stat, base.before ?? "", mid.after ?? "", null),
+      summary: `${mid.stat ?? ""}: ${base.before} ⇒ ${base.after} ⇒ ${mid.after} (중간 패치 반영)`,
+    });
+  }
+  return items.flatMap((i) => (chained.has(i.id) ? [chained.get(i.id) as PatchNoteItem] : consumed.has(i.id) ? [] : [i]));
 }

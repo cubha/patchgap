@@ -10,6 +10,7 @@ import path from "node:path";
 import { fetchPatchNotesHtml, parsePatchNotes } from "../src/pipeline/match/patchnotes-parser";
 import { notesFile } from "../src/pipeline/shared/paths";
 import { loadDdragon } from "../src/pipeline/match/ddragon";
+import { splitCombinedWithLocalDdragon } from "../src/pipeline/match/combined-note-split-local";
 import { lolLlmProfile } from "../src/pipeline/match/llm-profile-lol";
 import { buildDeltas, carryOverMatchIds, loadAggregatedPatch, type AggregatedPatch } from "../src/pipeline/match/delta";
 import type { DdragonData } from "../src/pipeline/match/ddragon";
@@ -68,7 +69,8 @@ export async function loadOrFetchNotes(patch: PatchId): Promise<PatchNoteItem[]>
 
   console.log(`[run-match] notes/${patch}.json 없음 — 라이브 fetch 시도`);
   const fetched = await fetchPatchNotesHtml(patch);
-  const result = parsePatchNotes(fetched.html, { patch, sourceUrl: fetched.sourceUrl });
+  const parsedNotes = parsePatchNotes(fetched.html, { patch, sourceUrl: fetched.sourceUrl });
+  const result = { ...parsedNotes, items: splitCombinedWithLocalDdragon(parsedNotes.items, patch) };
 
   const bySection = new Map<PatchNoteSection, number>();
   for (const item of result.items) bySection.set(item.section, (bySection.get(item.section) ?? 0) + 1);
