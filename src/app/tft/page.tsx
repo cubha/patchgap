@@ -7,7 +7,7 @@
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { gameDataEntityCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { gapEntityKeys, gapUnionCount, loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import {
   TftFooter,
   TftSampleNotice,
@@ -147,6 +147,8 @@ export default function TftPage() {
   // 시안 04-applied의 헤드라인 — 이 사이트가 무엇을 하는 곳인지 한 문장으로 말한다.
   // 숫자는 아래 3타일과 **같은 출처**를 쓴다(따로 세면 화면이 스스로를 반박한다).
   const noteEntities = new Set(notes.items.map((n) => n.entity)).size;
+  // 「미공지 Gap」은 대상을 센다 — 타일은 통계 Gap 대상, 탭은 거기에 수치 축 대상을 **합집합**으로(C15·D2).
+  const gapKeys = gapEntityKeys(unannounced);
 
   // 전 대상 색인(§8-1) — 이 패치 보드 집계에 등장한 **모든** 유닛·특성·아이템.
   // 이름은 판정 산출물이 이미 들고 있다(실측 233종 중 232종). 못 찾는 1종은 키를 그대로 쓴다.
@@ -227,7 +229,8 @@ export default function TftPage() {
             patch={deltas.meta.to}
             itemCount={notes.items.length}
             significantCount={reportable.length}
-            gapCount={unannounced.length}
+            // 대상 수(C15, 사용자 확정 7) — 전에는 행 수라 LoL(대상 수)과 단위가 달랐다.
+            gapCount={gapKeys.size}
             game="tft"
           />
 
@@ -244,7 +247,7 @@ export default function TftPage() {
               위치를 아는 쪽만 정할 수 있다(2026-09-24). */}
           <BriefingTabs
               contentCount={announced.length}
-              gapCount={unannounced.length + gameDataEntityCount(submarine)}
+              gapCount={gapUnionCount(gapKeys, submarine)}
               content={
                 <SectionCard
                   eyebrow="대조"
