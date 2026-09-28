@@ -61,8 +61,24 @@ const closureOf = (entry: string, depth = 2): string => {
  * 있다 — 최신 쌍(`/lol/`)과 과거 쌍(`/lol/history/[pair]/`)이 같은 본문을 쓰려고 옮겼다(명세 변경: 검사 대상
  * 파일만 바뀌고 검사 내용은 그대로).
  */
-const briefingSource = (id: string): string =>
-  id === "lol" ? "src/components/home/LolBriefing.tsx" : `src/app/${id}/page.tsx`;
+// 2026-09-28 명세 변경(이월 R8): TFT도 과거 쌍 라우트(`/tft/history/[pair]/`)가 생겨 본문이
+// `components/tft/TftBriefing.tsx`로 옮겼다 — LoL과 같은 이유·같은 처리(검사 대상 파일만 바뀌고 검사 내용은 그대로).
+const BRIEFING_BODY: Partial<Record<string, string>> = {
+  lol: "src/components/home/LolBriefing.tsx",
+  tft: "src/components/tft/TftBriefing.tsx",
+};
+const briefingSource = (id: string): string => BRIEFING_BODY[id] ?? `src/app/${id}/page.tsx`;
+
+/**
+ * 상세 화면 본문의 소스 파일. 2026-09-28 명세 변경(이월 R8): LoL·TFT 상세 본문이 컴포넌트로 옮겼다 — 평소 상세와
+ * 과거 쌍 상세(`history/[pair]/item|unit/…`)가 같은 본문을 쓴다. 페이지는 얇은 위임이라, 검사는 본문 파일에 한다
+ * (검사 내용은 그대로). 위임이 실제로 그 본문인지는 `detail body delegation` 검사가 따로 본다.
+ */
+const DETAIL_BODY: Partial<Record<string, string>> = {
+  "src/app/lol/item/[id]/page.tsx": "src/components/detail/LolItemDetail.tsx",
+  "src/app/tft/unit/[key]/page.tsx": "src/components/tft/TftUnitDetail.tsx",
+};
+const detailSource = (page: string): string => DETAIL_BODY[page] ?? page;
 
 describe("§8-1 골격 — 세 게임이 같은 컴포넌트를 쓴다", () => {
   for (const id of GAME_IDS) {
@@ -152,7 +168,7 @@ describe("§8-1 상세 머리 — 유형과 판정이 머리에 있다", () => {
       "src/app/pubg/weapon/[key]/page.tsx",
     ];
     for (const page of pages) {
-      const src = read(page);
+      const src = read(detailSource(page));
       const aside = src.indexOf("titleAside");
       expect(aside, `${page}: titleAside 없음`).toBeGreaterThanOrEqual(0);
       // 유형 라벨과 뱃지가 그 안에 있어야 한다 — 머리 바깥으로 밀면 이 검사가 실패한다.
@@ -372,11 +388,20 @@ describe("§8-5 상세 — 세 게임이 같은 머리를 쓴다", () => {
       // (LoL) / `← 대조표 / 유닛`(TFT) / `브리핑 / 대조표 / Groza`(PUBG)로 셋이 달랐다.
       // 「방송 규칙 보기 →」는 LoL 상세에만 있었다.
       for (const page of detailPagesOf(id)) {
-        expect(read(page), page).toContain("PageHeader");
-        expect(read(page), page).toContain("detailCrumbs");
+        expect(read(detailSource(page)), page).toContain("PageHeader");
+        expect(read(detailSource(page)), page).toContain("detailCrumbs");
       }
     });
   }
+
+  it("상세 페이지가 본문 컴포넌트에 실제로 위임한다 — 매핑이 공회전하지 않게", () => {
+    // 2026-09-28(이월 R8): 위 검사들이 본문 파일을 읽으므로, 페이지가 그 본문을 쓰지 않게 되면 검사가 헛돈다.
+    for (const [page, body] of Object.entries(DETAIL_BODY)) {
+      const name = path.basename(body as string, ".tsx");
+      expect(read(page), page).toMatch(new RegExp(`import ${name} from "@/components/`));
+    }
+    expect(read("src/app/tft/page.tsx")).toMatch(/import TftBriefing from "@\/components\/tft\/TftBriefing"/);
+  });
 
   it("이동 경로 형식은 하나뿐이다 — 화면이 마디를 직접 조립하지 않는다", () => {
     const owners = new Set(["src/components/Breadcrumb.tsx", "src/lib/breadcrumbs.ts"]);
@@ -399,10 +424,12 @@ describe("§8-5 상세 — 세 게임이 같은 머리를 쓴다", () => {
 
   it("상세 제목에 지표를 붙이지 않는다 — 라우트 단위가 대상이다(§8-7 #10)", () => {
     // LoL 상세가 `{이름} — {지표}`를 h1에 쓰고 있었고 라우트도 지표 단위였다.
-    const lol = read("src/app/lol/item/[id]/page.tsx");
+    // 2026-09-28 명세 변경(이월 R8): 제목은 본문 컴포넌트가, 정적 파라미터는 페이지가 소유한다 — 각각 제 파일에서 본다.
+    const lol = read(detailSource("src/app/lol/item/[id]/page.tsx"));
+    expect(lol).toContain("PageHeader");
     expect(lol).not.toContain("{delta.entityName} — {displayMetricLabel(delta)}");
     // 정준 라우트는 대상 키다 — 별칭(구 지표 경로)은 `detailRouteSlugs`가 따로 만든다.
-    expect(lol).toContain("detailRouteSlugs");
+    expect(read("src/app/lol/item/[id]/page.tsx")).toContain("detailRouteSlugs");
   });
 });
 
@@ -605,8 +632,9 @@ describe("§8-1 행 정렬 — 뱃지 칸이 고정폭이다", () => {
     const tabs = read("src/components/BriefingTabs.tsx");
     expect(tabs).toMatch(/lg:grid-cols-\[2fr_1fr\]/);
     expect(tabs).toMatch(/BriefingTabBar[\s\S]*?\{panel\}/);
+    // 2026-09-28 명세 변경(이월 R8): TFT 브리핑 본문은 `TftBriefing`이다(`briefingSource`).
     for (const g of ["tft", "pubg"]) {
-      const page = read(`src/app/${g}/page.tsx`);
+      const page = read(briefingSource(g));
       expect(page).toMatch(/<BriefingTabs[\s\S]*?aside=\{/);
       expect(page).not.toMatch(/grid-cols-\[2fr_1fr\]/);
     }

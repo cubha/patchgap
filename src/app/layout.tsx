@@ -7,7 +7,7 @@ import GameRoot from "@/components/GameRoot";
 import Header, { type GameChrome } from "@/components/Header";
 import type { GameId } from "@/lib/game";
 import { loadPubg, loadPubgDeclaration } from "@/lib/pubgData";
-import { loadTft, loadTftDeclaration } from "@/lib/tftData";
+import { listTftPairs, loadTft, loadTftDeclaration } from "@/lib/tftData";
 import { getDefaultPair, listPatchPairs, listPatches, loadSummary } from "@/lib/data";
 import { fmtKst } from "@/lib/format";
 import "./globals.css";
@@ -127,10 +127,16 @@ function declarationChrome(
  */
 function getTftChrome(): GameChrome | null {
   const bundle = loadTft();
-  if (!bundle) return declarationChrome(loadTftDeclaration(), ["KR", "Master+", "랭크"]);
+  // 쌍 목록은 판정 파일이 있는 쌍 전부(최신 우선) — 과거 쌍 라우트(`/tft/history/[pair]/`)가 생겨 select가 열린다
+  // (2026-09-28, 이월 R8). 전에는 최신 쌍 하나만 올려 18.1→18.2를 볼 길이 없었다.
+  const pairs = listTftPairs();
+  if (!bundle) {
+    const chrome = declarationChrome(loadTftDeclaration(), ["KR", "Master+", "랭크"]);
+    return chrome && pairs.length > 0 ? { ...chrome, pairs } : chrome;
+  }
   const pair = { from: bundle.deltas.meta.from, to: bundle.deltas.meta.to };
   return {
-    pairs: [pair],
+    pairs: pairs.length > 0 ? pairs : [pair],
     currentPair: pair,
     nBefore: bundle.before.matches,
     nAfter: bundle.after.matches,
