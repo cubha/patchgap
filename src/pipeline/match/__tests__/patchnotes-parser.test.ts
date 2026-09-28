@@ -764,4 +764,18 @@ describe("parsePatchNotes — 아레나 증강 범주(R11)", () => {
       ["잃은 체력 비례 추가 기력 재생", null, "최대 추가 기력 재생"],
     ]);
   });
+  // 실데이터 재묶음에서 발견(26.17~26.19 ARAM): 「버그 수정」 h4 + 바로 ul(라벨 없음) — 범주가 아닌 h4는 증강
+  // 묶음을 끝내고 그 자체가 대상이다. 안 끊으면 버그 수정 줄이 마지막 증강의 스킬로 붙는다.
+  it("증강 묶음 뒤의 범주 아닌 h4(버그 수정)는 새 대상이다 — 마지막 증강에 붙지 않는다", () => {
+    const withBugfix = html.replace(
+      '<h4 class="change-detail-title">체계</h4>',
+      '<h4 class="change-detail-title">버그 수정</h4><ul><li>광대 대학의 문구 색상 버그를 수정했습니다.</li></ul><h4 class="change-detail-title">체계</h4>'
+    );
+    const items = parsePatchNotes(withBugfix, {
+      patch: "26.19",
+      sourceUrl: "https://www.leagueoflegends.com/ko-kr/news/game-updates/league-of-legends-patch-26-19-notes/",
+    }).items.filter((i) => i.modeScope === "arena");
+    expect(items.find((i) => i.summary.includes("광대 대학"))?.entity).toBe("버그 수정");
+    expect(items.find((i) => i.summary.includes("광대 대학"))?.skill).toBeNull();
+  });
 });
