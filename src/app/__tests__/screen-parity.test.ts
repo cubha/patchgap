@@ -56,11 +56,20 @@ const closureOf = (entry: string, depth = 2): string => {
   return visit(entry, depth);
 };
 
+/**
+ * 게임 브리핑 본문의 소스 파일. LoL은 2026-09-28(PR-C B3)부터 본문이 `components/home/LolBriefing.tsx`에
+ * 있다 — 최신 쌍(`/lol/`)과 과거 쌍(`/lol/history/[pair]/`)이 같은 본문을 쓰려고 옮겼다(명세 변경: 검사 대상
+ * 파일만 바뀌고 검사 내용은 그대로).
+ */
+const briefingSource = (id: string): string =>
+  id === "lol" ? "src/components/home/LolBriefing.tsx" : `src/app/${id}/page.tsx`;
+
 describe("§8-1 골격 — 세 게임이 같은 컴포넌트를 쓴다", () => {
   for (const id of GAME_IDS) {
-    const home = `src/app/${id}/page.tsx`;
+    const home = briefingSource(id);
 
     it(`${id} 홈이 존재한다`, () => {
+      expect(exists(`src/app/${id}/page.tsx`)).toBe(true);
       expect(exists(home)).toBe(true);
     });
 
@@ -256,7 +265,7 @@ describe("§8-1 섹션 순서 — 세 브리핑이 같은 순서다", () => {
 
   for (const id of GAME_IDS) {
     it(`${id} 브리핑이 타일 → 본문 → 전 대상 색인 → 푸터 순이다`, () => {
-      const src = read(`src/app/${id}/page.tsx`);
+      const src = read(briefingSource(id));
       // LoL은 타일·본문을 각각 `HeroSummary`·`ReleaseNoteStream`을 거쳐 쓴다(§8-1이 인정한 경유).
       const tiles = src.includes("StatTiles") ? "StatTiles" : "HeroSummary";
       const body = src.includes("BriefingTabs") ? "BriefingTabs" : "ReleaseNoteStream";
@@ -289,7 +298,7 @@ describe("§8-1 전 대상 색인 — 세 브리핑이 같은 슬롯을 쓴다",
       // 대조표는 세 게임 모두 **판정된 것만** 올린다. 그래서 판정이 서지 않은 대상의 상세로 가는
       // 길이 여기밖에 없다 — PUBG에서 실제로 그 지적이 나왔고(2026-09-18 P1) 무기 47종 그리드가
       // 그 답이었다. 같은 구멍이 LoL·TFT에도 있었다.
-      expect(read(`src/app/${id}/page.tsx`)).toContain("EntityIndexSection");
+      expect(read(briefingSource(id))).toContain("EntityIndexSection");
     });
   }
 
@@ -297,7 +306,7 @@ describe("§8-1 전 대상 색인 — 세 브리핑이 같은 슬롯을 쓴다",
     const owner = read("src/components/EntityIndexSection.tsx");
     expect(owner).toContain(ENTITY_INDEX_TITLE);
     for (const id of GAME_IDS) {
-      expect(read(`src/app/${id}/page.tsx`)).not.toContain(`title="${ENTITY_INDEX_TITLE}"`);
+      expect(read(briefingSource(id))).not.toContain(`title="${ENTITY_INDEX_TITLE}"`);
     }
   });
 });
