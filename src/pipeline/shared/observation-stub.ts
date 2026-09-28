@@ -1,18 +1,81 @@
-// src/pipeline/shared/observation-stub.ts — 구현 전 시그니처(C14).
+// src/pipeline/shared/observation-stub.ts
+// 관측 stub 판정 파일(2026-09-28, C14 — 사용자 결정 D5). 순수 함수만.
+//
+// **왜 필요한가.** 화면은 판정 파일(`deltas-*.json`)로 패치쌍을 고른다. 관측 단계(매치 수집·판정)가
+// 대기 중이거나 키가 없거나 죽으면 판정 파일이 안 생기고, 그러면 **이미 받아 둔 패치노트도** 화면이
+// 새 쌍을 못 골라 안 보인다 — 결과가 결정 8 위반과 같다. 그래서 관측 없이도 선언 축을 실을 판정 파일을
+// 쓴다: rows는 비어 있고 `meta.observationFailed`가 사유를 든다. 화면은 관측 영역을 회색 사유로 그린다.
+// 지어낸 관측은 없다 — 0건 관측이 아니라 **관측 없음**이다(그래서 보드·무기 집계 파일을 만들지 않는다).
 import type { ObservationFailure, ObservationFailReason } from "../types";
+
 export interface ObservationStubFile {
-  meta: { game: "tft" | "pubg"; from: string; to: string; generatedAt: string; noteCount: number; observationFailed: ObservationFailure };
+  meta: {
+    game: "tft" | "pubg";
+    from: string;
+    to: string;
+    generatedAt: string;
+    /** 이 쌍의 노트 항목 수 — 선언 축이 실렸다는 증거. */
+    noteCount: number;
+    observationFailed: ObservationFailure;
+  };
   rows: [];
 }
-export function buildObservationStub(_g: "tft" | "pubg", _f: string, _t: string, _x: ObservationFailure, _n: number): ObservationStubFile {
-  throw new Error("TODO(C14): buildObservationStub");
+
+export function buildObservationStub(
+  game: "tft" | "pubg",
+  from: string,
+  to: string,
+  failure: ObservationFailure,
+  noteCount: number
+): ObservationStubFile {
+  return {
+    meta: { game, from, to, generatedAt: new Date().toISOString(), noteCount, observationFailed: failure },
+    rows: [],
+  };
 }
-export function isObservationStub(_meta: unknown): boolean {
-  throw new Error("TODO(C14): isObservationStub");
+
+/** 판정 파일 meta가 stub인가. */
+export function isObservationStub(meta: unknown): boolean {
+  return (
+    typeof meta === "object" &&
+    meta !== null &&
+    "observationFailed" in meta &&
+    typeof (meta as { observationFailed: unknown }).observationFailed === "object" &&
+    (meta as { observationFailed: unknown }).observationFailed !== null
+  );
 }
-export function deltasStateOf(_file: unknown, _from: string, _to: string): { kind: "none" } | { kind: "stub" } | { kind: "observed" } {
-  throw new Error("TODO(C14): deltasStateOf");
+
+/**
+ * 이 쌍의 판정 파일 상태. 파일이 없거나 **다른 쌍**이면(PUBG `deltas.json`은 한 파일이다) `none`,
+ * stub이면 `stub` — stub은 산출물로 치지 않는다(관측이 스스로 갱신되도록, §6 C13·C14).
+ */
+export function deltasStateOf(
+  file: unknown,
+  from: string,
+  to: string
+): { kind: "none" } | { kind: "stub" } | { kind: "observed" } {
+  if (typeof file !== "object" || file === null || !("meta" in file)) return { kind: "none" };
+  const meta = (file as { meta: unknown }).meta;
+  if (typeof meta !== "object" || meta === null) return { kind: "none" };
+  const pair = meta as { from?: unknown; to?: unknown };
+  if (pair.from !== from || pair.to !== to) return { kind: "none" };
+  return isObservationStub(meta) ? { kind: "stub" } : { kind: "observed" };
 }
-export function observationReasonLabel(_r: ObservationFailReason): string {
-  throw new Error("TODO(C14): observationReasonLabel");
+
+/** 화면 회색 사유 문구 — 조치가 필요한지까지 말한다(초록불이 대기와 고장을 같이 덮지 않게). */
+export function observationReasonLabel(reason: ObservationFailReason): string {
+  switch (reason) {
+    case "awaiting-observation":
+      return "관측 대기 — 패치 직후라 표본이 쌓이는 중입니다. 패치노트는 먼저 반영했습니다.";
+    case "key-expired":
+      return "관측 중단 — API 키가 만료돼 매치를 수집하지 못했습니다(키 재발급 필요). 패치노트는 반영했습니다.";
+    case "product-unapproved":
+      return "관측 중단 — API 제품 승인 대기로 매치를 수집하지 못했습니다. 패치노트는 반영했습니다.";
+    case "key-missing":
+      return "관측 중단 — API 키가 설정돼 있지 않습니다. 패치노트는 반영했습니다.";
+    case "crashed":
+      return "관측 실패 — 수집·판정 단계가 오류로 멈췄습니다. 패치노트는 반영했습니다.";
+    case "window-lost":
+      return "관측 불가 — 원천 데이터 보존 기간이 지나 이 패치쌍은 관측할 수 없습니다. 패치노트는 반영했습니다.";
+  }
 }
