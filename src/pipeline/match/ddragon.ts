@@ -117,6 +117,7 @@ interface RawChampionFile {
 
 interface RawItemEntry {
   name: string;
+  description?: string;
   stats?: Record<string, number>;
   into?: string[] | null;
   from?: string[] | null;
@@ -280,6 +281,30 @@ export function listDdragonVersions(options: LoadDdragonOptions = {}): string[] 
     .sort(compareVersionsDesc);
 }
 
+/** 설명문에서 읽은 기본 재생 백분율의 표 키 — DDragon `stats`에는 없는 값이라 네임스페이스를 따로 둔다. */
+export const DESC_HP_REGEN_KEY = "desc:기본 체력 재생";
+export const DESC_MP_REGEN_KEY = "desc:기본 마나 재생";
+
+const DESC_PERCENT_STATS: readonly [string, string][] = [
+  ["기본 체력 재생", DESC_HP_REGEN_KEY],
+  ["기본 마나 재생", DESC_MP_REGEN_KEY],
+];
+
+/**
+ * DDragon 아이템 설명문(`<stats>` 블록)의 「기본 체력 재생 <attention>75%</attention>」류를 읽는다(2026-09-28,
+ * 이월 R10). 서포터 아이템의 재생 백분율은 `stats`에 없고 설명문에만 있다. 없으면 키를 만들지 않는다 —
+ * 호출부가 「모름」과 0을 구분해야 한다(16.19 세계 지도집은 설명문이 비어 있다).
+ */
+export function descriptionStats(description: string): Record<string, number> {
+  const text = description.replace(/<[^>]+>/g, " ");
+  const out: Record<string, number> = {};
+  for (const [label, key] of DESC_PERCENT_STATS) {
+    const m = new RegExp(`${label}\\s*(\\d+(?:\\.\\d+)?)%`).exec(text);
+    if (m) out[key] = Number(m[1]);
+  }
+  return out;
+}
+
 /**
  * 아이템 이름 → DDragon 수치 표(2026-09-28, C2 합친 이름 노트 분해용). 이름 정규화는 `byKoName`과 같다.
  * 파일이 없으면 **던진다** — 조용히 빈 표를 주면 분해가 「검증할 수치 없음」으로 떨어져 결함이 숨는다.
@@ -292,7 +317,9 @@ export function loadItemStatTable(version: string, options: LoadDdragonOptions =
   const byName = new Map<string, { id: string; stats: Record<string, number> }[]>();
   for (const [id, entry] of Object.entries(raw.data)) {
     const key = normalizeKoName(entry.name);
-    byName.set(key, [...(byName.get(key) ?? []), { id, stats: entry.stats ?? {} }]);
+    // 설명문 값(R10)은 `desc:` 키로 합친다 — 분해는 이것을 배정 근거가 아니라 교차 검증에만 쓴다.
+    const stats = { ...(entry.stats ?? {}), ...descriptionStats(entry.description ?? "") };
+    byName.set(key, [...(byName.get(key) ?? []), { id, stats }]);
   }
   return { byName: (name) => byName.get(normalizeKoName(name)) ?? [] };
 }
