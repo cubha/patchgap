@@ -69,8 +69,9 @@ const BRIEFING_BODY: Partial<Record<string, string>> = {
 };
 const briefingSource = (id: string): string => BRIEFING_BODY[id] ?? `src/app/${id}/page.tsx`;
 
+// 2026-09-28 명세 변경(이월 R8): 상세 검사 대상을 페이지 → 본문 컴포넌트로 옮긴다(검사 내용은 그대로).
 /**
- * 상세 화면 본문의 소스 파일. 2026-09-28 명세 변경(이월 R8): LoL·TFT 상세 본문이 컴포넌트로 옮겼다 — 평소 상세와
+ * 상세 화면 본문의 소스 파일. LoL·TFT 상세 본문이 컴포넌트로 옮겼다 — 평소 상세와
  * 과거 쌍 상세(`history/[pair]/item|unit/…`)가 같은 본문을 쓴다. 페이지는 얇은 위임이라, 검사는 본문 파일에 한다
  * (검사 내용은 그대로). 위임이 실제로 그 본문인지는 `detail body delegation` 검사가 따로 본다.
  */
