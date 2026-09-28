@@ -150,7 +150,7 @@ export function deterministicSummary(input: {
       : input.status === "announced-inconsistent"
         ? "노트가 예고한 방향과 다르게 움직였습니다."
         : "";
-  return `${input.name} ${input.metricKo}${subjectParticle(input.metricKo)} ${input.before}에서 ${input.after}로 바뀌었습니다(${input.change}). ${tail}`.trim();
+  return `${input.name} ${input.metricKo}${subjectParticle(input.metricKo)} ${input.before}에서 ${input.after}${directionParticle(input.after)} 바뀌었습니다(${input.change}). ${tail}`.trim();
 }
 
 /** 주격 조사 — 마지막 음절에 받침이 있으면 「이」, 없으면 「가」(「평균 등수가」·「순방률이」). 한글이 아니면 「이」. */
@@ -160,9 +160,27 @@ export function subjectParticle(word: string): "이" | "가" {
   return code % 28 === 0 ? "가" : "이";
 }
 
-/** 부호를 붙인 변화량 문자열 — 결정론 요약용(`+0.4%p`·`-0.12등`). */
+/** 부호를 붙인 변화량 문자열 — 결정론 요약용(`+0.4%p`·`-0.12등`). 이미 부호가 있으면 그대로(「++」 금지). */
 export function signed(text: string): string {
-  return text.startsWith("-") ? text : `+${text}`;
+  return /^[+\-−]/.test(text) ? text : `+${text}`;
+}
+
+// 숫자 끝자리의 한국어 읽기 끝소리 — 받침(ㄹ 제외)이 있으면 「으로」. 0은 십·백·천·만·영 전부 받침이다.
+const DIGIT_TAKES_EURO: Record<string, boolean> = {
+  "0": true, "1": false, "2": false, "3": true, "4": false, "5": false, "6": true, "7": false, "8": false, "9": false,
+};
+
+/**
+ * 방향 조사 「로/으로」 — 끝소리가 ㄹ 이외 받침이면 「으로」(「4.48등으로」), 아니면 「로」(「12.2%로」·「11초로」).
+ * 기호(%)는 「퍼센트」로 읽혀 「로」다. 한글도 숫자도 아니면 「로」.
+ */
+export function directionParticle(word: string): "로" | "으로" {
+  const last = word.at(-1) ?? "";
+  if (last in DIGIT_TAKES_EURO) return DIGIT_TAKES_EURO[last] ? "으로" : "로";
+  const code = last.charCodeAt(0) - 0xac00;
+  if (code < 0 || code > 11171) return "로";
+  const jong = code % 28;
+  return jong === 0 || jong === 8 ? "로" : "으로"; // 8 = ㄹ
 }
 
 /**
