@@ -451,7 +451,11 @@ function isNarrativeStrong($: cheerio.CheerioAPI, node: AnyNode): boolean {
  */
 function startsNewEntity($: cheerio.CheerioAPI, node: AnyNode): boolean {
   const host = node.type === "tag" && node.name === "strong" ? $(node).parent() : $(node);
-  return host.next().is("blockquote.context");
+  if (host.next().is("blockquote.context")) return true;
+  // C9(2026-09-28): 26.19 아레나·클래식은 대상 이름이 `h4` 하나이고 소개 문단 없이 바로 스킬 라벨
+  // `p>strong`이 온다(26.16 23·26.17 7·26.18 2·26.19 24건). 그 모양의 h4도 새 대상(또는 새 범주)을 연다 —
+  // 없으면 36줄이 첫 대상 「아펠리오스」로 이월됐다. 스킬 라벨(`p>strong`) 자신에는 적용하지 않는다.
+  return node.type === "tag" && node.name === "h4" && host.next().is("p") && host.next().children("strong").length > 0;
 }
 
 /**
@@ -507,6 +511,11 @@ function parseNoteBlock(
         // 자체가 아니다 — 건너뛴다. `classicCategoryFor`를 재사용해 인식 범위를 한 곳에 고정한다
         // (전에는 "챔피언"/"아이템"만 걸러 "룬 및 진척도"/"체계" 라벨 자체가 엔티티로 오인되고
         // 그 뒤 진짜 엔티티명이 skill 자리로 밀리는 결함이 있었다 — scope-critic 라운드 2).
+        // 범주가 새 묶음을 열면 앞 대상을 끊는다(C9) — 그 아래 첫 라벨이 대상이 된다.
+        if (opensEntity) {
+          entity = null;
+          currentSkill = null;
+        }
         return;
       }
       lastLabelAnchorId = $(node).attr("id") ?? null;

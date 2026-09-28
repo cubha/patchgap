@@ -682,3 +682,33 @@ describe("parsePatchNotes — h4 대상 라벨(C9)", () => {
     expect(classic.map((i) => i.entity)).toEqual(["질리언", "포탑 방패"]);
   });
 });
+
+// C9 보강: 26.19 클래식 「아이템」 범주 아래 라벨은 아이템 이름이다(스킬이 없다) — 소개 문단 없이 이어져도
+// 각각 대상이다. 「망토와 단검」 뒤의 「달빛 마법검」·「즈롯 차원문」이 첫 아이템의 스킬로 묶이지 않는다.
+describe("parsePatchNotes — 클래식 아이템 범주(C9)", () => {
+  const html = [
+    '<div id="patch-notes-container">',
+    '<header class="header-primary"><h2 id="patch-classic">클래식</h2></header>',
+    '<div class="content-border"><div class="white-stone accent-before"><div>',
+    '<h4 class="change-detail-title">아이템</h4>',
+    "<p><strong>망토와 단검</strong></p>",
+    "<ul><li>조합식: 민첩성의 망토 + 단검. 총 1,130골드</li></ul>",
+    "<p><strong>달빛 마법검</strong></p>",
+    "<ul><li>조합식: 추적자의 팔목 보호대 + 음전자 망토. 총 2,300골드</li></ul>",
+    '<h4 class="change-detail-title">챔피언</h4>',
+    "<p><strong>피즈</strong></p>",
+    '<blockquote class="blockquote context"><p>피즈.</p></blockquote>',
+    "<p><strong>Q - 성게 찌르기</strong></p>",
+    "<ul><li>피해량: 10 ⇒ 20</li></ul>",
+    "</div></div></div>",
+    "</div>",
+  ].join("");
+  const parsed = parsePatchNotes(html, { patch: "26.19", sourceUrl: "https://example.com/26-19/" });
+  it("아이템 범주 아래 라벨은 각각 대상이고, 챔피언 범주로 돌아가면 스킬 규칙이 다시 선다", () => {
+    expect(parsed.items.map((i) => [i.entity, i.skill])).toEqual([
+      ["망토와 단검", null],
+      ["달빛 마법검", null],
+      ["피즈", "Q - 성게 찌르기"],
+    ]);
+  });
+});
