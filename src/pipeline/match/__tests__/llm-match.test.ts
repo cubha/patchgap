@@ -813,7 +813,7 @@ describe("요약 100자 폴백·재요청 누수(C1)", () => {
   it("재요청 요약의 인용이 바뀌어도 새 인용이 검증을 통과하면 문장·인용을 쌍째 채택한다", () => {
     const original = { summary: long, summaryCites: ["note:a"], causes: [] };
     const repaired = { summary: "짧아진 요약입니다.", summaryCites: ["note:b"], causes: [] };
-    expect(mergeRepairedProse(original, repaired, () => true)).toMatchObject({ summary: "짧아진 요약입니다.", summaryCites: ["note:b"] });
+    expect(mergeRepairedProse(original, repaired, (text, cites) => text.length < 100 && cites.length === 1)).toMatchObject({ summary: "짧아진 요약입니다.", summaryCites: ["note:b"] });
     expect(mergeRepairedProse(original, repaired, () => false)).toMatchObject({ summary: long, summaryCites: ["note:a"] });
   });
 });

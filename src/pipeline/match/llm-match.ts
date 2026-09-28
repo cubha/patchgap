@@ -402,7 +402,7 @@ export function countProseViolations(parsed: LlmOutput): number {
 export function mergeRepairedProse(
   original: LlmOutput,
   repaired: LlmOutput,
-  acceptSummaryCites: (cites: readonly string[]) => boolean = () => false
+  acceptSummaryCites: (summary: string, cites: readonly string[]) => boolean = () => false
 ): LlmOutput | null {
   if (repaired.causes.length !== original.causes.length) return null;
   const citesUnchanged =
@@ -410,7 +410,7 @@ export function mergeRepairedProse(
     repaired.summaryCites.every((id, index) => id === original.summaryCites[index]);
   // 인용이 바뀐 재요청 요약도, 새 인용이 검증을 통과하면 문장·인용을 **쌍째** 채택한다(2026-09-28, C1).
   // 원본을 지키면 긴 요약이 그대로 남았다 — ACCEPT-prose-v5 A1(요약 100자 초과 0) 회귀의 원인이다.
-  const adoptSummary = citesUnchanged || acceptSummaryCites(repaired.summaryCites);
+  const adoptSummary = citesUnchanged || acceptSummaryCites(repaired.summary, repaired.summaryCites);
   // 원인 문장은 **인용 id로** 짝짓는다(2026-09-27). 위치로 짝지으면 재요청이 순서를 바꿨을 때 문장이
   // 다른 노트의 인용을 달고 나간다 — 26.19 나피리 밴률 등 LoL 3행·TFT 4행이 그렇게 verified로 나갔다.
   // 같은 id가 여럿이면 등장 순서대로 소비한다. 짝이 없는 원인은 원본 문장을 지킨다(위반이 남더라도
@@ -639,7 +639,10 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
   };
   const client = options.client ?? new Anthropic();
   const resultById = new Map<string, TDelta>();
-  const acceptCites = (cites: readonly string[]) => verifySummaryCites(cites, candidates, profile);
+  // 재요청 요약 채택 게이트는 **최종 게이트와 같아야** 한다(scope-critic 2026-09-28) — 인용 실재만 보고
+  // 채택하면, 최종 단계의 C4(인용 전부 불일치)에서 미검증으로 떨어질 문장을 원본 대신 받아들이게 된다.
+  const acceptCites = (summaryText: string, cites: readonly string[], delta: TDelta) =>
+    verifySummaryCites(cites, candidates, profile) && !summaryCitesAllMismatched(summaryText, cites, candidates, ownNameOf(delta));
 
   /**
    * 화면에 나갈 요약을 확정한다(C1). 재요청까지 거쳐도 100자를 넘으면 **자르지 않고**(인용·수치를 잃는다)
@@ -687,7 +690,7 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
           );
           addUsage(summary.usage, repaired.usage);
           const merged =
-            repaired.parsed === null ? null : mergeRepairedProse(cachedParsed, repaired.parsed, acceptCites);
+            repaired.parsed === null ? null : mergeRepairedProse(cachedParsed, repaired.parsed, (t, c) => acceptCites(t, c, delta));
           if (merged !== null && countProseViolations(merged) < countProseViolations(cachedParsed)) {
             cachedParsed = merged;
           }
@@ -745,7 +748,7 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
           buildProseRepairNote(parsed)
         );
         addUsage(usage, repaired.usage);
-        const merged = repaired.parsed === null ? null : mergeRepairedProse(parsed, repaired.parsed, acceptCites);
+        const merged = repaired.parsed === null ? null : mergeRepairedProse(parsed, repaired.parsed, (t, c) => acceptCites(t, c, delta));
         if (merged !== null && countProseViolations(merged) < countProseViolations(parsed)) {
           parsed = merged;
         }

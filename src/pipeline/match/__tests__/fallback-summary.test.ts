@@ -61,3 +61,16 @@ describe("결정론 요약 — 부호·방향 조사(재생성 실측 2026-09-28
     expect(tftLlmProfile.fallbackSummary?.({ ...base, metric: "top4Rate", before: 0.5, after: 0.122, delta: -0.378 })).toContain("12.2%로");
   });
 });
+
+describe("결정론 요약 — 표시값끼리 자기 일관(scope-critic 2026-09-28)", () => {
+  it("변화량은 **표시된** 두 값의 차이다 — 16.2%→7.9%면 −8.3%p(원값 차이 −8.4%p를 쓰면 문장이 스스로 어긋난다)", () => {
+    const t = tftLlmProfile.fallbackSummary?.({ entityName: "요정", status: "announced-inconsistent", metric: "playRate", before: 0.16244, after: 0.07886, delta: -0.08358 } as DeltaRecord);
+    expect(t).toContain("16.2%에서 7.9%로");
+    expect(t).toContain("(-8.3%p)");
+  });
+  it("LoL 비율도 같은 규칙", () => {
+    const t = lolLlmProfile({} as unknown as DdragonData).fallbackSummary?.({ entityName: "노틸러스", status: "unannounced", metric: "banRate", before: 0.08849, after: 0.12151, delta: 0.03302 } as DeltaRecord);
+    expect(t).toContain("8.8%에서 12.2%로");
+    expect(t).toContain("(+3.4%p)");
+  });
+});
