@@ -472,6 +472,14 @@ export interface ProseHygieneStats {
    * 게이트가 그것을 못 봤다 — `ACCEPT-prose-v5`가 위험으로 적어 둔 바로 그 형태다.
    */
   causeNounEnding: number;
+  /**
+   * 검증 통과 원인 중 인용 노트 대상의 이름을 **하나도 말하지 않는** 문장 수(2026-09-28, C6). 문장-인용
+   * 게이트(`namesOtherEntityThanCited`)는 이름이 없는 문장을 판단하지 않는다(보수적 설계) — 그 사각지대의
+   * 크기를 잰다. 게이트를 넓히면 오탐이 생기므로 계측으로 둔다. 엔진이 채운다(없으면 미계측).
+   */
+  causeUnnamedTarget?: number;
+  /** 결정론 수치 요약으로 바뀐 요약 수(C1·D1). */
+  summaryDeterministic?: number;
 }
 
 /**
@@ -797,5 +805,13 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
       causes: (record.causes ?? []).map((cause) => ({ text: cause.text, confidence: cause.confidence })),
     }))
   );
+  const candidateById = new Map(candidates.map((note) => [note.id, note] as const));
+  summary.prose.causeUnnamedTarget = merged
+    .flatMap((record) => record.causes ?? [])
+    .filter((cause) => {
+      const cited = cause.verified && cause.candidateNoteId !== null ? candidateById.get(cause.candidateNoteId) : undefined;
+      return cited !== undefined && !citedMentionNames(cited).some((name) => cause.text.includes(name));
+    }).length;
+  summary.prose.summaryDeterministic = merged.filter((record) => record.llm?.summaryDeterministic === true).length;
   return { deltas: merged, summary };
 }

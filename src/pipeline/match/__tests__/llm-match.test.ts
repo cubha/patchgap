@@ -863,3 +863,24 @@ describe("verifyCauses — 사실성 검사 연결(C3)", () => {
     expect(c.verified).toBe(false);
   });
 });
+
+describe("계측 — 대상 이름 없는 원인(C6)", () => {
+  it("검증 통과 원인 중 인용 대상 이름을 말하지 않는 문장 수를 센다", async () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "llm-c6-"));
+    const graves = note({ id: "n2", entity: "그레이브즈" });
+    const parseFn = vi.fn().mockResolvedValue(
+      fakeResponse({
+        summary: "요약입니다.",
+        summaryCites: [],
+        causes: [
+          { text: "그레이브즈 너프로 정글이 바뀌었습니다.", candidateNoteId: "n2", confidence: "low" },
+          { text: "정글 경쟁 구도가 바뀌었습니다.", candidateNoteId: "n2", confidence: "low" },
+        ],
+      })
+    );
+    const out = await inferIndirectCandidates([delta({ id: "d1", entityName: "리신", status: "unannounced" })], [graves], lolLlmProfile(makeDdragon()), { client: fakeClient(parseFn), cacheDir: dir });
+    fs.rmSync(dir, { recursive: true, force: true });
+    expect(out.summary.prose.causeUnnamedTarget).toBe(1);
+    expect(out.summary.prose.summaryDeterministic).toBe(0);
+  });
+});
