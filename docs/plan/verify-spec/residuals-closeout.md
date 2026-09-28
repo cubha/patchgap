@@ -102,3 +102,9 @@
   - V8 시안 02 라벨 구식 → 무시: UX-BRIEF 91·104행이 시안 02를 구식으로 명시.
 - 델타 재판정(2회차): A-V3·A-V5·A-V6·B-V3·B-V6·B-V7 ✅. A-V4 추가 근거 — (a) 분해 노트 id가 수치 축에 연결: `data/aggregated/gamedata/lol/26.18_26.19.json` 182·197행(`note:26.19:item:세계-지도집:*`·`룬-나침반:*`) (b) 「DDragon 부재 시 크게 실패」는 PR-B Phase 3에서 「경보·원문 유지」로 바뀐 결정 → 로드맵 PLAN B4 문구 갱신 + 가드 신설 `combined-note-split-local.test.ts`(버전 쌍 없음·item.json 없음 두 경로 모두 `::warning::[C2]` + 원문 그대로). 비평가 부기(UX-BRIEF 189행 커버리지 바 옛 5분류 문구)도 고쳤다.
 - 3회차: A-V4 ✅ — /verify-impl 코드 축 UNMET 0 · UNREQUESTED 0 · UNKNOWN 0(운영 절차 R1·R3 제외).
+
+## R3 — TFT Actions 실측(새 키, run 36424128722) → 결함 발견·교정(PR-D)
+- 결과: determine·프리플라이트 통과(새 키 TFT 200), **매치 수집이 잡 제한 120분에 걸려 취소**(12:47Z→14:47Z). 뒤 스텝 전부 skip, `actions/cache` 저장(post 스텝)도 skip → 2시간 수집분 전량 유실. main에 push 없음.
+- 원인: Actions에서 실제 수집이 돈 것은 처음(과거 실행은 전부 no-op, 18.2·18.3은 로컬 수집). 개발 키 리밋(100/2분)으로 두 패치 × 2,500매치는 120분에 못 끝난다. 수집기에 시간 예산이 없었고, 캐시 저장이 잡 성공 시의 post 스텝에 묶여 있었다.
+- 교정(PR-D `feature/tft-collect-deadline`): 크롤러 `deadlineAt`(루프 정상 종료·`stoppedAtDeadline`), `run-tft-collect --deadline-minutes`(부분이면 `partial=true`), 워크플로 raw 캐시를 `cache/restore` + 수집 직후 `cache/save`(`always()`)로 분리, 마감 75분, 부분 수집이면 관측 스텝 skip·선언 stub(`awaiting-observation`)·커밋은 진행. 다음 날 실행이 `ids-seen.txt`로 이어 받는다. 가드: `tft-crawler.test.ts`(마감 2건), `tft-collect-args.test.ts`, `collect-tft-workflow.test.ts`.
+- 미확인: 수정한 워크플로의 실제 Actions 실행은 머지 후 workflow_dispatch 1회로 확인한다(결과는 사용자 보고).
