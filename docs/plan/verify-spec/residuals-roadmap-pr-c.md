@@ -26,3 +26,7 @@
 - 실측: `next build` → `out/lol/history/26.16-26.17/`·`26.17-26.18/` 생성, 각 쌍의 헤드라인 숫자가 다름.
 - 명세 변경: `screen-parity` 상세 계약에서 `history` 제외(대상 상세가 아니라 브리핑), 헤더 select 테스트(F3 표시 전용 → LoL 실제 이동).
 - 미확인: 과거 쌍 화면의 대상 링크(`/lol/item/[id]`)는 그 id가 처음 나오는 쌍의 상세로 간다 — 과거 쌍 문맥이 상세에서 이어지지 않는다. `/lol/compare/`는 기본 쌍만. TFT(쌍 2개)는 라우트를 만들지 않았다(D3 범위 = LoL).
+
+## Phase 3 반영(2026-09-28)
+- scope-critic(C4): select 목적지 ↔ 정적 라우트 목록 일치 가드 신설 — `app/lol/history/[pair]/__tests__/static-params.test.ts`(select가 보내는 모든 과거 쌍 href가 `generateStaticParams`에 있다).
+- 무시(사유): 「`/lol/` 메타데이터 없음 vs history 동적 제목」 — 이동 전 `/lol/page.tsx`에도 없었다(회귀 아님, 레이아웃 기본 제목). 「과거 쌍 안 대상 링크가 쌍 문맥을 잃는다」 — 404는 아니고(상세는 존재), D3 범위는 브리핑 라우트다. §C4 미확인에 이미 기록, 쌍별 상세 라우트는 이월(아래 잔여).
