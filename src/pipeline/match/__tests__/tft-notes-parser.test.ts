@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
+import { resolveDirection } from "../patchnotes-parser";
 
 import {
   parseTftPatchNotes,
@@ -190,3 +191,52 @@ describe("resolveTftEntity — 원문 표기 별칭", () => {
   });
 });
 
+
+// ── PR-B(2026-09-28, 잔여 로드맵 C7·C11) ─────────────────────────────────────────────────────────
+// C7: TFT 유닛 「마나 조정」은 「시작/최대」 두 값이다 — 시작은 높을수록, 최대는 낮을수록 좋다(섞이면 조정).
+//     한 규칙(「마나 = 낮을수록 좋음」)은 아칼리 「0/30 ⇒ 0/25」를 반대로 찍는다(§6 외부검토).
+//     그리고 「추가 패치(#patch-midpatch-updates)」가 같은 수치를 다시 바꾸면 **순변화**로 잇는다 —
+//     18.2 마오카이는 40/100 ⇒ 30/90 뒤 중간 패치로 30/90 ⇒ 30/100이 돼 두 줄이 방향 동률로 남았다.
+// C11: 한 줄에 「, <라벨>: X ⇒ Y」로 두 수치가 섞인 원문은 줄을 나눈다(18.2 「연소」 가격·피해량).
+describe("resolveDirection — 유닛 마나 시작/최대(C7)", () => {
+  it.each([
+    ["0/30", "0/25", "buff"], // 최대 감소
+    ["40/100", "30/90", "adjust"], // 시작 감소(나쁨) + 최대 감소(좋음)
+    ["30/90", "30/100", "nerf"], // 최대 증가
+    ["40/100", "30/100", "nerf"], // 시작 감소
+    ["0/50", "20/50", "buff"], // 시작 증가
+  ])("마나 조정 %s ⇒ %s = %s", (before, after, expected) => {
+    expect(resolveDirection("마나 조정", before, after, null)).toBe(expected);
+    expect(resolveDirection("공격력 형태 마나 조정", before, after, null)).toBe(expected);
+  });
+  it("「최대 마나 감소」 같은 다른 마나 수치는 기존 규칙 그대로", () => {
+    expect(resolveDirection("최대 마나 감소", "18%", "15%", null)).toBe("nerf");
+  });
+});
+
+describe("parseTftPatchNotes — 줄 분할(C11)·중간 패치 체이닝(C7)", () => {
+  const catalog: TftCatalog = { ...CATALOG, units: [...CATALOG.units, "마오카이", "레오나", "아칼리"], items: [...CATALOG.items, "연소", "소매치기"] };
+  let cached: TftNotesParseResult | null = null;
+  const parsed = () => (cached ??= parseTftPatchNotes(FIXTURE, { patch: "18.2", sourceUrl: SOURCE_URL, catalog }));
+
+  it("「, 라벨: X ⇒ Y」가 붙은 줄을 수치별로 나눈다", () => {
+    const burn = parsed().items.filter((i) => i.entity === "연소");
+    expect(burn.map((i) => [i.stat, i.before, i.after, i.direction])).toEqual([
+      ["가격", "5골드", "3골드", "buff"],
+      ["최대 체력 비례 피해량", "15%", "12%", "nerf"],
+    ]);
+  });
+
+  it("중간 패치가 같은 수치를 다시 바꾸면 한 줄의 순변화로 잇는다", () => {
+    const mana = parsed().items.filter((i) => i.entity === "마오카이" && (i.stat ?? "").includes("마나"));
+    expect(mana).toHaveLength(1);
+    expect(mana[0]).toMatchObject({ before: "40/100", after: "30/100", direction: "nerf" });
+    expect(mana[0].summary).toContain("30/90");
+    expect(mana[0].anchorUrl).toContain("#patch-midpatch-updates");
+  });
+
+  it("중간 패치와 짝이 없는 줄은 그대로다(레오나·아칼리)", () => {
+    expect(find(parsed(), "레오나", "마나").direction).toBe("adjust");
+    expect(find(parsed(), "아칼리", "마나").direction).toBe("buff");
+  });
+});
