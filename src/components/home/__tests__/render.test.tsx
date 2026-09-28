@@ -20,13 +20,6 @@ function withAmbient(children: ReactNode) {
   return <AmbientProvider>{children}</AmbientProvider>;
 }
 
-/** 2026-09-28 명세 변경(PR-C B1): 기본 탭이 「미공지 Gap」이 됐다 — 패치 내용 탭을 보는 검사는 먼저 누른다. */
-function openTab(container: HTMLElement, label: "패치 내용" | "미공지 Gap"): void {
-  const tab = Array.from(container.querySelectorAll('button[role="tab"]')).find((b) => b.textContent?.startsWith(label));
-  if (!tab) throw new Error(`탭 없음: ${label}`);
-  fireEvent.click(tab);
-}
-
 describe("HeroSummary — 빈 상태(모든 수치 0)", () => {
   it("0을 그대로 렌더하고 크래시하지 않는다", () => {
     const { container } = render(
@@ -47,8 +40,7 @@ describe("ReleaseNoteStream — 빈 상태", () => {
   // 2026-09-12(4차, R2): 라인 필터가 StreamLaneFilter.tsx로 분리되면서 이 컴포넌트는 더 이상
   // 필터를 렌더하지 않는다(StreamColumnLayout의 별도 그리드 행이 필터를 담당) — 명세 변경.
   // 필터 렌더 단언은 아래 "StreamLaneFilter" 케이스로 옮겼다.
-  // 2026-09-28 명세 변경(PR-C B1): 기본 탭이 「미공지 Gap」(발견 먼저)이 됐다 — 두 검사의 탭을 맞바꾼다.
-  it("그룹이 없으면 기본(미공지 Gap) 탭에서 빈 상태 문구를 렌더하고, 탭 행은 여전히 존재한다", () => {
+  it("그룹이 없으면 기본(패치 내용) 탭에서 빈 상태 문구를 렌더하고, 탭 행은 여전히 존재한다", () => {
     const { container } = render(
       withAmbient(
         <ReleaseNoteStream
@@ -61,12 +53,12 @@ describe("ReleaseNoteStream — 빈 상태", () => {
         />
       )
     );
-    expect(container.textContent).toContain("이 라인에서는 미공지 변화가 없습니다");
+    expect(container.textContent).toContain("이 라인에서는 관측된 변화가 없습니다");
     // 빈 상태에서도 탭 바가 사라지면 안 된다(2026-09-14 — early-return 구조의 결함이었다).
     expect(container.querySelectorAll('button[role="tab"]')).toHaveLength(2);
   });
 
-  it("패치 내용 탭으로 전환하면 관측 빈 상태 문구를 렌더한다", () => {
+  it("미공지 Gap 탭으로 전환하면 신규 빈 상태 문구를 렌더한다", () => {
     const { container } = render(
       withAmbient(
         <ReleaseNoteStream
@@ -79,12 +71,17 @@ describe("ReleaseNoteStream — 빈 상태", () => {
         />
       )
     );
-    openTab(container, "패치 내용");
-    expect(container.textContent).toContain("이 라인에서는 관측된 변화가 없습니다");
+    const gapTab = Array.from(container.querySelectorAll('button[role="tab"]')).find((b) =>
+      b.textContent?.startsWith("미공지 Gap")
+    );
+    expect(gapTab).not.toBeUndefined();
+    fireEvent.click(gapTab!);
+    // 문구 변경(2026-09-18 라운드6 C5): "노트에 없는 변화"·"간접 영향"·"미공지"를 "미공지" 한 어휘로 통일했다.
+    expect(container.textContent).toContain("이 라인에서는 미공지 변화가 없습니다");
     expect(container.querySelectorAll('button[role="tab"]')).toHaveLength(2);
   });
 
-  it("기본 진입은 미공지 Gap 탭 — unannounced 엔트리만 렌더하고 matched는 숨긴다(패치 내용 탭에선 반대)", () => {
+  it("기본 진입은 패치 내용 탭 — matched 엔트리만 렌더하고 unannounced는 숨긴다", () => {
     const matchedEntry: ReleaseStreamEntry = {
       group: { kind: "matched", entity: "아우렐리온 솔", notes: [] },
       icon: { entityType: "champion", entityKey: "AurelionSol" },
@@ -107,9 +104,6 @@ describe("ReleaseNoteStream — 빈 상태", () => {
         />
       )
     );
-    expect(container.textContent).toContain("로크");
-    expect(container.textContent).not.toContain("아우렐리온 솔");
-    openTab(container, "패치 내용");
     expect(container.textContent).toContain("아우렐리온 솔");
     expect(container.textContent).not.toContain("로크");
   });
@@ -306,13 +300,11 @@ describe("ReleaseNoteStream — tier 2 접기 · 기타 변경", () => {
   ];
 
   function renderStream() {
-    const result = render(
+    return render(
       withAmbient(
         <ReleaseNoteStream entries={entries} spellIcons={null} noteDeltas={{}} patch="26.18" contentCount={5} gapCount={0} miscSections={misc} />
       )
     );
-    openTab(result.container, "패치 내용");
-    return result;
   }
 
   it("연속 tier 2는 요약 1행('유의한 관측 없음 · N건')으로 접히고, 그 안에 카드가 전부 남는다", () => {
@@ -338,7 +330,6 @@ describe("ReleaseNoteStream — tier 2 접기 · 기타 변경", () => {
         <ReleaseNoteStream entries={split} spellIcons={null} noteDeltas={{}} patch="26.18" contentCount={3} gapCount={0} />
       )
     );
-    openTab(container, "패치 내용");
     const folds = Array.from(container.querySelectorAll("ul > li > details > summary")).filter((s) =>
       s.textContent?.startsWith("유의한 관측 없음")
     );

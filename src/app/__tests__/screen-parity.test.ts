@@ -281,13 +281,13 @@ describe("§8-1 섹션 순서 — 세 브리핑이 같은 순서다", () => {
     });
   }
 
-  // 2026-09-28 명세 변경(PR-C B1, 사용자 결정 D4 — 10/6 머지): 섹션 순서를 뒤집는다(발견 먼저). 이 제품의
-  // 발견은 「미공지 Gap」이고, 심사 기간엔 출품 스크린샷 보호로 「공지 먼저」를 유지했었다.
-  it("탭 순서는 공용 컴포넌트가 소유한다 — 미공지 Gap(발견) 먼저, 패치 내용 나중, 기본 선택도 Gap", async () => {
+  // 2026-09-28 명세 재변경(R2, 사용자 결정): PR-C B1(발견 먼저)을 되돌린다 — 「패치내용 먼저 유지가 맞음.
+  // 미공지 gap이 없을수도잇잖아」. Gap이 0건인 패치에서 빈 탭이 첫 화면이 되면 안 된다. 순서·기본값은
+  // 공용 상수 하나가 소유한다(LoL 스트림도 같은 상수를 본다).
+  it("탭 순서는 공용 컴포넌트가 소유한다 — 패치 내용 먼저, 미공지 Gap 나중, 기본 선택도 패치 내용", async () => {
     const { BRIEFING_TAB_ORDER, DEFAULT_BRIEFING_TAB } = await import("@/components/BriefingTabs");
-    expect(BRIEFING_TAB_ORDER).toEqual(["gap", "content"]);
-    expect(DEFAULT_BRIEFING_TAB).toBe("gap");
-    // LoL 스트림도 같은 기본값을 쓴다(자기 상태를 쥐지만 기본값은 공용 상수).
+    expect(BRIEFING_TAB_ORDER).toEqual(["content", "gap"]);
+    expect(DEFAULT_BRIEFING_TAB).toBe("content");
     expect(read("src/components/home/ReleaseNoteStream.tsx")).toContain("useState<StreamTab>(DEFAULT_BRIEFING_TAB)");
   });
 });
