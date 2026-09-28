@@ -93,7 +93,8 @@ function cacheKeyFor(model: string, promptVersion: string, deltaId: string, cand
     .digest("hex");
 }
 
-function buildSystemPrompt<TDelta extends LlmDelta>(profile: GameLlmProfile<TDelta>, notes: readonly PatchNoteItem[]): string {
+/** 골든 가드(`prompt-golden.test.ts`)가 렌더 결과를 해시하려고 노출한다 — 후보 목록을 감싸는 문구는 캐시 키에 없다. */
+export function buildSystemPrompt<TDelta extends LlmDelta>(profile: GameLlmProfile<TDelta>, notes: readonly PatchNoteItem[]): string {
   return `${profile.systemInstructions}\n\n후보 패치노트 항목 목록(JSON):\n${serializeCandidates(notes)}`;
 }
 
