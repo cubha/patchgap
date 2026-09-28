@@ -10,6 +10,7 @@
 // `--smoke`는 아주 작게(플레이어 5명·패치당 25매치) 돌려 **응답 스키마와 패치 분포만 확인**한다.
 // 본 수집 전에 이걸 먼저 돌린다 — 예산이 가장 비싼 단계라 헛돌면 시간이 통째로 날아간다.
 
+import fs from "node:fs";
 import "dotenv/config";
 
 import { createTftClient, type TftTier } from "../src/pipeline/collect/tft-client";
@@ -36,6 +37,8 @@ interface CliArgs {
   dataRoot: string;
   platform: string;
   region: string;
+  /** 수집 시간 상한(분). 넘으면 정상 종료하고 `partial=true`를 GITHUB_OUTPUT에 남긴다(R3). 없으면 끝까지. */
+  deadlineMinutes?: number;
 }
 
 function parseTiers(raw: string): TftTier[] {
@@ -60,6 +63,7 @@ export function parseArgs(argv: string[]): CliArgs {
     { name: "dataRoot", type: "string", default: "data" },
     { name: "platform", type: "string", default: "kr" },
     { name: "region", type: "string", default: "asia" },
+    { name: "deadlineMinutes", type: "number" },
   ]);
 
   const target = Number(raw.target);
@@ -75,7 +79,13 @@ export function parseArgs(argv: string[]): CliArgs {
     throw new Error(`run-tft-collect: --seed-limit은 양의 정수여야 한다`);
   }
 
+  const deadlineMinutes = raw.deadlineMinutes === undefined ? undefined : Number(raw.deadlineMinutes);
+  if (deadlineMinutes !== undefined && (!Number.isInteger(deadlineMinutes) || deadlineMinutes <= 0)) {
+    throw new Error(`run-tft-collect: --deadline-minutes는 양의 정수여야 한다 (받은 값: ${String(raw.deadlineMinutes)})`);
+  }
+
   return {
+    deadlineMinutes,
     target,
     tiers: typeof raw.tiers === "string" ? parseTiers(raw.tiers) : undefined,
     seedLimit,
@@ -119,6 +129,7 @@ async function main(): Promise<void> {
       seedLimit,
       idsPerPlayer: args.idsPerPlayer,
       outDir,
+      deadlineAt: args.deadlineMinutes === undefined ? undefined : startedAt + args.deadlineMinutes * 60_000,
       onProgress: (e) => {
         if (e.phase === "match") console.log(`  적재 ${e.stored} · 창 밖 ${e.skipped}`);
         else if (e.detail) console.log(`  [${e.phase}] ${e.detail}`);
@@ -126,7 +137,10 @@ async function main(): Promise<void> {
     });
 
     const elapsed = ((Date.now() - startedAt) / 1000).toFixed(0);
-    console.log(`\n[tft-collect] 완료 (${elapsed}s)`);
+    console.log(`\n[tft-collect] ${result.stoppedAtDeadline ? `마감(${args.deadlineMinutes}분)에 멈춤 — 부분 수집` : "완료"} (${elapsed}s)`);
+    // 워크플로가 관측(집계·판정)을 미루고 raw 캐시만 저장하게 한다 — 다음 실행이 ids-seen으로 이어 받는다.
+    const githubOutput = process.env.GITHUB_OUTPUT;
+    if (githubOutput) fs.appendFileSync(githubOutput, `partial=${result.stoppedAtDeadline ? "true" : "false"}\n`);
     console.log(`  시드 ${result.seeds}명 · 조회 ${result.requested}건 · 창 밖 ${result.skipped}건`);
     for (const [patch, n] of Object.entries(result.storedByPatch)) {
       console.log(`  ${patch}: ${n}매치`);

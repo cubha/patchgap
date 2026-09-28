@@ -40,6 +40,13 @@ export interface TftCrawlOptions {
   queueIds?: readonly number[];
   outDir: string;
   onProgress?: (event: TftCrawlProgress) => void;
+  /**
+   * 이 시각(epoch ms)이 지나면 ID·매치 루프를 **정상 종료**한다(2026-09-28, R3 실측). Actions 잡 제한(120분)에
+   * 걸려 취소되면 뒤 스텝(캐시 저장 포함)이 돌지 않아 모은 매치가 사라졌다 — 제한 전에 스스로 멈춰야 남는다.
+   */
+  deadlineAt?: number;
+  /** 시계 주입(테스트). 기본 `Date.now`. */
+  now?: () => number;
 }
 
 export interface TftCrawlProgress {
@@ -66,6 +73,8 @@ export interface TftCrawlResult {
   offQueue: number;
   seeds: number;
   requested: number;
+  /** 마감 시각에 걸려 목표 전에 멈췄다 — 호출부는 관측을 미루고 다음 실행이 이어 받는다. */
+  stoppedAtDeadline: boolean;
 }
 
 /** 시각이 어느 창에 속하나. 어디에도 안 속하면 null. */
@@ -112,7 +121,14 @@ export async function crawlTft(options: TftCrawlOptions): Promise<TftCrawlResult
     queueIds = [1100],
     outDir,
     onProgress,
+    deadlineAt = Number.POSITIVE_INFINITY,
+    now = Date.now,
   } = options;
+  let stoppedAtDeadline = false;
+  const pastDeadline = () => {
+    if (now() >= deadlineAt) stoppedAtDeadline = true;
+    return stoppedAtDeadline;
+  };
 
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -177,6 +193,7 @@ export async function crawlTft(options: TftCrawlOptions): Promise<TftCrawlResult
     const ids: string[] = [];
     for (const puuid of puuids) {
       if (ids.length >= targetPerPatch * windows.length * 2) break;
+      if (pastDeadline()) break;
       const page = await client.getMatchIdsByPuuid(puuid, {
         startTime: span.startMs,
         endTime: span.endMs ?? undefined,
@@ -190,6 +207,7 @@ export async function crawlTft(options: TftCrawlOptions): Promise<TftCrawlResult
     const unique = [...new Set(ids)];
     for (const id of unique) {
       if (done()) break;
+      if (pastDeadline()) break;
       requested += 1;
       fs.writeSync(seenFd, `${id}\n`);
       seen.add(id);
@@ -227,7 +245,7 @@ export async function crawlTft(options: TftCrawlOptions): Promise<TftCrawlResult
     for (const fd of handles.values()) fs.closeSync(fd);
   }
 
-  return { storedByPatch, skipped, versionHistogram, seeds, requested, offQueue };
+  return { storedByPatch, skipped, versionHistogram, seeds, requested, offQueue, stoppedAtDeadline };
 }
 
 /** 응답은 `queue_id`와 `queueId`를 **둘 다** 준다(실측). 없으면 null — 거르지 않고 통과시킨다. */
