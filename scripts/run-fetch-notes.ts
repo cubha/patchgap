@@ -6,7 +6,7 @@ import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";
 import { fetchPatchNotesHtml, parsePatchNotes } from "../src/pipeline/match/patchnotes-parser";
-import { splitCombinedWithLocalDdragon } from "../src/pipeline/match/ddragon";
+import { splitCombinedWithLocalDdragon } from "../src/pipeline/match/combined-note-split-local";
 import { notesFile } from "../src/pipeline/shared/paths";
 import type { PatchNoteSection } from "../src/pipeline/types";
 import { isMainModule, parseCliArgs } from "./shared/cli";
