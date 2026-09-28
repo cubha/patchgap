@@ -2216,11 +2216,11 @@
       "modeScope": "classic"
     },
     {
-      "id": "note:26.18:other:증강:f18f5395",
+      "id": "note:26.18:other:광대-대학:be5be69f",
       "patch": "26.18",
       "section": "other",
-      "entity": "증강",
-      "skill": "광대 대학",
+      "entity": "광대 대학",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2231,11 +2231,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.18:other:증강:35873480",
+      "id": "note:26.18:other:승리를-위한-회전:49d56724",
       "patch": "26.18",
       "section": "other",
-      "entity": "증강",
-      "skill": "승리를 위한 회전",
+      "entity": "승리를 위한 회전",
+      "skill": null,
       "stat": "궁극기 피해량 증가",
       "before": "30%",
       "after": "50%",
@@ -2246,11 +2246,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.18:other:증강:496fcfff",
+      "id": "note:26.18:other:궁극의-히드라:be5be69f",
       "patch": "26.18",
       "section": "other",
-      "entity": "증강",
-      "skill": "궁극의 히드라",
+      "entity": "궁극의 히드라",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2531,11 +2531,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.18:other:증강:14bd016b",
+      "id": "note:26.18:other:버그-수정:be5be69f",
       "patch": "26.18",
       "section": "other",
-      "entity": "증강",
-      "skill": "버그 수정",
+      "entity": "버그 수정",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2546,11 +2546,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.18:other:증강:14bd016b-2",
+      "id": "note:26.18:other:버그-수정:be5be69f-2",
       "patch": "26.18",
       "section": "other",
-      "entity": "증강",
-      "skill": "버그 수정",
+      "entity": "버그 수정",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2561,11 +2561,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.18:other:증강:14bd016b-3",
+      "id": "note:26.18:other:버그-수정:be5be69f-3",
       "patch": "26.18",
       "section": "other",
-      "entity": "증강",
-      "skill": "버그 수정",
+      "entity": "버그 수정",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2576,11 +2576,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.18:other:증강:14bd016b-4",
+      "id": "note:26.18:other:버그-수정:be5be69f-4",
       "patch": "26.18",
       "section": "other",
-      "entity": "증강",
-      "skill": "버그 수정",
+      "entity": "버그 수정",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2591,11 +2591,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.18:other:증강:14bd016b-5",
+      "id": "note:26.18:other:버그-수정:be5be69f-5",
       "patch": "26.18",
       "section": "other",
-      "entity": "증강",
-      "skill": "버그 수정",
+      "entity": "버그 수정",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2606,11 +2606,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.18:other:증강:14bd016b-6",
+      "id": "note:26.18:other:버그-수정:be5be69f-6",
       "patch": "26.18",
       "section": "other",
-      "entity": "증강",
-      "skill": "버그 수정",
+      "entity": "버그 수정",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2621,11 +2621,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.18:other:증강:14bd016b-7",
+      "id": "note:26.18:other:버그-수정:be5be69f-7",
       "patch": "26.18",
       "section": "other",
-      "entity": "증강",
-      "skill": "버그 수정",
+      "entity": "버그 수정",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,

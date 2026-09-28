@@ -2431,11 +2431,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:3a8dc47b",
+      "id": "note:26.17:other:치명적-미사일:0b9e8234",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "치명적 미사일",
+      "entity": "치명적 미사일",
+      "skill": null,
       "stat": "미사일 개수",
       "before": "치명타 확률에 따라 1/2/3/4",
       "after": "치명타 확률에 따라 1/2/3",
@@ -2446,11 +2446,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:fc188230",
+      "id": "note:26.17:other:한-발에-두-놈:054b120d",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "한 발에 두 놈",
+      "entity": "한 발에 두 놈",
+      "skill": null,
       "stat": "등급",
       "before": "골드",
       "after": "프리즘",
@@ -2461,11 +2461,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:5674e27c",
+      "id": "note:26.17:other:3연발:be5be69f",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "3연발",
+      "entity": "3연발",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2476,11 +2476,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:496fcfff",
+      "id": "note:26.17:other:궁극의-히드라:be5be69f",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "궁극의 히드라",
+      "entity": "궁극의 히드라",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2491,11 +2491,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:496fcfff-2",
+      "id": "note:26.17:other:궁극의-히드라:be5be69f-2",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "궁극의 히드라",
+      "entity": "궁극의 히드라",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2506,11 +2506,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:496fcfff-3",
+      "id": "note:26.17:other:궁극의-히드라:be5be69f-3",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "궁극의 히드라",
+      "entity": "궁극의 히드라",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2521,11 +2521,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:dac88a98",
+      "id": "note:26.17:other:죽음의-무도-업그레이드:be5be69f",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "죽음의 무도 업그레이드",
+      "entity": "죽음의 무도 업그레이드",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2536,11 +2536,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:4c7c38d0",
+      "id": "note:26.17:other:무한의-대검-업그레이드:be5be69f",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "무한의 대검 업그레이드",
+      "entity": "무한의 대검 업그레이드",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2551,11 +2551,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:7ef6db38",
+      "id": "note:26.17:other:굶주린-히드라-업그레이드:be5be69f",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "굶주린 히드라 업그레이드",
+      "entity": "굶주린 히드라 업그레이드",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2566,11 +2566,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:3add828b",
+      "id": "note:26.17:other:굶주린-히드라-업그레이드:1fbb90f6",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "굶주린 히드라 업그레이드",
+      "entity": "굶주린 히드라 업그레이드",
+      "skill": null,
       "stat": "굶주린 히드라 생명력 흡수",
       "before": "18%",
       "after": "20%",
@@ -2581,11 +2581,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:14bd016b",
+      "id": "note:26.17:other:버그-수정:be5be69f",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "버그 수정",
+      "entity": "버그 수정",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2596,11 +2596,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:14bd016b-2",
+      "id": "note:26.17:other:버그-수정:be5be69f-2",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "버그 수정",
+      "entity": "버그 수정",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2611,11 +2611,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:14bd016b-3",
+      "id": "note:26.17:other:버그-수정:be5be69f-3",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "버그 수정",
+      "entity": "버그 수정",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2626,11 +2626,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:14bd016b-4",
+      "id": "note:26.17:other:버그-수정:be5be69f-4",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "버그 수정",
+      "entity": "버그 수정",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2641,11 +2641,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:14bd016b-5",
+      "id": "note:26.17:other:버그-수정:be5be69f-5",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "버그 수정",
+      "entity": "버그 수정",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -2656,11 +2656,11 @@
       "modeScope": "aram"
     },
     {
-      "id": "note:26.17:other:증강:14bd016b-6",
+      "id": "note:26.17:other:버그-수정:be5be69f-6",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "버그 수정",
+      "entity": "버그 수정",
+      "skill": null,
       "stat": null,
       "before": null,
       "after": null,
@@ -3121,11 +3121,11 @@
       "modeScope": "arena"
     },
     {
-      "id": "note:26.17:other:증강:a60640b9",
+      "id": "note:26.17:other:기사회생:eb9d5e3c",
       "patch": "26.17",
       "section": "other",
-      "entity": "증강",
-      "skill": "기사회생",
+      "entity": "기사회생",
+      "skill": null,
       "stat": "지속시간",
       "before": "3/6초",
       "after": "4/8초",

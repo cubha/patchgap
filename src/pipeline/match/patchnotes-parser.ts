@@ -214,6 +214,22 @@ function classicCategoryFor(label: string): ClassicCategory {
   return null;
 }
 
+/**
+ * 모드 섹션에서 **범주 라벨로만** 쓰이는 h4(섹션 분류에는 안 쓴다) — 아레나 「증강」(2026-09-28, 이월 R11).
+ * `classicCategoryFor`에 넣지 않는 이유: 그 함수는 클래식 섹션의 챔피언/아이템/룬/체계 분류 상태 기계다.
+ */
+const MODE_ONLY_CATEGORY_LABELS = new Set(["증강"]);
+
+/** 범주 라벨인가(건너뛸 대상). */
+function isCategoryLabel(label: string): boolean {
+  return classicCategoryFor(label) !== null || MODE_ONLY_CATEGORY_LABELS.has(label);
+}
+
+/** 그 범주 아래 라벨이 전부 대상인가 — 아이템·증강에는 스킬이 없다(C9 · R11). */
+function labelsAreEntities(label: string): boolean {
+  return classicCategoryFor(label) === "item" || MODE_ONLY_CATEGORY_LABELS.has(label);
+}
+
 type SectionStrategy =
   | { kind: "skip" }
   | { kind: "fixed"; section: PatchNoteSection; subsection?: "rune" | "system" }
@@ -503,7 +519,7 @@ function parseNoteBlock(
 
   let currentSkill: string | null = null;
   let lastLabelAnchorId: string | null = null;
-  // 클래식 「아이템」 범주 아래인가(C9) — 아이템에는 스킬이 없어 라벨마다 대상이다.
+  // 클래식 「아이템」·아레나 「증강」 범주 아래인가(C9·R11) — 스킬이 없어 라벨마다 대상이다.
   let inItemCategory = false;
   const rawLines: RawNoteLine[] = [];
 
@@ -530,9 +546,13 @@ function parseNoteBlock(
       const label = $(node).text().trim();
       if (label.length === 0) return;
       // 새 엔티티가 시작되는가 — 라벨이 자기 소개 문단(blockquote.context)을 데리고 있으면 그렇다.
-      const opensEntity = h3.length === 0 && (startsNewEntity($, node) || (inItemCategory && node.type === "tag" && node.name === "strong"));
-      if (opts.skipCategoryLabels && (entity === null || opensEntity) && classicCategoryFor(label) !== null) {
-        inItemCategory = classicCategoryFor(label) === "item";
+      // 아이템·증강 묶음 아래에선 라벨(strong)마다 대상이고, 범주 아닌 h4(「버그 수정」)는 묶음을 끝내는 새 대상이다(R11).
+      const isH4 = node.type === "tag" && node.name === "h4";
+      const opensEntity =
+        h3.length === 0 &&
+        (startsNewEntity($, node) || (inItemCategory && node.type === "tag" && (node.name === "strong" || node.name === "h4")));
+      if (opts.skipCategoryLabels && (entity === null || opensEntity) && isCategoryLabel(label)) {
+        inItemCategory = labelsAreEntities(label);
         // 클래식/아레나 섹션의 범주 라벨("챔피언"/"아이템"/"룬 및 진척도"/"체계" 등)은 엔티티
         // 자체가 아니다 — 건너뛴다. `classicCategoryFor`를 재사용해 인식 범위를 한 곳에 고정한다
         // (전에는 "챔피언"/"아이템"만 걸러 "룬 및 진척도"/"체계" 라벨 자체가 엔티티로 오인되고
@@ -545,6 +565,7 @@ function parseNoteBlock(
         return;
       }
       lastLabelAnchorId = $(node).attr("id") ?? null;
+      if (isH4 && inItemCategory) inItemCategory = false;
       if (entity === null || opensEntity) {
         entity = label;
         currentSkill = null; // 앞 엔티티의 마지막 스킬이 새 엔티티의 첫 줄로 새지 않게 한다.
