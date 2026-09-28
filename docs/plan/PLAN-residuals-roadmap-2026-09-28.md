@@ -47,7 +47,7 @@
 | B1 | C7 TFT 마나 시작/최대 위치별 의미(시작↑좋음·최대↓좋음·혼재=조정) | [TDD] | 마오카이 2·아칼리·레오나 방향 교정 |
 | B2 | C7 `#patch-midpatch-updates` 체이닝 | [TDD] | 추가 패치 줄 구분 |
 | B3 | C11 `, <라벨>: X ⇒ Y` 줄 분할 | [TDD] | 3줄 분할 |
-| B4 | C2 DDragon 수치 대조로 합친 이름 노트 분해(불일치면 현행 유지) + linkedNotes 재생성 + from DDragon 부재 시 크게 실패 | [TDD] | 세계 지도집·룬 나침반·세계의 결실 분해 |
+| B4 | C2 DDragon 수치 대조로 합친 이름 노트 분해(불일치면 현행 유지) + linkedNotes 재생성 + DDragon 부재 시 크게 실패 → **경보(`::warning::`)·원문 유지**로 변경(PR-B Phase 3 scope-critic: 분해는 부가 교정이라 선언 축을 막지 않는다, 가드 `combined-note-split-local.test.ts`) | [TDD] | 세계 지도집·룬 나침반·세계의 결실 분해 |
 | B5 | 재생성: TFT 18.1→18.2 · 18.2→18.3 · LoL 26.18→26.19 (쌍별 실행, 상한 400) | — | 불변식 전부 통과 |
 
 ## PR-C — 브랜치 준비만, 10/6 머지
