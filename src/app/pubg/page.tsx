@@ -181,7 +181,7 @@ export default function PubgPage() {
                 <SectionCard
                   eyebrow="대조"
                   title="공지된 변경은 실제로 그렇게 됐나"
-                  variant="glass"
+                  variant="embedded"
                   action={<span className="font-mono text-xs text-muted">{announced.length}건</span>}
                 >
                   {/* 단위 1줄 — 매치당 총 획득이 함께 내려가(490 → 427) 이 한 줄이 없으면 모든 무기가 하향으로
@@ -218,14 +218,17 @@ export default function PubgPage() {
               gap={
                 // 미공지 Gap은 **두 갈래**다(2026-09-21): 위가 수치 축(게임사가 무엇을 바꿨나),
                 // 아래가 지표 축(공지에 없는데 움직였나). 위계의 근거는 증거 등급이다.
-                <div className="flex flex-col gap-6">
+                <div>
+                {/* 수치 축 — 탭 카드 안 위쪽 갈래(LoL 스트림과 같은 자리, B2). */}
                 {submarine ? (
-                  <SubmarineSection summary={submarine} hrefOf={(change) => weaponHref(change.entityKey)} />
+                  <div className="border-b border-border-soft p-5">
+                    <SubmarineSection summary={submarine} hrefOf={(change) => weaponHref(change.entityKey)} />
+                  </div>
                 ) : null}
                 <SectionCard
                   eyebrow="발견 · 지표 축"
                   title="공지에 없는데 움직였습니다"
-                  variant="glass"
+                  variant="embedded"
                   action={<span className="font-mono text-xs text-muted">{unannounced.length}건</span>}
                 >
                   <div className={PANEL_SCROLL_BODY}>

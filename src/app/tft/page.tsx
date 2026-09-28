@@ -252,7 +252,7 @@ export default function TftPage() {
                 <SectionCard
                   eyebrow="대조"
                   title="공지된 변경은 실제로 그렇게 됐나"
-                  variant="glass"
+                  variant="embedded"
                   action={<span className="font-mono text-xs text-muted">{announced.length}건</span>}
                 >
                   <div className={PANEL_SCROLL_BODY}>
@@ -272,19 +272,22 @@ export default function TftPage() {
                 </SectionCard>
               }
               gap={
-                <div className="flex flex-col gap-6">
-                  {/* 수치 축 — 산출물이 없으면 통째로 빠진다(없는 것을 있는 척하지 않는다). */}
+                <div>
+                  {/* 수치 축 — 산출물이 없으면 통째로 빠진다(없는 것을 있는 척하지 않는다). 탭 카드 안에서
+                      LoL 스트림과 같은 자리(위쪽 갈래, p-5 + 아래 테두리)에 선다(B2). */}
                   {submarine ? (
-                    <SubmarineSection
-                      summary={submarine}
-                      hrefOf={(change) => tftEntityHref(`${change.entityType}:${change.entityKey}`)}
-                    />
+                    <div className="border-b border-border-soft p-5">
+                      <SubmarineSection
+                        summary={submarine}
+                        hrefOf={(change) => tftEntityHref(`${change.entityType}:${change.entityKey}`)}
+                      />
+                    </div>
                   ) : null}
 
                   <SectionCard
                     eyebrow="발견 · 지표 축"
                     title="패치노트에 없는데 움직인 것"
-                    variant="glass"
+                    variant="embedded"
                     action={<span className="font-mono text-xs text-muted">{unannounced.length}건</span>}
                   >
                     <div className={PANEL_SCROLL_BODY}>

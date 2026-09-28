@@ -27,7 +27,11 @@ export interface SectionCardProps {
   action?: ReactNode;
   children: ReactNode;
   className?: string;
-  variant?: "opaque" | "glass";
+  /**
+   * `embedded`(2026-09-28, B2) — 표면·테두리·둥근 모서리 없이 머리와 본문만. 이미 카드인 곳(탭 카드) 안에
+   * 들어가는 패널용이다 — 카드 속 카드를 만들지 않는다(LoL 스트림과 같은 구조).
+   */
+  variant?: "opaque" | "glass" | "embedded";
 }
 
 export default function SectionCard({
@@ -38,9 +42,9 @@ export default function SectionCard({
   className = "",
   variant = "opaque",
 }: SectionCardProps) {
-  const surfaceClass = panelSurfaceClass(variant);
+  const shell = variant === "embedded" ? "" : `${panelSurfaceClass(variant)} overflow-hidden rounded-lg`;
   return (
-    <section className={`${surfaceClass} overflow-hidden rounded-lg ${className}`}>
+    <section className={`${shell} ${className}`.trim()}>
       <div className="panel-head-wash flex items-center justify-between gap-4 border-b border-border-soft px-5 py-5">
         <div>
           {eyebrow ? (

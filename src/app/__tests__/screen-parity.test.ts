@@ -588,10 +588,11 @@ describe("§8-1 행 정렬 — 뱃지 칸이 고정폭이다", () => {
 
   it("2컬럼 골격의 소유자는 BriefingTabs다 — 페이지가 그리드를 만들지 않는다", () => {
     // 페이지가 그리드를 쥐면 우측 패널이 좌측 **탭 바** 상단에 맞아 카드끼리 어긋난다.
-    // 탭 바는 1행, 카드와 사이드는 같은 2행에 서야 한다 — 그 배치는 탭 바 위치를 아는 쪽만 안다.
+    // 2026-09-28 명세 변경(PR-C B2): 탭 바가 카드 **안**으로 들어가(`tabs-in-card.test.tsx`) 카드와 사이드가
+    // 한 행에 선다 — 행을 나누던 `row-start` 배치는 필요 없어졌다. 그리드 소유자가 여기라는 규칙은 그대로.
     const tabs = read("src/components/BriefingTabs.tsx");
-    expect(tabs).toMatch(/lg:row-start-1/);
-    expect(tabs).toMatch(/lg:col-start-2 lg:row-start-2/);
+    expect(tabs).toMatch(/lg:grid-cols-\[2fr_1fr\]/);
+    expect(tabs).toMatch(/BriefingTabBar[\s\S]*?\{panel\}/);
     for (const g of ["tft", "pubg"]) {
       const page = read(`src/app/${g}/page.tsx`);
       expect(page).toMatch(/<BriefingTabs[\s\S]*?aside=\{/);

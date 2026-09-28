@@ -10,6 +10,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { panelSurfaceClass } from "@/lib/panelSurface";
 
 export type BriefingTabKey = "content" | "gap";
 
@@ -102,28 +103,30 @@ export default function BriefingTabs({
 }: BriefingTabsProps) {
   const [tab, setTab] = useState<BriefingTabKey>(DEFAULT_BRIEFING_TAB);
   const panel = tab === "content" ? content : gap;
-  const bar = (
-    <BriefingTabBar tab={tab} onSelect={setTab} contentCount={contentCount} gapCount={gapCount} />
+  // 탭 바는 **카드 안 맨 위**(2026-09-28, B2 · D4) — LoL 스트림과 같은 구조. 전에는 탭 바가 카드 위에 떠
+  // 있어 탭 위치가 게임마다 달랐다. 패널은 `SectionCard variant="embedded"`로 들어와 카드 속 카드를 만들지 않는다.
+  const card = (
+    <section className={`${panelSurfaceClass("glass")} flex flex-col overflow-hidden rounded-lg`}>
+      <BriefingTabBar
+        tab={tab}
+        onSelect={setTab}
+        contentCount={contentCount}
+        gapCount={gapCount}
+        className="flex gap-2 border-b border-border-soft px-5 pt-4"
+      />
+      {panel}
+    </section>
   );
 
   // 사이드가 없으면 단일 컬럼 — 없는 열을 만들지 않는다.
-  if (!aside) {
-    return (
-      <div className="flex flex-col">
-        {bar}
-        <div className="pt-4">{panel}</div>
-      </div>
-    );
-  }
+  if (!aside) return card;
 
-  // 행을 **명시**한다: 1행 = 탭 바(좌측만) · 2행 = 카드 | 사이드. 둘 다 `pt-4`라 상단이 맞는다.
-  // 행 간격을 0으로 두는 이유: 간격을 주면 그 값이 `pt-4`에 더해져 또 어긋난다.
-  // 모바일(lg 미만)은 배치 지시가 걸리지 않아 DOM 순서대로 쌓인다(탭 → 카드 → 사이드).
+  // 카드와 사이드가 같은 행에 서서 **카드 상단끼리** 맞는다(탭 바가 카드 안이라 행을 나눌 필요가 없다).
+  // 모바일(lg 미만)은 DOM 순서대로 쌓인다(카드 → 사이드).
   return (
-    <div className="grid grid-cols-1 gap-x-6 lg:grid-cols-[2fr_1fr] lg:items-start">
-      <div className="lg:col-start-1 lg:row-start-1">{bar}</div>
-      <div className="pt-4 lg:col-start-1 lg:row-start-2">{panel}</div>
-      <div className="flex flex-col gap-6 pt-6 lg:col-start-2 lg:row-start-2 lg:pt-4">{aside}</div>
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr] lg:items-start">
+      {card}
+      <div className="flex flex-col gap-6">{aside}</div>
     </div>
   );
 }
