@@ -160,6 +160,16 @@ export function subjectParticle(word: string): "이" | "가" {
   return code % 28 === 0 ? "가" : "이";
 }
 
+/**
+ * 표시 정밀도로 반올림한 두 값의 차이 — 결정론 요약이 **자기 문장 안에서** 어긋나지 않게 한다(2026-09-28).
+ * 「16.2%에서 7.9%로(−8.4%p)」는 원값 차이라 맞지만 읽는 사람에겐 틀린 뺄셈이다. `step`은 표시 단위(0.001 = 0.1%).
+ */
+export function displayedDelta(before: number | null, after: number | null, step: number): number | null {
+  if (before === null || after === null) return null;
+  const round = (v: number) => Math.round(v / step) * step;
+  return Math.round((round(after) - round(before)) / step) * step;
+}
+
 /** 부호를 붙인 변화량 문자열 — 결정론 요약용(`+0.4%p`·`-0.12등`). 이미 부호가 있으면 그대로(「++」 금지). */
 export function signed(text: string): string {
   return /^[+\-−]/.test(text) ? text : `+${text}`;
