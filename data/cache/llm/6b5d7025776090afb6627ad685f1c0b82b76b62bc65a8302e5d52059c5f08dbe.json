@@ -1,0 +1,34 @@
+{
+  "deltaId": "trait:DA_18_Solar:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:06:20.795Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": null,
+        "text": "변화 -0.06등은 95% 신뢰구간 [-0.24, +0.12]에 0을 포함해 통계적 잡음 범위입니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": null,
+        "text": "표본이 1624→996으로 줄어 소수 숙련 사용자만 남은 선택 효과일 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃이 150%로 약화되고 로비당 1명 제한이 붙어 경쟁 상단 조합이 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "햇빛 평균 등수 4.27→4.21등 변화는 신뢰구간이 0을 포함해 잡음 수준이며, 실질 약화·강화로 보기 어렵습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 151,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 826
+  }
+}

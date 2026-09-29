@@ -1,0 +1,18 @@
+{
+  "deltaId": "lane:BOTTOM:goldAt14",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:08:01.573Z",
+  "parsed": {
+    "causes": [],
+    "summary": "바텀 라인의 14분 골드 감소(-62.6, 95% CI [-115.7, -9.6])를 직접적으로 설명할 만한 바텀 챔피언 대상 변경 노트가 후보 목록에 없어 원인을 특정하기 어렵습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 122
+  }
+}

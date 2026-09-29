@@ -1,0 +1,38 @@
+{
+  "deltaId": "unit:DA_18_Tristana:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:11:53.970Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 기본 공격당 공격 속도가 4·5단계에서 9→8%, 15→12%로 줄어 공속형 원거리 딜러의 후반 체급이 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 너프로 평타 캐리 아이템 효율이 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 공격력 30%→25%, 사냥꾼 증폭 유지 시간 조정으로 원거리 딜러 조합 화력이 낮아졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "트리스타나 평균 등수가 4.61등→4.81등으로 악화됐습니다. 속사포 공속 9→8%·15→12%와 명멸검 5%→4% 너프로 평타 캐리 체급이 떨어진 여파입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:속사포:f271519a",
+      "note:tft:18.2:item:명멸검:ce978bd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 151,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 733
+  },
+  "proseRepairAttempts": 0
+}

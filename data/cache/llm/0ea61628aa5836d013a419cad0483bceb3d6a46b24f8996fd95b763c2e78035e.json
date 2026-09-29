@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_Fiddlesticks18:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:39:17.542Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:83333c69",
+        "text": "검은 가시가 주문력 유닛 희생 시 마나 재생 1.7→2로 올라, 주문력 캐리인 피들스틱의 스킬 회전이 빨라졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:bf8a4249",
+        "text": "검은 가시 체력이 175/350/600으로 상향돼 이를 낀 보드 전체의 생존력이 올라갔습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상이 전 구간 상향돼 주문력 캐리 구성의 기대치가 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:루덴의-폭풍:9f4a135d",
+        "text": "루덴의 폭풍 처치 시 피해 100→130으로 광역 주문 캐리의 정리력이 강화됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "피들스틱 평균 등수가 4.66→4.46등으로 개선됐고, 검은 가시의 주문력 마나 재생·체력 상향이 주된 간접 원인입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:검은-가시:83333c69",
+      "note:tft:18.2:system:검은-가시:bf8a4249"
+    ]
+  },
+  "usage": {
+    "inputTokens": 152,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 869
+  }
+}

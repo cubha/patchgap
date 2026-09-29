@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Aphelios:BOTTOM:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:02:37.352Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:lucian:98722aa4",
+        "text": "루시안 경계 강화 적중 피해가 15(+공격력 20%)에서 5(+15%)로 줄어, 경쟁 원딜 약화가 아펠리오스 승률을 밀어올렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
+        "text": "서포터 아이템 체력 재생이 25%/50%에서 50%/75%로 올라 바텀 라인 유지력이 늘었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "아펠리오스 승률 +3.0%p이나 95% CI가 [-2.4, 8.4]로 0을 포함해 노이즈 범위이며, 루시안 너프 등 바텀 환경 변화가 보조 요인입니다.",
+    "summaryCites": [
+      "note:26.19:champion:lucian:98722aa4"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 653
+  }
+}

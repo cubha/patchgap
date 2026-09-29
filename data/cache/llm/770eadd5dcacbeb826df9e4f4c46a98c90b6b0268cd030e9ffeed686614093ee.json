@@ -1,0 +1,31 @@
+{
+  "deltaId": "item:DA_18_EmblemHunter:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:50:19.826Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 특성의 피해 증폭 대상 유지 시간이 4초에서 3초로 줄어, 상징으로 붙인 사냥꾼의 가치도 함께 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃의 상징 효과 증가율이 150%로 줄고 로비당 1명 제한이 생겨 상징 기반 구성 전반이 약해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "사냥꾼 특성 증폭 유지 시간이 3초로 단축되며 상징 가치가 함께 떨어졌지만, 평균 등수 +0.10등은 신뢰구간이 0을 포함해 유의하지 않습니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:사냥꾼:70e7b088"
+    ]
+  },
+  "usage": {
+    "inputTokens": 156,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 665
+  }
+}

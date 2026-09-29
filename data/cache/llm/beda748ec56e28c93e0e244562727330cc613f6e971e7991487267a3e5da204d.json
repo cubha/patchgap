@@ -1,0 +1,48 @@
+{
+  "deltaId": "unit:DA_18_Sejuani:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:19:04.594Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력 60%→40%로 전선 탱커의 생존 구간이 늦어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:3332ad10",
+        "text": "밤의 끝자락 회복량 20%→15% 하향이 탱커 유지력을 함께 깎았습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 너프로 전선 보강용 상징 가치가 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력 30→25 하향도 전선 내구도를 낮췄습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:b3191eaf",
+        "text": "검은 가시 탱커 희생 보상이 15→12로 줄어 탱커 채용 이득이 감소했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "세주아니 순방률이 53.3%→46.7%(-6.6%p)로 떨어졌습니다. 밤의 끝자락 발동 체력 60%→40%·회복 20%→15% 너프가 전선 유지력을 깎은 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+      "note:tft:18.2:item:밤의-끝자락:3332ad10"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 930
+  },
+  "proseRepairAttempts": 0
+}

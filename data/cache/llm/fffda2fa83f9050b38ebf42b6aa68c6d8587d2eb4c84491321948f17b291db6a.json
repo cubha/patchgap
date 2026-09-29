@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:DA_BrambleVest:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:53:45.527Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:원시-상징:32460e11",
+        "text": "원시 상징 공격 속도 25%→35% 버프로 공격 속도형 물리 딜러가 늘며 대응 아이템 수요가 커졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:은빛-여명:185091b8",
+        "text": "은빛 여명 공격력 125%→150% 버프가 물리 딜러 비중을 높여 물리 방어 아이템 채택을 밀어올렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 너프로 전열 내구도를 아이템으로 보충하는 흐름이 생겼습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:전쟁기계-상징:83270fa5",
+        "text": "전쟁기계 상징 체력 350→250 너프도 탱커용 방어 아이템 수요를 키운 요인입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "덤불 조끼 등장률이 9.1%→11.9%(+2.8%p)로 올랐고, 원시 상징 공격 속도 버프와 싸움꾼·전쟁기계 상징 체력 너프가 물리 방어 아이템 수요를 키운 것으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:원시-상징:32460e11",
+      "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+      "note:tft:18.2:item:전쟁기계-상징:83270fa5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 902
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Camille:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:34:58.239Z",
+  "parsed": {
+    "causes": [],
+    "summary": "카밀에 대한 직접 밸런스 변경 노트가 후보 목록에 없어, 이번 밴율 급락(0.3157→0.1994, 95% CI [-0.1283,-0.1043])을 설명할 만한 간접 영향 후보를 찾을 수 없습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 126
+  }
+}

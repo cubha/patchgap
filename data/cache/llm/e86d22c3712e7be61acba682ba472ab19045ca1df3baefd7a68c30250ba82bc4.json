@@ -1,0 +1,38 @@
+{
+  "deltaId": "item:DA_Artifact_Dawncore:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:16:22.497Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:83333c69",
+        "text": "검은 가시의 주문력 유닛 희생 시 마나 재생이 1.7→2로 올라, 마나 재생 스케일 아이템의 효율이 함께 상승했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:기원자-상징:dfaf6790",
+        "text": "기원자 상징이 사용 마나당 주문력 10%→8%로 약화되며, 마나 계열 주문력 대안으로서의 채택 가치가 반사 상승했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:타릭:fbe6df4f",
+        "text": "타릭 회복량(주문력 200/300→250/375) 버프로 회복 지원 캐리어 조합이 강해져 장착처 품질이 올랐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "새벽심장 순방률이 52.0%→63.4%(+11.4%p, CI 하한 +4.5%p)로 뚜렷이 올랐는데, 마나 재생 강화와 기원자 상징 약화 같은 주변 변화가 배경으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:검은-가시:83333c69",
+      "note:tft:18.2:item:기원자-상징:dfaf6790"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 902
+  },
+  "proseRepairAttempts": 0
+}

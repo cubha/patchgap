@@ -1,0 +1,43 @@
+{
+  "deltaId": "trait:DA_18_Slayer:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:22:27.655Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카직스:c60397e3",
+        "text": "카직스 기본 공격력 30→40 상향으로 약탈자 구성의 초중반 전투력이 올라갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:워윅:ad5aa8ef",
+        "text": "워윅 공격력 40→45 상향이 같은 근접 딜러 축의 순방을 보탰습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력 15%→18% 상향으로 흡혈 캐리 세팅의 안정성이 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:5f42b359",
+        "text": "정의의 손길 흡혈 12%→15% 상향이 근접 캐리 유지력을 강화했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "약탈자 순방률이 47.1%→51.4%(+4.3%p) 올랐는데, 카직스 공격력 30→40·워윅 40→45 상향이 해당 축 전투력을 끌어올린 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:카직스:c60397e3",
+      "note:tft:18.2:champion:워윅:ad5aa8ef"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 832
+  },
+  "proseRepairAttempts": 0
+}

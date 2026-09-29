@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:Yasuo:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T11:42:05.477Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "야스오가 주로 사용하는 폭풍갈퀴의 공격 속도가 20%→25%로 상향되어, 야스오 개인 스킬 너프(치명타 피해량 감소 완화 축소)에도 불구하고 아이템 시너지를 통한 실전 성능이 강화되면서 밴율이 오히려 상승했을 가능성이 있습니다.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "야스오의 밴율은 10.88%에서 16.11%로 5.23%p 상승(95% CI [4.29%p, 6.17%p])했는데, 직접 노트인 낭인의 길 치명타 피해량 감소 완화 축소(-10%→-5%)는 오히려 약화(너프)이므로 이 상승을 설명하지 못하며, 대신 야스오가 자주 사용하는 폭풍갈퀴의 공격 속도 상향(note:26.17:item:stormrazor:0a1d6b43)이 실전 체감 성능을 끌어올려 밴율 상승에 간접적으로 기여했을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 20668,
+    "outputTokens": 747
+  }
+}

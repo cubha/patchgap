@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Nautilus:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:48:32.875Z",
+  "parsed": {
+    "causes": [],
+    "summary": "노틸러스 미드 픽률은 0.0%→0.1%로 변화폭이 0.0%p이고 신뢰구간이 0을 포함해 통계적 노이즈 수준입니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 157
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Cassiopeia:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:40:16.335Z",
+  "parsed": {
+    "causes": [],
+    "summary": "카시오페아에 대한 직접 패치노트가 없고, 후보 목록에서도 카시오페아와 상호작용할 만한 간접 요인(관련 아이템·시스템·상대 챔피언 변경)을 찾을 수 없어 이 밴율 하락(-2.11%p, 95% CI [-0.0318, -0.0104])의 원인을 설명할 근거가 부족함.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 163
+  }
+}

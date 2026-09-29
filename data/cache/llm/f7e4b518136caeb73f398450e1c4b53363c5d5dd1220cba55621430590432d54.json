@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:AurelionSol:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:24:58.246Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:아리:de1b72d9",
+        "text": "아리가 체력 460→440, 기본 체력 재생 6.1→4.5로 약해져 미드 라인전 경쟁자가 줄어든 영향이 있을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+        "text": "제라스 Q 피해량과 체력(596→575) 너프로 장거리 포킹 메이지 경쟁 구도가 완화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:그라가스:fec76b2f",
+        "text": "그라가스 R 쿨타임 100/90/80초→130/115/100초 등 전방위 너프로 미드·정글 압박이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:system:체력-재생-정수:394e3a0d",
+        "text": "체력 재생 정수가 5초당 +1.5→+3.0으로 강화되어 라인 유지력이 중요한 원거리 메이지가 이득을 봅니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "승률 51.1%→55.8%(+4.7%p)이지만 95% CI가 [-4.2%p, 13.5%p]로 0을 포함해 표본 변동 가능성이 크며, 아리·제라스 너프로 인한 미드 경쟁 완화가 보조 요인일 수 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:아리:de1b72d9",
+      "note:26.17:champion:xerath:43a6f4aa"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 757
+  }
+}

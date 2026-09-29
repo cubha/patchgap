@@ -1,0 +1,47 @@
+{
+  "deltaId": "item:3085:adoptionRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T02:54:22.809Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
+        "text": "애쉬 W 피해량 상향으로 애쉬의 픽률/승률이 오르면서 애쉬가 주로 채용하는 온히트형 아이템인 루난의 허리케인 채택률도 함께 상승했을 가능성이 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애쉬:0ff78387",
+        "text": "애쉬 W 사거리 증가로 애쉬 활용도가 높아져 관련 빌드(루난의 허리케인)의 선택 빈도가 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트런들:85be03ea",
+        "text": "트런들 W 공격 속도 대폭 상향으로 트런들의 온히트 빌드 선호도가 올라가면서 루난의 허리케인 채택률에 영향을 줬을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:bd82e946",
+        "text": "미스 포츈 이동 속도 및 공격 속도 관련 버프로 인해 미스 포츈의 픽률이 증가하고, 이에 따라 온히트 아이템인 루난의 허리케인 채택률도 간접적으로 늘었을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴의 공격 속도 상향(20%→25%)으로 마크스맨 아이템 트리 전반의 공격 속도 지향 빌드가 강화되어, 유사 계열인 루난의 허리케인의 상대적 매력도와 채택률이 함께 상승했을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "루난의 허리케인 채택률이 2.31%→3.23%로 유의미하게 상승(Δ0.92%p, 95% CI [0.78%,1.06%])했는데, 이는 직접 변경 없이 애쉬 W 피해량 상향(note:26.17:champion:애쉬:7d7ed661) 등 온히트·공격 속도 지향 챔피언 버프와 폭풍갈퀴 공격 속도 상향(note:26.17:item:stormrazor:0a1d6b43) 같은 관련 아이템 변경의 간접 파급 효과로 설명될 수 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:애쉬:7d7ed661",
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 20668,
+    "outputTokens": 1434
+  }
+}

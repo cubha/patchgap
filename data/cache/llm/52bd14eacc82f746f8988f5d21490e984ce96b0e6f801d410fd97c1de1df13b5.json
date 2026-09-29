@@ -1,0 +1,42 @@
+{
+  "deltaId": "item:DA_18_EmblemPrimal:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:48:45.377Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력 15%→10% 너프로 상징 선택 경쟁에서 원시 상징의 상대 가치가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:4e39e3c3",
+        "text": "날렵이 상징 기수 공격 속도 30%→20% 너프로 공속형 상징 수요가 원시 상징으로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150, 선봉대·전쟁기계 상징 동반 너프가 원시 상징을 상대적으로 띄웠습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:워윅:ad5aa8ef",
+        "text": "워윅 공격력 40→45 등 원시 계열 유닛 강화가 원시 상징 조합의 성능을 함께 올렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "원시 상징 평균 등수 4.44→4.31등 개선은 요정·날렵이 등 경쟁 상징 너프에 따른 반사 이익이며, CI가 0을 포함해 유의성은 낮습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:요정-상징:4abbb549",
+      "note:tft:18.2:item:날렵이-상징:4e39e3c3"
+    ]
+  },
+  "usage": {
+    "inputTokens": 152,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 896
+  }
+}

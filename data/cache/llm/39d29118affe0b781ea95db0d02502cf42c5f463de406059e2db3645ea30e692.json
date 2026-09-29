@@ -1,0 +1,42 @@
+{
+  "deltaId": "item:DA_18_EmblemFloraFatalis:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:36:22.693Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력 15%→10% 너프로 상징 선택지 경쟁이 약해져 상대적으로 강세를 얻었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:4e39e3c3",
+        "text": "날렵이 상징 기수 공격 속도 30%→20% 너프가 상징 선호를 치명적인 꽃 쪽으로 이동시켰습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 너프로 방어형 상징 대비 상대 가치가 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃이 로비당 1명 제한으로 바뀌며 상징 덱 간 매물 경쟁이 줄었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요정·날렵이 등 경쟁 상징이 일제히 너프되며 치명적인 꽃 상징 평균 등수가 4.48등→4.16등으로 강화됐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:요정-상징:4abbb549",
+      "note:tft:18.2:item:날렵이-상징:4e39e3c3"
+    ]
+  },
+  "usage": {
+    "inputTokens": 156,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 986
+  }
+}

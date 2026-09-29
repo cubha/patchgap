@@ -1,0 +1,27 @@
+{
+  "deltaId": "champion:Xerath:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:59:26.195Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:thresh:83ce59dd",
+        "text": "쓰레쉬 E 피해량 감소로 원거리 포킹 조합의 하위 서포터 압박이 줄어 제라스 생존이 쉬워졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "제라스는 체력·Q 피해량 너프에도 승률이 46.9%→50.0%로 올랐지만, 95% CI가 [-3.5%p, 9.7%p]로 0을 포함해 표본 변동 범위입니다.",
+    "summaryCites": [
+      "note:26.17:champion:xerath:080e761c",
+      "note:26.17:champion:xerath:43a6f4aa"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 633
+  }
+}

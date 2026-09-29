@@ -1,0 +1,18 @@
+{
+  "deltaId": "item:6610:adoptionRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:40:41.893Z",
+  "parsed": {
+    "causes": [],
+    "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 825
+  }
+}

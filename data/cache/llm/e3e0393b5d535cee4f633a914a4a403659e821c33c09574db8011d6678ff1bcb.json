@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Ezreal:BOTTOM:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:12:42.873Z",
+  "parsed": {
+    "causes": [],
+    "summary": "이즈리얼 픽률 하락(-3.6%p, 95% CI [-4.80%, -2.37%])을 설명할 만한 간접 영향 후보를 후보 목록에서 찾지 못했습니다 — 관련 아이템/챔피언 변경 중 이즈리얼의 빌드나 라인전에 직접적으로 연결되는 항목이 확인되지 않아 원인 미상으로 남깁니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 703
+  }
+}

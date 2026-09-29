@@ -1,0 +1,38 @@
+{
+  "deltaId": "trait:DA_18_Adaptor:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:28:37.414Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:3e0ae055",
+        "text": "적응가 핵심 캐리 마스터 이의 주문력 형태 스킬 피해량이 140/210/335→125/190/285로 하향돼 특성 순방률이 함께 내려갔습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:7f03951b",
+        "text": "마스터 이 공격력 형태 기본 공격력 65→60 너프로 두 형태 모두 약해져 적응가 조합의 상한이 낮아졌습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 기본 공격력 30%→25% 하향이 적응가 공격력 캐리 세팅 효율을 함께 깎았을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "적응가 순방률 -3.9%p는 핵심 캐리 마스터 이의 주문력 형태 피해량과 공격력 형태 기본 공격력 동시 하향이 주 원인입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:마스터-이:3e0ae055",
+      "note:tft:18.2:champion:마스터-이:7f03951b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 662
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,49 @@
+{
+  "deltaId": "champion:Fiora:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:01:26.977Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+        "text": "탑 퀘스트 순간이동 쿨이 420초→390초로 줄어 분열 운영형 피오라의 사이드 주도권이 강해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:f037ef05",
+        "text": "탑 강화 순간이동 쿨 300~210초로 단축되어 스플릿 압박 후 합류 손실이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:nasus:b5997156",
+        "text": "나서스 Q 추가 피해 10 감소로 대표적 탑 대치 상대가 약화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+        "text": "럼블 과열 공격속도 50~130%→30~100% 너프로 탑 라인 경쟁자가 약해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
+        "text": "뽀삐 Q 미니언·몬스터 피해 상한 하향으로 탑 카운터 픽 입지가 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "피오라 탑 승률이 46.3%→54.7%(+8.4%p)로 급등했는데, 탑 순간이동 쿨 단축(390초·300~210초)과 나서스·럼블 너프가 겹친 영향입니다.",
+    "summaryCites": [
+      "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+      "note:26.19:system:순간이동-재사용-대기시간:f037ef05",
+      "note:26.19:champion:nasus:b5997156",
+      "note:26.19:champion:rumble:17e40d96"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 987
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Yasuo:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:59:42.848Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 야스오 계열 빌드 가치가 소폭 하락했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
+        "text": "요네도 동일한 치명타 피해 패널티 완화를 받아 미드 픽 수요가 분산됐을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "야스오 미드 픽률 -0.2%p는 95% CI [-0.9%p, 0.4%p]로 0을 포함해 유의하지 않으며, 같은 완화를 받은 요네로의 수요 분산이 일부 작용했을 수 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:yone:c6a149c7"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 496
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "deltaId": "trait:DA_18_Invoker:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:36:27.749Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:item:기원자-상징:04e357a3",
+        "text": "기원자 상징 마나 재생 3→2 하향으로 상징 편입 기원자 조합의 스킬 회전이 느려졌습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:영원한-서약:2e842b57",
+        "text": "영원한 서약 마나 15→10 하향이 기원자 마나 순환 보조를 약화시켰습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:마나가-풍부한-토양:2efefbd3",
+        "text": "마나가 풍부한 토양 최대 마나 감소 18%→15%로 마나 특화 조합 전반이 약화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:개화:67a010bd",
+        "text": "주술 마나가 풍부한 토양 25%→20% 하향도 기원자 증폭 루트를 함께 깎았습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:전쟁기계-상징:1438f13f",
+        "text": "전쟁기계 상징 사망 시 마나 15→10 하향이 마나 공급원 감소에 가세했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "기원자 순방률 51.3%→46.9%(-4.4%p) 하락은 기원자 상징 마나 재생 3→2, 영원한 서약 마나 15→10 등 마나 공급 전반 하향이 겹친 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.3:item:기원자-상징:04e357a3",
+      "note:tft:18.3:item:영원한-서약:2e842b57"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 967
+  }
+}

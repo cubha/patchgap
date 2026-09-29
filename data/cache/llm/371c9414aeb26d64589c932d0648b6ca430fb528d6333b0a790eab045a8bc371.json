@@ -1,0 +1,38 @@
+{
+  "deltaId": "unit:DA_18_Soraka:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:20:13.113Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:타릭:fbe6df4f",
+        "text": "타릭 사용 시 회복량이 주문력 250/375로 상향되며 회복 서포터 자리를 대체했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:e1a56234",
+        "text": "아이번이 시작 칸 3개와 보호막 상향을 받아 저비용 유지력 슬롯 경쟁에서 앞섰습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:기원자-상징:dfaf6790",
+        "text": "기원자 상징 주문력 계수가 10%→8%로 내려가 마나 소모형 주문 조합 수요가 줄었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "소라카 등장률이 19.5%→14.0%(-5.5%p)로 떨어졌고, 타릭·아이번의 회복·보호막 상향이 같은 서포터 슬롯을 가져간 영향으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:타릭:fbe6df4f",
+      "note:tft:18.2:champion:아이번:e1a56234"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 778
+  },
+  "proseRepairAttempts": 0
+}

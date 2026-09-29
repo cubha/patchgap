@@ -1,0 +1,41 @@
+{
+  "deltaId": "pubg:weapon:Item_Weapon_BerylM762_C:pickupShare",
+  "model": "claude-opus-5",
+  "promptVersion": "v5+pubg-redistribution-bound",
+  "candidateSetHash": "cc94f398846bd16ac234d7524a67e793470189b97753b1ab31f37a48ee0ca7d1",
+  "generatedAt": "2026-09-26T19:25:24.597Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:pubg-43.1:spawn:lmg",
+        "text": "RPD·M249 스폰율 100%→70% 감소로 같은 7.62mm·근중거리 역할인 Beryl M762가 반사 이익을 얻었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:pubg-43.1:recoil:rpd-m249",
+        "text": "RPD·M249 반동 제어 하향으로 이들을 지나치고 Beryl M762를 집어드는 빈도가 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": null,
+        "text": "전체 획득 수가 17.9% 줄어 분모가 축소된 점도 점유율 상승 폭을 키웠습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:pubg-43.1:ads:lmg",
+        "text": "LMG 조준 전환 0.30초→0.37초 둔화가 픽업 선호를 Beryl M762 쪽으로 옮겼을 여지가 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "Beryl M762 점유율 +15.7%는 RPD·M249 스폰 30% 감소(균등 재분배 기대치 +1.9%)만으론 부족해, 전체 획득 17.9% 감소가 함께 작용한 결과입니다.",
+    "summaryCites": [
+      "note:pubg-43.1:spawn:lmg"
+    ]
+  },
+  "usage": {
+    "inputTokens": 220,
+    "cacheReadInputTokens": 2449,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 690
+  }
+}

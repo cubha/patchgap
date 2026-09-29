@@ -1,0 +1,42 @@
+{
+  "deltaId": "item:DA_NashorsTooth:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:20:05.770Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "경쟁 공격속도 아이템 명멸검이 기본 공격당 공격 속도 5%→4%로 약화되며 반사이익을 얻었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:원시-상징:32460e11",
+        "text": "원시 상징 공격 속도 25%→35% 상향으로 공격속도 중심 AD 캐리 조합의 가치가 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:애쉬:a87e3310",
+        "text": "애쉬 화살 피해량 상향 등 AD 원거리 캐리 강화가 착용처 품질을 끌어올렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:바루스:c5280269",
+        "text": "바루스 스킬 피해량 상향으로 주요 착용 캐리의 성능이 올랐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "명멸검의 기본 공격당 공격 속도 5%→4% 너프로 대체 아이템 자리를 넘겨받아 평균 등수가 4.27등→4.10등으로 개선됐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:명멸검:ce978bd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 155,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 787
+  },
+  "proseRepairAttempts": 0
+}

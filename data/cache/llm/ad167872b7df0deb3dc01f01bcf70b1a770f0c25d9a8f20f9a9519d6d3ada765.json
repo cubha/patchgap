@@ -1,0 +1,37 @@
+{
+  "deltaId": "item:DA_18_EmblemJuggernaut:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:00:48.904Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃의 상징 특성 효과 증가율 200%→150%, 선택 인원 1명 제한으로 상징 가치가 전반적으로 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 등 전방 상징 일괄 하향으로 전열 조합 자체의 성능이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력 30→25로 탱커 상징 계열 전체가 약화됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "평균 등수 +0.14등 악화는 흡수하는 꽃 상징 효과 150% 하향과 상징 계열 일괄 너프 여파이며, CI가 0을 포함해 변화폭은 확정적이지 않습니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+      "note:tft:18.2:item:싸움꾼-상징:93051b8e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 156,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 768
+  }
+}

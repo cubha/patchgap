@@ -1,0 +1,31 @@
+{
+  "deltaId": "unit:DA_18_Yorick:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "c5fe11838e969011401862d4b7aaeac11b42714f3a0bfbeafa868d6e7d917140",
+  "generatedAt": "2026-09-26T19:26:56.850Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:파수꾼:672d0ed9",
+        "text": "소환수 파수꾼의 스킬 보호막이 주문력 400/500에서 350/450으로 줄어 요릭 조합의 생존력이 하락했습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력 60%→40%, 회복량 20%→15% 너프로 전방 딜탱 요릭의 버티기가 약해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요릭 평균 등수가 4.46등에서 4.66등으로 +0.20등 악화했는데, 소환수 파수꾼의 보호막 너프(400/500→350/450)가 주된 원인입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:파수꾼:672d0ed9"
+    ]
+  },
+  "usage": {
+    "inputTokens": 150,
+    "cacheReadInputTokens": 17042,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 900
+  }
+}

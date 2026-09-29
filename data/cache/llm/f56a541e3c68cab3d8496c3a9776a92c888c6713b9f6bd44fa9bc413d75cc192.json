@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Kaisa:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T08:59:59.350Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
+        "text": "아펠리오스가 무기 전반에 버프를 받아 원거리 딜러 픽이 분산됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+        "text": "루시안 Q 기본 피해량이 최대 30 상승해 바텀 경쟁 픽으로 올라섰습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+        "text": "드레이븐 기본 공격력 62→64 상향도 바텀 선택지를 나눈 요인입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카이사 직접 변경은 없고, 아펠리오스·루시안 버프로 바텀 경쟁이 심해지며 픽률이 2.1%p 하락했습니다.",
+    "summaryCites": [
+      "note:26.19:champion:aphelios:fa3a30c8",
+      "note:26.19:champion:lucian:24a11f30"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 477
+  }
+}

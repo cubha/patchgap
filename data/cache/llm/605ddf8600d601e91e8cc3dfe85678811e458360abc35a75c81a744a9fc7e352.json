@@ -1,0 +1,42 @@
+{
+  "deltaId": "item:3046:adoptionRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:20:24.055Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+        "text": "야스오의 치명타 피해량 감소 페널티가 -10%에서 -5%로 완화되어 치명타·공격속도 아이템인 유령 무희의 가치가 올랐을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
+        "text": "요네도 치명타 피해량 감소가 -10%에서 -5%로 줄어, 치명타 확률 아이템 우선순위가 상승했을 가능성이 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트린다미어:833bdd67",
+        "text": "트린다미어의 격노 최대 치명타 확률이 50%에서 30%로 줄어 치명타 확률을 아이템으로 보충해야 하는 상황이 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 상향으로 공격속도 중심 빌드 전반이 힘을 받으며 같은 계열인 유령 무희 채택도 함께 늘었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "유령 무희 채택률이 1.1%에서 1.6%로 0.5%p 올랐는데, 야스오·요네의 치명타 피해량 감소가 -10%에서 -5%로 완화된 영향이 가장 유력합니다.",
+    "summaryCites": [
+      "note:26.17:champion:yasuo:66635940",
+      "note:26.17:champion:yone:c6a149c7"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 895
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:DA_18_EmblemFloraFatalis:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:30:39.757Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
+        "text": "사냥꾼 상징 처치 관여당 공격력이 18%→15%로 너프되며 상징 선택이 대체재로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:기원자-상징:04e357a3",
+        "text": "기원자 상징 마나 재생 3→2 너프로 경쟁 상징의 가치가 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:전쟁기계-상징:1438f13f",
+        "text": "전쟁기계 상징 사망 시 마나 회복 15→10 너프가 상징 선택 구도를 바꿨습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 특성 추가 공격력 너프로 사냥꾼 계열 확장 수요가 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "치명적인 꽃 상징 등장률 2.1%→3.1%(+1.0%p)는 사냥꾼·기원자·전쟁기계 상징 동시 너프로 상징 선택이 옮겨온 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.3:item:사냥꾼-상징:da474098",
+      "note:tft:18.3:item:기원자-상징:04e357a3",
+      "note:tft:18.3:item:전쟁기계-상징:1438f13f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 136,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 747
+  }
+}

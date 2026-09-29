@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Zaahen:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:44:22.733Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
+        "text": "카시오페아 Q 기본 피해가 10 낮아져 미드 경쟁자가 약화되며 자헨 픽이 반사 이익을 얻었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
+        "text": "신드라 W 쿨타임이 1초씩 늘어 미드 선호도가 내려간 자리를 자헨이 대체한 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
+        "text": "제리 W 계수가 120%에서 100%로 하향되며 딜러 픽 구도가 자헨 쪽으로 이동했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "자헨 픽률이 2.4%→3.9%(+1.6%p)로 올랐습니다. 카시오페아·신드라·제리 너프로 인한 경쟁 챔피언 이탈이 유력한 배경입니다.",
+    "summaryCites": [
+      "note:26.18:champion:cassiopeia:91d07d6f",
+      "note:26.18:champion:syndra:cb99a266",
+      "note:26.18:champion:zeri:d0cacf0b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 699
+  }
+}

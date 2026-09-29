@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Syndra:MIDDLE:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:42:11.525Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:kassadin:d9a6b909",
+        "text": "카사딘 R 기본 피해량 70/90/110→80/95/110 상향으로 미드 대치 구도에서 신드라가 불리해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
+        "text": "에코 Q 마나 소모 10 감소로 미드 라인전 주도권 경쟁이 심해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
+        "text": "카사딘 Q 주문력 계수 70%→80% 상향이 신드라 상대 라인전 압박을 키웠을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "신드라 미드 승률이 52.3%→47.5%(-4.9%p)로 하락했으며, 카사딘 Q·R 상향 등 미드 경쟁 챔피언 강화가 하락폭을 키웠습니다.",
+    "summaryCites": [
+      "note:26.18:champion:kassadin:d631af52",
+      "note:26.18:champion:kassadin:d9a6b909"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 634
+  }
+}

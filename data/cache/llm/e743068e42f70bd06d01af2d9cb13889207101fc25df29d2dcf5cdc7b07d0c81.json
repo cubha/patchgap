@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_Karma18:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:42:38.452Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상이 전 구간 상향돼 주문력 캐리 수요가 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력이 15%→18%로 올라 주문력 캐리 아이템 가치가 상승했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:ef16a6f2",
+        "text": "마스터 이 주문력 형태 피해량 너프로 대체 캐리 수요가 옮겨왔을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:루덴의-폭풍:9f4a135d",
+        "text": "루덴의 폭풍 처치 시 피해량 100→130 상향이 마법 딜러 조합 채용을 밀어올렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카르마 등장률이 8.0%→10.0%(+2.1%p)로 올랐습니다. 어둠의 의식 주문력 보상 전 구간 상향과 피바라기 주문력 18% 상향이 주문력 캐리 수요를 키운 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:어둠의-의식:a8212aab",
+      "note:tft:18.2:item:피바라기:69a953de"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 910
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Irelia:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-19T00:06:15.567Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
+        "text": "르블랑 W 피해량이 주문력 계수 80%에서 90%로 올라 미드 선호도가 분산되면서 이렐리아 버프가 픽률 상승으로 이어지지 못했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애니:04d73af9",
+        "text": "애니 Q 피해량이 90/130/170/210/250 + 주문력의 75%로 상향되는 등 미드 대체 픽이 함께 강해져 이렐리아 픽 수요를 흡수했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:럭스:cce285a0",
+        "text": "럭스 E 반경이 310에서 350으로 넓어지는 등 미드 경쟁군 상향이 겹쳐 이렐리아 픽률 변화가 묻혔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "이렐리아 미드는 스킬 상향에도 픽률이 1.9%로 그대로이며, 르블랑·애니 등 미드 경쟁 챔피언 상향이 동시에 이뤄진 점이 상쇄 요인으로 보이나 CI가 ±0.4%p라 판단 근거는 약합니다.",
+    "summaryCites": [
+      "note:26.17:champion:leblanc:887dc51f",
+      "note:26.17:champion:애니:04d73af9"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 748
+  }
+}

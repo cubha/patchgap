@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Lucian:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:04:36.290Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+        "text": "서포터 아이템 초반 체력이 30에서 0으로 줄어, 공격적 바텀 라인전 주도력이 약해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+        "text": "드레이븐 기본 공격력 62→64 버프로 초반 교전 원거리 딜러 경쟁에서 밀렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
+        "text": "아펠리오스 다수 버프로 바텀 픽 경쟁이 심해져 루시안 입지가 좁아졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "루시안 승률 -1.2%p는 CI [-7.0%p, 4.6%p]로 통계적 유의성이 없고, 서포터 아이템 초반 체력 삭제와 드레이븐·아펠리오스 버프가 바텀 경쟁에 영향을 준 정도입니다.",
+    "summaryCites": [
+      "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+      "note:26.19:champion:draven:d1cc348b",
+      "note:26.19:champion:aphelios:fa3a30c8"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 726
+  }
+}

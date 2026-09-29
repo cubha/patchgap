@@ -1,0 +1,49 @@
+{
+  "deltaId": "trait:DA_18_Sprykin:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:34:04.479Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:4e39e3c3",
+        "text": "날렵이 상징의 기수 추가 공격 속도가 30%→20%로 깎여 상징 경유 진입이 줄었습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:f178d8b7",
+        "text": "상징의 기수 추가 방어력·마법 저항력이 20→15로 하향돼 날렵이 전개의 내구도가 낮아졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:c7eb10eb",
+        "text": "상징 기본 방어력·마법 저항력 20→15 하향이 겹쳐 상징 채용 가치가 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:렝가:4a189382",
+        "text": "렝가 기본 공격 속도 0.8→0.75 너프가 날렵이 조합 캐리력을 약화시켰습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃의 상징 효과가 200%→150%, 로비 1명 제한으로 바뀌어 상징형 특성 진입이 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "날렵이 상징의 공격 속도 30%→20%와 방어·마저 하향이 겹쳐 날렵이 등장률이 6.6%→4.9%(-1.7%p)로 감소했습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:날렵이-상징:4e39e3c3",
+      "note:tft:18.2:item:날렵이-상징:f178d8b7",
+      "note:tft:18.2:item:날렵이-상징:c7eb10eb"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 910
+  },
+  "proseRepairAttempts": 0
+}

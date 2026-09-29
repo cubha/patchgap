@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Nautilus:UTILITY:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T01:03:59.971Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
+        "text": "봇 라인 파트너인 제리의 W 피해 계수가 낮아지며, 선제 CC 위주 서포터인 노틸러스의 조합 딜 마무리 기대값이 함께 떨어졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 재사용 대기시간이 11초로 고정되며 바텀 서포터 메타 구도가 흔들린 점도 노틸러스 성적 변동에 간접적으로 작용했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
+        "text": "비에고가 공격력 성장과 기본 지속 효과 회복 계수 강화로 강해지며, 아군 CC에 의존하는 노틸러스 조합이 상대 정글 압박에 더 취약해졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "노틸러스 서포터 승률이 50.6%에서 47.4%로 3.3%p 내렸는데, 봇 파트너 제리의 W 계수 너프 등 주변 환경 변화가 간접 요인으로 의심됩니다(CI 상한 0.0%p로 유의성은 경계선).",
+    "summaryCites": [
+      "note:26.18:champion:zeri:d0cacf0b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 792
+  }
+}

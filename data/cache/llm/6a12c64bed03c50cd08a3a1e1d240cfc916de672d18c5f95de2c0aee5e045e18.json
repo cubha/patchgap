@@ -1,0 +1,47 @@
+{
+  "deltaId": "trait:DA_18_Maokai_UniqueTrait:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "c5fe11838e969011401862d4b7aaeac11b42714f3a0bfbeafa868d6e7d917140",
+  "generatedAt": "2026-09-26T19:29:58.438Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:e1a56234",
+        "text": "아이번 시작 칸 수 2→3 및 보호막·피해량 상향으로 고목 핵심 유닛 채용이 급증했습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:56e1c4af",
+        "text": "덩굴정령 도약 피해량 공격력 600%→1,000% 등 연속 상향이 고목 조합 가치를 올렸습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:나르:bfa85e59",
+        "text": "나르 추가 체력 10,000→15,000, 분노 획득 5→20 상향으로 고목 전개 상한이 커졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마오카이:78dc9945",
+        "text": "마오카이 마나 30/90→30/100 조정으로 고목 전열 운영이 함께 선택됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:어미-부리:5ac178d8",
+        "text": "어미 부리 기본 공격력 50→55, 스킬 피해 상향이 초반 고목 유지력을 보탰습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "고목 등장률 11.7%→24.2%(+12.4%p)는 아이번 시작 칸 2→3과 덩굴정령 도약 피해 600%→1,000% 등 소속 유닛 대량 상향의 파급입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:아이번:e1a56234",
+      "note:tft:18.2:champion:덩굴정령:56e1c4af"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 17042,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1034
+  }
+}

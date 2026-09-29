@@ -1,0 +1,43 @@
+{
+  "deltaId": "trait:DA_18_Blossom:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:31:18.713Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:자이라:63f16bc7",
+        "text": "자이라 스킬 피해량이 주문력 37/55에서 35/53으로 낮아져 개화 딜 축이 약해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마오카이:d7ea1995",
+        "text": "마오카이 시작 마나가 40에서 30으로 줄어 첫 스킬이 늦어지며 개화 전열이 흔들렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:6ebb4a52",
+        "text": "덩굴정령 도약 피해량이 공격력 170/255에서 155/235로 하향되어 초중반 체급이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃의 상징 특성 증가율이 200%에서 150%로 줄고 로비당 1명 제한이 생겼습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "개화 순방률이 55.0%에서 51.9%로 3.1%p 하락했는데, 자이라 스킬 피해 하향과 마오카이 시작 마나 40→30 너프가 주된 원인입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:자이라:63f16bc7",
+      "note:tft:18.2:champion:마오카이:d7ea1995"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 851
+  },
+  "proseRepairAttempts": 0
+}

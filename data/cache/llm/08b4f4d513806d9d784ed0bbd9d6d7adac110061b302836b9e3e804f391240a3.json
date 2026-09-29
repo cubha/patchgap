@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Pyke:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:10:14.086Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "노틸러스 공격력 61→58로 하향되어 경쟁 서포트가 약해진 반사이익",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+        "text": "노틸러스 Q 피해량 감소로 초반 교전력 하락, 파이크 대면 우위",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 재사용 대기시간 11초 고정 너프로 서포트 경쟁권 약화",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
+        "text": "바드 방어력 34→32(레벨당 5→4.7) 하향으로 로밍형 서포트 입지 축소",
+        "confidence": "low"
+      }
+    ],
+    "summary": "파이크 직접 조항은 없으나 노틸러스 공격력·Q 피해량 하향 등 서포트 경쟁자 너프가 겹치며 승률이 10.1%p 올랐습니다.",
+    "summaryCites": [
+      "note:26.18:champion:nautilus:b6aff2b2",
+      "note:26.18:champion:nautilus:878378b8"
+    ]
+  },
+  "usage": {
+    "inputTokens": 119,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 600
+  }
+}

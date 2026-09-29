@@ -1,0 +1,31 @@
+{
+  "deltaId": "item:DA_18_EmblemHunter:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T15:05:45.015Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 특성의 피해 증폭 유지 시간이 4초에서 3초로 줄어 상징 채택 유인이 함께 감소했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:원시-상징:32460e11",
+        "text": "원시 상징이 공격 속도 25%→35%로 강화돼 딜러용 상징 선택이 분산됐을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "사냥꾼 등장률 3.7%→3.4%(CI가 0 포함, 유의하지 않음)은 사냥꾼 특성 증폭 유지 시간 4초→3초 너프의 파급으로 설명됩니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:사냥꾼:70e7b088"
+    ]
+  },
+  "usage": {
+    "inputTokens": 137,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 639
+  }
+}

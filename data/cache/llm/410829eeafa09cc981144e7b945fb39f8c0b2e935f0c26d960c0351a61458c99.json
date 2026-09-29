@@ -1,0 +1,43 @@
+{
+  "deltaId": "champion:Lulu:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:36:14.224Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 쿨다운이 전 구간 11초로 고정되며 너프돼, 대체 서포터로 룰루 픽이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "노틸러스 공격력과 Q 피해량 너프로 상위 서포터 입지가 줄며 룰루가 반사 이익을 얻었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
+        "text": "바드 방어력이 32+레벨당 4.7로 낮아져 서포터 선택지가 좁아진 영향입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수 중첩 지속시간 4초 상향으로 평타 원딜이 강해져 룰루 조합 수요가 늘었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "룰루 픽률 15.0%→19.7%(+4.7%p)은 세라핀 E 쿨다운 고정, 노틸러스 공격력·Q 너프 등 경쟁 서포터 약화의 반사 이익입니다.",
+    "summaryCites": [
+      "note:26.18:champion:seraphine:4519a08c",
+      "note:26.18:champion:nautilus:b6aff2b2",
+      "note:26.18:champion:nautilus:878378b8"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 797
+  }
+}

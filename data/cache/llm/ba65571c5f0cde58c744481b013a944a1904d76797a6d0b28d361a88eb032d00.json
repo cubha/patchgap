@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Camille:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:19:08.203Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력 15%→18%, 발동 체력 40%→50% 버프로 공격력 딜러 카밀의 아이템 가치가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:35db05bd",
+        "text": "정의의 손길 기본 공격력 15%→18%, 흡혈 12%→15% 버프가 근접 공격력 캐리 채용을 늘렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:5c211705",
+        "text": "마스터 이 기본 공격력 65→60 너프로 밀려난 근접 공격력 캐리 수요가 카밀로 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:렝가:4a189382",
+        "text": "렝가 기본 공격 속도 0.8→0.75 너프로 암살 계열 대체재로 카밀이 선택되었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카밀은 스킬 피해량 너프에도 등장률이 2.8%→3.3% 올랐는데, 피바라기·정의의 손길 공격력 버프로 공격력 캐리 수요가 커진 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:피바라기:69a953de",
+      "note:tft:18.2:item:정의의-손길:35db05bd"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 924
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "deltaId": "item:DA_IonicSpark:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "1b4ec346ad0605238fd935fc97d52d05e7d396b4fcc038faca64e9e36e85b1cf",
+  "generatedAt": "2026-09-26T19:16:57.408Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
+        "text": "베이가 스킬 피해량 상향으로 주문력 캐리 라인이 강해지며 이온 충격기 장착 보드가 순방에 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
+        "text": "알리스타 스킬 피해량이 주문력 100/150/225에서 180/270/420으로 크게 올라 주문력 아이템 가치가 상승했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
+        "text": "스태틱의 단검 기본 주문력 15%→25% 상향으로 마법 저항 깎기 조합의 딜량이 함께 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:카시오페아:3e896e3e",
+        "text": "카시오페아 스킬 피해량 상향이 주문력 캐리 채용을 늘려 이온 충격기 성과를 끌어올렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "이온 충격기 순방률이 56.9%→63.6%(+6.7%p)로 올랐는데, 베이가·알리스타 등 주문력 캐리 상향이 배경입니다. 표본 393판으로 변동폭은 감안이 필요합니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:베이가:c44fce5f",
+      "note:tft:18.3:champion:알리스타:d527c10f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 8613,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 919
+  }
+}

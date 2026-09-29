@@ -1,0 +1,31 @@
+{
+  "deltaId": "item:DA_EdgeOfNight:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T15:04:08.964Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:fb81a27e",
+        "text": "피바라기 발동 체력·수치 상향으로 생존템 수요가 분산돼, 밤의 끝자락은 숙련 조합에만 남았을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:레오나:665ef4f0",
+        "text": "레오나 방어·마저 상향 등 탱커 강화가 밤의 끝자락 착용 유닛의 생존을 보완했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "밤의 끝자락은 발동 체력 너프에도 순방률 0.5%p 상승했으나 95% CI가 0을 포함해 사실상 변화 없음이며, 피바라기 상향에 따른 사용층 선별이 겹친 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:피바라기:fb81a27e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 136,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 652
+  }
+}

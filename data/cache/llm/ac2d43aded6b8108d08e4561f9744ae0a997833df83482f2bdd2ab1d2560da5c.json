@@ -1,0 +1,37 @@
+{
+  "deltaId": "item:6610:adoptionRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T01:00:32.255Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검의 들끓는 일격 중첩 지속시간이 3초에서 4초로 늘어나, 지속 전투형 근접 챔피언들의 첫 코어 선택이 격노검 쪽으로 이동하며 갈라진 하늘 채택률을 잠식했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+        "text": "비에고의 군주의 지배 회복량이 추가 공격력·주문력·공격 속도·체력에 비례해 늘어나, 갈라진 하늘의 회복 의존도가 낮아지고 다른 아이템으로 갈아탄 영향이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+        "text": "마스터 이의 궁극기 이동 속도 상향(35/45/55% → 40/50/60%)으로 공격 속도·추격형 빌드 선호가 커져 갈라진 하늘 픽률이 상대적으로 밀렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "갈라진 하늘 채택률이 3.6%에서 2.4%로 1.2%p 떨어졌는데, 직접 조항 없이 구인수의 격노검 중첩 지속시간 4초 상향과 비에고 기본 지속 회복 강화로 빌드 우선순위가 밀린 간접 효과로 보입니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b",
+      "note:26.18:champion:viego:caf9b23d"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1112
+  }
+}

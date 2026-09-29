@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Kaisa:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:37:39.755Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:5400a762",
+        "text": "카이사의 핵심 아이템 계열(리글의 랜턴과 야생의 섬광 등)에 쓰이는 활력증진의 펜던트 조합 레시피에서 공격력이 25에서 0으로 삭제되어, 온힛/공속 기반 카이사 빌드의 초반~중반 공격력이 약화되며 선호도가 낮아졌을 가능성이 있음",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:8f360fb2",
+        "text": "동일 아이템 계열에서 공격 속도가 0%에서 30%로 상향되었지만 공격력 손실을 완전히 상쇄하지 못해 순수 공격력 스케일링에 의존하는 카이사 빌드의 효율이 떨어졌을 수 있음",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "카이사가 일부 빌드에서 활용하는 갈라진 하늘의 공격력과 체력이 각각 45→40, 450→400으로 너프되어 관련 빌드의 전투력이 소폭 감소했을 가능성이 있음",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카이사 자체에 대한 직접 패치노트는 없으나, 공속형 온힛 빌드의 핵심 재료인 활력증진의 펜던트 계열 아이템에서 공격력이 삭제되고(25→0) 공격 속도만 보완되는 조정(note:26.17:item:활력증진의-펜던트:5400a762, note:26.17:item:활력증진의-펜던트:8f360fb2)이 이루어져 관련 빌드의 초반 딜 손실이 발생했고, 이것이 픽률 하락(27.86%→24.10%, 95% CI [-0.0497, -0.0254])의 간접적 원인일 가능성이 있음.",
+    "summaryCites": [
+      "note:26.17:item:활력증진의-펜던트:5400a762",
+      "note:26.17:item:활력증진의-펜던트:8f360fb2"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1530
+  }
+}

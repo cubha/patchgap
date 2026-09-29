@@ -1,0 +1,29 @@
+{
+  "deltaId": "champion:Nocturne:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:06:29.164Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
+        "text": "탑 경쟁자 나서스의 생명력 흡수 너프로 탑 픽 분포가 소폭 이동했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+        "text": "야스오 치명타 피해량 감소 폭 조정 등 탑 상위픽 변동의 반사 효과로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "녹턴 탑 픽률 0.1%→0.2%(+0.1%p)는 CI[-0.0%p,0.2%p]가 0을 포함해 사실상 노이즈이며, 체력·방어력 너프와 방향만 어긋난 수준입니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 506
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "deltaId": "champion:Shen:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:41:40.838Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "쉔이 자주 채용하는 탱커형 아이템 '갈라진 하늘'의 공격력이 45→40으로 감소해 아이템 효율이 낮아지면서 쉔의 빌드 파워 및 픽률에 부정적 영향을 줄 수 있음",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "동일 아이템 '갈라진 하늘'의 체력이 450→400으로 감소해 탱커 챔피언인 쉔의 핵심 아이템 가치가 하락, 상대적으로 픽률 감소에 기여했을 가능성",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:d2cf5f23",
+        "text": "탑 라인 경쟁 챔피언인 가렌이 방어력 증가량, 공격력, E 피해량, W 보호막 등 전방위적으로 강력한 버프를 받아 탑 라인에서 쉔 대신 가렌을 선택하는 빈도가 늘어나며 쉔의 픽률이 간접적으로 감소했을 가능성이 있음",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트런들:85be03ea",
+        "text": "트런들의 W 공격 속도 버프로 인해 탑/정글 포지션에서 쉔과 경쟁하는 탱커형 챔피언의 매력이 상승, 쉔의 상대적 픽률 감소에 기여했을 가능성",
+        "confidence": "low"
+      }
+    ],
+    "summary": "쉔 자체에 대한 직접 변경 노트는 없으나, 쉔이 주로 채용하는 '갈라진 하늘' 아이템의 공격력과 체력 너프, 그리고 경쟁 탑 라이너인 가렌의 대규모 버프가 픽률 하락(-0.0189, 95% CI [-0.0262, -0.0116])의 간접 원인으로 추정된다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e",
+      "note:26.17:champion:가렌:d2cf5f23"
+    ]
+  },
+  "usage": {
+    "inputTokens": 121,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1270
+  }
+}

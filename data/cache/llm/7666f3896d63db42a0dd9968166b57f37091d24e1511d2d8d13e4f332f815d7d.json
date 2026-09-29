@@ -1,0 +1,18 @@
+{
+  "deltaId": "unit:DA_Lux18_Base:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:43:55.588Z",
+  "parsed": {
+    "causes": [],
+    "summary": "럭스 등장률 변화는 0.3%p로 신뢰구간 [-1.2%p, 1.9%p]이 0을 포함하고 이후 표본이 2664판에 불과해, 유의한 변화로 보기 어렵습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 343
+  }
+}

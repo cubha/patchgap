@@ -1,0 +1,37 @@
+{
+  "deltaId": "item:3504:adoptionRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T01:01:06.084Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검이 들끓는 일격 중첩 유지시간 3초→4초로 버프되며 지속 공격 기반 원거리 딜러 조합이 늘어, 공격 속도·온힛을 함께 밀어주는 불타는 향로 채택이 동반 상승했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+        "text": "마스터 이 궁극기 이동 속도가 40/50/60%로 상향돼 공속형 딜러 픽이 늘면, 이를 보조하는 불타는 향로 수요도 함께 증가할 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "노틸러스가 공격력과 Q 피해량 모두 하향되며 탱커형 서포터 입지가 줄어, 인챈터 서포터 비중이 늘고 불타는 향로 채택률이 오른 흐름으로 볼 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "불타는 향로 채택률이 1.6%→2.1%(+0.5%p)로 올랐는데, 구인수의 격노검 중첩 유지 3초→4초 버프와 노틸러스 하향에 따른 인챈터 서포터 선호 증가가 간접 원인으로 보입니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b",
+      "note:26.18:champion:nautilus:b6aff2b2"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 914
+  }
+}

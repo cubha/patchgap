@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Syndra:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:40:48.095Z",
+  "parsed": {
+    "causes": [],
+    "summary": "신드라의 밴율 감소(-2.01%p, 95% CI [-3.13%p, -0.89%p])를 직접적으로 설명할 수 있는 신드라 관련 패치노트 항목이나 그와 연관된 간접 영향 후보가 후보 목록에서 발견되지 않았습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 227
+  }
+}

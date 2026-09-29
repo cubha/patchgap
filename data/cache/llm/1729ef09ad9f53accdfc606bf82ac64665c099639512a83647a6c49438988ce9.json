@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:DA_SteraksGage:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:18:28.852Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력이 60%→40%로 낮아지며 생존기 아이템 수요가 스테락으로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:3332ad10",
+        "text": "밤의 끝자락 회복량 20%→15% 너프로 근접 캐리의 방어 아이템 선택지가 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 공격 속도 5%→4% 너프로 공격력 캐리 아이템 슬롯이 재편됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:바루스:c5280269",
+        "text": "바루스 스킬 피해량 버프 등 공격력 캐리 강화가 공격력·체력 아이템 채택을 늘렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "밤의 끝자락이 발동 체력 60%→40%, 회복 20%→15%로 너프되며 생존 아이템 수요가 옮겨와 스테락의 도전 등장률이 7.2%p 올랐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+      "note:tft:18.2:item:밤의-끝자락:3332ad10"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 880
+  },
+  "proseRepairAttempts": 0
+}

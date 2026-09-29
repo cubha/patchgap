@@ -1,0 +1,44 @@
+{
+  "deltaId": "item:DA_Artifact_Dawncore:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:22:13.301Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:기원자-상징:dfaf6790",
+        "text": "기원자 상징이 사용 마나당 주문력 10%→8%로 약화되며 마나형 주문력 세팅이 새벽심장 쪽으로 몰린 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:럭스:f810ec39",
+        "text": "럭스 레이저 피해량이 주문력 5,000→6,500으로 올라 주문력 스케일 캐리에 붙는 새벽심장 가치가 상승했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아리:77d6da2f",
+        "text": "아리 스킬 피해량 주문력 425/640→455/685 버프로 고배율 주문력 캐리 조합의 성적이 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 적중 피해 하향으로 주문력 캐리의 아이템 선택이 새벽심장으로 이동했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "럭스·아리 등 주문력 캐리 버프로 새벽심장 순방률이 52.0%→63.4%(+11.4%p)로 올랐고, 기원자 상징 너프가 대체 수요를 더했습니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:럭스:f810ec39",
+      "note:tft:18.2:champion:아리:77d6da2f",
+      "note:tft:18.2:item:기원자-상징:dfaf6790"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 940
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Yone:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:02:57.287Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 치명타 기반 요네의 초중반 위력이 올라 밴 대상이 됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+        "text": "야스오도 치명타 피해량 감소 -10%→-5%로 완화돼 치명타 딜러 계열 전반의 선호도가 올랐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요네 밴률 5.1%→5.9%(+0.8%p)는 폭풍갈퀴 공격 속도 25% 상향 등 치명타 빌드 강화가 겹친 결과입니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 610
+  }
+}

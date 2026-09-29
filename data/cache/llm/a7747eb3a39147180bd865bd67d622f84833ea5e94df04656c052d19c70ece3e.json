@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Shen:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "c5fe11838e969011401862d4b7aaeac11b42714f3a0bfbeafa868d6e7d917140",
+  "generatedAt": "2026-09-26T19:44:00.558Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:파수꾼:672d0ed9",
+        "text": "파수꾼 보호막이 주문력 400/500에서 350/450으로 줄며 보호막 탱커 조합의 가치가 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력이 30에서 25로 내려가 전방 탱커 구성의 선호도가 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:타릭:fbe6df4f",
+        "text": "타릭 회복량이 주문력 200/300에서 250/375로 올라 같은 보호막·힐 자리를 두고 쉔을 밀어냈을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:레오나:665ef4f0",
+        "text": "레오나 방어력·마법 저항력이 최대 100에서 130으로 강화되며 전열 경쟁이 심해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "쉔은 보호막이 상향됐는데도 등장률이 9.2%→6.7%(-2.5%p) 하락했습니다. 파수꾼 보호막·선봉대 상징 너프로 보호막 탱커 계열 전반이 약해진 영향으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:파수꾼:672d0ed9",
+      "note:tft:18.2:item:선봉대-상징:58dac5b5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 17042,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 922
+  }
+}

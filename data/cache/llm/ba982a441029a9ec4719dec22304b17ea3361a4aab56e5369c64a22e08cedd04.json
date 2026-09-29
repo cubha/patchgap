@@ -1,0 +1,32 @@
+{
+  "deltaId": "trait:DA_18_Blossom:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:38:08.529Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 추가 공격력 65%→60% 너프로 개화 보드의 주력 딜 축이 약해졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:기원자:3f993458",
+        "text": "기원자 마나 재생 9→8 하향이 함께 서던 마법 조합의 체급을 낮췄습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "개화 순방률 51.9%→50.1%(-1.8%p)는 95% CI가 0을 포함하고 이후 표본이 571판에 불과해 노이즈 범위이며, 사냥꾼·기원자 하향이 소폭 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.3:system:사냥꾼:616a50ac",
+      "note:tft:18.3:system:기원자:3f993458"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 668
+  }
+}

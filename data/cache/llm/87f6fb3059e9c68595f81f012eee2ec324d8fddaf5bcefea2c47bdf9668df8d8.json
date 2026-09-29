@@ -1,0 +1,26 @@
+{
+  "deltaId": "unit:DA_18_Cassiopeia:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:39:18.353Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
+        "text": "스태틱의 단검 기본 주문력 15%→25% 강화로 주문력 캐리 카시오페아가 간접 수혜를 봤을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "순방률 50.0%→51.4% 변화는 95% CI가 [-6.0%p, 8.7%p]로 0을 포함하고 표본이 222판에 불과해, 스태틱의 단검 강화 등 간접 요인 외에는 사실상 통계적 잡음입니다.",
+    "summaryCites": [
+      "note:tft:18.3:item:스태틱의-단검:ccfc29ef"
+    ]
+  },
+  "usage": {
+    "inputTokens": 378,
+    "cacheReadInputTokens": 17064,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 971
+  }
+}

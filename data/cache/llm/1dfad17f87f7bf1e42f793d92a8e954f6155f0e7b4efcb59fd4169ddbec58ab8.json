@@ -1,0 +1,37 @@
+{
+  "deltaId": "unit:DA_Lux18_Base:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:52:33.113Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 적중 시 피해량이 전 구간 하향돼 주문력 캐리 럭스의 실전 화력이 깎였습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:기원자-상징:dfaf6790",
+        "text": "기원자 상징의 마나당 주문력이 10%→8%로 낮아져 주문 딜러 빌드 상한이 하락했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력 15%→10% 하향으로 주문력 보조 옵션이 약해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "럭스는 피해량 상향에도 평균 등수가 3.47등→3.54등으로 소폭 올랐으나 CI가 0을 포함해, 마법사의 최후·기원자 상징 등 주문력 아이템 하향의 간접 영향으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:마법사의-최후:b79f865a",
+      "note:tft:18.2:item:기원자-상징:dfaf6790"
+    ]
+  },
+  "usage": {
+    "inputTokens": 152,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 719
+  }
+}

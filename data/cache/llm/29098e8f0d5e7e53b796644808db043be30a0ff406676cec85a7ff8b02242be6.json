@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Nasus:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:30:46.474Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:system:체력-재생-정수:394e3a0d",
+        "text": "체력 재생 정수의 5초당 재생이 +1.5에서 +3.0으로 강화되며 나서스 같은 탑 라인 유지형 챔피언의 버티기 능력이 올라, 생명력 흡수 너프를 체감상 상쇄해 밴 대상으로 남았을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트린다미어:833bdd67",
+        "text": "트린다미어의 최대 치명타 확률이 50%에서 30%로 줄어 대표적인 탑 스플릿 카드가 약해지면서, 반대 축인 나서스가 상대적으로 부각돼 밴이 몰렸을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:그라가스:fec76b2f",
+        "text": "그라가스가 Q·W·R 전방위 너프(R 재사용 대기시간 100/90/80초 → 130/115/100초)를 받아 탑·정글 견제 축이 약해진 것이 나서스 선호와 밴률 상승으로 이어질 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "나서스는 생명력 흡수 너프(12/18/24% → 10/15/20%)를 받았는데도 밴률이 11.2%에서 13.8%로 2.5%p 올랐고, 체력 재생 정수 강화(+1.5 → +3.0)와 트린다미어·그라가스 너프로 탑 경쟁 구도가 유리해진 영향이 의심됩니다.",
+    "summaryCites": [
+      "note:26.17:system:체력-재생-정수:394e3a0d",
+      "note:26.17:champion:트린다미어:833bdd67",
+      "note:26.17:champion:그라가스:fec76b2f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 889
+  }
+}

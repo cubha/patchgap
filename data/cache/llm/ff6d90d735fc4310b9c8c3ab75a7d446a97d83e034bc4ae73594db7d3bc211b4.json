@@ -1,0 +1,37 @@
+{
+  "deltaId": "item:DA_18_EmblemSprykin:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T15:05:09.349Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃이 상징 효과 150%로 축소되고 로비당 1명 제한이 되어 상징류 픽 자체가 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:원시-상징:32460e11",
+        "text": "원시 상징 공격 속도가 25%→35%로 올라, 공속 목적의 상징 수요가 그쪽으로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 공격 속도 하향으로 공속 중심 조합의 가치가 낮아져 기수·공속 상징 수요가 감소했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "날렵이 상징 등장률이 2.1%→1.8%로 감소했습니다. 흡수하는 꽃의 상징 효과 축소와 원시 상징 공속 버프로 상징 수요가 이동한 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+      "note:tft:18.2:item:원시-상징:32460e11"
+    ]
+  },
+  "usage": {
+    "inputTokens": 135,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 804
+  }
+}

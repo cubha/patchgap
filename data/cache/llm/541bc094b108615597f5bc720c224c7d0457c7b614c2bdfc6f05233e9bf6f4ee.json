@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Camille:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:08:52.978Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:피오라:13b4ff5b",
+        "text": "피오라가 대규모 개편(다수의 스킬 변경)을 받으며 탑 라인 밴 우선순위가 피오라 쪽으로 이동해 카밀의 밴률이 상대적으로 감소했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
+        "text": "신규/강화된 탑 챔피언 자헨의 Q 피해량 버프로 탑 메타 내 밴 대상이 분산되며 카밀 밴률이 낮아졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카밀에 대한 직접 패치 변경이 없는 상태에서 밴률이 0.1994에서 0.1008로 급감(약 -9.9%p, 95% CI [-0.1099, -0.0870])했는데, 이는 같은 탑 라인 챔피언인 피오라의 대규모 개편과 자헨의 버프로 밴 우선순위가 다른 챔피언들로 분산된 간접 효과일 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.18:champion:피오라:13b4ff5b",
+      "note:26.18:champion:zaahen:bce84005"
+    ]
+  },
+  "usage": {
+    "inputTokens": 120,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 678
+  }
+}

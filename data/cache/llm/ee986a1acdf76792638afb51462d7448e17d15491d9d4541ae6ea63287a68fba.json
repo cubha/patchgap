@@ -1,0 +1,55 @@
+{
+  "deltaId": "trait:DA_18_Maokai_UniqueTrait:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:15:55.194Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:e1a56234",
+        "text": "아이번 시작 칸 수 2→3 상향으로 고목 핵심 유닛의 가치가 크게 올랐습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:fa35905e",
+        "text": "아이번 스킬 피해량 주문력 140/210→155/235 상향이 고목 채용을 늘렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:ac1690b7",
+        "text": "아이번 보호막 흡수량 주문력 165/300→185/350 상향으로 전선 유지력이 강해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:56e1c4af",
+        "text": "덩굴정령 도약 피해량 공격력 600%→1,000%로 고목 소환체 화력이 급등했습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:c9acbf01",
+        "text": "덩굴정령 스킬 추가 공격력 280%→300%가 고목 조합의 딜링을 보강했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:321bfc23",
+        "text": "덩굴정령 기본 공격력 115→120 상향이 누적되며 등장률 상승에 기여했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "고목 등장률 11.7%→24.2%(+12.4%p)는 아이번 시작 칸 3칸화·스킬/보호막 상향과 덩굴정령 도약 피해 1,000% 상향이 겹친 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:아이번:e1a56234",
+      "note:tft:18.2:champion:아이번:fa35905e",
+      "note:tft:18.2:champion:아이번:ac1690b7",
+      "note:tft:18.2:champion:덩굴정령:56e1c4af"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1014
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Yunara:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:51:09.216Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해가 최대 체력의 6~10%에서 4~10%로 깎이며 원딜 지분이 유나라로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:fb0dfc8b",
+        "text": "베인 Q 마나 소모가 레벨별 46까지 올라 초반 부담이 커진 점도 픽 이동을 거들었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 공속 기반 원딜 빌드 가치가 올랐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "유나라 픽률이 16.0%→22.2%(+6.2%p)로 급등했습니다. 베인 W 고정 피해 너프로 생긴 원딜 자리를 흡수한 결과입니다.",
+    "summaryCites": [
+      "note:26.17:champion:vayne:1da6ddd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 535
+  }
+}

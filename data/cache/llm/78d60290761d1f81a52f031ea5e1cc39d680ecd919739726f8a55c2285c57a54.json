@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Nasus:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:32:29.160Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:system:체력-재생-정수:394e3a0d",
+        "text": "체력 재생 정수의 5초당 재생이 +1.5에서 +3.0으로 올라 라인 유지력이 중요한 나서스의 탑 버티기가 쉬워졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:51b5b58f",
+        "text": "활력증진의 펜던트 체력이 430에서 500으로 상승해 나서스가 즐겨 쓰는 체력 기반 빌드의 효율이 개선됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트린다미어:833bdd67",
+        "text": "트린다미어 최대 치명타 확률이 50%에서 30%로 깎이며 탑 대면 강자가 약화된 점이 나서스에 유리하게 작용했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "나서스는 생흡 너프를 받았는데도 승률이 48.6%에서 50.8%로 올랐지만 CI가 -3.2~7.4%p로 0을 포함해 잡음일 가능성이 크고, 체력 재생 정수 버프 같은 라인 유지력 상향이 일부 상쇄했을 수 있습니다.",
+    "summaryCites": [
+      "note:26.17:system:체력-재생-정수:394e3a0d"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 814
+  }
+}

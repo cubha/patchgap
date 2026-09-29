@@ -1,0 +1,37 @@
+{
+  "deltaId": "unit:DA_Taric18:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:10:09.083Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력 60%→40% 너프로 전방 탱커 생존력이 줄어 회복 버프 효과가 상쇄됐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 등 탱커 보강 수단 약화로 전방 조합 전반의 체감 성능이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어·마저 30→25 너프가 타릭이 서는 전방 라인의 내구력을 함께 깎았습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "타릭 평균 등수 3.90→3.93은 신뢰구간이 0을 포함해 사실상 변동 없는 수준이며, 전방 내구 아이템 너프가 회복 버프를 상쇄한 것으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+      "note:tft:18.2:item:선봉대-상징:58dac5b5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 152,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 843
+  }
+}

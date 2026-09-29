@@ -1,0 +1,37 @@
+{
+  "deltaId": "unit:DA_18_Soraka:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:27:21.010Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:타릭:f0d46c43",
+        "text": "타릭 체력 회복량 상향으로 회복 중심 조합이 늘며 소라카가 함께 채택됐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
+        "text": "알리스타 스킬 피해량·회복 대폭 상향으로 전방 유지력 조합이 강해져 후열 힐러 수요가 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:구원의-영혼:55645219",
+        "text": "구원의 영혼 회복량 7.5%→9% 상향이 회복 축 조합 선택을 늘린 것으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "소라카는 직접 조정 없이 등장률이 14.0%→17.7%로 올랐고, 타릭·알리스타 회복 상향에 따른 회복 축 조합 확대가 배경으로 추정됩니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:타릭:f0d46c43",
+      "note:tft:18.3:champion:알리스타:d527c10f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 924
+  }
+}

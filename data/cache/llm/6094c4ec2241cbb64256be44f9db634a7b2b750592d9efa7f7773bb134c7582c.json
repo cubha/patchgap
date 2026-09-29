@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:Jhin:BOTTOM:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:41:23.805Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴의 공격 속도 증가(20%→25%)가 진의 핵심 코어 아이템 성능을 강화해 픽률 상승에 간접적으로 기여했을 수 있음",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "진에 대한 직접 변경 노트는 없으나, 폭풍갈퀴 공격 속도 상향(20%→25%)이 진의 코어 아이템 효율을 높여 픽률이 0.1863→0.2052(+0.0189, 95% CI [0.0079, 0.0299])로 상승하는 데 간접적으로 영향을 주었을 가능성이 있다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 119,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 597
+  }
+}

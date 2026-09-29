@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Yasuo:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:39:45.857Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+        "text": "이렐리아가 Q 계수 80%, R 주문력 계수 100%, W 피해 감소 상향까지 겹치며 상체 라인에서 야스오 대신 선택되는 비중이 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:d2cf5f23",
+        "text": "가렌이 공격력 60, E 계수 상향, W 방어 수치 대폭 강화로 탑 밴픽 지분을 가져가 야스오 픽률을 잠식했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
+        "text": "키아나 Q 피해량 상향 등 근접 딜러 버프가 겹쳐 미드 픽 경쟁이 심해진 영향으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "야스오는 치명타 피해 감소 완화로 강해졌는데도 픽률이 10.7%→9.9%로 내렸으나, 95% CI가 [-1.6%p, 0.1%p]로 0을 포함해 유의하지 않고 이렐리아·가렌 등 경쟁 상체 챔피언 버프의 반사 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:irelia:9035ffdc",
+      "note:26.17:champion:가렌:d2cf5f23"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 914
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "deltaId": "unit:DA_18_Kobuko:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:28:30.356Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력이 250에서 150으로 줄어 전방 탱커 조합의 가치가 낮아졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법저항 30→25 하향으로 방어 중심 보드 채용이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력 60%→40%, 회복 20%→15% 너프로 탱커용 핵심 아이템 가치가 하락했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "코부코 등장률이 5.1%→3.3%(-1.8%p)로 내렸고, 싸움꾼·선봉대 상징과 밤의 끝자락 너프로 탱커 축의 수요가 줄어든 영향으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+      "note:tft:18.2:item:선봉대-상징:58dac5b5",
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1057
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Lulu:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:09:27.201Z",
+  "parsed": {
+    "causes": [],
+    "summary": "룰루에 대한 직접 패치 노트가 없고 후보 목록에서도 룰루의 밴율 급등(6.55%→13.0%, 95% CI [5.42%,7.52%])을 설명할 만한 간접 연쇄 효과 후보를 찾을 수 없어, 이번 변화는 패치 노트로 설명되지 않는 메타 변동(unannounced)으로 보입니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 119,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 321
+  }
+}

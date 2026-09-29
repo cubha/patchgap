@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Trundle:JUNGLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-19T00:03:47.661Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:이블린:7340a85b",
+        "text": "이블린 Q 기본 피해량과 마나 효율이 깎이며 정글 1티어권이 약해져, 대체 픽으로 트런들 수요가 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
+        "text": "녹턴이 체력 640, 방어력 36으로 기본 능력치가 하향돼 경쟁 정글러 자리가 비었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:graves:39e7c86f",
+        "text": "그레이브즈 Q 계수 하향으로 AD 정글 딜 기대치가 떨어져 픽 분산이 트런들 쪽으로 흘렀을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "트런들 정글 픽률은 0.3%→0.5%(+0.2%p)지만 신뢰구간이 0을 걸쳐 노이즈 수준이며, 이블린·녹턴 등 경쟁 정글러 하향의 반사 효과 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:이블린:7340a85b",
+      "note:26.17:champion:nocturne:fd4d5d23"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 613
+  }
+}

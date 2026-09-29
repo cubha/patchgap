@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Thresh:UTILITY:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T11:43:32.743Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+        "text": "경쟁 서포터인 노틸러스의 Q 피해량이 너프되면서 상대적으로 매력도가 높아진 쓰레쉬의 픽률이 반사이익으로 상승했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "노틸러스의 기본 공격력 감소로 인한 성능 저하가 서포터 포지션에서 쓰레쉬 선택 비중을 늘렸을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "쓰레쉬에 대한 직접적인 패치 변경 사항은 없으나(픽률 0.1053→0.1322, 95% CI [0.0159, 0.0382], n=10000/5000), 경쟁 서포터인 노틸러스의 Q 피해량 및 기본 공격력 너프(note:26.18:champion:nautilus:878378b8, note:26.18:champion:nautilus:b6aff2b2)로 인해 서포터 메타에서 반사이익을 얻었을 가능성이 있는 간접 영향으로 추정됩니다.",
+    "summaryCites": [
+      "note:26.18:champion:nautilus:878378b8",
+      "note:26.18:champion:nautilus:b6aff2b2"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 729
+  }
+}

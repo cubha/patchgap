@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:AurelionSol:UTILITY:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T01:01:54.470Z",
+  "parsed": {
+    "causes": [],
+    "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 137,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 228
+  }
+}

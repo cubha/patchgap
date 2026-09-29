@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:Zeri:BOTTOM:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T01:05:14.834Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 들끓는 일격 중첩 지속시간이 3초에서 4초로 늘어 제리의 핵심 아이템 성능이 올라갔는데, 관측 승률은 오히려 내려가 이 상향이 하락폭을 부분적으로 가렸을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "제리 승률 하락 -2.0%p는 95% CI [-6.4%p, 2.3%p]가 0을 포함해 통계적으로 불확실하며, 구인수의 격노검 중첩 지속시간 3초→4초 상향이 변화를 상쇄한 것으로 보입니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 489
+  }
+}

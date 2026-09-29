@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Yasuo:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:54:49.037Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
+        "text": "요네도 같은 치명타 피해 보정 완화를 받아, 숙련자 픽이 요네로 분산됐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력 45→40 하향으로 브루저형 빌드 효율이 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력 450→400 하향으로 교전 생존력이 감소했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "야스오 승률 52.8%→50.2%(-2.6%p)이나 95% CI[-6.9%p, +1.8%p]로 유의하지 않고, 갈라진 하늘 공격력·체력 하향이 일부 기여했을 수 있습니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 668
+  }
+}

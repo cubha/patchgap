@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:3046:adoptionRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T02:54:59.714Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
+        "text": "키아나 Q 피해량 및 계수 상향으로 신속 처형형 빌드가 강화되며 유령 무희 채택률이 동반 상승했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+        "text": "이렐리아 Q 공격력 계수 상향은 물리 대미지 극대화 빌드를 강화해 유령 무희 채용을 늘렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 상향(20%→25%)으로 유사 신속형 아이템 계열 전반의 인기가 올라가며 유령 무희 채택률에도 간접적인 영향을 주었을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "트런들 W 공격 속도 상향은 온오프탱커형 공격 속도 아이템 선호도를 높여 유령 무희 채택에 간접 영향을 주었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "유령 무희 자체에 대한 직접 패치 노트는 없지만, 키아나·이렐리아 등 물리 딜러 챔피언들의 스킬 계수 상향과 폭풍갈퀴의 공격 속도 버프가 결합되어 신속 처형형 아이템 빌드의 선호도가 높아지면서 채택률이 0.0108에서 0.0162로 상승(95% CI [0.0044, 0.0064])한 것으로 추정됩니다.",
+    "summaryCites": [
+      "note:26.17:champion:qiyana:5a6d587d",
+      "note:26.17:champion:irelia:9035ffdc",
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1266
+  }
+}

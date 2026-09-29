@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Lucian:BOTTOM:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:13:44.322Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 버프(3→4초)는 온히트/공속 기반 원거리 딜러인 루시안의 아이템 선호도를 높여 픽률 상승에 간접적으로 기여했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
+        "text": "경쟁 원거리 딜러인 제리의 W 피해량 및 지형 관통 계수 너프로 상대적으로 루시안의 매력이 상승해 픽률 증가를 견인했을 가능성이 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "루시안과 자주 기용되는 서포터 세라핀의 E 재사용 대기시간 너프로 봇라인 조합 밸런스가 바뀌며 루시안 선호도가 반사이익을 받았을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "루시안 픽률이 0.0784→0.106(+0.0276, 95% CI [0.0177, 0.0378])으로 유의미하게 증가했으나 직접 변경 노트가 없어, 구인수의 격노검 버프와 경쟁 원거리 딜러 제리의 너프가 간접적으로 픽률 상승에 기여했을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b",
+      "note:26.18:champion:zeri:d0cacf0b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 120,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 912
+  }
+}

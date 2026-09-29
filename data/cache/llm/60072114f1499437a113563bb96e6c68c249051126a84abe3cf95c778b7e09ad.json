@@ -1,0 +1,38 @@
+{
+  "deltaId": "trait:DA_18_ZyraUniqueTrait:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:20:43.505Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마오카이:d7ea1995",
+        "text": "마오카이 마나 40/100→30/100 너프로 식물 계열 핵심 딜러의 가치가 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:자이라:63f16bc7",
+        "text": "자이라 스킬 피해량 37/55→35/53 너프가 초중반 구성 유지력을 깎았습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:6ebb4a52",
+        "text": "덩굴정령 도약 피해량 170/255→155/235 하향이 함께 서던 조합 선호를 낮췄을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "가시의 여인 등장률이 19.7%→14.4%로 떨어진 것은 마오카이 마나 너프와 자이라 스킬 피해 하향 등 동반 유닛 약화의 파급입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:마오카이:d7ea1995",
+      "note:tft:18.2:champion:자이라:63f16bc7"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 746
+  },
+  "proseRepairAttempts": 0
+}

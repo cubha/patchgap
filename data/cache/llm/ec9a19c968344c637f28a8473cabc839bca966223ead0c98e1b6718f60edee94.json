@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Mel:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:38:36.531Z",
+  "parsed": {
+    "causes": [],
+    "summary": "멜(Mel)에 대한 직접 패치노트 항목이 후보 목록에 존재하지 않으며, 밴율 급락(-2.95%p, 95% CI [-3.51%p, -2.40%p])을 설명할 만한 간접 영향(아이템/시스템 변경) 후보도 확인되지 않아 원인 불명(unannounced) 상태로 유지됩니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 161
+  }
+}

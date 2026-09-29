@@ -1,0 +1,31 @@
+{
+  "deltaId": "item:DA_18_EmblemHunter:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:20:59.485Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃이 상징 효과 150%로 축소되고 로비당 1명 제한이 생겨 상징 전반 채용이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 특성의 대상 유지 요구 시간이 3초로 바뀌며 사냥꾼 계열 조합 선호가 흔들렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "사냥꾼 상징 등장률 -0.2%p는 CI가 0을 포함해 유의하지 않으며, 흡수하는 꽃 상징 효과 축소로 상징 전반 채용이 줄어든 여파입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:흡수하는-꽃:cb5ebf63"
+    ]
+  },
+  "usage": {
+    "inputTokens": 137,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 657
+  }
+}

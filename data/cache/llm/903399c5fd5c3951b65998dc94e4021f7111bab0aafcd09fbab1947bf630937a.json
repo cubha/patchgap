@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_Fiddlesticks18:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:30:13.302Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상이 전 구간 상향되어 주문력 딜러인 피들스틱의 후반 화력이 함께 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:83333c69",
+        "text": "검은 가시 주문력 유닛 희생 시 마나 재생 1.7→2, 체력 상향으로 마법 캐리 축의 안정성이 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:루덴의-폭풍:9f4a135d",
+        "text": "루덴의 폭풍 처치 시 피해 100→130 상향이 광역 주문 딜러의 아이템 가치를 높였습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:ef16a6f2",
+        "text": "마스터 이·티모·자이라 등 경쟁 딜러 너프로 주문력 캐리 자리가 비었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "피들스틱 직접 변경은 없으나 어둠의 의식 주문력 보상과 검은 가시 마나 재생 상향으로 주문력 캐리 축이 강해져 평균 등수가 4.66등→4.46등으로 개선됐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:어둠의-의식:a8212aab",
+      "note:tft:18.2:system:검은-가시:83333c69"
+    ]
+  },
+  "usage": {
+    "inputTokens": 152,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 876
+  }
+}

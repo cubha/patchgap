@@ -1,0 +1,43 @@
+{
+  "deltaId": "champion:DrMundo:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:36:43.035Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
+        "text": "초가스 E 기본 피해량이 10 상향되어 대상 최대 체력 비례 피해가 붙은 지속 딜이 강해졌고, 고체력 문도 박사가 특히 불리한 탑 대치 구도가 됩니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:a83e2425",
+        "text": "가렌이 공격력 60, 방어력 증가량 3으로 상향돼 탑 라인 경쟁자가 강해진 점이 문도 박사 승률 정체에 영향을 줄 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:크산테:bdc53950",
+        "text": "크산테 E 추가 체력 계수 15%, W 쿨타임 단축으로 탑 탱커 경쟁자가 강해져 문도 박사의 상대적 입지가 좁아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘이 공격력 40, 체력 400으로 하향돼 브루저형 문도 박사 빌드의 체급이 소폭 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "문도 박사는 체력 560·공격속도 0.658 상향을 받았지만 승률은 48.1%→47.1%로 -1.0%p, CI가 [-7.2%p, 5.3%p]로 매우 넓어 유의한 하락으로 보기 어렵고, 초가스 E 상향 등 탑 경쟁 구도 변화가 부분 요인으로 의심됩니다.",
+    "summaryCites": [
+      "note:26.17:champion:문도-박사:f54272dc",
+      "note:26.17:champion:문도-박사:71432046",
+      "note:26.17:champion:chogath:44d563a2"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1082
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Thresh:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:10:52.072Z",
+  "parsed": {
+    "causes": [],
+    "summary": "쓰레쉬의 밴율이 7.51%에서 12.92%로 크게 상승했으나(델타 +5.41%p, 95% CI [4.36%p, 6.49%p], n=10000/5000), 후보 목록에는 쓰레쉬 자체에 대한 직접 변경 노트도 없고 이를 설명할 만한 간접 영향 후보도 확인되지 않아 원인 불명으로 남습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 276
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Irelia:JUNGLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-19T00:07:16.601Z",
+  "parsed": {
+    "causes": [],
+    "summary": "이렐리아 정글 픽률은 0.0%p 변화에 95% 신뢰구간도 [-0.0%p, 0.1%p]로 0을 포함해, 사실상 변화가 없는 수준입니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 236
+  }
+}

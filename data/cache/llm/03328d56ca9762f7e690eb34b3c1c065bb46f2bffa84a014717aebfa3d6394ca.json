@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Lulu:UTILITY:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:12:13.651Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀의 E 재사용 대기시간이 사실상 상향되며(고정 11초로 단축) 경쟁 서포터 포지션에서의 입지가 변동, 플레이어들이 대체 서포터인 룰루로 이동했을 가능성이 있음",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+        "text": "노틸러스 Q 피해량 너프로 인해 탱커형 서포터 선호도가 감소하고, 상대적으로 유틸형 서포터인 룰루의 픽률이 반사이익을 얻었을 가능성이 있음",
+        "confidence": "low"
+      }
+    ],
+    "summary": "룰루에 대한 직접 패치 노트가 없는 상태에서 픽률이 0.146→0.1828로 유의미하게 상승(95% CI가 0을 포함하지 않음)했는데, 이는 경쟁 서포터인 세라핀(note:26.18:champion:seraphine:4519a08c)과 노틸러스(note:26.18:champion:nautilus:878378b8)의 너프로 인한 간접적 메타 이동 가능성이 있으나 근거는 약함.",
+    "summaryCites": [
+      "note:26.18:champion:seraphine:4519a08c",
+      "note:26.18:champion:nautilus:878378b8"
+    ]
+  },
+  "usage": {
+    "inputTokens": 120,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 712
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Viktor:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:11:38.235Z",
+  "parsed": {
+    "causes": [],
+    "summary": "빅토르에 대한 직접 패치 노트가 없고, 후보 목록에서도 빅토르의 밴율 상승(9.13%→13.22%)을 설명할 만한 간접 영향 요인(상대 챔피언 버프/너프, 아이템 변경 등)을 찾을 수 없어 원인 불명으로 판단됩니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 224
+  }
+}

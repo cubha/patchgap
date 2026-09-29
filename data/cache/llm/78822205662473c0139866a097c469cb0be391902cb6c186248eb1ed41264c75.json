@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:Thresh:UTILITY:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:55:38.587Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "바텀 파트너 베인의 W 고정 피해 너프로 쓰레쉬 조합의 라인전 마무리력이 약해졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "쓰레쉬 승률은 51.7%→49.9%(-1.9%p)지만 CI가 [-6.6%p, 2.9%p]로 0을 포함해 노이즈 범위이며, 베인 W 너프로 인한 조합 약화가 일부 영향일 수 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:vayne:1da6ddd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 133,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 629
+  }
+}

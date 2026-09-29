@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:AurelionSol:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T11:42:51.563Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+        "text": "제라스 Q 피해량 및 체력 너프로 인해 미드 라인에서 아우렐리온 솔의 상대적 경쟁력이 개선되었을 가능성이 있습니다(간접 영향, 근거 약함).",
+        "confidence": "low"
+      }
+    ],
+    "summary": "아우렐리온 솔의 승률 상승(51.1%→55.8%, 95% CI[-4.2%,13.5%], n=227/251)은 신뢰구간이 0을 포함할 정도로 넓어 통계적 유의성이 낮고, 직접 버프(Q 마나 소모 감소, W 재사용 대기시간 감소)만으로는 설명 강도가 부족하지만 제라스 등 경쟁 미드 챔피언의 너프가 간접적으로 기여했을 가능성이 낮은 확신도로 존재합니다.",
+    "summaryCites": [
+      "note:26.17:champion:xerath:43a6f4aa"
+    ]
+  },
+  "usage": {
+    "inputTokens": 143,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 789
+  }
+}

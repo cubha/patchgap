@@ -1,0 +1,43 @@
+{
+  "deltaId": "champion:Shen:UTILITY:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:17:56.710Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:애니:e298f012",
+        "text": "애니가 기절 지속시간 1.5초→1.75초를 비롯해 Q·W 피해량까지 상향되며 메이지 서포터 선호도가 올라, 탱커형 쉔의 지분을 잠식했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:럭스:cce285a0",
+        "text": "럭스 E 반경 310→350 등 전반적 상향으로 유틸·메이지 서포터가 강해지면서 쉔 픽이 밀렸을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:불타는-향로:48821869",
+        "text": "회복·보호막 증폭이 12%→10%로 줄어 보호막·수호형 서포터 조합의 가치가 떨어진 점이 쉔 채용 감소에 영향을 줬을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:6d438477",
+        "text": "미스 포츈이 Q 피해량·이동 속도·E까지 폭넓게 상향돼 공격적인 봇 조합이 늘면서, 수비형 서포터인 쉔의 수요가 줄었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "쉔 서포터 픽률이 6.8%→4.1%(-2.6%p)로 떨어졌는데, 직접 변경은 없고 애니·럭스 상향과 회복·보호막 증폭 12%→10% 너프로 메타가 밀린 간접 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:애니:e298f012",
+      "note:26.17:champion:럭스:cce285a0",
+      "note:26.17:other:불타는-향로:48821869"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 988
+  }
+}

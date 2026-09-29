@@ -1,0 +1,36 @@
+{
+  "deltaId": "unit:DA_18_Ivern:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:12:29.545Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력이 15%에서 10%로 줄어 요정 축 보드의 마무리력이 약해졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:83fba4d7",
+        "text": "요정 상징 체력이 250에서 200으로 감소해 보조 유닛의 생존 기여가 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:파수꾼:672d0ed9",
+        "text": "파수꾼 보호막이 400/500에서 350/450으로 하향돼 보호막 중첩 조합 전체의 버티기가 약해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "아이번은 버프를 받았는데 순방률이 2.3%p 내렸지만 95% CI가 0을 포함해(표본 1903→3975) 유의하지 않으며, 픽률 급증에 따른 희석과 요정 상징 하향이 겹친 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:요정-상징:4abbb549"
+    ]
+  },
+  "usage": {
+    "inputTokens": 378,
+    "cacheReadInputTokens": 34166,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1528
+  }
+}

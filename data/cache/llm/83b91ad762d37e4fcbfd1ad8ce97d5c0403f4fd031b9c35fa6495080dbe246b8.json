@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Yunara:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:08:42.583Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력 15%→18% 상향으로 공격력 캐리 유나라의 아이템 효율이 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:35db05bd",
+        "text": "정의의 손길 기본 공격력 15%→18%, 흡혈 12%→15% 상향이 유나라 캐리 빌드를 보조합니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:은빛-여명:185091b8",
+        "text": "은빛 여명 공격력 125%→150% 상향으로 공격력 기반 캐리 라인의 상한이 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:5c211705",
+        "text": "마스터 이 기본 공격력 65→60 하향으로 공격력 아이템 수요가 유나라 쪽으로 이동했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "유나라 순방률 45.2%→49.6%(+4.3%p)는 피바라기·정의의 손길 상향에 따른 공격력 캐리 효율 상승이 겹친 결과이며, CI가 0을 포함해 폭은 다소 과장됐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:피바라기:69a953de",
+      "note:tft:18.2:item:정의의-손길:35db05bd"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 979
+  }
+}

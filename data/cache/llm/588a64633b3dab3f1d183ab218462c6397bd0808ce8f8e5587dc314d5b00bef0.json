@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Ashe:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:42:53.055Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "경쟁 원딜 베인의 W 고정 피해가 최대 체력의 6~10%에서 4~10%로 줄어 하위 레벨 구간이 약해지며, 밀려난 픽이 애쉬로 옮겨간 영향이 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:이즈리얼:5b9e4881",
+        "text": "이즈리얼 Q 총공격력 계수가 120%에서 110%로 하향돼 주력 원딜 경쟁군이 약화된 점이 애쉬 픽률 상승의 반사 이익으로 작용했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트위치:8757056b",
+        "text": "트위치의 1레벨 공격 속도가 0.679에서 0.658로 낮아지는 등 너프를 받아 원딜 선호도가 애쉬 쪽으로 분산된 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 올라, 평타·둔화 기반 애쉬의 아이템 효율이 개선된 점도 픽률에 보탬이 됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "애쉬 픽률이 2.5%에서 2.9%로 올랐으나 CI가 0을 걸쳐 약한 변화이며, 베인 W 고정 피해 하향과 이즈리얼 Q 계수 110% 하향에 따른 원딜 경쟁 완화가 주된 간접 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:vayne:1da6ddd1",
+      "note:26.17:champion:이즈리얼:5b9e4881"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 870
+  }
+}

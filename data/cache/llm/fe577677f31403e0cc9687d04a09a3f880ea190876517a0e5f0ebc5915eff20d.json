@@ -1,0 +1,48 @@
+{
+  "deltaId": "trait:DA_18_Sprykin:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:55:35.297Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:4e39e3c3",
+        "text": "날렵이 상징 기수 추가 공격 속도 30%→20% 너프로 상징 기반 날렵이 진입 가치가 떨어졌습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:c7eb10eb",
+        "text": "날렵이 상징 기본 방어력·마법 저항력 20→15 하향이 특성 채택률을 함께 끌어내렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:f178d8b7",
+        "text": "날렵이 상징 기수 추가 방어력·마법 저항력 20→15 하향도 같은 방향으로 작용했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃의 상징 효과 증가율 150%로 축소·1인 제한으로 상징발 날렵이 구성이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 공격 속도 상위 구간 너프로 공속 중심 조합 전반의 선호가 낮아졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "날렵이 상징의 공격 속도 30%→20%와 방어 수치 하향이 겹치며 등장률이 6.6%→4.9%로 1.7%p 감소했습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:날렵이-상징:4e39e3c3",
+      "note:tft:18.2:item:날렵이-상징:c7eb10eb",
+      "note:tft:18.2:item:날렵이-상징:f178d8b7"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 967
+  }
+}

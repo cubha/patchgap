@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Yasuo:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-19T00:02:06.290Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:6d438477",
+        "text": "미스 포츈이 Q 피해량·E 둔화·이동 속도 등 전방위 상향을 받아 원거리 딜러 선택지가 몰리면서, 비주류인 야스오 원딜의 지분이 밀렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
+        "text": "애쉬 W 피해량과 사거리가 함께 상향되어 정통 원딜 픽이 강해진 점도 야스오 원딜 채택률을 낮추는 방향으로 작용했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:증강:3a8dc47b",
+        "text": "치명적 미사일의 미사일 개수가 최대 4개에서 3개로 줄어 치명타 빌드 기대값이 낮아진 점이, 치명타 의존도가 높은 야스오 원딜 선호도에 영향을 줬을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "야스오 원딜 픽률 2.2%→1.9%(-0.3%p)이나 신뢰구간이 0을 포함해 유의하지 않으며, 미스 포츈·애쉬 상향으로 정통 원딜 쏠림이 커진 영향이 의심됩니다.",
+    "summaryCites": [
+      "note:26.17:champion:미스-포츈:6d438477",
+      "note:26.17:champion:애쉬:7d7ed661"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 910
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Jhin:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T08:58:17.485Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:lucian:98722aa4",
+        "text": "루시안 패시브 강화 평타 피해가 15(+공격력 20%)에서 5(+15%)로 너프되며 바텀 원딜 지분이 진으로 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+        "text": "서포터 아이템 초반 체력이 30/100에서 0/60으로 줄어 라인전 압박이 강한 진의 가치가 올랐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "진은 직접 변경이 없는데 픽률이 22.0%→24.6%(+2.6%p) 상승했고, 루시안 패시브 너프와 서포터 아이템 초반 체력 감소가 간접 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.19:champion:lucian:98722aa4",
+      "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0"
+    ]
+  },
+  "usage": {
+    "inputTokens": 120,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 531
+  }
+}

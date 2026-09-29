@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Pyke:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:13:36.190Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "노틸러스 공격력 61→58 너프로 상위 서포터가 밀리며 파이크 밴 수요가 커졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+        "text": "노틸러스 Q 피해량 하향으로 서포트 밴 우선순위가 파이크로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 쿨다운 11초 고정 너프로 서포트 대체재가 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
+        "text": "바드 방어력 하향으로 서포트 선택지가 좁아진 점도 밴률 상승에 기여했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "파이크 직접 변경은 없으나 노틸러스 공격력·Q 하향 등 서포트 너프로 밴률이 46.2%→50.3%(+4.1%p) 올랐습니다.",
+    "summaryCites": [
+      "note:26.18:champion:nautilus:b6aff2b2",
+      "note:26.18:champion:nautilus:878378b8"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 592
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "deltaId": "item:DA_18_EmblemHunter:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:15:15.626Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 특성의 피해 증폭 대상 유지 시간이 4초에서 3초로 조정되어 상징 가치가 함께 흔들렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃의 상징 효과가 200%에서 150%로 줄고 로비당 1명 제한이 생겨 상징 활용 폭이 좁아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:원시-상징:32460e11",
+        "text": "원시 상징 공격 속도가 25%에서 35%로 올라 공격력 계열 상징 선택이 분산됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "사냥꾼 상징 순방률 53.1%→51.6%(-1.5%p)는 CI가 0을 포함해 유의하지 않고, 사냥꾼 특성 유지 시간 4초→3초 조정의 파급이 겹친 수준입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:사냥꾼:70e7b088"
+    ]
+  },
+  "usage": {
+    "inputTokens": 135,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 783
+  }
+}

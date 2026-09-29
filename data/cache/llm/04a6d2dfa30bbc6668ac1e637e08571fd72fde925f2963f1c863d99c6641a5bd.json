@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Ashe:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:43:09.390Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 은화살 고정 피해가 최대 체력의 6/7/8/9/10%에서 4/5.5/7/8.5/10%로 하향되며 경쟁 원딜 선호도가 낮아져 애쉬로 픽이 분산된 영향.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:이즈리얼:5b9e4881",
+        "text": "이즈리얼 Q 총공격력 계수가 120%에서 110%로 줄어든 너프로 바텀 1티어 경쟁자가 약화된 반사 이익.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트위치:64a7906a",
+        "text": "트위치 기본 공격 속도가 0.679에서 0.658로 하향되어 원딜 픽 풀이 애쉬 쪽으로 이동했을 가능성.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트리스타나:0d52db0d",
+        "text": "트리스타나 공격 속도 증가량이 4%에서 3%로 감소한 너프도 원딜 선택 분산에 기여.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "애쉬 픽률 2.5%→2.9%(+0.4%p)는 CI가 0을 걸쳐 약한 변화이며, 베인 W 고정 피해 하향과 이즈리얼 Q 계수 120%→110% 너프로 경쟁 원딜이 약화된 반사 이익으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:vayne:1da6ddd1",
+      "note:26.17:champion:이즈리얼:5b9e4881"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 888
+  }
+}

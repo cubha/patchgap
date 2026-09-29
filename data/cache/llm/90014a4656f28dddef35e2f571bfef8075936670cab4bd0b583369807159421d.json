@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Talon:JUNGLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:18:09.651Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:graves:39e7c86f",
+        "text": "그레이브즈 Q 피해 계수가 낮아지며 AD 정글 1티어 자리가 비었고, 그 수요가 탈론으로 옮겨간 것으로 보입니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:이블린:7340a85b",
+        "text": "이블린이 Q 피해량·W 마나 및 쿨타임까지 연속 너프되며 암살자 정글 선택지에서 밀려난 영향입니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
+        "text": "녹턴이 체력 640, 방어력 36으로 기본 능력치가 깎여 경쟁 다이브 정글러의 입지가 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:그라가스:ee3208b9",
+        "text": "그라가스가 Q 피해·쿨타임과 R 쿨타임까지 폭넓게 너프되며 정글 파이가 재분배됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "탈론 직접 변경은 없으나 그레이브즈 Q 계수 하향과 이블린 Q 피해 너프로 AD·암살 정글 수요가 옮겨오며 픽률이 5.4%→7.9%(+2.5%p) 올랐습니다.",
+    "summaryCites": [
+      "note:26.17:champion:graves:39e7c86f",
+      "note:26.17:champion:이블린:7340a85b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 728
+  }
+}

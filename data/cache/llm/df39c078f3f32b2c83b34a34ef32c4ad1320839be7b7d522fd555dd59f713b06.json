@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Kassadin:JUNGLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:49:11.721Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
+        "text": "비에고 레벨당 공격력 3.5→4 버프로 정글 경쟁이 강해져 카사딘 정글 진입이 막혔을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:ekko:433f5bb2",
+        "text": "에코 Q 계수·마나 버프로 AP 정글 수요가 에코 쪽으로 흡수된 영향으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카사딘 정글 픽률은 0.0%p로 사실상 무변동이며, 비에고·에코 정글 버프가 AP 정글 수요를 가져간 것으로 보입니다.",
+    "summaryCites": [
+      "note:26.18:champion:viego:3477e7c5",
+      "note:26.18:champion:ekko:433f5bb2"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 462
+  }
+}

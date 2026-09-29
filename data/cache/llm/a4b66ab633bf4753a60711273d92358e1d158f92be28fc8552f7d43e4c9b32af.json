@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:Lucian:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:13:18.038Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검의 '들끓는 일격' 중첩 지속시간이 3초에서 4초로 증가하여, 공격 속도 기반 원거리 캐리인 루시안의 아이템 빌드 옵션이 강화되었을 가능성이 있음.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "루시안 픽률이 8.09%→11.0%로 크게 상승했지만(95% CI 하한도 +1.9%p로 유의미), 루시안을 직접 겨냥한 패치노트는 없어 구인수의 격노검 지속시간 버프 등 간접적 아이템 파워업이 원인일 가능성이 낮은 신뢰도로 제기되며, 확정적 설명은 부족함.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 120,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 548
+  }
+}

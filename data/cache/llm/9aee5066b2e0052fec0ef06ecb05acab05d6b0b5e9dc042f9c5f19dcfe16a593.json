@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:DA_Quicksilver:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:39:10.242Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:5c211705",
+        "text": "수은을 자주 받는 마스터 이가 기본 공격력 65→60으로 약화돼 수은 조합 성능이 내려갔습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카밀:ee0ba0ac",
+        "text": "카밀 스킬 피해량 하향으로 수은을 두르던 근접 캐리 라인 전반이 밀렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 공격 속도 5%→4% 하향으로 수은과 함께 쓰이던 공격 캐리 아이템 조합이 약화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:렝가:4a189382",
+        "text": "렝가 기본 공격 속도 0.8→0.75 하향이 수은 장착 암살 캐리 수요를 줄였습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "수은 순방률이 59.1%→55.1%(-4.0%p)로 내렸고, 마스터 이·렝가·카밀 등 수은을 두르던 근접 캐리 하향의 여파로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:마스터-이:5c211705",
+      "note:tft:18.2:champion:렝가:4a189382",
+      "note:tft:18.2:champion:카밀:ee0ba0ac"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 809
+  }
+}

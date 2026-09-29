@@ -1,0 +1,39 @@
+{
+  "deltaId": "champion:Ambessa:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-09-28T10:21:46.634Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라 R 회복량·범위 상향으로 탑 브루저 픽 경쟁에서 암베사 지분이 밀렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:5bc9f3f5",
+        "text": "아트록스 W 쿨타임·E 회복 상향으로 탑 1군 선호가 아트록스로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:c754a41b",
+        "text": "피오라 성장 체력 증가가 라인전 안정성을 높여 암베사 대체 픽으로 작용했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "암베사 픽률 -2.7%p는 직접 변경 없이, 피오라 R 회복·체력 상향과 아트록스 W/E 상향으로 탑 경쟁 픽이 이동한 결과입니다.",
+    "summaryCites": [
+      "note:26.19:champion:fiora:4ff3c93f",
+      "note:26.19:champion:fiora:c754a41b",
+      "note:26.19:champion:aatrox:5bc9f3f5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 616
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,44 @@
+{
+  "deltaId": "trait:DA_Primal18:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:17:03.734Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:렝가:4a189382",
+        "text": "원시 핵심 캐리 렝가의 기본 공격 속도가 0.8에서 0.75로 깎여 조합 전체 화력이 내려갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:3e0ae055",
+        "text": "마스터 이 주문력 형태 피해량 너프로 원시 보드의 딜 축이 약해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:경쟁을-넘어서:64c38bc1",
+        "text": "경쟁을 넘어서의 마나·회복 지원 축소로 렝가·카직스 연계 가치가 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:원시-상징:32460e11",
+        "text": "원시 상징 공격 속도 25%→35% 버프로 진입 인구가 늘어(표본 4156→5789) 평균 등수가 희석됐을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "원시 평균 등수가 4.21등→4.48등으로 악화했습니다. 렝가 공격 속도 너프와 마스터 이 피해량 하향, 경쟁을 넘어서 연계 축소가 겹친 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:렝가:4a189382",
+      "note:tft:18.2:champion:마스터-이:3e0ae055",
+      "note:tft:18.2:system:경쟁을-넘어서:64c38bc1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 148,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 940
+  },
+  "proseRepairAttempts": 0
+}

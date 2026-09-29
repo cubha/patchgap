@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Caitlyn:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:38:09.853Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴의 공격 속도가 20%→25%로 강화되어 케이틀린과 같은 원거리 딜러의 초반 파워가 상승, 밴율 상승에 간접적으로 기여했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:02ad4f34",
+        "text": "경쟁 원거리 딜러 베인의 W 최소 피해량 및 고정 피해 너프로 상대적으로 케이틀린의 픽/밴 매력이 상승했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트위치:f9629eb2",
+        "text": "또 다른 경쟁 원거리 딜러 트위치의 기본 능력치 너프(공속·체력 감소)로 메타 내 원거리 딜러 구도가 케이틀린에 유리하게 재편되었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "케이틀린 자신에 대한 직접 변경 노트는 없지만, 경쟁 원거리 딜러(베인, 트위치)의 너프와 폭풍갈퀴 강화 등 메타 전반의 간접적 변화가 밴율을 0.0791에서 0.1108로 끌어올렸을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:vayne:02ad4f34",
+      "note:26.17:champion:트위치:f9629eb2",
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1014
+  }
+}

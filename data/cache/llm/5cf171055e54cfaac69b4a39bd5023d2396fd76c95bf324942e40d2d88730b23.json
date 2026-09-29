@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:AurelionSol:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-19T00:04:32.953Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:other:르블랑:25a092a5",
+        "text": "르블랑 R 모방 재사용 대기시간이 45/35/25초에서 30/20/10초로 크게 줄며 미드 선호도가 르블랑 쪽으로 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애니:04d73af9",
+        "text": "애니 Q 피해량과 계수가 상향돼(85→90 기본, 계수 70%→75%) 미드 AP 픽 경쟁에서 아우렐리온 솔의 지분을 나눠 가졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:럭스:cce285a0",
+        "text": "럭스 E 반경이 310에서 350으로 늘어나는 등 전반적 상향을 받아 미드 AP 픽 선택지가 분산됐을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "아우렐리온 솔은 W 쿨다운·Q 마나 상향에도 픽률이 1.3%→1.2%로 내려갔으나 CI가 0을 포함해 유의하지 않고, 르블랑 R 쿨다운 30/20/10초 단축 등 경쟁 미드 상향에 따른 선택 분산으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:other:르블랑:25a092a5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 136,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 667
+  }
+}

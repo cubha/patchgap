@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:MasterYi:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:45:15.554Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3→4초 상향으로 핵심 코어 효율이 올라 픽률이 상승했습니다.",
+        "confidence": "high"
+      }
+    ],
+    "summary": "마스터 이 픽률이 2.4%→2.9%(+0.5%p) 올랐습니다. 핵심템 구인수의 격노검 중첩 지속시간 3→4초 상향이 주된 동인입니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 381
+  }
+}

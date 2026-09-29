@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Alistar:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-09-28T10:23:34.609Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:item:룬-나침반:6931f115",
+        "text": "룬 나침반 체력이 100에서 60으로 줄어 탱커 서포터인 알리스타의 초반 라인 버티기가 약화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:item:세계-지도집:29bcd928",
+        "text": "세계 지도집 체력이 30에서 0이 되어 체력 기반 서포터의 가치가 낮아졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
+        "text": "아펠리오스 절단검 회복 상향 등 원거리 딜러 강화로 자체 유지력이 좋은 조합이 선호될 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "알리스타 픽률이 13.2%에서 10.8%로 2.3%p 내렸는데, 룬 나침반·세계 지도집의 체력 삭감이 탱커 서포터 선호를 낮춘 영향입니다.",
+    "summaryCites": [
+      "note:26.19:item:룬-나침반:6931f115",
+      "note:26.19:item:세계-지도집:29bcd928"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 619
+  },
+  "proseRepairAttempts": 0
+}

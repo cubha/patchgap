@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Irelia:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:07:02.903Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "이렐리아 핵심템 갈라진 하늘 공격력 45→40 하향이 스킬 버프를 상쇄했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력 450→400 하향으로 탑 라인 생존력이 줄어 이득이 희석됐습니다.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "이렐리아 승률은 51.6%로 변동이 없었고, 갈라진 하늘 공격력·체력 하향이 스킬 버프를 상쇄했습니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 450
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Trundle:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:07:51.853Z",
+  "parsed": {
+    "causes": [],
+    "summary": "트런들 밴률은 0.1%로 변동 없고 신뢰구간도 ±0.1%p라, W 공격속도 상향에도 밴 지표는 반응하지 않은 통계적 무변화입니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 100
+  }
+}

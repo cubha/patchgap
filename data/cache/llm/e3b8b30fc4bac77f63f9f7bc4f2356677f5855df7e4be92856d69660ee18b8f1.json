@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Yone:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:57:44.400Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25%로 요네가 즐겨 쓰는 치명타 빌드 효율이 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해 하향으로 원거리 캐리 대체 픽 수요가 요네로 일부 이동했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요네 픽률 +0.5%p는 95% CI[-0.5%p, 1.5%p]로 통계적 유의성이 없고, 폭풍갈퀴 공격 속도 25% 상향이 보조 요인입니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 537
+  }
+}

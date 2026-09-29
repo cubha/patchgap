@@ -1,0 +1,37 @@
+{
+  "deltaId": "trait:DA_18_Solar:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:29:57.852Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:system:꽃의-부름:3d5c2646",
+        "text": "4단계 유닛 획득 수호령 가격이 낮아져 고비용 조합 접근성이 좋아지며 3성 리롤형 햇빛이 밀려난 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:출세가도:8eb52d0d",
+        "text": "출세가도 레벨당 새로고침 2회 상향으로 레벨업 노선이 강해져 저비용 리롤 축 선택이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:럭스:8c458b36",
+        "text": "햇빛 럭스 3성당 추가 피해 12%→15% 상향에도 등장률이 오르지 않아, 보정 폭이 체감 상향에 못 미쳤습니다.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "햇빛 등장률이 5.0%→3.6%로 내려갔습니다. 럭스 3성당 추가 피해 15% 상향에도 회복되지 않았고, 4단계 유닛 수호령 가격 인하로 리롤 축이 밀렸습니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:럭스:8c458b36",
+      "note:tft:18.3:system:꽃의-부름:3d5c2646"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 860
+  }
+}

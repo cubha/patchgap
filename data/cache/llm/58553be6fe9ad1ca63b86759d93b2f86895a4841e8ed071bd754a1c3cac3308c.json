@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:AurelionSol:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:52:15.424Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+        "text": "제라스 Q 피해량 5 감소로 장거리 마법사 구도에서 아우렐리온 솔의 상대 우위가 커졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:080e761c",
+        "text": "제라스 기본 체력 596→575 너프로 미드 포킹 대치 구도가 완화됐을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "아우렐리온 솔 승률 4.7%p 상승은 95% CI가 [-4.2%p, 13.5%p]로 0을 포함해 표본 변동일 소지가 크며, 제라스 너프의 간접 반사이익 정도가 보조 근거입니다.",
+    "summaryCites": [
+      "note:26.17:champion:xerath:43a6f4aa",
+      "note:26.17:champion:xerath:080e761c"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 566
+  }
+}

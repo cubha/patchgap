@@ -1,0 +1,38 @@
+{
+  "deltaId": "item:DA_HandOfJusticeRadiant:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:22:02.602Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:찬란한-피바라기:4a98368c",
+        "text": "찬란한 피바라기 공격력/주문력이 30%→40%로 올라, 같은 흡혈 계열 선택지에서 밀려났습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:찬란한-피바라기:8432499f",
+        "text": "찬란한 피바라기 보호막이 최대 체력 50%→60%로 강화돼 생존형 찬란 아이템 수요를 흡수했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:찬란한-피바라기:fb81a27e",
+        "text": "찬란한 피바라기 발동 체력 40%→50%로 안정성이 올라 우선 선택되었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "흡혈 버프에도 등장률이 0.2%→0.1%로 내려간 건 찬란한 피바라기가 공격력 40%·보호막 60%·발동 50%로 크게 강화돼 수요를 가져간 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:찬란한-피바라기:4a98368c",
+      "note:tft:18.2:item:찬란한-피바라기:8432499f",
+      "note:tft:18.2:item:찬란한-피바라기:fb81a27e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 139,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 704
+  }
+}

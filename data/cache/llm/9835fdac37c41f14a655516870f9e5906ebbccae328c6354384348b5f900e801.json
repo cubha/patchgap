@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Yone:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:41:37.292Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:트린다미어:833bdd67",
+        "text": "트린다미어 격노의 최대 치명타 확률이 50%에서 30%로 줄며 탑 치명타 근접 딜러 경쟁자가 약해져, 요네로 수요가 이동했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
+        "text": "나서스 기본 지속 효과의 생명력 흡수가 12/18/24%에서 10/15/20%로 낮아져 탑 라인 대체 픽 매력이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 올라 치명타 기반 근접 딜러의 초반 아이템 효율이 개선됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요네 탑 픽률 +0.5%p는 95% CI[-0.2%p, 1.1%p]로 유의하지 않으며, 트린다미어 최대 치명타 확률 30% 하향 등 탑 경쟁자 약화의 파급 정도로 봅니다.",
+    "summaryCites": [
+      "note:26.17:champion:트린다미어:833bdd67"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 776
+  }
+}

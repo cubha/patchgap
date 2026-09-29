@@ -1,0 +1,31 @@
+{
+  "deltaId": "pubg:weapon:Item_Weapon_BerylM762_C:pickupShare",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cc94f398846bd16ac234d7524a67e793470189b97753b1ab31f37a48ee0ca7d1",
+  "generatedAt": "2026-09-23T11:58:09.762Z",
+  "parsed": {
+    "summary": "RPD·M249 스폰율 30% 감소로 빈자리가 재분배되어 Beryl M762 획득 점유율이 +15.7% 올랐습니다.",
+    "summaryCites": [
+      "note:pubg-43.1:spawn:lmg"
+    ],
+    "causes": [
+      {
+        "candidateNoteId": "note:pubg-43.1:spawn:lmg",
+        "confidence": "high",
+        "text": "RPD·M249 스폰율 100%→70% 감소분이 남은 무기로 재분배되며 Beryl 점유율이 상승했습니다."
+      },
+      {
+        "candidateNoteId": "note:pubg-43.1:ads:lmg",
+        "confidence": "low",
+        "text": "LMG 조준 전환 0.30→0.37초 너프로 근접 교전용 픽이 돌격소총으로 이동했습니다."
+      }
+    ]
+  },
+  "usage": {
+    "inputTokens": 415,
+    "cacheReadInputTokens": 4634,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 707
+  }
+}

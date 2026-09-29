@@ -1,0 +1,31 @@
+{
+  "deltaId": "pubg:weapon:Item_Weapon_Groza_C:pickupShare",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cc94f398846bd16ac234d7524a67e793470189b97753b1ab31f37a48ee0ca7d1",
+  "generatedAt": "2026-09-23T11:57:19.609Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:pubg-43.1:spawn:lmg",
+        "text": "RPD·M249 스폰율이 100%→70%로 줄면서 빈자리를 Groza 획득이 메웠습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:pubg-43.1:ads:lmg",
+        "text": "LMG 조준 전환이 0.30초→0.37초로 느려져 근접 돌격 역할이 Groza로 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "Groza 점유율 +26.3%는 직접 변경이 아니라 RPD·M249 스폰율 100%→70% 감소로 생긴 제로섬 반사 상승입니다.",
+    "summaryCites": [
+      "note:pubg-43.1:spawn:lmg"
+    ]
+  },
+  "usage": {
+    "inputTokens": 143,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 2317,
+    "outputTokens": 455
+  }
+}

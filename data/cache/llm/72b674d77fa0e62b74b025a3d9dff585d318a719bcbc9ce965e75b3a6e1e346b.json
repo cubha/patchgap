@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Soraka:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:47:26.818Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력이 15%→10%로 깎여 요정 조합 자체의 채용이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:e1a56234",
+        "text": "아이번이 시작 칸 3칸·보호막 흡수량 상향을 받아 힐·보호막 서포터 자리를 가져갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:타릭:fbe6df4f",
+        "text": "타릭 회복량이 주문력 250/375로 올라 회복 담당 슬롯 경쟁에서 밀렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:기원자-상징:dfaf6790",
+        "text": "기원자 상징 마나당 주문력 10%→8% 너프로 마나 기반 서포터 가치가 낮아졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "소라카 등장률이 19.5%→14.0%(-5.5%p)로 하락했습니다. 아이번 시작 칸 3칸·보호막 상향과 타릭 회복량 상향이 회복 서포터 자리를 대체했습니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:아이번:e1a56234",
+      "note:tft:18.2:champion:타릭:fbe6df4f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 829
+  }
+}

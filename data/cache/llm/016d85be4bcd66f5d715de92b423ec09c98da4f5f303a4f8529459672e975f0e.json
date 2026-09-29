@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:DrMundo:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:44:09.401Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:a83e2425",
+        "text": "가렌이 공격력·방어력 증가량과 E 심판 계수까지 한꺼번에 상향돼 탑 라인 지속싸움 경쟁에서 문도 박사가 이득을 보기 어려워졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:f3562bca",
+        "text": "가렌 W 용기의 추가 방어력·마법 저항력 증가가 20%에서 30%로 올라 문도 박사의 지속 피해로 압박하기가 더 까다로워졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "트런들 W 공격 속도가 최대 110%까지 상향돼 체력 비례 탱커를 녹이는 상성 챔피언이 강해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+        "text": "이렐리아 Q·W·R이 동시 상향돼 탑 라인 강세 대상이 늘어난 점도 문도 박사의 체감 승률을 눌렀을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "문도 박사는 체력·공격 속도 상향을 받았지만 탑 승률은 48.7%→48.4%로 -0.3%p, CI가 [-7.0%p, 6.4%p]로 매우 넓어 사실상 변화 없음이며 가렌·트런들 등 상성 챔피언 상향이 상쇄 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:가렌:a83e2425",
+      "note:26.17:champion:trundle:85be03ea"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 858
+  }
+}

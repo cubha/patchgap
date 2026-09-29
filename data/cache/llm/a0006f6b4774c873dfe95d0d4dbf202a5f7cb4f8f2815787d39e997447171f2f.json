@@ -1,0 +1,36 @@
+{
+  "deltaId": "item:DA_18_EmblemInvoker:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:08:01.451Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃의 상징 효과 증가율이 150%로 줄고 로비당 1명만 선택 가능해져, 상징을 얹은 조합의 상한이 낮아졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 적중 피해 하향으로 주문력 캐리 아이템 축이 약해져 기원자 계열 순방률이 함께 내려갔습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:역병의-보석:d03e92e1",
+        "text": "역병의 보석 마법 저항력 감소 하향이 주문력 딜 구성의 체감 피해를 줄였습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "기원자 상징 순방률 58.9%→54.2%(-4.7%p)는 흡수하는 꽃의 상징 효과 증가율 150% 하향과 로비당 1명 제한으로 상징 조합 상한이 낮아진 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:흡수하는-꽃:cb5ebf63"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 799
+  }
+}

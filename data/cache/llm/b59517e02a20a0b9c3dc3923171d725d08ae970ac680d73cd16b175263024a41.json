@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Zaahen:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T05:31:55.932Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
+        "text": "신드라 W 쿨다운 1초 증가 너프로 미드 경쟁 픽이 줄며 자헨 지분이 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
+        "text": "카시오페아 Q 기본 피해 10 감소로 미드 라인 경쟁자가 약화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 쿨다운이 전 구간 11초로 고정돼 미드 선택지가 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "자헨 미드 픽률 변화 0.1%p는 CI가 [-0.0%p, 0.2%p]로 0을 포함해 미미하며, 신드라·카시오페아 너프에 따른 반사 효과 정도로 봅니다.",
+    "summaryCites": [
+      "note:26.18:champion:syndra:cb99a266",
+      "note:26.18:champion:cassiopeia:91d07d6f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 608
+  }
+}

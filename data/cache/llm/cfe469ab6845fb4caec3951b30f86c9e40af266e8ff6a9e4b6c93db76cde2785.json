@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_Vi18:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "c5fe11838e969011401862d4b7aaeac11b42714f3a0bfbeafa868d6e7d917140",
+  "generatedAt": "2026-09-26T19:23:47.958Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력이 250에서 150으로 줄어 근접 전열 유닛의 생존력이 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력 60%→40%, 회복량 20%→15% 너프로 근접 딜탱 캐리의 유지력이 약화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 너프가 근접 공격력 캐리 성능을 함께 낮췄습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력 30→25 하향으로 전열 구성 전반이 약해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "바이는 직접 조정 없이 평균 등수가 4.28등에서 4.65등으로 +0.36등 악화됐는데, 밤의 끝자락·명멸검 등 근접 딜탱 아이템 너프의 파급으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+      "note:tft:18.2:item:명멸검:ce978bd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 149,
+    "cacheReadInputTokens": 17042,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 932
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "deltaId": "trait:DA_18_Rival:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "1b4ec346ad0605238fd935fc97d52d05e7d396b4fcc038faca64e9e36e85b1cf",
+  "generatedAt": "2026-09-26T19:17:11.780Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:워윅:adef4bb0",
+        "text": "워윅 스킬 피해량이 공격력 215/325/500에서 230/345/535로 올라 채용 폭이 넓어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:워윅:7b46e2b4",
+        "text": "워윅 스킬 체력 회복량 20%→25% 버프가 전면 유지력을 높여 함께 쓰이는 조합 등장률을 끌어올렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 추가 공격력이 4/6단계에서 45/65%→40/60%로 깎이며 대체 축으로 수요가 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:기원자:3f993458",
+        "text": "기원자 9단계 마나 재생 9→8 너프로 상위 시너지 경쟁에서 밀린 자리를 대신 채웠습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "경쟁자 등장률이 6.9%→13.4%(+6.5%p)로 급등했는데, 사냥꾼·기원자 상위 단계 너프로 밀려난 수요와 워윅 버프가 유력한 배경으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.3:system:사냥꾼:616a50ac",
+      "note:tft:18.3:system:기원자:3f993458",
+      "note:tft:18.3:champion:워윅:adef4bb0"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 8613,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1029
+  }
+}

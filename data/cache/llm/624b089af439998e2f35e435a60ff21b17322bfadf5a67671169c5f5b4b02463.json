@@ -1,0 +1,44 @@
+{
+  "deltaId": "item:3109:adoptionRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T02:54:42.228Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:f3562bca",
+        "text": "가렌 W(용기)의 추가 방어력/마법 저항력 증가량이 20%→30%로 강화되고 관련 중첩 효과도 함께 buff되어(가렌:6c9a1eca, 868690af) 가렌의 탱커 아이템 선호도가 높아지면서 기사의 맹세 채택률 상승에 간접적으로 기여했을 수 있음",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:문도-박사:f54272dc",
+        "text": "문도 박사의 체력(522→560) 및 체력 증가량 buff로 탱커형 챔피언 선호도가 올라가면서 기사의 맹세 같은 보호형 아이템의 채택률이 함께 상승했을 가능성이 있음",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:크산테:963736ea",
+        "text": "크산테 W 재사용 대기시간 감소 및 E 체력 계수 buff(크산테:bdc53950)로 탱커 챔피언 크산테의 활용도가 높아지며 기사의 맹세 채택 증가에 기여했을 수 있음",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:탐-켄치:c7da4f95",
+        "text": "탐 켄치 W(심연 잠수) 재사용 대기시간이 크게 감소해 보호형 서포터 챔피언의 강세가 높아지면서 기사의 맹세 채택률 상승에 간접 영향을 줬을 가능성이 있음",
+        "confidence": "low"
+      }
+    ],
+    "summary": "기사의 맹세(Knight's Vow) 채택률이 0.0229에서 0.0304로(95% CI [0.0061, 0.0089]) 유의미하게 상승했는데, 직접 아이템 변경 노트는 없어 가렌·문도 박사·크산테·탐 켄치 등 탱커/보호형 챔피언들의 방어 관련 버프가 해당 아이템군의 선호도를 간접적으로 끌어올렸을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:가렌:f3562bca",
+      "note:26.17:champion:문도-박사:f54272dc",
+      "note:26.17:other:크산테:963736ea",
+      "note:26.17:other:탐-켄치:c7da4f95"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1447
+  }
+}

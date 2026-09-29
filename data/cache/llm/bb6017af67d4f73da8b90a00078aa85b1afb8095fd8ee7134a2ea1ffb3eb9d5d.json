@@ -1,0 +1,37 @@
+{
+  "deltaId": "unit:DA_18_Ashe:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T15:03:13.769Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 기본 공격력 30%→25% 너프로 애쉬가 쓰는 원거리 딜 축이 약화됐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 기본 공격당 공격 속도 15%→12% 너프가 평타 기반 애쉬 조합의 상한을 낮췄습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 너프로 애쉬 주력 아이템 효율이 감소했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "애쉬 순방률 -1.0%p는 95% CI [-3.7%p, 1.7%p] 안이라 사실상 변화 없음이며, 사냥꾼 상징·속사포 너프가 버프를 상쇄했을 수 있습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:사냥꾼-상징:2f196381",
+      "note:tft:18.2:system:속사포:f271519a"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 706
+  }
+}

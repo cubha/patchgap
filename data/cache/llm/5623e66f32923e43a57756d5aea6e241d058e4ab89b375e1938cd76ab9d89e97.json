@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Poppy:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:08:13.526Z",
+  "parsed": {
+    "causes": [],
+    "summary": "미드 뽀삐 픽률 -0.1%p는 신뢰구간 [-0.2%p, 0.1%p]에 0이 포함되고 표본도 3871로 적어, 패치 효과로 보기 어려운 통계적 잡음입니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 233
+  }
+}

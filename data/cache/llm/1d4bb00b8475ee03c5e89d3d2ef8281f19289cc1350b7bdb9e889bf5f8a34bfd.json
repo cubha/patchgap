@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Locke:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:40:19.668Z",
+  "parsed": {
+    "causes": [],
+    "summary": "로크(Locke)는 후보 패치노트 목록에 해당 챔피언 및 관련 시스템/아이템 변경 사항이 존재하지 않아, 픽률 하락(-0.0211, 95% CI [-0.0302, -0.0120])을 설명할 간접 영향 후보를 찾을 수 없습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 140
+  }
+}

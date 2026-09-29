@@ -1,0 +1,47 @@
+{
+  "deltaId": "champion:Jax:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:30:12.065Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "핵심 코어인 갈라진 하늘의 공격력이 45에서 40으로 줄어 잭스의 딜 기대치가 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력이 450에서 400으로 감소해 잭스의 탱키함과 라인 지속력이 함께 약해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:d2cf5f23",
+        "text": "가렌 E 계수가 총공격력 80~120%로 상향되고 방어력·공격력도 올라 탑 맞라인 구도가 불리해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:크산테:963736ea",
+        "text": "크산테 W 쿨타임이 12~8초로 줄어 잭스의 초반 교환 우위가 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "트런들 W 공격 속도가 최대 110%로 대폭 상향되어 근접 대치에서 잭스가 밀릴 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "잭스 승률 -2.6%p는 갈라진 하늘 공격력 45→40, 체력 450→400 너프로 코어 효율이 떨어진 영향이 유력하나 CI가 0을 포함해 단정은 어렵습니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 903
+  }
+}

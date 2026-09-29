@@ -1,0 +1,43 @@
+{
+  "deltaId": "trait:DA_DravenUniqueTrait18:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:26:28.153Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 추가 공격력이 4/6단계에서 하향되며 같은 딜러 축을 공유하던 현상금 추적자 조합의 채용이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
+        "text": "사냥꾼 상징 처치 관여당 공격력이 18%→15%로 낮아져 처치 관여 기반 빌드 전반의 매력이 감소했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:개화:c0747fdf",
+        "text": "골동품 수레 추가 골드가 2골드→1골드로 줄어 이코노미 지향 운영 자체의 선호가 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:개화:5f705bbc",
+        "text": "뜨거운 경쟁 처치 관여 요구가 7→5로 바뀌며 처치 관여 계열 조합 구성이 재편됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "현상금 추적자 등장률이 12.2%→7.4%(-4.8%p)로 급감했는데, 사냥꾼 공격력·사냥꾼 상징 하향과 골드 주술 축소가 겹친 여파로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.3:system:사냥꾼:616a50ac",
+      "note:tft:18.3:item:사냥꾼-상징:da474098",
+      "note:tft:18.3:system:개화:c0747fdf"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 874
+  }
+}

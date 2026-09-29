@@ -1,0 +1,48 @@
+{
+  "deltaId": "unit:DA_Draven18:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:33:15.076Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:은빛-여명:185091b8",
+        "text": "은빛 여명 공격력 125%→150%로 공격력 캐리 드레이븐의 아이템 상한이 올라갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력 15%→18%, 발동 체력 40%→50% 버프가 드레이븐 캐리 빌드를 밀어올렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:35db05bd",
+        "text": "정의의 손길 기본 공격력 15%→18%, 흡혈 12%→15%로 공격력 딜러 채용이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:프리즘-운명:f32724bb",
+        "text": "프리즘 운명+ 골드 10→7 등 경제 증강 약화로 골드 벌이 유닛 수요가 커진 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 피해량 하향으로 주문력 캐리 대안이 줄며 공격력 축이 반사 이익을 얻었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "드레이븐은 현상금 사냥꾼 요구치 너프에도 등장률이 6.1%→12.2% 뛰었는데, 은빛 여명·피바라기 등 공격력 아이템 버프가 캐리 가치를 끌어올린 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:은빛-여명:185091b8",
+      "note:tft:18.2:item:피바라기:69a953de"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1165
+  },
+  "proseRepairAttempts": 0
+}

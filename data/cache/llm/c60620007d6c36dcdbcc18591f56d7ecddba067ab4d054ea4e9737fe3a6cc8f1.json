@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Akali_AD:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "1b4ec346ad0605238fd935fc97d52d05e7d396b4fcc038faca64e9e36e85b1cf",
+  "generatedAt": "2026-09-26T19:20:20.753Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 4/5단계 추가 공격력이 45/65%에서 40/60%로 하향되며 관련 딜러 채용이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
+        "text": "사냥꾼 상징 처치 관여당 공격력 18%→15% 하향으로 스플래시 진입 경로가 좁아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:황금-징수의-총:cce21382",
+        "text": "황금 징수의 총 공격력 40%→35% 너프로 공격력 캐리 아이템 가치가 떨어진 영향일 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:응징:f65a1f15",
+        "text": "응징 치명타 확률 25%→15% 하향이 치명타 의존 근접 딜러의 픽률을 눌렀습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "아칼리 등장률이 5.3%→3.6%(-1.7%p)로 빠졌습니다. 사냥꾼 추가 공격력 및 사냥꾼 상징 하향으로 공격력 딜러 수요가 줄어든 여파입니다.",
+    "summaryCites": [
+      "note:tft:18.3:system:사냥꾼:616a50ac",
+      "note:tft:18.3:item:사냥꾼-상징:da474098"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 8613,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 880
+  }
+}

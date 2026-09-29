@@ -1,0 +1,47 @@
+{
+  "deltaId": "item:3084:adoptionRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:21:10.579Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘의 체력이 450에서 400으로 줄어 상단 전사·탱커의 1코어 선택지가 약해진 반사이익으로 강철심장 채택이 늘었을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력도 45에서 40으로 하향돼 체력 성장형 아이템으로의 이동 유인이 커졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:f3562bca",
+        "text": "가렌 W의 추가 방어력·마법 저항력 증가가 20%에서 30%로 올라 탱커 가렌 픽이 늘면서 강철심장 수요가 함께 증가했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:문도-박사:f54272dc",
+        "text": "문도 박사 기본 체력이 522에서 560으로 상향돼 체력 스택형 빌드를 쓰는 탱커 사용률이 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
+        "text": "초가스 E 기본 피해량 상향으로 최대 체력 시너지 탱커 픽이 늘어난 점도 소폭 영향으로 볼 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "강철심장 채택률이 1.0%에서 1.3%로 올랐는데, 갈라진 하늘의 체력 450→400·공격력 45→40 하향으로 상단 코어 경쟁 아이템이 약화된 영향이 가장 유력합니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:4c4f025e",
+      "note:26.17:item:sundered-sky:0aec77fe"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 984
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "deltaId": "champion:Viktor:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-09-28T10:19:13.304Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
+        "text": "라이즈 Q 전이 추가 피해량이 10%p씩 하향돼 미드 AP 지분이 빅토르로 이동했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:ryze:f4e781e8",
+        "text": "라이즈 E 마나 소모량 5 증가로 라인 지속력이 떨어져 미드 대체 픽 수요가 커졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+        "text": "럼블 과열 공격 속도가 50~130%에서 30~100%로 너프돼 AP 미드 경쟁자가 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "빅토르 직접 변경은 없고, 라이즈 Q·E 너프와 럼블 과열 너프로 인한 미드 AP 수요 이동이 픽률 3.6%p 상승의 유력한 배경입니다.",
+    "summaryCites": [
+      "note:26.19:champion:ryze:2bcac5df",
+      "note:26.19:champion:ryze:f4e781e8",
+      "note:26.19:champion:rumble:17e40d96"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 724
+  },
+  "proseRepairAttempts": 0
+}

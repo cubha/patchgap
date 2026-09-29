@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Zaahen:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:25:34.146Z",
+  "parsed": {
+    "causes": [],
+    "summary": "자헨 원딜 픽률 변화는 -0.0%p로 CI[-0.1%p, 0.0%p]가 0을 포함해 사실상 변동이 없습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 160
+  }
+}

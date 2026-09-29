@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Olaf:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-09-28T10:20:11.077Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라가 궁극기 회복량·체력 성장까지 폭넓게 강화되며 탑 1티어로 올라서 올라프 자리를 밀어냈습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
+        "text": "아트록스 E 회복 계수와 W 쿨 감소로 라인 지속력이 올라 탑 브루저 픽이 아트록스로 쏠렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+        "text": "탑 순간이동 쿨 390초 단축으로 합류형 탑 챔피언이 선호돼 올라프 수요가 줄었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "올라프 탑 픽률이 8.7%→5.3%로 떨어졌습니다. 직접 변경은 없고 피오라·아트록스 버프로 탑 경쟁에서 밀린 결과입니다.",
+    "summaryCites": [
+      "note:26.19:champion:fiora:4ff3c93f",
+      "note:26.19:champion:aatrox:f629d9e5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 747
+  },
+  "proseRepairAttempts": 0
+}

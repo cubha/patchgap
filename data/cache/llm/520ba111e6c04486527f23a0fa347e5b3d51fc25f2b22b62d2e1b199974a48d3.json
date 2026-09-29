@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Qiyana:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T02:56:21.275Z",
+  "parsed": {
+    "causes": [],
+    "summary": "키아나의 밴률 급등(0.2677→0.4245)은 Q 기본 피해량 및 계수 상승이라는 키아나 자신의 직접 버프로 설명되며, 이를 뒷받침할 만한 다른 챔피언·아이템·시스템 변경발 간접 영향은 후보 목록에서 확인되지 않았습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 678
+  }
+}

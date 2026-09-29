@@ -1,0 +1,42 @@
+{
+  "deltaId": "item:DA_18_EmblemInvoker:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T15:06:45.614Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력 15%→10% 너프로 상징 간 상대적 매력 순위가 유지됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 너프 등 상징 전반 하향으로 선택 분포가 그대로 남았습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력 30→25 너프가 대체 상징 수요를 함께 눌렀습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상 상향으로 주문력 기반 구성 수요가 유지됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "기원자 상징은 하향됐지만 요정·싸움꾼 등 다른 상징도 동시 너프돼 등장률이 4.2%→4.3%로 사실상 유지됐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:요정-상징:4abbb549",
+      "note:tft:18.2:item:싸움꾼-상징:93051b8e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 134,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 684
+  }
+}

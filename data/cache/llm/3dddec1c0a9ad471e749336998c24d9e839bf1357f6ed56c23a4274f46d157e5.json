@@ -1,0 +1,48 @@
+{
+  "deltaId": "item:DA_18_EmblemBlackthorn:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:45:23.949Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:bf8a4249",
+        "text": "검은 가시 특성 체력이 175/350/600으로 상향되며 상징 채용 가치가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:6b4e68f0",
+        "text": "공격력 유닛 희생 시 공격 속도가 12%→14%로 올라 검은 가시 확장 수요가 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:83333c69",
+        "text": "주문력 유닛 희생 마나 재생 1.7→2 상향도 상징 추가 채용을 밀어줬습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력 15%→10% 등 경쟁 상징 너프로 선택이 검은 가시로 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 너프도 상대적 선호도를 검은 가시 쪽으로 옮겼습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "검은 가시 특성의 체력·공속·마나 재생 상향으로 상징 수요가 늘며 등장률이 2.0%→2.5%로 올랐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:검은-가시:bf8a4249",
+      "note:tft:18.2:system:검은-가시:6b4e68f0",
+      "note:tft:18.2:system:검은-가시:83333c69"
+    ]
+  },
+  "usage": {
+    "inputTokens": 133,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 883
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Rumble:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:50:46.888Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력 45→40 너프로 AD 탑 브루저가 약해져 럼블의 라인전 부담이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력 450→400 너프로 근접 브루저 생존력이 낮아져 럼블 지속 견제가 통합니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
+        "text": "나서스 생명력 흡수 12/18/24%→10/15/20% 너프로 대표적 탑 맞수의 라인 유지력이 떨어졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "럼블 탑 승률이 44.2%→53.6%(+9.4%p)로 급등했고, 갈라진 하늘 너프와 나서스 생존력 하향에 따른 탑 구도 변화가 유력합니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:champion:nasus:0915ac64"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 715
+  }
+}

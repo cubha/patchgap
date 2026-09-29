@@ -1,0 +1,37 @@
+{
+  "deltaId": "item:3084:adoptionRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:56:11.936Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력이 450에서 400으로 줄며 전사·탱커의 체력 아이템 선택이 강철심장으로 분산됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력이 45에서 40으로 하향돼 1코어 경쟁력이 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
+        "text": "초가스 E 기본 피해량 10 상승으로 체력 스택 챔피언 픽이 늘어난 영향이 있어 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "강철심장 채택률이 1.0%에서 1.3%로 올랐습니다. 갈라진 하늘의 체력 450→400, 공격력 45→40 하향으로 체력 아이템 수요가 이동한 결과입니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:4c4f025e",
+      "note:26.17:item:sundered-sky:0aec77fe"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 611
+  }
+}

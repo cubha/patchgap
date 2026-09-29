@@ -1,0 +1,37 @@
+{
+  "deltaId": "unit:DA_Taric18:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T15:03:02.446Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력 60%→40% 너프로 전열 유닛 생존력이 전반적으로 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력 30→25 하향으로 탱커 보강 폭이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:b3191eaf",
+        "text": "검은 가시 탱커 희생 보상이 15→12로 낮아져 전열 중심 조합의 이득이 감소했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "타릭 순방률 60.7%→59.7%(-1.0%p)는 95% CI가 0을 포함해 유의하지 않으며, 밤의 끝자락·선봉대 상징 하향에 따른 전열 전반 약화가 겹친 정도입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+      "note:tft:18.2:item:선봉대-상징:58dac5b5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 736
+  }
+}

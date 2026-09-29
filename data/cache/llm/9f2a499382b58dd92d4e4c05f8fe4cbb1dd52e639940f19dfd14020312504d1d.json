@@ -1,0 +1,37 @@
+{
+  "deltaId": "trait:DA_18_Defender:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:38:47.376Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
+        "text": "알리스타 스킬 피해량이 주문력 100/150/225→180/270/420으로 대폭 상승해 전선 유닛 채용이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:람머스:9b820b51",
+        "text": "람머스 보호막이 350/450/550→400/550/725로 강화되며 탱커 조합 수요가 커졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:타릭:f0d46c43",
+        "text": "타릭 회복량이 주문력 250/375→275/450으로 올라 함께 서는 전선 특성 채용을 밀어올렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "엄호대 3단계 방어 소폭 너프에도 등장률이 24.6%→26.2% 올랐는데, 알리스타·람머스 등 전선 유닛 버프가 원인이며 CI가 0을 포함해 유의성은 약합니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:알리스타:d527c10f",
+      "note:tft:18.3:champion:람머스:9b820b51"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 658
+  }
+}

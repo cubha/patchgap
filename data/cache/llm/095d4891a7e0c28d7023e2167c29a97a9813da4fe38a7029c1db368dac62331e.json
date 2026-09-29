@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Tristana:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:42:51.502Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 공격 속도가 9/15%에서 8/12%로 하향되며 속사포 캐리 조합 수요가 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도가 5%에서 4%로 하향되어 평타 캐리 가치가 낮아졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 증폭 조건 변경으로 원거리 딜러 배치 선호가 바뀐 영향으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 공격력이 30%에서 25%로 줄어 관련 딜러 채용이 감소했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "트리스타나 등장률이 6.9%→4.9%로 떨어진 건 속사포 공속 하향과 명멸검 공속 4% 하향으로 평타 캐리 가치가 낮아진 여파입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:속사포:f271519a",
+      "note:tft:18.2:item:명멸검:ce978bd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 763
+  }
+}

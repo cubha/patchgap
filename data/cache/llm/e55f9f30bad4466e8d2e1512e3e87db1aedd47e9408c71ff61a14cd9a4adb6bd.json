@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Rumble:TOP:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:35:42.444Z",
+  "parsed": {
+    "causes": [],
+    "summary": "럼블에 대한 직접 패치노트가 없고, 후보 목록에서도 럼블의 빌드/역할에 명확히 연결되는 간접 변경(정글, 탑, 관련 아이템)을 찾지 못해 이번 승률 상승(0.442→0.536, 95% CI [0.028, 0.159], n=432/446)의 원인을 설명할 근거가 부족합니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 740
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Viktor:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:38:56.475Z",
+  "parsed": {
+    "causes": [],
+    "summary": "빅토르에 대한 직접 패치노트 변경이나 후보 목록 내 간접 영향을 줄 만한 관련 챔피언/아이템/시스템 변경 사항을 찾을 수 없어, pickRate 하락(-0.0267, 95% CI [-0.0359,-0.0175], n=10000/10000)의 원인을 이 패치노트 후보들로는 설명할 수 없습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 169
+  }
+}

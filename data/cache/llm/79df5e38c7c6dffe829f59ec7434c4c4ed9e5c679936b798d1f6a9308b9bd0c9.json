@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Akali:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:35:39.357Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:cassiopeia:64976414",
+        "text": "카시오페아 R 기본 피해량 150/250/350→125/225/325 너프로 미드 지분이 아칼리로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
+        "text": "신드라 W 재사용 대기시간 1초 증가로 미드 대항마가 약해지며 아칼리 견제 밴이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 쿨다운이 11초로 고정되며 미드 억제력이 줄어 아칼리 밴 수요가 커졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "아칼리 직접 변경 없이 밴률 9.9%→15.2%(+5.3%p). 카시오페아 R·신드라 W 너프로 미드 경쟁자가 약해진 반사이익입니다.",
+    "summaryCites": [
+      "note:26.18:champion:cassiopeia:64976414",
+      "note:26.18:champion:syndra:cb99a266"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 594
+  }
+}

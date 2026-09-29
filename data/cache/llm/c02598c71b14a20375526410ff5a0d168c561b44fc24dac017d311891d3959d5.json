@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Leona:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:38:36.721Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력 30→25 하향으로 전방 탱커 조합 채용 유인이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:햇빛:6c96b871",
+        "text": "햇빛 3성 3명 공격 속도 18%→15% 등 하향으로 레오나가 속한 조합의 상단 가치가 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:쉔:eca86037",
+        "text": "쉔 보호막 흡수량 상향으로 같은 전방 자리를 두고 경쟁하는 탱커에게 밀렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:b3191eaf",
+        "text": "검은 가시 탱커 희생 보상이 방어력·마법 저항력 15→12로 줄어 탱커 채용 가치가 하락했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "레오나는 직접 상향에도 등장률이 13.1%→6.5%(-6.6%p) 급감했는데, 선봉대 상징 방어·마저 30→25 하향 등 전방 탱커 체계 약화가 주요 배경입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:선봉대-상징:58dac5b5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 888
+  },
+  "proseRepairAttempts": 0
+}

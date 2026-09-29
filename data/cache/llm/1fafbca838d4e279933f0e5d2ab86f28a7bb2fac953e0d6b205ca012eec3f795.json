@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Fiora:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T01:03:04.420Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 들끓는 일격 중첩 유지가 3초에서 4초로 늘어 공속 기반 지속딜 챔피언들이 강해지면서, 결투로 이득을 보던 피오라의 탑 상성이 상대적으로 나빠졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
+        "text": "마스터 이가 레벨당 방어력 4.5에서 5로 늘고 궁극기 이동 속도도 40/50/60%로 올라, 스플릿·듀얼 구도에서 피오라의 우위가 줄었을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+        "text": "비에고가 레벨당 공격력 4로 상향되고 지속 효과 회복량이 공격력·공속·체력 비례로 확장되어, 브루저 대면 구도에서 피오라가 손해를 봤을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "피오라 탑 승률이 50.8%에서 46.3%로 4.5%p 내렸지만 95% 신뢰구간이 0을 포함해 유의성은 약하며, 구인수의 격노검 중첩 4초 연장 등 대면 챔피언 강화가 간접 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 880
+  }
+}

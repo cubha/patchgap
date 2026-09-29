@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Blitzcrank:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:37:43.074Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:thresh:83ce59dd",
+        "text": "경쟁 그랩형 서포터인 쓰레쉬의 E 사슬 채찍 피해량이 너프되면서, 너프에도 불구하고 블리츠크랭크로 수요가 옮겨왔을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:레나타-글라스크:e7dd6afe",
+        "text": "레나타 글라스크의 궁극기 쿨타임이 크게 늘어 서포터 선택지가 줄어든 점도 블리츠크랭크 픽률 상승에 기여했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:질리언:4e816012",
+        "text": "질리언 궁극기 쿨타임 증가로 유틸 서포터가 약화되며 공격적 그랩 픽 비중이 늘어났을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "블리츠크랭크는 너프에도 픽률이 5.5%→6.3%로 올랐는데, 쓰레쉬 E 피해량 너프 등 경쟁 서포터 약화가 반사 이익을 준 것으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:thresh:83ce59dd"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 651
+  }
+}

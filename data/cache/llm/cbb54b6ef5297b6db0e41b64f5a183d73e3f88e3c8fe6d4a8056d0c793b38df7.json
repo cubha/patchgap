@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Pantheon:UTILITY:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:39:37.945Z",
+  "parsed": {
+    "causes": [],
+    "summary": "판테온에 대한 직접 밸런스 변경 노트가 없고, 후보 목록에서도 판테온의 픽률 감소를 설명할 만한 간접 연관 항목(예: 판테온이 주로 활용하는 아이템이나 상성 챔피언 변경)을 찾을 수 없어 이번 델타(픽률 0.0798→0.0562, 95% CI [-0.0306, -0.0166])의 원인은 패치노트로 설명되지 않는 것으로 보입니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 318
+  }
+}

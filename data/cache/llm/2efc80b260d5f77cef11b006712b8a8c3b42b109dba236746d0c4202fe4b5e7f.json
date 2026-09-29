@@ -1,0 +1,44 @@
+{
+  "deltaId": "item:DA_18_EmblemInferno:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:32:06.057Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:지옥불:e0ee7b3d",
+        "text": "지옥불 화상 피해가 3/3.5단계에서 3.5/4.5%로 상향돼 상징으로 단계를 올리는 가치가 커졌습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력이 15%에서 10%로 하향되며 상징 선택이 지옥불 쪽으로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 하향으로 경쟁 상징의 매력도가 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:전쟁기계-상징:83270fa5",
+        "text": "전쟁기계 상징 체력 350→250 하향도 상징 수요를 지옥불로 밀어냈습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "지옥불 화상 피해 상향(3.5%/4.5%)에 요정·싸움꾼 등 경쟁 상징 하향이 겹치며 지옥불 상징 등장률이 2.2%→4.5%로 올랐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:지옥불:e0ee7b3d",
+      "note:tft:18.2:item:요정-상징:4abbb549",
+      "note:tft:18.2:item:싸움꾼-상징:93051b8e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 813
+  },
+  "proseRepairAttempts": 0
+}

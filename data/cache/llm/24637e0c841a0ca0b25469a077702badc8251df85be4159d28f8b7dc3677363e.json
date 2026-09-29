@@ -1,0 +1,42 @@
+{
+  "deltaId": "trait:DA_18_Blossom:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "c5fe11838e969011401862d4b7aaeac11b42714f3a0bfbeafa868d6e7d917140",
+  "generatedAt": "2026-09-26T19:28:53.641Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃의 상징 특성 효과가 200%→150%로 줄고 로비당 1명 제한이 생겨, 상징 기반 확장 빌드의 상한이 낮아졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력이 15%→10%로 깎여, 자연 계열 상징 조합의 화력이 함께 떨어졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:자이라:63f16bc7",
+        "text": "자이라 스킬 피해량 너프로 초중반 식물 계열 딜 축이 약해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:티모:68e7c01d",
+        "text": "티모 작은 버섯 피해량이 60/90/135→55/82/130으로 줄어 보조 딜이 감소했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "개화 평균 등수가 4.24등→4.41등으로 약화됐는데, 흡수하는 꽃의 상징 효과 150% 하향과 인원 제한, 요정 상징 너프가 겹친 결과로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+      "note:tft:18.2:item:요정-상징:4abbb549"
+    ]
+  },
+  "usage": {
+    "inputTokens": 148,
+    "cacheReadInputTokens": 17042,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 898
+  }
+}

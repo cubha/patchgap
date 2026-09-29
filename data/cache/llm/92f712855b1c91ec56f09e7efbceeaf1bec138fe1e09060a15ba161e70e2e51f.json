@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Blitzcrank:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:39:20.453Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:thresh:83ce59dd",
+        "text": "쓰레쉬 E 사슬 채찍 피해량이 75~255에서 65~245로 깎여, 같은 그랩형 서포터 밴 지분이 블리츠크랭크로 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:레나타-글라스크:e7dd6afe",
+        "text": "레나타 글라스크 R 쿨타임이 100/90/80초에서 150/130/110초로 늘어나 상위 밴 대상 서포터가 줄면서, 밴 표가 블리츠크랭크 쪽으로 분산됐을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:질리언:4e816012",
+        "text": "질리언 R 쿨타임이 120/90/60초에서 150/120/90초로 증가해 서포터 밴 우선순위가 재편된 영향이 있을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "블리츠크랭크는 Q 마나·사거리와 R까지 너프됐는데도 밴률이 3.0%→3.8%(+0.8%p)로 올랐고, 쓰레쉬 E 피해량 너프 등 경쟁 서포터 약화로 밴 표가 옮겨온 정황이 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:thresh:83ce59dd"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 844
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:MasterYi:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:19:27.377Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "핵심 아이템 구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초로 지속 딜 유지력 상승",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "마스터 이 승률 46.5%→50.7%(+4.2%p), 구인수의 격노검 중첩 지속 4초 상향이 영향으로 보이나 CI가 0을 포함해 확정은 어렵습니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 374
+  }
+}

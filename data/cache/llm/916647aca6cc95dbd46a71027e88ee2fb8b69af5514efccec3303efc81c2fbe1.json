@@ -1,0 +1,47 @@
+{
+  "deltaId": "champion:Yone:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:24:45.749Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:other:가렌:868690af",
+        "text": "가렌 W 방어력·마법저항력 최대 증가가 30에서 60으로 두 배가 되어, 물리 피해 위주인 요네의 탑 라인전·교전 압박이 크게 약해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:a83e2425",
+        "text": "가렌 공격력이 55.5에서 60으로 오르며 탑 대면 구도가 불리해진 점도 승률 하락에 기여했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:문도-박사:f54272dc",
+        "text": "문도 박사 기본 체력 522→560 등 탑 탱커 강화로 요네의 딜 관통력이 상대적으로 저하됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+        "text": "이렐리아 Q 공격력 계수 70%→80%, R 주문력 계수 100% 상향으로 근접 대검 매치업에서 밀릴 여지가 커졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:크산테:963736ea",
+        "text": "크산테 W 재사용 대기시간 단축과 E 추가 체력 계수 상향으로 탑 상위권 경쟁자가 강해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요네 탑 승률이 51.7%→47.0%(-4.7%p, n=593)로 떨어졌지만 CI가 0을 포함해 유의성은 약하며, 가렌 W 방어력·마법저항 최대치 60 상향과 공격력 60 상향 등 탑 대면 강화가 주된 간접 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:other:가렌:868690af",
+      "note:26.17:champion:가렌:a83e2425"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1128
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Poppy:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:13:12.534Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:a83e2425",
+        "text": "가렌이 공격력·방어력 증가와 E/W 강화까지 겹친 대형 상향을 받아 탑 밴 우선순위를 가져가면서, 뽀삐가 밴 슬롯 경쟁에서 밀렸을 가능성이 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:f3562bca",
+        "text": "가렌 W 추가 방어력·마법 저항력 증가폭이 20%에서 30%로 오르며 탑 체감 위협이 커져, 밴 표가 가렌 쪽으로 이동했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:잭스:95dc6321",
+        "text": "잭스 Q 피해 유형 변경과 궁극기 개편으로 탑 구도의 관심이 잭스에 쏠리면서 뽀삐 밴 수요가 분산됐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+        "text": "이렐리아가 Q·W·R 계수 상향으로 강해져 탑/미드 밴 순위를 차지하며 뽀삐 밴률을 끌어내렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "뽀삐는 직접 변경이 없지만 밴률이 40.4%에서 32.3%로 8.2%p 떨어졌는데, 가렌의 공격력 상향과 W 방어 수치 강화 등 탑 대형 상향이 밴 우선순위를 가져간 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:가렌:a83e2425",
+      "note:26.17:champion:가렌:f3562bca"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 872
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "deltaId": "unit:DA_18_Lillia:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:34:29.149Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:system:기원자:3f993458",
+        "text": "기원자 마나 재생 4단계 9→8 하향으로 마나 기반 후열 캐리의 스킬 회전이 느려졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:기원자-상징:04e357a3",
+        "text": "기원자 상징 마나 재생 3→2 하향이 같은 마나 축 조합의 체감 성능을 낮췄습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "릴리아는 회복량 상향에도 평균 등수가 +0.07등 올랐지만, 표본 251판에 CI가 [-0.24, +0.38]로 통계적 노이즈 범위이며 기원자 마나 재생 하향이 겹쳤습니다.",
+    "summaryCites": [
+      "note:tft:18.3:system:기원자:3f993458"
+    ]
+  },
+  "usage": {
+    "inputTokens": 152,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 573
+  }
+}

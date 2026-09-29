@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Blitzcrank:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:31:38.390Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:other:불타는-향로:48821869",
+        "text": "서포트 회복·보호막 계수가 12%에서 10%로 줄어 서포트 전반의 유지력이 약해진 점이 블리츠크랭크 승률 하락을 일부 거들 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:불타는-향로:490dc4fd",
+        "text": "구원의 회복·보호막 효과가 12%에서 10%로 하향돼 이니시 후 팀 생존력이 떨어진 영향입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:bd82e946",
+        "text": "미스 포츈이 이동 속도 325→335 등 전방위 상향을 받아 봇 라인 구도에서 서포트 픽 선호가 이동한 여파일 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "블리츠크랭크 승률은 51.9%→49.6%(-2.3%p)로 내렸지만 95% CI가 [-8.0%p, 3.4%p]로 0을 포함해 유의하지 않고, 서포트 회복·보호막 계수 12%→10% 하향이 보조 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:other:불타는-향로:48821869"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 815
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "deltaId": "unit:DA_18_Alistar:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:19:58.064Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:레오나:c1cfbbf3",
+        "text": "레오나의 마나 30/90 하향 조정과 방어 수치 강화로 전방 탱커 조합이 부상하며 알리스타가 함께 채용된 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마오카이:d7ea1995",
+        "text": "마오카이 마나가 30/100으로 나빠지며 밀려난 앞라인 자리를 알리스타가 대체했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력이 250에서 150으로 하향되며 상징 대신 실제 싸움꾼 유닛을 겹쳐 쓰는 구성이 늘었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "알리스타 등장률이 9.5%→15.4%(+5.9%p)로 급등했는데, 직접 변경은 없고 레오나 마나 조정·마오카이 마나 하향에 따른 앞라인 재편의 파급으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:레오나:c1cfbbf3",
+      "note:tft:18.2:champion:마오카이:d7ea1995"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 951
+  },
+  "proseRepairAttempts": 0
+}

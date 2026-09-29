@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Graves:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:33:13.572Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "그레이브즈 주력 코어인 갈라진 하늘의 공격력이 45에서 40으로 줄어 중반 딜 기대치가 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "같은 아이템의 체력이 450에서 400으로 감소해 정글 교전 생존력도 함께 약해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:3f4d7db5",
+        "text": "리글의 랜턴 조합식이 곡궁 기반으로 바뀌어 정글 초반 빌드 선택지가 달라진 영향도 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "그레이브즈 승률은 50.9%→49.2%(-1.7%p)이지만 CI가 0을 포함해 유의하지 않고, 코어 아이템 갈라진 하늘의 공격력 45→40·체력 450→400 너프가 간접 하락 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 744
+  }
+}

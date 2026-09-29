@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Rengar:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:13:02.161Z",
+  "parsed": {
+    "causes": [],
+    "summary": "렝가에 대한 직접 변경 내역이 없고 후보 목록에서도 렝가의 밴율 하락(-3.18%p, 95% CI [-4.06%p, -2.27%p])을 설명할 만한 간접 영향 요인을 찾을 수 없어 원인 불명으로 판단됩니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 276
+  }
+}

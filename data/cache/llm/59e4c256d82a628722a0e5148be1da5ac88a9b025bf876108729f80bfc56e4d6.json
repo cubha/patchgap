@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Zoe:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:08:18.069Z",
+  "parsed": {
+    "causes": [],
+    "summary": "조이(Zoe)에 대한 직접 패치노트 변경이나 이를 설명할 만한 간접 영향 후보가 목록에서 발견되지 않아, 밴율 하락(-0.1139)의 원인을 특정할 수 없습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 171
+  }
+}

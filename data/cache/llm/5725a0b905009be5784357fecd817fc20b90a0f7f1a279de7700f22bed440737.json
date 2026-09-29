@@ -1,0 +1,42 @@
+{
+  "deltaId": "item:DA_Artifact_RapidFireCannon:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:35:16.960Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 특성의 기본 공격당 공격 속도가 9/15%→8/12%로 하향돼 공격속도 축 조합 수요가 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:원시-상징:32460e11",
+        "text": "원시 상징 공격 속도가 25%→35%로 올라 공격속도 확보 수단이 대체됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 하향으로 평타 스택형 빌드 자체의 매력이 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 공격력 30%→25% 하향으로 원거리 평타 캐리 채용이 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "고속 연사포 등장률 1.6%→1.0%(-0.6%p)는 속사포 특성 공격 속도 하향으로 평타·공격속도 축 조합 수요가 줄어든 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:속사포:f271519a"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 876
+  },
+  "proseRepairAttempts": 0
+}

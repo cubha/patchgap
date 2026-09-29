@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_Nidalee18_AP:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:06:50.294Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 유지 조건이 바뀌어 사냥꾼 계열 딜러 전반의 실전 화력이 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 기본 공격력이 30%에서 25%로 줄어 사냥꾼 확장 빌드의 상한이 낮아졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도가 5%에서 4%로 줄어 평타 기반 캐리 세팅이 약화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 상위 단계 공속이 15%에서 12%로 줄어 평타 캐리 조합의 경쟁력이 내려갔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "니달리는 피해량 상향에도 순방률이 5.5%p 하락했는데, 사냥꾼 특성과 사냥꾼 상징 너프로 소속 딜러 전반이 약화된 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:사냥꾼:70e7b088",
+      "note:tft:18.2:item:사냥꾼-상징:2f196381"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 906
+  }
+}

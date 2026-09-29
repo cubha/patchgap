@@ -1,0 +1,37 @@
+{
+  "deltaId": "unit:DA_KogMaw18_AD:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "c5fe11838e969011401862d4b7aaeac11b42714f3a0bfbeafa868d6e7d917140",
+  "generatedAt": "2026-09-26T19:25:18.034Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 기본 공격당 공격 속도가 9/15%에서 8/12%로 줄어 속사포 캐리인 코그모의 화력이 직접 깎였습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 하향으로 지속 딜링형 코그모의 스택 가속이 둔화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 유지 시간 4초→3초 조정이 원거리 딜러 조합 구성에 영향을 줬을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "코그모 평균 등수가 4.29등→4.55등(+0.26등)으로 악화됐는데, 속사포 공격 속도 9/15%→8/12% 하향과 명멸검 스택 5%→4% 너프가 겹친 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:속사포:f271519a",
+      "note:tft:18.2:item:명멸검:ce978bd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 150,
+    "cacheReadInputTokens": 17042,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 716
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "deltaId": "unit:DA_18_Leona:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:28:31.809Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:item:영원한-서약:2e842b57",
+        "text": "영원한 서약의 탱커 스킬 시전 마나가 15에서 10으로 줄며 전열 아이템 캐리어 가치가 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:엄호대:ad7723b2",
+        "text": "엄호대 3단계 방어·마저가 120에서 115로 내려가 해당 전열 조합 채용이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
+        "text": "알리스타 스킬 피해량이 크게 상향돼 경쟁 전열 자리를 대체했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:람머스:9b820b51",
+        "text": "람머스 보호막이 550에서 725로 올라 저비용 탱커 수요를 흡수했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "레오나 등장률이 6.5%→4.6%로 1.9%p 하락했습니다. 영원한 서약·엄호대 너프와 알리스타 상향에 전열 자리를 내준 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.3:item:영원한-서약:2e842b57",
+      "note:tft:18.3:system:엄호대:ad7723b2",
+      "note:tft:18.3:champion:알리스타:d527c10f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 780
+  }
+}

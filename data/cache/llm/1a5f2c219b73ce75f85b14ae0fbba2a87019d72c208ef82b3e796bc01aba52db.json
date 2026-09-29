@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Poppy:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:35:54.953Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:0f074cfc",
+        "text": "가렌의 공격력·방어력 증가 등 전반적 상향으로 탑 라인 지분이 늘며 뽀삐와의 매치업 구도가 변화했을 가능성이 있음",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:크산테:963736ea",
+        "text": "크산테 W 재사용 대기시간 감소 등 상향으로 탑 챔피언 선택지가 늘어나 뽀삐 밴율에 간접 영향을 줬을 가능성이 있음",
+        "confidence": "low"
+      }
+    ],
+    "summary": "뽀삐 자체에 대한 직접 패치노트가 없어 밴율 급감(-8.18%p, 95% CI [-0.095, -0.068])의 원인은 명확하지 않으며, 가렌·크산테 등 탑 라인 챔피언들의 전반적 상향이 상대 구도를 바꿔 간접적으로 영향을 줬을 가능성이 낮은 신뢰도로 추정됨.",
+    "summaryCites": [
+      "note:26.17:champion:가렌:0f074cfc",
+      "note:26.17:other:크산테:963736ea"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 816
+  }
+}

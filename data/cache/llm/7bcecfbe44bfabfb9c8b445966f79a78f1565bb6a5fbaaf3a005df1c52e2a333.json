@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Qiyana:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:10:39.259Z",
+  "parsed": {
+    "causes": [],
+    "summary": "키아나 밴률이 42.4%에서 50.8%로 8.4%p 올랐으나, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 90
+  }
+}

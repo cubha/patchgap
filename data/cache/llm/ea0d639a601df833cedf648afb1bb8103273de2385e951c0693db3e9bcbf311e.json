@@ -1,0 +1,32 @@
+{
+  "deltaId": "trait:DA_18_Coven:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:58:35.780Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:럭스:f810ec39",
+        "text": "악의 여단 보상으로 주어지는 럭스의 레이저 피해량이 주문력 5,000에서 6,500으로 올라 보상 가치가 상승했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:럭스:fc47e05b",
+        "text": "럭스 스킬 피해량이 주문력 355/550에서 375/565로 올라 악의 여단 조합의 후반 체급이 올랐습니다.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "악의 여단 평균 등수가 5.42등에서 5.14등으로 0.28등 개선됐으나 CI가 0을 포함해 유의하지 않으며, 보상 유닛 럭스의 피해량 상향이 체급을 밀어올렸습니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:럭스:f810ec39",
+      "note:tft:18.2:champion:럭스:fc47e05b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 151,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 713
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "deltaId": "trait:DA_18_Blossom:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:53:09.026Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:6ebb4a52",
+        "text": "덩굴정령 도약 피해량이 공격력 170/255에서 155/235로 줄어 개화 핵심 딜 축이 약해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:56e1c4af",
+        "text": "덩굴정령 도약 피해 계수가 공격력 600%에서 1,000%로 재조정되며 실전 딜 기대치가 흔들렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:자이라:63f16bc7",
+        "text": "자이라 스킬 피해량이 주문력 37/55에서 35/53으로 하향돼 초중반 개화 보드 안정성이 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃 상징 효과가 200%에서 150%로 줄고 로비당 1명 제한이 붙어 특성 상한이 낮아졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "개화 순방률이 55.0%에서 51.9%로 떨어졌습니다. 덩굴정령 도약 피해와 자이라 스킬 피해 하향이 주 원인입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:덩굴정령:6ebb4a52",
+      "note:tft:18.2:champion:자이라:63f16bc7"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 895
+  }
+}

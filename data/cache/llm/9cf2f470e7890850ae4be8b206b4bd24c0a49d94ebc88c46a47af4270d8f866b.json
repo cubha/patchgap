@@ -1,0 +1,43 @@
+{
+  "deltaId": "trait:DA_18_Slayer:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:27:57.401Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카직스:c60397e3",
+        "text": "카직스 기본 공격력 30→40 상향으로 약탈자 계열 딜 하한이 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:워윅:ad5aa8ef",
+        "text": "워윅 공격력 40→45 상향이 같은 계열 초중반 안정성을 높였습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:fb81a27e",
+        "text": "피바라기 발동 체력 40%→50%, 공격력/주문력 15%→18% 상향이 근접 딜러 생존을 보강했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:5f42b359",
+        "text": "정의의 손길 흡혈 12%→15% 상향이 약탈자 아이템 조합 효율을 올렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "약탈자 순방률이 47.1%→51.4%(+4.3%p) 올랐습니다. 카직스 공격력 30→40, 워윅 40→45 상향이 주된 동력입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:카직스:c60397e3",
+      "note:tft:18.2:champion:워윅:ad5aa8ef"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 796
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Sivir:BOTTOM:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:35:51.275Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:6d438477",
+        "text": "미스 포츈이 Q 피해량·이동 속도·E 등 전방위 상향을 받아 봇 라인 픽 경쟁에서 시비르의 입지가 좁아졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
+        "text": "애쉬 W 피해량이 40/55/70/85/100으로, 사거리도 1,300으로 늘어 라인전 교환에서 시비르가 밀릴 여지가 커졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 올라 지속 딜형 원딜들이 반사이익을 얻으며 상대적 체감이 줄었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "시비르 승률은 48.8%에서 47.7%로 -1.1%p지만 신뢰구간이 ±8%p대라 사실상 노이즈이며, 미스 포츈·애쉬 상향으로 인한 봇 경쟁 심화가 소폭 영향을 줬을 수 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:미스-포츈:6d438477",
+      "note:26.17:champion:애쉬:7d7ed661"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 864
+  }
+}

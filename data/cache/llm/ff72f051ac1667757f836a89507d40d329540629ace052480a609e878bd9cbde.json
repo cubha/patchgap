@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Irelia:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T01:03:07.985Z",
+  "parsed": {
+    "causes": [],
+    "summary": "이렐리아 원딜 픽률은 0.1%로 변화 0.0%p, 신뢰구간도 0을 포함해 사실상 무변화이며 이를 설명할 조항을 찾지 못했습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 133,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 241
+  }
+}

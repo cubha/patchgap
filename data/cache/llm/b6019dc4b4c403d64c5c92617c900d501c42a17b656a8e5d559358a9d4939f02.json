@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Ekko:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T01:10:29.583Z",
+  "parsed": {
+    "causes": [],
+    "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 392
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "deltaId": "item:DA_18_EmblemFloraFatalisAugment:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:33:33.387Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃의 상징 효과 증가율이 200%→150%로 줄고 로비당 1명 제한이 생겨 상징 채용 유인이 급감했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력 15%→10% 등 상징 전반 너프로 상징 아이템 선택 우선순위가 밀렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:4e39e3c3",
+        "text": "날렵이 상징 기수 공격 속도 30%→20% 너프도 상징 계열 전체의 픽률 하락에 영향을 줬을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "치명적인 꽃 상징 등장률 3.1%→1.2%(-1.9%p)는 흡수하는 꽃의 상징 증폭 200%→150% 및 로비 1인 제한 너프로 상징 채용 자체가 줄어든 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:흡수하는-꽃:cb5ebf63"
+    ]
+  },
+  "usage": {
+    "inputTokens": 137,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 710
+  },
+  "proseRepairAttempts": 0
+}

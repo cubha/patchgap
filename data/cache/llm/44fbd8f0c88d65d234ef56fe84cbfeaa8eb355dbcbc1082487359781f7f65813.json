@@ -1,0 +1,36 @@
+{
+  "deltaId": "trait:DA_18_Solar:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "1b4ec346ad0605238fd935fc97d52d05e7d396b4fcc038faca64e9e36e85b1cf",
+  "generatedAt": "2026-09-26T19:21:30.300Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:타릭:21e22d94",
+        "text": "타릭 기본 보호막이 100/225에서 75/150으로 깎이며 햇빛 전열이 약해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:응징:f65a1f15",
+        "text": "응징 치명타 확률 25%→15% 너프로 햇빛 딜링 축의 매력이 줄었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:럭스:8c458b36",
+        "text": "럭스 3성당 추가 피해 12%→15% 버프는 3성 리롤 조건부라 등장률 하락을 막지 못했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "햇빛 등장률이 5.0%→3.6%로 떨어졌는데, 타릭 기본 보호막 너프(100/225→75/150)로 전열이 약해진 영향이 큽니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:타릭:21e22d94"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 8613,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 852
+  }
+}

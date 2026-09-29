@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:Bard:UTILITY:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T01:08:28.043Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:other:증강:c51e841d",
+        "text": "아레나 증강 체력 목록에서 바드가 '매우 낮음'으로 내려가, 일부 모드 성능이 함께 흔들릴 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "바드 승률 -0.2%p는 95% CI가 [-4.2%p, 3.9%p]로 넓어 사실상 변화 없음이며, 방어력 하향 외에는 증강 체력 목록의 '매우 낮음' 조정 정도만 부수 요인입니다.",
+    "summaryCites": [
+      "note:26.18:other:증강:c51e841d"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 346
+  }
+}

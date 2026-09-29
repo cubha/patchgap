@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:DA_Artifact_SeekersArmguard:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:35:41.411Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 기본 공격력 30%→25% 너프로 사냥꾼 계열 조합 채용이 줄며 연계 아이템 사용도 감소했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 특성의 피해 증폭 조건 변경으로 해당 빌드 수요가 이동했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 너프로 평타 중심 캐리 구성 전반의 선택률이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:후방의-핵심:e1ef7386",
+        "text": "후방의 핵심 3골드→1골드 등 다수 상점 아이템 가격 인하로 상대적 채택 우선순위가 밀렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "추적자의 팔목 보호대 등장률이 1.4%→0.9%(-0.5%p)로 줄었는데, 사냥꾼 상징 공격력 너프와 명멸검 공속 너프로 평타 빌드 수요가 빠진 영향으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:사냥꾼-상징:2f196381",
+      "note:tft:18.2:item:명멸검:ce978bd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 138,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1145
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,47 @@
+{
+  "deltaId": "champion:Trundle:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-19T00:01:06.215Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+        "text": "그레이브즈 Q 폭발 피해 계수가 하향되며 정글 상위권 픽이 약화돼 트런들이 반사 이익을 봤을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:그라가스:fec76b2f",
+        "text": "그라가스가 Q 피해·쿨다운과 R 쿨다운(100/90/80초 → 130/115/100초)까지 전방위 너프를 받아 정글 파이가 재분배됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
+        "text": "녹턴이 체력 655 → 640, 방어력 38 → 36으로 약화되며 경쟁 정글러 기용이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:8f360fb2",
+        "text": "리글의 랜턴·야생의 섬광이 공격 속도 30%를 얻도록 조합이 바뀌어, W로 공속을 살리는 트런들 빌드 가치가 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
+        "text": "나서스 기본 지속 효과 생명력 흡수가 12/18/24% → 10/15/20%로 줄어 탑 대체 픽으로 트런들 수요가 늘었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "트런들 픽률이 1.0%→1.3%로 올랐는데, 그레이브즈·그라가스 등 경쟁 정글러 너프에 따른 반사 이익이 유력합니다.",
+    "summaryCites": [
+      "note:26.17:champion:graves:0bc5877b",
+      "note:26.17:champion:그라가스:fec76b2f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 20986,
+    "outputTokens": 944
+  }
+}

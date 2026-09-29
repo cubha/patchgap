@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Rengar:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-09-28T10:16:23.009Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:khazix:defcade0",
+        "text": "카직스 기본 지속 피해량이 17~136에서 22~141로 올라 암살자 정글 밴 우선순위가 카직스로 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:khazix:49b122f5",
+        "text": "카직스 E 진화 사거리가 200에서 300으로 늘며 체감 위협이 커져 렝가 대신 밴 표를 가져갔을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:elise:a7bec286",
+        "text": "엘리스 W 공격 속도 10%p 상향 등 정글 상향이 겹쳐 밴 슬롯 경쟁이 분산됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "렝가 직접 변경 없이 밴률이 9.6%→3.8%로 급락했는데, 카직스 기본 지속 피해·E 진화 사거리 상향 등 정글 상향들이 밴 우선순위를 가져간 것으로 보입니다.",
+    "summaryCites": [
+      "note:26.19:champion:khazix:defcade0",
+      "note:26.19:champion:khazix:49b122f5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 640
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Yasuo:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:00:14.907Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력 45→40 하향으로 야스오의 검술 빌드 화력이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력 450→400 하향이 야스오의 교전 생존력을 깎았습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+        "text": "이렐리아 Q 계수 70%→80% 상향으로 근접 라인 대결 구도가 불리해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:1f26947d",
+        "text": "이렐리아 R 주문력 계수 70%→100%로 카운터 픽의 한타 폭발력이 커졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "야스오 승률이 52.8%→50.2%(-2.6%p)로 내렸지만 CI가 0을 포함해 유의하지 않고, 갈라진 하늘 하향과 이렐리아 상향이 일부 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:champion:irelia:9035ffdc"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 853
+  }
+}

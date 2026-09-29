@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Qiyana:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:52:25.748Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+        "text": "미드 경쟁자 제라스가 Q 피해량 5 감소로 약화되며 키아나 선택지가 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:080e761c",
+        "text": "제라스 기본 체력 596→575 너프로 미드 구도에서 키아나 선호가 커졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:graves:39e7c86f",
+        "text": "그레이브즈 Q 계수 너프로 정글 AD 암살 역할 일부가 키아나로 이동했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "키아나 픽률이 16.1%→20.4%(+4.4%p)로 올랐고, 제라스 체력·Q 너프 등 경쟁 챔피언 약화가 반사 이익을 준 것으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:xerath:080e761c",
+      "note:26.17:champion:xerath:43a6f4aa"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 760
+  }
+}

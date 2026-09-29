@@ -1,0 +1,43 @@
+{
+  "deltaId": "unit:DA_KogMaw18_AD:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:28:52.738Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 4·6단계 공격 속도가 9/15%에서 8/12%로 너프되며 평타형 코그모 딜이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도가 5%에서 4%로 줄어 공속 캐리 코그모가 손해를 봅니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 조건 변경으로 원거리 딜러의 실전 증폭이 불안정해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 공격력이 30%에서 25%로 하향돼 사냥꾼 확장 보드의 화력이 감소했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "코그모 순방률이 54.4%→50.7%(-3.7%p)로 떨어진 건 속사포 공격 속도(9/15%→8/12%)와 명멸검(5%→4%) 너프로 공속 캐리 가치가 낮아진 탓입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:속사포:f271519a",
+      "note:tft:18.2:item:명멸검:ce978bd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 814
+  },
+  "proseRepairAttempts": 0
+}

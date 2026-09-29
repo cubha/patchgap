@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Camille:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:09:38.577Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:피오라:16150c0d",
+        "text": "피오라가 공격 속도 및 여러 스킬 지표에서 전면 개편(버프 다수)을 받아 탑라인 경쟁 구도가 바뀌면서 카밀의 픽률이 상대적으로 감소했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:피오라:744cdab9",
+        "text": "피오라의 기본 능력치 조정과 스킬 재설계로 탑 챔피언 폭 안에서 카밀 대신 피오라를 선택하는 비율이 늘었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카밀은 직접적인 패치 변경 사항이 없어 픽률 하락(-6.4%p, 95% CI [-0.0755,-0.0522])은 패치노트로 직접 설명되지 않으며, 동일 라인(탑)에서 대대적으로 개편·버프된 피오라와의 경쟁 심화가 간접적인 원인일 가능성이 있으나 근거가 약합니다.",
+    "summaryCites": [
+      "note:26.18:champion:피오라:16150c0d",
+      "note:26.18:champion:피오라:744cdab9"
+    ]
+  },
+  "usage": {
+    "inputTokens": 120,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 718
+  }
+}

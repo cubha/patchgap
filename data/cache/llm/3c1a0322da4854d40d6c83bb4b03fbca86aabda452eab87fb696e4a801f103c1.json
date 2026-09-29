@@ -1,0 +1,44 @@
+{
+  "deltaId": "champion:Ambessa:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T08:59:44.792Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라 대결투 회복량·계수 상향으로 탑 브루저 슬롯 경쟁에서 암베사가 밀렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:c754a41b",
+        "text": "피오라 체력 성장 99→105로 라인전 안정성이 올라 탑 선호도가 옮겨갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
+        "text": "아트록스 E 회복 계수 1.1%→1.3% 버프로 동일 역할군 픽이 분산됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:5bc9f3f5",
+        "text": "아트록스 W 쿨 초반 20초→18초 단축도 탑 근접 딜러 수요를 가져갔습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "암베사 탑 픽률이 8.9%→6.7%(-2.2%p)로 하락했습니다. 직접 조항은 없고, 피오라 궁 회복·체력 성장 상향과 아트록스 W·E 버프로 탑 브루저 픽이 분산된 영향입니다.",
+    "summaryCites": [
+      "note:26.19:champion:fiora:4ff3c93f",
+      "note:26.19:champion:fiora:c754a41b",
+      "note:26.19:champion:aatrox:f629d9e5",
+      "note:26.19:champion:aatrox:5bc9f3f5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 811
+  }
+}

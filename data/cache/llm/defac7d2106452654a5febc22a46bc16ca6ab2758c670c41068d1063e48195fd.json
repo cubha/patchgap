@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Aurora:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:02:20.210Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
+        "text": "라이즈 Q 전이 추가 피해량이 10%p 깎여 미드 경쟁자가 약해진 반사이익일 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+        "text": "럼블 과열 공격 속도가 50~130%에서 30~100%로 하향돼 미드 대치 구도가 오로라에게 유리해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "오로라 승률이 44.1%→47.6%(+3.6%p)로 올랐지만 CI가 [-4.8%p, 12.0%p]로 0을 포함해, 라이즈·럼블 하향 반사이익 정도만 추정됩니다.",
+    "summaryCites": [
+      "note:26.19:champion:ryze:2bcac5df",
+      "note:26.19:champion:rumble:17e40d96"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 559
+  }
+}

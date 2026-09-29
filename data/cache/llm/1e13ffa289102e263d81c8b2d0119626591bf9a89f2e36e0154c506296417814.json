@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Pantheon:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:11:15.222Z",
+  "parsed": {
+    "causes": [],
+    "summary": "판테온에 대한 직접 패치노트가 없고 후보 목록에서도 판테온 밴율 급락(-0.0457)을 설명할 만한 간접 연관 변경(상대 챔피언, 메타에 큰 영향을 주는 아이템/시스템 변경)을 찾을 수 없어 원인 불명으로 남습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 244
+  }
+}

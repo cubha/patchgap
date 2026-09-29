@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:MasterYi:JUNGLE:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:18:27.357Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초로, 핵심 아이템을 쓰는 마스터 이 지속딜이 상승했습니다.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "마스터 이 정글 승률이 45.9%→54.4%(8.4%p) 상승했고, 구인수의 격노검 중첩 지속시간 4초 연장이 유력하나 CI가 0을 걸쳐 표본이 부족합니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 416
+  }
+}

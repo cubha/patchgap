@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Jayce:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:11:04.650Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:피오라:cb45f0a7",
+        "text": "피오라가 이번 패치에서 궁극기 및 여러 스킬에 걸쳐 대규모 재조정(사실상 리메이크 수준)을 겪으면서 탑 라인 메타가 크게 흔들렸고, 이는 제이스와 자주 맞붙는 주요 상대 챔피언의 강세/약세 변화로 이어져 제이스의 밴률 하락에 간접적으로 영향을 미쳤을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
+        "text": "탑 라이너로 추정되는 자헨의 Q2 피해량이 상향되면서 탑 라인 매치업 구도가 변화해 제이스에 대한 상대적 위협도가 낮아졌을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "제이스는 이번 패치노트에 직접 언급되지 않았지만, 밴률이 0.3166→0.2656(약 -5.1%p, 95% CI [-0.066, -0.036])로 크게 하락한 것은 피오라의 대규모 스킬 재조정과 자헨 등 탑 라이너 밸런스 변화로 인한 탑 라인 메타 이동의 간접적 파급 효과로 추정됩니다.",
+    "summaryCites": [
+      "note:26.18:champion:피오라:cb45f0a7",
+      "note:26.18:champion:zaahen:bce84005"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 871
+  }
+}

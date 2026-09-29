@@ -1,0 +1,38 @@
+{
+  "deltaId": "unit:DA_Amumu18:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:15:17.600Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:지옥불:e0ee7b3d",
+        "text": "지옥불 화상 피해가 3/3.5%에서 3.5/4.5%로 올라 화상 기반 전방 조합 수요가 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:거인의-오라:8617fcbc",
+        "text": "거인의 오라가 5골드에서 3골드로 싸져 저가 탱커 배치 진입 장벽이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:bf8a4249",
+        "text": "검은 가시 체력이 175/350/600으로 상향되며 전방 유닛 전반의 채용이 늘었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "아무무 등장률이 27.1%→42.8%(+15.7%p)로 급등했으나 직접 조항은 없고, 지옥불 화상 상향·거인의 오라 가격 인하 등 전방 조합 강화의 파급으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:지옥불:e0ee7b3d",
+      "note:tft:18.2:item:거인의-오라:8617fcbc"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1125
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,47 @@
+{
+  "deltaId": "item:DA_Artifact_Fishbones:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:27:25.667Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 너프로 함께 쓰이는 평타 캐리 빌드의 화력이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 공격 속도 9/15%→8/12% 너프로 평타 중심 조합의 성능이 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 조건 변경으로 원거리 딜러 축이 흔들렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 공격력 30%→25% 너프가 같은 캐리에 겹쳐 얹히며 성능을 끌어내렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:5c211705",
+        "text": "마스터 이 공격력 65→60 너프로 주요 장착 캐리의 기대치가 하락했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "생선대가리 평균 등수가 4.15등→4.57등으로 약화됐는데, 속사포 공격 속도 너프와 명멸검 너프로 평타 캐리 축이 함께 내려간 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:속사포:f271519a",
+      "note:tft:18.2:item:명멸검:ce978bd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 150,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 948
+  }
+}

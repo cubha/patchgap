@@ -1,0 +1,31 @@
+{
+  "deltaId": "trait:DA_18_Coven:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T15:04:56.266Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃이 효과 150%로 축소되고 로비당 1명 제한이 되어 특수 특성 조합 시도가 줄었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 등 상징 계열 너프로 상징 기반 변칙 빌드 선호가 낮아진 영향으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "악의 여단 등장률이 1.4%→1.1%(-0.3%p)로 내려갔고, 보상 골드 상향에도 불구하고 흡수하는 꽃의 로비당 1명 제한 등 변칙 빌드 억제가 배경일 수 있습니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:흡수하는-꽃:cb5ebf63"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 782
+  }
+}

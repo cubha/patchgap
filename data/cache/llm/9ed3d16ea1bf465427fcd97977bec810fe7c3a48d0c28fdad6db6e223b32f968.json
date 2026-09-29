@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Vayne:JUNGLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:08:31.281Z",
+  "parsed": {
+    "causes": [],
+    "summary": "베인 정글 픽률은 0.0%에서 0.0%로 변화 -0.0%p, CI[-0.1%p, 0.0%p]로 사실상 무변화라 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 271
+  }
+}

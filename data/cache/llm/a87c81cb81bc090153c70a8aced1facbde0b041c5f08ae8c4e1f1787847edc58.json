@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Alistar:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T08:59:26.136Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+        "text": "서포터 아이템 체력이 초중반 30/100 → 0/60으로 줄어 라인전 탱킹에 의존하는 알리스타가 직격타를 받았습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
+        "text": "아펠리오스 절단검 회복량 등 원딜 강화로 자체 생존형 바텀 조합 선호가 늘며 알리스타 수요가 밀렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "서포터 아이템 체력이 30/100/200에서 0/60/200으로 줄며 라인전 탱킹 기반이 약해져 알리스타 픽률이 13.2%→10.8%로 하락했습니다.",
+    "summaryCites": [
+      "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 542
+  }
+}

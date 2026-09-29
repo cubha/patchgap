@@ -1,0 +1,36 @@
+{
+  "deltaId": "unit:DA_18_Diana:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:13:07.383Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상이 전 구간 상향돼 주문력 캐리인 다이애나의 상한이 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:83333c69",
+        "text": "검은 가시 주문력 유닛 희생 시 마나 재생이 1.7에서 2로 올라 스킬 회전이 빨라졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:루덴의-폭풍:9f4a135d",
+        "text": "루덴의 폭풍 처치 시 피해량 100→130 상향이 광역 주문력 딜러 가치를 함께 올렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "다이애나 순방률 48.1%→50.0%(+1.9%p)이나 CI가 0을 포함해 유의하지 않고, 어둠의 의식 주문력 보상 상향 등 주문력 계열 상향이 겹친 것으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:어둠의-의식:a8212aab"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 756
+  }
+}

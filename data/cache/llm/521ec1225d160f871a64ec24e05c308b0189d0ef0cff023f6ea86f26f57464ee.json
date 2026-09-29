@@ -1,0 +1,36 @@
+{
+  "deltaId": "unit:DA_Lux18_Base:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:58:42.240Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:기원자-상징:dfaf6790",
+        "text": "기원자 상징의 마나당 주문력이 10%→8%로 하향돼 주문력 캐리 럭스의 후반 화력이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 적중 피해가 전 구간 하향되어 마법 딜러 아이템 조합의 기대값이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징의 공격력/주문력이 15%→10%로 줄어 마법 캐리 보드 전반의 세기가 약화됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "럭스는 직접 상향에도 순방률이 68.6%→66.6%로 -2.0%p인데, CI가 0을 포함해 유의하지 않고 기원자 상징 주문력 하향이 마법 캐리 환경을 눌렀습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:기원자-상징:dfaf6790"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 683
+  }
+}

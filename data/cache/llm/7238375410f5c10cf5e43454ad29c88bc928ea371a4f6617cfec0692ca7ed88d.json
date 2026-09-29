@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:MonkeyKing:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:08:44.111Z",
+  "parsed": {
+    "causes": [],
+    "summary": "오공은 이번 패치의 직접 변경 노트가 없으며, 후보 목록에서도 오공과 상호작용할 만한 간접 영향(정글/탑 챔피언 대상 아이템이나 상성 챔피언 조정) 근거를 찾을 수 없어, 승률 하락(-10.2%p, 95% CI [-18.7%, -1.4%])의 원인을 현재 후보로 설명하기 어렵습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 133,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 368
+  }
+}

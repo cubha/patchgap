@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Thresh:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:27:10.344Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:블리츠크랭크:5466e16b",
+        "text": "블리츠크랭크가 마나 보호막을 현재 마나 기준으로 바꾸는 등 연속 너프를 받으며, 그랩 서포터 수요가 쓰레쉬로 옮겨가 밴 집중도가 올라갔을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:블리츠크랭크:80b7656e",
+        "text": "블리츠크랭크 Q 사거리가 1,080에서 1,050으로 줄어 훅 서포터 선호가 쓰레쉬 쪽으로 기울었을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:질리언:4e816012",
+        "text": "질리언 R 재사용 대기시간이 150/120/90초로 늘어나며 경쟁 서포터 입지가 약화, 쓰레쉬 밴 우선순위가 상승했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:레나타-글라스크:e7dd6afe",
+        "text": "레나타 글라스크 R 쿨타임이 150/130/110초로 크게 늘어 상위 서포터 구도가 재편된 영향으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "쓰레쉬는 E 피해량 너프를 받았지만 밴률이 4.1%→7.5%로 올랐는데, 블리츠크랭크의 마나 보호막·Q 사거리 연속 너프로 그랩 서포터 수요가 쓰레쉬에 몰린 영향이 유력합니다.",
+    "summaryCites": [
+      "note:26.17:champion:블리츠크랭크:5466e16b",
+      "note:26.17:champion:블리츠크랭크:80b7656e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 854
+  }
+}

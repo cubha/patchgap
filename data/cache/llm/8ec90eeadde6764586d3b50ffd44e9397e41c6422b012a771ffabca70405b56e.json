@@ -1,0 +1,36 @@
+{
+  "deltaId": "item:DA_IonicSpark:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:41:17.320Z",
+  "parsed": {
+    "summary": "이온 충격기 평균 등수가 4.07등에서 3.77등으로 개선됐으며, 스태틱의 단검 주문력 15%→25% 등 마법 피해 강화 흐름이 배경으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.3:item:스태틱의-단검:ccfc29ef"
+    ],
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
+        "confidence": "low",
+        "text": "스태틱의 단검 기본 주문력 15%→25% 상향으로 주문력 아이템 조합 보드가 강해졌습니다."
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
+        "confidence": "low",
+        "text": "베이가 스킬 피해량 상향으로 주문력 캐리 채용이 늘어 이온 충격기 수요가 커졌습니다."
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
+        "confidence": "low",
+        "text": "알리스타 스킬 피해량 대폭 상향으로 주문력 기반 조합 성적이 함께 올랐습니다."
+      }
+    ]
+  },
+  "usage": {
+    "inputTokens": 452,
+    "cacheReadInputTokens": 17064,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1468
+  }
+}

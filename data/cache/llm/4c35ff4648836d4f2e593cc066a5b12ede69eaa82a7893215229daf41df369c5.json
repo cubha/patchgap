@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Zeri:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:47:24.656Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해가 최대 체력의 6~10%에서 4~10%로 하향돼 원거리 딜러 수요가 제리로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:02ad4f34",
+        "text": "베인 W 최소 피해량이 10 감소해 초중반 경쟁력이 약화된 점도 제리 선호를 키웠습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 올라 평타 기반 제리의 빌드 효율이 상승했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "제리 픽률이 8.0%→11.1%(+3.1%p) 상승했습니다. 베인 W 하향과 폭풍갈퀴 공속 25% 버프가 원딜 선호를 제리 쪽으로 옮긴 것으로 판단됩니다.",
+    "summaryCites": [
+      "note:26.17:champion:vayne:1da6ddd1",
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 121,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 671
+  }
+}

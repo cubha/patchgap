@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:MissFortune:BOTTOM:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T02:58:10.727Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:other:증강:3a8dc47b",
+        "text": "치명적 미사일 증강이 치명타 확률 기반 미사일 개수를 4개에서 3개로 하향되면서, 크리티컬 아이템 빌드를 즐겨 쓰는 미스 포츈의 스노우볼 잠재력이 간접적으로 약화되었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
+        "text": "애쉬의 W 사거리 및 피해량 버프로 원거리 라인전 구도에서 경쟁 관계인 미스 포츈이 상대적으로 불리해졌을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "미스 포츈은 Q/E/R 및 이동 속도 등 직접 버프를 받았음에도 승률이 49.5%에서 42.6%로 크게 하락했는데(95% CI가 0을 포함해 통계적으로는 불확실하지만), 이는 직접 패치 내용과 불일치하는 announced-inconsistent 상태로, 치명타 관련 증강 하향이나 경쟁 원거리 딜러 버프 같은 간접적 메타 요인이 영향을 미쳤을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:other:증강:3a8dc47b",
+      "note:26.17:champion:애쉬:7d7ed661"
+    ]
+  },
+  "usage": {
+    "inputTokens": 139,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1359
+  }
+}

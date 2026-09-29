@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Soraka:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:36:43.910Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징의 공격력/주문력이 15%에서 10%로 줄어 요정 계열 조합 채용이 줄었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:기원자-상징:dfaf6790",
+        "text": "기원자 상징 주문력 계수가 10%에서 8%로 낮아져 마나 활용형 서포터 수요가 감소했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:타릭:fbe6df4f",
+        "text": "타릭 회복량이 주문력 200/300에서 250/375로 올라 힐러 자리를 잠식했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:ac1690b7",
+        "text": "아이번 보호막이 주문력 165/300에서 185/350으로 강화돼 지원 슬롯 경쟁에서 우위를 가졌습니다.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "소라카 등장률이 19.5%→14.0%로 5.5%p 급락했는데, 타릭 회복량·아이번 보호막 상향으로 지원 슬롯을 내준 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:타릭:fbe6df4f",
+      "note:tft:18.2:champion:아이번:ac1690b7"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 782
+  }
+}

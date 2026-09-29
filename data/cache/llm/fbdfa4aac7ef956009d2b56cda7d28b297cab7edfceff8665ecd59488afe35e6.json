@@ -1,0 +1,44 @@
+{
+  "deltaId": "unit:DA_18_Shen:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:34:15.780Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:파수꾼:672d0ed9",
+        "text": "파수꾼 보호막이 주문력 400/500에서 350/450으로 줄어 보호막 탱커 계열 수요가 함께 감소했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:타릭:fbe6df4f",
+        "text": "타릭 회복량이 주문력 200/300→250/375로 올라 보호막·유지력 슬롯 경쟁에서 쉔을 밀어냈습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:레오나:665ef4f0",
+        "text": "레오나 방어·마저가 60/80/100/130으로 강화돼 전방 탱커 자리를 대체한 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:e1a56234",
+        "text": "아이번 시작 칸 3칸화와 보호막 증가로 보호막 공급 대체재가 늘었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "쉔은 보호막 버프를 받았지만 등장률이 9.2%→6.7%(-2.5%p) 하락했는데, 파수꾼 보호막 너프와 타릭·레오나 등 경쟁 탱커 강화가 원인입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:파수꾼:672d0ed9",
+      "note:tft:18.2:champion:타릭:fbe6df4f",
+      "note:tft:18.2:champion:레오나:665ef4f0"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 970
+  },
+  "proseRepairAttempts": 0
+}

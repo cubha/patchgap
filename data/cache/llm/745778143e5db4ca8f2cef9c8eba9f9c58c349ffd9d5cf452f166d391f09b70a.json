@@ -1,0 +1,37 @@
+{
+  "deltaId": "unit:DA_18_Alistar:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:47:11.177Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마오카이:c1cfbbf3",
+        "text": "마오카이 마나가 30/100으로 늘어 시전이 느려지면서, 같은 저코스트 탱커 자리를 알리스타가 대체한 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력이 250에서 150으로 줄어, 상징 대신 전방 유닛 수를 늘리는 구성이 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:타릭:f5dd9d03",
+        "text": "타릭 기본 보호막이 100/225로 낮아져 초중반 탱커 선택지가 알리스타로 이동했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "알리스타 직접 변경은 없지만 등장률이 9.5%→15.4%(+5.9%p)로 급등했고, 마오카이 마나 증가·타릭 보호막 하향으로 비는 전방 자리를 대체한 것이 유력합니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:마오카이:c1cfbbf3",
+      "note:tft:18.2:champion:타릭:f5dd9d03"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 979
+  }
+}

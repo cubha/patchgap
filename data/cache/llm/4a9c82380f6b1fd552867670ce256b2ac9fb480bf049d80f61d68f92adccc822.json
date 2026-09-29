@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Lulu:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:12:37.324Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 쿨다운이 전 구간 11초로 고정 너프되며 인챈터 픽이 룰루로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+        "text": "노틸러스 Q 피해량 너프로 서포터 경쟁 구도가 약화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
+        "text": "바드 방어력이 32+레벨당 4.7로 하향돼 서포터 선택지 일부가 룰루로 흡수됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수 들끓는 일격 중첩이 4초로 늘며 평타 하이퍼캐리 가치가 올라 룰루 수요가 증가했습니다.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "룰루 픽률이 15.0%→19.7%(+4.7%p)로 올랐습니다. 세라핀 E 쿨다운 11초 고정 너프와 구인수 중첩 4초 버프의 반사 효과로 보입니다.",
+    "summaryCites": [
+      "note:26.18:champion:seraphine:4519a08c",
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 781
+  }
+}

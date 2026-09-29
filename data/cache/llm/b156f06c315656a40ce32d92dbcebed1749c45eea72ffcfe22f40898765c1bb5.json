@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Rumble:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:12:36.531Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:그라가스:a76db06f",
+        "text": "같은 AP 브루저 포지션 경쟁자인 그라가스가 Q 피해량과 쿨다운 전반에서 너프를 받아, 럼블이 탑·정글 AP 자리에서 반사이익을 봤을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:암베사:82c4e3d3",
+        "text": "탑 라인 강자 암베사의 E 쿨다운과 궁극기 계수 너프로 상대 구도가 완화된 영향도 일부 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:system:체력-재생-정수:394e3a0d",
+        "text": "체력 재생 정수가 5초당 +1.5에서 +3.0으로 강화되어, 마나 없이 체력만 관리하는 럼블의 라인 지속력이 상대적으로 좋아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:a83e2425",
+        "text": "반대로 가렌 공격력 55.5→60 등 탑 근접 챔피언 버프는 럼블에게 불리한 요소로, 이번 상승세를 전부 메타 변동으로 설명하긴 어렵습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "럼블 직접 변경은 없으나 그라가스 Q 피해량 하향, 암베사 E 쿨다운 증가로 AP 브루저 경쟁이 줄어든 영향이 승률 9.9%p 상승의 유력한 배경입니다.",
+    "summaryCites": [
+      "note:26.17:champion:그라가스:a76db06f",
+      "note:26.17:other:암베사:82c4e3d3"
+    ]
+  },
+  "usage": {
+    "inputTokens": 119,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 944
+  }
+}

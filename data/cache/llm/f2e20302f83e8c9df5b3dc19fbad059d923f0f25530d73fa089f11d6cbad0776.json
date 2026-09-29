@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Rammus:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:37:55.414Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:item:영원한-서약:2e842b57",
+        "text": "영원한 서약의 탱커 스킬 사용 시 마나가 15→10으로 줄어 전방 보호막 유닛 기용 가치가 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:엄호대:ad7723b2",
+        "text": "엄호대 3단계 방어·마저가 120→115로 내려가 탱커 조합 자체의 채택이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:알리스타:bfb34c5d",
+        "text": "알리스타가 회복·피해 모두 크게 올라 같은 전방 자리를 두고 람머스를 밀어냈습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:타릭:f0d46c43",
+        "text": "타릭 회복량 상향으로 보호막형 탱커 선택지가 타릭 쪽으로 이동했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "람머스는 보호막 상향에도 등장률이 5.7%→3.7%로 떨어졌는데, 영원한 서약 마나 너프와 알리스타 대폭 상향으로 전방 자리를 뺏긴 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.3:item:영원한-서약:2e842b57",
+      "note:tft:18.3:champion:알리스타:bfb34c5d"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 750
+  }
+}

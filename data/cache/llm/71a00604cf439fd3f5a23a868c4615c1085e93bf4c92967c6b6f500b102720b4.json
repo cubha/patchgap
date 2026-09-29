@@ -1,0 +1,38 @@
+{
+  "deltaId": "item:DA_Artifact_Fishbones:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:16:05.165Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:소매치기:bdc157ad",
+        "text": "소매치기 골드 생성 확률이 15%→20%로 올라 경제 아이템 경쟁에서 생선대가리가 밀렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:소매치기:c2fdf816",
+        "text": "소매치기 가격이 3골드→2골드로 내려 저비용 경제 선택지가 우선됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:금빛-운명:c07f6e42",
+        "text": "금빛 운명+ 골드 보상 6→5골드 등 경제 총량 축소가 골드 기반 운영의 이점을 줄였을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "생선대가리 순방률이 59.3%→47.4%(-11.8%p)로 급락했고, 소매치기 확률 20% 상향·가격 2골드 인하로 경제 아이템 경쟁에서 밀린 영향으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:소매치기:bdc157ad",
+      "note:tft:18.2:item:소매치기:c2fdf816"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 717
+  },
+  "proseRepairAttempts": 0
+}

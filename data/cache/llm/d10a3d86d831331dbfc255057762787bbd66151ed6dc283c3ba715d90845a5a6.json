@@ -1,0 +1,18 @@
+{
+  "deltaId": "unit:DA_18_Kayle:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:17:35.714Z",
+  "parsed": {
+    "causes": [],
+    "summary": "평균 등수 +0.01등은 95% 신뢰구간이 0을 포함해 사실상 무변화이며, 패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 151,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 912
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Syndra:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:42:02.641Z",
+  "parsed": {
+    "causes": [],
+    "summary": "신드라에 대한 직접 변경 노트가 없고, 후보 목록에서도 신드라의 픽률 하락(-1.83%p)을 설명할 만한 간접 영향(상대 챔피언 버프나 관련 아이템/시스템 변경)을 찾을 수 없어 원인 불명으로 판단됩니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 141
+  }
+}

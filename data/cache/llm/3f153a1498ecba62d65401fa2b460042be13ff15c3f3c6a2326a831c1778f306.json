@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Aurora:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:09:15.583Z",
+  "parsed": {
+    "causes": [],
+    "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 309
+  }
+}

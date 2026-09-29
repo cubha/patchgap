@@ -1,0 +1,43 @@
+{
+  "deltaId": "champion:Pyke:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T05:31:16.245Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "노틸러스 공격력 61→58 너프로 메이킹 서포트 선호가 파이크로 쏠렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+        "text": "노틸러스 Q 후반 피해량 265→245 하향이 경쟁 서포트 입지를 줄였습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 쿨다운이 9초→11초로 고정되며 서포트 밴 우선순위가 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
+        "text": "바드 방어력 34→32 너프로 서포트 밴 표가 파이크에 몰렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "파이크 직접 변경은 없고, 노틸러스·세라핀·바드 등 경쟁 서포트 너프로 밴 표가 쏠리며 밴률이 4.1%p 올랐습니다.",
+    "summaryCites": [
+      "note:26.18:champion:nautilus:b6aff2b2",
+      "note:26.18:champion:seraphine:4519a08c",
+      "note:26.18:champion:bard:453ef7b4"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 604
+  }
+}

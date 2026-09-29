@@ -1,0 +1,37 @@
+{
+  "deltaId": "item:DA_Quicksilver:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "c5fe11838e969011401862d4b7aaeac11b42714f3a0bfbeafa868d6e7d917140",
+  "generatedAt": "2026-09-26T19:25:59.079Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 너프로 수은을 함께 끼던 공속 캐리 빌드의 상한이 낮아졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 상위 단계 공속 3/5/9/15%→3/5/8/12% 너프로 수은 장착 평타 캐리 조합의 체급이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 유지 시간 조건 변경으로 수은을 쓰던 원거리 캐리 축의 순방 기대치가 흔들렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "수은 평균 등수가 3.98등→4.19등으로 악화했는데, 명멸검·속사포 공격 속도 너프로 수은을 끼던 평타 캐리 축이 약해진 영향으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:명멸검:ce978bd1",
+      "note:tft:18.2:system:속사포:f271519a"
+    ]
+  },
+  "usage": {
+    "inputTokens": 149,
+    "cacheReadInputTokens": 17042,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 895
+  }
+}

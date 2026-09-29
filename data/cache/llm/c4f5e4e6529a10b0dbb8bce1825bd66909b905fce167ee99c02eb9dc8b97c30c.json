@@ -1,0 +1,31 @@
+{
+  "deltaId": "trait:DA_18_ApexPredator:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:38:31.418Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카직스:c60397e3",
+        "text": "카직스 기본 공격력 30→40 버프로 이 특성을 끼는 조합 채용이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:은빛-여명:185091b8",
+        "text": "은빛 여명 공격력 125%→150% 상향이 근접 딜러 축 조합의 가치를 함께 올렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카직스 공격력 30→40 상향이 최상위 포식자 채용을 끌어올려 등장률이 8.7%→13.2%로 올랐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:카직스:c60397e3"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 564
+  }
+}

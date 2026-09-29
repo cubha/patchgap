@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Tristana:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "1b4ec346ad0605238fd935fc97d52d05e7d396b4fcc038faca64e9e36e85b1cf",
+  "generatedAt": "2026-09-26T19:20:58.734Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 4/6단계 추가 공격력이 45/65%에서 40/60%로 하향되며 사냥꾼 계열 원거리 캐리 수요가 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
+        "text": "사냥꾼 상징 처치 관여당 공격력이 18%에서 15%로 낮아져 사냥꾼 확장 빌드의 가치가 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:황금-징수의-총:cce21382",
+        "text": "황금 징수의 총 공격력이 40%에서 35%로 하향돼 AD 원거리 캐리 채용이 위축됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
+        "text": "스태틱의 단검 주문력 15%→25% 상향으로 AP 캐리 선호가 커지며 AD 캐리 자리를 밀어냈습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "트리스타나 등장률이 4.9%→3.4%(-1.5%p)로 떨어졌습니다. 사냥꾼 추가 공격력 하향과 황금 징수의 총 너프가 AD 캐리 수요를 줄인 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.3:system:사냥꾼:616a50ac",
+      "note:tft:18.3:item:황금-징수의-총:cce21382"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 8613,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 746
+  }
+}

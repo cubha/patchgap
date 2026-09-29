@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Zeri:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:36:35.007Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴(스톰레이저)의 공격 속도 증가량이 20%→25%로 상향되어, 제리의 핵심 코어 아이템 성능이 강화되며 간접적으로 승률 상승에 기여했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:8f360fb2",
+        "text": "활력증진의 펜던트 계열(리글의 랜턴/야생의 섬광 조합) 아이템에 공격 속도 30%가 신규 부여되어, 제리가 자주 사용하는 지속 공격형 아이템 트리가 강화된 것이 간접 영향을 줬을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:fda607e4",
+        "text": "활력증진의 펜던트의 신경 자극 효과(체력/마나 회복량 상승)가 강화되어 원거리 지속 딜러인 제리의 지속력이 간접적으로 향상됐을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "제리 자체에 대한 직접 변경 노트는 없지만, 제리의 핵심 빌드 아이템인 폭풍갈퀴(공격 속도 20%→25%)와 활력증진의 펜던트 계열(공격 속도 30% 신규 부여, 신경 자극 회복량 상승)이 상향되어 아이템 파급 효과로 승률이 50.7%→56.4%로 상승했을 가능성이 있습니다(95% CI [0.012, 0.103], n=797/1111).",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43",
+      "note:26.17:item:활력증진의-펜던트:8f360fb2"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1137
+  }
+}

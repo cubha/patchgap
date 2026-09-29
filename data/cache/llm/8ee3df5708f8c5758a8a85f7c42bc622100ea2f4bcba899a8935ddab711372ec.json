@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Taliyah:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T00:57:47.660Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
+        "text": "카사딘 Q 주문력 계수가 70%→80%로 올라 미드 마법사 경쟁에서 탈리야 자리를 일부 대체했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
+        "text": "에코 Q 마나 소모가 10 감소해 미드·정글 양쪽 선호도가 올라간 점이 탈리야 픽률 하락과 맞물립니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:cassiopeia:957165bc",
+        "text": "카시오페아 Q 주문력 계수 65%→75% 등 후반 스케일 강화로 마법사 픽 수요가 분산됐을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "탈리야 직접 변경은 없고, 카사딘 Q 계수 80% 상향과 에코 Q 마나 10 감소 같은 경쟁 미드 버프가 픽률 -3.0%p 하락의 유력한 배경입니다.",
+    "summaryCites": [
+      "note:26.18:champion:kassadin:d631af52",
+      "note:26.18:champion:ekko:dfd6f002"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 609
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "deltaId": "champion:Yunara:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:13:47.028Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 은화살의 최대 체력 비례 고정 피해가 6/7/8/9/10%에서 4/5.5/7/8.5/10%로 하향되어, 원거리 딜러 선택이 유나라로 분산된 것으로 보입니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:이즈리얼:5b9e4881",
+        "text": "이즈리얼 Q 총공격력 계수가 120%에서 110%로 하향되며 인기 원딜의 체급이 낮아져 유나라 픽이 늘어난 영향이 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트위치:8757056b",
+        "text": "트위치 1레벨 공격 속도가 0.679에서 0.658로 하향되어 원딜 구도에서 유나라의 상대적 매력이 올라갔습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트리스타나:0d52db0d",
+        "text": "트리스타나 공격 속도 증가량이 4%에서 3%로 줄어든 것도 원딜 픽 분산 요인입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 상향되어 평타 중심 원딜인 유나라의 빌드 효율이 개선됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "유나라 픽률이 16.0%→22.2%(+6.1%p)로 올랐는데, 베인 W 고정 피해와 이즈리얼 Q 계수 하향 등 경쟁 원딜 너프로 픽이 분산된 간접 효과로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:vayne:1da6ddd1",
+      "note:26.17:champion:이즈리얼:5b9e4881"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1025
+  }
+}

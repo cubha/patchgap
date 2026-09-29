@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Lulu:UTILITY:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:52:11.721Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:thresh:83ce59dd",
+        "text": "쓰레쉬 E 피해량이 75→65(계수 70%→60%)로 너프되며 서포터 수요가 룰루로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 버프로 공속형 원딜이 강해져 룰루 조합 가치가 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해 너프로 원딜 구도가 바뀌며 룰루가 보조할 대체 캐리 선택이 늘었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "룰루 픽률이 10.3%→14.6%(+4.3%p) 상승했습니다. 쓰레쉬 E 너프로 인한 서포터 수요 이동과 폭풍갈퀴 공속 버프가 주 요인입니다.",
+    "summaryCites": [
+      "note:26.17:champion:thresh:83ce59dd",
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 695
+  }
+}

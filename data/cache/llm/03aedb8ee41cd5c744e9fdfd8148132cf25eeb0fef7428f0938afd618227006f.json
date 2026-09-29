@@ -1,0 +1,47 @@
+{
+  "deltaId": "unit:DA_18_LeBlanc:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:07:33.745Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상이 전 구간 상향돼 주문력 캐리 수요가 커졌고, 르블랑이 그 수혜를 받았습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:루덴의-폭풍:9f4a135d",
+        "text": "루덴의 폭풍 처치 시 피해가 100에서 130으로 올라 광역 마법 캐리 채용이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:83333c69",
+        "text": "검은 가시의 주문력 유닛 희생 마나 재생이 1.7에서 2로 올라 주문력 캐리 운용이 쉬워졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:ef16a6f2",
+        "text": "마스터 이 주문력 형태 피해 하향으로 경쟁 주문력 캐리 자리가 비었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:티모:68e7c01d",
+        "text": "티모 작은 버섯 피해 하향으로 마법 캐리 수요가 르블랑 쪽으로 이동했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "르블랑 등장률이 5.8%→11.0%(+5.2%p)로 급등했습니다. 어둠의 의식 주문력 보상 상향과 루덴의 폭풍 강화가 주문력 캐리 수요를 끌어올린 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:어둠의-의식:a8212aab",
+      "note:tft:18.2:item:루덴의-폭풍:9f4a135d"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1099
+  }
+}

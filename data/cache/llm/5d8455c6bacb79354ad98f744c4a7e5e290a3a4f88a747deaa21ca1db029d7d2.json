@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Sivir:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:41:06.073Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:6d438477",
+        "text": "미스 포츈이 Q 피해량 상향 등 전방위 버프를 받아 원딜 픽 파이를 잠식했고, 시비르가 밀려난 것으로 보입니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:bd82e946",
+        "text": "미스 포츈 기본 이동 속도 325 → 335 상향으로 바텀 경쟁 구도가 바뀌며 시비르 선호도가 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
+        "text": "애쉬 W 피해량·사거리 상향으로 포킹형 원딜 대안이 강해져 시비르 픽 수요가 분산됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20% → 25% 상향으로 지속 평타형 원딜이 반사이익을 얻어, 스킬 의존형 시비르의 상대적 매력이 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "시비르 픽률이 3.8%에서 3.3%로 -0.5%p 내렸는데, 미스 포츈 Q 피해량·이동 속도 상향 등 경쟁 원딜 버프에 밀린 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:미스-포츈:6d438477",
+      "note:26.17:champion:미스-포츈:bd82e946"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 777
+  }
+}

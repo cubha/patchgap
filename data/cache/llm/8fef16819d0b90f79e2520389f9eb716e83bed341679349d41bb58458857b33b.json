@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:LeeSin:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:40:12.540Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:3f4d7db5",
+        "text": "정글 아이템인 리글의 랜턴(활력증진의 펜던트 계열) 조합식이 마드레드의 갈퀴손+곡궁으로 변경되고 공격력이 삭제되며 공격속도가 30% 추가되는 등 정글 아이템 전반의 성능이 재조정되어, 이 아이템에 의존하던 리 신의 초반 정글 클리어/전투 효율이 간접적으로 영향을 받았을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "경쟁 정글러인 트런들의 W 공격 속도가 큰 폭으로 상향되어 정글 픽률 경쟁에서 리 신의 상대적 선택 비중이 줄어들었을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
+        "text": "녹턴의 체력·방어력 하향으로 인해 정글 메타 내 픽 구성이 변화하면서 리 신의 픽률에도 간접적 파급 효과가 있었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "리 신은 이번 패치에서 직접적인 챔피언 변경 사항이 없음에도 픽률이 25.93%→23.8%(약 -2.1%p, 95% CI 모두 음수)로 유의미하게 감소했는데, 이는 정글 아이템(리글의 랜턴 계열) 리워크와 트런들·녹턴 등 경쟁 정글러 밸런스 변화가 겹쳐 나타난 간접 효과로 추정됩니다.",
+    "summaryCites": [
+      "note:26.17:item:활력증진의-펜던트:3f4d7db5",
+      "note:26.17:champion:trundle:85be03ea"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1073
+  }
+}

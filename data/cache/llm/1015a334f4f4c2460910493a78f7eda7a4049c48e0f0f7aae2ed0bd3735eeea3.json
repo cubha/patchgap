@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:MissFortune:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:22:39.510Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:other:증강:fc188230",
+        "text": "미스 포츈 시너지 증강 '한 발에 두 놈'이 골드에서 프리즘 등급으로 올라가 초반에 집기 어려워졌고, 핵심 빌드 완성이 늦어져 승률이 내려갔을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:증강:3a8dc47b",
+        "text": "'치명적 미사일' 미사일 최대 개수가 4개에서 3개로 줄어, 원거리 광역 딜 증강에 의존하던 미스 포츈의 폭발력이 약화됐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:불타는-향로:42df8461",
+        "text": "도미닉 경의 인사 공격력 30→45 등 방어구 관통 아이템 강화로 근접 브루저·암살 조합이 강해져, 물몸인 미스 포츈의 생존 환경이 나빠졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "미스 포츈은 버프를 받았는데도 승률이 49.5%→42.6%(-6.9%p)로 떨어졌으나 95% CI가 0을 포함해 유의성은 약하며, 시너지 증강 '한 발에 두 놈'의 프리즘 등급 상향과 '치명적 미사일' 미사일 수 감소가 체감 하락 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:other:증강:fc188230",
+      "note:26.17:other:증강:3a8dc47b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 939
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Nocturne:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:51:25.001Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "트런들 W 공격 속도 30~110%로 상향돼 정글 경쟁 구도에서 녹턴 입지가 밀렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
+        "text": "초가스 E 기본 피해량 10 상향으로 근접 탱커 상대 난이도가 올랐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 25%로 상향돼 경쟁 AD 챔피언들의 상대적 성능이 올랐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "녹턴 승률이 48.9%→40.1%(-8.8%p)로 급락했으나 CI 하단이 0에 닿고 표본이 212판이라 과대 추정 소지가 있으며, 트런들 공속 상향 등 정글 경쟁 변화가 일부 작용했을 수 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:trundle:85be03ea"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 687
+  }
+}

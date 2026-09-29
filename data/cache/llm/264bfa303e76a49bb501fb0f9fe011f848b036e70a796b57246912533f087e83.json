@@ -1,0 +1,43 @@
+{
+  "deltaId": "trait:DA_18_Rapidfire:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T15:02:33.890Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:애쉬:5bb903ca",
+        "text": "애쉬 지속 피해가 공격력 5/8에서 9/14로 크게 올라 속사포 조합의 딜량을 보강했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:이즈리얼:d819af2a",
+        "text": "이즈리얼 1차 피해량이 공격력 235/355에서 250/375로 상향돼 속사포 캐리 축이 강해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:원시-상징:32460e11",
+        "text": "원시 상징 공격 속도 25%→35% 상향이 공격속도 기반 속사포 보드와 맞물렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:바루스:c5280269",
+        "text": "바루스 스킬 피해량 상향이 원거리 딜러 보드의 체급을 함께 끌어올렸습니다.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "속사포 특성 수치는 하향됐지만 애쉬·이즈리얼·바루스 등 소속 딜러 상향으로 순방률이 1.2%p 올랐습니다(CI가 0 포함, 유의성은 약함).",
+    "summaryCites": [
+      "note:tft:18.2:champion:애쉬:5bb903ca",
+      "note:tft:18.2:champion:이즈리얼:d819af2a",
+      "note:tft:18.2:champion:바루스:c5280269"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 896
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Xerath:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:28:29.777Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:아리:a1938c18",
+        "text": "미드 경쟁자인 아리가 기본 체력 재생 6.1→4.5로 크게 깎이며 라인 유지력이 약해져, 포킹형 제라스가 상대적으로 이득을 봤을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:아리:de1b72d9",
+        "text": "아리 기본 체력이 460→440으로 줄어 제라스의 원거리 견제에 더 취약해진 점이 매치업 승률에 유리하게 작용했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:그라가스:fec76b2f",
+        "text": "그라가스가 Q 피해·쿨다운과 R 쿨다운(100/90/80초→130/115/100초) 전반 너프를 받아 미드 경쟁 구도가 완화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:이블린:8bf47559",
+        "text": "이블린 W 쿨다운 15초→20초, 마나 소모 40 추가 등 정글 갱킹력 약화로 취약한 제라스의 생존률이 올랐을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "제라스는 체력·Q 너프에도 승률이 46.9%→50.0%로 올랐지만 95% CI가 [-3.5%p, 9.7%p]로 0을 포함해 노이즈 가능성이 크며, 아리 체력·체젠 너프 등 미드 경쟁자 약화가 간접 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:아리:a1938c18",
+      "note:26.17:champion:아리:de1b72d9"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 919
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Fiora:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:07:20.746Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+        "text": "드레이븐 기본 공격력 62→64로 정통 원딜 경쟁력이 올라 비주류 하단 픽이 밀렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+        "text": "루시안 Q 피해량 상향으로 하단 선택지가 강화돼 피오라 원딜 수요가 줄었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라 버프가 R 회복량 중심이라 탑 1대1 구도에 유리해 사용자가 탑으로 쏠렸습니다.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "피오라 원딜 픽률 0.1%→0.0%(-0.1%p)는 R 대결투 회복 상향이 탑 활용에 맞춰져 하단 실험픽이 빠진 결과이며, 표본도 3871로 작습니다.",
+    "summaryCites": [
+      "note:26.19:champion:fiora:4ff3c93f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 646
+  }
+}

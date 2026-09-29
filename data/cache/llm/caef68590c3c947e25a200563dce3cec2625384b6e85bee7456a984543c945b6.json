@@ -1,0 +1,43 @@
+{
+  "deltaId": "champion:Kaisa:BOTTOM:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:37:20.104Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:5400a762",
+        "text": "카이사가 자주 사용하는 신경 자극(구 에센스 리버) 계열 아이템의 조합 가격이 인상되고(750→350은 인하지만 관련 하위 아이템 재구성) 공격력 옵션이 사라지는 등 아이템 경로가 변경되어, 카이사의 코어 빌드 효율이 간접적으로 저하되었을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:6d438477",
+        "text": "미스 포츈의 Q, E, 기본 능력치 전반에 걸친 큰 버프로 봇라인 원거리 딜러 경쟁에서 미스 포츈의 매력도가 상승하면서, 상대적으로 카이사의 픽률이 잠식되었을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
+        "text": "애쉬 W의 사거리·피해량 버프로 애쉬의 유틸리티/딜 효율이 상승해 원거리 딜러 픽 경쟁에서 카이사의 상대적 매력이 낮아졌을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:이즈리얼:9152ff5a",
+        "text": "이즈리얼 R 계수 버프(70%→100%)로 이즈리얼의 후반 캐리력이 강화되어, 원거리 딜러 포지션에서 카이사와 픽 경쟁을 벌이며 카이사 픽률을 잠식했을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카이사에 대한 직접 패치 노트가 없는 상태에서 픽률이 27.7%→23.85%로 유의미하게 하락한 것은, 미스 포츈·애쉬·이즈리얼 등 경쟁 원거리 딜러들의 버프와 신경 자극류 아이템 개편으로 인한 간접적 파급 효과로 추정되며, 이는 unannounced 판정과 부합합니다.",
+    "summaryCites": [
+      "note:26.17:champion:미스-포츈:6d438477",
+      "note:26.17:champion:애쉬:7d7ed661",
+      "note:26.17:champion:이즈리얼:9152ff5a"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1380
+  }
+}

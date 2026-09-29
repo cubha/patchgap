@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:Olaf:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:38:03.349Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
+        "text": "자헨 Q2 피해량 상향으로 탑 라인 경쟁 구도가 바뀌며 올라프 지분을 잠식했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "올라프 탑 픽률이 11.8%→8.7%(-3.2%p)로 떨어졌으나 직접 조항은 없고, 자헨 Q2 상향에 따른 탑 경쟁 변화가 유일한 단서입니다.",
+    "summaryCites": [
+      "note:26.18:champion:zaahen:bce84005"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 468
+  }
+}

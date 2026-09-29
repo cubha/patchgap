@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Olaf:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-09-28T10:20:52.544Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:khazix:defcade0",
+        "text": "카직스 기본 지속 피해량 상향으로 정글 밴 우선순위가 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:elise:a7bec286",
+        "text": "엘리스 W 공격속도 70~130% 상향으로 정글 밴 표가 분산된 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라 R 회복량 상향으로 탑 밴 대상이 피오라 쪽으로 이동했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "올라프 밴률이 9.8%→6.6%(-3.1%p)로 떨어졌습니다. 직접 변경은 없고 카직스·엘리스 등 정글 버프로 밴 표가 분산된 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.19:champion:khazix:defcade0",
+      "note:26.19:champion:elise:a7bec286"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 514
+  },
+  "proseRepairAttempts": 0
+}

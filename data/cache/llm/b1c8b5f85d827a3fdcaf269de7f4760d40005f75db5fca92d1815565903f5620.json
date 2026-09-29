@@ -1,0 +1,42 @@
+{
+  "deltaId": "trait:DA_18_Defender:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:35:42.618Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
+        "text": "알리스타 스킬 피해량이 주문력 100/150/225→180/270/420으로 대폭 올라 전방 탱커 조합의 가치를 끌어올렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:람머스:9b820b51",
+        "text": "람머스 보호막 흡수량이 350/450/550→400/550/725로 상향돼 엄호대 전선 유지력이 강화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:타릭:f0d46c43",
+        "text": "타릭 체력 회복량 상향(주문력 250/375→275/450)이 탱커 중심 보드의 생존력을 보탰습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:단체-포옹-ii:44b4eda8",
+        "text": "단체 포옹 II 방어력·마법 저항력 9→10 상향이 방어 스탯 기반 조합을 함께 밀어올렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "엄호대는 3단계 방어 수치가 120→115로 깎였지만, 알리스타·람머스 등 탱커 상향에 힘입어 순방률이 49.7%→54.3% 올랐습니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:알리스타:d527c10f",
+      "note:tft:18.3:champion:람머스:9b820b51"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 777
+  }
+}

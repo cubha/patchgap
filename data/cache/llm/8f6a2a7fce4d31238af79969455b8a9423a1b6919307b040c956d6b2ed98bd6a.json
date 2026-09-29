@@ -1,0 +1,32 @@
+{
+  "deltaId": "unit:DA_18_Kennen:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:18:49.755Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:악의-여단:7ff9f003",
+        "text": "악의 여단 정기 365개 보상에 2성 케넨이 추가되어 무상 획득 경로가 생겼습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요들-영혼:c2fdf816",
+        "text": "요들 영혼 가격이 3골드에서 2골드로 낮아져 요들 조합 채용이 늘었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "악의 여단 365 정기 보상에 2성 케넨이 추가되면서 케넨 등장률이 19.6%→26.4%(+6.8%p)로 올랐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:악의-여단:7ff9f003"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 481
+  },
+  "proseRepairAttempts": 0
+}

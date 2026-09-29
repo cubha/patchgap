@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Thresh:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:28:11.807Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:블리츠크랭크:5466e16b",
+        "text": "경쟁 후크 서포터 블리츠크랭크가 마나 보호막을 최대 마나 50%에서 현재 마나 50%로 약화당해, 그 수요가 쓰레쉬로 옮겨간 것으로 보입니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:블리츠크랭크:80b7656e",
+        "text": "블리츠크랭크 Q 사거리가 1,080에서 1,050으로 줄고 마나 소모도 늘어, 그랩 서포터 1순위 자리가 쓰레쉬로 이동했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:블리츠크랭크:7b35d60d",
+        "text": "블리츠크랭크 R 쿨타임이 30초에서 40초로 늘어 한타 기여가 줄면서, 유틸형 탱커 서포터인 쓰레쉬 선호가 커졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:불타는-향로:48821869",
+        "text": "회복·보호막 효과가 12%에서 10%로 낮아져 엔찬터 서포터 가치가 하락, 상대적으로 쓰레쉬 같은 이니시 서포터 픽이 늘었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "쓰레쉬 E 피해량은 너프됐지만 픽률이 7.3%→10.5%로 올랐는데, 블리츠크랭크의 마나 보호막·Q 사거리 연속 너프로 그랩 서포터 수요가 이동한 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:블리츠크랭크:5466e16b",
+      "note:26.17:champion:블리츠크랭크:80b7656e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 921
+  }
+}

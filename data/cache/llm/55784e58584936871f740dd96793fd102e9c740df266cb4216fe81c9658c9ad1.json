@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Anivia:TOP:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:34:55.167Z",
+  "parsed": {
+    "causes": [],
+    "summary": "애니비아는 26.17 패치노트에서 직접 변경되지 않았으며, 승률이 57.3%에서 44.4%로 급락(n=220→225, 95% CI[-0.218,-0.035])했지만 이를 설명할 만한 간접적 아이템·시스템 변경 후보를 찾지 못했습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 458
+  }
+}

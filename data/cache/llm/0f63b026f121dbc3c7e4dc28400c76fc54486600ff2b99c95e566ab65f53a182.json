@@ -1,0 +1,42 @@
+{
+  "deltaId": "trait:DA_18_Invoker:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:32:14.673Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:item:기원자-상징:04e357a3",
+        "text": "기원자 상징 마나 재생 3→2로 특성 확장 비용 대비 효율이 떨어져 기원자 조합 완성도가 낮아졌습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:마나가-풍부한-토양:2efefbd3",
+        "text": "마나가 풍부한 토양 최대 마나 감소 18%→15%로 기원자 마법사 축의 스킬 회전이 느려졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:개화:67a010bd",
+        "text": "주술 마나가 풍부한 토양 25%→20% 하향으로 마나 가속 기반 기원자 빌드가 함께 약화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:영원한-서약:2e842b57",
+        "text": "영원한 서약 탱커 마나 15→10, 전쟁기계 상징 사망 마나 15→10 등 보조 마나 공급 축소가 겹쳤습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "기원자 평균 등수가 4.47→4.66등(+0.19)으로 밀렸습니다. 기원자 상징 마나 재생 3→2와 마나가 풍부한 토양 하향이 겹친 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.3:item:기원자-상징:04e357a3",
+      "note:tft:18.3:item:마나가-풍부한-토양:2efefbd3"
+    ]
+  },
+  "usage": {
+    "inputTokens": 150,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 904
+  }
+}

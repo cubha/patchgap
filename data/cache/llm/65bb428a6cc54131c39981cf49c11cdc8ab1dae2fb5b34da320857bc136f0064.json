@@ -1,0 +1,43 @@
+{
+  "deltaId": "champion:Yunara:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T08:57:47.119Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
+        "text": "아펠리오스가 무기 전반(화염포 Q 쿨 1초 감소 등) 버프를 받아 원딜 픽 지분을 가져갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
+        "text": "만월총 Q 피해량이 10 상승해 아펠리오스 초반 체감이 좋아지며 경쟁 픽으로 부상했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+        "text": "루시안 Q 기본 피해량이 최대 30 증가해 하단 원딜 선택지가 분산됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+        "text": "드레이븐 기본 공격력 62→64 상향도 원딜 픽 분산에 일부 작용했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "유나라 픽률이 27.1%→24.3%(-2.8%p)로 하락했습니다. 직접 변경은 없고, 아펠리오스 전 무기 버프와 루시안 Q 상향에 원딜 지분을 내준 결과입니다.",
+    "summaryCites": [
+      "note:26.19:champion:aphelios:ccd9a119",
+      "note:26.19:champion:aphelios:fa3a30c8",
+      "note:26.19:champion:lucian:24a11f30"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 656
+  }
+}

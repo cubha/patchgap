@@ -1,0 +1,49 @@
+{
+  "deltaId": "item:DA_18_EmblemSlayer:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:29:55.150Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력이 15%→10%로 내려가 상징 선택권이 약탈자 쪽으로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 기본 공격력이 30%→25%로 약화되어 공격 계열 상징 경쟁자가 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:4e39e3c3",
+        "text": "날렵이 상징 기수 공격 속도 30%→20% 너프로 대체 상징 수요가 약탈자로 흘렀습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 너프로 탱킹 상징 선호가 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:기원자-상징:dfaf6790",
+        "text": "기원자 상징 마나당 주문력 10%→8% 하향도 상징 선택 분산에 기여했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요정·사냥꾼·날렵이 등 경쟁 상징이 일제히 너프되며 약탈자 상징 등장률이 2.0%→2.6%로 반사이익을 얻었습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:요정-상징:4abbb549",
+      "note:tft:18.2:item:사냥꾼-상징:2f196381",
+      "note:tft:18.2:item:날렵이-상징:4e39e3c3"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 907
+  },
+  "proseRepairAttempts": 0
+}

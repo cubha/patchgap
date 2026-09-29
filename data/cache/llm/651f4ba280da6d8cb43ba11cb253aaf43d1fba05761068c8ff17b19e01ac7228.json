@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Graves:JUNGLE:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:34:30.854Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "그레이브즈 정글이 자주 쓰는 갈라진 하늘의 공격력이 45에서 40으로 줄어 초중반 교전 딜이 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력이 450에서 400으로 감소해 정글 다이브·교전 생존력이 함께 약해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도가 25%로 올라 지속 딜형 원거리 정글러 쪽으로 메타가 이동한 영향도 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "그레이브즈 정글 승률 -1.6%p는 CI가 [-5.7%p, 2.5%p]로 통계적 유의성이 없고, 갈라진 하늘의 공격력·체력 하향(45→40, 450→400)이 겹친 정도로 보입니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 762
+  }
+}

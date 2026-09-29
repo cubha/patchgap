@@ -1,0 +1,37 @@
+{
+  "deltaId": "item:3504:adoptionRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T02:55:25.019Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:럭스:cce285a0",
+        "text": "럭스의 E 스킬(광휘의 특이점) 범위 확장 등 다수 버프로 서포터 럭스의 픽률이 상승했을 가능성이 있으며, 이는 서포터 아이템인 불타는 향로(구 아르덴트 첼서 계열)의 채택률 증가로 이어졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애니:e3b6727a",
+        "text": "애니 W(소각) 및 기본 지속 효과 버프로 서포터 애니의 사용 빈도가 늘어나면서, 힐/보호막 강화 아이템인 불타는 향로의 동반 채택이 증가했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:bd82e946",
+        "text": "미스 포츈의 이동 속도 및 E 스킬 버프로 서포터/원거리 딜러 조합에서의 활용도가 높아져 향로류 서포트 아이템의 채택률에 간접적 영향을 주었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "불타는 향로(3504)의 채택률이 1.13%에서 1.58%로 약 0.45%p(95% CI [0.35%, 0.55%]) 상승했는데, 직접적인 아이템 자체 변경은 이미 반영된 것으로 보이며, 럭스·애니·미스 포츈 등 서포터로 자주 기용되는 챔피언들의 버프가 간접적으로 향로 채택 증가에 기여했을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:럭스:cce285a0",
+      "note:26.17:champion:애니:e3b6727a"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1898
+  }
+}

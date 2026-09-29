@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:DA_NashorsTooth:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:14:14.567Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 너프로 공격 속도 아이템 수요가 내셔의 이빨로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 적중 피해 하향으로 경쟁 온힛 아이템이 약화되며 내셔의 이빨 채용 가치가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:애쉬:5bb903ca",
+        "text": "애쉬 지속 피해 공격력 5/8→9/14 버프로 평타형 캐리 수요가 늘어 내셔 장착 보드가 강해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:바루스:c5280269",
+        "text": "바루스 스킬 피해 상향 등 원거리 공격력 캐리 강화가 내셔 빌드 순방률을 끌어올렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "내셔의 이빨 평균 등수 4.27→4.10등(-0.18) 강화는 명멸검·마법사의 최후 너프로 경쟁 평타 아이템이 밀린 반사이익입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:명멸검:ce978bd1",
+      "note:tft:18.2:item:마법사의-최후:b79f865a"
+    ]
+  },
+  "usage": {
+    "inputTokens": 155,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 853
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Bard:UTILITY:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:42:13.620Z",
+  "parsed": {
+    "causes": [],
+    "summary": "바드 픽률이 14.57%에서 12.75%로 유의미하게 감소했으나(95% CI가 0을 포함하지 않음), 후보 목록에서 바드에게 간접적으로 영향을 줄 만한 서포트 아이템이나 시스템 변경(예: 로밍/시야 관련 변경)이 확인되지 않아 뚜렷한 간접 원인 후보를 찾기 어렵습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 370
+  }
+}

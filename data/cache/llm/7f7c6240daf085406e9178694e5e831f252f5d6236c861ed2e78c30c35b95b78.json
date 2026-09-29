@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Rell:UTILITY:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-09-28T10:20:43.148Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:item:룬-나침반:6931f115",
+        "text": "룬 나침반 체력이 100에서 60으로 줄어 체력 기반 탱커 서포터 렐의 초반 버티기가 약화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:item:세계-지도집:29bcd928",
+        "text": "세계 지도집 체력이 30에서 0으로 삭제되며 라인전 전투형 서포터의 이득이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
+        "text": "아펠리오스·루시안·드레이븐 등 원딜 버프로 원딜 주도형 조합이 늘며 렐 선호가 밀렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "렐 픽률이 11.7%→8.4%(-3.3%p)로 내려갔습니다. 룬 나침반·세계 지도집 체력 너프로 탱커 서포터 입지가 좁아진 영향입니다.",
+    "summaryCites": [
+      "note:26.19:item:룬-나침반:6931f115",
+      "note:26.19:item:세계-지도집:29bcd928"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 679
+  },
+  "proseRepairAttempts": 0
+}

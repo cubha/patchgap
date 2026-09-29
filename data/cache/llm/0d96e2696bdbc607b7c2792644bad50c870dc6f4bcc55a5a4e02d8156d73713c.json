@@ -1,0 +1,43 @@
+{
+  "deltaId": "unit:DA_18_Hecarim:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:17:37.607Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:4e39e3c3",
+        "text": "날렵이 상징의 기수 추가 공격 속도가 30%→20%로 줄어 기수 유닛 가치가 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:f178d8b7",
+        "text": "기수 추가 방어력·마법 저항력도 20→15로 낮아져 기수 전방 라인의 생존력이 약화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:c7eb10eb",
+        "text": "날렵이 상징 기본 방어력·마법 저항력 20→15 하향이 상징 채택 자체를 줄였습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 상위 구간 공격 속도 15%→12% 하향이 평타 기반 조합 수요를 낮췄을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "헤카림 등장률이 19.2%→11.4%(-7.8%p)로 급락했는데, 날렵이 상징의 기수 공격 속도 30%→20%·방어 20→15 하향이 주된 원인입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:날렵이-상징:4e39e3c3",
+      "note:tft:18.2:item:날렵이-상징:f178d8b7"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 847
+  },
+  "proseRepairAttempts": 0
+}

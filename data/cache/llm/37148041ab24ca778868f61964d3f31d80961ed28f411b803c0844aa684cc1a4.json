@@ -1,0 +1,47 @@
+{
+  "deltaId": "item:DA_SteraksGage:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:40:35.172Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력 15%→18% 등 강화로 근접 캐리 아이템 선택이 피바라기로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:35db05bd",
+        "text": "정의의 손길 기본 공격력/주문력 15%→18% 버프가 스테락 자리를 대체했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카밀:ee0ba0ac",
+        "text": "카밀 스킬 피해량 너프로 주요 장착처가 약해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:5c211705",
+        "text": "마스터 이 기본 공격력 65→60 너프로 근접 캐리 조합 자체의 성능이 내려갔습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:렝가:4a189382",
+        "text": "렝가 공격 속도 0.8→0.75 너프도 근접 캐리 수요를 줄였습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "스테락의 도전 평균 등수 4.04→4.23등 악화는 피바라기·정의의 손길 버프로 근접 캐리 아이템 수요가 옮겨간 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:피바라기:69a953de",
+      "note:tft:18.2:item:정의의-손길:35db05bd"
+    ]
+  },
+  "usage": {
+    "inputTokens": 154,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 818
+  }
+}

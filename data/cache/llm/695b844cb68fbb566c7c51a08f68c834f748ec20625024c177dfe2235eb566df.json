@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Pyke:UTILITY:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:08:37.552Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+        "text": "동일 서포터 포지션에서 경쟁하는 노틸러스의 Q 피해량이 너프되어 상대적으로 파이크의 픽률/승률 매력도가 반사이익을 받았을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "노틸러스 기본 공격력 하향으로 서포터 티어에서 파이크가 간접적으로 유리해졌을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "파이크에 대한 직접 패치노트 변경이 후보 목록에 없어 이번 승률 상승(43.1%→53.7%, 표본 n=298로 상대적으로 작음)은 패치노트로 직접 설명되지 않으며, 경쟁 서포터인 노틸러스의 하향 조정이 간접적으로 기여했을 가능성이 있으나 근거는 약합니다.",
+    "summaryCites": [
+      "note:26.18:champion:nautilus:878378b8"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 635
+  }
+}

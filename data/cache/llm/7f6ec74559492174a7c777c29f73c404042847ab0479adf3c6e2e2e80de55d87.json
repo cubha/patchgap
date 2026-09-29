@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Ezreal:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:10:27.918Z",
+  "parsed": {
+    "causes": [],
+    "summary": "이즈리얼(Ezreal)에 대한 직접 패치노트 항목이 없고, 후보 목록에서도 이즈리얼의 밴율 하락(-5.82%p, 95% CI [-6.91%p, -4.70%p], n=10000→5000)을 설명할 만한 간접 영향(아이템/시스템 변경)을 찾을 수 없어 원인 불명으로 판단됩니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 306
+  }
+}

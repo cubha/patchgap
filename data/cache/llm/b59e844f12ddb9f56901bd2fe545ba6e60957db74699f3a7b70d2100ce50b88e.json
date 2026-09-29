@@ -1,0 +1,47 @@
+{
+  "deltaId": "item:DA_ArchangelsStaff:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "1b4ec346ad0605238fd935fc97d52d05e7d396b4fcc038faca64e9e36e85b1cf",
+  "generatedAt": "2026-09-26T19:17:28.313Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
+        "text": "베이가 스킬 주문력 계수가 크게 올라 주문력 스택 아이템 수요가 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:베이가:03c1b3b4",
+        "text": "베이가 처치당 주문력이 3%→2%로 줄어 부족한 주문력을 아이템으로 메꾸는 방향이 됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:카시오페아:3e896e3e",
+        "text": "카시오페아 스킬 피해량 버프로 주문력 캐리 조합 자체의 채택이 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:카르마:98f7ca1f",
+        "text": "카르마 폭발 피해량 버프도 주문력 아이템 수요를 함께 끌어올렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:기원자-상징:04e357a3",
+        "text": "기원자 상징 마나 재생 너프로 마나 중심 세팅 대신 주문력 아이템 비중이 올라갔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "베이가의 스킬 주문력 계수 상승과 처치당 주문력 너프(3%→2%)로 주문력 스택 수요가 커져 대천사의 지팡이 등장률이 17.4%→23.0%로 올랐습니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:베이가:c44fce5f",
+      "note:tft:18.3:champion:베이가:03c1b3b4"
+    ]
+  },
+  "usage": {
+    "inputTokens": 134,
+    "cacheReadInputTokens": 8613,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1053
+  }
+}

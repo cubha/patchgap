@@ -1,0 +1,26 @@
+{
+  "deltaId": "item:DA_BloodthirsterRadiant:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:21:39.924Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:찬란한-정의의-손길:10abb7a6",
+        "text": "찬란한 정의의 손길 흡혈 24%→30% 버프로 같은 흡혈 계열 수요가 분산됐을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "등장률 0.1%p 변동은 95% CI가 0을 포함해 사실상 무변화이며, 찬란한 정의의 손길 흡혈 강화로 수요가 나뉜 정도입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:찬란한-정의의-손길:10abb7a6"
+    ]
+  },
+  "usage": {
+    "inputTokens": 137,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 446
+  }
+}

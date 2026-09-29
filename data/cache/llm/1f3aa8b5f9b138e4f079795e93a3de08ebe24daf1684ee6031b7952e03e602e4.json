@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Pyke:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:08:26.883Z",
+  "parsed": {
+    "causes": [],
+    "summary": "파이크의 승률이 43.1%에서 54.0%로 크게 상승했으나, 후보 목록에서 파이크 자신 또는 그의 상호작용 대상(라인전 상대, 아이템, 증강 등)에 대한 직접적·간접적 변경 노트를 찾을 수 없어 이 변화를 설명할 근거가 부족합니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 386
+  }
+}

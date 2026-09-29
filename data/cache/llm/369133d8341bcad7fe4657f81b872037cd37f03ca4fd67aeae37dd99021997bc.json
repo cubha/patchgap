@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Leblanc:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T08:53:22.492Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
+        "text": "라이즈 Q 전이 피해량이 10%p 하향되며 미드 메이지 선택지가 줄어, 르블랑 견제 밴이 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:ryze:f4e781e8",
+        "text": "라이즈 E 마나 소모 5 증가로 라인전 부담이 커져 미드 밴 우선순위가 르블랑으로 이동한 정황입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+        "text": "럼블 과열 공격 속도 하향으로 미드 경쟁 챔피언이 약화된 반사 효과로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "르블랑 직접 변경은 없고, 라이즈 Q·E 하향으로 미드 밴 우선순위가 옮겨가며 밴률이 5.5%p(33.2%→38.7%) 올랐습니다.",
+    "summaryCites": [
+      "note:26.19:champion:ryze:2bcac5df",
+      "note:26.19:champion:ryze:f4e781e8"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 706
+  }
+}

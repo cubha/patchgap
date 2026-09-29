@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:MasterYi:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T01:03:15.256Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검의 들끓는 일격 중첩 지속시간이 3초에서 4초로 늘어, 이 아이템을 핵심으로 쓰는 마스터 이의 지속 전투력이 간접 상승했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
+        "text": "비에고 등 경쟁 정글러의 성장 강화로 정글 메타가 흔들리며 상대 구도가 바뀐 영향도 일부 있을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "마스터 이 승률이 46.5%에서 50.7%로 4.2%p 올랐는데, 구인수의 격노검 중첩 지속시간 3초→4초 버프가 유력한 간접 요인이며 95% CI가 0을 포함해 표본 변동 가능성도 있습니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 506
+  }
+}

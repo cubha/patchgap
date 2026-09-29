@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Nautilus:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:19:51.866Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
+        "text": "봇 파트너 제리의 W 계수 하향으로 라인전 화력이 줄어 서포터 노틸러스 승률에 영향을 줄 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
+        "text": "비에고 공격력 성장 상향으로 정글 압박이 커져 노틸러스의 라인 주도권이 줄었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+        "text": "마스터 이 궁극기 이동 속도 상향으로 CC 후 추격 구도가 바뀐 점이 간접 요인일 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "노틸러스 승률이 50.7%→47.3%(-3.3%p)로 떨어졌고, 제리 W 계수 하향 등 주변 챔피언 변화가 간접 요인으로 의심됩니다.",
+    "summaryCites": [
+      "note:26.18:champion:zeri:d0cacf0b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 782
+  }
+}

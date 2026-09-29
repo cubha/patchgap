@@ -1,0 +1,44 @@
+{
+  "deltaId": "unit:DA_18_Kobuko:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:33:49.611Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:레오나:665ef4f0",
+        "text": "레오나가 방어력·마법 저항력 100→130으로 강화되며 전열 자리를 대체했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:쉔:eca86037",
+        "text": "쉔 보호막이 600→700까지 오르며 탱커 선택지 경쟁이 심해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 너프로 전열 상징 조합의 가치가 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력 30→25 너프가 전열 중심 구성을 약화시켰습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "코부코 등장률이 5.1%→3.3%(-1.8%p)로 떨어졌습니다. 직접 조항은 없고 레오나·쉔 등 전열 강화와 방어 상징 너프의 간접 영향으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:레오나:665ef4f0",
+      "note:tft:18.2:champion:쉔:eca86037",
+      "note:tft:18.2:item:선봉대-상징:58dac5b5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 964
+  },
+  "proseRepairAttempts": 0
+}

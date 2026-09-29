@@ -1,0 +1,38 @@
+{
+  "deltaId": "trait:DA_18_Elderwood:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:23:25.841Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:릴리아:da2771dd",
+        "text": "릴리아 체력 회복량이 주문력 325/475에서 350/525로 올라 나무정령 조합의 생존력이 강화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 추가 공격력 너프로 경쟁 조합이 약해지며 나무정령이 반사이익을 봤을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:기원자:3f993458",
+        "text": "기원자 마나 재생 9→8 너프가 상위권 조합을 눌러 나무정령의 상대 순위가 올랐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "나무정령 평균 등수 4.25등→4.00등 강화는 릴리아 회복량 상향과 사냥꾼·기원자 너프에 따른 반사이익이 겹친 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:릴리아:da2771dd",
+      "note:tft:18.3:system:사냥꾼:616a50ac",
+      "note:tft:18.3:system:기원자:3f993458"
+    ]
+  },
+  "usage": {
+    "inputTokens": 149,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 705
+  }
+}

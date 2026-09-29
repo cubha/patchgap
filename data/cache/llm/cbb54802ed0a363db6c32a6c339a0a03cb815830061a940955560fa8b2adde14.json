@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Vayne:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T05:32:28.859Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 탑 브루저 상대가 약해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
+        "text": "나서스 생명력 흡수 12/18/24%→10/15/20% 너프로 탑 맞라인 지속력이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 상향이 베인 빌드 효율을 일부 보전했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "베인 탑 승률 2.4%p 상승은 CI [-4.3%p, 9.1%p]로 유의하지 않고, 갈라진 하늘·나서스 너프로 맞라인이 약해진 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:champion:nasus:0915ac64"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 668
+  }
+}

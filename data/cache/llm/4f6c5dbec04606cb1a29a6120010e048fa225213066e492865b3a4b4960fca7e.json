@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:LeeSin:JUNGLE:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:40:43.575Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:3f4d7db5",
+        "text": "정글 아이템(리글의 랜턴/야생의 섬광) 조합식과 능력치가 크게 변경되어(공격력 삭제, 공속 30% 추가 등) 정글 아이템 선택 및 정글러 픽 밸런스에 파급 영향을 줬을 수 있어, 리 신 같은 초반 공격형 정글러의 매력도가 상대적으로 감소했을 가능성이 있음",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:그라가스:ee3208b9",
+        "text": "그라가스 Q 재사용 대기시간 증가 등 정글 클리어 관련 전반 너프가 있었으나, 동시에 서비스 시간(정글 몬스터 처치 보너스) 쿨다운이 감소하여 정글 메타 내 경쟁 구도가 변화, 리 신의 상대적 픽률에 간접 영향을 줬을 가능성",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
+        "text": "나서스의 생명력 흡수 너프로 정글 나서스의 안정성이 낮아지며 정글 픽 풀 내 경쟁 구도가 변화했을 가능성이 있으나 직접적 연관성은 약함",
+        "confidence": "low"
+      }
+    ],
+    "summary": "리 신의 픽률이 25.6%에서 23.6%로 유의미하게 하락(95% CI가 0을 포함하지 않음)했는데, 이는 패치노트에 리 신 자체에 대한 직접 변경이 없는 상태에서 정글 아이템(리글의 랜턴/야생의 섬광) 조합식·능력치 개편과 같은 정글 생태계 전반의 변화가 간접적으로 영향을 미쳤을 가능성이 있음을 시사한다.",
+    "summaryCites": [
+      "note:26.17:item:활력증진의-펜던트:3f4d7db5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1201
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "deltaId": "trait:DA_18_LuxUniqueTrait:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:48:10.210Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:니달리:719efb93",
+        "text": "니달리 주문력 형태 강화 피해 300/450으로 상향돼 화신 계열 조합 채용이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:니달리:d8cb09b0",
+        "text": "니달리 공격력 형태 스킬 피해가 공격력 3,000%로 올라 형태 전환 축의 가치가 커졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아칼리:041e2aca",
+        "text": "아칼리 공격력 형태 마나가 0/25로 줄어 스킬 회전이 빨라지며 동반 채용이 증가했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:ef16a6f2",
+        "text": "마스터 이 양 형태 하향은 반대 방향이라 상승폭을 일부 상쇄했을 뿐입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "화신 등장률이 11.8%→16.8%(+5.0%p)로 뛴 것은 니달리 양 형태 피해 상향 등 형태 전환 유닛 강화가 견인했습니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:니달리:719efb93",
+      "note:tft:18.2:champion:니달리:d8cb09b0"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 876
+  }
+}

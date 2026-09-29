@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:LeeSin:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:49:06.484Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력 45→40 하향으로 이를 애용하던 리 신의 코어 빌드 가치가 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력 450→400 추가 하향이 리 신의 초반 교전 유지력을 떨어뜨렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "트런들 W 공격 속도 최대 90→110% 상향으로 정글 픽 경쟁에서 지분을 뺏겼습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "리 신 픽률이 25.9%→23.8%(-2.1%p)로 내렸습니다. 직접 조항은 없고 갈라진 하늘 공격력·체력 하향이 유력합니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 706
+  }
+}

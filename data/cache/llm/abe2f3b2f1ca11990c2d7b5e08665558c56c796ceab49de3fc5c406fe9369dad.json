@@ -1,0 +1,42 @@
+{
+  "deltaId": "trait:DA_DravenUniqueTrait18:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:46:36.119Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:드레이븐:66f8c74a",
+        "text": "드레이븐의 현상금 사냥꾼 골드 보상 조건이 재조정되며 특성 채용이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:드레이븐:5391bfea",
+        "text": "12골드 보상 요구 처치 횟수 조정으로 현상금 계열 운영 가치가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:드레이븐:a0771ecf",
+        "text": "5단계 유닛 보상 조건 변경이 후반 보상 기대값을 바꿔 픽률을 밀어올렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카직스:c60397e3",
+        "text": "카직스 기본 공격력 30→40 상향이 같은 조합 라인의 채용을 늘렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "현상금 추적자 등장률이 6.1%→12.2%로 두 배가 된 것은 드레이븐의 현상금 사냥꾼 보상 조건 재조정(처치·피해량 요구치 변경)이 특성 가치를 끌어올린 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:드레이븐:66f8c74a",
+      "note:tft:18.2:champion:드레이븐:5391bfea"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 859
+  }
+}

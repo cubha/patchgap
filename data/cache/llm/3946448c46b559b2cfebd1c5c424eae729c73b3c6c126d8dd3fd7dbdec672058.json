@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Sylas:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:09:50.811Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:kassadin:d9a6b909",
+        "text": "카사딘 R(균열 이동) 기본 피해량 상향으로 사일러스가 훔칠 수 있는 궁극기의 위력이 강화되어 사일러스의 위협도와 밴율이 간접적으로 상승했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:cassiopeia:8209fcaf",
+        "text": "카시오페아 R(석화의 응시) 주문력 계수 상향(50%→75%)으로 사일러스가 해당 궁극기를 훔쳤을 때의 피해량이 증가해 밴율 상승에 기여했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+        "text": "마스터 이 R(최후의 전사) 이동 속도 상향으로 사일러스가 해당 궁극기를 훔칠 때의 유용성이 커져 밴율 상승에 영향을 주었을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "사일러스 자체에 대한 직접 패치 노트는 없으나, 그가 훔칠 수 있는 카사딘·카시오페아·마스터 이의 궁극기가 이번 패치에서 강화되면서 사일러스의 실전 위협도가 커져 밴율이 0.1328에서 0.1938로 상승(델타 0.061, 95% CI [0.048, 0.074])했을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.18:champion:kassadin:d9a6b909",
+      "note:26.18:champion:cassiopeia:8209fcaf",
+      "note:26.18:champion:masteryi:c898ee27"
+    ]
+  },
+  "usage": {
+    "inputTokens": 120,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 928
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Fiora:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-19T00:00:25.946Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 중첩 유지시간이 3초에서 4초로 늘어 지속 평타형 브루저·원거리 딜러의 가치가 올라가면서, 상대적으로 피오라의 선택 우선순위가 밀렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
+        "text": "비에고가 레벨당 공격력 증가량 3.5→4로 강화되어 근접 딜러 픽 경쟁에서 피오라 수요를 일부 흡수했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+        "text": "마스터 이 궁극기 이동 속도가 40/50/60%로 상향되며 평타 기반 캐리 픽 인기가 올라, 피오라 픽률 분산에 영향을 줬을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "피오라 픽률이 7.8%에서 5.5%로 2.3%p 떨어졌지만 직접 조항은 없고, 구인수의 격노검 중첩 지속시간 3초→4초 등 평타 딜러 강화의 간접 파급이 유력한 설명입니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 16933,
+    "outputTokens": 734
+  }
+}

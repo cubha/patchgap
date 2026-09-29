@@ -1,0 +1,37 @@
+{
+  "deltaId": "trait:DA_18_Blackthorn:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T15:00:37.257Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력이 15%에서 18%로 올라 희생 기반 딜러 구성의 화력이 함께 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:35db05bd",
+        "text": "정의의 손길 기본 공격력/주문력 15%→18% 버프가 검은 가시 캐리 아이템 가치를 끌어올렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상 전 구간 상향으로 주문력 축 조합 순방이 동반 상승했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "검은 가시 순방률 48.7%→50.2%(+1.5%p)이나 95% CI가 0을 포함해 유의하지 않고, 피바라기·정의의 손길 상향에 따른 간접 효과로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:피바라기:69a953de",
+      "note:tft:18.2:item:정의의-손길:35db05bd"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 804
+  }
+}

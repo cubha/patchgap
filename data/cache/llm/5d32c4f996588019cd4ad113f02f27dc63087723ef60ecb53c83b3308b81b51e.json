@@ -1,0 +1,32 @@
+{
+  "deltaId": "item:3083:adoptionRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T02:56:06.368Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "경쟁 탱커/브루저 아이템인 갈라진 하늘의 체력이 450에서 400으로 감소하는 등 전반적인 체력형 아이템 밸런스 조정이 있었으나, 이는 워모그의 갑옷과 직접 경쟁 관계라기보다는 간접적으로 탱커 빌드 선호도에 영향을 줄 수 있음",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:system:체력-재생-정수:394e3a0d",
+        "text": "시스템 아이템인 체력 재생 정수의 재생량이 1.5에서 3.0으로 두 배 상향되어, 워모그의 갑옷이 제공하는 체력 재생 효과의 상대적 가치가 낮아지면서 채택률 감소로 이어졌을 가능성이 있음",
+        "confidence": "low"
+      }
+    ],
+    "summary": "워모그의 갑옷 채택률이 0.356%에서 0.233%로 유의미하게 감소했으나(95% CI [-0.171%, -0.076%]), 이를 직접 설명하는 패치노트 항목은 없으며, 체력 재생 정수 상향(note:26.17:system:체력-재생-정수:394e3a0d)이나 경쟁 탱커 아이템인 갈라진 하늘의 체력 감소(note:26.17:item:sundered-sky:4c4f025e) 등이 간접적으로 영향을 미쳤을 가능성이 낮은 확신으로 제기된다.",
+    "summaryCites": [
+      "note:26.17:system:체력-재생-정수:394e3a0d",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 134,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1162
+  }
+}

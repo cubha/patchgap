@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Orianna:MIDDLE:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:41:59.119Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:leblanc:76a8a16c",
+        "text": "르블랑이 W와 RW 피해량 계수가 상향되며 미드 메이지 티어가 오르면 오리아나와 같은 미드 마법사 챔피언의 픽률을 잠식할 수 있음",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애니:04d73af9",
+        "text": "애니의 Q/W 피해량과 기절 지속시간 상향으로 미드 마법사 경쟁이 심화되어 오리아나 픽률이 분산되었을 가능성",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:aurelionsol:7b32ba55",
+        "text": "아우렐리온 솔의 마나 소모량 감소 및 W 재사용 대기시간 감소로 미드 마법사 픽 경쟁이 심화되어 오리아나 픽률에 영향을 주었을 가능성",
+        "confidence": "low"
+      }
+    ],
+    "summary": "오리아나에 대한 직접 밸런스 변경 노트가 없으므로, 르블랑·애니·아우렐리온 솔 등 경쟁 미드 마법사 챔피언들의 버프로 인한 간접적 픽 경쟁 심화가 픽률 하락(0.0861→0.0676)의 원인일 가능성이 있으나 근거는 약함.",
+    "summaryCites": [
+      "note:26.17:champion:leblanc:76a8a16c",
+      "note:26.17:champion:애니:04d73af9",
+      "note:26.17:champion:aurelionsol:7b32ba55"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 837
+  }
+}

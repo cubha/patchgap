@@ -1,0 +1,38 @@
+{
+  "deltaId": "unit:DA_18_KhaZix:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "1b4ec346ad0605238fd935fc97d52d05e7d396b4fcc038faca64e9e36e85b1cf",
+  "generatedAt": "2026-09-26T19:16:14.234Z",
+  "parsed": {
+    "summary": "카직스 등장률이 4.0%→11.2%(+7.2%p)로 급등했으나 직접 조항은 없고, 어스름늑대·심술두꺼비 공격 강화와 진형 유지 공격력 상향의 파급이 유력합니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:어스름늑대:7334faf2",
+      "note:tft:18.3:champion:심술두꺼비:b8056d07",
+      "note:tft:18.3:system:진형-유지:5b4cf303"
+    ],
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:어스름늑대:7334faf2",
+        "confidence": "low",
+        "text": "어스름늑대 강화 기본 공격이 공격력 65/100/160으로 올라 같은 계열 조합 수요가 커졌습니다."
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:심술두꺼비:b8056d07",
+        "confidence": "low",
+        "text": "심술두꺼비 기본 공격력 45→50, 공격 속도 0.7→0.75 상향이 근접 딜러 축 조합의 채용을 끌어올린 영향일 수 있습니다."
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:진형-유지:5b4cf303",
+        "confidence": "low",
+        "text": "진형 유지 공격력 9%→11% 상향으로 공격력 기반 근접 딜러의 가치가 올라 카직스 픽이 늘었을 수 있습니다."
+      }
+    ]
+  },
+  "usage": {
+    "inputTokens": 375,
+    "cacheReadInputTokens": 17226,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1870
+  }
+}

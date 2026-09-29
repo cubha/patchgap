@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Viego:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T05:31:47.791Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초로 늘어, 이를 핵심으로 쓰는 비에고의 지속 딜이 강화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+        "text": "마스터 이 궁극기 이동 속도 버프로 정글 구도가 흔들린 여파가 일부 섞였을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "비에고 승률 44.1%→46.5%(+2.5%p)는 구인수의 격노검 중첩 지속시간 4초 연장 수혜가 크지만, CI가 0을 포함해 확정적이진 않습니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 559
+  }
+}

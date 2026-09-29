@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Pyke:UTILITY:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T00:52:14.687Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "경쟁 상대인 노틸러스가 기본 공격력 61에서 58로 하향되어, 바텀 대치에서 파이크가 상대적으로 유리해졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+        "text": "노틸러스 Q 닻줄 견인 피해량이 후반 구간에서 265에서 245로 줄어, 라인전 주도권 경쟁에서 파이크에게 반사이익이 갔을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
+        "text": "바드 방어력이 34+레벨당 5에서 32+레벨당 4.7로 낮아져, 파이크의 처형형 딜에 더 쉽게 잡히는 서포터가 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 재사용 대기시간이 전 구간 11초로 고정되며 견제형 서포터가 약해져, 돌진형 파이크의 입지가 올라갔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "파이크 서포터 승률이 43.1%에서 53.0%로 9.9%p 급등했으나 직접 조항은 없고, 노틸러스 공격력 하향(61→58)과 바드 방어력 하향 등 경쟁 서포터 약화가 간접 요인으로 추정됩니다.",
+    "summaryCites": [
+      "note:26.18:champion:nautilus:b6aff2b2",
+      "note:26.18:champion:bard:453ef7b4"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 742
+  }
+}

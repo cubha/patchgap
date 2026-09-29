@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Rumble:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:50:37.097Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
+        "text": "나서스 기본 지속 효과 생명력 흡수가 12/18/24%에서 10/15/20%로 하향돼, 탑 라인전 상성이 럼블 쪽으로 기울었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+        "text": "제라스 Q 피해량과 체력 하향으로 미드 AP 경쟁자가 약해진 반사 이익이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+        "text": "그레이브즈 Q 계수 하향으로 정글 압박이 줄어든 점이 럼블 라인 안정성에 유리하게 작용했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "럼블 승률이 43.0%→52.9%(+9.9%p)로 급등했는데 직접 조항은 없고, 나서스 생흡 하향 등 주변 상성 변화가 유력합니다.",
+    "summaryCites": [
+      "note:26.17:champion:nasus:0915ac64"
+    ]
+  },
+  "usage": {
+    "inputTokens": 119,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 720
+  }
+}

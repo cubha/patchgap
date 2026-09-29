@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:Chogath:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:06:12.640Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 버프로 정석 원딜 구도가 강해져, 변칙 원딜 초가스 채택이 줄었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "초가스 원딜 픽률 0.2%→0.1%(-0.1%p)로, CI 상한이 0에 닿는 극소 표본 변동이며 폭풍갈퀴 버프로 인한 정석 원딜 선호 외에 설명 조항이 없습니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 457
+  }
+}

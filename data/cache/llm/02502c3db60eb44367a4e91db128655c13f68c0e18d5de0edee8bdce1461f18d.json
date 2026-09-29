@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:TwistedFate:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:13:30.840Z",
+  "parsed": {
+    "causes": [],
+    "summary": "트위스티드 페이트에 대한 직접 패치 항목이 없고, 후보 목록에서도 그를 간접적으로 설명할 만한 챔피언·아이템 변경(예: 시너지 챔피언 버프나 관련 아이템 조정)을 찾을 수 없어 픽률 상승(0.0853→0.113)의 원인을 후보들로 설명하기 어렵습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 267
+  }
+}

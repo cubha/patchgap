@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:DA_TitansResolve:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:38:20.712Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력이 30에서 25로 낮아져 전방 탱커 축 전반이 약해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력이 250에서 150으로 줄어 근접 탱커 조합의 생존력이 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:b3191eaf",
+        "text": "검은 가시의 탱커 희생 방어력·마법 저항력이 15에서 12로 감소해 방어 아이템 가치가 하락했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:전쟁기계-상징:83270fa5",
+        "text": "전쟁기계 상징 체력이 350에서 250으로 줄며 탱커 중심 배치의 효율이 낮아졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "거인의 결의 순방률이 60.2%에서 55.8%로 4.5%p 하락했고, 선봉대·싸움꾼·전쟁기계 상징 동시 너프로 탱커 축이 약화된 여파로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:선봉대-상징:58dac5b5",
+      "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+      "note:tft:18.2:item:전쟁기계-상징:83270fa5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 948
+  }
+}

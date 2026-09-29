@@ -1,0 +1,39 @@
+{
+  "deltaId": "champion:Ambessa:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-09-28T10:23:53.329Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라 R 회복량·범위·기본 체력이 동시에 상향돼 탑 듀얼리스트 픽이 피오라로 쏠렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:5bc9f3f5",
+        "text": "아트록스 W 쿨타임 단축과 E 회복 상향으로 탑 브루저 선택지가 암베사를 대체했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
+        "text": "아트록스 E 체력 회복 계수 상향(추가 체력 100당 1.1%→1.3%)이 라인전 우위를 키웠습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "암베사 탑 픽률이 8.9%→6.7%(-2.2%p)로 떨어졌습니다. 피오라 R 대폭 상향과 아트록스 W·E 버프로 탑 근접 딜러 수요가 이동한 영향입니다.",
+    "summaryCites": [
+      "note:26.19:champion:fiora:4ff3c93f",
+      "note:26.19:champion:aatrox:5bc9f3f5",
+      "note:26.19:champion:aatrox:f629d9e5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 649
+  },
+  "proseRepairAttempts": 0
+}

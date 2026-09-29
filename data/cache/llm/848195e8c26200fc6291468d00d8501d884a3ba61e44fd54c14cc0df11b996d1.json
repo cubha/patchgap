@@ -1,0 +1,38 @@
+{
+  "deltaId": "unit:DA_18_Elise:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:29:12.924Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 특성의 피해 증폭 조건이 불리해져 관련 조합 채용이 줄었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 기본 공격력 30%→25% 하향으로 해당 계열 확장 유인이 감소했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력 15%→10% 하향이 저비용 보조 유닛 채용을 밀어냈습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "엘리스 등장률이 3.6%→2.2%(-1.4%p, CI -1.7~-1.0%p)로 떨어졌습니다. 사냥꾼·요정 상징 하향에 따른 계열 위축이 유력한 배경입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:사냥꾼-상징:2f196381",
+      "note:tft:18.2:item:요정-상징:4abbb549"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 838
+  },
+  "proseRepairAttempts": 0
+}

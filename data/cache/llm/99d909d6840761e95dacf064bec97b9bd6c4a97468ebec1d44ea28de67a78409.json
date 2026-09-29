@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Lulu:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:38:49.409Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:6d438477",
+        "text": "미스 포츈 Q 피해량 강화 등 다수의 버프로 룰루와의 바텀 시너지(강력한 원거리 딜러 보호)가 부각되어 밴율 상승에 간접적으로 기여했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
+        "text": "애쉬 W 피해량 및 사거리 버프로 룰루-애쉬 조합의 위력이 커지면서 룰루 밴율 상승에 간접 영향을 미쳤을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:e3f52a3c",
+        "text": "베인 기본 능력치 조정(체력/공속 재조정)으로 룰루가 자주 보호하는 하이퍼캐리 챔피언의 안정성이 변화하며 룰루 픽/밴 가치에 영향을 줬을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "룰루에 대한 직접 변경 노트는 없으며(0.0366→0.0655, 델타 +0.0289, 95% CI [0.0228, 0.0350]로 통계적으로 유의미한 상승), 미스 포츈·애쉬 등 룰루와 시너지가 강한 원거리 딜러들의 버프가 간접적으로 룰루의 밴율 상승에 기여했을 가능성이 낮은 신뢰도로 제기됩니다.",
+    "summaryCites": [
+      "note:26.17:champion:미스-포츈:6d438477",
+      "note:26.17:champion:애쉬:7d7ed661"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 903
+  }
+}

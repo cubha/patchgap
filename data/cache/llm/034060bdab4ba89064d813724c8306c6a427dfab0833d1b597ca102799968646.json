@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Katarina:MIDDLE:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:41:47.505Z",
+  "parsed": {
+    "causes": [],
+    "summary": "카타리나 관련 직접 패치 노트가 없고, 후보 목록에서도 카타리나의 픽률 급증(0.0335→0.0523, 95% CI [0.0132, 0.0244])을 설명할 만한 간접 연관 변경 사항을 찾을 수 없어 원인 불명(unannounced) 상태로 판단됩니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 364
+  }
+}

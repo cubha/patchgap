@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Nidalee:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:51:46.619Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+        "text": "그레이브즈 Q 폭발 피해 계수 너프로 상위 AD 정글 입지가 줄며 니달리 우선순위가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
+        "text": "녹턴 방어력 38→36, 체력 655→640 너프로 정글 경쟁자가 약화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:qiyana:9d50d4d6",
+        "text": "키아나 Q 몬스터 피해 175%→160%로 정글 채용이 줄며 니달리 수요가 커졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "니달리 직접 변경은 없으나 그레이브즈 Q 계수 너프 등 정글 경쟁자 약화로 밴률이 4.5%p 올랐습니다.",
+    "summaryCites": [
+      "note:26.17:champion:graves:0bc5877b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 538
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:JarvanIV:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:48:57.539Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "핵심 아이템 갈라진 하늘 공격력 45→40 하향으로 자르반 4세 딜 기대치가 낮아졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력 450→400 하향으로 자르반 4세 특유의 돌진 후 생존력이 약화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "트런들 W 공격 속도 최대 110%로 상향되며 정글 경쟁 구도에서 픽을 잠식했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
+        "text": "키아나 Q 피해량 상향으로 대체 다이브형 픽이 늘어난 영향으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "자르반 4세 픽률이 8.7%→6.6%(-2.2%p) 하락했고, 핵심 아이템 갈라진 하늘의 공격력·체력 동시 너프가 주요 원인으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 707
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "deltaId": "unit:DA_Vi18:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:44:19.062Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력 15%→18%, 발동 체력 40%→50% 상향으로 근접 AD 캐리인 바이의 채용 가치가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:5f42b359",
+        "text": "정의의 손길 흡혈 12%→15%, 능력치 15%→18% 상향이 전방 딜러 바이 빌드를 밀어올렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:5c211705",
+        "text": "마스터 이 공격력 65→60 하향으로 근접 캐리 자리가 비면서 바이로 수요가 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카밀:ee0ba0ac",
+        "text": "카밀 스킬 피해량 하향이 경쟁 근접 딜러를 밀어내 바이 픽률을 끌어올렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:은빛-여명:185091b8",
+        "text": "은빛 여명 공격력 125%→150% 상향이 물리 근접 조합 전반의 채용을 늘렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "바이 등장률이 17.8%→26.1%(+8.3%p)로 뛴 건 피바라기·정의의 손길 상향과 마스터 이·카밀 하향에 따른 근접 캐리 수요 이동 때문입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:피바라기:69a953de",
+      "note:tft:18.2:item:정의의-손길:5f42b359",
+      "note:tft:18.2:champion:마스터-이:5c211705",
+      "note:tft:18.2:champion:카밀:ee0ba0ac"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 993
+  }
+}

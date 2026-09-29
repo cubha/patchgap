@@ -1,0 +1,51 @@
+{
+  "deltaId": "champion:Anivia:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:12:03.578Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:other:가렌:868690af",
+        "text": "가렌 W의 방어력·마법 저항력 최대 증가량이 30에서 60으로 두 배가 되어, 마법 피해에 의존하는 애니비아 탑의 라인전 견제와 폭발 피해가 크게 무력화됩니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:가렌:6c9a1eca",
+        "text": "가렌 W 중첩당 방어력·마법 저항력이 0.2에서 0.5로 올라 지속 마법 저항 확보가 빨라진 점도 애니비아의 라인 주도권 약화 요인입니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:문도-박사:f54272dc",
+        "text": "문도 박사 기본 체력이 522에서 560으로, 성장 체력도 90으로 늘어 탑의 체력 기반 브루저 상대로 애니비아의 킬 압박이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
+        "text": "초가스 E 기본 피해량이 30/50/70/90/110으로 상향돼, 애니비아가 상대하던 탑 탱커군의 라인전 교환력이 강화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:system:체력-재생-정수:394e3a0d",
+        "text": "체력 재생 정수가 5초당 +1.5에서 +3.0으로 강화되어 애니비아의 Q·E 지속 견제로 쌓은 체력 우위가 빠르게 회복됩니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:a83e2425",
+        "text": "가렌 기본 공격력이 55.5에서 60으로 오르며 탑 근접 압박이 세져, 저체력 원거리인 애니비아가 더 불리해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "애니비아 탑 승률이 57.3%에서 44.4%로 -12.8%p 급락했는데, 가렌 W의 마법 저항 최대 증가량이 30에서 60으로 두 배가 된 점이 마법 피해 의존도가 높은 애니비아의 탑 주도권을 깎은 유력 원인입니다.",
+    "summaryCites": [
+      "note:26.17:other:가렌:868690af"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1221
+  }
+}

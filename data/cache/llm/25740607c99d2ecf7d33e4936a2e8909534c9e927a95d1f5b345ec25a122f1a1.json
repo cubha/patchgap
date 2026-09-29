@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:DA_18_EmblemJuggernaut:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T15:05:57.050Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 너프로 탱킹 상징 간 상대 서열이 유지됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:83fba4d7",
+        "text": "요정 상징도 체력 250→200, 공격력/주문력 15%→10%로 함께 하향됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법저항 30→25 너프로 대체 상징 선택지가 같이 약해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃이 로비당 1명 제한으로 바뀌며 상징 픽 분포가 재편됐을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "전쟁기계 상징은 체력 너프에도 등장률 2.5%→2.6%로 사실상 변동 없는데, 이는 싸움꾼·요정·선봉대 상징이 동시에 하향돼 상대 서열이 유지된 결과입니다(CI가 0 포함).",
+    "summaryCites": [
+      "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+      "note:tft:18.2:item:요정-상징:83fba4d7",
+      "note:tft:18.2:item:선봉대-상징:58dac5b5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 137,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 773
+  }
+}

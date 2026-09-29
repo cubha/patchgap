@@ -1,0 +1,42 @@
+{
+  "deltaId": "trait:DA_18_Adaptor:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:37:10.651Z",
+  "parsed": {
+    "summary": "적응가 평균 등수가 4.20등에서 4.48등으로 +0.29등 악화됐는데, 마스터 이의 공격력·주문력 형태 동시 하향이 주원인입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:마스터-이:5c211705",
+      "note:tft:18.2:champion:마스터-이:ef16a6f2"
+    ],
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:ef16a6f2",
+        "confidence": "medium",
+        "text": "마스터 이 주문력 형태 스킬 피해량이 140/210/335에서 125/190/285로 하향돼 적응가 핵심 딜이 약화됐습니다."
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:5c211705",
+        "confidence": "medium",
+        "text": "마스터 이 공격력 형태 기본 공격력 65→60 하향으로 적응가 구성의 전투력이 함께 내려갔습니다."
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아칼리:041e2aca",
+        "confidence": "low",
+        "text": "아칼리 공격력 형태 마나가 0/30에서 0/25로 조정되며 적응가 운영 축이 흔들렸습니다."
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "confidence": "low",
+        "text": "니달리 형태별 피해량 재조정으로 적응가 조합의 안정성이 낮아졌을 수 있습니다."
+      }
+    ]
+  },
+  "usage": {
+    "inputTokens": 417,
+    "cacheReadInputTokens": 34166,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1641
+  }
+}

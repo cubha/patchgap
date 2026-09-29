@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Thresh:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T08:53:46.906Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+        "text": "드레이븐 기본 공격력 62→64 버프로 공격적 봇 조합이 늘며 훅 서포트 쓰레쉬 동반 픽이 증가했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+        "text": "루시안 Q 피해량 상향으로 초반 주도권 봇 조합 수요가 커져 쓰레쉬 픽이 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
+        "text": "서포트 아이템 체력 재생 25%/50%→50%/75% 상향으로 라인 유지력이 좋아져 서포트 픽 분포가 흔들렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "쓰레쉬 픽률이 10.5%→15.3%(+4.8%p)로 올랐습니다. 직접 조항은 없고 드레이븐·루시안 봇 버프에 따른 동반 픽 상승이 유력합니다.",
+    "summaryCites": [
+      "note:26.19:champion:draven:d1cc348b",
+      "note:26.19:champion:lucian:24a11f30"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 807
+  }
+}

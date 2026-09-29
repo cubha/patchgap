@@ -1,0 +1,36 @@
+{
+  "deltaId": "item:DA_18_EmblemFloraFatalisAugment:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:55:03.819Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃이 로비당 1명만 선택 가능으로 바뀌면서 꽃 계열 상징 획득 경로 자체가 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력 15%→10% 등 상징 전반 너프로 상징 채용 우선순위가 밀렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 등 상징 능력치 하향이 상징 기반 빌드 선택률을 낮췄습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "치명적인 꽃 상징 등장률이 3.1%→1.2%로 급감했는데, 흡수하는 꽃이 로비당 1명 제한·효과 150%로 하향된 여파가 큽니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:흡수하는-꽃:cb5ebf63"
+    ]
+  },
+  "usage": {
+    "inputTokens": 137,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 706
+  }
+}

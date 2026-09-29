@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Yunara:BOTTOM:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:35:58.535Z",
+  "parsed": {
+    "causes": [],
+    "summary": "유나라(Yunara) 관련 직접 변경 노트가 후보 목록에 전혀 없고, 픽률 급등(0.1601→0.2216)을 설명할 만한 간접 영향 후보도 확인되지 않아 원인 불명 상태입니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 121,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 158
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Rumble:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:12:55.513Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘의 체력이 450에서 400으로 줄어 이 아이템에 의존하는 AD 탑 브루저들이 약화되면서, 원거리 견제로 맞서는 럼블의 라인전 부담이 줄었을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력이 45에서 40으로 하향되어 탑 근접 딜러의 교전 폭발력이 낮아진 점이 럼블의 생존력에 유리하게 작용했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "트린다미어의 최대 치명타 확률이 50%에서 30%로 하향되고 R 재사용 대기시간도 늘어나, 럼블이 상대하기 까다로운 스플릿 챔피언의 압박이 약해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:nasus:0915ac64",
+        "text": "나서스 기본 지속 효과의 생명력 흡수가 12/18/24%에서 10/15/20%로 줄어 장기 라인전 유지력이 떨어진 점도 탑 AP 챔피언에게 유리한 환경을 만들었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "럼블 탑 승률이 44.2%에서 53.6%로 9.4%p 올랐는데, 직접 변경은 없고 갈라진 하늘의 체력·공격력 하향으로 AD 탑 브루저가 약화된 파급 효과로 보입니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:4c4f025e",
+      "note:26.17:item:sundered-sky:0aec77fe"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1034
+  }
+}

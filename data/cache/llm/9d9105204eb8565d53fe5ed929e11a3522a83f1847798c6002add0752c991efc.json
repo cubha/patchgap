@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Seraphine:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T01:08:40.618Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "노틸러스 기본 공격력 하향으로 서포터 픽 일부가 이탈해 세라핀이 반사 이익을 봤을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
+        "text": "바드 방어력 하향으로 유틸형 서포터 선호가 세라핀 쪽으로 옮겨갔을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 재사용 대기시간 고정 너프가 있었으나 픽률 반응은 미미했습니다.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "세라핀 E 쿨다운 너프에도 픽률은 4.2%→4.3%로 사실상 변동 없으며(CI가 0 포함), 노틸러스·바드 너프에 따른 서포터 수요 이동이 소폭 상승 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.18:champion:seraphine:4519a08c",
+      "note:26.18:champion:nautilus:b6aff2b2",
+      "note:26.18:champion:bard:453ef7b4"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 690
+  }
+}

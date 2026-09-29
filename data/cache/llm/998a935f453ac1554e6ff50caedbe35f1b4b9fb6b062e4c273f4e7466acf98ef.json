@@ -1,0 +1,42 @@
+{
+  "deltaId": "item:3075:adoptionRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:01:13.387Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라 R 대결투 회복량이 375/500/625→400/525/650으로 올라 치유 감소 대응 수요가 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
+        "text": "아트록스 E 회복 계수가 추가 체력 100당 1.1%→1.3%로 강화돼 치유 감소 카운터 가치가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:elise:a7bec286",
+        "text": "엘리스 W 공격 속도 10%p 상향 등 지속 평타 위협이 늘어 방어력 아이템 채택이 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+        "text": "드레이븐 기본 공격력 62→64로 원거리 딜러 압박이 커져 방어력 구매가 늘었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "가시 갑옷 채택률이 1.0%→1.5% 올랐습니다. 피오라 R·아트록스 E 회복 상향으로 치유 감소 수요가 커진 영향입니다.",
+    "summaryCites": [
+      "note:26.19:champion:fiora:4ff3c93f",
+      "note:26.19:champion:aatrox:f629d9e5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 737
+  }
+}

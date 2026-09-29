@@ -1,0 +1,43 @@
+{
+  "deltaId": "trait:DA_18_Greenfather:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:33:52.938Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:e1a56234",
+        "text": "아이번 시작 칸 수가 2칸에서 3칸으로 늘며 해당 특성 채용 가치가 크게 올랐습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:ac1690b7",
+        "text": "아이번 보호막 흡수량이 주문력 165/300에서 185/350으로 상향되어 전선 유지력이 강해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:fa35905e",
+        "text": "아이번 스킬 피해량이 주문력 140/210에서 155/235로 올라 기용 폭이 넓어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마오카이:78dc9945",
+        "text": "마오카이 마나가 30/90에서 30/100으로 조정되며 함께 서는 조합의 안정성이 변했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "아이번의 시작 칸 2→3칸과 보호막·스킬 피해량 동시 상향으로 자연의 아버지 등장률이 10.6%→19.8%(+9.2%p)로 급등했습니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:아이번:e1a56234",
+      "note:tft:18.2:champion:아이번:ac1690b7",
+      "note:tft:18.2:champion:아이번:fa35905e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 721
+  }
+}

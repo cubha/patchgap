@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Varus:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:51:26.469Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 유지 시간이 4초에서 3초로 줄어 증폭이 빨라졌고, 사냥꾼 계열 원거리 딜러 채용이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력이 15%에서 18%로 올라 공격력 기반 캐리의 가치가 상승했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:은빛-여명:185091b8",
+        "text": "은빛 여명 공격력이 125%에서 150%로 강화되어 공격력 캐리 아이템 조합이 힘을 받았습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카밀:ee0ba0ac",
+        "text": "카밀 스킬 피해량 너프로 비워진 공격력 캐리 자리를 바루스가 대체했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "바루스 등장률이 5.3%→13.7%(+8.4%p)로 급등했습니다. 사냥꾼 증폭 시간 단축과 피바라기 공격력 상향이 공격력 캐리 수요를 끌어올린 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:사냥꾼:70e7b088",
+      "note:tft:18.2:item:피바라기:69a953de"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 949
+  }
+}

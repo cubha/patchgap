@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:LeeSin:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:54:40.601Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "리 신 주력 코어인 갈라진 하늘 공격력이 45에서 40으로 하향돼 정글 주도권이 약화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력도 450에서 400으로 줄어 초반 교전 생존력이 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "트런들 W 공격 속도가 최대 110%로 상향돼 정글 픽 경쟁에서 수요가 분산됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "리 신 픽률이 25.9%→23.8%(-2.1%p)로 내렸습니다. 코어 아이템 갈라진 하늘의 공격력·체력 하향이 주요 원인입니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 755
+  }
+}

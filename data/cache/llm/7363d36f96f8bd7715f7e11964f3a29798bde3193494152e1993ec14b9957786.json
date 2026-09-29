@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Tryndamere:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:23:56.506Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘의 공격력이 45에서 40으로 줄어, 이 아이템을 주력으로 쓰는 트린다미어의 라인전 교환력과 후반 딜이 동반 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력이 450에서 400으로 감소해 트린다미어의 생존력·한타 유지력이 약해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:a83e2425",
+        "text": "가렌의 기본 공격력이 55.5에서 60으로, 방어력 증가량도 상향되며 탑 맞라인 난도가 올라간 영향도 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:f3562bca",
+        "text": "가렌 W의 추가 방어력·마법 저항력 증가가 20%에서 30%로 올라, 트린다미어의 지속 평타 압박 효율이 떨어졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "트린다미어 탑 승률이 53.4%→48.0%(-5.4%p)로 떨어졌는데, 갈라진 하늘의 공격력 45→40·체력 450→400 너프가 핵심 간접 요인으로 보이며, 95% CI가 0을 포함해 확정적이진 않습니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 943
+  }
+}
