@@ -54,10 +54,21 @@ import {
   loadSummary,
 } from "@/lib/data";
 import SiteFooter from "@/components/SiteFooter";
+import EntityIcon from "@/components/EntityIcon";
 import EntityIndexSection, { EntityIndexGrid } from "@/components/EntityIndexSection";
 import { buildEntityIndex } from "@/components/home/entityIndex";
 import { detailEntityKeys, lolEntityHref } from "@/lib/detailRoutes";
 import { PairBaseProvider } from "@/components/PairBaseContext";
+
+/**
+ * 전 대상 색인 칸의 아이콘(2026-09-29). TFT는 `indexIcon`을 넘기는데 LoL만 빠져 있어 색인이 이름뿐이었다 — 사용자 지적
+ * 「아직도 패치대상 이미지 안보이잖아」. 자산은 `public/dd/{champion,item}`에 색인 대상 수(173·218)만큼 있다.
+ */
+function lolIndexIcon(type: "champion" | "item") {
+  return function LolIndexIcon(item: { key: string; name: string }) {
+    return <EntityIcon entityType={type} entityKey={item.key.slice(item.key.indexOf(":") + 1)} name={item.name} size={40} />;
+  };
+}
 
 export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair | null; pairBase?: string | null }) {
 
@@ -242,8 +253,8 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
             {/* 전 대상 색인(§8-1) — 대조표는 판정이 선 것만 올리므로 전수 진입점은 여기뿐이다. */}
             <EntityIndexSection
               groups={[
-                { label: "챔피언", total: championIndex.length, body: <EntityIndexGrid items={championIndex} /> },
-                { label: "아이템", total: itemIndex.length, body: <EntityIndexGrid items={itemIndex} /> },
+                { label: "챔피언", total: championIndex.length, body: <EntityIndexGrid items={championIndex} iconOf={lolIndexIcon("champion")} /> },
+                { label: "아이템", total: itemIndex.length, body: <EntityIndexGrid items={itemIndex} iconOf={lolIndexIcon("item")} /> },
               ]}
             />
           </Container>

@@ -319,6 +319,16 @@ describe("§8-1 전 대상 색인 — 세 브리핑이 같은 슬롯을 쓴다",
     });
   }
 
+  // 2026-09-29 사용자 지적 「아직도 패치대상 이미지 안보이잖아」: TFT는 색인 격자에 아이콘을 넘기는데 LoL만 빠져
+  // 이름뿐이었다. 이름 격자(EntityIndexGrid)를 쓰는 브리핑은 전부 아이콘을 넘긴다(PUBG는 렌더 카드라 해당 없음).
+  for (const id of GAME_IDS) {
+    it(`${id} 브리핑의 색인 격자는 아이콘을 넘긴다`, () => {
+      const src = read(briefingSource(id));
+      const grids = src.match(/<EntityIndexGrid\b[^>]*\/>/g) ?? [];
+      for (const grid of grids) expect(grid, grid).toContain("iconOf=");
+    });
+  }
+
   it("색인 제목은 하나뿐이다 — 게임이 자기 제목을 다시 쓰지 않는다", () => {
     const owner = read("src/components/EntityIndexSection.tsx");
     expect(owner).toContain(ENTITY_INDEX_TITLE);
