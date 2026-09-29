@@ -59,7 +59,7 @@ export interface BuildBriefingOptions {
   /** 미공지 상위 몇 건을 필드로 노출할지. 기본 5(PLAN F6 "상위 미공지 5건"). */
   topN?: number;
   /**
-   * 헤드라인 "패치노트는 N개 엔티티를 말했고..."의 N(패치노트가 언급한 고유 챔피언·아이템
+   * 헤드라인 "패치노트는 N개 항목을 말했고..."의 N(패치노트가 언급한 고유 챔피언·아이템
    * 엔티티 수 — 시스템/기타 노트 줄 수 아님, ST-11 `countRelevantNoteEntities`와 동일 규칙) —
    * deltas 파일 자체엔 없는 값이라 호출부(run-notify.ts `loadNoteCount`)가 notes/{patch}.json을
    * 파싱해 주입한다. 없으면(null/undefined) 헤드라인에서 이 구간을 생략한다.
@@ -227,7 +227,7 @@ export function assembleBriefing<T>(source: BriefingSource<T>, options: BuildBri
   // (무근거로 지어내지 않음).
   const headline =
     options.noteCount != null
-      ? `패치노트는 ${fmtInt(options.noteCount)}개 엔티티를 말했고, 통계는 ${fmtInt(significantCount)}개 변화를 말합니다`
+      ? `패치노트는 ${fmtInt(options.noteCount)}개 항목을 말했고, 통계는 ${fmtInt(significantCount)}개 변화를 말합니다`
       : `통계는 ${fmtInt(significantCount)}개 변화를 말합니다`;
   let description = `${headline} · 미공지 ${fmtInt(gapEntityCount)}건`;
   if (unannouncedRows.length === 0) {

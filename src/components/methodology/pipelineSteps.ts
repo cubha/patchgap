@@ -22,7 +22,7 @@ export interface PipelineStepsInput {
   /**
    * 노트 "엔티티" 수(코디네이터 정정, 2026-09-05) — `src/components/home/logic.ts`의
    * `countRelevantNoteEntities(notes)`와 동일 기준(champion/item 섹션의 고유 `section:entity`
-   * 쌍)으로 계산해서 넘겨야 한다. 홈 헤드라인("패치노트는 N개 엔티티를 말했고")과 이 파이프라인
+   * 쌍)으로 계산해서 넘겨야 한다. 홈 헤드라인("패치노트는 N개 항목을 말했고")과 이 파이프라인
    * 3단 표기가 서로 다른 수(항목 수 vs 엔티티 수)를 보여주면 같은 데이터를 두 화면이 다르게
    * 세는 것처럼 보여 신뢰를 해친다 — 반드시 항목 수(`PatchNoteItem[].length`)가 아니라 이
    * 필드를 표시 기준으로 삼는다.

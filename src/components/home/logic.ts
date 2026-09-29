@@ -62,7 +62,7 @@ export { isGapStatus };
  * 그 기존 컨벤션에 홈을 맞춘다. 소비처 3곳(`page.tsx`·`HeroSummary.tsx`·이 파일의 테스트)
  * 전수 확인 후 리네임 — 외부 공개 API가 아니므로 `tsc --noEmit`가 누락을 전부 잡는다. */
 export interface HeadlineStats {
-  /** "패치노트는 N개 엔티티를 말했고" + 스탯 타일 "공지된 변화" — countRelevantNoteEntities. */
+  /** "패치노트는 N개 항목을 말했고" + 스탯 타일 "공지된 변화" — countRelevantNoteEntities. */
   noteEntityCount: number;
   /** 원문 패치노트 "항목" 수(`NotesFile.meta.itemCount`) — HANDOFF §4-1 "35 엔티티 / 215 항목"
    * 분리 표기에 쓰는 참고 병기 수치. */

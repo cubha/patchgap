@@ -46,7 +46,7 @@ export default function DeclarationOnly({ from, to, notes, failure, extra }: Dec
         </span>
         <h1 className="max-w-3xl font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
           {to} 패치노트는{" "}
-          <span className="text-accent">{entityCount > 0 ? `${entityCount}개 대상` : `${notes.length}개 조항`}</span>을 말했고,
+          <span className="text-accent">{entityCount > 0 ? entityCount : notes.length}개 항목</span>을 말했고,
           통계는 아직 관측 전입니다
         </h1>
         <p className="max-w-3xl text-sm leading-relaxed text-fg-2">
