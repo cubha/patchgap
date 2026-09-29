@@ -60,9 +60,14 @@ export interface HeroSummaryProps {
   gapCount?: number;
   /** 과거 쌍 화면의 기준 경로(2026-09-28, 이월 R8) — 미공지 타일이 그 쌍의 대조표로 가게 `StatTiles`로 넘긴다. */
   pairBase?: string | null;
+  /**
+   * h1 아래 캡션 한 줄 — 무엇을·어느 표본에서·몇 매치로 쟀나(2026-09-30 사용자 지시 「맞춰줘」: PUBG·TFT 히어로의
+   * 「지표 · 표본 n → n매치 · 대상 N종」 줄과 같은 자리·같은 서체). 없으면 그리지 않는다(테스트·빈 상태).
+   */
+  caption?: ReactNode;
 }
 
-export default function HeroSummary({ stats, patch, action, gapCount, pairBase = null }: HeroSummaryProps) {
+export default function HeroSummary({ stats, patch, action, gapCount, pairBase = null, caption }: HeroSummaryProps) {
   const { noteEntityCount, noteItemCount, statCount, unannouncedCount } = stats;
 
   return (
@@ -82,6 +87,7 @@ export default function HeroSummary({ stats, patch, action, gapCount, pairBase =
           패치노트는 <span className="text-accent">{fmtInt(noteEntityCount)}개 항목</span>을 말했고, 통계는{" "}
           <span className="text-accent">{fmtInt(statCount)}개 변화</span>를 말합니다
         </h1>
+        {caption ? <p className="ambient-hero-sub max-w-3xl text-sm leading-relaxed text-fg-2">{caption}</p> : null}
         {/* 계산 방법 설명 문장("패치 전후 … 유의한 변화만 셉니다")은 방법론으로 옮겼다(재판정 보완 6, C3). */}
         {/* 인트로 재생 버튼은 2026-09-18 라운드6(사용자 C4 "인트로재생 버튼 제거")에 뺐다. `action`
             슬롯은 히어로 아래 조작 요소 주입용으로 남긴다(지금은 호출부가 넘기지 않는다). */}

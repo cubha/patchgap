@@ -78,6 +78,20 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
   const notesTo = pair ? loadNotes(pair.to) : null;
   const summaryTo = pair ? loadSummary(pair.to) : null;
   const summaryFrom = pair ? loadSummary(pair.from) : null;
+  // 히어로 캡션(2026-09-30) — PUBG·TFT와 같은 「지표 · 표본 n → n매치 · 대상 N종」. 대상 수는 대조 후 패치의
+  // 챔피언·아이템 **종** 수다(TFT의 유닛+특성+아이템, PUBG의 무기 종 수와 같은 층위). 챔피언 집계는 포지션별
+  // 행이라(26.19: 728행) 그대로 세면 한 챔피언이 최대 5번 세어진다 — 키로 중복을 뺀다.
+  const heroEntityCount = pair
+    ? new Set((loadChampions(pair.to)?.rows ?? []).map((row) => row.championKey)).size + (loadItems(pair.to)?.rows.length ?? 0)
+    : 0;
+  const heroCaption =
+    summaryFrom && summaryTo ? (
+      <>
+        <strong className="text-fg">챔피언 · 아이템</strong> · KR · Master+ <strong className="text-fg">{summaryFrom.data.matches.toLocaleString()}</strong> →{" "}
+        <strong className="text-fg">{summaryTo.data.matches.toLocaleString()}</strong>매치 · 대상{" "}
+        <strong className="text-fg">{heroEntityCount}</strong>종
+      </>
+    ) : null;
   const objectivesTo = pair ? loadObjectives(pair.to) : null;
   const objectivesFrom = pair ? loadObjectives(pair.from) : null;
   const spellIcons = loadSpellIcons();
@@ -205,7 +219,7 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
               같이 내려가므로 그 요구를 그대로 만족한다. 176px은 Tailwind 표준 스케일(11rem)이라
               arbitrary 불필요. */}
           <Container className="flex flex-col gap-6 pt-44 pb-8">
-            <HeroSummary stats={headline} patch={pair?.to ?? ""} gapCount={gapTotal} pairBase={pairBase} />
+            <HeroSummary stats={headline} patch={pair?.to ?? ""} gapCount={gapTotal} pairBase={pairBase} caption={heroCaption} />
             <StreamColumnLayout
               leftHeader={<StreamLaneFilter />}
               left={
