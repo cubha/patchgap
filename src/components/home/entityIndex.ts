@@ -1,14 +1,14 @@
 // src/components/home/entityIndex.ts
-// 전 대상 색인의 **조립 규칙**(UX-BRIEF §8-1). 순수 함수 — 렌더는 `EntityIndexSection.tsx`.
+// 브리핑 하단 **상세 바로가기**의 조립 규칙(UX-BRIEF §8-1). 순수 함수 — 렌더는 `EntityIndexSection.tsx`.
 //
-// 규칙은 둘뿐이고 세 게임이 같다:
-//  ① **전수**를 낸다 — 판정이 섰는지와 무관하다. 그게 이 슬롯의 존재 이유다.
-//  ② 상세 라우트가 **실재할 때만** 링크를 건다. 정적 export에서 없는 경로는 곧 404다.
+// 규칙(세 게임 공통): 상세 라우트가 **실재하는 대상만** 낸다. 2026-09-29 전까지는 전수를 내고 상세가 없으면 링크만
+// 뺐는데, LoL 391칸 중 339칸·TFT 231칸 중 192칸이 누를 수 없는 「판정 없음」 이름표였다 — 이 슬롯의 목적(상세 입구)을
+// 못 하는 칸이다. 사용자 결정으로 바로가기만 남긴다(`docs/plan/PLAN-entity-index-quicklinks-2026-09-29.md`).
 export interface EntityIndexEntry {
   readonly key: string;
   readonly name: string;
-  /** 상세 경로. `null`이면 그 대상은 상세가 없다(링크를 걸지 않는다). */
-  readonly href: string | null;
+  /** 상세 경로 — 상세가 없는 대상은 애초에 목록에 없다. */
+  readonly href: string;
   readonly meta?: string;
 }
 
@@ -31,13 +31,8 @@ export function buildEntityIndex(
   const byKey = new Map<string, EntityIndexEntry>();
   for (const source of sources) {
     const id = `${source.type}:${source.key}`;
-    if (byKey.has(id)) continue;
-    byKey.set(id, {
-      key: id,
-      name: source.name,
-      href: hasDetail(source.type, source.key) ? hrefOf(source.type, source.key) : null,
-      meta: source.meta,
-    });
+    if (byKey.has(id) || !hasDetail(source.type, source.key)) continue;
+    byKey.set(id, { key: id, name: source.name, href: hrefOf(source.type, source.key), meta: source.meta });
   }
   return [...byKey.values()].sort((a, b) => a.name.localeCompare(b.name));
 }

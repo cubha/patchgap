@@ -281,7 +281,7 @@ describe("§8-1 섹션 순서 — 세 브리핑이 같은 순서다", () => {
   const orderOf = (src: string, markers: readonly string[]): number[] => markers.map((m) => src.indexOf(m));
 
   for (const id of GAME_IDS) {
-    it(`${id} 브리핑이 타일 → 본문 → 전 대상 색인 → 푸터 순이다`, () => {
+    it(`${id} 브리핑이 타일 → 본문 → 상세 바로가기 → 푸터 순이다`, () => {
       const src = read(briefingSource(id));
       // LoL은 타일·본문을 각각 `HeroSummary`·`ReleaseNoteStream`을 거쳐 쓴다(§8-1이 인정한 경유).
       const tiles = src.includes("StatTiles") ? "StatTiles" : "HeroSummary";
@@ -309,12 +309,11 @@ describe("§8-1 섹션 순서 — 세 브리핑이 같은 순서다", () => {
   });
 });
 
-describe("§8-1 전 대상 색인 — 세 브리핑이 같은 슬롯을 쓴다", () => {
+describe("§8-1 상세 바로가기(구 전 대상 색인) — 세 브리핑이 같은 슬롯을 쓴다", () => {
   for (const id of GAME_IDS) {
-    it(`${id} 브리핑 맨 아래에 전 대상 색인이 있다`, () => {
-      // 대조표는 세 게임 모두 **판정된 것만** 올린다. 그래서 판정이 서지 않은 대상의 상세로 가는
-      // 길이 여기밖에 없다 — PUBG에서 실제로 그 지적이 나왔고(2026-09-18 P1) 무기 47종 그리드가
-      // 그 답이었다. 같은 구멍이 LoL·TFT에도 있었다.
+    it(`${id} 브리핑 맨 아래에 상세 바로가기가 있다`, () => {
+      // 출처: PUBG 「상세페이지 진입점이 없음」(2026-09-18 P1). 2026-09-29 명세 변경(사용자 결정): 전수 격자 → **상세가 있는
+      // 대상만**(LoL·TFT 칸의 87%·83%가 누를 수 없는 「판정 없음」이었다). 슬롯의 자리·제목은 세 게임 공통 그대로.
       expect(read(briefingSource(id))).toContain("EntityIndexSection");
     });
   }

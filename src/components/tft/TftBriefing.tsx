@@ -158,7 +158,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
   // 「미공지 Gap」은 대상을 센다 — 타일은 통계 Gap 대상, 탭은 거기에 수치 축 대상을 **합집합**으로(C15·D2).
   const gapTotal = tftGapTotal(deltas.rows, deltas.meta.qAlpha, submarine);
 
-  // 전 대상 색인(§8-1) — 이 패치 보드 집계에 등장한 **모든** 유닛·특성·아이템.
+  // 상세 바로가기(§8-1) — 이 패치 보드 집계에 등장한 유닛·특성·아이템 중 **상세가 있는 것**(buildEntityIndex가 거른다).
   // 이름은 판정 산출물이 이미 들고 있다(실측 233종 중 232종). 못 찾는 1종은 키를 그대로 쓴다.
   const haveAssets = assetKeySet(loadTftAssets());
   const rowIcon = tftRowIcon(haveAssets);
@@ -323,7 +323,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
               그대로고 자리만 옮긴 것이다: 표가 이름을 부른 뒤 화면 맨 아래 딴 카드가 같은
               이름을 다시 부르면, 읽는 쪽이 두 곳을 오가며 짝을 맞춰야 한다. */}
 
-          {/* 전 대상 색인(§8-1) — 대조표는 판정이 선 것만 올리므로 전수 진입점은 여기뿐이다. */}
+          {/* 상세 바로가기(§8-1) — 상세가 있는 유닛·특성·아이템만 아이콘 격자로(2026-09-29, 「판정 없음」 칸 제거). */}
           <EntityIndexSection
             groups={[
               { label: "유닛", total: unitIndex.length, body: <EntityIndexGrid items={unitIndex} iconOf={indexIcon("unit", haveAssets)} /> },
