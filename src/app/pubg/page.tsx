@@ -35,7 +35,7 @@ import DiscordPanel from "@/components/home/DiscordPanel";
 import BriefingTabs from "@/components/BriefingTabs";
 import BriefingRowList from "@/components/BriefingRowList";
 import AnnouncedCoverageLine from "@/components/home/AnnouncedCoverageLine";
-import EntityIndexSection from "@/components/EntityIndexSection";
+import EntityIndexSection, { ENTITY_INDEX_CELL, ENTITY_INDEX_GRID } from "@/components/EntityIndexSection";
 import { groupBriefingItems } from "@/components/briefingRows";
 import { pubgNotesAsPatchNotes } from "@/pipeline/match/pubg-delta";
 
@@ -261,13 +261,13 @@ export default function PubgPage() {
                       label: "맵",
                       total: maps.after.maps.length,
                       body: (
-                    <ul className={`grid gap-px bg-border-soft sm:grid-cols-2 lg:grid-cols-4 ${PANEL_SCROLL_BODY}`}>
+                    <ul className={`${ENTITY_INDEX_GRID} sm:grid-cols-2 lg:grid-cols-4 ${PANEL_SCROLL_BODY}`}>
                       {maps.after.maps.map((map) => {
                         const identity = mapIdentity(map.mapKey);
                         const delta = maps.deltas.rows.find((r) => r.mapKey === map.mapKey) ?? null;
                         const hasRender = identity.assetName !== "" && mapAssets.has(identity.assetName);
                         return (
-                          <li key={map.mapKey} className="bg-surface">
+                          <li key={map.mapKey} className={ENTITY_INDEX_CELL}>
                             <Link
                               href={mapHref(map.mapKey)}
                               className="flex h-full flex-col gap-2 p-4 transition-colors hover:bg-accent/10"

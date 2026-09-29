@@ -24,6 +24,8 @@ import { panelSurfaceClass } from "@/lib/panelSurface";
 export interface SectionCardProps {
   eyebrow?: string;
   title: string;
+  /** 제목 아래 한 줄 설명(2026-09-29) — 본문 첫 줄에 따로 두면 제목과 떨어져 빈 띠가 하나 더 생긴다. */
+  description?: string;
   action?: ReactNode;
   children: ReactNode;
   className?: string;
@@ -37,6 +39,7 @@ export interface SectionCardProps {
 export default function SectionCard({
   eyebrow,
   title,
+  description,
   action,
   children,
   className = "",
@@ -51,6 +54,7 @@ export default function SectionCard({
             <span className="block text-xs font-bold text-muted">{eyebrow}</span>
           ) : null}
           <h2 className="font-display text-lg font-bold text-fg">{title}</h2>
+          {description ? <p className="mt-1 text-xs leading-relaxed text-muted">{description}</p> : null}
         </div>
         {action}
       </div>
