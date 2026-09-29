@@ -65,9 +65,9 @@ import { PairBaseProvider } from "@/components/PairBaseContext";
  * 「아직도 패치대상 이미지 안보이잖아」. 자산은 `public/dd/{champion,item}`에 색인 대상 수(173·218)만큼 있다.
  */
 function lolIndexIcon(type: "champion" | "item") {
-  return (item: { key: string; name: string }) => (
-    <EntityIcon entityType={type} entityKey={item.key.slice(item.key.indexOf(":") + 1)} name={item.name} size={40} />
-  );
+  return function LolIndexIcon(item: { key: string; name: string }) {
+    return <EntityIcon entityType={type} entityKey={item.key.slice(item.key.indexOf(":") + 1)} name={item.name} size={40} />;
+  };
 }
 
 export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair | null; pairBase?: string | null }) {
