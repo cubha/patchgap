@@ -61,7 +61,7 @@ import { detailEntityKeys, lolEntityHref } from "@/lib/detailRoutes";
 import { PairBaseProvider } from "@/components/PairBaseContext";
 
 /**
- * 전 대상 색인 칸의 아이콘(2026-09-29). TFT는 `indexIcon`을 넘기는데 LoL만 빠져 있어 색인이 이름뿐이었다 — 사용자 지적
+ * 상세 바로가기 칸의 아이콘(2026-09-29). TFT는 `indexIcon`을 넘기는데 LoL만 빠져 있어 색인이 이름뿐이었다 — 사용자 지적
  * 「아직도 패치대상 이미지 안보이잖아」. 자산은 `public/dd/{champion,item}`에 색인 대상 수(173·218)만큼 있다.
  */
 function lolIndexIcon(type: "champion" | "item") {
@@ -87,7 +87,7 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
   // 「미공지 Gap」 타일·탭·랜딩 카드는 같은 수 — `lib/gapTotals`가 소유한다(2026-09-28, D2).
   const gapTotal = lolGapTotal(deltas?.rows ?? [], submarine);
 
-  // 전 대상 색인(§8-1) — 이 패치 집계에 등장한 **모든** 챔피언·아이템. 이름은 Data Dragon이 주고,
+  // 상세 바로가기(§8-1) — 이 패치 집계에 등장한 챔피언·아이템 중 **상세가 있는 것**(buildEntityIndex가 거른다). 이름은 Data Dragon이 주고,
   // 상세가 실재하는 대상만 링크한다(없는 경로는 정적 export에서 곧 404다).
   const detailKeys = new Set(detailEntityKeys([deltas?.rows ?? []]));
   const hasDetail = (type: string, key: string) => detailKeys.has(`${type}:${key}`);
@@ -250,7 +250,7 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
               }
             />
 
-            {/* 전 대상 색인(§8-1) — 대조표는 판정이 선 것만 올리므로 전수 진입점은 여기뿐이다. */}
+            {/* 상세 바로가기(§8-1) — 상세가 있는 챔피언·아이템만 아이콘 격자로(2026-09-29, 「판정 없음」 칸 제거). */}
             <EntityIndexSection
               groups={[
                 { label: "챔피언", total: championIndex.length, body: <EntityIndexGrid items={championIndex} iconOf={lolIndexIcon("champion")} /> },

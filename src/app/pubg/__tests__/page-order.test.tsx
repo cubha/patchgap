@@ -28,7 +28,8 @@ describe("/pubg/ 정보 위계", () => {
     const caption = at("총 획득 대비");
     // 2026-09-23 §8-1: 무기 그리드·맵 그리드가 **세 게임 공통 「전 대상 색인」 슬롯**으로
     // 들어갔다. 카드 제목은 그 슬롯이 소유하고(`ENTITY_INDEX_TITLE`), 게임은 묶음 라벨만 준다.
-    const grid = at("이 패치의 모든 대상");
+    // 2026-09-29 명세 변경: 슬롯 제목 「이 패치의 모든 대상」 → 「상세 바로가기」(상세 있는 대상만 올린다).
+    const grid = at("상세 바로가기");
     const maps = at("맵");
     expect(tiles).toBeLessThan(tabs);
     expect(tabs).toBeLessThan(table);
