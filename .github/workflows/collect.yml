@@ -160,7 +160,7 @@ jobs:
         # (실측 6건) 같은 델타의 "추정 원인"이 실행마다 나타났다 사라졌다 한다.
         # `data/cache/`는 gitignore라 저장소로는 보존되지 않으므로 여기서 보존해야 한다.
         if: steps.determine.outputs.should_run == 'true'
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: data/cache/llm
           key: patchgap-llm-${{ steps.determine.outputs.to }}-${{ github.run_id }}
@@ -261,11 +261,23 @@ jobs:
           PATCH_TO: ${{ steps.determine.outputs.to }}
           LLM_MAX: ${{ github.event.inputs.llm_max || '400' }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # 실제 호출 opt-in(2026-09-29 호출 정책) — 없으면 엔진은 캐시 전용이라 미스가 있으면 견적과 함께 멈춘다.
+          PATCHGAP_LLM: "1"
         run: |
           npx tsx scripts/run-match.ts \
             --from "$PATCH_FROM" \
             --to "$PATCH_TO" \
             --llm-max "$LLM_MAX"
+
+      # LLM 캐시는 **호출 직후 무조건** 저장한다(2026-09-29). 암묵 post 저장은 잡이 성공해야만 돌아, run 35944265345가
+      # LLM 133건을 산 뒤 커밋 단계에서 실패하자 결과가 버려지고 같은 날 재실행이 같은 133건을 다시 샀다(raw 캐시와 같은 규약).
+      # 장기 보존은 git이다(data/cache/llm 커밋 — actions 캐시는 7일 미접근 시 지워진다).
+      - name: Save data/cache/llm (LLM 호출 직후)
+        if: always() && steps.determine.outputs.should_run == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: data/cache/llm
+          key: patchgap-llm-${{ steps.determine.outputs.to }}-${{ github.run_id }}
 
       # 스킬 아이콘은 **노트가 생긴 뒤에** 맞춘다(2026-09-29). 위 「Update Data Dragon assets」는 판정 앞이라
       # 새 패치 노트가 아직 없어, 새 스킬은 늘 아이콘 대상에서 빠졌다(26.19 스킬 22개 중 2개 — 사용자 지적
@@ -388,7 +400,7 @@ jobs:
         run: |
           git config user.name "patchgap-bot"
           git config user.email "patchgap-bot@users.noreply.github.com"
-          git add data/aggregated public/dd data/ddragon
+          git add data/aggregated public/dd data/ddragon data/cache/llm
           if git diff --cached --quiet; then
             echo "변경분 없음 — 커밋 생략"
           else

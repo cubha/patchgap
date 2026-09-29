@@ -33,6 +33,7 @@ import { isReportableRecord } from "../src/pipeline/shared/reportable";
 import { STATUS_SORT_PRIORITY } from "../src/pipeline/shared/status-order";
 import type { DeltaRecord, MatchStatus, PatchNoteItem } from "../src/pipeline/types";
 import { isMainModule, parseCliArgs } from "./shared/cli";
+import { assertNoLlmDowngrade } from "./shared/llm-guard";
 
 interface CliArgs {
   from: string;
@@ -40,6 +41,10 @@ interface CliArgs {
   dataRoot: string;
   llmMax: number;
   noLlm: boolean;
+  /** 견적만 — LLM 호출 0, 파일 기록 없음(2026-09-29). */
+  dryRun: boolean;
+  /** 0이면 끔. N이면 상위 N건만 묻고 파일은 쓰지 않는다. */
+  llmSample: number;
 }
 
 export function parseArgs(argv: string[]): CliArgs {
@@ -49,6 +54,8 @@ export function parseArgs(argv: string[]): CliArgs {
     { name: "dataRoot", type: "string", default: "data" },
     { name: "llmMax", type: "number", default: 120 },
     { name: "noLlm", type: "boolean", default: false },
+    { name: "dryRun", type: "boolean", default: false },
+    { name: "llmSample", type: "number", default: 0 },
   ]);
   const llmMax = raw.llmMax as number;
   if (llmMax < 0) throw new Error(`run-tft-match: --llm-max 값이 올바르지 않습니다: ${String(llmMax)}`);
@@ -58,6 +65,8 @@ export function parseArgs(argv: string[]): CliArgs {
     dataRoot: String(raw.dataRoot),
     llmMax,
     noLlm: raw.noLlm === true,
+    dryRun: raw.dryRun === true,
+    llmSample: Math.max(0, Number(raw.llmSample)),
   };
 }
 
@@ -169,17 +178,17 @@ async function main(): Promise<void> {
   let final = judged;
   let llmSummary: LlmRunSummary | undefined;
   let indirectEffectCount = 0;
-  const llmSkipReason = args.noLlm
-    ? "--no-llm"
-    : process.env.ANTHROPIC_API_KEY
-      ? null
-      : "ANTHROPIC_API_KEY 없음";
+  // 키가 없어도 2단은 돈다(2026-09-29) — 캐시 전용이 로컬 기본이고, 미스가 있으면 엔진이 견적과 함께 멈춘다.
+  // 예전의 「키 없음 → 조용히 회색」은 그 산출물이 커밋되면 이미 산 원인을 덮었다.
+  const llmSkipReason = args.noLlm ? "--no-llm" : null;
+  const llmMax = args.llmSample > 0 ? args.llmSample : args.llmMax;
   if (llmSkipReason === null) {
     const result = await inferIndirectCandidates(final, notes, tftLlmProfile, {
-      maxDeltas: args.llmMax,
+      maxDeltas: llmMax,
+      planOnly: args.dryRun,
       // 문장 재요청이 **같은 지갑에서** 나가므로 호출 총 상한을 대상 수보다 위에 둔다 —
       // 그러지 않으면 뒤쪽 델타가 `call-budget-exceeded`로 떨어져 화면에 "LLM 미실행"으로 보인다.
-      maxTotalCalls: args.llmMax + 40,
+      maxTotalCalls: llmMax + 40,
     });
     final = result.deltas;
     llmSummary = result.summary;
@@ -220,6 +229,11 @@ async function main(): Promise<void> {
   console.log(`[tft-match] 보고 자격(isReportableRecord): ${reportable.length}건`);
 
   const outFile = path.join(dir, `deltas-${args.from}-${args.to}.json`);
+  if (args.dryRun || args.llmSample > 0) {
+    console.log(`[tft-match] ${args.dryRun ? "--dry-run" : `--llm-sample ${args.llmSample}`} — 파일 기록 생략`);
+    return;
+  }
+  if (args.noLlm) assertNoLlmDowngrade(outFile, final, "run-tft-match --no-llm");
   fs.writeFileSync(
     outFile,
     `${JSON.stringify(

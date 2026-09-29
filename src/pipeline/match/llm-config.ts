@@ -29,3 +29,22 @@ export const LLM_MODEL = "claude-opus-5";
 // ② 길이는 문구가 아니라 호출부 1회 재요청으로 닫는다(규칙 9는 숫자만 유지). 근거·기각 사유는
 // docs/plan/ACCEPT-prose-v5-2026-09-19.md.
 export const PROMPT_VERSION = "v5";
+
+// 추론 강도(2026-09-29). 호출 비용의 약 71%가 출력(적응형 thinking 포함)이라 가장 큰 레버지만, 낮추면
+// 원인 탐지가 줄어 화면이 회색으로 기운다 — 바꾸려면 A/B(`run-llm-ab.ts`)와 사용자 결정을 먼저 거친다.
+// 캐시 키에는 **기본값이 아닐 때만** 들어간다: 그래야 기존 캐시 1,841건이 그대로 적중하고, 값을 바꾼
+// 날에는 옛 답이 그것을 만들지 않은 설정에 귀속되지 않는다.
+export type LlmEffort = "low" | "medium" | "high";
+export const LLM_EFFORT: LlmEffort = "medium";
+
+// 호출 정책(2026-09-29, 키 누적 $54.59 실측 — 로컬 약 $46.75·CI 약 $6.1). 실제 API 호출은 이 환경변수가
+// "1"일 때만 나간다(CI 워크플로의 LLM 스텝이 명시한다). 로컬 기본은 **캐시 전용** — 미스가 있으면 견적을
+// 보여 주고 멈춘다. 회색으로 채우고 계속 가지 않는 이유: 그 산출물이 커밋되면 이미 산 원인까지 덮인다.
+export const LLM_OPT_IN_ENV = "PATCHGAP_LLM";
+export const LLM_BUDGET_ENV = "PATCHGAP_LLM_BUDGET_USD";
+// 실행 1회 예산. CI의 호출 총 상한 150건 × 건당 추정치 ≈ $4.5라 정상 실행은 걸리지 않고, 프롬프트·파서
+// 변경으로 여러 쌍이 한꺼번에 무효화된 실행만 멈춘다.
+export const DEFAULT_LLM_BUDGET_USD = 8;
+// 건당 추정 단가 — 캐시 1,841건 usage 합산 $46.11 ÷ 1,841 ≈ $0.025(Opus 5, 2026-09-29)에 여유를 둔 값.
+// **추정**이다: 청구 단가가 바뀌면 여기만 고친다.
+export const LLM_EST_USD_PER_CALL = 0.03;

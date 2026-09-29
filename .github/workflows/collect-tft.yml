@@ -231,7 +231,7 @@ jobs:
       # 게임별로 둔다 — `patchgap-llm-`만 쓰면 LoL 캐시가 복원 폴백으로 딸려 온다.
       - name: Restore data/cache/llm (LLM 2단 파일 캐시)
         if: steps.determine.outputs.should_run == 'true' && steps.collect.outputs.partial != 'true'
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: data/cache/llm
           key: patchgap-llm-tft-${{ steps.determine.outputs.to }}-${{ github.run_id }}
@@ -242,14 +242,25 @@ jobs:
       - name: Match + verdict (F4)
         if: steps.determine.outputs.should_run == 'true' && steps.collect.outputs.partial != 'true'
         env:
-          # LLM 2단·3단이 이 키로 돈다. **없으면 던지지 않고 조용히 건너뛴다**
-          # (run-tft-match.ts: `process.env.ANTHROPIC_API_KEY ? null : "ANTHROPIC_API_KEY 없음"`) —
-          # 즉 이 줄이 빠지면 스텝은 초록인데 원인이 0건인 판정이 나간다. job-level 상속을
+          # LLM 2단·3단이 이 키로 돈다. 2026-09-29부터 키가 빠지면 엔진이 **던진다**(PATCHGAP_LLM=1인데 키
+          # 없음) — 예전엔 조용히 건너뛰어 스텝은 초록인데 원인이 0건인 판정이 나갔다. job-level 상속을
           # 걷어내면서 반드시 여기로 따라와야 하는 줄이다.
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # 실제 호출 opt-in(2026-09-29 호출 정책) — 없으면 엔진은 캐시 전용이라 미스가 있으면 견적과 함께 멈춘다.
+          PATCHGAP_LLM: "1"
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
         run: npx tsx scripts/run-tft-match.ts --from "$PATCH_FROM" --to "$PATCH_TO"
+
+      # LLM 캐시는 **호출 직후 무조건** 저장한다(2026-09-29). 암묵 post 저장은 잡이 성공해야만 돌아, run 35944265345가
+      # LLM 133건을 산 뒤 커밋 단계에서 실패하자 결과가 버려지고 같은 날 재실행이 같은 133건을 다시 샀다(raw 캐시와 같은 규약).
+      # 장기 보존은 git이다(data/cache/llm 커밋 — actions 캐시는 7일 미접근 시 지워진다).
+      - name: Save data/cache/llm (LLM 호출 직후)
+        if: always() && steps.determine.outputs.should_run == 'true' && steps.collect.outputs.partial != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: data/cache/llm
+          key: patchgap-llm-tft-${{ steps.determine.outputs.to }}-${{ github.run_id }}
 
       # 수치 축(F9) — 위 스텝이 받아 둔 CDragon 스냅숏을 **전 패치 것과 대조**해 노트에 없는 변경을
       # 찾는다. 지표 축(Match + verdict)과 직교하고 산출물도 섞지 않는다(`data/aggregated/gamedata/tft`).
@@ -362,7 +373,7 @@ jobs:
           # TFT 네임스페이스만 건드린다 — LoL·PUBG 산출물은 이 워크플로의 소관이 아니다.
           # `data/cdragon`은 TFT 전용 수치 스냅숏이라 같이 커밋한다 — 커밋하지 않으면 다음 패치의
           # "전 버전" 스냅숏이 사라져 수치 축이 대조할 짝을 잃는다(버전당 316KB).
-          git add data/aggregated/tft data/aggregated/gamedata/tft data/cdragon public/dd/tft
+          git add data/aggregated/tft data/aggregated/gamedata/tft data/cdragon public/dd/tft data/cache/llm
           if git diff --cached --quiet; then
             echo "변경분 없음 — 커밋 생략"
           else

@@ -975,7 +975,7 @@ describe("요약 수치 사실성 — 캐시 적중 뒤 수치가 바뀐 경우"
     const opts = { cacheDir: dir, client: fakeClient(parseFn) };
     const first = await inferIndirectCandidates([delta({})], [], lolLlmProfile(makeDdragon()), opts);
     expect(first.deltas[0].llm?.summaryDeterministic).toBeUndefined();
-    const moved = await inferIndirectCandidates([delta({ after: 0.3, delta: 0.2 })], [], lolLlmProfile(makeDdragon()), opts);
+    const moved = await inferIndirectCandidates([delta({ after: 0.35, delta: 0.25 })], [], lolLlmProfile(makeDdragon()), opts);
     expect(moved.summary.calls).toBe(0);
     expect(moved.deltas[0].llm?.summaryDeterministic).toBe(true);
     expect(moved.deltas[0].llm?.summary).not.toContain("20.0%");

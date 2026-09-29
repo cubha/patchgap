@@ -2,7 +2,10 @@
 // F3~F4 파이프라인 진입점 — dotenv 로드 후 패치노트 로드(없으면 fetch+parse) → ddragon 로드 →
 // 델타 계산(ST-08) → 1단 결정론 매칭(ST-08) → 판정(ST-08) → 2단 LLM 간접 추론(ST-09, --no-llm 시
 // 스킵) → deltas/{from}_{to}.json 기록 → 콘솔 요약.
-// 실행: npm run pipeline:match -- --from 26.16 --to 26.17 [--llm-max 120] [--no-llm] [--dry-run]
+// 실행: npm run pipeline:match -- --from 26.16 --to 26.17 [--llm-max 120] [--no-llm] [--dry-run] [--llm-sample N]
+// LLM 호출 정책(2026-09-29): 실제 호출은 PATCHGAP_LLM=1일 때만(CI가 명시), 로컬 기본은 캐시 전용 —
+// 미스가 있으면 견적을 보이고 멈춘다. --dry-run은 견적만(호출 0), --llm-sample N은 상위 N건만 부르고 파일은
+// 쓰지 않는다(프롬프트·파서를 고치는 동안 전량을 다시 사지 않게 — 비용의 절반이 그 반복이었다).
 
 import "dotenv/config";
 import fs from "node:fs";
@@ -27,6 +30,7 @@ import { reclassifyIndirectEffects } from "../src/pipeline/match/indirect-effect
 import { deltasFile, matchesJsonl } from "../src/pipeline/shared/paths";
 import type { DeltaRecord, DeltasFile, MatchStatus, PatchId, PatchNoteItem, PatchNoteSection } from "../src/pipeline/types";
 import { isMainModule, parseCliArgs } from "./shared/cli";
+import { assertNoLlmDowngrade } from "./shared/llm-guard";
 
 export interface RunMatchArgs {
   from: PatchId;
@@ -34,6 +38,8 @@ export interface RunMatchArgs {
   llmMax: number;
   noLlm: boolean;
   dryRun: boolean;
+  /** 0이면 끔. N이면 상위 N건만 LLM에 묻고 파일은 쓰지 않는다. */
+  llmSample: number;
 }
 
 export function parseArgs(argv: string[]): RunMatchArgs {
@@ -43,6 +49,7 @@ export function parseArgs(argv: string[]): RunMatchArgs {
     { name: "llmMax", type: "number", default: 120 },
     { name: "noLlm", type: "boolean", default: false },
     { name: "dryRun", type: "boolean", default: false },
+    { name: "llmSample", type: "number", default: 0 },
   ]);
 
   const llmMax = raw.llmMax as number;
@@ -56,6 +63,7 @@ export function parseArgs(argv: string[]): RunMatchArgs {
     llmMax,
     noLlm: raw.noLlm as boolean,
     dryRun: raw.dryRun as boolean,
+    llmSample: Math.max(0, raw.llmSample as number),
   };
 }
 
@@ -113,7 +121,7 @@ export interface RunMatchPipelineParams {
   llmMax: number;
   noLlm: boolean;
   /** 테스트 주입용(Anthropic 클라이언트 모킹·캐시 디렉토리 격리 등) — 프로덕션 호출은 생략. */
-  llmOptions?: Pick<LlmMatchOptions, "client" | "cacheDir" | "maxTotalCalls" | "model">;
+  llmOptions?: Pick<LlmMatchOptions, "client" | "cacheDir" | "maxTotalCalls" | "model" | "planOnly">;
   /** buildDeltas의 matches.jsonl 표본 추출 dataRoot(테스트 격리용). */
   dataRoot?: string;
 }
@@ -200,8 +208,9 @@ export async function main(): Promise<void> {
     after,
     notes,
     ddragon,
-    llmMax: args.llmMax,
+    llmMax: args.llmSample > 0 ? args.llmSample : args.llmMax,
     noLlm: args.noLlm,
+    llmOptions: args.dryRun ? { planOnly: true } : undefined,
   });
 
   if (pipelineResult.mappingFailures.length > 0) {
@@ -255,10 +264,11 @@ export async function main(): Promise<void> {
     }
   }
 
-  if (args.dryRun) {
-    console.log(`[run-match] --dry-run — 파일 기록 생략`);
+  if (args.dryRun || args.llmSample > 0) {
+    console.log(`[run-match] ${args.dryRun ? "--dry-run" : `--llm-sample ${args.llmSample}`} — 파일 기록 생략`);
     return;
   }
+  if (args.noLlm) assertNoLlmDowngrade(oldDeltasPath, finalDeltas, "run-match --no-llm");
 
   const result = writeDeltas({
     from: args.from,

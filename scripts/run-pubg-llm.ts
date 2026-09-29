@@ -69,6 +69,8 @@ async function main(): Promise<void> {
 
   const inferred = await inferIndirectCandidates(deltas.rows, candidates, profile, {
     maxDeltas: args.llmMax as number,
+    // --dry-run은 견적만 — 예전엔 호출·캐시 기록을 다 하고 파일만 안 써서 이름과 달리 돈을 썼다(2026-09-29).
+    planOnly: args.dryRun as boolean,
     // 개정 태그는 프로필이 지시문 옆에서 든다(`llm-profile-pubg.ts`, C5).
   });
   const capped = inferred.deltas.map((row) => capOverclaimedConfidence(row, redistribution));
