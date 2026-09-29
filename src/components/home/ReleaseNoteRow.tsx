@@ -39,7 +39,7 @@ import { lolEntityHref } from "@/lib/detailRoutes";
 import { usePairBase } from "@/components/PairBaseContext";
 import { isCosmeticGroup, isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
 import CosmeticSkinPreview, { type CosmeticSkinItem } from "./CosmeticSkinPreview";
-import { spellIconKey } from "@/pipeline/match/spell-icon";
+import { parseSkillSlot, spellIconKey } from "@/pipeline/match/spell-icon";
 import {
   excludeObservation,
   formatMetricValue,
@@ -412,7 +412,14 @@ export default function ReleaseNoteRow({
               return (
                 <li key={skillGroup.key} className="flex items-start gap-3">
                   {skillGroup.skill ? (
-                    <SpellIcon filename={filename} name={skillGroup.skill} size={40} />
+                    // 슬롯이 없는 행(「기본 능력치」·아펠리오스 무기명)은 스킬 아이콘이 존재하지 않는다 — 글자 폴백 대신
+                    // 그 챔피언 초상화를 쓴다(2026-09-29, 사용자 지적 「lol은 패치내용표에 사진이 없다」). 슬롯이
+                    // 있는데 파일이 없으면(자산 미동기화) 기존대로 글자 폴백 — 없는 아이콘을 지어내지 않는다.
+                    parseSkillSlot(skillGroup.skill) === null && icon.entityType === "champion" && icon.entityKey ? (
+                      <EntityIcon entityType="champion" entityKey={icon.entityKey} name={group.entity} size={40} />
+                    ) : (
+                      <SpellIcon filename={filename} name={skillGroup.skill} size={40} />
+                    )
                   ) : null}
                   <div className="min-w-0 flex-1">
                     {skillGroup.skill ? (

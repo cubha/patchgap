@@ -85,13 +85,22 @@ export function resolveSpellIconFile(championJson: unknown, slot: SpellSlot): st
 
 /**
  * `PatchNoteItem.skill`(예: "Q - 빛의 숨결", "RW - 모방: 왜곡")에서 선행 슬롯 문자를 추출한다.
- * 문자열 맨 앞이 Q/W/E/R가 아니면(예: "기본 능력치", "기본 지속 효과 - ...") null을 반환한다 —
- * 패시브 텍스트는 명시적 슬롯 표기가 없어 추측하지 않는다(무근거 아이콘 매핑 방지). "RW" 같은
+ * 「기본 지속 효과 - …」는 패시브(P). 그 밖에 맨 앞이 Q/W/E/R가 아니면(예: "기본 능력치", 아펠리오스 무기명)
+ * null — 슬롯을 추측하지 않는다(무근거 아이콘 매핑 방지). "RW" 같은
  * 복합 표기(궁극기로 다른 스킬을 모방하는 챔피언)는 첫 글자(R)만 슬롯으로 취급한다.
  */
 export function parseSkillSlot(skill: string): SpellSlot | null {
-  const match = /^([QWER])/.exec(skill.trim());
+  const text = skill.trim();
+  // 「기본 지속 효과」는 LoL 한국어 노트의 패시브 **명시 표기**다 — 추측이 아니다(2026-09-29, 26.19 패시브 4행이
+  // 글자 폴백으로 나가던 것을 사용자가 지적).
+  if (text.startsWith("기본 지속 효과")) return "P";
+  const match = /^([QWER])/.exec(text);
   return match ? (match[1] as SpellSlot) : null;
+}
+
+/** DDragon CDN의 이미지 폴더 — 패시브는 `img/passive/`, 스킬은 `img/spell/`이다. */
+export function spellImageDir(slot: SpellSlot): "passive" | "spell" {
+  return slot === "P" ? "passive" : "spell";
 }
 
 /** entity+skill 쌍을 스펠 아이콘 인덱스(`data/aggregated/spell-icons.json`)의 키로 정규화한다.
