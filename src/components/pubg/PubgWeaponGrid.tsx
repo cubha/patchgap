@@ -9,6 +9,7 @@
 // 상대 변화(판정이 선 무기만 색으로, 노이즈 상태는 표시하지 않는다 — 사용자 C1). 컨테이너는 고정 높이
 // 내부 스크롤(h-80)이라 47장이 페이지를 늘리지 않는다. 서버 컴포넌트(상태 없음).
 import Link from "next/link";
+import { ENTITY_INDEX_CELL, ENTITY_INDEX_GRID } from "@/components/EntityIndexSection";
 import type { PubgWeaponStat } from "@/pipeline/aggregate/pubg-weapons";
 import type { PubgDeltaRow } from "@/pipeline/match/pubg-delta";
 import { publicWeaponPath } from "@/pipeline/pubg/asset-path";
@@ -28,13 +29,13 @@ export default function PubgWeaponGrid({ weapons, rows, assetKeys }: PubgWeaponG
   const byKey = new Map(rows.map((row) => [row.weaponKey, row] as const));
   const ordered = [...weapons].sort((a, b) => b.share - a.share);
   return (
-    <ul className="grid h-80 grid-cols-2 gap-px overflow-y-auto bg-border-soft sm:grid-cols-3 lg:grid-cols-6">
+    <ul className={`${ENTITY_INDEX_GRID} h-80 grid-cols-2 overflow-y-auto sm:grid-cols-3 lg:grid-cols-6`}>
       {ordered.map((weapon) => {
         const row = byKey.get(weapon.weaponKey) ?? null;
         const judged = row !== null && isReportable(row.status);
         const rel = judged ? (row.relChange ?? 0) : null;
         return (
-          <li key={weapon.weaponKey} className="bg-surface">
+          <li key={weapon.weaponKey} className={ENTITY_INDEX_CELL}>
             <Link
               href={weaponHref(weapon.weaponKey)}
               className="flex h-full flex-col gap-1.5 p-3 transition-colors hover:bg-accent/10"
