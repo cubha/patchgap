@@ -220,12 +220,12 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
               패치노트가 말한 것 vs 통계가 말하는 것
             </span>
             <h1 className="max-w-3xl font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
-              패치노트는 <span className="text-accent">{noteEntities}개 엔티티</span>를 말했고, 통계는{" "}
+              패치노트는 <span className="text-accent">{noteEntities}개 항목</span>을 말했고, 통계는{" "}
               <span className="text-accent">{reportable.length}개 변화</span>를 말합니다
             </h1>
             <p className="max-w-3xl text-sm leading-relaxed text-fg-2">
               <strong className="text-fg">유닛 · 특성 · 아이템</strong> · KR · Master+ <strong className="text-fg">{before.matches.toLocaleString()}</strong> →{" "}
-              <strong className="text-fg">{after.matches.toLocaleString()}</strong>매치 · 엔티티{" "}
+              <strong className="text-fg">{after.matches.toLocaleString()}</strong>매치 · 대상{" "}
               <strong className="text-fg">{after.units.length + after.traits.length + after.items.length}</strong>종
             </p>
           </div>

@@ -130,8 +130,9 @@ describe("buildBriefingEmbeds", () => {
       noteCount: 35,
       matchCounts: { from: 10240, to: 10118 },
     });
-    // ST-11 HeroSummary와 통일된 문구("패치노트는 N개 엔티티를 말했고, 통계는 M개 변화를 말합니다").
-    expect(withCounts.description).toContain("패치노트는 35개 엔티티를 말했고");
+    // ST-11 HeroSummary와 통일된 문구("패치노트는 N개 항목을 말했고, 통계는 M개 변화를 말합니다").
+    // 2026-09-30 명세 변경: 화면 히어로가 세 게임 모두 「N개 항목」(PUBG 기준)으로 맞춰져 여기도 따른다.
+    expect(withCounts.description).toContain("패치노트는 35개 항목을 말했고");
     expect(withCounts.description).toMatch(/통계는 \d+개 변화를 말합니다/);
     expect(withCounts.footer.text).toContain("n=10,240/10,118");
 

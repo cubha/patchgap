@@ -67,22 +67,20 @@ export default function HeroSummary({ stats, patch, action, gapCount, pairBase =
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="pt-1">
+      {/* 2026-09-30 사용자 지시 「배틀그라운드 기준으로 문구(항목/변화)와 폰트사이즈 맞춰라」 — 머리줄·h1·강조
+          범위를 PUBG 브리핑(`app/pubg/page.tsx`)과 같은 마크업으로 맞췄다. 배경 위 그림자(ambient-hero-*)는
+          LoL 키아트 대비 때문에 유지한다(크기·서체에는 영향 없음). */}
+      <div className="flex flex-col gap-2 pt-1">
         {/* 2026-09-18(채점 라운드1 ST-10): 첫 줄에 제품이 답하는 질문을 사람 말로 — 심사석·투표자는
             30초 안에 "무엇을 하는 사이트인지" 알아야 한다. 숫자는 <h1> 한 문장에 넣고 mono span
             안의 여백을 없앴다(이중 공백이 그대로 렌더되던 결함). 부제의 통계 용어(FDR·1차축·
             게이트)는 방법론으로 보내고 여기는 표본과 규칙만 말한다. */}
-        <p className="ambient-hero-sub text-xs font-bold tracking-wide text-accent">
+        <span className="ambient-hero-sub font-mono text-xs font-bold tracking-wide text-accent uppercase">
           패치노트가 말한 것 vs 통계가 말하는 것
-        </p>
-        <h1 className="ambient-hero-headline mt-2 max-w-3xl break-keep text-2xl font-bold leading-tight text-fg">
-          {/* 두 숫자를 accent로 든다(2026-09-21 사용자 지시 — 세 게임 히어로 통일). 이 문장이
-              히어로의 전부이므로 "패치가 말한 수"와 "통계가 말한 수"가 한눈에 대비돼야 한다. */}
-          패치노트는{" "}
-          <strong className="font-mono tabular-nums text-accent">{fmtInt(noteEntityCount)}</strong>개
-          챔피언·아이템을 바꿨다고 말했고, 통계는{" "}
-          <strong className="font-mono tabular-nums text-accent">{fmtInt(statCount)}</strong>개 변화를
-          말합니다
+        </span>
+        <h1 className="ambient-hero-headline max-w-3xl break-keep font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
+          패치노트는 <span className="text-accent">{fmtInt(noteEntityCount)}개 항목</span>을 말했고, 통계는{" "}
+          <span className="text-accent">{fmtInt(statCount)}개 변화</span>를 말합니다
         </h1>
         {/* 계산 방법 설명 문장("패치 전후 … 유의한 변화만 셉니다")은 방법론으로 옮겼다(재판정 보완 6, C3). */}
         {/* 인트로 재생 버튼은 2026-09-18 라운드6(사용자 C4 "인트로재생 버튼 제거")에 뺐다. `action`

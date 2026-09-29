@@ -31,7 +31,8 @@ describe("HeroSummary — 빈 상태(모든 수치 0)", () => {
     );
     // 2026-09-18 명세 변경(채점 라운드1 ST-10): 히어로 문장이 "N 엔티티 / M 항목"에서 사람 말
     // ("N개 챔피언·아이템을 바꿨다고 말했고")로 바뀌었다 — 테스트 약화가 아니라 문구 반영.
-    expect(container.textContent).toContain("0개 챔피언·아이템");
+    // 2026-09-30 명세 변경(사용자 지시 「배틀그라운드 기준으로 문구(항목/변화) 맞춰라」): 세 게임이 같은 문장.
+    expect(container.textContent).toContain("패치노트는 0개 항목을 말했고, 통계는 0개 변화를 말합니다");
     expect(container.textContent).toContain("패치노트가 말한 것 vs 통계가 말하는 것");
     expect(container.querySelector("h1")).not.toBeNull();
   });
