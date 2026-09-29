@@ -5,7 +5,7 @@
 import { describe, it, expect } from "vitest";
 import chogathFixture from "../../../__fixtures__/ddragon-champion-chogath.json";
 import gravesFixture from "../../../__fixtures__/ddragon-champion-graves.json";
-import { parseSkillSlot, resolveSpellIconFile, spellIconKey } from "../spell-icon";
+import { parseSkillSlot, resolveSpellIconFile, spellIconKey, spellImageDir } from "../spell-icon";
 
 describe("resolveSpellIconFile", () => {
   it("초가스 E는 VorpalSpikes.png", () => {
@@ -67,8 +67,10 @@ describe("parseSkillSlot", () => {
     expect(parseSkillSlot("기본 능력치")).toBeNull();
   });
 
-  it("'기본 지속 효과 - 영혼의 포식자'는 슬롯 표기가 없어 null", () => {
-    expect(parseSkillSlot("기본 지속 효과 - 영혼의 포식자")).toBeNull();
+  // 2026-09-29 명세 변경: 「기본 지속 효과」는 LoL 한국어 노트가 패시브에 쓰는 **명시적 표기**다(추측 아님).
+  // null로 두었더니 26.19 패시브 4행이 전부 글자 폴백이었다 — 사용자 지적 「lol은 패치내용표에 사진이 없다」.
+  it("'기본 지속 효과 - 영혼의 포식자'는 패시브(P)", () => {
+    expect(parseSkillSlot("기본 지속 효과 - 영혼의 포식자")).toBe("P");
   });
 
   it("빈 문자열은 null", () => {
@@ -86,5 +88,13 @@ describe("spellIconKey", () => {
     const a = spellIconKey("A", "BC");
     const b = spellIconKey("AB", "C");
     expect(a).not.toBe(b);
+  });
+});
+
+// 패시브 이미지는 DDragon CDN에서 `img/passive/`, 스킬은 `img/spell/`에 있다(2026-09-29).
+describe("spellImageDir", () => {
+  it("P는 passive, Q/W/E/R은 spell", () => {
+    expect(spellImageDir("P")).toBe("passive");
+    for (const slot of ["Q", "W", "E", "R"] as const) expect(spellImageDir(slot)).toBe("spell");
   });
 });

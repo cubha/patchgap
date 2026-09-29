@@ -267,6 +267,14 @@ jobs:
             --to "$PATCH_TO" \
             --llm-max "$LLM_MAX"
 
+      # 스킬 아이콘은 **노트가 생긴 뒤에** 맞춘다(2026-09-29). 위 「Update Data Dragon assets」는 판정 앞이라
+      # 새 패치 노트가 아직 없어, 새 스킬은 늘 아이콘 대상에서 빠졌다(26.19 스킬 22개 중 2개 — 사용자 지적
+      # 「lol은 패치내용표에 사진이 없다」). 공개 CDN이라 키가 필요 없고, 실패해도 화면은 글자 폴백이다.
+      - name: Sync spell icons for new notes
+        if: steps.determine.outputs.should_run == 'true'
+        run: npx tsx scripts/run-ddragon.ts --spells-only
+        continue-on-error: true
+
       # 수치 축(F9) — 게임사가 배포한 **원본 수치**를 패치 간 대조해 패치노트에 없는 변경을 찾는다.
       # 지표 축(위 Match + verdict)과 직교하고 산출물도 섞지 않는다(`data/aggregated/gamedata/lol`).
       #

@@ -34,6 +34,7 @@ import {
   parseSkillSlot,
   resolveSpellIconFile,
   spellIconKey,
+  spellImageDir,
   type SpellSlot,
 } from "../src/pipeline/match/spell-icon";
 import type { PatchNoteItem, SpellIconIndexFile, SpellIconMap } from "../src/pipeline/types";
@@ -241,7 +242,7 @@ async function syncSpellIcons(
         continue;
       }
       icons[spellIconKey(target.entity, target.skill)] = filename;
-      const url = `${cdnBase(version)}/img/spell/${filename}`;
+      const url = `${cdnBase(version)}/img/${spellImageDir(target.slot)}/${filename}`;
       const dest = path.join(PUBLIC_DD_DIR, "spell", filename);
       const result = await downloadImageIfMissing(url, dest, fetchImpl);
       if (result === "downloaded") downloaded += 1;
@@ -451,10 +452,24 @@ async function syncSkinIndexAndSplashes(
   );
 }
 
+/**
+ * `--spells-only`(2026-09-29): 스킬 아이콘만 다시 맞춘다. LoL 워크플로는 이 스크립트를 판정(노트 생성) **앞**에서
+ * 돌리므로 새 패치의 스킬은 아이콘 대상에서 빠졌다(26.19 스킬 22개 중 2개) — 판정 뒤에 이 모드로 한 번 더 돈다.
+ */
+export function parseRunDdragonArgs(argv: readonly string[]): { spellsOnly: boolean } {
+  return { spellsOnly: argv.includes("--spells-only") };
+}
+
 export async function main(): Promise<void> {
+  const { spellsOnly } = parseRunDdragonArgs(process.argv.slice(2));
   const fetchImpl = fetch;
   const version = await fetchLatestVersion(fetchImpl);
-  console.log(`[run-ddragon] latest version=${version}`);
+  console.log(`[run-ddragon] latest version=${version}${spellsOnly ? " (spells-only)" : ""}`);
+  if (spellsOnly) {
+    // 앞 단계가 받아 둔 같은 버전의 champion.json을 쓴다 — 없으면 loadDdragon이 던진다(조용히 넘어가지 않는다).
+    await syncSpellIcons(version, loadDdragon(version), fetchImpl);
+    return;
+  }
 
   const versionDir = path.join(DATA_ROOT, "ddragon", version);
   await downloadJsonFile(

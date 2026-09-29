@@ -2,6 +2,7 @@
 // 브리핑 홈 컴포넌트 빈 상태 렌더 검증(ST-11 완료 조건 "빈 상태 렌더"). 프로젝트 관례대로
 // jest-dom 매처 없이 render()의 container를 직접 querying한다(src/__tests__/components.test.tsx
 // 참고 — setupFiles는 RTL cleanup 등록에만 쓰고 매처는 붙이지 않는다, vitest.setup.ts).
+import type { PatchNoteItem } from "@/pipeline/types";
 import { describe, expect, it } from "vitest";
 import { fireEvent, render } from "@testing-library/react";
 import type { ReactNode } from "react";
@@ -362,5 +363,38 @@ describe("ReleaseNoteStream — tier 2 접기 · 기타 변경", () => {
     const gapTab = Array.from(container.querySelectorAll('button[role="tab"]')).find((b) => b.textContent?.startsWith("미공지 Gap"));
     fireEvent.click(gapTab!);
     expect(container.textContent).not.toContain("기타 변경");
+  });
+});
+
+// 2026-09-29 사용자 지적 「lol은 패치내용표에 사진이 없다」: 스킬 행이 글자 폴백이었다. 슬롯 없는 행(기본 능력치)은
+// 챔피언 초상화, 패시브는 패시브 아이콘, Q/W/E/R은 스킬 아이콘 — 아이콘 파일이 인덱스에 있으면 이미지로 그린다.
+describe("ReleaseNoteStream — 스킬 행 이미지", () => {
+  const note = (id: string, skill: string) =>
+    ({
+      id, patch: "26.19", section: "champion", entity: "아리", skill, stat: "피해량", before: "1", after: "2",
+      direction: "buff", summary: `${skill} 피해량: 1 ⇒ 2`, anchorUrl: "https://x/#a", anchorKind: "entity", modeScope: "core",
+    }) as PatchNoteItem;
+  it("기본 능력치 → 챔피언 초상화, 기본 지속 효과 → 패시브 아이콘, Q → 스킬 아이콘", () => {
+    const entry: ReleaseStreamEntry = {
+      group: { kind: "matched", entity: "아리", notes: [note("n1", "기본 능력치"), note("n2", "기본 지속 효과 - 정기 흡수"), note("n3", "Q - 현혹의 구슬")] },
+      icon: { entityType: "champion", entityKey: "Ahri" },
+      lanes: [],
+    };
+    const { container } = render(
+      withAmbient(
+        <ReleaseNoteStream
+          entries={[entry]}
+          spellIcons={{ "아리\u001F기본 지속 효과 - 정기 흡수": "Ahri_SoulEater2.png", "아리\u001FQ - 현혹의 구슬": "AhriQ.png" }}
+          noteDeltas={{}}
+          patch="26.19"
+          contentCount={1}
+          gapCount={0}
+        />
+      )
+    );
+    const srcs = [...container.querySelectorAll("li img")].map((img) => img.getAttribute("src"));
+    expect(srcs).toContain("/dd/spell/AhriQ.png");
+    expect(srcs).toContain("/dd/spell/Ahri_SoulEater2.png");
+    expect(srcs.filter((src) => src?.includes("/dd/champion/Ahri")).length).toBeGreaterThan(0);
   });
 });
