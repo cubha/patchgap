@@ -20,12 +20,14 @@ describe("run-match: parseArgs", () => {
   });
 
   it("옵션을 전부 파싱한다", () => {
-    expect(parseArgs(["--from", "26.16", "--to", "26.17", "--llm-max", "10", "--no-llm", "--dry-run"])).toEqual({
+    expect(parseArgs(["--from", "26.16", "--to", "26.17", "--llm-max", "10", "--no-llm", "--dry-run", "--llm-sample", "5"])).toEqual({
       from: "26.16",
       to: "26.17",
       llmMax: 10,
       noLlm: true,
       dryRun: true,
+      // 2026-09-29 명세 추가: 개발 중 상위 N건만 묻고 파일은 쓰지 않는다(비용 정책).
+      llmSample: 5,
     });
   });
 

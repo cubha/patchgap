@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Fiora:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T01:02:32.980Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 들끓는 일격 중첩 지속시간이 3초에서 4초로 늘어, 지속 평타 딜러들의 맞라인·후반 교전 강도가 올라가면서 피오라의 상대적 우위가 줄었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:other:증강:35873480",
+        "text": "'승리를 위한 회전' 증강의 궁극기 피해량 증가가 30%에서 50%로 상향되어, 궁극기 한 방 위주 조합이 강해지며 지속 딜 위주의 피오라가 불리해졌을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+        "text": "마스터 이의 궁극기 이동 속도와 레벨당 방어력이 함께 상향되어, 대표적인 결투 상대와의 1대1 구도에서 피오라가 밀릴 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "피오라 승률은 51.0%에서 46.0%로 -4.9%p 하락했지만 95% CI가 [-10.3%p, 0.5%p]로 0을 포함해 표본 변동일 소지가 크며, 간접 요인으로는 구인수의 격노검 중첩 지속시간 4초 상향과 마스터 이 강화가 꼽힙니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b",
+      "note:26.18:champion:masteryi:c898ee27"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 804
+  }
+}

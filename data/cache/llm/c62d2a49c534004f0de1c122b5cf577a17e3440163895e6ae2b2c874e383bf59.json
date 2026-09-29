@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Ekko:MIDDLE:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:18:18.820Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
+        "text": "카사딘 Q 계수 70%→80% 버프로 미드 암살·스케일링 경쟁에서 에코가 밀렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:kassadin:d9a6b909",
+        "text": "카사딘 R 기본 피해 70/90/110→80/95/110 상향으로 에코의 중반 주도권이 약화됐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:cassiopeia:957165bc",
+        "text": "카시오페아 Q 계수 65%→75% 등 조정으로 미드 라인전 상성이 에코에 불리해졌을 소지가 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+        "text": "비에고 지속효과 회복 강화로 정글 개입이 늘어 에코 미드의 생존이 어려워졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "에코는 Q 계수·마나 버프를 받았음에도 승률이 57.4%→47.8%로 떨어졌는데, 카사딘 Q·R 상향 등 미드 경쟁자 강화가 유력한 배경입니다.",
+    "summaryCites": [
+      "note:26.18:champion:kassadin:d631af52",
+      "note:26.18:champion:kassadin:d9a6b909"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 758
+  }
+}

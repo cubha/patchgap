@@ -1,0 +1,43 @@
+{
+  "deltaId": "unit:DA_18_Kayle:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:29:13.279Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:system:기원자:3f993458",
+        "text": "기원자 4단계 마나 재생 9→8 너프로 기원자 계열 주문 캐리 채용이 줄어든 영향으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
+        "text": "베이가 스킬 피해량 상향으로 주문 캐리 자리를 베이가가 가져가며 밀려났습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:럭스:8c458b36",
+        "text": "럭스 3성 보너스 12%→15% 상향으로 후반 마법 캐리 선택지가 럭스로 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:기원자-상징:04e357a3",
+        "text": "기원자 상징 마나 재생 3→2 하향으로 상징 기반 주문 캐리 조합 빈도가 감소했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "케일 등장률 5.2%→3.7%(-1.5%p)는 직접 변경 없이, 베이가·럭스 상향으로 주문 캐리 자리가 대체되고 기원자 마나 재생 너프가 겹친 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:베이가:c44fce5f",
+      "note:tft:18.3:champion:럭스:8c458b36",
+      "note:tft:18.3:system:기원자:3f993458"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 849
+  }
+}

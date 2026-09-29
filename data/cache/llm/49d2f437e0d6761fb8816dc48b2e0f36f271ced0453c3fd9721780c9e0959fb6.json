@@ -1,0 +1,18 @@
+{
+  "deltaId": "lane:UTILITY:goldAt14",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:08:06.047Z",
+  "parsed": {
+    "causes": [],
+    "summary": "서포터 라인의 14분 골드(-40.5, 95% CI [-69.6, -11.5])는 후보 목록에서 서포터 포지션 챔피언(예: 노틸러스, 세라핀, 바드 등)의 방어력·피해량 소폭 조정이 존재하지만 해당 변경들은 개별 챔피언 대상이며 서포터 전체 지표에 직접적인 간접 영향을 설명할 만큼 체계적이지 않아 뚜렷한 간접 인과 후보를 찾기 어렵습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 216
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "deltaId": "champion:Jax:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:26:57.505Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "잭스 탑의 핵심 코어인 갈라진 하늘의 공격력이 45에서 40으로 줄어 라인전·교환 딜이 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "같은 아이템의 체력도 450에서 400으로 감소해 잭스의 지속 전투 생존력이 함께 약해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:d2cf5f23",
+        "text": "탑 경쟁자인 가렌이 공격력·방어력·E 피해량까지 상향돼 잭스의 라인 주도권이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:문도-박사:f54272dc",
+        "text": "문도 박사의 기본 체력이 522에서 560으로 올라 잭스가 상대하기 어려운 탑 픽이 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:크산테:963736ea",
+        "text": "크산테의 W 재사용 대기시간이 12/11/10/9/8초로 짧아져 탑 맞대결에서 잭스가 불리해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "잭스 탑 승률 -3.5%p는 신뢰구간이 0을 포함해 유의성이 약하며, 코어 아이템 갈라진 하늘의 공격력 45→40·체력 450→400 너프가 가장 그럴듯한 간접 원인입니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 904
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Qiyana:MIDDLE:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:58:18.957Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+        "text": "제라스 Q 피해량과 체력 너프로 미드 견제형 상대가 약해져 키아나가 반사이익을 얻은 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:080e761c",
+        "text": "제라스 기본 체력 596→575 하락으로 키아나의 강한 폭발 딜 진입이 더 쉬워졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "키아나 미드 승률 48.5%→52.7%(+4.2%p)이나 95% CI가 0을 포함해 변동일 수 있고, 제라스 Q·체력 너프가 미드 구도상 간접 이득을 준 정도입니다.",
+    "summaryCites": [
+      "note:26.17:champion:xerath:43a6f4aa",
+      "note:26.17:champion:xerath:080e761c"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 617
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Trundle:UTILITY:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-19T00:03:35.118Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:애니:e298f012",
+        "text": "애니 기본 지속 효과 기절 지속시간이 1.5초에서 1.75초로 늘고 Q·W 피해량도 올라가 서포터 픽 슬롯 경쟁이 심해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:럭스:cce285a0",
+        "text": "럭스 E 반경이 310에서 350으로 커지는 등 전반적 상향을 받아, 변칙 서포터 대신 정통 마법사 서포터 선택이 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트런들:85be03ea",
+        "text": "트런들 W 공격 속도가 30/50/70/90/110%로 강화되어 정글·탑 활용 가치가 커지면서 서포터 기용이 줄어든 것으로 보입니다.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "트런들 서포터 픽률이 0.4%에서 0.1%로 -0.2%p 내려간 것은 W 공격 속도 상향이 정글·탑 기용을 밀어준 반면, 애니·럭스 상향으로 서포터 슬롯 경쟁이 세진 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:트런들:85be03ea",
+      "note:26.17:champion:애니:e298f012",
+      "note:26.17:champion:럭스:cce285a0"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 955
+  }
+}

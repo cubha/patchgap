@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Ezreal:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:53:35.422Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해가 최대 체력 6~10%에서 4~10%로 하향돼 원거리 딜러 밴 우선순위가 이즈리얼로 옮겨간 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+        "text": "그레이브즈 Q 폭발 피해 계수 하향으로 경쟁 AD 챔피언 입지가 줄며 이즈리얼 기용·견제가 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 상향이 이즈리얼 빌드 효율을 올려 밴 대상 가치를 높였습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "이즈리얼 밴률이 13.1%→16.1%(+3.0%p)로 올랐고, 베인·그레이브즈 하향에 따른 원딜 우선순위 이동이 유력한 간접 요인입니다.",
+    "summaryCites": [
+      "note:26.17:champion:vayne:1da6ddd1",
+      "note:26.17:champion:graves:0bc5877b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 654
+  }
+}

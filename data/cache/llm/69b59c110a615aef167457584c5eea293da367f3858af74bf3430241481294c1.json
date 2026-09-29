@@ -1,0 +1,49 @@
+{
+  "deltaId": "champion:MonkeyKing:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T00:51:16.426Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
+        "text": "마스터 이가 레벨당 방어력 증가(4.5→5)와 궁극기 이동 속도 상향을 받아 정글 초반 대결 및 픽 경쟁에서 오공이 밀렸을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+        "text": "마스터 이 R 이동 속도가 35/45/55%에서 40/50/60%로 올라 정글 동선·추격 싸움에서 오공의 상대 난이도가 높아졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
+        "text": "비에고가 레벨당 공격력 증가(3.5→4)와 지속 효과 회복량 상향을 받아 같은 근접 정글 구간에서 오공의 상대 우위가 줄었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+        "text": "비에고 군주의 지배 회복량이 공격력·주문력·공격 속도·체력에 비례해 늘어나 정글 교전 지속력 격차가 벌어졌을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 중첩 지속시간이 3초에서 4초로 늘어 지속 평타형 정글러 선호가 커지면서 오공의 상대 입지가 약해졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "오공 승률이 55.4%에서 44.5%로 10.8%p 급락했지만 직접 조항은 없고, 마스터 이 방어력·R 이동 속도 상향과 비에고 공격력·회복 상향 같은 정글 경쟁자 버프가 간접 원인으로 의심됩니다.",
+    "summaryCites": [
+      "note:26.18:champion:masteryi:d392c3c6",
+      "note:26.18:champion:masteryi:c898ee27",
+      "note:26.18:champion:viego:3477e7c5",
+      "note:26.18:champion:viego:caf9b23d"
+    ]
+  },
+  "usage": {
+    "inputTokens": 119,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 972
+  }
+}

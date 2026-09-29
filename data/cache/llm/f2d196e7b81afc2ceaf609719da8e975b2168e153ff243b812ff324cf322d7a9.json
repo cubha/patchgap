@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Yone:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:03:25.672Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 요네의 핵심 치명타 빌드 효율이 올라갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력 45→40 너프로 경쟁 탑 브루저가 약화돼 반사이익을 얻었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+        "text": "야스오도 같은 치명타 피해 감소 조정을 받아 두 검사 모두 픽 수요가 이동했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요네 탑 픽률 5.5%→5.9%(CI가 0을 포함해 유의하지 않음)로, 폭풍갈퀴 공격 속도 25% 상향에 따른 빌드 효율 상승이 주요 배경입니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 774
+  }
+}

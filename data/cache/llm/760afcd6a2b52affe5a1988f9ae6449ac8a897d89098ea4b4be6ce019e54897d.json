@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Irelia:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:56:40.259Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "이렐리아 핵심템 갈라진 하늘 공격력 45→40 하향으로 버프 효과가 상쇄됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력 450→400 하향으로 이렐리아의 교전 생존력이 낮아졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:1f26947d",
+        "text": "R 주문력 계수 버프는 AD 주력 빌드에서 체감이 적어 승률 반등으로 이어지지 않았습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "이렐리아 승률 -1.3%p는 CI가 [-6.9, 4.2]로 통계적 유의성이 없고, 코어템 갈라진 하늘의 공격력·체력 하향이 버프를 상쇄한 것으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 636
+  }
+}

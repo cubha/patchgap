@@ -1,0 +1,44 @@
+{
+  "deltaId": "champion:Sivir:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:40:05.353Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 상향돼 공격 속도 기반 원거리 딜러인 시비르의 체감 성능이 올라가 밴 우선순위가 높아졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트위치:8757056b",
+        "text": "트위치의 1레벨 공격 속도가 0.679에서 0.658로 낮아지는 등 경쟁 원거리 딜러가 약화되며 시비르가 반사이익을 얻어 밴률이 올랐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:이즈리얼:5b9e4881",
+        "text": "이즈리얼 Q 총공격력 계수가 120%에서 110%로 줄어 바텀 1티어 경쟁자가 밀려나면서 시비르 선호·견제가 늘었을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해가 최대 체력의 6~10%에서 4~10%로 하향돼 원거리 딜러 구도가 재편된 영향으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "시비르 밴률이 1.7%에서 2.4%로 올랐는데, 본인 변경은 하향 위주라 폭풍갈퀴 공격 속도 25% 상향과 이즈리얼·트위치·베인 등 경쟁 원딜 하향에 따른 반사이익으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43",
+      "note:26.17:champion:이즈리얼:5b9e4881",
+      "note:26.17:champion:트위치:8757056b",
+      "note:26.17:champion:vayne:1da6ddd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1034
+  }
+}

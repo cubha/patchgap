@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Cassiopeia:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-09-28T10:15:49.476Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
+        "text": "오로라 궁극기 지속시간 버프로 미드 밴 우선순위가 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:lillia:9a5c8c9b",
+        "text": "릴리아 궁극기 수면 2.5초 강화로 밴 표가 분산된 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라 대결투 회복량 상향이 밴 우선순위를 가져간 영향으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카시오페아 밴률이 11.2%→4.4%(-6.8%p)로 급락했습니다. 직접 변경은 없고 오로라·릴리아 버프로 밴 표가 분산된 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.19:champion:aurora:8770c9ea",
+      "note:26.19:champion:lillia:9a5c8c9b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 627
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,18 @@
+{
+  "deltaId": "lane:MIDDLE:goldAt10",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:08:09.112Z",
+  "parsed": {
+    "causes": [],
+    "summary": "미드 라인 10분 골드(goldAt10)의 소폭 하락(-36.6, 95% CI [-63.2, -10.0])을 직접 설명할 만한 미드 챔피언 대상 패치노트 항목이 후보 목록에 없어, 특정 원인으로 지목하기 어렵습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 135
+  }
+}

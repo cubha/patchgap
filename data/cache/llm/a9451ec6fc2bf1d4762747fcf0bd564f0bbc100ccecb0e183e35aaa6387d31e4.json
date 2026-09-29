@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:DA_Quicksilver:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:23:10.774Z",
+  "parsed": {
+    "summary": "수은 순방률 -4.0%p는 직접 변경이 아니라 속사포·명멸검 공격 속도 하향으로 수은 주력 캐리 축이 약화된 여파입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:속사포:f271519a",
+      "note:tft:18.2:item:명멸검:ce978bd1"
+    ],
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:렝가:4a189382",
+        "confidence": "low",
+        "text": "수은 주 사용처인 렝가 기본 공격 속도 0.8→0.75 너프로 아이템 순방률이 동반 하락했습니다."
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:7f03951b",
+        "confidence": "low",
+        "text": "마스터 이 공격력 65→60, 주문력 형태 피해 너프로 수은 장착 캐리 구성의 성능이 내려갔습니다."
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "confidence": "low",
+        "text": "속사포 공격 속도가 9/15%에서 8/12%로 내려가 수은을 두르던 공격 속도 캐리 축이 약화됐습니다."
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "confidence": "low",
+        "text": "명멸검 기본 공격당 공격 속도가 5%에서 4%로 하향돼 수은과 함께 쓰이던 조합의 화력이 줄었습니다."
+      }
+    ]
+  },
+  "usage": {
+    "inputTokens": 372,
+    "cacheReadInputTokens": 34262,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1434
+  },
+  "proseRepairAttempts": 1
+}

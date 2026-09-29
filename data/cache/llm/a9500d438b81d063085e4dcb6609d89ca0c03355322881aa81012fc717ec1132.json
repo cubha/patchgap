@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Anivia:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:50:15.059Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+        "text": "이렐리아 Q 계수 70%→80% 등 전반 강화로 탑 라인 대치에서 애니비아가 밀립니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:1f26947d",
+        "text": "이렐리아 R 주문력 계수 70%→100%로 딜교 폭이 커져 애니비아 탑 생존이 어려워졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
+        "text": "초가스 E 피해량 10 증가로 마법사 탑 상대 라인 압박이 강해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "트런들 W 공격 속도 최대 90%→110% 버프로 탑 근접 압박 챔피언이 늘었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "애니비아 탑 승률이 57.3%→44.4%(-12.8%p)로 급락했습니다. 직접 변경은 없고 이렐리아 Q·R 계수 상향 등 탑 경쟁 챔피언 강화가 주요 요인입니다.",
+    "summaryCites": [
+      "note:26.17:champion:irelia:9035ffdc",
+      "note:26.17:champion:irelia:1f26947d"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 738
+  }
+}

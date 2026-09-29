@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:DA_18_EmblemInferno:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:53:57.223Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:지옥불:e0ee7b3d",
+        "text": "지옥불 화상 피해가 3/3.5%에서 3.5/4.5%로 올라, 단계를 올려주는 지옥불 상징 가치가 상승했습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징의 공격력/주문력이 15%에서 10%로 깎이며 상징 선택 경쟁에서 밀렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 너프로 대체 상징 수요가 지옥불 쪽으로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:전쟁기계-상징:83270fa5",
+        "text": "전쟁기계 상징 체력 350→250 너프도 상징 선택지 재편에 기여했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "지옥불 화상 피해 상향(3.5%→4.5%)에 요정·싸움꾼 상징 너프가 겹치며 지옥불 상징 등장률이 2.2%→4.5%로 올랐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:지옥불:e0ee7b3d",
+      "note:tft:18.2:item:요정-상징:4abbb549",
+      "note:tft:18.2:item:싸움꾼-상징:93051b8e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 773
+  }
+}

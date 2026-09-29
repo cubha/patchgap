@@ -1,0 +1,48 @@
+{
+  "deltaId": "item:DA_18_EmblemFloraFatalis:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:28:13.837Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력 15%→10% 너프로 상징 선택지 중 치명적인 꽃의 상대 가치가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 너프로 경쟁 상징이 밀려났습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:전쟁기계-상징:83270fa5",
+        "text": "전쟁기계 상징 체력 350→250 너프도 같은 방향으로 작용했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 공격력 30%→25% 너프로 딜 상징 경쟁이 약해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃이 효과 150%·로비 1명 제한으로 바뀌며 상징 사용층이 재편됐을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요정·싸움꾼·전쟁기계 상징이 일제히 너프되며 치명적인 꽃 상징이 반사 이익을 얻어 평균 등수가 4.48등에서 4.16등으로 개선됐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:요정-상징:4abbb549",
+      "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+      "note:tft:18.2:item:전쟁기계-상징:83270fa5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 156,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 856
+  }
+}

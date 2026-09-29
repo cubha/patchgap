@@ -1,0 +1,43 @@
+{
+  "deltaId": "trait:DA_18_Battlemage:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:23:52.097Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력이 60%→40%로 내려가 전열 유지력이 약해지면서 방어 특성 수요가 줄었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:3332ad10",
+        "text": "밤의 끝자락 회복량 20%→15% 너프로 탱커 중심 조합의 가치가 하락했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:b3191eaf",
+        "text": "검은 가시의 탱커 희생 방어력·마법 저항력이 15→12로 줄어 전열 세팅 유인이 감소했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:fb81a27e",
+        "text": "피바라기·정의의 손길 버프로 캐리 중심 구성이 강해지며 방어 특성이 밀린 흐름입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "거석 등장률이 22.4%→15.0%(-7.4%p)로 떨어졌고, 밤의 끝자락 너프와 검은 가시 탱커 희생 수치 하향 등 전열 가치 하락이 배경으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+      "note:tft:18.2:system:검은-가시:b3191eaf"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1108
+  },
+  "proseRepairAttempts": 0
+}

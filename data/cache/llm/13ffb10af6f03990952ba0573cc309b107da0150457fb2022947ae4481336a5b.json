@@ -1,0 +1,45 @@
+{
+  "deltaId": "champion:Ambessa:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-28T09:45:55.213Z",
+  "parsed": {
+    "summary": "암베사 탑 승률이 48.6%→58.9%(+10.3%p)로 급등했습니다. 직접 조항은 없고, 나서스·럼블·뽀삐 너프와 탑 순간이동 쿨다운 감소가 간접 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.19:champion:nasus:b5997156",
+      "note:26.19:champion:rumble:17e40d96",
+      "note:26.19:champion:poppy:d2a46ee3",
+      "note:26.19:system:순간이동-재사용-대기시간:c9025e15"
+    ],
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+        "confidence": "medium",
+        "text": "탑 순간이동 쿨다운 420초→390초로 라인 복귀가 빨라져 주도권이 커졌습니다."
+      },
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:f037ef05",
+        "confidence": "medium",
+        "text": "탑 강화 순간이동도 300~210초로 줄어 사이드 주도권형 챔피언의 가치가 올랐습니다."
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+        "confidence": "low",
+        "text": "럼블 과열 공격 속도가 50~130%에서 30~100%로 줄어 탑 경쟁자가 약화됐습니다."
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:nasus:b5997156",
+        "confidence": "low",
+        "text": "나서스 Q 추가 피해량 10 감소로 탑 맞라인 상대가 약화됐습니다."
+      }
+    ]
+  },
+  "usage": {
+    "inputTokens": 364,
+    "cacheReadInputTokens": 15882,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1498
+  },
+  "proseRepairAttempts": 1
+}

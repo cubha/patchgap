@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Viego:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:22:49.480Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
+        "text": "신드라 W 쿨다운 1초 증가로 미드 주력 픽이 약화되며 대체 픽 수요가 생겼습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
+        "text": "카시오페아 Q 기본 피해량 10 감소 등 라인전 약화로 미드 메타 공백이 발생했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 쿨다운 고정 11초 너프로 미드 AP 선호도가 분산됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "비에고 미드 픽률이 0.4%→0.7%로 올랐고, 신드라·카시오페아 등 미드 주력 챔피언 너프에 따른 반사이익으로 보입니다.",
+    "summaryCites": [
+      "note:26.18:champion:syndra:cb99a266",
+      "note:26.18:champion:cassiopeia:91d07d6f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 704
+  }
+}

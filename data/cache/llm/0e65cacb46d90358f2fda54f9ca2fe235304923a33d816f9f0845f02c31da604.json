@@ -1,0 +1,41 @@
+{
+  "deltaId": "item:6610:adoptionRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:17:43.681Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 중첩 지속시간 3→4초 상향으로 공속 딜러 1코어가 옮겨간 영향",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+        "text": "비에고 패시브 회복이 공속·체력까지 계수화돼 회복 아이템 의존도가 낮아짐",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+        "text": "마스터 이 R 이동속도 상향으로 공속·치명타 빌드 선호가 강해진 영향",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "노틸러스 공격력 61→58 하향으로 AD 기반 아이템 채택 유인이 줄어듦",
+        "confidence": "low"
+      }
+    ],
+    "summary": "갈라진 하늘 채택률이 3.6%→2.4%(-1.2%p)로 떨어졌습니다. 구인수의 격노검 중첩 4초 상향이 공속 빌드로 1코어 수요를 빼간 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 984
+  }
+}

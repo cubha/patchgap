@@ -1,0 +1,41 @@
+{
+  "deltaId": "unit:DA_18_Teemo:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:06:35.009Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징의 공격력/주문력이 15%에서 10%로 줄어 요정 축 딜 기대치가 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:83fba4d7",
+        "text": "요정 상징 체력이 250에서 200으로 감소해 요정 보드의 생존력이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 적중 피해가 전 구간 하향되어 주문력 캐리 세팅의 기대값이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:기원자-상징:dfaf6790",
+        "text": "기원자 상징의 마나당 주문력이 10%에서 8%로 줄어 마법 딜러 조합이 함께 약화됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "티모 순방률이 52.5%→46.7%(-5.8%p)로 하락했고, 요정 상징의 공격력/주문력 15%→10% 하향이 주요 간접 요인입니다(CI에 0 포함, 표본 364).",
+    "summaryCites": [
+      "note:tft:18.2:item:요정-상징:4abbb549"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 800
+  }
+}

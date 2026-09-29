@@ -1,0 +1,47 @@
+{
+  "deltaId": "unit:DA_18_Hecarim:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:44:49.403Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:4e39e3c3",
+        "text": "날렵이 상징의 기수 추가 공격 속도가 30%에서 20%로 깎여 기수 계열 조합 수요가 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:f178d8b7",
+        "text": "날렵이 상징의 기수 추가 방어력·마법 저항력이 20에서 15로 감소해 전방 기수 유닛의 생존력이 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:날렵이-상징:c7eb10eb",
+        "text": "날렵이 상징 기본 방어력·마법 저항력 20→15 너프로 상징 채용 자체가 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력 30→25 너프로 탱커 전열 중심 조합의 매력이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:b3191eaf",
+        "text": "검은 가시의 탱커 희생 방어력·마법 저항력이 15에서 12로 줄어 탱커 기용 가치가 하락했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "헤카림 등장률이 19.2%에서 11.4%로 -7.8%p 급감했는데, 날렵이 상징의 기수 공격 속도 30%→20%·방어력 20→15 너프가 기수 조합 수요를 줄인 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:날렵이-상징:4e39e3c3",
+      "note:tft:18.2:item:날렵이-상징:f178d8b7"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 991
+  }
+}

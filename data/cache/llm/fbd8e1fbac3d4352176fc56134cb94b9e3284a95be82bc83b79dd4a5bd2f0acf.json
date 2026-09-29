@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Locke:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-09-28T10:21:24.748Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
+        "text": "오로라 E 기본 피해량 70~230→80~240 상향으로 미드 픽 경쟁에서 밀렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
+        "text": "오로라 R 영역 지속시간 1.75/2.5초→2.25/2.75초 상향이 미드 선호도를 흡수한 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+        "text": "루시안 Q 피해량 대폭 상향으로 미드 루시안 픽이 늘며 로크 지분이 줄었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "로크 미드 픽률이 11.6%→8.8%(-2.9%p)로 떨어졌습니다. 직접 변경은 없고 오로라 E·R 상향 등 미드 경쟁자 버프가 유력한 배경입니다.",
+    "summaryCites": [
+      "note:26.19:champion:aurora:537dcee9",
+      "note:26.19:champion:aurora:8770c9ea"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 602
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,43 @@
+{
+  "deltaId": "trait:DA_18_Adaptor:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:10:24.210Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:3e0ae055",
+        "text": "적응가 핵심 캐리 마스터 이의 주문력 형태 피해량이 335→285로 깎여 특성 전체 성능이 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:7f03951b",
+        "text": "마스터 이 공격력 형태 기본 공격력 65→60 하향이 적응가 조합의 딜 상한을 낮췄습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "평타 캐리가 쓰는 명멸검의 기본 공격당 공격 속도 5%→4% 너프가 적응가 딜러 효율을 떨어뜨렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 상위 구간 공격 속도 15%→12% 너프가 적응가와 함께 쓰이는 평타 축을 약화했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "적응가 평균 등수가 4.20→4.48등으로 약화됐고, 핵심 캐리 마스터 이의 주문력·공격력 형태 동시 하향이 주원인입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:마스터-이:3e0ae055",
+      "note:tft:18.2:champion:마스터-이:7f03951b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 149,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 858
+  },
+  "proseRepairAttempts": 0
+}

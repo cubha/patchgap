@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Kayle:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:08:25.782Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 공격당 공격 속도가 9/15%에서 8/12%로 낮아져 평타 기반 케일의 가치가 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도가 5%에서 4%로 줄어 케일 주력 아이템 효율이 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 적중 시 피해량 하향으로 평타 마법 피해 조합의 기대값이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:햇빛:6c96b871",
+        "text": "햇빛의 3성 공격 속도·방어 보정 하향이 케일 리롤 빌드 매력도를 낮췄을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "케일 등장률이 9.7%→5.2%(-4.4%p)로 급감했는데, 속사포와 명멸검의 공격 속도 하향이 평타 기반 케일의 가치를 함께 끌어내렸습니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:속사포:f271519a",
+      "note:tft:18.2:item:명멸검:ce978bd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 837
+  }
+}

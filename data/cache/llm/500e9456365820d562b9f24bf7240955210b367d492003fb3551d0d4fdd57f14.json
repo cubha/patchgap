@@ -1,0 +1,38 @@
+{
+  "deltaId": "trait:DA_18_Slayer:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "c5fe11838e969011401862d4b7aaeac11b42714f3a0bfbeafa868d6e7d917140",
+  "generatedAt": "2026-09-28T09:47:14.272Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:드레이븐:66f8c74a",
+        "text": "드레이븐의 현상금 사냥꾼 보상 조건이 전반적으로 완화되며 골드 기반 조합 가치가 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:소매치기:1285e58e",
+        "text": "소매치기가 2골드로 내려가고 골드 생성 확률이 15%에서 20%로 올라 약탈 계열 운영이 유리해졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:워윅:ad5aa8ef",
+        "text": "워윅 공격력 40→45 버프가 해당 특성 보드의 전투력을 함께 끌어올렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "약탈자는 직접 변경 없이 평균 등수가 4.65등에서 4.48등으로 0.18등 개선됐고, 드레이븐 현상금 사냥꾼 조건 완화와 소매치기 강화 등 골드 계열 버프가 영향을 준 것으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:드레이븐:66f8c74a",
+      "note:tft:18.2:item:소매치기:1285e58e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 416,
+    "cacheReadInputTokens": 34084,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1624
+  },
+  "proseRepairAttempts": 1
+}

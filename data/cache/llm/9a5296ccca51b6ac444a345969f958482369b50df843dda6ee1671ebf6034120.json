@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Nocturne:UTILITY:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:09:20.212Z",
+  "parsed": {
+    "causes": [],
+    "summary": "녹턴 서포터 픽률 변화는 -0.0%p로 신뢰구간이 0을 포함해 사실상 변동이 없습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 120
+  }
+}

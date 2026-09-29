@@ -1,0 +1,47 @@
+{
+  "deltaId": "trait:DA_18_Hunter:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:16:21.538Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:애쉬:5bb903ca",
+        "text": "애쉬 지속 피해가 공격력 5/8에서 9/14로 올라 사냥꾼 축 캐리 채용이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:워윅:ad5aa8ef",
+        "text": "워윅 공격력 40→45 상향으로 사냥꾼 전개의 초중반 안정성이 올라갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:니달리:719efb93",
+        "text": "니달리 강화 기본 공격 피해 주문력 300/450 상향이 사냥꾼 조합 채택을 밀어올렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력 15%→18% 버프로 공격력 캐리 축 전체 수요가 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:은빛-여명:185091b8",
+        "text": "은빛 여명 공격력 125%→150% 상향이 공격력 캐리 사냥꾼 조합을 밀어준 것으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "사냥꾼 특성·상징은 하향됐지만 애쉬·워윅 등 소속 유닛 상향으로 등장률이 17.4%→18.7% 올랐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:애쉬:5bb903ca",
+      "note:tft:18.2:champion:워윅:ad5aa8ef"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1032
+  }
+}

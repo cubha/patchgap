@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Poppy:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:06:27.541Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라가 궁극기 회복량·범위·기본 체력까지 상향돼 탑 경쟁에서 뽀삐 지분을 흡수했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
+        "text": "아트록스 E 회복 계수와 W 쿨 상향으로 탑 브루저 선호가 뽀삐에서 이동한 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
+        "text": "Q의 미니언·몬스터 피해 상한 너프가 정글뿐 아니라 탑 라인전 체감까지 떨어뜨렸습니다.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "뽀삐 탑 픽률 1.5%→1.2%(-0.2%p)는 CI가 0을 포함해 유의하지 않으며, Q 상한 너프와 피오라 상향에 따른 탑 경쟁 심화가 겹친 결과입니다.",
+    "summaryCites": [
+      "note:26.19:champion:poppy:d2a46ee3",
+      "note:26.19:champion:fiora:4ff3c93f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 708
+  }
+}

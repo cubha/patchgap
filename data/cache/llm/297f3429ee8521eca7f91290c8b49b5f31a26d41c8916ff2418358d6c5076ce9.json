@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:Kalista:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:40:57.711Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "칼리스타는 공격속도 기반 마크스맨으로 폭풍갈퀴를 자주 선택하는데, 해당 아이템의 공격 속도가 20%에서 25%로 상향되어 간접적으로 챔피언 선호도가 상승했을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "칼리스타 자체에 대한 직접 패치 항목은 없으나, 픽률이 0.0657→0.0856(Δ0.0199, 95% CI [0.0126, 0.0272])로 유의미하게 상승한 것은 마크스맨 아이템인 폭풍갈퀴의 공격 속도 상향(20%→25%)이 간접적으로 영향을 미쳤을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 618
+  }
+}

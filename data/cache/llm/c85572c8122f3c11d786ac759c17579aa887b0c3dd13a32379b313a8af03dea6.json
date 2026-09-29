@@ -1,0 +1,33 @@
+{
+  "deltaId": "champion:Nautilus:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-09-28T10:19:36.624Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
+        "text": "아펠리오스 다수 상향으로 원딜 주도 바텀 구도가 강해지며, 이니시 서포터 노틸러스 선호도가 함께 오른 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:item:룬-나침반:6931f115",
+        "text": "서포터 아이템 체력이 100에서 60으로 줄어 라인 유지력이 약한 서폿이 밀리고, 하드 CC 탱커 노틸러스 가치가 상대적으로 부각됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "노틸러스 밴률이 8.8%→12.2%(+3.5%p)로 올랐지만 직접 변경은 없고, 아펠리오스 상향과 서포터 아이템 체력 너프가 간접 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.19:champion:aphelios:fa3a30c8",
+      "note:26.19:item:룬-나침반:6931f115"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 720
+  },
+  "proseRepairAttempts": 0
+}

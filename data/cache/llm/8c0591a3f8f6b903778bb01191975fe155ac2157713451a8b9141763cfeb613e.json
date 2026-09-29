@@ -1,0 +1,37 @@
+{
+  "deltaId": "item:3181:adoptionRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T02:55:50.381Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:a83e2425",
+        "text": "가렌의 공격력이 55.5→60으로 상향되고 W 방어력/마법저항력 증가율도 20%→30%로 강화되어, 선체파괴자를 자주 사용하는 가렌의 픽률과 채용이 늘면서 아이템 채택률도 간접적으로 상승했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:f3562bca",
+        "text": "가렌 W(용기)의 추가 방어력/마법저항력 증가량 상향은 가렌의 전반적 성능을 강화해 선체파괴자 같은 브루저형 아이템의 선호도를 높였을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "트런들 W(얼음 왕국)의 공격 속도 상향은 온진형·정글러 트런들의 선체파괴자 채택 매력도를 높였을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "선체파괴자(3181)의 채택률이 0.436%→0.579%로 유의미하게 상승(95% CI가 0을 포함하지 않음)했는데, 이는 패치노트에 직접 언급되지 않은 변화로, 가렌·트런들 등 해당 아이템을 즐겨 쓰는 브루저 챔피언들의 간접적 버프(공격력, 방어 스탯, 공격 속도 상향)로 인해 채택률이 늘었을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:가렌:a83e2425",
+      "note:26.17:champion:trundle:85be03ea"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1033
+  }
+}

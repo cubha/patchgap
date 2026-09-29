@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Camille:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "1b4ec346ad0605238fd935fc97d52d05e7d396b4fcc038faca64e9e36e85b1cf",
+  "generatedAt": "2026-09-26T19:20:31.416Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 추가 공격력이 4/8단계에서 45→40%, 65→60%로 줄어 사냥꾼 AD 딜러 채용이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
+        "text": "사냥꾼 상징 처치 관여당 공격력이 18%→15%로 낮아져 사냥꾼 확장 빌드의 매력이 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:황금-징수의-총:cce21382",
+        "text": "황금 징수의 총 공격력 40%→35% 너프로 AD 근접 캐리의 아이템 가치가 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:응징:f65a1f15",
+        "text": "응징 치명타 확률 25%→15% 너프가 치명타 기반 AD 딜러 조합 선택을 줄였을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카밀 등장률이 3.3%→1.6%(-1.7%p)로 떨어진 것은 사냥꾼 공격력 너프와 황금 징수의 총 하향 등 AD 근접 캐리 환경 악화가 주원인입니다.",
+    "summaryCites": [
+      "note:tft:18.3:system:사냥꾼:616a50ac",
+      "note:tft:18.3:item:황금-징수의-총:cce21382"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 8613,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 854
+  }
+}

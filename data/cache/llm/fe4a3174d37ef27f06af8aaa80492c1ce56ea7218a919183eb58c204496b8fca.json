@@ -1,0 +1,45 @@
+{
+  "deltaId": "unit:DA_18_Leona:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "1b4ec346ad0605238fd935fc97d52d05e7d396b4fcc038faca64e9e36e85b1cf",
+  "generatedAt": "2026-09-28T09:48:11.365Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:item:영원한-서약:2e842b57",
+        "text": "영원한 서약의 탱커 스킬 사용 시 마나가 15에서 10으로 줄어, 전방 유닛 레오나의 채용 가치가 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:엄호대:ad7723b2",
+        "text": "엄호대 3단계 방어력·마법 저항력이 120에서 115로 하향돼 해당 조합 전방 수요가 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
+        "text": "알리스타 스킬 피해량이 주문력 225→420(3성)으로 크게 올라 경쟁 탱커 자리를 잠식했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:람머스:9b820b51",
+        "text": "람머스 보호막이 550→725로 강화되며 대체 전방 선택지로 부상했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "레오나 등장률이 6.5%→4.6%(-1.9%p)로 하락했습니다. 영원한 서약 마나 15→10, 엄호대 방어 120→115 하향과 알리스타·람머스 강화로 전방 자리를 내준 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.3:item:영원한-서약:2e842b57",
+      "note:tft:18.3:system:엄호대:ad7723b2",
+      "note:tft:18.3:champion:알리스타:d527c10f",
+      "note:tft:18.3:champion:람머스:9b820b51"
+    ]
+  },
+  "usage": {
+    "inputTokens": 374,
+    "cacheReadInputTokens": 17226,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1430
+  },
+  "proseRepairAttempts": 1
+}

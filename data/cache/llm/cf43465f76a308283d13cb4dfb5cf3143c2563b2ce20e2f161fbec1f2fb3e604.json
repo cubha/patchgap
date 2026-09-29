@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Yone:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:40:36.958Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 상향되어 치명타 기반 요네 빌드의 초반 체감이 좋아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트린다미어:833bdd67",
+        "text": "트린다미어 최대 치명타 확률이 50%에서 30%로 하향돼 탑·미드 치명타 전사 경쟁자가 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+        "text": "야스오도 같은 치명타 피해량 감소 완화를 받아 치명타 검사 계열 전반의 픽 선호가 함께 올랐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요네 픽률 0.5%p 상승은 95% CI가 [-0.5%p, 1.5%p]로 0을 포함해 통계적으로 약하며, 폭풍갈퀴 공격 속도 25% 상향 등 치명타 아이템 환경 변화가 보조 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 679
+  }
+}

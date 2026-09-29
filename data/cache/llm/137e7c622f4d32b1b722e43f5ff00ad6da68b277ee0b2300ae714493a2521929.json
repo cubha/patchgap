@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Caitlyn:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:11:41.816Z",
+  "parsed": {
+    "causes": [],
+    "summary": "케이틀린 밴율이 0.1108에서 0.1516으로 상승(델타 +0.0408, 95% CI [0.0293, 0.0526])했으나, 후보 목록에는 케이틀린 자신 또는 간접적으로 영향을 줄 만한 원거리 딜러 관련 아이템/시스템 변경 항목이 없어 이를 설명할 근거를 찾지 못했습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 169
+  }
+}

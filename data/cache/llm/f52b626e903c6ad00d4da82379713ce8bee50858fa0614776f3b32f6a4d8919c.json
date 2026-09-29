@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Yasuo:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:05:35.789Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
+        "text": "요네도 치명타 피해량 감소가 -10%에서 -5%로 완화돼, 같은 탑 라인 수요를 나눠 가졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+        "text": "이렐리아가 Q 계수 80%, R 주문력 계수 100%로 강화되며 탑 라인 선택지 경쟁이 심해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "야스오 탑 픽률 -0.2%p는 95% CI [-0.6%p, 0.2%p]로 0을 포함해 통계적 변화로 보기 어렵고, 이렐리아 강화로 인한 탑 경쟁이 일부 작용했습니다.",
+    "summaryCites": [
+      "note:26.17:champion:irelia:9035ffdc"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 596
+  }
+}

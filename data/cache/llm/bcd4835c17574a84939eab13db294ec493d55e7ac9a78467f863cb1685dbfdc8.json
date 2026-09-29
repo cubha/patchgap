@@ -1,0 +1,42 @@
+{
+  "deltaId": "item:DA_SteraksGage:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:45:39.452Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력이 60%에서 40%로 낮아져 AD 생존템 수요가 스테락의 도전으로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:3332ad10",
+        "text": "밤의 끝자락 회복량이 20%에서 15%로 줄며 경쟁 방어템 가치가 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도가 5%에서 4%로 너프되어 AD 아이템 선택지가 스테락 쪽으로 쏠렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카직스:c60397e3",
+        "text": "카직스 기본 공격력 30→40 등 AD 근접 캐리 강화가 스테락 채택을 늘렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "스테락의 도전 등장률이 19.3%→26.5%로 올랐습니다. 밤의 끝자락 발동 체력 60%→40%, 회복 20%→15% 너프로 AD 생존템 수요가 옮겨온 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+      "note:tft:18.2:item:밤의-끝자락:3332ad10"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 903
+  }
+}

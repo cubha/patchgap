@@ -1,0 +1,36 @@
+{
+  "deltaId": "unit:DA_18_Cassiopeia:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:36:44.193Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
+        "text": "스태틱의 단검 기본 주문력 15%→25% 상향으로 주문력 캐리 채용이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 추가 공격력 너프로 공격력 캐리 수요가 줄고 주문 딜러로 수요가 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
+        "text": "사냥꾼 상징 공격력 15%로 하향되며 공격력 조합의 경쟁력이 낮아졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카시오페아 등장률이 4.3%→8.3%(+4.0%p)로 급등했습니다. 스태틱의 단검 주문력 상향이 주문 캐리 채용을 밀어올린 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.3:item:스태틱의-단검:ccfc29ef"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 774
+  }
+}

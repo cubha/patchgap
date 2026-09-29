@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Blitzcrank:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T00:56:51.354Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+        "text": "경쟁 그랩형 탱커 서포터인 노틸러스의 Q 피해량이 하향되어(최대 265→245) 블리츠크랭크로 수요가 몰리며 밴 지분이 올라갔을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "노틸러스 기본 공격력이 61→58로 낮아져 초반 라인전 압박이 약해진 점도 블리츠크랭크 선호·견제를 키운 요인으로 보입니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 재사용 대기시간이 전 구간 11초로 고정 하향되며 서포터 티어가 재편된 점도 블리츠크랭크 밴 증가에 일조했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
+        "text": "바드 방어력이 34+레벨당 5에서 32+레벨당 4.7로 깎이며 서포터 선택지가 줄어든 것도 간접 요인입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "노틸러스가 Q 피해량(최대 265→245)과 기본 공격력(61→58) 이중 하향을 받으면서 대체 그랩 서포터인 블리츠크랭크 밴률이 3.8%→7.1%로 올랐을 가능성이 큽니다.",
+    "summaryCites": [
+      "note:26.18:champion:nautilus:878378b8",
+      "note:26.18:champion:nautilus:b6aff2b2"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 852
+  }
+}

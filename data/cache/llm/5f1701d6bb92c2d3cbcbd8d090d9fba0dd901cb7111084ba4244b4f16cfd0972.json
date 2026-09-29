@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Yone:TOP:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T11:42:40.260Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+        "text": "이렐리아 Q 피해량 계수 강화(70%→80%)로 이렐리아가 상대 라인(탑/미드)에서 요네를 상대로 더 강해져 요네의 라인전 승률이 간접적으로 하락했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:4b925bed",
+        "text": "이렐리아 W 피해 감소 계수 강화(7%→8%)도 요네와의 교전에서 이렐리아 생존력을 높여 요네의 상대 전적에 부정적 영향을 줄 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
+        "text": "르블랑 W 피해량 계수 강화(80%→90%)로 미드 라인 경쟁자인 르블랑이 강해져 요네의 미드 매치업 승률이 간접적으로 낮아졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요네 자체의 직접 변경(치명타 피해 감소량 축소, 사실상 자기 자신에는 버프)만으로는 승률 하락(51.7%→47.0%, 델타 -4.7%p, CI가 0을 포함해 통계적으로는 불확실)을 설명하기 어려워, 이렐리아·르블랑 등 주요 상대 챔피언들의 버프가 간접적으로 요네의 라인전 승률을 낮췄을 가능성을 낮은 신뢰도로 제시합니다.",
+    "summaryCites": [
+      "note:26.17:champion:irelia:9035ffdc",
+      "note:26.17:champion:leblanc:887dc51f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 133,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1138
+  }
+}

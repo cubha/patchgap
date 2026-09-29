@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Galio:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-09-28T10:23:10.620Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+        "text": "상단 포지션 순간이동 대기시간이 420초→390초로 줄어 순간이동 합류 가치가 탑으로 쏠렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
+        "text": "오로라 E 피해량 70~230→80~240 버프로 미드 AP 경쟁 픽이 늘어난 영향으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aurora:8770c9ea",
+        "text": "오로라 R 영역 지속시간 증가로 미드 선호도가 이동한 영향일 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "갈리오 미드 픽률이 9.5%→7.2%(-2.3%p) 하락했습니다. 상단 순간이동 대기시간 390초 단축으로 순간이동 합류 역할이 탑으로 옮겨간 영향입니다.",
+    "summaryCites": [
+      "note:26.19:system:순간이동-재사용-대기시간:c9025e15"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 780
+  },
+  "proseRepairAttempts": 0
+}

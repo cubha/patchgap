@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Nidalee:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:09:57.042Z",
+  "parsed": {
+    "causes": [],
+    "summary": "후보 목록에서 니달리와 직접 연관되거나 정글 메타에 뚜렷한 간접 영향을 줄 만한 패치 항목을 찾을 수 없어(예: 그의 스킬, 아이템, 정글 몬스터 관련 변경 부재), 밴율 하락(-0.0604, 95% CI [-0.0756, -0.0450])의 원인을 이번 패치노트로 설명하기 어렵습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 330
+  }
+}

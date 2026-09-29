@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Seraphine:UTILITY:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:41:50.583Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+        "text": "경쟁 서포터 노틸러스가 Q 피해량과 기본 공격력 너프를 받아 세라핀의 상대적 입지가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
+        "text": "바드 방어력이 34+레벨당 5에서 32+레벨당 4.7로 내려가 서포터 경쟁군이 약화됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "세라핀은 E 쿨다운 너프에도 승률이 5.5%p 올랐는데, 노틸러스 Q·공격력 너프 등 경쟁 서포터 약화가 주 요인이며 CI가 0을 포함해 표본 변동도 섞였습니다.",
+    "summaryCites": [
+      "note:26.18:champion:nautilus:878378b8"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 448
+  }
+}

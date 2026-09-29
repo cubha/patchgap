@@ -1,0 +1,42 @@
+{
+  "deltaId": "trait:DA_18_Defender:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:31:48.969Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:람머스:9b820b51",
+        "text": "람머스 보호막 흡수량이 550→725로 크게 올라 전방 탱커 라인이 강해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
+        "text": "알리스타 스킬 피해량이 주문력 225→420으로 대폭 상향돼 탱커 조합 가치가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:타릭:f0d46c43",
+        "text": "타릭 체력 회복량 상향으로 엄호대와 함께 서는 유지력 축이 보강됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:단체-포옹-ii:44b4eda8",
+        "text": "단체 포옹 II 방어력·마법 저항력 9→10 상향이 방어 수치 5 감소를 상쇄합니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "엄호대는 3단계 방어 수치가 120→115로 하향됐지만 평균 등수가 4.51등→4.26등으로 개선됐는데, 람머스 보호막·알리스타 스킬 피해 상향 등 탱커 유닛 버프가 원인입니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:람머스:9b820b51",
+      "note:tft:18.3:champion:알리스타:d527c10f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 151,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 865
+  }
+}

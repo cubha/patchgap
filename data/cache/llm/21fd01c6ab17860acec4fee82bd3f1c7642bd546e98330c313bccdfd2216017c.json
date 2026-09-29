@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Nidalee:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:45:52.194Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+        "text": "그레이브즈 Q 폭발 계수 너프로 정글 상위권이 비면서 니달리 선호·견제가 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:qiyana:9d50d4d6",
+        "text": "키아나 Q 몬스터 피해 175%→160% 너프로 정글 대안 축소가 니달리 밴 집중에 기여했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "니달리 밴률이 28.0%→32.5%(+4.5%p)로 올랐습니다. 직접 조항은 없고 그레이브즈 Q 너프 등 정글 경쟁자 약화가 배경으로 추정됩니다.",
+    "summaryCites": [
+      "note:26.17:champion:graves:0bc5877b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 475
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Yone:TOP:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:57:30.834Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+        "text": "이렐리아 Q 계수 70%→80% 등 상향으로 탑 맞대결 난이도가 올라갔습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "트런들 W 공격 속도 최대 90%→110%로 탑 근접 대치에서 요네가 밀립니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
+        "text": "초가스 E 기본 피해 10 상향으로 탑 라인전 카운터 픽이 강해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력 45→40, 체력 450→400 너프로 브루저형 빌드 가치가 내려갔습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요네 탑 승률이 51.7%→47.0%(-4.7%p)로 떨어졌지만 CI가 0을 포함하며, 이렐리아·트런들 상향 등 탑 경쟁 픽 강화가 배경으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:irelia:9035ffdc",
+      "note:26.17:champion:trundle:85be03ea"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 822
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Sett:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:41:12.086Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "근접 딜탱 핵심 아이템 밤의 끝자락 발동 체력이 60%→40%로 낮아져 생존력이 감소했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:3332ad10",
+        "text": "밤의 끝자락 회복량 20%→15% 너프가 겹치며 전선 유지력이 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 너프로 전방 유닛 조합의 안정성이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:b3191eaf",
+        "text": "검은 가시의 탱커 희생 방어력·마저가 15→12로 줄어 전방 보정이 약해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "세트 직접 변경은 없으나 밤의 끝자락 발동 체력 60%→40%·회복 20%→15% 너프로 전방 생존력이 깎이며 순방률이 3.2%p 하락했습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+      "note:tft:18.2:item:밤의-끝자락:3332ad10"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 841
+  }
+}

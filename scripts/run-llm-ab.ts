@@ -11,7 +11,7 @@
 //    바뀐다.
 //  - 대상은 "현재 causes가 비어 있는 미공지 행" 우선 — 개선 여지가 있는 곳에서 재본다.
 //
-// 사용: npx tsx scripts/run-llm-ab.ts [--n 12] [--challenger claude-opus-5]
+// 사용: PATCHGAP_LLM=1 npx tsx scripts/run-llm-ab.ts [--n 12] [--challenger claude-opus-5]
 import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";

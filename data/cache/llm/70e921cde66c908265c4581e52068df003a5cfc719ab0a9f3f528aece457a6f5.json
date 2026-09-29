@@ -1,0 +1,38 @@
+{
+  "deltaId": "unit:DA_18_Hecarim:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:27:34.294Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:item:싸움꾼-상징:a497a9e0",
+        "text": "싸움꾼 상징 피해량이 최대 체력의 2%→2.5%로 올라 근접 전선 유닛 채용이 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 추가 공격력 너프(4단계 65%→60%)로 밀려난 자리를 대체 딜러가 채운 여파로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:진형-유지:5b4cf303",
+        "text": "진형 유지 공격력 9%→11% 강화가 전선형 딜러 조합 채용을 밀어올렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "헤카림 등장률이 11.4%→14.9%(+3.6%p)로 올랐지만 직접 조항은 없고, 싸움꾼 상징·진형 유지 강화와 사냥꾼 너프에 따른 간접 파급으로 추정됩니다.",
+    "summaryCites": [
+      "note:tft:18.3:item:싸움꾼-상징:a497a9e0",
+      "note:tft:18.3:system:진형-유지:5b4cf303",
+      "note:tft:18.3:system:사냥꾼:616a50ac"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 914
+  }
+}

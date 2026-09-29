@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Thresh:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T11:43:22.829Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+        "text": "노틸러스 Q 피해량 너프로 인해 동일한 탱커/이니시에이터 역할군인 쓰레쉬로 서포터 픽이 이동했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "노틸러스 기본 공격력 너프가 경쟁 서포터 챔피언인 쓰레쉬의 상대적 매력도를 높였을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 재사용 대기시간 너프로 경쟁 서포터 픽인 세라핀의 매력이 줄어들며 쓰레쉬 픽률이 반사적으로 상승했을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "쓰레쉬 자체에 대한 직접 변경 노트는 없으나, 경쟁 서포터 챔피언인 노틸러스(공격력·Q 피해량 너프)와 세라핀(E 재사용 대기시간 너프)의 하향으로 인해 서포터 포지션 내 픽 점유율이 쓰레쉬로 이동했을 가능성이 있어 픽률이 0.1053에서 0.1322로 상승(95% CI [0.0159, 0.0382])한 것으로 추정됩니다.",
+    "summaryCites": [
+      "note:26.18:champion:nautilus:b6aff2b2",
+      "note:26.18:champion:seraphine:4519a08c"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 16705,
+    "outputTokens": 861
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "deltaId": "trait:DA_18_Inferno:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:44:11.442Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
+        "text": "스태틱의 단검 기본 주문력 15%→25% 상향이 화상 조합 마법 딜러 화력을 보강해 너프를 상쇄했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:카시오페아:3e896e3e",
+        "text": "카시오페아 스킬 피해량 상향(400/600/950→425/630/1,020)이 마법 피해 축 손실을 메운 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
+        "text": "베이가 스킬 피해량 기본치 상향이 같은 마법 캐리 라인의 체감 화력을 끌어올렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "지옥불은 화상 피해 너프에도 평균 4.25등 그대로이며, 표본 866판·CI ±0.16등으로 변화 미검출 수준입니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 151,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 760
+  }
+}

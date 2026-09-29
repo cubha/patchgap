@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Sett:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:52:38.123Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력이 60%에서 40%로 내려가 전방 탱커의 생존 구간이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:3332ad10",
+        "text": "밤의 끝자락 회복량이 20%에서 15%로 줄어 근접 브루저 유지력이 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력이 250에서 150으로 깎여 싸움꾼 계열 확장 빌드의 가치가 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:b3191eaf",
+        "text": "검은 가시의 탱커 희생 방어력·마법 저항력이 15에서 12로 감소해 전방 내구도가 약화됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "세트 순방률이 54.4%→51.2%(-3.2%p)로 하락했습니다. 밤의 끝자락 발동 체력 60%→40%, 회복 20%→15% 너프로 전방 유지력이 깎인 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+      "note:tft:18.2:item:밤의-끝자락:3332ad10"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 804
+  }
+}

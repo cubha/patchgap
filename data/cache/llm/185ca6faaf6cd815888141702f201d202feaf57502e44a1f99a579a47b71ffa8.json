@@ -1,0 +1,48 @@
+{
+  "deltaId": "unit:DA_18_Leona:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:32:54.746Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:햇빛:02f88fd9",
+        "text": "햇빛 3성 3명 방어·마저 15→12 등 축소로 레오나가 서던 조합의 탱킹 가치가 하락했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어·마법 저항력 30→25 너프로 전방 탱커 구성 채택이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:쉔:eca86037",
+        "text": "쉔 보호막 흡수량 상향으로 같은 전방 자리를 두고 레오나가 밀려났습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:타릭:fbe6df4f",
+        "text": "타릭 회복량 상향(주문력 200/300→250/375)이 탱커 슬롯 경쟁을 심화시켰습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:나르:bfa85e59",
+        "text": "나르 추가 체력·분노 대폭 상향으로 전방 유닛 선택이 나르 쪽으로 이동했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "레오나는 직접 버프에도 등장률이 13.1%→6.5%로 급락했습니다. 쉔·타릭 상향으로 탱커 슬롯 경쟁에서 밀린 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:쉔:eca86037",
+      "note:tft:18.2:champion:타릭:fbe6df4f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 947
+  },
+  "proseRepairAttempts": 0
+}

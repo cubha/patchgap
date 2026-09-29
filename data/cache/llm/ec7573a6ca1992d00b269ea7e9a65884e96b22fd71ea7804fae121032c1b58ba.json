@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Lulu:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T08:51:38.233Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
+        "text": "아펠리오스 화염포 Q 쿨타임 1초 감소 등 전반 강화로, 짝꿍인 룰루 선호도와 밴이 동반 상승했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
+        "text": "아펠리오스 만월총 Q 피해량 10 상승으로 하이퍼캐리 가치가 올라 보호형 서포터 룰루 밴이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+        "text": "드레이븐 기본 공격력 62→64 상향으로 초반 공격적 원딜 조합이 강해져 룰루 견제 밴이 증가했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+        "text": "루시안 Q 기본 피해량 상향도 바텀 캐리 강세에 힘을 보태 룰루 밴 압력을 키웠습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "룰루 밴률이 14.8%→26.7%(+11.9%p)로 급등했습니다. 아펠리오스 화염포·만월총 Q 강화로 캐리 보호형 서포터 가치가 오른 파급효과입니다.",
+    "summaryCites": [
+      "note:26.19:champion:aphelios:ccd9a119",
+      "note:26.19:champion:aphelios:fa3a30c8"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 7941,
+    "outputTokens": 729
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Qiyana:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T05:32:17.248Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+        "text": "제라스 Q 피해량과 체력이 깎이며 미드 경쟁 픽이 빠진 자리를 키아나가 흡수했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:graves:39e7c86f",
+        "text": "그레이브즈 Q 공격력 계수 너프로 정글 상위권이 약해져 키아나 정글 채택이 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:nocturne:fd4d5d23",
+        "text": "녹턴 체력·방어력 하향도 정글 픽 분산에 기여했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "키아나 픽률이 16.1%→20.4%(+4.4%p)로 올랐습니다. 제라스 Q·체력 너프로 미드 경쟁 픽이 빠진 영향이 큽니다.",
+    "summaryCites": [
+      "note:26.17:champion:xerath:43a6f4aa"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 740
+  }
+}

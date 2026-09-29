@@ -1,0 +1,48 @@
+{
+  "deltaId": "item:DA_SteraksGage:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "c5fe11838e969011401862d4b7aaeac11b42714f3a0bfbeafa868d6e7d917140",
+  "generatedAt": "2026-09-26T19:38:35.897Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:렝가:4a189382",
+        "text": "렝가 기본 공격 속도 0.8→0.75 너프로 스테락을 주로 쓰던 근접 AD 캐리 라인이 약화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:경쟁을-넘어서:64c38bc1",
+        "text": "렝가·카직스 상호 보너스 축소로 해당 조합의 성능이 내려가며 스테락 순방률도 동반 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카밀:ee0ba0ac",
+        "text": "카밀 스킬 피해량 너프로 스테락 장착 후보 한 축이 약해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력 15%→18% 등 연쇄 버프로 근접 딜러 아이템 경쟁에서 밀렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:35db05bd",
+        "text": "정의의 손길 능력치·흡혈 상향이 유사 역할 슬롯을 가져갔습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "스테락의 도전 순방률 -3.1%p는 직접 너프가 아니라 렝가 공속 하향·경쟁을 넘어서 축소 등 주 착용 조합 약화와 피바라기 상향에 따른 아이템 경쟁 심화 탓입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:렝가:4a189382",
+      "note:tft:18.2:system:경쟁을-넘어서:64c38bc1",
+      "note:tft:18.2:item:피바라기:69a953de"
+    ]
+  },
+  "usage": {
+    "inputTokens": 133,
+    "cacheReadInputTokens": 17042,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1144
+  }
+}

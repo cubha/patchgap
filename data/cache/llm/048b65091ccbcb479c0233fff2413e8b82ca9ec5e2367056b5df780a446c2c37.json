@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Tristana:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:29:33.710Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 4/5단계 추가 공격력이 45/65%에서 40/60%로 깎이며 소속 원거리 딜러의 채용이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
+        "text": "사냥꾼 상징 공격력이 18%에서 15%로 낮아져 사냥꾼 확장 빌드의 매력이 감소했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:응징:f65a1f15",
+        "text": "응징 치명타 확률 25%→15% 너프로 평타 기반 공격력 캐리 라인 전반의 수요가 줄었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
+        "text": "스태틱의 단검 주문력 15%→25% 상향으로 주문력 캐리 조합이 공격력 캐리 자리를 밀어냈습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "트리스타나 등장률이 4.9%→3.4%로 하락했는데, 사냥꾼 특성과 사냥꾼 상징 공격력 동시 너프에 따른 공격력 캐리 라인 위축이 주된 원인입니다.",
+    "summaryCites": [
+      "note:tft:18.3:system:사냥꾼:616a50ac",
+      "note:tft:18.3:item:사냥꾼-상징:da474098"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 782
+  }
+}

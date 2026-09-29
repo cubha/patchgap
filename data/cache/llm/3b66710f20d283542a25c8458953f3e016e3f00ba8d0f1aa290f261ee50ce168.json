@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Zeri:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:53:11.561Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해가 최대 체력 6~10%에서 4~10%로 하향되며 원거리 딜러 수요가 제리로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:fb0dfc8b",
+        "text": "베인 Q 마나 소모가 30에서 최대 46으로 올라 라인전 부담이 커졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 올라 제리 빌드 효율이 개선됐을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "제리 픽률이 8.0%→11.1%(+3.1%p) 상승했습니다. 베인 W 하향과 Q 마나 증가로 원딜 수요가 제리로 이동한 영향입니다.",
+    "summaryCites": [
+      "note:26.17:champion:vayne:1da6ddd1",
+      "note:26.17:champion:vayne:fb0dfc8b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 121,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 617
+  }
+}

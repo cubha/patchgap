@@ -1,0 +1,43 @@
+{
+  "deltaId": "unit:DA_18_Yorick:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:28:15.425Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력 60%→40% 하향으로 전열 유닛의 생존 구간이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:3332ad10",
+        "text": "밤의 끝자락 회복량 20%→15% 하향이 탱커형 캐리의 버티는 힘을 함께 깎았습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력 30→25 하향으로 전열 보강 가치가 낮아졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:b3191eaf",
+        "text": "검은 가시 탱커 희생 방어력·마법 저항력 15→12 하향도 전열 체급을 낮췄습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요릭 순방률이 51.1%→47.1%(-4.0%p)로 떨어졌습니다. 밤의 끝자락 발동 체력·회복량 하향으로 전열 생존력이 깎인 여파입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+      "note:tft:18.2:item:밤의-끝자락:3332ad10"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1005
+  },
+  "proseRepairAttempts": 0
+}

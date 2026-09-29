@@ -1,0 +1,43 @@
+{
+  "deltaId": "trait:DA_18_ZyraUniqueTrait:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:26:20.689Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:자이라:63f16bc7",
+        "text": "자이라 스킬 피해량이 주문력 37/55에서 35/53으로 하향되며 계열 조합 채용이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마오카이:d7ea1995",
+        "text": "마오카이 시작 마나가 40에서 30으로 줄어 첫 스킬이 느려지며 조합 가치가 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:b3191eaf",
+        "text": "검은 가시 탱커 희생 방어력·마법저항이 15에서 12로 내려가 전방 유지력이 약해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:6ebb4a52",
+        "text": "덩굴정령 도약 피해량 하향이 함께 서는 유닛들의 체감 성능을 낮췄습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "가시의 여인 등장률이 19.7%→14.4%로 떨어졌습니다. 자이라 피해량 하향과 마오카이 시작 마나 감소가 계열 채용을 밀어낸 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:자이라:63f16bc7",
+      "note:tft:18.2:champion:마오카이:d7ea1995"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 836
+  },
+  "proseRepairAttempts": 0
+}

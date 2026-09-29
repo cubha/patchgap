@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Locke:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:34:47.353Z",
+  "parsed": {
+    "causes": [],
+    "summary": "로크(Locke)는 후보 패치노트 목록에 해당 챔피언 또는 직접적으로 연관될 만한 시스템/아이템 변경 항목이 존재하지 않아, 밴율 -0.1302(95% CI [-0.1437, -0.1167], n=10000/10000) 하락을 설명할 간접 영향 후보를 찾을 수 없습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 158
+  }
+}

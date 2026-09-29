@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Akali:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:10:47.069Z",
+  "parsed": {
+    "causes": [],
+    "summary": "아칼리에 대한 직접 패치 노트가 없으며, 후보 목록에서도 아칼리의 밴율 급등(9.94%→15.62%)을 설명할 만한 간접 연관 변경 사항(상성 챔피언 버프/너프, 관련 아이템 변경 등)을 찾을 수 없어 원인 불명 상태로 남습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 120,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 250
+  }
+}

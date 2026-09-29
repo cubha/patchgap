@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Talon:JUNGLE:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:39:23.360Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:이블린:7340a85b",
+        "text": "이블린이 Q 기본 피해량, 이동 W 마나 소모/재사용 대기시간 등 다수 항목에서 약화되며 정글 암살자 메타에서 대체픽으로 탈론이 선택되었을 가능성이 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:이블린:8bf47559",
+        "text": "이블린 W 재사용 대기시간 증가(15→20초)로 인한 정글 이동성 저하가 경쟁 정글 암살자인 탈론의 픽률 상승에 간접적으로 기여했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
+        "text": "녹턴의 방어력·체력 감소로 경쟁 정글 암살자군의 입지가 약해지며 탈론이 반사이익을 얻었을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:080e761c",
+        "text": "제라스 체력 및 Q 피해량 너프로 미드 라인에서 탈론과 같은 근접 암살자에게 유리한 환경이 조성되었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "탈론 픽률이 0.0538에서 0.0793로 통계적으로 유의미하게 상승했으나(95% CI가 0을 포함하지 않음) 탈론 자체에 대한 직접 변경 노트는 없어, 이블린·녹턴 등 경쟁 정글/미드 암살자군의 연쇄 너프가 간접적으로 탈론 픽률 상승에 기여했을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:이블린:7340a85b",
+      "note:26.17:champion:nocturne:9c41fff1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1276
+  }
+}

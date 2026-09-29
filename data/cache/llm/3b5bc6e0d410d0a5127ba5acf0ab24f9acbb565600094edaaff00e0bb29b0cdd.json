@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Ryze:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:06:51.443Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+        "text": "탑 퀘스트 순간이동 쿨다운이 420초에서 390초로 줄어 글로벌 합류형 탑 라이즈의 가치가 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:f037ef05",
+        "text": "강화 순간이동 쿨다운도 300~210초로 단축되어 라인 주도권형 탑 픽 선택이 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:nasus:b5997156",
+        "text": "나서스 Q 추가 피해 10 너프로 탑 경쟁 픽이 약화되며 라이즈 픽률이 상대적으로 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
+        "text": "뽀삐 Q 미니언·몬스터 피해 상한 너프도 탑 픽 분포 이동에 일조했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "라이즈 탑 픽률 1.2%→1.4%(+0.2%p)는 CI가 0을 포함해 유의하지 않으며, 탑 순간이동 쿨다운 단축과 나서스 너프에 따른 반사 효과로 보입니다.",
+    "summaryCites": [
+      "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+      "note:26.19:champion:nasus:b5997156"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 870
+  }
+}

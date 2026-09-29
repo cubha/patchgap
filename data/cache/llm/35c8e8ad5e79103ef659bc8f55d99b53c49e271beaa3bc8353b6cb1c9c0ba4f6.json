@@ -1,0 +1,37 @@
+{
+  "deltaId": "unit:DA_18_Maokai:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:49:25.507Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:bf8a4249",
+        "text": "검은 가시 체력이 175/350/600으로 올라 전열 탱커 기용 가치가 커졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력 60%→40%, 회복량 20%→15% 너프로 경쟁 탱커 조합이 밀려났습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:지옥불:e0ee7b3d",
+        "text": "지옥불 화상 피해 3.5/4.5% 상향으로 해당 계열 전열 배치 수요가 늘었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "마오카이 등장률이 11.8%→24.3%(+12.5%p)로 급등했으나, 자체 마나 조정만으로는 설명되지 않고 탱커 주변 환경 변화(검은 가시 체력 상향, 밤의 끝자락 너프)가 유력한 배경입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:검은-가시:bf8a4249",
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15"
+    ]
+  },
+  "usage": {
+    "inputTokens": 378,
+    "cacheReadInputTokens": 26786,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1682
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Yone:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:57:53.463Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25%로 치명타 코어 효율이 올라 요네 선호도가 상승했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해 너프로 탑 대체 픽이 줄며 요네 픽률이 반사 이익을 얻었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+        "text": "그레이브즈 Q 계수 너프로 AD 브루저 계열 수요가 요네 쪽으로 이동했을 여지가 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요네 탑 픽률 0.5%p 상승은 CI가 0을 포함해 유의하지 않고, 폭풍갈퀴 공격 속도 25% 상향이 부분 요인일 수 있습니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 657
+  }
+}

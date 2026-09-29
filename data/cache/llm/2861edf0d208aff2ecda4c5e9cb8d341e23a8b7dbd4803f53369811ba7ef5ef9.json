@@ -1,0 +1,38 @@
+{
+  "deltaId": "trait:DA_18_Adaptor:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:23:23.698Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:3e0ae055",
+        "text": "마스터 이 주문력 형태 스킬 피해량이 140/210/335→125/190/285로 하향돼 적응가 축의 딜이 약화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:7f03951b",
+        "text": "마스터 이 공격력 형태 기본 공격력 65→60 하향으로 두 형태 모두 손해를 봤습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 너프가 적응가 근접 캐리의 아이템 효율을 낮췄을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "적응가 순방률이 55.8%→51.9%(-3.9%p)로 하락했는데, 마스터 이의 주문력 형태 피해량과 공격력 형태 기본 공격력이 함께 하향된 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:마스터-이:3e0ae055",
+      "note:tft:18.2:champion:마스터-이:7f03951b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 741
+  },
+  "proseRepairAttempts": 0
+}

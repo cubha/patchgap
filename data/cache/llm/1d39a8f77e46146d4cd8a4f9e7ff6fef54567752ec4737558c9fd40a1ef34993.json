@@ -1,0 +1,18 @@
+{
+  "deltaId": "item:3084:adoptionRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T02:55:36.266Z",
+  "parsed": {
+    "causes": [],
+    "summary": "제공된 26.17 패치노트 후보 목록에서 강철심장(3084) 채택률 변화(0.01023→0.01337, 델타 +0.00314, 95% CI [0.0021945, 0.0040888], n=100000/100000)를 설명할 수 있는 간접 영향 후보(공격 속도 계열 챔피언/아이템 변경 등)를 찾지 못했습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 400
+  }
+}

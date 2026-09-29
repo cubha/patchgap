@@ -1,0 +1,41 @@
+{
+  "deltaId": "champion:Pyke:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T00:51:37.371Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:other:증강:35873480",
+        "text": "증강 '승리를 위한 회전'의 궁극기 피해량 증가가 30%→50%로 상향되어, 처형 임계값이 피해량에 직결되는 파이크 궁극기가 큰 반사이익을 얻었을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "노틸러스 기본 공격력 61→58, Q 피해량 하향으로 경쟁 서포트 탱커가 약해져 파이크의 상대적 입지가 개선됐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 재사용 대기시간이 전 구간 11초로 고정 너프되어 바텀 경쟁 서포트 풀이 약화된 영향도 고려할 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
+        "text": "바드 방어력이 34+레벨당 5에서 32+레벨당 4.7로 낮아져 파이크의 처형 각이 더 쉬워졌을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "파이크 승률이 43.1%→53.2%(+10.1%p, n=647→611)로 급등했는데, 직접 조항은 없고 증강 '승리를 위한 회전'의 궁극기 피해량 30%→50% 상향이 가장 유력한 간접 요인입니다.",
+    "summaryCites": [
+      "note:26.18:other:증강:35873480"
+    ]
+  },
+  "usage": {
+    "inputTokens": 119,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 896
+  }
+}

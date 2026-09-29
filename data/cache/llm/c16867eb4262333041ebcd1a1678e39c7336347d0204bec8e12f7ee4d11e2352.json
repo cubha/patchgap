@@ -1,0 +1,41 @@
+{
+  "deltaId": "trait:DA_18_Battlemage:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:45:23.232Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:56e1c4af",
+        "text": "덩굴정령 도약 피해량이 공격력 600%→1,000% 기준으로 조정되며 너프돼, 거석 조합의 주력 딜 축이 흔들린 영향으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:6ebb4a52",
+        "text": "덩굴정령 도약 피해량 공격력 170/255→155/235 하향이 거석 계열 채용 유인을 줄였을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마오카이:c1cfbbf3",
+        "text": "마오카이 마나 40/100→30/90 조정으로 스킬 운용이 바뀌며 거석 전개 선택률이 낮아졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 등 전방 상징 약화로 탱커 중심 조합 전반의 매력이 떨어졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "거석 등장률이 22.4%→15.0%(-7.4%p)로 급락했고, 덩굴정령 도약 피해량 하향 등 주변 너프의 파급으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:덩굴정령:6ebb4a52"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 946
+  }
+}

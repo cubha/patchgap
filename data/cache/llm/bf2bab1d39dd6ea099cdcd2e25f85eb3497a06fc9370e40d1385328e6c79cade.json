@@ -1,0 +1,42 @@
+{
+  "deltaId": "trait:DA_18_Rapidfire:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:59:02.143Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": null,
+        "text": "변화폭 -0.02등은 95% CI [-0.12, +0.08] 안에 들어가 통계적으로 무의미한 노이즈입니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력 15%→18% 버프가 속사포 공격 캐리의 손실을 상쇄했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:35db05bd",
+        "text": "정의의 손길 기본 공격력/주문력 15%→18% 상향도 공격 캐리 조합을 함께 받쳤습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:원시-상징:32460e11",
+        "text": "원시 상징 공격 속도 25%→35% 버프가 공격 속도 축 조합의 대체 보강으로 작용했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "속사포는 공격 속도 9/15%→8/12% 너프에도 평균 4.53→4.51등으로 변화가 CI 안 노이즈 수준이며, 피바라기·정의의 손길 버프가 손실을 상쇄했습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:피바라기:69a953de",
+      "note:tft:18.2:item:정의의-손길:35db05bd"
+    ]
+  },
+  "usage": {
+    "inputTokens": 151,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 799
+  }
+}

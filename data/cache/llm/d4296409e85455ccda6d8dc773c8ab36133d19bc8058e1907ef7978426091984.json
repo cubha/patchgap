@@ -1,0 +1,36 @@
+{
+  "deltaId": "unit:DA_Nidalee18_AP:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:36:06.650Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 4/5단계 추가 공격력 하향으로 사냥꾼 기반 공격력 조합의 선호도가 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
+        "text": "사냥꾼 상징 처치 관여당 공격력이 18%에서 15%로 줄어 상징 활용 조합이 위축됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:응징:f65a1f15",
+        "text": "응징 치명타 확률 25%→15% 하향으로 공격력 캐리 빌드 전반의 매력이 낮아졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "니달리 등장률이 19.8%→15.3%(-4.5%p)로 떨어졌는데, 사냥꾼 추가 공격력 하향이 공격력 기반 니달리 조합 수요를 줄인 것이 주된 원인입니다.",
+    "summaryCites": [
+      "note:tft:18.3:system:사냥꾼:616a50ac"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 689
+  }
+}

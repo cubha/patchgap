@@ -1,0 +1,47 @@
+{
+  "deltaId": "champion:Qiyana:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:26:21.455Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:아리:a1938c18",
+        "text": "아리의 기본 체력 재생이 6.1에서 4.5로 줄어 미드 라인전 유지력이 떨어지면서, 초반 압박이 강한 키아나가 상대적으로 이득을 봤을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:아리:de1b72d9",
+        "text": "아리 기본 체력이 460에서 440으로 낮아져 키아나의 콤보 처형 구간이 넓어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:그라가스:fec76b2f",
+        "text": "그라가스 궁극기 쿨타임이 100/90/80초에서 130/115/100초로 늘어 한타 개입이 줄면서, 난입형 암살자인 키아나의 진입 리스크가 감소했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:이블린:7340a85b",
+        "text": "이블린 Q 기본 피해가 40/60/80/100/120에서 40/55/70/85/100으로 하향되어 경쟁 암살 픽의 입지가 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+        "text": "제라스 Q 피해와 체력이 함께 하향되어 원거리 견제형 미드가 약해진 점이 키아나에게 유리하게 작용했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "키아나 승률이 51.3%에서 55.0%로 3.7%p 올랐는데, 아리의 체력·체력 재생 하향 등 경쟁 미드 챔피언 너프가 간접 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:아리:a1938c18",
+      "note:26.17:champion:아리:de1b72d9"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 951
+  }
+}

@@ -903,3 +903,95 @@ describe("verifyCauses — 부호 없는 변화량 백분율(R14, 세 게임 공
     expect(good.verified).toBe(true);
   });
 });
+
+// 호출 정책(2026-09-29, 비용 $54.59 실측 — 85%가 로컬 재실행). 실제 호출은 명시 opt-in(PATCHGAP_LLM=1,
+// 또는 테스트처럼 클라이언트 주입)일 때만, 예산 안에서만 나간다. 견적은 호출 전에 결정론으로 센다.
+describe("호출 정책 — opt-in·견적·예산(2026-09-29)", () => {
+  const profile = () => lolLlmProfile(makeDdragon());
+  const answer = { causes: [], summary: "아트록스 픽률이 10.0%→20.0%로 올랐습니다.", summaryCites: [] };
+  let dir: string;
+  const saved = process.env.PATCHGAP_LLM;
+  beforeEach(() => {
+    dir = fs.mkdtempSync(path.join(os.tmpdir(), "llm-policy-"));
+    delete process.env.PATCHGAP_LLM;
+  });
+  afterEach(() => {
+    fs.rmSync(dir, { recursive: true, force: true });
+    if (saved === undefined) delete process.env.PATCHGAP_LLM;
+    else process.env.PATCHGAP_LLM = saved;
+  });
+
+  it("opt-in 없이 캐시 미스가 있으면 호출하지 않고 멈춘다 — 회색으로 조용히 통과하지 않는다", async () => {
+    await expect(inferIndirectCandidates([delta({})], [], profile(), { cacheDir: dir })).rejects.toThrow(/PATCHGAP_LLM=1/);
+  });
+
+  it("opt-in 없어도 전부 캐시 적중이면 그대로 돈다(호출 0)", async () => {
+    const parseFn = vi.fn().mockResolvedValue(fakeResponse(answer));
+    await inferIndirectCandidates([delta({})], [], profile(), { cacheDir: dir, client: fakeClient(parseFn) });
+    const again = await inferIndirectCandidates([delta({})], [], profile(), { cacheDir: dir });
+    expect(again.summary.calls).toBe(0);
+    expect(again.summary.cacheHits).toBe(1);
+  });
+
+  it("planOnly는 견적만 내고 호출하지 않는다(--dry-run이 돈을 쓰던 결함)", async () => {
+    const parseFn = vi.fn();
+    const out = await inferIndirectCandidates([delta({})], [], profile(), { cacheDir: dir, client: fakeClient(parseFn), planOnly: true });
+    expect(parseFn).not.toHaveBeenCalled();
+    expect(out.summary.plan?.misses).toBe(1);
+    expect(out.summary.plan?.estimatedCalls).toBe(1);
+    expect(out.deltas[0].llm).toBeUndefined();
+    expect(fs.readdirSync(dir)).toHaveLength(0);
+  });
+
+  it("견적이 예산을 넘으면 한 건도 호출하지 않고 멈춘다", async () => {
+    const parseFn = vi.fn();
+    await expect(
+      inferIndirectCandidates([delta({})], [], profile(), { cacheDir: dir, client: fakeClient(parseFn), budgetUsd: 0.001 })
+    ).rejects.toThrow(/예산/);
+    expect(parseFn).not.toHaveBeenCalled();
+  });
+
+  it("effort를 바꾸면 기본값(medium)으로 받은 답을 재사용하지 않는다", async () => {
+    const parseFn = vi.fn().mockResolvedValue(fakeResponse(answer));
+    await inferIndirectCandidates([delta({})], [], profile(), { cacheDir: dir, client: fakeClient(parseFn) });
+    const low = await inferIndirectCandidates([delta({})], [], profile(), { cacheDir: dir, client: fakeClient(parseFn), effort: "low" });
+    expect(low.summary.calls).toBe(1);
+  });
+});
+
+// 캐시 키는 델타 수치를 모른다 — 같은 쌍을 다시 수집해 수치가 바뀌어도 적중한다. 원인은 이미 현재 수치로
+// 재검증되지만 요약은 아니었다(2026-09-29 braintrust 정합성·실패모드 공통 지적).
+describe("요약 수치 사실성 — 캐시 적중 뒤 수치가 바뀐 경우", () => {
+  let dir: string;
+  beforeEach(() => {
+    dir = fs.mkdtempSync(path.join(os.tmpdir(), "llm-stale-"));
+  });
+  afterEach(() => fs.rmSync(dir, { recursive: true, force: true }));
+
+  it("옛 수치를 말하는 요약은 결정론 요약으로 바뀐다", async () => {
+    const parseFn = vi.fn().mockResolvedValue(
+      fakeResponse({ causes: [], summary: "아트록스 픽률이 10.0%→20.0%로 올랐습니다.", summaryCites: [] })
+    );
+    const opts = { cacheDir: dir, client: fakeClient(parseFn) };
+    const first = await inferIndirectCandidates([delta({})], [], lolLlmProfile(makeDdragon()), opts);
+    expect(first.deltas[0].llm?.summaryDeterministic).toBeUndefined();
+    const moved = await inferIndirectCandidates([delta({ after: 0.35, delta: 0.25 })], [], lolLlmProfile(makeDdragon()), opts);
+    expect(moved.summary.calls).toBe(0);
+    expect(moved.deltas[0].llm?.summaryDeterministic).toBe(true);
+    expect(moved.deltas[0].llm?.summary).not.toContain("20.0%");
+  });
+
+  it("반올림 경계(42.45 → 42.4)는 옛 수치가 아니다", async () => {
+    const parseFn = vi.fn().mockResolvedValue(
+      fakeResponse({ causes: [], summary: "아트록스 밴률이 42.4%→50.8%로 올랐습니다.", summaryCites: [] })
+    );
+    const out = await inferIndirectCandidates(
+      [delta({ metric: "banRate", before: 0.4245, after: 0.5081, delta: 0.0836 })],
+      [],
+      lolLlmProfile(makeDdragon()),
+      { cacheDir: dir, client: fakeClient(parseFn) }
+    );
+    expect(out.deltas[0].llm?.summaryDeterministic).toBeUndefined();
+    expect(out.deltas[0].llm?.summaryVerified).toBe(true);
+  });
+});

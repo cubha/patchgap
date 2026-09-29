@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:MasterYi:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:03:25.131Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
+        "text": "녹턴 R 쿨다운이 140/115/90초에서 160/130/100초로 늘며 정글 한 자리가 비었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
+        "text": "뽀삐 Q의 몬스터 대상 피해 상한이 15 감소해 정글 수급이 나빠졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+        "text": "럼블 과열 공격 속도가 50~130%에서 30~100%로 하향돼 정글 선호도가 밀렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "마스터 이는 Q 쿨 환급 조정(너프)에도 픽률이 2.9%→5.0%로 올랐는데, 녹턴 R 쿨 증가와 뽀삐 Q 정글 피해 하향에 따른 반사이득입니다.",
+    "summaryCites": [
+      "note:26.19:champion:nocturne:daf7f9d0",
+      "note:26.19:champion:poppy:d2a46ee3"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 698
+  }
+}

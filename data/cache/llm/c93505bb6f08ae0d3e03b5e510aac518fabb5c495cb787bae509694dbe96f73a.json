@@ -1,0 +1,48 @@
+{
+  "deltaId": "champion:Ezreal:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:29:05.563Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도가 20%→25%로 올라 포킹형 원거리 딜러의 구매 가치가 상승, 이즈리얼 선호도와 밴 우선순위를 밀어올렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:불타는-향로:bdec87bb",
+        "text": "세릴다의 원한 방어구 관통력이 40%→45%로 강화되어 AD 코어 빌드의 후반 화력이 올라간 점이 체감 위협도를 키웠을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:불타는-향로:42df8461",
+        "text": "도미닉 경의 인사 공격력이 30→45로 크게 올라 방어구 관통 빌드 전반이 강해진 것이 밴률 상승에 기여했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해가 6/7/8/9/10%→4/5.5/7/8.5/10%로 약화되며 경쟁 원거리 딜러가 밀려난 결과, 이즈리얼이 상대적으로 부각됐을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트위치:64a7906a",
+        "text": "트위치 기본 공격 속도가 0.679→0.658로 너프되어 바텀 대안 축소가 이즈리얼 밴 집중으로 이어졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "이즈리얼은 Q 너프에도 밴률이 13.1%→16.1%(+3.0%p) 올랐는데, 베인·트위치 등 경쟁 원거리 딜러 너프와 폭풍갈퀴 공격 속도 25% 상향이 반사 이익을 준 것으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:vayne:1da6ddd1",
+      "note:26.17:champion:트위치:64a7906a",
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1113
+  }
+}

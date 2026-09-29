@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Taliyah:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:51:27.966Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+        "text": "제라스 Q 피해량 및 체력 너프로 경쟁 포킹 메이지가 약해지며 탈리야가 반사이익을 얻었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+        "text": "그레이브즈 Q 계수 너프로 정글 경쟁 구도가 완화됐을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "탈리야 승률이 48.7%→54.5%(+5.8%p)로 올랐습니다. 직접 변경 없이 제라스 너프에 따른 미드 반사이익으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:xerath:43a6f4aa"
+    ]
+  },
+  "usage": {
+    "inputTokens": 120,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 531
+  }
+}

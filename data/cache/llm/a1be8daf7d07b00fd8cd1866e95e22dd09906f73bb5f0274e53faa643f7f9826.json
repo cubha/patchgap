@@ -1,0 +1,42 @@
+{
+  "deltaId": "item:3084:adoptionRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:51:00.194Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력 450→400 하향으로 전사 첫 아이템 수요가 강철심장으로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력 45→40 하향이 겹치며 대체재로서 강철심장 선호가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
+        "text": "초가스 E 피해량 10 상향으로 체력 중심 탱커 픽이 늘며 강철심장 채택을 밀어올렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "트런들 W 공격속도 최대 110%로 상향되며 체력형 아이템 빌드 수요가 증가했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "강철심장 채택률이 1.0%→1.3%(+0.3%p) 올랐는데, 갈라진 하늘 체력 450→400·공격력 45→40 하향에 따른 대체 구매로 보입니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:4c4f025e",
+      "note:26.17:item:sundered-sky:0aec77fe"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 674
+  }
+}

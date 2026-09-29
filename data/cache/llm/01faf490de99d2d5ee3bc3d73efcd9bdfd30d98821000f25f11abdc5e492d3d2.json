@@ -1,0 +1,34 @@
+{
+  "deltaId": "champion:Nocturne:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-19T00:04:12.527Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:아리:de1b72d9",
+        "text": "아리의 체력·체력 재생 하향으로 미드 라인의 마법사 선호가 줄면서 녹턴 같은 암살형 픽이 소폭 유입됐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:080e761c",
+        "text": "제라스의 체력과 Q 피해량 하향도 미드 포킹 챔피언 비중을 낮춰 녹턴 미드 실험 픽 여지를 넓혔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "녹턴은 체력 655→640, 방어력 38→36 하향에도 미드 픽률이 0.1%p 올랐으나 CI 하한이 0.0%p라 노이즈일 가능성이 크고, 아리·제라스 등 미드 마법사 하향의 반사 효과 정도로 봅니다.",
+    "summaryCites": [
+      "note:26.17:champion:nocturne:fd4d5d23",
+      "note:26.17:champion:nocturne:9c41fff1",
+      "note:26.17:champion:아리:de1b72d9",
+      "note:26.17:champion:xerath:080e761c"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 605
+  }
+}

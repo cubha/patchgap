@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Lucian:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:17:00.906Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
+        "text": "제리 W 피해량 계수가 120%→100%로 내려가며 원딜 자리 일부가 루시안으로 이동했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:zeri:e371a79d",
+        "text": "제리 W 지형 관통 계수 180%→150% 너프로 경쟁 원딜 선호도가 낮아졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 쿨다운 고정 11초 너프로 봇 조합 구도가 바뀐 영향이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "루시안 픽률이 7.8%→10.0%(+2.1%p)로 올랐고, 제리 W 계수 너프로 원딜 수요가 옮겨온 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.18:champion:zeri:d0cacf0b",
+      "note:26.18:champion:zeri:e371a79d"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 522
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Azir:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:56:03.949Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:기원자-상징:dfaf6790",
+        "text": "기원자 상징의 사용 마나당 주문력이 10%→8%로 하향되며 마나 순환형 주문 딜러의 가치가 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 적중 시 피해량 하향으로 지속 주문 딜러 아이템 조합의 기대값이 낮아졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 공격 속도가 5%→4%로 줄어 지속 딜 위주 빌드의 경쟁력이 약화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃의 상징 효과가 150%로 축소되고 1인 제한이 생겨 상징 의존 조합 선택이 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "아지르는 병사 피해량 상향에도 등장률이 17.6%→14.0%로 감소했는데, 기원자 상징과 마법사의 최후 하향이 주문 딜러 빌드 가치를 함께 끌어내린 여파입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:기원자-상징:dfaf6790",
+      "note:tft:18.2:item:마법사의-최후:b79f865a"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 875
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "deltaId": "trait:DA_18_ZyraUniqueTrait:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:37:13.960Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:자이라:63f16bc7",
+        "text": "자이라 스킬 피해량이 주문력 37/55에서 35/53으로 하향되며 함께 서던 조합의 채용이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:b3191eaf",
+        "text": "검은 가시의 탱커 희생 방어력·마법 저항력이 15에서 12로 줄어 연계 빌드 가치가 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 적중 피해 하향으로 마법 피해 중심 보드 전반의 선호도가 낮아졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "가시의 여인 등장률이 19.7%→14.4%(-5.4%p)로 떨어졌습니다. 자이라 하향과 검은 가시 탱커 보정 축소가 원인일 수 있습니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:자이라:63f16bc7",
+      "note:tft:18.2:system:검은-가시:b3191eaf"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 802
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "deltaId": "trait:DA_18_Elderwood:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "1b4ec346ad0605238fd935fc97d52d05e7d396b4fcc038faca64e9e36e85b1cf",
+  "generatedAt": "2026-09-26T19:15:30.846Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:릴리아:da2771dd",
+        "text": "릴리아 체력 회복량이 주문력 325/475에서 350/525로 올라 나무정령 조합의 생존력이 개선됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:심술두꺼비:08de5c12",
+        "text": "심술두꺼비 지속 피해량 상향이 함께 서는 나무정령 보드의 딜량을 끌어올린 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:어스름늑대:7334faf2",
+        "text": "어스름늑대 강화 기본 공격 피해량 상향(공격력 60/90/135→65/100/160)이 같은 보드의 체급을 보탰습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "나무정령 평균 등수가 4.25등→4.00등으로 개선됐고, 릴리아 회복량 상향 등 함께 서는 유닛 버프가 주된 배경입니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:릴리아:da2771dd"
+    ]
+  },
+  "usage": {
+    "inputTokens": 149,
+    "cacheReadInputTokens": 8613,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 720
+  }
+}

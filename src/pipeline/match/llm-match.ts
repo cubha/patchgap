@@ -25,7 +25,16 @@ import type { GameLlmProfile, LlmDelta } from "./llm-profile";
 
 export { LLM_MODEL, PROMPT_VERSION } from "./llm-config";
 import { splitCombinedEntity } from "./entity-match";
-import { LLM_MODEL, PROMPT_VERSION } from "./llm-config";
+import {
+  DEFAULT_LLM_BUDGET_USD,
+  LLM_BUDGET_ENV,
+  LLM_EFFORT,
+  LLM_EST_USD_PER_CALL,
+  LLM_MODEL,
+  LLM_OPT_IN_ENV,
+  PROMPT_VERSION,
+  type LlmEffort,
+} from "./llm-config";
 import { arrowClaimsGrounded, noteNumbersOf, unsignedPercentChangeClaimsGrounded } from "./cause-factuality";
 // 2026-09-17: 50 → 120. 실측 후보가 113건(미공지 47 + 간접 2 + 공지-불일치 64)인데 상한이
 // 50이라 미공지 14건이 LLM을 **아예 거치지 못했고**, 화면은 그것을 "근거 미확인"으로 표시해
@@ -86,10 +95,12 @@ export function candidateSetHash(serialized: string): string {
   return crypto.createHash("sha256").update(serialized).digest("hex");
 }
 
-function cacheKeyFor(model: string, promptVersion: string, deltaId: string, candSetHash: string): string {
+function cacheKeyFor(model: string, promptVersion: string, deltaId: string, candSetHash: string, effort: LlmEffort): string {
+  // effort는 기본값이 아닐 때만 키에 든다(llm-config.ts LLM_EFFORT 주석) — 기존 캐시를 그대로 적중시킨다.
+  const effortTag = effort === LLM_EFFORT ? "" : `|effort=${effort}`;
   return crypto
     .createHash("sha256")
-    .update(`${model}|${promptVersion}|${deltaId}|${candSetHash}`)
+    .update(`${model}|${promptVersion}|${deltaId}|${candSetHash}${effortTag}`)
     .digest("hex");
 }
 
@@ -128,7 +139,8 @@ export async function callLlmForDelta<TDelta extends LlmDelta = DeltaRecord>(
   candidates: readonly PatchNoteItem[],
   /** 길이 재요청 문구(1회 한정). 있으면 사용자 메시지 뒤에 붙는다 — 시스템 프롬프트는 그대로라
    * 캐시 프리픽스가 깨지지 않는다. */
-  repairNote?: string
+  repairNote?: string,
+  effort: LlmEffort = LLM_EFFORT
 ): Promise<LlmCallResult> {
   const response = await client.messages.parse({
     model,
@@ -151,7 +163,7 @@ export async function callLlmForDelta<TDelta extends LlmDelta = DeltaRecord>(
       },
     ],
     output_config: {
-      effort: "medium",
+      effort,
       format: zodOutputFormat(OutputSchema),
     },
   });
@@ -560,6 +572,19 @@ export function summarizeProseHygiene(
   return stats;
 }
 
+/**
+ * 요약의 「A→B」·변화 백분율이 후보 노트나 **지금** 델타 수치와 맞나(2026-09-29). 델타 수치는 표시 반올림
+ * 경계(42.45 → 42.4/42.5)를 허용하려고 ±0.1을 더한다 — 실측으로 현 데이터 148건 중 6건이 그 경계에서만
+ * 어긋났고, 옛 수치는 그보다 훨씬 크게 벗어난다.
+ */
+export function summaryNumbersGrounded(summaryText: string, candidates: readonly PatchNoteItem[], own: readonly number[]): boolean {
+  const tolerant = own.flatMap((n) => [n, Math.round((n - 0.1) * 10) / 10, Math.round((n + 0.1) * 10) / 10]);
+  return (
+    arrowClaimsGrounded(summaryText, candidates, tolerant) &&
+    unsignedPercentChangeClaimsGrounded(summaryText, [], [...candidates.flatMap(noteNumbersOf), ...tolerant])
+  );
+}
+
 export interface LlmMatchOptions {
   /** 세션당 LLM 2단 시도 대상 델타 수 상한(`--llm-max`, 기본 50). */
   maxDeltas?: number;
@@ -576,6 +601,45 @@ export interface LlmMatchOptions {
   /** 주입 가능한 Anthropic 클라이언트(테스트 모킹용). 기본은 `new Anthropic()`(env의 ANTHROPIC_API_KEY 사용). */
   client?: Anthropic;
   model?: string;
+  /** 견적만 내고 호출·캐시 기록을 하지 않는다(`--dry-run`). 반환 델타는 입력 그대로다. */
+  planOnly?: boolean;
+  /** 실행 1회 예산(USD). 없으면 `PATCHGAP_LLM_BUDGET_USD` → `DEFAULT_LLM_BUDGET_USD`. */
+  budgetUsd?: number;
+  /** 추론 강도. 기본 `LLM_EFFORT` — 바꾸면 캐시 키가 갈린다. */
+  effort?: LlmEffort;
+}
+
+/**
+ * 호출 전 견적(2026-09-29). 캐시 파일 존재만 보고 센다 — 비용 0, 결정론. `estimatedCalls`는 호출 총 상한으로
+ * 자른 값이고, 새로 받은 답의 길이 재요청(델타당 최대 1회)은 미리 알 수 없어 넣지 않는다(실측 위반율 2~3%).
+ */
+export interface LlmCallPlan {
+  targets: number;
+  cacheHits: number;
+  misses: number;
+  /** 캐시 적중했지만 문장 규칙 위반으로 1회 되물을 항목. */
+  proseRepairs: number;
+  estimatedCalls: number;
+  /** 추정치 — `LLM_EST_USD_PER_CALL` 기준. */
+  estimatedUsd: number;
+}
+
+/** 실제 호출 허용 여부 — 명시 opt-in(환경변수)만. 테스트처럼 클라이언트를 주입하면 그 자체가 opt-in이다. */
+export function llmCallsOptedIn(env: NodeJS.ProcessEnv = process.env): boolean {
+  return env[LLM_OPT_IN_ENV] === "1";
+}
+
+function budgetFrom(options: LlmMatchOptions, env: NodeJS.ProcessEnv = process.env): number {
+  if (options.budgetUsd !== undefined) return options.budgetUsd;
+  const raw = Number(env[LLM_BUDGET_ENV]);
+  return Number.isFinite(raw) && raw > 0 ? raw : DEFAULT_LLM_BUDGET_USD;
+}
+
+function formatPlan(plan: LlmCallPlan): string {
+  return (
+    `대상 ${plan.targets} · 캐시 적중 ${plan.cacheHits} · 미스 ${plan.misses} · 재요청 ${plan.proseRepairs} ` +
+    `→ 예상 호출 ${plan.estimatedCalls}건 · 추정 $${plan.estimatedUsd.toFixed(2)}`
+  );
 }
 
 export interface LlmRunSummary {
@@ -590,6 +654,8 @@ export interface LlmRunSummary {
    * `calls`에 이미 포함된다 — 별도 예산이 아니라 같은 지갑에서 나간다는 사실을 보이려고 따로 센다. */
   proseRepairs: number;
   usage: LlmUsageTotals;
+  /** 호출 전 견적(2026-09-29) — 실행 로그와 산출물에서 「얼마를 쓰려 했나」를 남긴다. */
+  plan?: LlmCallPlan;
 }
 
 export interface LlmMatchResult<TDelta extends LlmDelta = DeltaRecord> {
@@ -632,6 +698,48 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
     profile.isTarget ?? ((d: TDelta) => d.status === "unannounced" || d.status === "announced-inconsistent");
   const targets = deltas.filter((d) => isTarget(d)).slice(0, maxDeltas);
   const targetIds = new Set(targets.map((d) => d.id));
+  const effort = options.effort ?? LLM_EFFORT;
+  const keyOf = (d: TDelta) => cacheKeyFor(model, promptVersion, d.id, candSetHash, effort);
+
+  // ── 견적 → 게이트(2026-09-29). 한 건이라도 부르기 **전에** 멈춰야 한다 — 도중에 멈추면 이미 산 호출이
+  // 산출물에 반영되지 않는 채로 버려진다.
+  const plan: LlmCallPlan = { targets: targets.length, cacheHits: 0, misses: 0, proseRepairs: 0, estimatedCalls: 0, estimatedUsd: 0 };
+  for (const d of targets) {
+    const hit = readCache(cacheDir, keyOf(d));
+    if (hit === null) plan.misses += 1;
+    else {
+      plan.cacheHits += 1;
+      if (countProseViolations(hit.parsed) > 0 && (hit.proseRepairAttempts ?? 0) < MAX_PROSE_REPAIR_ATTEMPTS) plan.proseRepairs += 1;
+    }
+  }
+  plan.estimatedCalls = Math.min(plan.misses + plan.proseRepairs, maxTotalCalls);
+  plan.estimatedUsd = plan.estimatedCalls * LLM_EST_USD_PER_CALL;
+  console.log(`[llm] 견적: ${formatPlan(plan)}`);
+
+  if (options.planOnly) {
+    return {
+      deltas: [...deltas],
+      summary: { calls: 0, cacheHits: 0, skipped: 0, proseRepairs: 0, usage: emptyUsage(), prose: summarizeProseHygiene([]), plan },
+    };
+  }
+  if (plan.estimatedCalls > 0) {
+    if (options.client === undefined && !llmCallsOptedIn()) {
+      throw new Error(
+        `LLM 호출 차단 — ${formatPlan(plan)}. 실제로 부르려면 ${LLM_OPT_IN_ENV}=1, 견적만 보려면 --dry-run. ` +
+          `(로컬 기본은 캐시 전용: 미스를 회색으로 채워 쓰면 이미 산 원인까지 덮인다)`
+      );
+    }
+    if (options.client === undefined && !process.env.ANTHROPIC_API_KEY) {
+      // opt-in했는데 키가 없으면 호출마다 실패해 전부 회색이 된다 — 스텝이 초록으로 끝나는 조용한 우회였다.
+      throw new Error(`LLM 호출 불가 — ${LLM_OPT_IN_ENV}=1인데 ANTHROPIC_API_KEY가 없다. ${formatPlan(plan)}`);
+    }
+    const budget = budgetFrom(options);
+    if (plan.estimatedUsd > budget) {
+      throw new Error(
+        `LLM 예산 초과 — ${formatPlan(plan)} > 예산 $${budget.toFixed(2)}. 대상을 줄이거나(--llm-max) ${LLM_BUDGET_ENV}로 올린다.`
+      );
+    }
+  }
 
   const summary: LlmRunSummary = {
     calls: 0,
@@ -641,7 +749,9 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
     usage: emptyUsage(),
     prose: summarizeProseHygiene([]),
   };
-  const client = options.client ?? new Anthropic();
+  // 게이트를 지난 뒤에만 만든다 — 캐시 전용 실행은 키 없이도 돈다.
+  let lazyClient: Anthropic | undefined = options.client;
+  const clientOf = (): Anthropic => (lazyClient ??= new Anthropic());
   const resultById = new Map<string, TDelta>();
   // 재요청 요약 채택 게이트는 **최종 게이트와 같아야** 한다(scope-critic 2026-09-28) — 인용 실재만 보고
   // 채택하면, 최종 단계의 C4(인용 전부 불일치)에서 미검증으로 떨어질 문장을 원본 대신 받아들이게 된다.
@@ -654,7 +764,14 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
    * 결정론 요약으로 바꾼다 — 지시문 규칙 6이 이미 허용하는 형태(`summaryCites=[]`)다. 캐시는 원문을 지킨다.
    */
   const finalizeSummary = (parsed: LlmOutput, delta: TDelta): NonNullable<TDelta["llm"]> => {
-    const fallback = parsed.summary.length > SUMMARY_MAX_CHARS ? profile.fallbackSummary?.(delta) : undefined;
+    // 수치 사실성(2026-09-29): 캐시 키가 델타 수치를 모르므로, 같은 쌍을 다시 수집하면 옛 수치를 말하는 요약이
+    // 적중한다. 원인은 verifyCauses가 현재 수치로 재검증하지만 요약은 아니었다 — 여기서 같은 검사를 건다.
+    // 키에 수치를 넣으면 재수집마다 전량 재호출이라 비용이 역행한다: 막는 곳은 키가 아니라 검증이다.
+    const stale = !summaryNumbersGrounded(parsed.summary, candidates, profile.ownNumbersOf?.(delta) ?? []);
+    const fallback = parsed.summary.length > SUMMARY_MAX_CHARS || stale ? profile.fallbackSummary?.(delta) : undefined;
+    if (fallback === undefined && stale) {
+      return { skipped: false, summary: parsed.summary, summaryCites: parsed.summaryCites, summaryVerified: false };
+    }
     if (fallback !== undefined) {
       return { skipped: false, summary: fallback, summaryCites: [], summaryVerified: true, summaryDeterministic: true };
     }
@@ -669,7 +786,7 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
   };
 
   for (const delta of targets) {
-    const key = cacheKeyFor(model, promptVersion, delta.id, candSetHash);
+    const key = keyOf(delta);
     const cached = readCache(cacheDir, key);
     if (cached) {
       summary.cacheHits += 1;
@@ -685,12 +802,13 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
           summary.calls += 1;
           summary.proseRepairs += 1;
           const repaired = await callLlmForDelta(
-            client,
+            clientOf(),
             model,
             profile,
             delta,
             candidates,
-            buildProseRepairNote(cachedParsed)
+            buildProseRepairNote(cachedParsed),
+            effort
           );
           addUsage(summary.usage, repaired.usage);
           const merged =
@@ -699,10 +817,15 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
             cachedParsed = merged;
           }
           // 고쳐졌든 아니든 시도를 적는다 — 적지 않으면 다음 실행이 같은 것을 또 묻는다(C1).
+          // 재요청 usage도 캐시 파일에 합산한다 — 빠지면 캐시 합계로 청구액을 설명할 수 없다(2026-09-29 실측 잔차).
+          const usageSoFar = emptyUsage();
+          addUsage(usageSoFar, cached.usage);
+          addUsage(usageSoFar, repaired.usage);
           writeCache(cacheDir, key, {
             ...cached,
             generatedAt: new Date().toISOString(),
             parsed: cachedParsed,
+            usage: usageSoFar,
             proseRepairAttempts: attempts + 1,
           });
         } catch {
@@ -730,7 +853,7 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
 
     try {
       summary.calls += 1;
-      const first = await callLlmForDelta(client, model, profile, delta, candidates);
+      const first = await callLlmForDelta(clientOf(), model, profile, delta, candidates, undefined, effort);
       const usage = emptyUsage();
       addUsage(usage, first.usage);
       let parsed = first.parsed;
@@ -744,12 +867,13 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
         summary.proseRepairs += 1;
         repairAttempts += 1;
         const repaired = await callLlmForDelta(
-          client,
+          clientOf(),
           model,
           profile,
           delta,
           candidates,
-          buildProseRepairNote(parsed)
+          buildProseRepairNote(parsed),
+          effort
         );
         addUsage(usage, repaired.usage);
         const merged = repaired.parsed === null ? null : mergeRepairedProse(parsed, repaired.parsed, (t, c) => acceptCites(t, c, delta));

@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Khazix:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:07:12.079Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:khazix:49b122f5",
+        "text": "E 진화 사거리 200→300 등 버프가 정글 동선에 유리해 픽이 정글로 쏠렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라 R 회복량 375/500/625→400/525/650 상향으로 탑 1대1 경쟁에서 밀렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
+        "text": "아트록스 E 회복 계수 1.1%→1.3% 상향으로 탑 브루저 선호도가 올라갔습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+        "text": "탑 순간이동 대기시간 420초→390초로 라인 유지형 탑 챔피언이 상대적으로 유리해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카직스 탑 픽률 0.2%→0.0%(-0.2%p)는 표본이 매우 작고, 피오라·아트록스 탑 버프로 비주류 픽이 밀려난 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.19:champion:fiora:4ff3c93f",
+      "note:26.19:champion:aatrox:f629d9e5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 662
+  }
+}

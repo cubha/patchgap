@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Taliyah:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:36:19.818Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:51b5b58f",
+        "text": "정글 아이템 계열인 활력증진의 펜던트(및 리글의 랜턴 등 연계 아이템)의 체력·공격속도·조합식 개편이 정글 챔피언인 탈리야의 성장 곡선과 정글링 효율에 간접적으로 영향을 주었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:불타는-향로:d8a7c7d5",
+        "text": "꽃피는 새벽의 검 등 마법공학 계열 아이템의 주문력 계수 상향이 AP 챔피언인 탈리야의 스노우볼링 및 딜링에 간접적 이득을 주었을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "탈리야는 이번 패치에서 직접적인 챔피언 밸런스 변경이 없었지만(승률 48.7%→54.5%, 95% CI [0.012, 0.103], n=860/960), 그녀가 자주 사용하는 정글 및 AP 아이템 계열(활력증진의 펜던트, 꽃피는 새벽의 검 등)의 간접적 개편이 승률 상승에 영향을 주었을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:item:활력증진의-펜던트:51b5b58f",
+      "note:26.17:other:불타는-향로:d8a7c7d5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1011
+  }
+}

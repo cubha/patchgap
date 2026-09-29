@@ -1,0 +1,38 @@
+{
+  "deltaId": "trait:DA_DravenUniqueTrait18:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:25:01.876Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:드레이븐:9fa21721",
+        "text": "드레이븐 현상금 사냥꾼 보상 체계가 재조정되며 관련 특성 채용이 크게 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:드레이븐:5391bfea",
+        "text": "12골드 획득 요구 처치 횟수 등 보상 구간이 손질되어 골드형 운영 가치가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카직스:c60397e3",
+        "text": "카직스 기본 공격력 30→40 상향이 같은 계열 보드의 채용을 함께 끌어올렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "드레이븐 현상금 사냥꾼 보상 구간 재조정(12골드 요구 6→8회 등)이 파급되며 현상금 추적자 등장률이 6.1%→12.2%로 두 배 올랐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:드레이븐:9fa21721",
+      "note:tft:18.2:champion:드레이븐:5391bfea"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 753
+  },
+  "proseRepairAttempts": 0
+}

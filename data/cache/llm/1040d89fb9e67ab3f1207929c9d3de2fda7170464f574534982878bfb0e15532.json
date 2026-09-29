@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Elise:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:03:05.303Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
+        "text": "녹턴 R 재사용 대기시간이 최대 20초 늘어 정글 경쟁자가 약해진 반사이익으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:poppy:d2a46ee3",
+        "text": "뽀삐 Q의 몬스터 피해 상한 하향으로 정글 뽀삐가 밀린 점도 일부 작용했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "엘리스 승률 2.6%p 상승은 CI [-5.8%p, 11.0%p]로 유의하지 않으며, 녹턴 R 너프 등 정글 경쟁 완화가 일부 영향.",
+    "summaryCites": [
+      "note:26.19:champion:nocturne:daf7f9d0"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 561
+  }
+}

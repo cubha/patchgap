@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Taliyah:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:12:47.005Z",
+  "parsed": {
+    "causes": [],
+    "summary": "탈리야에 대한 직접 변경 사항이 패치노트에 없고, 픽률 감소(-3.6%p)를 설명할 만한 간접 연관 후보(정글/아이템/시스템 변경 등)도 후보 목록에서 확인되지 않아 원인 불명(unannounced)으로 남습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 204
+  }
+}

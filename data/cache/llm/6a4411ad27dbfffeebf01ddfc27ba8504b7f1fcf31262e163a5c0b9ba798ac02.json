@@ -1,0 +1,42 @@
+{
+  "deltaId": "item:DA_Artifact_RapidFireCannon:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:44:48.702Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 공속 증가치가 9/15%에서 8/12%로 깎이며 공속 축 빌드가 위축, 고속 연사포 수요가 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 조건 변경으로 원거리 평타 캐리 구성이 약화되며 고속 연사포 채택이 감소했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기·정의의 손길 등 공격력 아이템 버프로 원거리 딜러 아이템 선택이 그쪽으로 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 공속 스택 너프로 공속 중첩형 조합 전반이 약해져 고속 연사포 병행 수요도 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "고속 연사포 등장률이 1.6%→1.0%(-0.6%p)로 떨어진 건 속사포 공속 너프와 사냥꾼 조건 변경으로 공속 평타 축이 위축된 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:속사포:f271519a",
+      "note:tft:18.2:system:사냥꾼:70e7b088"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 923
+  }
+}

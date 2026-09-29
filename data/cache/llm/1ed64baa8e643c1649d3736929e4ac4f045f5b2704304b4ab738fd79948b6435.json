@@ -1,0 +1,43 @@
+{
+  "deltaId": "unit:DA_18_Xayah:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:17:41.029Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 너프로 평타 딜러인 자야의 화력이 깎였습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 상위 단계 공격 속도 15%→12% 너프가 자야 캐리 구성의 상한을 낮췄습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 유지 시간 3초 단축 너프가 자야 조합의 딜에 영향을 줬을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 공격력 30%→25% 너프로 자야 중심 원거리 딜 구성이 약화됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "자야 평균 등수가 4.57등→4.80등으로 악화됐고, 명멸검 공격 속도 4% 하향과 속사포 12% 너프 등 평타 딜 축소가 주 원인입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:명멸검:ce978bd1",
+      "note:tft:18.2:system:속사포:f271519a"
+    ]
+  },
+  "usage": {
+    "inputTokens": 148,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 833
+  },
+  "proseRepairAttempts": 0
+}

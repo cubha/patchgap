@@ -1,0 +1,37 @@
+{
+  "deltaId": "unit:DA_18_Alistar:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:40:21.183Z",
+  "parsed": {
+    "summary": "알리스타는 스킬·회복 상향에도 등장률이 15.4%에서 14.4%로 내려갔는데, 영원한 서약 탱커 마나 너프와 람머스 보호막 상향이 전방 자리를 잠식했습니다.",
+    "summaryCites": [
+      "note:tft:18.3:item:영원한-서약:2e842b57",
+      "note:tft:18.3:champion:람머스:9b820b51"
+    ],
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:item:영원한-서약:2e842b57",
+        "confidence": "medium",
+        "text": "영원한 서약의 탱커 마나 회복이 15에서 10으로 줄어 알리스타 같은 전방 유닛 기용이 위축됐습니다."
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:엄호대:ad7723b2",
+        "confidence": "low",
+        "text": "람머스 보호막이 350/450/550에서 400/550/725로 올라 같은 탱커 자리 경쟁에서 밀렸습니다."
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:람머스:9b820b51",
+        "confidence": "low",
+        "text": "엄호대 3단계 방저/마저가 120에서 115로 줄어 관련 전방 조합 채용이 소폭 감소했습니다."
+      }
+    ]
+  },
+  "usage": {
+    "inputTokens": 380,
+    "cacheReadInputTokens": 17064,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1296
+  }
+}

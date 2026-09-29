@@ -1,0 +1,38 @@
+{
+  "deltaId": "unit:DA_Fiddlesticks18:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:25:26.555Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상이 전 구간 상향돼 주문력 캐리 피들스틱의 후반 화력이 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:83333c69",
+        "text": "검은 가시가 주문력 유닛 희생 시 마나 재생 1.7→2로 상향돼 스킬 회전이 빨라졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:루덴의-폭풍:9f4a135d",
+        "text": "루덴의 폭풍 처치 시 피해 100→130 상향이 광역 주문 캐리 조합의 가치를 올렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "피들스틱 순방률이 47.6%→50.8%(+3.2%p)로 올랐고, 어둠의 의식 주문력 보상 상향과 검은 가시 마나 재생 1.7→2 등 주문력 체계 강화가 배경입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:어둠의-의식:a8212aab",
+      "note:tft:18.2:system:검은-가시:83333c69"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 750
+  },
+  "proseRepairAttempts": 0
+}

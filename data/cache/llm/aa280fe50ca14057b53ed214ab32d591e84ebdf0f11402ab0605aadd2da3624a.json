@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Tristana:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:34:47.896Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:6d438477",
+        "text": "미스 포츈이 Q 피해량·이동 속도·궁극기 계수까지 전방위 상향되며 원거리 딜러 픽이 그쪽으로 쏠린 영향으로 보입니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:bd82e946",
+        "text": "미스 포츈 기본 이동 속도 325→335 상향으로 바텀 라인전 안정성이 올라가 트리스타나 대체 픽이 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
+        "text": "애쉬 W 피해량·사거리 상향으로 원거리 딜러 선택지가 넓어져 트리스타나 지분이 줄었을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 상향은 트리스타나에게 유리한 방향이므로 이번 하락을 설명하지는 못합니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "트리스타나 픽률이 13.9%→12.4%(-1.5%p)로 내렸는데, 미스 포츈 전면 상향과 애쉬 W 강화로 바텀 픽 수요가 분산된 영향이 커 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:미스-포츈:6d438477",
+      "note:26.17:champion:애쉬:7d7ed661"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 939
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "deltaId": "trait:DA_18_LuxUniqueTrait:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:26:36.118Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:레오나:c1cfbbf3",
+        "text": "레오나 마나가 40/100에서 30/90으로 줄고 감소 방어력·마법저항이 최대 130까지 올라 기용이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:다이애나:558de82b",
+        "text": "다이애나 보호막 500, 구체 피해 상향으로 함께 서는 조합의 채용이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:햇빛:f67843ec",
+        "text": "햇빛 기본 추가 마법 피해량 7%→8% 상향이 연계 조합 선택을 밀어올렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "화신 등장률이 11.8%→16.8%(+5.0%p)로 급등했는데, 레오나 마나 30/90 단축과 다이애나 보호막 500 상향 등 소속 유닛 버프가 주도한 간접 상승입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:레오나:c1cfbbf3",
+      "note:tft:18.2:champion:다이애나:558de82b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 979
+  },
+  "proseRepairAttempts": 0
+}

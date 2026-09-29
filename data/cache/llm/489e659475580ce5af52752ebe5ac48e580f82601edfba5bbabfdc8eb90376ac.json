@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Akali:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:39:29.094Z",
+  "parsed": {
+    "causes": [],
+    "summary": "아칼리에 대한 직접 변경 사항이 패치노트에 없고, 후보 목록에서도 아칼리의 밴율 하락(-2.55%p, 95% CI [-0.0342, -0.0168])을 설명할 만한 간접적 연관 변경(상대 챔피언·아이템 등)을 찾을 수 없어 원인 불명으로 판단됩니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 293
+  }
+}

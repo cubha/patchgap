@@ -1,0 +1,43 @@
+{
+  "deltaId": "champion:Thresh:UTILITY:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:27:56.450Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:블리츠크랭크:80b7656e",
+        "text": "경쟁 훅 서포터인 블리츠크랭크가 Q 사거리 1,080→1,050으로 줄면서 그랩 구도 수요가 쓰레쉬로 옮겨간 것으로 보입니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:블리츠크랭크:5466e16b",
+        "text": "블리츠크랭크 기본 지속 효과 보호막이 최대 마나 50%에서 현재 마나 50%로 바뀌어 생존력이 떨어진 점도 쓰레쉬 선호로 이어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:블리츠크랭크:7b35d60d",
+        "text": "블리츠크랭크 R 재사용 대기시간 30초→40초, 피해량 하향까지 겹쳐 엔게이지 서포터 1순위가 교체되는 흐름입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:불타는-향로:48821869",
+        "text": "회복·보호막 계열 아이템 효과가 12%→10%로 하향되어 엔챈터 대신 쓰레쉬 같은 탱형 서포터 비중이 늘었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "쓰레쉬는 E 피해량 하향에도 픽률이 7.3%→10.5%(+3.3%p) 올랐는데, 블리츠크랭크의 Q 사거리·마나 보호막·R 대기시간 연쇄 너프로 훅 서포터 수요가 옮겨온 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:블리츠크랭크:80b7656e",
+      "note:26.17:champion:블리츠크랭크:5466e16b",
+      "note:26.17:champion:블리츠크랭크:7b35d60d"
+    ]
+  },
+  "usage": {
+    "inputTokens": 134,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 907
+  }
+}

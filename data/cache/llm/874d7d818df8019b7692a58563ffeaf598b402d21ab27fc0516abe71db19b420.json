@@ -1,0 +1,42 @@
+{
+  "deltaId": "item:DA_SteraksGage:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:35:16.701Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력이 60%→40%로 낮아져 생존형 딜러 아이템 수요가 스테락으로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:3332ad10",
+        "text": "밤의 끝자락 회복량 20%→15% 너프가 겹치며 대체재로서의 경쟁력이 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력 15%→18% 버프로 공격력 캐리 빌드가 늘며 스테락이 함께 채택됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 너프로 공격력 아이템 선택지가 스테락 쪽으로 쏠렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "스테락의 도전 등장률이 19.3%→26.5%(+7.2%p)로 급등했는데, 밤의 끝자락 발동 체력 60%→40%·회복 20%→15% 너프로 생존형 딜러템 수요가 옮겨온 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+      "note:tft:18.2:item:밤의-끝자락:3332ad10"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 941
+  }
+}

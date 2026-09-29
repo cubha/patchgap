@@ -1,0 +1,36 @@
+{
+  "deltaId": "item:DA_18_EmblemJuggernaut:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:58:30.385Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃의 상징 효과 증폭이 150%로 줄고 로비당 1명 제한이 생겨 상징 기반 빌드 가치가 전반적으로 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 등 전선 상징 동반 너프로 탱킹 상징 조합 전체가 약해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력 30→25 너프가 겹쳐 전선 상징 구성의 안정성이 떨어졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "전쟁기계 상징 순방률 -2.0%p는 CI가 [-8.1%p, 4.1%p]로 유의하지 않으나, 흡수하는 꽃 증폭 150% 축소·1인 제한이 상징 가치를 눌렀습니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:흡수하는-꽃:cb5ebf63"
+    ]
+  },
+  "usage": {
+    "inputTokens": 135,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 753
+  }
+}

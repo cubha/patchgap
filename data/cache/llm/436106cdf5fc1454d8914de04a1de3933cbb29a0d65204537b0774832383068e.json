@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Kalista:BOTTOM:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:41:14.703Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도가 20%→25%로 상향되어 칼리스타를 포함한 원거리 딜러 전반의 딜링 효율이 개선되며 픽률 상승에 간접적으로 기여했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:8f360fb2",
+        "text": "활력증진의 펜던트 계열(리글의 랜턴/야생의 섬광) 아이템에 공격 속도 30%가 신규 부여되어 원거리 딜러의 후반 아이템 선택지가 늘어난 점이 칼리스타 픽률에 간접 영향을 주었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "칼리스타의 픽률이 0.0648에서 0.0843으로 유의미하게 상승(95% CI [0.0122, 0.0268])했는데, 이는 챔피언 자체 직접 변경 없이 원거리 딜러 전반의 딜링 효율을 높인 폭풍갈퀴 공격 속도 상향(note:26.17:item:stormrazor:0a1d6b43)과 활력증진의 펜던트 계열 아이템의 공격 속도 신규 부여(note:26.17:item:활력증진의-펜던트:8f360fb2) 같은 간접 아이템 버프가 원인일 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43",
+      "note:26.17:item:활력증진의-펜던트:8f360fb2"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1242
+  }
+}

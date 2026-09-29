@@ -1,0 +1,36 @@
+{
+  "deltaId": "unit:DA_18_Diana:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:58:51.947Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상이 전 구간 상향돼 주문력 딜러인 다이애나의 기대값이 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:루덴의-폭풍:9f4a135d",
+        "text": "루덴의 폭풍 처치 시 피해량 100→130 상향이 주문력 캐리 아이템 가치를 높였습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:기원자-상징:dfaf6790",
+        "text": "기원자 상징 너프로 마나 소모형 딜러가 밀려난 자리를 다이애나가 대체한 것으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "다이애나 순방률 48.1%→50.0%(CI 하단 -0.4%p로 경계)는 어둠의 의식 주문력 보상 상향 등 주문력 계열 전반 강화가 겹친 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:어둠의-의식:a8212aab"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 766
+  }
+}

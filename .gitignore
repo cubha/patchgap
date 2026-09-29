@@ -46,7 +46,10 @@ next-env.d.ts
 # 무효화된다 — 반드시 `/data/raw/*`(내용물)를 제외해야 `.gitkeep` 재포함이 동작한다.
 /data/raw/*
 !/data/raw/.gitkeep
-/data/cache/
+/data/cache/*
+# LLM 답 캐시는 커밋한다(2026-09-29) — 로컬과 CI가 같은 답을 두 번 사지 않게(9/26 LoL 26.19 121건 재구매),
+# 그리고 actions 캐시의 7일 휘발을 피하려고. 내용은 모델 출력·usage뿐이라 비밀이 없다.
+!/data/cache/llm/
 .playwright-mcp/
 scratch.md
 .mvp-state*.json

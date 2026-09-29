@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Cassiopeia:UTILITY:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:49:19.390Z",
+  "parsed": {
+    "causes": [],
+    "summary": "카시오페아 서포터 픽률은 0.0%→0.1%로 사실상 변동이 없고 신뢰구간[-0.1%p, 0.1%p]이 0을 포함해, 패치 영향으로 볼 근거가 없습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 133,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 153
+  }
+}

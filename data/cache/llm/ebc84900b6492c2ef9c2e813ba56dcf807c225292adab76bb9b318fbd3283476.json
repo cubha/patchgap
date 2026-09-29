@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Kaisa:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:46:39.253Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+        "text": "야스오 치명타 피해 감소 페널티가 10%→5%로 완화돼 원거리 딜러 자리 경쟁이 세졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
+        "text": "요네도 치명타 피해 감소가 10%→5%로 완화돼 봇·미드 픽 점유를 잠식했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 치명타형 원딜 선호가 커졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카이사 직접 변경은 없으나, 야스오·요네 치명타 페널티 완화와 폭풍갈퀴 공속 상향이 겹쳐 픽률이 3.8%p 하락한 것으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:yasuo:66635940",
+      "note:26.17:champion:yone:c6a149c7",
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 778
+  }
+}

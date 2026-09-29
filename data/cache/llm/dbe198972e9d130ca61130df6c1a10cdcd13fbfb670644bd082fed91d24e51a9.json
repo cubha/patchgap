@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Leblanc:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:24:24.572Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:럭스:4acd488a",
+        "text": "럭스가 E 반경 확대 등 전반적 상향을 받아 미드 AP 구도에서 르블랑의 픽·매치업 경쟁이 불리해졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애니:04d73af9",
+        "text": "애니 Q·W 피해량과 기절 지속시간이 함께 상향돼, 근거리 폭발형 AP 상대로 르블랑의 라인전 이점이 줄었을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:이렐리아:9035ffdc",
+        "text": "이렐리아 Q·R 계수 상향으로 미드 다이브형 상대가 강해져 르블랑의 생존·교환 난이도가 올라갔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "르블랑 승률은 52.3%→47.2%(-5.1%p)지만 95% CI가 [-12.3%p, 2.1%p]로 0을 포함해 표본 노이즈 가능성이 크고, 럭스·애니 상향으로 미드 AP 경쟁이 심해진 영향도 의심됩니다.",
+    "summaryCites": [
+      "note:26.17:champion:럭스:4acd488a",
+      "note:26.17:champion:애니:04d73af9"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 735
+  }
+}

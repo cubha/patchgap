@@ -1,0 +1,48 @@
+{
+  "deltaId": "unit:DA_18_Xayah:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:34:26.401Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 공격 속도가 8/12%로 하향돼 평타 기반 캐리 자야의 채용 유인이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 공격력이 30%→25%로 줄어 원거리 딜러 조합 전반의 상한이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 평타당 공격 속도 5%→4% 하향으로 평타 캐리 아이템 가치가 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:애쉬:a87e3310",
+        "text": "애쉬 화살 피해량 상향 등 경쟁 원거리 캐리 강화로 AD 아이템 수요가 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:유나라:e4fc92cf",
+        "text": "유나라 스킬 피해량 상향이 같은 공격력 캐리 자리를 대체했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "자야 등장률이 12.4%→4.5%로 급락했습니다. 속사포·명멸검 하향으로 평타 캐리 가치가 내려가고 애쉬 등 경쟁 딜러가 강화된 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:속사포:f271519a",
+      "note:tft:18.2:item:명멸검:ce978bd1",
+      "note:tft:18.2:champion:애쉬:a87e3310"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1005
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Shen:UTILITY:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:39:04.398Z",
+  "parsed": {
+    "causes": [],
+    "summary": "쉔에 대한 직접 변경 노트가 없고 후보 목록에서도 쉔의 픽률 하락(-2.63%p)을 설명할 만한 간접 영향 요인(예: 쉔과 자주 함께 픽되는 챔피언이나 쉔이 상대하는 라이너의 큰 버프 등)을 찾을 수 없어 원인 불명으로 남습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 164
+  }
+}

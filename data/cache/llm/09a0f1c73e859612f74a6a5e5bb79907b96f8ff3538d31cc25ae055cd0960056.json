@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Qiyana:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:38:48.886Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:아리:de1b72d9",
+        "text": "미드 주요 경쟁 픽인 아리가 체력 460→440, 기본 체력 재생 6.1→4.5로 라인 유지력이 크게 깎이면서 그 자리를 키아나가 일부 흡수했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+        "text": "제라스가 체력 596→575, Q 피해량 하향으로 미드 선호도가 떨어지며 대체 픽 수요가 키아나로 이동했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:불타는-향로:bdec87bb",
+        "text": "세릴다의 원한 방어구 관통력 40%→45%, 도미닉 경의 인사 공격력 30→45 등 AD 관통 아이템 강화로 AD 암살자인 키아나의 후반 가치가 올라갔습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:그라가스:ee3208b9",
+        "text": "그라가스가 Q 피해량·쿨타임과 W, R 쿨타임까지 연속 하향되며 미드/정글 경쟁 픽이 줄어든 영향도 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "키아나 미드 픽률이 3.7%→4.5%(+0.8%p)로 올랐는데, 아리의 체력·체력 재생 하향과 제라스 체력·Q 피해량 하향으로 생긴 미드 수요 이동이 유력한 배경입니다.",
+    "summaryCites": [
+      "note:26.17:champion:아리:de1b72d9",
+      "note:26.17:champion:xerath:43a6f4aa"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1005
+  }
+}

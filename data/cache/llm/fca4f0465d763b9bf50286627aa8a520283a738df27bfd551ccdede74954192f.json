@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Kalista:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:39:53.458Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴의 공격 속도가 20%→25%로 상승해 온힛/급성장 자객형 원거리 챔피언인 칼리스타의 아이템 파워가 간접적으로 강화되었을 가능성이 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:8f360fb2",
+        "text": "활력증진의 펜던트 계열(리글의 랜턴/야생의 섬광) 조합이 공격 속도 0%→30%로 크게 buff되어 원거리 딜러 코어템 경로가 강화되면서 칼리스타의 체감 성능과 인기가 상승했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:51b5b58f",
+        "text": "활력증진의 펜던트 자체 체력 증가(430→500)로 원거리 딜러들의 초반 생존력이 늘어나 칼리스타 등 스노우볼형 챔피언의 선호도가 올랐을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "칼리스타는 직접 패치 노트가 없음에도 밴율이 0.0131→0.0359로 크게 상승했으며(95% CI [0.0186, 0.0271]), 이는 원거리 딜러 코어 아이템인 폭풍갈퀴와 활력증진의 펜던트 계열의 공격 속도 강화가 간접적으로 그녀의 성능 체감을 높였기 때문일 수 있습니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43",
+      "note:26.17:item:활력증진의-펜던트:8f360fb2"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1065
+  }
+}

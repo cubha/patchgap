@@ -1,0 +1,36 @@
+{
+  "deltaId": "unit:DA_18_Rammus:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "1b4ec346ad0605238fd935fc97d52d05e7d396b4fcc038faca64e9e36e85b1cf",
+  "generatedAt": "2026-09-26T19:22:57.060Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
+        "text": "알리스타 스킬 피해량이 주문력 100/150/225→180/270/420으로 크게 올라 저비용 탱커 자리를 가져갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:영원한-서약:2e842b57",
+        "text": "영원한 서약의 탱커 스킬 사용 시 마나가 15→10으로 줄어 보호막형 탱커 가치가 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:엄호대:ad7723b2",
+        "text": "엄호대 방어력·마법저항 최대치 120→115 너프로 전방 특성 채용 유인이 약해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "람머스는 보호막 버프에도 등장률이 5.7%→3.7%로 떨어졌는데, 알리스타의 대폭 강화가 저비용 탱커 자리를 대체한 영향이 큽니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:알리스타:d527c10f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 8613,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 688
+  }
+}

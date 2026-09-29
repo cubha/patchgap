@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:DA_18_EmblemElderwood:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:31:02.739Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
+        "text": "사냥꾼 상징이 처치 관여당 공격력 18%→15%로 약화되며 상징 선택이 나무정령 쪽으로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 특성 추가 공격력 하향(4/6단계 45→40%, 65→60%)으로 사냥꾼 상징 수요가 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:기원자-상징:04e357a3",
+        "text": "기원자 상징 마나 재생 3→2 하향으로 경쟁 상징 가치가 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:전쟁기계-상징:1438f13f",
+        "text": "전쟁기계 상징 사망 시 마나 15→10 하향도 상징 선택 분산에 일부 기여했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "나무정령 상징 등장률 2.6%→3.4%는 직접 변경이 아니라 사냥꾼 상징·사냥꾼 특성·기원자 상징 동시 하향에 따른 상징 수요 이동입니다.",
+    "summaryCites": [
+      "note:tft:18.3:item:사냥꾼-상징:da474098",
+      "note:tft:18.3:system:사냥꾼:616a50ac",
+      "note:tft:18.3:item:기원자-상징:04e357a3"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 829
+  }
+}

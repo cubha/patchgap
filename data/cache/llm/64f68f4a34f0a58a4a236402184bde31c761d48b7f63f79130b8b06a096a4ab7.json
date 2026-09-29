@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Leblanc:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T11:42:24.961Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
+        "text": "키아나 Q 피해량이 상향되어 미드 라인에서 르블랑과 자주 마주치는 암살자 챔피언의 전투력이 강화되면서 상대적으로 르블랑의 라인전 및 스노우볼링이 어려워졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:문도-박사:f54272dc",
+        "text": "문도 박사의 체력이 크게 상향되어 탱커형 챔피언의 생존력이 늘어나면서, 순간 폭딜에 의존하는 르블랑의 킬 확정력이 감소했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:f3562bca",
+        "text": "가렌의 W 저항력 증가 및 방어력 성장 상향 등 브루저/탱커 계열 챔피언들의 전반적인 생존력 강화가 르블랑 같은 버스트 암살자의 킬 확정력을 간접적으로 낮췄을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "르블랑은 이번 패치에서 W·RW 피해량 및 공격 속도, R 재사용 대기시간 등 다수의 직접 버프를 받았음에도 승률이 52.3%에서 47.2%로 하락했는데, 이는 자체 변경으로 설명되지 않는 불일치이며 키아나 강화 및 문도 박사·가렌 등 탱커/브루저 챔피언들의 생존력 상향이 르블랑의 순간 폭딜 킬 확정력을 간접적으로 약화시켰을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:qiyana:5a6d587d",
+      "note:26.17:champion:문도-박사:f54272dc",
+      "note:26.17:champion:가렌:f3562bca"
+    ]
+  },
+  "usage": {
+    "inputTokens": 137,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1418
+  }
+}

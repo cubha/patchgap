@@ -1,0 +1,43 @@
+{
+  "deltaId": "unit:DA_Vi18:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:15:43.139Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 공격 속도 3/5/9/15%→3/5/8/12% 너프로 평타 기반 근접 딜러의 체급이 함께 내려갔습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공속 5%→4% 너프로 바이가 주로 쓰는 평타 아이템 가치가 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 너프로 전방 브루저 구성의 유지력이 감소했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:전쟁기계-상징:83270fa5",
+        "text": "전쟁기계 상징 체력 350→250 너프가 같은 계열 탱커·브루저 조합 전반을 약화시켰습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "바이 평균 등수가 4.28등→4.65등(+0.36등)으로 악화됐고, 속사포 공속 너프와 명멸검 공속 5%→4% 너프 등 평타 브루저 기반 약화가 유력한 배경입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:속사포:f271519a",
+      "note:tft:18.2:item:명멸검:ce978bd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 149,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1060
+  },
+  "proseRepairAttempts": 0
+}

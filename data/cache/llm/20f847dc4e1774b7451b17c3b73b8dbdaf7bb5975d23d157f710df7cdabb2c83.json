@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:3085:adoptionRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:19:56.607Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:yasuo:66635940",
+        "text": "야스오의 치명타 피해량 감소 페널티가 -10%에서 -5%로 완화되어, 루난의 허리케인을 코어로 쓰는 치명타 빌드의 효율이 올라갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
+        "text": "요네의 치명타 피해량 감소 페널티도 -10%에서 -5%로 줄어, 공속·치명타 중심의 루난 채택이 늘어날 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도가 20%에서 25%로 올라 공속 기반 빌드 전반이 강화되며 루난과의 조합 선호가 커졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:8f360fb2",
+        "text": "야생의 섬광이 공격력 25를 잃고 공격 속도 30%를 얻어, 공속 빌드 경로에서 루난과 함께 쓰이는 선택지가 늘었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "루난의 허리케인 채택률이 2.3%에서 3.2%로 0.9%p 올랐는데, 야스오·요네의 치명타 피해 감소 페널티 완화(-10%→-5%)와 폭풍갈퀴 공격 속도 25% 상향이 공속·치명타 빌드 선호를 키운 파급 효과로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:yasuo:66635940",
+      "note:26.17:champion:yone:c6a149c7",
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1165
+  }
+}

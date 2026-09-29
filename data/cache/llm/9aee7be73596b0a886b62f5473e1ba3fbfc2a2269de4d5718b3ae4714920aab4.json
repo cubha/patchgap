@@ -1,0 +1,44 @@
+{
+  "deltaId": "champion:Ambessa:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-09-28T10:39:55.302Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+        "text": "상단 포지션 순간이동 대기시간 420초→390초 단축으로 라인 주도권형 탑 챔피언인 암베사가 이득을 봅니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:f037ef05",
+        "text": "강력 순간이동도 330~240초→300~210초로 줄어 탑 운영 챔피언의 합류 가치가 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:nasus:b5997156",
+        "text": "나서스 Q 추가 피해량 너프로 주요 탑 상대군이 약화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+        "text": "럼블 과열 공격 속도 50~130%→30~100% 너프로 탑 맞라인 압박이 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "암베사 승률 48.4%→55.9%(+7.6%p)는 상단 순간이동 대기시간 420초→390초 단축과 나서스·럼블 너프의 간접 수혜로 보입니다.",
+    "summaryCites": [
+      "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+      "note:26.19:champion:nasus:b5997156",
+      "note:26.19:champion:rumble:17e40d96"
+    ]
+  },
+  "usage": {
+    "inputTokens": 120,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 8037,
+    "outputTokens": 679
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:Yone:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:05:18.361Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 치명타 빌드 요네의 초반 아이템 가치가 올랐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요네 미드 픽률 9.8%→10.1%(0.2%p)는 CI가 0을 포함해 통계적 변화로 보기 어렵고, 폭풍갈퀴 공격 속도 상향이 소폭 영향을 줬을 수 있습니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 521
+  }
+}

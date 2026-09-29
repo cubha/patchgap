@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:DA_TitansResolve:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:19:07.428Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력이 30에서 25로 줄어 탱커 축 전반이 약해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력이 250에서 150으로 깎여 앞라인 유지력이 낮아졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:b3191eaf",
+        "text": "검은 가시의 탱커 희생 보상이 방저 15에서 12로 줄어 방어형 구성 가치가 하락했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:찬란한-피바라기:4a98368c",
+        "text": "피바라기 계열 공격력·주문력과 보호막 상향으로 딜러형 방어 아이템에 수요가 옮겨갔습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "거인의 결의 평균 등수가 3.95등에서 4.14등으로 올랐습니다. 선봉대·싸움꾼 상징 너프로 탱커 축이 함께 약해진 여파입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:선봉대-상징:58dac5b5",
+      "note:tft:18.2:item:싸움꾼-상징:93051b8e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 153,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 821
+  },
+  "proseRepairAttempts": 0
+}

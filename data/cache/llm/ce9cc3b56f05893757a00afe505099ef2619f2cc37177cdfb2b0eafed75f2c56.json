@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Olaf:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:11:10.841Z",
+  "parsed": {
+    "causes": [],
+    "summary": "올라프의 픽률이 12.76%에서 7.92%로 크게 하락했으나(95% CI [-0.058, -0.038]), 후보 목록 내에 올라프와 직접적으로 연관되거나 간접적으로 영향을 줄 만한 챔피언/아이템/시스템 변경 사항이 확인되지 않아 이 하락을 설명할 근거를 찾지 못했습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 352
+  }
+}

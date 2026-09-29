@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Ambessa:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T08:57:55.774Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라 R 회복량·체력 상향으로 탑 브루저 선호가 피오라로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:5bc9f3f5",
+        "text": "아트록스 W 쿨타임·E 회복 상향으로 탑 라인 경쟁에서 암베사 지분이 밀렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:c754a41b",
+        "text": "피오라 성장 체력 99→105로 탑 대면 구도가 불리해진 영향이 있어 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "암베사 직접 변경은 없지만 피오라 R 회복 강화와 아트록스 W·E 상향으로 탑 경쟁이 심화돼 픽률이 2.7%p 하락했습니다.",
+    "summaryCites": [
+      "note:26.19:champion:fiora:4ff3c93f",
+      "note:26.19:champion:aatrox:5bc9f3f5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 598
+  }
+}

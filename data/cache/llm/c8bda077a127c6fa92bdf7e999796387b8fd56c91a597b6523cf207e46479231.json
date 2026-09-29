@@ -1,0 +1,49 @@
+{
+  "deltaId": "item:DA_SteraksGage:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:26:24.204Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력 18%·발동 체력 50%·보호막 30% 상향으로 생존형 공격력 아이템 경쟁에서 밀렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:찬란한-피바라기:4a98368c",
+        "text": "찬란한 피바라기 공격력 40%·보호막 60%로 상향돼 상위 호환 선택지가 생겼습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:35db05bd",
+        "text": "정의의 손길 능력치 18%·흡혈 15% 상향으로 공격력 캐리 아이템 우선순위가 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카밀:ee0ba0ac",
+        "text": "카밀 스킬 피해량 하향으로 주요 장착 캐리의 성능이 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:7f03951b",
+        "text": "마스터 이 공격력 형태 하향도 공격력 캐리 수요를 줄였습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "스테락의 도전 순방률 -3.1%p 하락은 피바라기·찬란한 피바라기·정의의 손길 상향으로 공격력 생존 아이템 경쟁에서 밀린 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:피바라기:69a953de",
+      "note:tft:18.2:item:찬란한-피바라기:4a98368c",
+      "note:tft:18.2:item:정의의-손길:35db05bd"
+    ]
+  },
+  "usage": {
+    "inputTokens": 133,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1050
+  },
+  "proseRepairAttempts": 0
+}

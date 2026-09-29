@@ -1,0 +1,36 @@
+{
+  "deltaId": "unit:DA_Fiddlesticks18:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:52:25.134Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상이 전 구간 상향(7단계 250→300)돼 주문력 캐리인 피들스틱이 이득을 봤습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:83333c69",
+        "text": "검은 가시의 주문력 유닛 희생 마나 재생이 1.7→2로 올라 마법 딜러 운용이 수월해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:루덴의-폭풍:9f4a135d",
+        "text": "루덴의 폭풍 처치 시 피해량 100→130 상향이 광역 마법 딜러의 체감 화력을 올렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "피들스틱 순방률이 47.6%→50.8%(+3.2%p)로 올랐습니다. 어둠의 의식 주문력 보상 상향 등 주문력 캐리 환경 개선이 주요 배경입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:어둠의-의식:a8212aab"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 714
+  }
+}

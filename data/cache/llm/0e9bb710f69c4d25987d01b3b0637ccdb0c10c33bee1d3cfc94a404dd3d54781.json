@@ -1,0 +1,44 @@
+{
+  "deltaId": "champion:Olaf:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-09-28T10:20:00.053Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라 R 회복량 상향으로 탑 브루저 경쟁에서 올라프가 밀린 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
+        "text": "아트록스 E 회복 계수 상향(1.1%→1.3%)이 같은 탑 지속 브루저 픽을 흡수했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:khazix:defcade0",
+        "text": "카직스 기본 지속 효과 피해량 상향으로 정글 올라프 지분이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:elise:a7bec286",
+        "text": "엘리스 W 공격 속도 10%p 상향도 정글 경쟁 픽을 늘렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "올라프 픽률이 9.5%→6.0%(-3.4%p)로 떨어졌습니다. 직접 변경은 없고 아트록스·피오라·카직스 버프에 탑·정글 지분을 내준 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.19:champion:aatrox:f629d9e5",
+      "note:26.19:champion:fiora:4ff3c93f",
+      "note:26.19:champion:khazix:defcade0"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 715
+  },
+  "proseRepairAttempts": 0
+}

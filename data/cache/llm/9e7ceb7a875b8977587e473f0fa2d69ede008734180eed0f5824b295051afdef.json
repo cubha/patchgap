@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Lulu:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:34:51.768Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 중첩 지속시간이 3초→4초로 늘며 온힛 원딜 캐리력이 올라, 이를 키우는 룰루의 밴 가치가 상승했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 쿨다운이 11초로 고정되며 유틸 서포터 선택지가 줄어 룰루로 밴이 몰렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+        "text": "마스터 이 R 이동속도 버프로 룰루 동반 조합이 강해져 밴 표적이 됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "룰루 밴률 6.6%→14.8%(+8.2%p). 구인수의 격노검 중첩 4초 버프로 온힛 캐리 성장이 강해진 파급이 주된 요인입니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 656
+  }
+}

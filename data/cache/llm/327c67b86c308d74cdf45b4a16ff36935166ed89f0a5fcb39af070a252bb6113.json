@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Kaisa:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:15:30.769Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:6d438477",
+        "text": "미스 포츈이 Q 피해량·E 피해량/마나·이동 속도까지 전방위 상향을 받아 바텀 1티어로 올라서며 카이사 픽 지분을 잠식했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:bd82e946",
+        "text": "미스 포츈 기본 이동 속도 325 → 335 상향으로 라인전 주도권이 커져 원딜 픽 선택이 미스 포츈 쪽으로 쏠렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
+        "text": "애쉬 W 피해량(최대 80 → 100)과 사거리 1,200 → 1,300 상향으로 초반 강한 원딜 대안이 늘어난 점도 카이사 선호도를 낮췄습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20% → 25% 상향으로 다른 평타 원딜의 아이템 효율이 올라가며 상대적 경쟁이 심화됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카이사 직접 변경은 없었고, 미스 포츈의 Q 피해량·이동 속도 335 상향 등 전방위 버프로 바텀 픽 지분이 옮겨가며 픽률이 3.9%p 하락한 것으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:미스-포츈:6d438477",
+      "note:26.17:champion:미스-포츈:bd82e946"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 842
+  }
+}

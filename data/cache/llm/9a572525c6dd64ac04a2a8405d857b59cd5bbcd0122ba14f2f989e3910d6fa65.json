@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Alistar:UTILITY:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T08:58:51.652Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+        "text": "서포터 아이템 초반 체력이 30/100에서 0/60으로 줄어 알리스타 같은 탱커 서포터의 라인 압박력이 약화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
+        "text": "체력 재생이 25%/50%에서 50%/75%로 올라 유지력 기반 서포터가 상대적으로 이득을 봤습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
+        "text": "아펠리오스·드레이븐·루시안 등 원거리 딜러 버프로 공격적 라인전 조합 선호가 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "알리스타 픽률이 13.2%→10.8%(-2.4%p) 하락했습니다. 서포터 아이템 초반 체력이 30/100→0/60으로 깎인 영향이 큽니다.",
+    "summaryCites": [
+      "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 641
+  }
+}

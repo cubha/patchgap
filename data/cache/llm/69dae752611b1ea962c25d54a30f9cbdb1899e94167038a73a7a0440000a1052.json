@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Tristana:MIDDLE:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:27:41.732Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
+        "text": "르블랑 W 왜곡 피해량 계수가 주문력의 80%에서 90%로 올라, 미드에서 트리스타나가 상대하기 까다로운 암살 매치업이 강해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애니:04d73af9",
+        "text": "애니 Q 붕괴 피해량이 90/130/170/210/250 + 주문력의 75%로 상향돼 미드 라인전 압박이 커졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:럭스:cce285a0",
+        "text": "럭스 E 광휘의 특이점 반경이 310에서 350으로 넓어져 사거리 기반 미드 견제가 강화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
+        "text": "키아나 Q 피해량이 80/110/140/170/200 + 추가 공격력의 90%로 상향돼 미드 딜러 경쟁이 심해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "트리스타나 미드 승률 -3.3%p는 95% CI가 [-11.1%p, 4.5%p]로 0을 포함해 표본 변동 가능성이 크며, 르블랑·애니 등 미드 경쟁 챔피언 상향이 겹친 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:leblanc:887dc51f",
+      "note:26.17:champion:애니:04d73af9"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 948
+  }
+}

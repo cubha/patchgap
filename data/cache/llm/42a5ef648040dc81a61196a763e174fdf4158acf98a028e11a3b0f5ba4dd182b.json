@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Zeri:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:45:42.570Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 제리의 초반 아이템 효율이 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해 하향으로 경쟁 원거리 딜러가 약화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:fb0dfc8b",
+        "text": "베인 Q 마나 소모 증가로 라인전 주도권이 낮아져 원딜 구도가 제리에게 유리해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "제리 승률이 50.7%→56.4%(+5.7%p) 올랐습니다. 폭풍갈퀴 공격 속도 25% 상향과 베인 너프에 따른 원딜 구도 변화가 유력합니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43",
+      "note:26.17:champion:vayne:1da6ddd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 119,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 591
+  }
+}

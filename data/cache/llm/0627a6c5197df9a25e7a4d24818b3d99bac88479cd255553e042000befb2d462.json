@@ -1,0 +1,41 @@
+{
+  "deltaId": "champion:MissFortune:BOTTOM:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:22:56.937Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:other:증강:fc188230",
+        "text": "미스 포츈과 시너지가 큰 '한 발에 두 놈' 증강이 골드에서 프리즘 등급으로 올라가, 실전에서 이를 집을 확률이 줄어든 것이 성능 하락 요인일 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:other:증강:3a8dc47b",
+        "text": "'치명적 미사일' 증강의 미사일 개수가 최대 4개에서 3개로 줄어, 원거리 딜러 전반의 딜 증강 상한이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
+        "text": "애쉬 W 피해량·사거리 상향 등 경쟁 원딜 강화로 픽 경쟁에서 밀려 상대적 승률이 낮아질 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 지속 공격형 원딜이 득을 봐, 스킬 기반인 미스 포츈의 상대 입지가 좁아졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "미스 포츈은 Q·E·R 상향을 받았는데도 승률이 49.5%→42.6%(-6.9%p)로 떨어졌으며, '한 발에 두 놈' 증강이 프리즘 등급으로 상향 배치된 영향이 유력하나 95% CI가 0을 포함해 표본 변동 가능성도 있습니다.",
+    "summaryCites": [
+      "note:26.17:other:증강:fc188230"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 989
+  }
+}

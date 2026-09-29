@@ -1,0 +1,42 @@
+{
+  "deltaId": "item:DA_StrikersFlail:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:54:14.144Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 너프로 공격력 캐리 아이템 수요가 대체 아이템으로 이동했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력 15%→18% 버프로 공격력 캐리 조합 전체의 성능이 올라갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:35db05bd",
+        "text": "정의의 손길 기본 공격력/주문력 15%→18% 버프가 같은 보드에 서는 공격력 아이템 가치를 끌어올렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 적중 피해 너프로 주문력 조합이 약화되며 공격력 아이템의 상대적 입지가 커졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "타격대의 철퇴 순방률 53.1%→55.4%는 피바라기·정의의 손길 공격력 15%→18% 버프로 공격력 캐리 조합 전반이 강해진 파급 효과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:피바라기:69a953de",
+      "note:tft:18.2:item:정의의-손길:35db05bd"
+    ]
+  },
+  "usage": {
+    "inputTokens": 134,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1009
+  }
+}

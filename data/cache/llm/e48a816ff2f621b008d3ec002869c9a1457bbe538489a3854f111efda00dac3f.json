@@ -1,0 +1,44 @@
+{
+  "deltaId": "unit:DA_18_Cassiopeia:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:44:02.804Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:기원자-상징:dfaf6790",
+        "text": "기원자 상징의 사용 마나당 주문력이 10%→8%로 낮아져 주문 캐리 빌드 가치가 하락했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 적중 피해가 전 구간 하향되어 마법 피해 캐리 조합의 선호도가 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아리:77d6da2f",
+        "text": "아리 스킬 피해량 상향으로 같은 주문 캐리 자리를 두고 카시오페아가 밀려났습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:럭스:fc47e05b",
+        "text": "럭스 스킬 피해량 상향도 주문 캐리 수요를 흡수했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카시오페아 등장률이 5.9%→4.3%로 떨어졌습니다. 직접 변경은 없고, 기원자 상징·마법사의 최후 하향과 아리·럭스 상향에 주문 캐리 자리를 내준 여파로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:기원자-상징:dfaf6790",
+      "note:tft:18.2:item:마법사의-최후:b79f865a",
+      "note:tft:18.2:champion:아리:77d6da2f",
+      "note:tft:18.2:champion:럭스:fc47e05b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 877
+  }
+}

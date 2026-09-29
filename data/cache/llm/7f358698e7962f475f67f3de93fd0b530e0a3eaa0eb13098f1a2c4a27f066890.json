@@ -1,0 +1,49 @@
+{
+  "deltaId": "trait:DA_Primal18:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:10:41.824Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:렝가:4a189382",
+        "text": "렝가 기본 공격 속도 0.8→0.75 너프로 원시 주력 캐리의 딜이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:경쟁을-넘어서:3e5b2191",
+        "text": "카직스가 렝가에게 주는 마나 70%→50% 축소로 원시 조합의 스킬 회전이 느려졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:경쟁을-넘어서:64c38bc1",
+        "text": "렝가→카직스 체력 회복 50%→25% 감소로 원시 전열 유지력이 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:원시-상징:32460e11",
+        "text": "원시 상징 공격 속도 25%→35% 상향으로 표본이 늘며 저숙련 픽이 섞여 평균 등수가 밀렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:7f03951b",
+        "text": "마스터 이 공격력·주문력 피해 하향이 같은 보드의 원시 조합 체급을 함께 낮췄습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "원시 평균 등수가 4.21등→4.48등으로 악화했는데, 렝가 공격 속도 하향과 카직스·렝가 상호 지원(마나 70%→50%, 회복 50%→25%) 축소가 주원인입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:렝가:4a189382",
+      "note:tft:18.2:system:경쟁을-넘어서:3e5b2191",
+      "note:tft:18.2:system:경쟁을-넘어서:64c38bc1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 148,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1082
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,48 @@
+{
+  "deltaId": "item:DA_HextechGunblade:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "1b4ec346ad0605238fd935fc97d52d05e7d396b4fcc038faca64e9e36e85b1cf",
+  "generatedAt": "2026-09-26T19:16:25.597Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
+        "text": "알리스타 스킬 피해량이 주문력 100/150/225→180/270/420로 대폭 상승해 주문력 아이템 수요가 커졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:타릭:f0d46c43",
+        "text": "타릭 회복량이 주문력 250/375→275/450로 올라 주문력 계수 탱커·서포터 빌드가 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
+        "text": "베이가 스킬 피해량 상향으로 주문력 중심 조합이 늘며 주문력 부여 아이템 채용이 증가했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:영원한-서약:2e842b57",
+        "text": "영원한 서약 마나 15→10 너프로 탱커용 지원 아이템 수요가 마법공학 총검으로 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
+        "text": "스태틱의 단검 주문력 15%→25% 버프로 주문력 축 조합 전반이 강해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "알리스타·타릭·베이가 등 주문력 계수 대폭 상향으로 주문력 조합이 늘며 마법공학 총검 등장률이 19.8%→27.0%(+7.1%p)로 올랐습니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:알리스타:d527c10f",
+      "note:tft:18.3:champion:타릭:f0d46c43",
+      "note:tft:18.3:champion:베이가:c44fce5f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 8613,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 903
+  }
+}

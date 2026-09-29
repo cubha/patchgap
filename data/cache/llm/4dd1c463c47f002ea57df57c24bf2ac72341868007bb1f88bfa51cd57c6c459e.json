@@ -1,0 +1,38 @@
+{
+  "deltaId": "trait:DA_18_Caustic:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:29:21.116Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:티모:68e7c01d",
+        "text": "티모 작은 버섯 피해량 하향(주문력 60/90/135 → 55/82/130)이 부식 조합 딜 축을 약화시켰습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:자이라:63f16bc7",
+        "text": "자이라 스킬 피해량 하향(주문력 37/55 → 35/53)으로 저비용 부식 라인업의 기대치가 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:역병의-보석:d03e92e1",
+        "text": "역병의 보석 마법 저항력 감소량 4 → 3 하향이 중첩형 부식 딜 구조의 기대 피해를 줄였습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "부식 평균 등수가 4.29등에서 4.55등으로 +0.26등 악화됐는데, 티모·자이라 피해량 하향과 역병의 보석 감소량 축소가 겹친 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:티모:68e7c01d",
+      "note:tft:18.2:champion:자이라:63f16bc7",
+      "note:tft:18.2:item:역병의-보석:d03e92e1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 148,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 758
+  }
+}

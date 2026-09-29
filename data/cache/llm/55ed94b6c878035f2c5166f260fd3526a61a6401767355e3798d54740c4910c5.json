@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Leblanc:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:51:57.304Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:leblanc:606fc9c6",
+        "text": "공격 속도 증가량이 2.35%에서 1.5%로 낮아져 계수 상향의 이득이 상쇄됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+        "text": "이렐리아 Q 계수 70%→80% 등 연속 버프로 미드 대치 구도가 불리해졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:aurelionsol:7b32ba55",
+        "text": "아우렐리온 솔 Q 마나 소모 감소로 미드 라인전 주도권 경쟁이 강해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "르블랑 승률 -5.1%p는 CI가 0을 포함해 확정적이지 않으며, 공격 속도 증가량 2.35%→1.5% 하향이 버프 효과를 상쇄한 것으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:leblanc:606fc9c6"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 603
+  }
+}

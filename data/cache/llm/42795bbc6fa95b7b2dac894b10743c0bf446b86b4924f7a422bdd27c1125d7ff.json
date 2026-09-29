@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Jinx:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T11:43:43.091Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검의 들끓는 일격 중첩 지속시간이 3초에서 4초로 늘어나 온히트/공격속도 의존형 원거리 딜러인 징크스의 아이템 빌드 효율이 간접적으로 상승했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
+        "text": "경쟁 원거리 딜러인 제리의 W 피해량이 하향되면서 상대적으로 징크스의 픽률이 반사이익을 얻었을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "징크스에 대한 직접 패치 변경은 없지만, 구인수의 격노검 지속시간 버프로 온히트 딜러인 징크스의 아이템 시너지가 강화되고 경쟁 원거리 딜러 제리의 하향으로 상대적 매력이 상승해 픽률이 6.25%에서 8.88%로 증가(델타 +2.63%p, 95% CI 상단까지 포함)했을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b",
+      "note:26.18:champion:zeri:d0cacf0b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 749
+  }
+}

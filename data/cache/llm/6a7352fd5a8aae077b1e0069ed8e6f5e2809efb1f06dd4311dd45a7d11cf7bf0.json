@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Ryze:JUNGLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:09:09.089Z",
+  "parsed": {
+    "causes": [],
+    "summary": "라이즈 정글 픽률은 변화 0.0%p, 95% CI [-0.0%p, 0.1%p]로 사실상 변동이 없어 패치노트로 설명할 변화 자체가 없습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 308
+  }
+}

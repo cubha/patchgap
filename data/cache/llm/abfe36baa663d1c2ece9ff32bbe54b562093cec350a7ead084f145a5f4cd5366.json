@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Thresh:UTILITY:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:32:45.829Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:other:불타는-향로:48821869",
+        "text": "불타는 향로의 체력 회복·보호막 효과가 12%에서 10%로 줄어 보호막 기반 서포터 운영 전반의 가치가 낮아졌고, 쓰레쉬의 팀 유지력 기여도 함께 떨어질 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:블리츠크랭크:80b7656e",
+        "text": "블리츠크랭크 다수 너프로 훅 서포터 픽 구도가 흔들리면서 쓰레쉬가 상대 조합·밴픽에서 더 자주 견제받았을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:bd82e946",
+        "text": "미스 포츈 등 원딜 버프로 바텀 주도권이 원딜 쪽으로 이동해, 이니시에이팅 위주인 쓰레쉬의 상대적 기여도가 낮아진 영향도 고려됩니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "쓰레쉬 승률은 51.7%→49.9%(-1.9%p)지만 95% CI가 [-6.6%p, 2.9%p]로 유의하지 않아, 불타는 향로 회복·보호막 10%로의 하향 같은 서포터 환경 변화 정도가 약한 간접 요인입니다.",
+    "summaryCites": [
+      "note:26.17:other:불타는-향로:48821869"
+    ]
+  },
+  "usage": {
+    "inputTokens": 133,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 898
+  }
+}

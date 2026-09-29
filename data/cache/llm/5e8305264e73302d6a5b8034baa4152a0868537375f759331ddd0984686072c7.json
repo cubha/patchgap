@@ -1,0 +1,42 @@
+{
+  "deltaId": "trait:DA_18_Hunter:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T15:01:52.892Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 발동에 필요한 대상 유지 시간이 4초에서 3초로 줄어 증폭이 더 쉽게 걸립니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:애쉬:5bb903ca",
+        "text": "애쉬 지속 피해가 공격력 5/8에서 9/14로 크게 올라 사냥꾼 조합 채용이 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:니달리:719efb93",
+        "text": "니달리 강화 기본 공격 피해가 주문력 300/450으로 상향되어 사냥꾼 라인 가치가 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:워윅:ad5aa8ef",
+        "text": "워윅 공격력이 40에서 45로 올라 사냥꾼 전개의 초중반 안정성이 개선됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "사냥꾼 상징 공격력 너프에도 등장률이 17.4%→18.7% 올랐는데, 증폭 유지 시간 3초 단축과 애쉬 지속 피해 상향이 소속 유닛 채용을 끌어올린 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:사냥꾼:70e7b088",
+      "note:tft:18.2:champion:애쉬:5bb903ca"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 950
+  }
+}

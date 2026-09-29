@@ -180,7 +180,7 @@ jobs:
       # 스텝 안에서 돈다). 키가 없거나 실패해도 판정·커밋은 계속한다 — 원인은 얹는 축이다.
       - name: Restore data/cache/llm (LLM 2단 파일 캐시)
         if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: data/cache/llm
           key: patchgap-llm-pubg-${{ steps.determine.outputs.to }}-${{ github.run_id }}
@@ -192,6 +192,8 @@ jobs:
         if: steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # 실제 호출 opt-in(2026-09-29 호출 정책) — 없으면 엔진은 캐시 전용이라 미스가 있으면 견적과 함께 멈춘다.
+          PATCHGAP_LLM: "1"
         run: |
           if [ -z "$ANTHROPIC_API_KEY" ]; then
             echo "[pubg-llm] ANTHROPIC_API_KEY 없음 — 원인 추정 생략(화면은 회색)"
@@ -199,6 +201,16 @@ jobs:
           fi
           npx tsx scripts/run-pubg-llm.ts
         continue-on-error: true
+
+      # LLM 캐시는 **호출 직후 무조건** 저장한다(2026-09-29). 암묵 post 저장은 잡이 성공해야만 돌아, run 35944265345가
+      # LLM 133건을 산 뒤 커밋 단계에서 실패하자 결과가 버려지고 같은 날 재실행이 같은 133건을 다시 샀다(raw 캐시와 같은 규약).
+      # 장기 보존은 git이다(data/cache/llm 커밋 — actions 캐시는 7일 미접근 시 지워진다).
+      - name: Save data/cache/llm (LLM 호출 직후)
+        if: always() && steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: data/cache/llm
+          key: patchgap-llm-pubg-${{ steps.determine.outputs.to }}-${{ github.run_id }}
 
       - name: Detect submarine patches (F9)
         if: steps.determine.outputs.mode == 'declaration' || (steps.determine.outputs.should_run == 'true' && steps.determine.outputs.notes_ready == 'true')
@@ -296,7 +308,7 @@ jobs:
           git config user.email "patchgap-bot@users.noreply.github.com"
           # PUBG 네임스페이스만 건드린다 — LoL·TFT 산출물은 이 워크플로의 소관이 아니다.
           # `data/raw/pubg`는 gitignore라 add 대상에 들어오지 않는다.
-          git add data/aggregated/pubg data/aggregated/gamedata/pubg
+          git add data/aggregated/pubg data/aggregated/gamedata/pubg data/cache/llm
           if git diff --cached --quiet; then
             echo "변경분 없음 — 커밋 생략"
           else

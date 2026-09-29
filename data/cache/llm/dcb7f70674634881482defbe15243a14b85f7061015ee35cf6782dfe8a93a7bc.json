@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Akali_AD:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:01:31.505Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 하향으로 근접 캐리 아칼리의 딜 상승 곡선이 둔화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력 60%→40%, 회복량 20%→15% 하향으로 돌진 생존력이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 유지 조건 변경으로 대상 이탈이 잦은 아칼리가 손해를 봤을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카직스:c60397e3",
+        "text": "카직스 기본 공격력 30→40 상향으로 같은 근접 암살 캐리 자리를 두고 경쟁이 심화됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "아칼리 평균 등수 4.47→4.60등(+0.13, CI 0 포함)은 명멸검 공격 속도 5%→4%, 밤의 끝자락 발동 체력 60%→40% 하향 등 근접 캐리용 아이템 약화의 파급으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:명멸검:ce978bd1",
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15"
+    ]
+  },
+  "usage": {
+    "inputTokens": 420,
+    "cacheReadInputTokens": 34166,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1684
+  }
+}

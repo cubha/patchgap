@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Qiyana:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:12:51.725Z",
+  "parsed": {
+    "causes": [],
+    "summary": "후보 목록에 키아나 자신 또는 그녀의 픽률에 영향을 줄 만한 간접 변경 사항(관련 아이템, 정글 시스템, 상대 챔피언 변경 등)이 존재하지 않아, 이번 픽률 하락(-0.0353, 95% CI [-0.0482, -0.0221], n=10000→5000)을 설명할 근거를 찾지 못했습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 279
+  }
+}

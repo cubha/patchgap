@@ -1,0 +1,43 @@
+{
+  "deltaId": "trait:DA_18_Rival:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "c5fe11838e969011401862d4b7aaeac11b42714f3a0bfbeafa868d6e7d917140",
+  "generatedAt": "2026-09-26T19:37:04.245Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:경쟁을-넘어서:3e5b2191",
+        "text": "카직스가 렝가에게 주는 마나가 70%에서 50%로 줄어 경쟁자 조합의 가치가 하락했습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:경쟁을-넘어서:64c38bc1",
+        "text": "렝가가 카직스에게 주는 체력 회복량이 50%에서 25%로 반감돼 시너지 채용 유인이 줄었습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:렝가:4a189382",
+        "text": "렝가 기본 공격 속도가 0.8에서 0.75로 하향돼 핵심 유닛 채용률이 함께 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 유지 시간 변경이 같은 암살 계열 보드 선택을 흔들었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "경쟁자 등장률 10.4%→6.9%(-3.5%p) 하락은 '경쟁을 넘어서'의 마나 70%→50%, 회복 50%→25% 너프와 렝가 공격 속도 0.8→0.75 하향이 겹친 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:경쟁을-넘어서:3e5b2191",
+      "note:tft:18.2:system:경쟁을-넘어서:64c38bc1",
+      "note:tft:18.2:champion:렝가:4a189382"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 17042,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 739
+  }
+}

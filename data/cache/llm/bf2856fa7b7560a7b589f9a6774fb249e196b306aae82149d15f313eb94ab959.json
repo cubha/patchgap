@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Pyke:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:10:10.547Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+        "text": "경쟁 서포터인 노틸러스의 Q 피해량 너프로 상대적으로 파이크의 서포터 티어가 상승해 밴율이 오른 것으로 추정됩니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "노틸러스 기본 공격력 너프까지 겹치며 탱커형 서포터 선호도가 낮아져 파이크 같은 이니시에이터형 서포터의 입지가 강화되었을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:bard:453ef7b4",
+        "text": "경쟁 유틸 서포터인 바드의 방어력 너프로 서포터 메타에서 파이크의 상대적 매력도가 높아졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 재사용 대기시간 너프로 경쟁 서포터/미드 챔피언의 힘이 약화되어 파이크가 반사이익을 얻었을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "파이크 밴율이 46.2%에서 52.2%로 약 6%p 상승(95% CI [4.3%,7.7%])했는데, 직접적인 패치 변경 없이도 노틸러스(주요 경쟁 서포터)의 Q 피해량 및 기본 공격력 너프로 서포터 메타 내 상대적 입지가 강화된 간접 효과로 추정됩니다.",
+    "summaryCites": [
+      "note:26.18:champion:nautilus:878378b8",
+      "note:26.18:champion:nautilus:b6aff2b2"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 973
+  }
+}

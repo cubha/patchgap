@@ -1,0 +1,43 @@
+{
+  "deltaId": "unit:DA_18_Aphelios:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:21:32.861Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 상위 단계 공격 속도가 15%→12%로 깎이며 평타 기반 AD 캐리인 아펠리오스의 딜이 감소했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 너프로 주력 아이템 성능이 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 조건 변경으로 원거리 딜러 계열 전반의 화력이 흔들렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 공격력 30%→25% 하향으로 AD 캐리 조합의 상한이 내려갔습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "아펠리오스 직접 변경은 없지만 속사포 공격 속도 15%→12%와 명멸검 5%→4% 너프로 평균 등수가 4.40등에서 4.55등으로 악화됐습니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:속사포:f271519a",
+      "note:tft:18.2:item:명멸검:ce978bd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 153,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 800
+  },
+  "proseRepairAttempts": 0
+}

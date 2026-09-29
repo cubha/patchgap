@@ -1,0 +1,43 @@
+{
+  "deltaId": "unit:DA_18_Malphite:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:34:49.077Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력 30→25로 탱커 상징 가치가 떨어져 전방 채용이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력 60%→40%, 회복 20%→15%로 탱커 아이템 효율이 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:레오나:665ef4f0",
+        "text": "레오나 방어력·마법 저항력 최대 100→130 강화로 전방 자리 경쟁에서 밀렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:b3191eaf",
+        "text": "검은 가시 탱커 희생 보상 15→12 하향으로 탱커 기용 유인이 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "말파이트 등장률이 22.4%→15.0%(-7.4%p)로 급감했습니다. 밤의 끝자락·선봉대 상징 하향과 레오나 방어 강화로 전방 자리를 잃은 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+      "note:tft:18.2:item:선봉대-상징:58dac5b5",
+      "note:tft:18.2:champion:레오나:665ef4f0"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 858
+  }
+}

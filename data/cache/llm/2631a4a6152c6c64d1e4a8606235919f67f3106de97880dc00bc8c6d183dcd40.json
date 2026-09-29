@@ -1,0 +1,43 @@
+{
+  "deltaId": "unit:DA_18_Varus:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:31:53.150Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 특성 피해 증폭 조건이 불리해지며 바루스 캐리 조합의 후반 화력이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 기본 공격력 30%→25% 너프로 공격력 기반 바루스의 이득이 감소했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 공격 속도 너프로 평타 비중이 큰 바루스 빌드의 DPS가 깎였습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 공격 속도 5%→4% 하향이 바루스 주력 아이템 효율을 낮췄습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "바루스는 스킬 피해 버프에도 평균 등수가 4.37등→4.62등으로 악화됐는데, 사냥꾼 특성 조건 변경과 사냥꾼 상징 공격력 25% 하향이 캐리 화력을 깎은 탓입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:사냥꾼:70e7b088",
+      "note:tft:18.2:item:사냥꾼-상징:2f196381"
+    ]
+  },
+  "usage": {
+    "inputTokens": 151,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 818
+  },
+  "proseRepairAttempts": 0
+}

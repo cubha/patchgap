@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Kaisa:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:46:28.366Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 공속 기반 다른 원딜 선호가 커진 영향으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해 하향 등 원딜 군 조정으로 바텀 픽 구도가 재편됐을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카이사 직접 변경은 없고, 폭풍갈퀴 공격 속도 상향(20%→25%)에 따른 원딜 선호 이동이 픽률 -3.9%p의 유력 배경입니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 518
+  }
+}

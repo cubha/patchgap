@@ -1,0 +1,37 @@
+{
+  "deltaId": "trait:DA_FloraFatalis18:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:51:27.874Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:e1a56234",
+        "text": "아이번이 시작 칸 3개와 보호막·스킬 피해 상향을 받아 식물 계열 보드의 안정성이 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:c9acbf01",
+        "text": "덩굴정령의 방어력 무시·기본 공격력·스킬 공격력 상향이 같은 계열 보드의 화력을 올렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마오카이:78dc9945",
+        "text": "마오카이 마나 상향으로 전방 유지력이 늘어 순방률을 밀어올렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "치명적인 꽃 순방률이 48.2%→51.6%(+3.5%p)로 올랐고, 아이번 시작 칸 3개·보호막 상향과 덩굴정령 공격력·방어력 무시 상향이 계열 보드를 끌어올린 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:아이번:e1a56234",
+      "note:tft:18.2:champion:덩굴정령:c9acbf01"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 662
+  }
+}

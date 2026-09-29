@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:MasterYi:JUNGLE:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:41:24.780Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초 버프가 핵심 코어인 마스터 이의 지속 전투력을 올렸습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+        "text": "R 이동 속도 5%p 상향으로 갱킹·추격 성공률이 올라 승률 상승을 보탰습니다.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "마스터 이 정글 승률이 45.9%→54.4%(+8.4%p)로 올랐습니다. 구인수 중첩 4초 버프와 R 이속 상향이 주 동력이나, CI가 0을 포함해 표본 변동도 섞였습니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b",
+      "note:26.18:champion:masteryi:c898ee27"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 585
+  }
+}

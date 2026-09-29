@@ -1,0 +1,32 @@
+{
+  "deltaId": "unit:DA_18_Hecarim:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "1b4ec346ad0605238fd935fc97d52d05e7d396b4fcc038faca64e9e36e85b1cf",
+  "generatedAt": "2026-09-26T19:19:06.265Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:system:악의-여단:b0b8eca1",
+        "text": "악의 여단 패배당 정기 증가로 해당 계열 조합 채용이 늘며 헤카림 기용이 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 추가 공격력 너프로 대체 전열·근접 딜러 수요가 헤카림 쪽으로 이동했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "헤카림 등장률이 11.4%→14.9%(+3.6%p)로 올랐으나, 직접 조항 없이 악의 여단 버프·사냥꾼 너프의 파급 정도만 정황으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.3:system:악의-여단:b0b8eca1",
+      "note:tft:18.3:system:사냥꾼:616a50ac"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 8613,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 678
+  }
+}

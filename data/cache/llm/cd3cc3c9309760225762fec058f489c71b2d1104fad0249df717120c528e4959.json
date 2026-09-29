@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Lulu:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:11:58.716Z",
+  "parsed": {
+    "causes": [],
+    "summary": "룰루의 픽률 상승(0.1497→0.1874, 95% CI [0.0249, 0.0507])을 설명할 수 있는 직접 또는 간접 패치 항목이 후보 목록에서 발견되지 않아 원인 불명(unannounced) 상태로 유지됩니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 213
+  }
+}

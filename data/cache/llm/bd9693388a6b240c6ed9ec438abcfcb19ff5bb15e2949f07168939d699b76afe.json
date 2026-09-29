@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Jinx:BOTTOM:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T11:43:53.908Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검의 들끓는 일격 중첩 지속시간이 3초에서 4초로 증가하여, 공격 속도 스택형 아이템에 의존하는 징크스와 같은 원거리 딜러의 지속 화력이 강화되었을 가능성이 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
+        "text": "제리의 W 피해량이 총공격력 계수 기준 120%→100%로 너프되면서 경쟁 원거리 딜러였던 제리의 픽률이 감소, 그 대체픽으로 징크스가 반사이익을 얻어 픽률이 상승했을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "징크스의 픽률이 6.25%에서 8.88%로 크게 상승(델타 +2.63%p, 95% CI [1.73%p, 3.57%p])했는데, 직접적인 징크스 변경 노트가 없어 구인수의 격노검 버프로 인한 공격 속도 스택 챔피언 강세 및 경쟁 원거리 딜러인 제리의 너프에 따른 반사이익이 간접 원인으로 추정됩니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b",
+      "note:26.18:champion:zeri:d0cacf0b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 745
+  }
+}

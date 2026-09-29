@@ -1,0 +1,18 @@
+{
+  "deltaId": "item:3742:adoptionRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T02:55:29.361Z",
+  "parsed": {
+    "causes": [],
+    "summary": "후보 목록에 망자의 갑옷 또는 이를 간접적으로 설명할 만한 탱커/방어 아이템 관련 변경 사항이 없어, 채택률 증가(0.65%→1.00%, 델타 +0.35%p)를 설명할 근거를 찾지 못했습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 208
+  }
+}

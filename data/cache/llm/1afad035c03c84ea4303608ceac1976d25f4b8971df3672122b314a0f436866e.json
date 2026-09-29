@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:MasterYi:UTILITY:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T01:10:41.693Z",
+  "parsed": {
+    "causes": [],
+    "summary": "마스터 이 서포터 픽률은 변화 0.0%p, 신뢰구간 [-0.0%p, 0.1%p]로 사실상 변동이 없어 해석할 만한 신호가 아닙니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 133,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 101
+  }
+}

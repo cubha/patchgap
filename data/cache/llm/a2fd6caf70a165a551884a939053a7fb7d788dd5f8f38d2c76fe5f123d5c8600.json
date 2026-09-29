@@ -1,0 +1,47 @@
+{
+  "deltaId": "champion:Nasus:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:37:30.578Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘의 체력이 450에서 400으로 줄어 나서스가 즐겨 쓰는 탑 코어 아이템의 생존력이 낮아졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘의 공격력도 45에서 40으로 감소해 Q 위주 딜링 효율이 소폭 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:가렌:d2cf5f23",
+        "text": "가렌이 공격력·방어력·E 피해까지 강화되어 탑 라인 대치에서 나서스의 상대 난도가 올라갔습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:문도-박사:f54272dc",
+        "text": "문도 박사의 체력·공격 속도 상향으로 탑 브루저 경쟁이 심해져 나서스 픽 가치가 상대적으로 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트런들:85be03ea",
+        "text": "트런들 W 공격 속도가 최대 110%까지 올라 같은 스케일링 탑 대체픽의 위력이 커졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "나서스 승률은 48.4%→47.5%(-0.9%p)로 CI가 [-5.2%p, 3.4%p]라 사실상 무변화 수준이며, 갈라진 하늘 체력 450→400·공격력 45→40 너프가 소폭 하방 압력으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:4c4f025e",
+      "note:26.17:item:sundered-sky:0aec77fe"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 991
+  }
+}

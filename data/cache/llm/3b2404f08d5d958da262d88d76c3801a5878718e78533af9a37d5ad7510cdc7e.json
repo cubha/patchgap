@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Gangplank:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T08:54:34.265Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+        "text": "상단 순간이동 보상 쿨다운이 420초→390초로 줄며 스플릿 주도형 탑 갱플랭크의 가치가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:f037ef05",
+        "text": "강력 순간이동도 300~210초로 단축돼 사이드 운영 중심 픽의 압박이 커졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+        "text": "럼블 과열 공격 속도 너프로 경쟁 탑 라이너가 약해지며 갱플랭크 우선 밴이 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:nasus:b5997156",
+        "text": "나서스 Q 추가 피해 10 감소로 탑 대항마가 줄어든 영향이 있어 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "갱플랭크 직접 변경은 없지만 상단 순간이동 쿨다운 단축(420초→390초, 강력 300~210초)으로 스플릿 가치가 올라 밴률이 4.4%p 상승했습니다.",
+    "summaryCites": [
+      "note:26.19:system:순간이동-재사용-대기시간:c9025e15",
+      "note:26.19:system:순간이동-재사용-대기시간:f037ef05"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 794
+  }
+}

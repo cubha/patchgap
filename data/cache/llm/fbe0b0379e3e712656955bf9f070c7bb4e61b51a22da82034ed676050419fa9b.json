@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Rell:UTILITY:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T08:56:57.973Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+        "text": "서포터 아이템 초반 체력이 30/100 → 0/60으로 줄어 라인전 맷집이 핵심인 렐의 선호도가 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
+        "text": "체력 재생 보정(25%/50% → 50%/75%)은 유지력형 서포터에 유리해 돌진형 렐의 상대적 입지가 좁아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
+        "text": "아펠리오스 절단검 회복 강화 등 원딜 버프로 자체 유지력이 높은 조합 선호가 커졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "렐 픽률이 11.7%→8.4%(-3.3%p)로 떨어졌습니다. 서포터 아이템 초반 체력 30/100→0/60 너프가 탱커 서포터 입지를 좁힌 영향입니다.",
+    "summaryCites": [
+      "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 653
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Khazix:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:07:37.343Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:khazix:49b122f5",
+        "text": "E 도약 진화 사거리 200→300 버프로 카직스 픽이 본진인 정글로 쏠려 미드 비중이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:khazix:defcade0",
+        "text": "보이지 않는 위협 피해 17~136→22~141 상향은 정글 클리어에 유리해 정글 선호를 키웠을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카직스 미드 픽률은 0.1%→0.0%(-0.1%p)로 원래 표본이 극히 적어, 정글형 버프(E 진화 사거리 200→300) 이후 정글 쏠림 수준의 미미한 변화입니다.",
+    "summaryCites": [
+      "note:26.19:champion:khazix:49b122f5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 432
+  }
+}

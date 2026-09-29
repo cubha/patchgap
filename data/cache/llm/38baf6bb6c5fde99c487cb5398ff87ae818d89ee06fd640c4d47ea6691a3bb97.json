@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Yasuo:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:56:58.154Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 야스오 코어 빌드 파워가 올라 밴 우선순위가 상승했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:yone:c6a149c7",
+        "text": "요네도 치명타 피해량 감소가 -10%→-5%로 완화돼 같은 계열 챔피언 전반의 체감 강도가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해 너프로 탱커 견제력이 줄며 야스오의 상대 난도가 낮아졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "야스오 밴률이 10.9%→16.1%(+5.2%p)로 올랐습니다. 폭풍갈퀴 공격 속도 25% 상향이 코어 빌드를 강화한 영향입니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 648
+  }
+}

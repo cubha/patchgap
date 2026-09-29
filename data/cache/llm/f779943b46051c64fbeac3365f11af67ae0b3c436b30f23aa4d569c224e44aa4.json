@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:JarvanIV:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:39:57.737Z",
+  "parsed": {
+    "causes": [],
+    "summary": "자르반 4세에 대한 직접 패치 노트가 없고 후보 목록에서도 정글/성장 아이템 관련 간접 영향을 뒷받침할 근거를 찾을 수 없어, pickRate 하락(0.0872→0.0657, 95% CI [-0.0289, -0.0141])의 원인을 현재 후보로 설명할 수 없습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 237
+  }
+}

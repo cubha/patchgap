@@ -1,0 +1,44 @@
+{
+  "deltaId": "trait:DA_18_Caustic:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:39:43.111Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:역병의-보석:d03e92e1",
+        "text": "역병의 보석 마법 저항력 감소량 4→3 너프로 감소 누적 조합의 화력이 줄었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:자이라:63f16bc7",
+        "text": "자이라 스킬 피해량 하향이 부식 기반 보드의 딜량을 함께 끌어내렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:티모:68e7c01d",
+        "text": "티모 작은 버섯 피해량 하향으로 지속 피해형 조합 전반이 약화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 적중 시 피해량 너프가 마법 피해 중심 보드의 순방률을 낮췄습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "부식 순방률이 54.4%→50.7%(-3.7%p)로 떨어졌고, 역병의 보석·마법사의 최후 너프와 자이라·티모 하향의 간접 영향으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:역병의-보석:d03e92e1",
+      "note:tft:18.2:item:마법사의-최후:b79f865a",
+      "note:tft:18.2:champion:자이라:63f16bc7",
+      "note:tft:18.2:champion:티모:68e7c01d"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 753
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "deltaId": "champion:Bard:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:23:05.366Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "경쟁 서포터 노틸러스의 공격력·Q 피해 하향으로 바텀 구도가 일부 이동했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 쿨타임 고정 너프로 유틸 서포터 간 픽 분포가 바뀐 영향입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "바드 승률 -0.2%p는 CI [-4.2%p, 3.9%p]로 0을 포함해 사실상 변화 없음이며, 방어력 하향의 체감 영향은 미미합니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 480
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Viego:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:48:18.458Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
+        "text": "비에고 공격력 성장 3.5→4 버프로 원거리 딜러 자리 시험 픽이 소폭 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+        "text": "군주의 지배 회복이 공격속도·체력까지 반영돼 원딜식 빌드 실험 유인이 생겼습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 중첩 유지 3초→4초 버프가 공속 빌드 비에고 시도를 거들었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "비에고 원딜 픽률은 0.0%→0.1%로 변화폭이 CI에 0이 포함될 만큼 미미하며, 공격력 성장·지속효과 버프에 따른 시험 픽 수준입니다.",
+    "summaryCites": [
+      "note:26.18:champion:viego:3477e7c5",
+      "note:26.18:champion:viego:caf9b23d"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 586
+  }
+}

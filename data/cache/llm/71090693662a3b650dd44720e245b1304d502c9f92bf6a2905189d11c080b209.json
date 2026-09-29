@@ -1,0 +1,48 @@
+{
+  "deltaId": "item:DA_TitansResolve:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:49:23.283Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:선봉대-상징:58dac5b5",
+        "text": "선봉대 상징 방어력·마법 저항력 30→25로 전선 조합이 약화돼 탱커 아이템 가치가 함께 하락했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 너프로 근접 탱커 축이 위축됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력 60%→40%, 회복 20%→15% 너프로 동반 탱킹 아이템 세팅 성능이 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:황금-드래곤:bc4605bd",
+        "text": "황금 드래곤 내구력 20%→15%로 버티는 조합 전반의 생존력이 감소했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:전쟁기계-상징:83270fa5",
+        "text": "전쟁기계 상징 체력 350→250 너프도 탱커 중심 편성 비중을 줄였습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "거인의 결의 순방률 60.2%→55.8%(-4.5%p)는 선봉대·싸움꾼 상징 너프와 밤의 끝자락 하향으로 탱커 축이 약화된 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:선봉대-상징:58dac5b5",
+      "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 973
+  }
+}

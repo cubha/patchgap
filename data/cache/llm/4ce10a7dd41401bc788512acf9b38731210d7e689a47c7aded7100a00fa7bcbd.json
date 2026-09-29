@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Lulu:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:36:51.414Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:6d438477",
+        "text": "미스 포츈 Q 피해량 증가 등 다수의 버프로 인해 룰루가 자주 픽되는 원거리 딜러 조합의 강세가 룰루 지원 픽률 상승에 간접적으로 기여했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
+        "text": "애쉬 W 피해량 및 사거리 버프로 애쉬 픽률이 상승하며, 룰루와 자주 함께 픽되는 조합이 늘어나 룰루 픽률에도 간접적 영향을 주었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 강화로 원거리 딜러 메타가 강화되면서 이들과 시너지가 좋은 룰루의 지원 픽률이 간접적으로 상승했을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "룰루 자체에 대한 직접 패치 변경 사항은 없으나(픽률 +0.0439, 95% CI [0.0347, 0.0531], n=10000/10000), 미스 포츈·애쉬 등 룰루와 자주 조합되는 원거리 딜러들의 강력한 버프와 폭풍갈퀴 강화가 원거리 딜러 메타를 활성화시켜 룰루의 지원 픽률 상승에 간접적으로 기여했을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:미스-포츈:6d438477",
+      "note:26.17:champion:애쉬:7d7ed661",
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 909
+  }
+}

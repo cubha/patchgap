@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Camille:UTILITY:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:11:34.014Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:피오라:1e265a2f",
+        "text": "피오라가 대규모 개편(패시브, Q/W/E/R 전면 수정)을 받으면서 탑라인 챔피언 상대 구도가 크게 바뀌었고, 카밀과 자주 매치업되는 피오라의 스타일 변화가 카밀의 픽률에 간접적인 영향을 주었을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
+        "text": "신규/강화된 자헨의 Q2 피해량 상승으로 탑 라인 브루저 메타가 재편되면서 카밀의 상대적 입지가 약화되었을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카밀 픽률이 9.86%에서 5.48%로 큰 폭(약 4.4%p, 95% CI [-5.23%p, -3.50%p])으로 하락했지만, 이번 패치노트에는 카밀 자신에 대한 직접 변경 사항이 없어 피오라의 대규모 개편(note:26.18:champion:피오라:1e265a2f)과 자헨 강화(note:26.18:champion:zaahen:bce84005) 같은 탑 라인 메타 변화가 간접적으로 영향을 주었을 가능성이 있으나 근거는 약합니다.",
+    "summaryCites": [
+      "note:26.18:champion:피오라:1e265a2f",
+      "note:26.18:champion:zaahen:bce84005"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 883
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "deltaId": "trait:DA_FloraFatalis18:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:12:07.424Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:니달리:d8cb09b0",
+        "text": "니달리 공격력 형태 스킬 피해량이 2,500%→3,000%로 올라 특성 캐리 체급이 상승했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:니달리:747cd917",
+        "text": "니달리 주문력 형태 강화 기본 공격 피해량 상향이 두 형태 모두의 가치를 끌어올렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:56e1c4af",
+        "text": "덩굴정령 도약 피해량 600%→1,000% 상향으로 함께 쓰이는 보드의 화력이 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:e1a56234",
+        "text": "아이번 시작 칸 수 증가와 보호막 상향이 전열 유지력을 보강했을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "평균 등수 4.63→4.42등(-0.21) 강화는 니달리 스킬 피해량 상향(공격력 2,500%→3,000%)과 덩굴정령 도약 피해량 상향의 파급 효과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:니달리:d8cb09b0",
+      "note:tft:18.2:champion:덩굴정령:56e1c4af"
+    ]
+  },
+  "usage": {
+    "inputTokens": 154,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 757
+  },
+  "proseRepairAttempts": 0
+}

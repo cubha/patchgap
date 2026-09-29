@@ -1,0 +1,44 @@
+{
+  "deltaId": "trait:DA_18_Fae:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:38:20.830Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징의 공격력/주문력이 15%→10%로 깎여 상징을 통한 요정 진입 유인이 줄었습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:83fba4d7",
+        "text": "요정 상징 체력이 250→200으로 하향돼 상징 채용 가치가 함께 떨어졌습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃의 상징 효과가 200%→150%로 줄고 로비당 1명 제한이 생겨 요정 상징 조합 빈도가 감소했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:자이라:63f16bc7",
+        "text": "자이라 스킬 피해량 하향이 요정 조합의 초중반 체급을 낮췄을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요정 등장률 16.2%→7.9%(-8.4%p) 급감은 요정 상징의 공격력/주문력 10%·체력 200 하향과 흡수하는 꽃 효과 축소로 상징발 요정 진입이 끊긴 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:요정-상징:4abbb549",
+      "note:tft:18.2:item:요정-상징:83fba4d7",
+      "note:tft:18.2:system:흡수하는-꽃:cb5ebf63"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 900
+  },
+  "proseRepairAttempts": 0
+}

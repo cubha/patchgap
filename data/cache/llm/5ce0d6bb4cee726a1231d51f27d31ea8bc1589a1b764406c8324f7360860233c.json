@@ -1,0 +1,29 @@
+{
+  "deltaId": "champion:Thresh:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:01:30.687Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "바텀 파트너 베인의 W 고정 피해 하향으로 쓰레쉬 조합의 라인전 마무리력이 약해졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 바텀 원딜 선호 구도가 바뀌며 쓰레쉬 시너지가 흔들렸을 여지가 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "쓰레쉬 승률 -1.8%p는 95% CI가 [-6.5%p, 2.9%p]로 0을 포함해 통계적으로 유의하지 않은 변동입니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 606
+  }
+}

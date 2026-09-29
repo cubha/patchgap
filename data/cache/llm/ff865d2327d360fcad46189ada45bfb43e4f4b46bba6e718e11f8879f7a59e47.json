@@ -1,0 +1,38 @@
+{
+  "deltaId": "trait:DA_DravenUniqueTrait18:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:19:21.683Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:소매치기:bdc157ad",
+        "text": "소매치기 골드 생성 확률 15%→20%, 가격도 3골드→2골드로 내려가 골드 획득형 조합 채용이 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:프리즘-운명:f32724bb",
+        "text": "프리즘 운명+ 10골드→7골드, 금빛 운명+ 6골드→5골드로 증강 경제가 약화되며 유닛 기반 골드 수급 수요가 커졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카직스:c60397e3",
+        "text": "카직스 기본 공격력 30→40 버프로 같은 특성대 유닛 채용이 늘어난 영향으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "현상금 추적자 등장률이 6.1%→12.2%로 두 배 뛰었으나, 소매치기 강화와 운명 증강 골드 감소 같은 경제 환경 변화 외에 직접 조항은 없습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:소매치기:bdc157ad",
+      "note:tft:18.2:system:프리즘-운명:f32724bb"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 985
+  },
+  "proseRepairAttempts": 0
+}

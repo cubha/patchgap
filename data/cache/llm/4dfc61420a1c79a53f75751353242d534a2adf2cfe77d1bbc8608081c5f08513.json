@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Qiyana:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:06:56.890Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+        "text": "이렐리아 Q 계수 70%→80% 등 상향으로 탑 근접 암살 픽 경쟁에서 밀렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "트런들 W 공격 속도 최대 90%→110% 상향으로 탑 선택지가 분산됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "키아나 탑 픽률 -0.1%p는 CI [-0.3%p, 0.2%p]로 유의하지 않은 변동이며, 이렐리아·트런들 상향에 따른 탑 경쟁 심화가 일부 영향일 수 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:irelia:9035ffdc",
+      "note:26.17:champion:trundle:85be03ea"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 531
+  }
+}

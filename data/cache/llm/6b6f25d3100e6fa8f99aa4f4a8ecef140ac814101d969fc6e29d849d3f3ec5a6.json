@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Viktor:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:37:47.300Z",
+  "parsed": {
+    "causes": [],
+    "summary": "빅토르에 대한 직접 패치노트가 없고, 후보 목록에서도 빅토르의 밴율 하락을 설명할 만한 간접 연관 변경(아이템, 시스템, 타 챔피언 변경)을 찾을 수 없어 원인 불명으로 판단됩니다(밴율 0.1246→0.0913, 95% CI [-0.0419, -0.0247], n=10000/10000).",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 438
+  }
+}

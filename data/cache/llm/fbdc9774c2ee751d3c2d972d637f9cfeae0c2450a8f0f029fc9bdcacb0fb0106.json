@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_LeBlanc:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:54:14.090Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상이 전 구간 상향돼 주문력 캐리 가치가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:83333c69",
+        "text": "검은 가시 주문력 유닛 희생 마나 재생이 1.7→2로 올라 마법 캐리 운영이 쉬워졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:루덴의-폭풍:9f4a135d",
+        "text": "루덴의 폭풍 처치 시 피해 100→130 상향이 광역 마법 딜러 채용을 밀어올렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:ef16a6f2",
+        "text": "마스터 이 피해량 하향으로 비워진 캐리 자리를 대체 픽이 흡수했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "르블랑 등장률이 5.8%→11.0%로 급등했는데, 어둠의 의식 주문력 보상 상향과 검은 가시 마나 재생 버프가 주문력 캐리 전반을 띄운 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:어둠의-의식:a8212aab",
+      "note:tft:18.2:system:검은-가시:83333c69"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 819
+  }
+}

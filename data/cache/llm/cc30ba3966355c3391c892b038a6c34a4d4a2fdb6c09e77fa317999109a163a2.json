@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:LeeSin:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T01:00:13.080Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:b6aff2b2",
+        "text": "노틸러스 공격력·Q 피해량 하향으로 초반 정글 압박형 픽의 입지가 줄면서 리 신 쪽으로 픽이 이동했을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:피오라:6ebea4b2",
+        "text": "정글 동선 관련 스킬(사냥 본능)의 재사용 대기시간이 크게 늘어난 챔피언군이 약화되며 리 신의 상대적 선호도가 올랐을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "리 신 픽률이 23.8%에서 25.8%로 +2.0%p(CI 0.8~3.2%p) 올랐는데, 노틸러스 공격력 58로 하향 등 경쟁 정글 픽 약화가 간접 요인으로 추정됩니다.",
+    "summaryCites": [
+      "note:26.18:champion:nautilus:b6aff2b2"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 698
+  }
+}

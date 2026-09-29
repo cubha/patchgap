@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Ashe:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:52:23.859Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 유지 시간 조건이 4초에서 3초로 조정되며 사냥꾼 계열 딜 기대치가 흔들렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 기본 공격력이 30%에서 25%로 하향돼 사냥꾼 확장 빌드의 화력이 줄었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 공격 속도가 3/5/8/12%로 하향돼 원거리 평타 캐리 조합 전반의 상한이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 공격당 공격 속도가 5%에서 4%로 낮아져 평타 기반 애쉬 아이템 세팅이 약해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "애쉬 평균 등수 +0.07등은 CI가 0을 포함해 유의하지 않으며, 사냥꾼·속사포 등 주변 체계 하향이 직접 버프를 상쇄한 것으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:사냥꾼:70e7b088",
+      "note:tft:18.2:system:속사포:f271519a"
+    ]
+  },
+  "usage": {
+    "inputTokens": 153,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 813
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Tristana:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:40:24.281Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:6d438477",
+        "text": "미스 포츈이 Q 피해량·이동 속도·E 둔화 등 전방위 상향을 받아 원딜 선호도가 옮겨간 영향으로 보입니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
+        "text": "애쉬 W 피해량과 사거리 상향으로 바텀 경쟁 픽이 늘어 트리스타나 지분이 밀린 것으로 추정됩니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트리스타나:0d52db0d",
+        "text": "성장 공격 속도 4%→3% 너프가 체감되며 마나 상향에도 픽 유인이 상쇄된 것으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "트리스타나 픽률 -0.6%p는 CI가 0을 포함해 약한 변화이며, 미스 포츈 Q 상향과 애쉬 W 강화로 원딜 수요가 분산된 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:미스-포츈:6d438477",
+      "note:26.17:champion:애쉬:7d7ed661"
+    ]
+  },
+  "usage": {
+    "inputTokens": 133,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 696
+  }
+}

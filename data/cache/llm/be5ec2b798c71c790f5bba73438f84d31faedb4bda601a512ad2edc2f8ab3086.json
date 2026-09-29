@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:MasterYi:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:47:10.636Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
+        "text": "신드라 W 쿨타임 1초 증가로 미드 견제가 약해져 마스터 이 미드 시도가 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
+        "text": "카시오페아 Q 기본 피해 10 감소 등 미드 AP 너프가 틈새 픽 여지를 넓혔습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 쿨타임이 11초로 고정되며 미드 라인전 압박이 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "마스터 이 미드 픽률 0.1%p 상승은 CI 하한이 0%p라 노이즈 수준이며, 신드라·카시오페아 너프에 따른 틈새 픽 정도로 봅니다.",
+    "summaryCites": [
+      "note:26.18:champion:syndra:cb99a266",
+      "note:26.18:champion:cassiopeia:91d07d6f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 644
+  }
+}

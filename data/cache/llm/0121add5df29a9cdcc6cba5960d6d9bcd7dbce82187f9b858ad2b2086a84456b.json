@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Nocturne:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:56:33.732Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력 45→40 하향으로 이를 핵심 아이템으로 쓰는 녹턴의 딜이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력 450→400 하향이 겹쳐 녹턴의 생존력까지 함께 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:trundle:85be03ea",
+        "text": "트런들 W 공격 속도 90%→110% 상향으로 정글 경쟁 구도가 불리해졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:chogath:44d563a2",
+        "text": "초가스 E 피해량 상향으로 상위 티어 정글·탑 매치업 부담이 커졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "녹턴 승률 48.9%→40.1%(-8.8%p) 급락은 주력 아이템 갈라진 하늘의 공격력·체력 동시 하향 여파가 큽니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 807
+  }
+}

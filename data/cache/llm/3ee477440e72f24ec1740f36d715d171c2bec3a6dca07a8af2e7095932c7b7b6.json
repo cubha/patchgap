@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Neeko:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:08:14.338Z",
+  "parsed": {
+    "causes": [],
+    "summary": "니코의 승률 변화(0.481→0.602, n=449/226, 95% CI[0.041,0.198])를 설명할 만한 간접 패치 영향(아이템·시스템·타 챔피언 상호작용)이 후보 목록에서 발견되지 않아, 표본 크기 및 메타 변동에 의한 자연 변동일 가능성이 높습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 286
+  }
+}

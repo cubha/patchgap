@@ -1,0 +1,36 @@
+{
+  "deltaId": "unit:DA_18_Yunara:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:27:07.392Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
+        "text": "스태틱의 단검 기본 주문력 15%→25% 버프로 주문력 캐리 보드 채용이 늘며 함께 기용됐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:릴리아:da2771dd",
+        "text": "릴리아 회복량 상향으로 연계 조합이 강해지며 동반 등장이 늘어난 영향으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:카르마:98f7ca1f",
+        "text": "카르마 폭발 피해 상향이 같은 주문력 축 조합의 채용률을 끌어올린 파급으로 볼 여지가 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "유나라 등장률이 5.6%→9.4%(+3.8%p)로 올랐으나 직접 조항은 없고, 스태틱의 단검 주문력 상향 등 주문력 조합 강화의 간접 파급으로 추정됩니다.",
+    "summaryCites": [
+      "note:tft:18.3:item:스태틱의-단검:ccfc29ef"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 777
+  }
+}

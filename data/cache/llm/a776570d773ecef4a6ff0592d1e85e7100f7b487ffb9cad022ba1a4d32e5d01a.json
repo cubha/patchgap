@@ -1,0 +1,43 @@
+{
+  "deltaId": "unit:DA_18_Rakan:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:38:09.335Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징의 공격력/주문력이 15%에서 10%로 줄어 요정 계열 조합 채용이 위축됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:e1a56234",
+        "text": "아이번이 시작 칸 수 증가와 피해·보호막 상향을 받아 보조 유닛 자리를 대체했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:타릭:fbe6df4f",
+        "text": "타릭 회복량 상향으로 서포터 슬롯 경쟁이 심해져 라칸 채용이 밀렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃의 상징 효과가 200%에서 150%로 줄고 1인 한정이 되어 상징 기반 조합 수요가 감소했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "라칸 등장률이 17.7%→13.1%(-4.5%p)로 떨어졌습니다. 요정 상징 너프와 아이번·타릭 상향에 따른 보조 슬롯 경쟁이 원인으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:요정-상징:4abbb549",
+      "note:tft:18.2:champion:아이번:e1a56234",
+      "note:tft:18.2:champion:타릭:fbe6df4f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 926
+  }
+}

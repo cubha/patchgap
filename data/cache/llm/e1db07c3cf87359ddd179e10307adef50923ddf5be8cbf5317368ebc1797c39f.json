@@ -1,0 +1,37 @@
+{
+  "deltaId": "unit:DA_18_Ezreal:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:54:04.239Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력 15%→18% 상향이 이즈리얼 같은 공격력 캐리의 딜을 끌어올렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:35db05bd",
+        "text": "정의의 손길 기본 공격력/주문력 15%→18% 상향이 공격력 캐리 아이템 가치를 올렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:은빛-여명:185091b8",
+        "text": "은빛 여명 공격력 125%→150% 상향으로 공격력 캐리 빌드 상한이 올라갔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "이즈리얼 평균 등수 4.35→4.29등 변화는 CI가 0을 포함해 미미하며, 피바라기·정의의 손길 등 공격력 아이템 상향의 파급으로 설명됩니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:피바라기:69a953de",
+      "note:tft:18.2:item:정의의-손길:35db05bd"
+    ]
+  },
+  "usage": {
+    "inputTokens": 155,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 716
+  }
+}

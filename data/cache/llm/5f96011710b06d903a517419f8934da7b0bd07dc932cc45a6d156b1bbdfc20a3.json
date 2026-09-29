@@ -1,0 +1,37 @@
+{
+  "deltaId": "unit:DA_18_Teemo:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:53:41.775Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징 공격력/주문력 15%→10% 너프로 요정 기반 딜링 구성의 기대치가 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 적중 피해 하향으로 마법 딜러용 아이템 가치가 떨어진 영향일 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:83fba4d7",
+        "text": "요정 상징 체력 250→200 너프가 요정 계열 조합의 생존력을 함께 깎았습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "티모 순방률 -5.8%p는 95% CI가 0을 포함해 통계적으로 약하며, 요정 상징·마법사의 최후 너프로 인한 환경 약화가 겹친 것으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:요정-상징:4abbb549",
+      "note:tft:18.2:item:마법사의-최후:b79f865a"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 888
+  }
+}

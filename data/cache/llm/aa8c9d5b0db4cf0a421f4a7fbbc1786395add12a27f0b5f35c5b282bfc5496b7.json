@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Yorick:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:38:55.493Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+        "text": "밤의 끝자락 발동 체력이 60%에서 40%로 낮아져 전방 탱커 요릭의 생존력이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:밤의-끝자락:3332ad10",
+        "text": "밤의 끝자락 회복량 20%→15% 하향이 요릭의 버티기 성능을 함께 깎았습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:b3191eaf",
+        "text": "검은 가시 탱커 희생 방어력·마법 저항력 15→12 하향으로 요릭 계열 전방 가치가 떨어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 하향이 전방 구성 전반의 순방률을 낮췄을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요릭 순방률이 51.1%→47.1%(-4.0%p)로 떨어졌고, 밤의 끝자락 발동 체력 60%→40%와 회복 20%→15% 하향이 전방 생존력을 깎은 것이 주 원인입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:밤의-끝자락:c84f7a15",
+      "note:tft:18.2:item:밤의-끝자락:3332ad10"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 856
+  }
+}

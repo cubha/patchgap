@@ -1,0 +1,44 @@
+{
+  "deltaId": "trait:DA_18_Greenfather:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:16:46.856Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:e1a56234",
+        "text": "아이번 시작 칸 수 2→3 상향으로 자연의 아버지 채용 가치가 크게 올랐습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:아이번:ac1690b7",
+        "text": "아이번 보호막 흡수량 주문력 165/300→185/350 상향이 조합 안정성을 높였습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:56e1c4af",
+        "text": "덩굴정령 도약 피해량 공격력 600%→1,000% 상향이 자연 계열 보드 수요를 늘렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:덩굴정령:c9acbf01",
+        "text": "덩굴정령 스킬 추가 공격력 280%→300%, 방어력 무시 상향이 캐리력을 보강했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "아이번 시작 칸 3칸화와 보호막 상향, 덩굴정령 도약 피해 1,000% 상향이 겹치며 자연의 아버지 등장률이 10.6%→19.8%로 뛰었습니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:아이번:e1a56234",
+      "note:tft:18.2:champion:아이번:ac1690b7",
+      "note:tft:18.2:champion:덩굴정령:56e1c4af"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 709
+  },
+  "proseRepairAttempts": 0
+}

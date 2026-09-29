@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Pantheon:UTILITY:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:48:45.431Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력 45→40 너프로 근접 딜러형 서포터 판테온의 아이템 가치가 하락했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력 450→400 너프로 초반 교전 생존력이 줄어 선호도가 떨어졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "판테온 서포터 픽률이 8.0%→5.6%(-2.4%p)로 떨어졌으나 직접 조항은 없고, 갈라진 하늘 공격력·체력 너프가 유력한 간접 요인입니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 647
+  }
+}

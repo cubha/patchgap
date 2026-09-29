@@ -1,0 +1,29 @@
+{
+  "deltaId": "unit:DA_Karma18:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:54:25.746Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상이 전 구간 상향돼 주문력 캐리 수요가 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:ef16a6f2",
+        "text": "마스터 이 주문력 형태 피해량 너프로 밀려난 캐리 자리를 대신 채운 것으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카르마 등장률이 8.0%→10.0%(+2.1%p)로 올랐습니다. 직접 변경은 없고 주문력 캐리 환경 변화의 반사 이익으로 추정됩니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 614
+  }
+}

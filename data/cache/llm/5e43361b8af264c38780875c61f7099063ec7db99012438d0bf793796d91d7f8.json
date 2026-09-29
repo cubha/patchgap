@@ -1,0 +1,36 @@
+{
+  "deltaId": "trait:DA_18_Blackthorn:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:09:52.572Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:요정:b5711d84",
+        "text": "요정 황금 나비정령 등장 기준치가 20만→17만으로 완화돼 요정 라인이 검은 가시 자리를 대체했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상이 전 구간 상향(7단계 250→300)돼 성장형 대안 체계로 수요가 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:지옥불:e0ee7b3d",
+        "text": "지옥불 화상 피해 상향(3/3.5%→3.5/4.5%)으로 경쟁 체계가 강해져 검은 가시 채택이 밀렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "검은 가시는 자체 상향에도 등장률이 26.0%→22.4%(-3.6%p) 하락했는데, 어둠의 의식 주문력 보상 상향 등 경쟁 체계 강화로 수요가 옮겨간 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:어둠의-의식:a8212aab"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 859
+  }
+}

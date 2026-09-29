@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Qiyana:JUNGLE:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T02:58:08.266Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+        "text": "정글 최상위권 그레이브즈의 Q 폭발 피해 계수가 10%p 깎여 키아나가 상대적 이득을 봤습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:graves:39e7c86f",
+        "text": "그레이브즈 Q 최초 피해 계수도 65%→55%로 하락해 정글 경쟁 구도가 키아나에 유리해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:nocturne:9c41fff1",
+        "text": "녹턴 기본 방어력 38→36 너프로 동선 경쟁·초반 교전에서 키아나가 앞섭니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘 체력 450→400 너프로 정글 브루저군이 약화됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "키아나 정글 승률 51.2%→55.6%(+4.3%p)는 몬스터 피해 너프에도 그레이브즈 Q 계수 하향 등 경쟁 정글러 약화가 상쇄한 결과입니다.",
+    "summaryCites": [
+      "note:26.17:champion:graves:0bc5877b",
+      "note:26.17:champion:graves:39e7c86f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 849
+  }
+}

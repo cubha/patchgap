@@ -1,0 +1,36 @@
+{
+  "deltaId": "unit:DA_18_Zyra:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:50:46.654Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:049e12e2",
+        "text": "어둠의 의식 주문력 보상 전반 상향으로 주문력 계열 보드가 강해지며 자이라 편승 효과가 났습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:검은-가시:83333c69",
+        "text": "검은 가시의 주문력 유닛 희생 마나 재생이 1.7→2로 올라 주문력 조합 완성도가 높아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:지옥불:e0ee7b3d",
+        "text": "지옥불 화상 피해 상향이 자이라를 쓰는 마법 피해 보드의 체급을 함께 끌어올렸습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "자이라는 스킬 피해량 너프에도 평균 등수가 4.62등→4.53등으로 소폭 개선됐지만 CI가 0을 포함해 유의하지 않고, 주문력 계열 상향의 편승 효과로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:어둠의-의식:049e12e2"
+    ]
+  },
+  "usage": {
+    "inputTokens": 152,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 683
+  }
+}

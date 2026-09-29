@@ -1,0 +1,48 @@
+{
+  "deltaId": "trait:DA_18_Slayer:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:41:24.262Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카직스:c60397e3",
+        "text": "카직스 기본 공격력 30→40 상향으로 약탈자 핵심 캐리의 성능이 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:워윅:ad5aa8ef",
+        "text": "워윅 공격력 40→45 상향이 약탈자 전열 딜에 더해졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:드레이븐:66f8c74a",
+        "text": "드레이븐 현상금 사냥꾼 보상 조건 완화로 약탈자 조합의 경제 안정성이 높아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력 15%→18%, 발동 체력 상향이 약탈자 공격력 캐리와 맞물렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:35db05bd",
+        "text": "정의의 손길 능력치·흡혈 상향이 약탈자 근접 딜러의 생존력을 보강했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "약탈자 평균 등수가 4.65등에서 4.48등으로 0.18등 개선됐습니다. 카직스·워윅 공격력 상향과 피바라기 버프가 겹친 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:카직스:c60397e3",
+      "note:tft:18.2:champion:워윅:ad5aa8ef",
+      "note:tft:18.2:item:피바라기:69a953de"
+    ]
+  },
+  "usage": {
+    "inputTokens": 150,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 891
+  }
+}

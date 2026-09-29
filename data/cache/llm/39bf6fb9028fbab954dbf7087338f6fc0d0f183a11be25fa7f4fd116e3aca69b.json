@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:Kaisa:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T00:58:17.558Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 들끓는 일격 중첩 지속시간이 3초에서 4초로 늘어, 같은 아이템을 쓰는 다른 온힛 챔피언들의 채택이 늘며 원딜 자리 경쟁이 심해졌을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카이사 픽률이 23.8%에서 20.9%로 3.0%p 내렸지만 직접 조항은 없고, 구인수의 격노검 중첩 지속시간 4초 상향에 따른 온힛 챔피언 간 경쟁 정도만 약한 근거로 보입니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 609
+  }
+}

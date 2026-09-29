@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Vayne:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:06:50.153Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:irelia:9035ffdc",
+        "text": "이렐리아 Q·W·R 계수 상향으로 미드 AD 브루저 수요가 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:qiyana:5a6d587d",
+        "text": "키아나 Q 피해량 80~200으로 상향되며 미드 AD 틈새 픽 경쟁에서 앞섰습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
+        "text": "르블랑 W 계수 90% 상향으로 미드 선택지가 재편됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "베인 미드 픽률 -0.1%p는 CI가 0을 포함해 유의성이 약하며, 이렐리아·키아나 상향에 따른 미드 틈새 픽 이탈로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:irelia:9035ffdc",
+      "note:26.17:champion:qiyana:5a6d587d"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 674
+  }
+}

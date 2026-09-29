@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Nasus:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:09:00.022Z",
+  "parsed": {
+    "causes": [],
+    "summary": "나서스 원딜 픽률은 변화 -0.0%p, 95% CI [-0.1%p, 0.1%p]로 표본상 의미 있는 변동이 없습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 124
+  }
+}

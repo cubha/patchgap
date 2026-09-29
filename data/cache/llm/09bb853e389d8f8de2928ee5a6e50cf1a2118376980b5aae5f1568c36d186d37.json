@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:3046:adoptionRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:00:42.737Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:masteryi:871d9688",
+        "text": "마스터 이 Q 재사용 대기시간 환급이 스킬 가속 비례에서 고정 1초로 바뀌며 공격 속도 아이템 비중이 커졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
+        "text": "아펠리오스 절단검 회복량과 화염포·만월총 상향으로 지속 평타 빌드 선호가 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+        "text": "드레이븐 기본 공격력 62→64 상향으로 평타 중심 원거리 딜러 픽이 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+        "text": "루시안 Q 피해량 상향으로 평타·이동속도 아이템 수요가 증가했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "유령 무희 채택률이 1.8%→2.5%(+0.7%p) 올랐습니다. 직접 조항은 없고, 아펠리오스·드레이븐·루시안 등 평타 딜러 상향의 파급으로 보입니다.",
+    "summaryCites": [
+      "note:26.19:champion:aphelios:5a77f71f",
+      "note:26.19:champion:draven:d1cc348b",
+      "note:26.19:champion:lucian:24a11f30"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 777
+  }
+}

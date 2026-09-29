@@ -1,0 +1,48 @@
+{
+  "deltaId": "champion:Taliyah:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:14:05.156Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:아리:de1b72d9",
+        "text": "미드 경쟁자 아리가 체력 460→440, 체력 재생 등 기본 능력치 전반이 깎이며 탈리야의 라인전 상대 난이도가 낮아졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+        "text": "제라스 Q 피해량과 체력(596→575)이 함께 너프되어 장거리 포킹 미드와의 구도에서 탈리야가 상대적으로 이득을 봤습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:그라가스:fec76b2f",
+        "text": "그라가스가 Q 피해량·쿨다운과 R 쿨다운(100/90/80초→130/115/100초)까지 연속 너프되며 미드·정글 경쟁 픽이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:이블린:7340a85b",
+        "text": "이블린 Q 피해량과 W 마나·쿨다운이 너프되어 AP 정글 경쟁 구도에서 탈리야 정글의 입지가 넓어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:system:체력-재생-정수:394e3a0d",
+        "text": "체력 재생 정수가 5초당 +1.5→+3.0으로 강화되어 체젠이 낮은 탈리야의 라인 유지력이 소폭 개선됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "탈리야는 직접 변경이 없었지만 아리 체력 460→440, 제라스 Q·체력, 그라가스 R 쿨다운 너프 등 미드 경쟁 픽 약화로 승률이 5.8%p 상승한 것으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:아리:de1b72d9",
+      "note:26.17:champion:xerath:43a6f4aa",
+      "note:26.17:champion:그라가스:fec76b2f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 120,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1042
+  }
+}

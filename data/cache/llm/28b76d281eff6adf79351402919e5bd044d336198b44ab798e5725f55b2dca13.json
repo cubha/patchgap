@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:TwistedFate:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:40:16.280Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
+        "text": "신드라 W 쿨타임이 전 구간 1초 늘고 마나 수급도 깎여, 미드 대체 픽으로 트위스티드 페이트 수요가 늘었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:cassiopeia:91d07d6f",
+        "text": "카시오페아 Q 기본 피해가 10 감소해 라인전이 약해지면서 미드 AP 픽이 분산됐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 쿨타임이 최대 9초에서 11초로 고정되며 미드 경쟁자가 줄었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "트위스티드 페이트 직접 변경은 없고, 신드라·카시오페아·세라핀 등 미드 AP 너프에 따른 반사 이득으로 픽률이 8.5%→10.6%(+2.1%p) 올랐습니다.",
+    "summaryCites": [
+      "note:26.18:champion:syndra:cb99a266",
+      "note:26.18:champion:cassiopeia:91d07d6f",
+      "note:26.18:champion:seraphine:4519a08c"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 603
+  }
+}

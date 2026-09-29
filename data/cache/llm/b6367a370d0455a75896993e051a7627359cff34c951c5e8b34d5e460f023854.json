@@ -1,0 +1,18 @@
+{
+  "deltaId": "pubg:weapon:Item_Weapon_Crossbow_C:pickupShare",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cc94f398846bd16ac234d7524a67e793470189b97753b1ab31f37a48ee0ca7d1",
+  "generatedAt": "2026-09-23T11:57:54.425Z",
+  "parsed": {
+    "causes": [],
+    "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 147,
+    "cacheReadInputTokens": 2317,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 431
+  }
+}

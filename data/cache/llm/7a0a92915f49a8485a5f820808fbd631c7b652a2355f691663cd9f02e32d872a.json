@@ -1,0 +1,42 @@
+{
+  "deltaId": "trait:DA_18_Hunter:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:19:34.475Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 기본 공격력 30%→25% 너프로 특성 확장 빌드의 상한이 낮아졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:렝가:4a189382",
+        "text": "핵심 캐리 렝가의 기본 공격 속도 0.8→0.75 하향이 특성 순방률을 끌어내렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:경쟁을-넘어서:3e5b2191",
+        "text": "카직스가 렝가에 주는 마나 70%→50% 하향으로 사냥꾼 조합 연계가 약해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:애쉬:5bb903ca",
+        "text": "애쉬 지속 피해 상향이 렝가 하향분을 일부 상쇄해 순방률 변동이 미미했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "사냥꾼 순방률 -0.5%p는 CI가 0을 포함해 사실상 유지 수준이며, 사냥꾼 상징 공격력 25% 하향과 렝가 공격속도 하향이 상승 요인을 상쇄했습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:사냥꾼-상징:2f196381",
+      "note:tft:18.2:champion:렝가:4a189382"
+    ]
+  },
+  "usage": {
+    "inputTokens": 133,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 811
+  }
+}

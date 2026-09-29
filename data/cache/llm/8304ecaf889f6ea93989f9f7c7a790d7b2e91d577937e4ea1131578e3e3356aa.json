@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:Yunara:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:10:42.078Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검의 들끓는 일격 중첩 지속시간이 3초에서 4초로 증가하여, 온힛/공격속도 기반 챔피언인 유나라의 아이템 빌드 파워가 간접적으로 강화되었을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "유나라에 대한 직접 패치노트가 없는 상태에서 밴율이 0.0553→0.1122로 급등(델타 +0.057, 95% CI 상 유의미)한 것은, 구인수의 격노검 중첩 지속시간 버프(note:26.18:item:guinsoos-rageblade:f624219b)처럼 온힛 계열 챔피언에게 간접적으로 힘을 실어준 아이템 변경이나 메타 변화가 원인일 가능성이 있으나 근거가 약해 낮은 신뢰도로만 제시합니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 684
+  }
+}

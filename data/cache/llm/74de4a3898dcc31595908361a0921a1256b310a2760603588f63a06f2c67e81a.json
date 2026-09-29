@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Rumble:JUNGLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:06:40.783Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:rumble:70cb1a94",
+        "text": "럼블 기본 지속 효과의 몬스터 대상 최대 피해량이 65~150에서 90~175로 올라 정글 클리어가 빨라졌습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+        "text": "과열 공격 속도가 50~130%에서 30~100%로 줄었지만, 라인전 비중이 큰 탑에서 정글로 수요가 이동했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "럼블의 몬스터 대상 최대 피해량 상향(65~150→90~175)으로 정글 클리어가 개선되며 정글 픽률이 0.0%→0.3%로 올랐습니다.",
+    "summaryCites": [
+      "note:26.19:champion:rumble:70cb1a94"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 425
+  }
+}

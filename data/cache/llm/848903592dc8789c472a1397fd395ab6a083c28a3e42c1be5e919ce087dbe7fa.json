@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Braum:UTILITY:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:00:32.703Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+        "text": "드레이븐 공격력 62→64 상향으로 공격적 원딜 조합이 늘며, 짝으로 자주 서는 브라움 픽이 동반 상승했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
+        "text": "아펠리오스 만월총 Q 피해량 등 다수 상향으로 보호형 서포터 수요가 커졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+        "text": "루시안 Q 피해량 상향으로 초반 교전형 바텀이 늘어 브라움의 맞교전 가치가 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:b5ca9faa",
+        "text": "서포터 아이템 체력 재생이 25%/50%→50%/75%로 올라 라인 유지력이 좋아졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "브라움 직접 변경은 없지만 드레이븐 공격력 상향과 아펠리오스 다수 버프로 원딜 메타가 강해지며 픽률이 5.1%→7.1% 올랐습니다.",
+    "summaryCites": [
+      "note:26.19:champion:draven:d1cc348b",
+      "note:26.19:champion:aphelios:fa3a30c8"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 787
+  }
+}

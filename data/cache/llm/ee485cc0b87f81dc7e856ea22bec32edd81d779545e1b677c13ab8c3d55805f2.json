@@ -1,0 +1,29 @@
+{
+  "deltaId": "trait:DA_18_Blackthorn:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:15:01.980Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력이 15%→18%로 올라 공격력 캐리 보드의 상한이 함께 상승했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:35db05bd",
+        "text": "정의의 손길 기본 공격력/주문력 15%→18% 강화가 캐리 유지력을 보조했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "검은 가시 순방률 48.7%→50.2%(+1.5%p)이나 95% CI가 [-0.6%p, 3.5%p]로 0을 포함해 유의한 변화로 단정하기 어렵습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 661
+  }
+}

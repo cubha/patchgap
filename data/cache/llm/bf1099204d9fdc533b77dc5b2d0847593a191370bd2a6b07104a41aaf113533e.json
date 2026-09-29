@@ -1,0 +1,36 @@
+{
+  "deltaId": "trait:DA_18_Coven:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:04:04.099Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:럭스:f810ec39",
+        "text": "보상으로 얻는 럭스의 레이저 피해량이 주문력 5,000→6,500으로 올라 후반 캐리력이 강화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:럭스:fc47e05b",
+        "text": "럭스 스킬 피해량 주문력 355/550→375/565 상향이 조합 마무리 화력을 함께 끌어올렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상이 전 구간 상향돼(7단계 250→300) 마법 피해 캐리 축이 강해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "악의 여단 순방률이 31.6%→40.4%로 올랐습니다. 보상 핵심인 럭스가 레이저 주문력 5,000→6,500 등으로 강화된 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:럭스:f810ec39"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 881
+  }
+}

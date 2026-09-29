@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_KogMaw18_AD:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:39:33.335Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 상위 단계 공격 속도가 9/15%에서 8/12%로 하향돼 공속 캐리인 코그모 화력이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도가 5%에서 4%로 낮아져 주력 아이템 효율이 떨어졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 공격력이 30%에서 25%로 줄어 원거리 딜러 빌드 상한이 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 적중 피해 하향이 다중 공격 캐리의 누적 딜을 깎았습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "코그모 순방률이 54.4%→50.7%(-3.7%p)로 하락했는데, 속사포 공속 하향과 명멸검 공속 4% 축소가 공속 캐리 화력을 동시에 깎은 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:속사포:f271519a",
+      "note:tft:18.2:item:명멸검:ce978bd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 785
+  }
+}

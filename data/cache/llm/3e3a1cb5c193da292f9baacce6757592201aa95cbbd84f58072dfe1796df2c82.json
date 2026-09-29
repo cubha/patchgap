@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Evelynn:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T02:58:24.062Z",
+  "parsed": {
+    "causes": [],
+    "summary": "이블린의 승률이 54.5%에서 47.7%로 약 6.8%p 하락했으나, 이는 이미 확인된 이블린 자신의 직접 너프(Q 피해량 감소, W 마나 소모 신설 및 재사용 대기시간 증가 등)로 설명 가능한 범위이며, 후보 목록에서 이블린에 영향을 줄 만한 별도의 간접 요인(다른 챔피언·아이템 변경)은 발견되지 않았습니다. 95% CI가 [-16.2%p, +2.8%p]로 넓어 표본 수(n=200/218)가 제한적인 점도 고려해야 합니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 861
+  }
+}

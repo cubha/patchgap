@@ -1,0 +1,31 @@
+{
+  "deltaId": "item:DA_18_EmblemFloraFatalisAugment:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:43:14.771Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:흡수하는-꽃:cb5ebf63",
+        "text": "흡수하는 꽃이 로비당 1명 제한·효과 150%로 축소되며 상징 획득 경로가 크게 줄었습니다.",
+        "confidence": "high"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정·싸움꾼·전쟁기계 등 상징 아이템 일괄 너프로 상징 중심 빌드 선호가 전반적으로 감소했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "흡수하는 꽃이 로비당 1명 제한·효과 150%로 하향되며 상징 접근이 막혀 치명적인 꽃 상징 등장률이 3.1%→1.2%로 떨어졌습니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:흡수하는-꽃:cb5ebf63"
+    ]
+  },
+  "usage": {
+    "inputTokens": 137,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 583
+  }
+}

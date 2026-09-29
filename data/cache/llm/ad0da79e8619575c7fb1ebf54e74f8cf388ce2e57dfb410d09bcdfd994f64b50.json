@@ -1,0 +1,37 @@
+{
+  "deltaId": "unit:DA_18_Rakan:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T10:46:51.173Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징의 공격력/주문력이 15%에서 10%로 줄어 요정 축 보드의 기대치가 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:파수꾼:672d0ed9",
+        "text": "파수꾼 보호막이 주문력 400/500에서 350/450으로 줄어 보호막 기반 전열 유지력이 약해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:쉔:eca86037",
+        "text": "쉔 보호막이 주문력 350/430/550/700으로 상향돼 보조 탱커 자리 경쟁에서 밀렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "라칸 순방률이 48.6%→42.7%(-6.0%p)로 하락했고, 요정 상징 너프와 보호막 계열 조정이 간접 요인으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:요정-상징:4abbb549",
+      "note:tft:18.2:champion:파수꾼:672d0ed9"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 782
+  }
+}

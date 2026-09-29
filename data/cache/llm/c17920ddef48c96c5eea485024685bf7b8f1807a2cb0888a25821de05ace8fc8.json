@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Nasus:MIDDLE:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T02:57:05.092Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "나서스가 자주 사용하는 브루저 아이템 갈라진 하늘의 체력이 450→400으로 감소해 나서스의 스킬 강화 및 생존력이 간접적으로 약화되었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘의 공격력이 45→40으로 감소해 나서스의 딜링 및 스택 파밍 속도에 간접적인 영향을 주었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "나서스 자체의 생명력 흡수 너프(12/18/24%→10/15/20%)만으로 설명하기엔 승률 하락폭(-7.05%p)이 크고 95% CI가 0을 포함해 통계적으로 불확실하므로, 나서스가 자주 채용하는 브루저 아이템 갈라진 하늘의 체력·공격력 동반 너프가 간접적으로 승률 하락을 가중시켰을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 135,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 763
+  }
+}

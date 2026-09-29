@@ -1,0 +1,43 @@
+{
+  "deltaId": "champion:Tristana:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:38:30.214Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:럭스:16150c0d",
+        "text": "럭스가 공격 속도 계수·증가량과 E 광휘의 특이점 반경 확대까지 받아 미드 우선순위가 올라가며 트리스타나 미드 지분을 흡수했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애니:04d73af9",
+        "text": "애니가 Q·W 피해량과 기절 지속시간까지 상향되어 미드 경쟁이 심해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:leblanc:887dc51f",
+        "text": "르블랑 W·모방 피해량 상향과 R 재사용 대기시간 대폭 단축으로 미드 픽 경쟁에서 밀렸을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:aurelionsol:7b32ba55",
+        "text": "아우렐리온 솔의 Q 마나 소모 감소와 W 쿨감 상향으로 미드 라인 대안이 늘었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "트리스타나 미드 픽률이 3.6%→2.7%(-0.9%p)로 유의하게 빠졌는데, 럭스·애니·르블랑 등 미드 경쟁 챔피언 상향이 대체 픽 수요를 끌어간 것으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:럭스:16150c0d",
+      "note:26.17:champion:애니:04d73af9",
+      "note:26.17:champion:leblanc:887dc51f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 878
+  }
+}

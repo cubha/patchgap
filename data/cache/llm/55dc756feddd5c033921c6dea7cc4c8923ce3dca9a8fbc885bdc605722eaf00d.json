@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:Zeri:BOTTOM:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:37:54.700Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "제리는 폭풍갈퀴를 핵심 아이템으로 사용하는 원거리 딜러로, 폭풍갈퀴의 공격 속도가 20%에서 25%로 상향되면서 제리의 성능이 간접적으로 강화되어 픽률 상승에 기여했을 가능성이 있습니다.",
+        "confidence": "medium"
+      }
+    ],
+    "summary": "제리에 대한 직접 패치 변경 사항은 없지만, 제리가 주로 사용하는 폭풍갈퀴의 공격 속도가 20%에서 25%로 상향(note:26.17:item:stormrazor:0a1d6b43)되면서 픽률이 0.0743에서 0.1061로 약 3.18%p 상승(95% CI [0.0239, 0.0397], n=10000)한 것으로 추정됩니다.",
+    "summaryCites": [
+      "note:26.17:item:stormrazor:0a1d6b43"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 504
+  }
+}

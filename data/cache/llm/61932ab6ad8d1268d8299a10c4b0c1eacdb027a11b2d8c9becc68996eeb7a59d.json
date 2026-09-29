@@ -1,0 +1,41 @@
+{
+  "deltaId": "champion:Olaf:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T00:57:05.843Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:피오라:74f0cb92",
+        "text": "피오라의 공격 속도 계수가 0.625에서 0.658로 상향되어 탑 결투 구도가 불리해졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:피오라:912bf6b1",
+        "text": "피오라의 기본 체력 재생이 4.5에서 5.05로 올라 라인 유지력이 좋아진 점도 올라프의 탑 선호도를 떨어뜨린 요인으로 볼 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:zaahen:bce84005",
+        "text": "자헨 Q2 피해량이 25~125에서 30~150으로 상향되어 근접 브루저 픽 경쟁이 심해졌을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 중첩 지속시간이 3초에서 4초로 늘어 지속 공격형 픽이 반사이익을 얻었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "올라프 탑 픽률이 11.8%에서 8.7%로 -3.2%p 내렸는데, 직접 조항은 없고 피오라 공격 속도 계수(0.625→0.658) 상향 등 탑 경쟁 픽 강화의 간접 영향으로 추정됩니다.",
+    "summaryCites": [
+      "note:26.18:champion:피오라:74f0cb92"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 16933,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 824
+  }
+}

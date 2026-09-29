@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Qiyana:MIDDLE:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:25:49.322Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:아리:a1938c18",
+        "text": "미드 경쟁자 아리가 기본 체력 재생 6.1→4.5, 체력 460→440으로 약화되며 라인전 상성이 키아나 쪽으로 기울었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:080e761c",
+        "text": "제라스 체력이 596→575로 줄어 암살형 키아나의 미드 포탈 난이도가 낮아졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:그라가스:ee3208b9",
+        "text": "그라가스 Q 재사용 대기시간 증가와 피해량 감소로 미드 라인 대치 구도가 완화된 영향도 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "키아나 미드 승률이 48.5%→52.7%(+4.2%p)로 올랐지만 CI가 0을 포함해 불확실하며, 아리 체력 460→440·기본 체력 재생 6.1→4.5 등 미드 경쟁자 약화가 간접 요인으로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:아리:a1938c18",
+      "note:26.17:champion:아리:de1b72d9"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 648
+  }
+}

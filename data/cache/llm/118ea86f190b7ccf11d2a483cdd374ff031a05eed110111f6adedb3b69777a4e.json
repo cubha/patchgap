@@ -1,0 +1,34 @@
+{
+  "deltaId": "unit:DA_18_Diana:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:07:47.643Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상이 전 구간 상향돼 주문력 딜러 다이애나의 상한이 올랐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:루덴의-폭풍:9f4a135d",
+        "text": "루덴의 폭풍 처치 시 피해량 100→130 상향이 광역 주문 딜러 조합의 체급을 보조했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:기원자-상징:dfaf6790",
+        "text": "기원자 상징 너프로 상위 마법 캐리 축이 약해지며 다이애나의 상대적 입지가 유지됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "다이애나 평균 등수 4.59등→4.53등(-0.05등)은 95% CI [-0.15, +0.05]가 0을 포함해 통계적 유의성이 없는 소폭 변동입니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 153,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 720
+  }
+}

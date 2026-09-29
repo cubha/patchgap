@@ -1,0 +1,43 @@
+{
+  "deltaId": "champion:Rumble:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:05:04.697Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라 R 회복량·계수 상향으로 탑 픽이 피오라 쪽으로 이동했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:c754a41b",
+        "text": "피오라 레벨당 체력 99→105 상향까지 겹쳐 탑 라인 경쟁에서 밀렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
+        "text": "아트록스 E 회복 계수 상향(추가 체력 100당 1.1%→1.3%)이 탑 지분을 가져갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:5bc9f3f5",
+        "text": "아트록스 W 쿨타임 감소로 탑 브루저 선호도가 올라간 영향으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "럼블 탑 픽률 4.6%→3.7%(-0.9%p)는 피오라 R·체력 상향과 아트록스 회복 상향으로 탑 픽이 이동한 결과입니다.",
+    "summaryCites": [
+      "note:26.19:champion:fiora:4ff3c93f",
+      "note:26.19:champion:fiora:c754a41b",
+      "note:26.19:champion:aatrox:f629d9e5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 762
+  }
+}

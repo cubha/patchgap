@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Draven:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:03:14.372Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
+        "text": "아펠리오스가 다방면으로 강화되며 원거리 딜러 경쟁에서 드레이븐이 밀렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:lucian:24a11f30",
+        "text": "루시안 Q 기본 피해량이 10~30 상승해 초반 라인전 맞대결이 불리해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:item:세계-지도집과-룬-나침반:c6bf0dd0",
+        "text": "서포터 아이템 초반 체력이 30→0으로 줄어 봇 라인 초반 교전 안정성이 떨어졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "드레이븐은 공격력 상향에도 승률이 53.2%→50.9%로 내렸지만 CI가 0을 포함해 유의하지 않고, 아펠리오스·루시안 강화로 인한 봇 경쟁 심화가 배경입니다.",
+    "summaryCites": [
+      "note:26.19:champion:aphelios:ccd9a119",
+      "note:26.19:champion:lucian:24a11f30"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 640
+  }
+}

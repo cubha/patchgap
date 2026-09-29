@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Ekko:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:41:43.666Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
+        "text": "마스터 이 방어력 성장 상승으로 정글 경쟁에서 에코가 밀렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+        "text": "비에고 지속 효과 회복 강화로 정글 픽 경쟁이 심화된 영향으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:kassadin:d631af52",
+        "text": "카사딘 Q 계수 상승으로 미드 에코의 입지가 좁아졌을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "에코 Q 버프에도 승률 53.1%→47.5%(-5.6%p). 마스터 이·비에고 정글 버프에 밀린 영향으로 보입니다.",
+    "summaryCites": [
+      "note:26.18:champion:masteryi:d392c3c6",
+      "note:26.18:champion:viego:caf9b23d"
+    ]
+  },
+  "usage": {
+    "inputTokens": 357,
+    "cacheReadInputTokens": 12330,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1395
+  }
+}

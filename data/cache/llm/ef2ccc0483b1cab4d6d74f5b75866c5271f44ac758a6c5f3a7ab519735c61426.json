@@ -1,0 +1,43 @@
+{
+  "deltaId": "unit:DA_Nidalee18_AP:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:33:31.126Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 유지 요구가 3초로 바뀌며 사냥꾼 축의 딜 기대치가 흔들렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:사냥꾼-상징:2f196381",
+        "text": "사냥꾼 상징 기본 공격력 30%→25% 하향으로 사냥꾼 확장 빌드의 화력이 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:명멸검:ce978bd1",
+        "text": "명멸검 기본 공격당 공격 속도 5%→4% 하향이 공격력 형태 딜 누적을 늦춘 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:속사포:f271519a",
+        "text": "속사포 상위 단계 공격 속도 하향으로 평타 위주 캐리 구성의 상한이 낮아졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "니달리는 직접 상향을 받았지만 순방률이 56.6%→51.1%(-5.5%p)로 떨어졌습니다. 사냥꾼 특성과 사냥꾼 상징 하향이 주변 구성을 약화시킨 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:system:사냥꾼:70e7b088",
+      "note:tft:18.2:item:사냥꾼-상징:2f196381"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 958
+  },
+  "proseRepairAttempts": 0
+}

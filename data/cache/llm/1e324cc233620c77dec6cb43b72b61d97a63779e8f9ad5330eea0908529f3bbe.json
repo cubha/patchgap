@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:AurelionSol:BOTTOM:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:59:04.900Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해가 최대 체력 6~10%에서 4~10%로 하향돼 하단 원딜 구도가 흔들렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:graves:0bc5877b",
+        "text": "그레이브즈 Q 계수 하향으로 AD 딜러 선호가 줄며 비주류 하단 픽 여지가 생겼습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "갈라진 하늘 공격력 45→40 하향 등 AD 아이템 약화가 AP 하단 실험을 부추겼습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "아우렐리온 솔 원딜 픽률이 0.9%→1.2%로 올랐지만 CI가 0을 포함해, 베인·그레이브즈 하향에 따른 하단 구도 변화의 파급으로 추정됩니다.",
+    "summaryCites": [
+      "note:26.17:champion:vayne:1da6ddd1",
+      "note:26.17:champion:graves:0bc5877b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 137,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 660
+  }
+}

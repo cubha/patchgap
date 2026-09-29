@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Olaf:TOP:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T08:56:29.032Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라 R 회복량·계수 상향으로 탑 브루저 지분을 가져가며 올라프 픽이 밀렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:c754a41b",
+        "text": "피오라 레벨당 체력 99→105로 라인전이 강해져 탑 선택지에서 우선순위가 올라갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:f629d9e5",
+        "text": "아트록스 E 회복 계수 1.1%→1.3%, W 쿨 감소로 탑 근접 딜러 수요를 흡수했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:5bc9f3f5",
+        "text": "아트록스 W 쿨 20초→18초(1레벨) 상향이 탑 라인 주도권 경쟁에서 올라프를 눌렀습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "올라프 탑 픽률이 8.7%→5.3%(-3.3%p)로 떨어졌습니다. 피오라·아트록스 탑 버프가 같은 근접 브루저 자리를 대체했습니다.",
+    "summaryCites": [
+      "note:26.19:champion:fiora:4ff3c93f",
+      "note:26.19:champion:aatrox:f629d9e5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 713
+  }
+}

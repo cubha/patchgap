@@ -1,0 +1,26 @@
+{
+  "deltaId": "champion:Irelia:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:15:00.026Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 중첩 지속시간 3초→4초로 공속 기반 근접 딜러의 지속 교전력이 올랐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "이렐리아 밴률이 15.6%→18.8%(+3.1%p)로 올랐으나 직접 조항은 없고, 구인수의 격노검 중첩 4초 연장 정도가 간접 요인입니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 430
+  }
+}

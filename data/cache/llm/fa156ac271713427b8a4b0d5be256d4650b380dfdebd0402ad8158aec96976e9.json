@@ -1,0 +1,37 @@
+{
+  "deltaId": "unit:DA_18_Soraka:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "1b4ec346ad0605238fd935fc97d52d05e7d396b4fcc038faca64e9e36e85b1cf",
+  "generatedAt": "2026-09-26T19:18:55.631Z",
+  "parsed": {
+    "summary": "소라카 등장률이 14.0%→17.7%(+3.7%p) 올랐는데 직접 변경은 없고, 타릭 보호막 너프와 릴리아 회복 상향 등 회복 축 재편의 반사 효과로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:타릭:21e22d94",
+      "note:tft:18.3:champion:릴리아:da2771dd"
+    ],
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:릴리아:da2771dd",
+        "confidence": "low",
+        "text": "릴리아 회복량 상향으로 회복 중심 조합이 늘며 소라카 채용도 함께 올랐습니다."
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:타릭:21e22d94",
+        "confidence": "low",
+        "text": "타릭 기본 보호막이 100/225에서 75/150으로 줄면서 회복 역할 수요가 소라카로 옮겨갔습니다."
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
+        "confidence": "low",
+        "text": "스태틱의 단검 주문력 15%→25% 상향이 주문력 서포터 기용 폭을 넓혔습니다."
+      }
+    ]
+  },
+  "usage": {
+    "inputTokens": 421,
+    "cacheReadInputTokens": 17226,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1403
+  }
+}

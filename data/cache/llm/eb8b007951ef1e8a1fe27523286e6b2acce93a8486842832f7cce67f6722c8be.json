@@ -1,0 +1,48 @@
+{
+  "deltaId": "item:DA_HextechGunblade:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "21fb9d0f9efa2dfefbfde89b24e6c901e6d2a649ea3d20806bc09e595c0d4a8c",
+  "generatedAt": "2026-09-24T06:24:08.752Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
+        "text": "베이가 스킬 피해량이 전 구간 상향돼 주문력 캐리 채용이 늘고 총검 수요가 증가했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:카르마:98f7ca1f",
+        "text": "카르마 폭발 피해량 상향으로 주문력 캐리 라인이 강화됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
+        "text": "스태틱의 단검 기본 주문력이 15%→25%로 올라 주문력 아이템 조합 전체의 가치가 상승했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:니달리:0d67b189",
+        "text": "니달리 주문력 형태 강화로 주문력 빌드 선택이 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:진형-유지:06a48fe8",
+        "text": "진형 유지 주문력 11% 상향이 주문력 중심 구성 선택을 거들었습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "베이가·카르마 등 주문력 캐리 상향과 스태틱의 단검 주문력 25% 버프로 주문력 빌드 수요가 늘어 총검 등장률이 19.8%→27.0%로 올랐습니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:베이가:c44fce5f",
+      "note:tft:18.3:champion:카르마:98f7ca1f",
+      "note:tft:18.3:item:스태틱의-단검:ccfc29ef"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 8532,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 910
+  }
+}

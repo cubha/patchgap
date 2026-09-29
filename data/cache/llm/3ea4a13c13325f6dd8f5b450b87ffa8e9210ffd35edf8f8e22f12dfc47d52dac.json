@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Lucian:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:04:25.725Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:ryze:2bcac5df",
+        "text": "라이즈 Q 전이 피해 너프로 미드 마법사 입지가 줄며 루시안이 반사 이익을 얻었습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:ryze:f4e781e8",
+        "text": "라이즈 E 마나 소모 증가로 라인전이 약해져 미드 대체 픽 수요가 커졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+        "text": "럼블 과열 공격 속도 너프로 미드 경쟁 픽이 줄어든 영향으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "루시안 미드 픽률이 0.2%→1.4%(+1.2%p)로 급등했고, 라이즈 Q·E 너프로 비워진 미드 자리를 메운 것으로 보입니다.",
+    "summaryCites": [
+      "note:26.19:champion:ryze:2bcac5df",
+      "note:26.19:champion:ryze:f4e781e8"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 766
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Irelia:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:10:22.983Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검(들끓는 일격) 중첩 지속시간 buff는 이렐리아가 자주 사용하는 온힛 빌드의 지속 딜을 강화해 챔피언 강력함이 상승하고, 이는 밴율 상승으로 이어졌을 가능성이 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:피오라:744cdab9",
+        "text": "피오라의 전면적인 리메이크(공격 속도 하향, 다수 스킬 조정)로 인해 탑 라인 메타가 흔들리면서 이렐리아가 상대적으로 더 위협적인 픽으로 부각되어 밴율이 상승했을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "이렐리아 밴율이 15.63%에서 21.56%로 유의미하게 상승했는데, 직접적인 이렐리아 패치 노트가 없는 상태에서 그녀가 즐겨 쓰는 구인수의 격노검 버프와 탑 라인 경쟁자인 피오라의 대규모 리메이크가 간접적으로 그녀의 상대적 강력함을 높였을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b",
+      "note:26.18:champion:피오라:744cdab9"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 841
+  }
+}

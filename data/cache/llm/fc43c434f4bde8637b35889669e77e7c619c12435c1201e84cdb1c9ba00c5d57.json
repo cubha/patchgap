@@ -1,0 +1,44 @@
+{
+  "deltaId": "champion:Talon:MIDDLE:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:09:07.722Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:cassiopeia:64976414",
+        "text": "카시오페아 R 궁극기 피해량 및 여러 스킬 전반의 너프로 탈론이 자주 상대하는 미드 라인전 상대가 약화되어 반사이익을 봤을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:syndra:cb99a266",
+        "text": "신드라 W 재사용 대기시간 증가 등 전반적 너프로 탈론과의 미드 매치업에서 유리해졌을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:seraphine:4519a08c",
+        "text": "세라핀 E 재사용 대기시간 고정(사실상 너프)으로 원거리 포킹 챔피언 상대 시 탈론의 성적이 개선됐을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
+        "text": "제리 W 피해량 감소로 원거리 딜러 상대 시 탈론이 이득을 봤을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "탈론에 대한 직접 패치노트 변경 사항은 없으나, 승률이 50.4%→60.2%로 크게 상승(표본 n=502→206, 95% CI가 0에서 멀리 떨어져 통계적으로 유의미)한 것은 탈론과 자주 맞붙는 카시오페아, 신드라, 세라핀, 제리 등 미드/원거리 챔피언들의 전반적 너프로 인한 간접적 반사이익일 가능성이 있으나 표본 수가 적어 확실하지 않습니다.",
+    "summaryCites": [
+      "note:26.18:champion:cassiopeia:64976414",
+      "note:26.18:champion:syndra:cb99a266",
+      "note:26.18:champion:seraphine:4519a08c",
+      "note:26.18:champion:zeri:d0cacf0b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1141
+  }
+}

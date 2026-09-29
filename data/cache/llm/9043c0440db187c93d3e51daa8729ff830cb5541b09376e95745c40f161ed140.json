@@ -1,0 +1,53 @@
+{
+  "deltaId": "lane:BOTTOM:goldAt14",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-06T09:34:27.372Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:6d438477",
+        "text": "미스 포츈 Q 피해량 상승으로 라인전 파워가 강화되어 바텀 라인의 골드 획득이 늘었을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:미스-포츈:8267908f",
+        "text": "미스 포츈 E 총피해량 증가가 바텀 라인 전투력을 높여 골드 우위로 이어졌을 가능성이 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:애쉬:7d7ed661",
+        "text": "애쉬 W 피해량 및 사거리 증가로 바텀 라인전 성능이 강화되어 골드 획득에 기여했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 강화(20%→25%)가 원거리 딜러 아이템 파워를 높여 바텀 라인 골드 성장에 영향을 줬을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:활력증진의-펜던트:8f360fb2",
+        "text": "활력증진의 펜던트 계열 아이템(리글의 랜턴 등)의 공격 속도 강화가 원거리 딜러의 초반 성장에 영향을 줬을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:이즈리얼:9152ff5a",
+        "text": "이즈리얼 R 주문력 계수 상승이 하이브리드 빌드를 강화해 바텀 라인 골드에 영향을 줬을 가능성이 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "바텀 라인의 14분 골드가 소폭 상승(약 +71.9, 95% CI가 0을 포함하지 않아 유의미)한 것은 미스 포츈의 Q/E 피해량 상승과 애쉬 W 강화 등 원거리 딜러 챔피언 버프가 라인전 파워를 높여 간접적으로 골드 성장에 기여했을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:champion:미스-포츈:6d438477",
+      "note:26.17:champion:미스-포츈:8267908f",
+      "note:26.17:champion:애쉬:7d7ed661"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 20668,
+    "outputTokens": 1098
+  }
+}

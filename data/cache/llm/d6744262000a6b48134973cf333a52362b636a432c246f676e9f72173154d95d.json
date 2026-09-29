@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Blitzcrank:banRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:10:31.662Z",
+  "parsed": {
+    "causes": [],
+    "summary": "블리츠크랭크의 밴율 급등(0.0382→0.0954)을 설명할 수 있는 직접적 변경 노트나 간접 연쇄 효과(상호작용 챔피언·아이템 변경)가 후보 목록에서 발견되지 않아 원인 불명으로 남습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 199
+  }
+}

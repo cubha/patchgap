@@ -1,0 +1,48 @@
+{
+  "deltaId": "champion:MonkeyKing:JUNGLE:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "1dfaf4ab534692a04e8aa36f905dbc2032fd8a93bf5686ff6a515ad92cd47b27",
+  "generatedAt": "2026-09-18T00:51:00.046Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:c898ee27",
+        "text": "마스터 이 궁극기 이동 속도가 40/50/60%로 상향되며 정글 경쟁 구도가 바뀌어, 오공의 상대적 입지가 좁아졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
+        "text": "마스터 이 레벨당 방어력이 5로 늘어 정글 교전·카정 대치에서 오공이 손해를 보기 쉬워졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:viego:3477e7c5",
+        "text": "비에고 레벨당 공격력이 4로 상향되어 같은 AD 정글 자리에서 오공의 상대 가치가 떨어졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+        "text": "비에고 기본 지속 효과 회복량이 여러 능력치 계수로 확장돼 정글 지속력 경쟁에서 오공이 밀렸을 가능성이 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
+        "text": "에코 Q 마나 소모 감소와 계수 상향으로 정글 클리어 효율이 올라가며 오공의 초반 주도권 이점이 희석됐을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "오공 정글 승률이 57.1%에서 45.5%로 11.6%p 떨어졌는데 직접 조항은 없고, 마스터 이 궁극기 이동 속도·방어력 상향과 비에고 공격력 상향 등 경쟁 정글러 버프의 간접 여파로 보입니다.",
+    "summaryCites": [
+      "note:26.18:champion:masteryi:c898ee27",
+      "note:26.18:champion:masteryi:d392c3c6",
+      "note:26.18:champion:viego:3477e7c5"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 16933,
+    "outputTokens": 874
+  }
+}

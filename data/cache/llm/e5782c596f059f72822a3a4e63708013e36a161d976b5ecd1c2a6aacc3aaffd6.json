@@ -1,0 +1,38 @@
+{
+  "deltaId": "unit:DA_Karma18:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9ef03c71dba083e46dca0234d1d32b608ca9e22178a4e36a5f1f0cdbf7a48b04",
+  "generatedAt": "2026-09-28T10:32:51.893Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:champion:파수꾼:672d0ed9",
+        "text": "파수꾼 보호막 350/450으로 하향되며 유틸 계열 대체 픽으로 카르마 수요가 옮겨간 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:어둠의-의식:a8212aab",
+        "text": "어둠의 의식 주문력 보상이 전 구간 상향돼 주문력 유닛 기용 폭이 넓어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:자이라:63f16bc7",
+        "text": "자이라 스킬 피해량 하향으로 저코스트 주문력 슬롯 경쟁이 완화됐습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카르마 등장률이 8.0%→10.0%(+2.1%p)로 올랐습니다. 직접 조항은 없고, 파수꾼·자이라 하향에 따른 주문력·유틸 슬롯 반사이익으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:champion:파수꾼:672d0ed9",
+      "note:tft:18.2:champion:자이라:63f16bc7"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 17127,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1418
+  },
+  "proseRepairAttempts": 0
+}

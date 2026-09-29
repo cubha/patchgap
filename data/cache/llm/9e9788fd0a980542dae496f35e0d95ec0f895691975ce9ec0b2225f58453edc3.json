@@ -1,0 +1,43 @@
+{
+  "deltaId": "trait:DA_Primal18:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "b48179d76f43874aceced2d877aaa6462ce925568d740440e5615f02e48cca45",
+  "generatedAt": "2026-09-28T13:21:29.098Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:원시-상징:32460e11",
+        "text": "원시 상징 공격 속도 25%→35% 버프로 표본이 4156→5789로 늘며 픽 폭이 넓어져 순방률이 희석됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:렝가:4a189382",
+        "text": "원시 핵심 캐리 렝가의 기본 공격 속도 0.8→0.75 너프가 조합 상한을 깎았습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:경쟁을-넘어서:64c38bc1",
+        "text": "경쟁을 넘어서 렝가·카직스 상호 보정 너프가 원시 축 조합의 안정성을 낮췄습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:system:사냥꾼:70e7b088",
+        "text": "사냥꾼 피해 증폭 조건 변경과 사냥꾼 상징 공격력 25% 하향이 같은 보드를 함께 약화시켰습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "원시 상징 버프로 표본이 4156→5789로 급증해 순방률이 희석된 데다, 렝가 공격 속도 너프가 겹쳐 순방률이 4.6%p 내렸습니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:원시-상징:32460e11",
+      "note:tft:18.2:champion:렝가:4a189382"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 17131,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 915
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,37 @@
+{
+  "deltaId": "trait:DA_FloraFatalis18:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T14:40:08.824Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력 15%→18%, 보호막·발동 체력 상향으로 딜러 캐리 라인 전반이 강해졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:35db05bd",
+        "text": "정의의 손길 기본 공격력/주문력 15%→18%, 흡혈 12%→15% 상향이 근접 캐리 조합의 생존력을 올렸습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:카직스:c60397e3",
+        "text": "카직스 기본 공격력 30→40 상향이 같은 자원을 쓰는 근접 딜러 조합의 체급을 함께 끌어올렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "치명적인 꽃은 직접 조정 없이 순방률이 48.2%→51.6%(+3.5%p)로 올랐고, 피바라기·정의의 손길 등 딜러 아이템 상향의 간접 수혜로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:피바라기:69a953de",
+      "note:tft:18.2:item:정의의-손길:35db05bd"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 790
+  }
+}

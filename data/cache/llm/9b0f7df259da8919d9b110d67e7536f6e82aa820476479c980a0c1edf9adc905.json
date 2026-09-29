@@ -1,0 +1,47 @@
+{
+  "deltaId": "item:DA_Artifact_ForbiddenIdol:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T15:04:45.171Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:루덴의-폭풍:9f4a135d",
+        "text": "루덴의 폭풍 처치 시 피해량 100→130 버프로 주문력 아이템 슬롯 경쟁에서 밀렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기가 공격력/주문력 15%→18%, 발동 체력 40%→50%로 강화돼 범용 우선순위를 가져갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:정의의-손길:35db05bd",
+        "text": "정의의 손길 능력치·흡혈 동반 상향으로 보조형 아이템 수요가 그쪽으로 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:기원자-상징:dfaf6790",
+        "text": "기원자 상징 너프로 주문력 조합 전반이 위축되며 함께 채용률이 내려갔습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:마법사의-최후:b79f865a",
+        "text": "마법사의 최후 피해량 하향이 마법 딜 조합 인기를 낮췄습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "금지된 우상은 체력 상향에도 등장률이 0.8%→0.5%로 떨어졌는데, 루덴의 폭풍·피바라기 등 경쟁 아이템 버프에 밀린 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:루덴의-폭풍:9f4a135d",
+      "note:tft:18.2:item:피바라기:69a953de"
+    ]
+  },
+  "usage": {
+    "inputTokens": 134,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 957
+  }
+}

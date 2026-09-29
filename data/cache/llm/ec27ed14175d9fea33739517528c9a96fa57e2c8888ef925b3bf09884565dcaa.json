@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Tryndamere:TOP:winRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-13T02:58:58.709Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:0aec77fe",
+        "text": "트린다미어가 핵심 아이템으로 자주 사용하는 갈라진 하늘의 공격력이 45→40으로 감소하여 직접 너프 외에 간접적으로 딜 손실이 발생했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:sundered-sky:4c4f025e",
+        "text": "갈라진 하늘의 체력이 450→400으로 감소해 트린다미어의 생존력이 간접적으로 낮아졌을 가능성이 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴의 공격 속도가 20%→25%로 증가했으나 이는 버프이므로 승률 하락을 설명하지 못해 참고용으로만 제시합니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "트린다미어는 이번 패치에서 격노(치명타 확률·체력 재생)와 궁극기 재사용 대기시간 등 직접 너프가 이미 존재하지만, 그가 즐겨 사용하는 갈라진 하늘의 공격력·체력 스탯 하향(간접 영향)이 추가로 승률 하락(53.4%→48.0%, Δ-5.4%p)에 기여했을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.17:item:sundered-sky:0aec77fe",
+      "note:26.17:item:sundered-sky:4c4f025e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 139,
+    "cacheReadInputTokens": 20668,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 1080
+  }
+}

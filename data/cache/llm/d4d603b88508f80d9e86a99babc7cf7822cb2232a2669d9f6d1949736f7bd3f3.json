@@ -1,0 +1,48 @@
+{
+  "deltaId": "champion:Zeri:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v3",
+  "candidateSetHash": "8b435069d2901b798a5c55f146d2910a2a113ea9d562693982b3ee78cb555cf5",
+  "generatedAt": "2026-09-18T01:16:51.758Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:이즈리얼:68ba2a1c",
+        "text": "경쟁 원딜 이즈리얼의 Q 사거리가 1,200에서 1,100으로 줄며 포킹 원딜 자리가 비어 제리로 수요가 이동했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:이즈리얼:5b9e4881",
+        "text": "이즈리얼 Q 총공격력 계수가 120%에서 110%로 하향되어 라인전 강자 자리가 약해진 점이 제리 픽 증가에 기여했을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해가 최대 체력의 6~10%에서 4~10%로 하향되어 저레벨 구간 성능이 떨어지며 원딜 선택지가 제리로 분산됐을 수 있습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트위치:8757056b",
+        "text": "트위치 1레벨 공격 속도가 0.679에서 0.658로 낮아진 너프도 원딜 픽 재분배에 영향을 준 요인입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:트리스타나:68545344",
+        "text": "트리스타나 Q 마나 소모량이 레벨별 50~90으로 늘어 라인 유지력이 나빠진 점이 제리 반사이익으로 이어졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "제리 직접 변경은 없으나 이즈리얼 Q 사거리·계수 하향과 베인 W 너프로 원딜 수요가 옮겨오며 픽률이 8.0%에서 11.1%로 3.1%p 올랐습니다.",
+    "summaryCites": [
+      "note:26.17:champion:이즈리얼:68ba2a1c",
+      "note:26.17:champion:이즈리얼:5b9e4881",
+      "note:26.17:champion:vayne:1da6ddd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 121,
+    "cacheReadInputTokens": 20986,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 980
+  }
+}

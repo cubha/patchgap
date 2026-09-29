@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Varus:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T01:10:49.678Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수의 격노검 들끓는 일격 중첩 지속시간 3초→4초로, 온힛 바루스의 중첩 유지가 쉬워졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:zeri:d0cacf0b",
+        "text": "제리 W 계수 120%→100% 너프로 원거리 딜러 경쟁군이 약해져 바루스 선호가 올랐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:nautilus:878378b8",
+        "text": "노틸러스 Q 피해량 너프로 바텀 라인전 압박이 줄어든 영향입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "바루스 직접 조항은 없지만 구인수의 격노검 중첩 유지 1초 증가와 제리 W 너프가 겹치며 승률이 43.4%→51.8%로 올랐습니다.",
+    "summaryCites": [
+      "note:26.18:item:guinsoos-rageblade:f624219b",
+      "note:26.18:champion:zeri:d0cacf0b"
+    ]
+  },
+  "usage": {
+    "inputTokens": 119,
+    "cacheReadInputTokens": 5980,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 544
+  }
+}

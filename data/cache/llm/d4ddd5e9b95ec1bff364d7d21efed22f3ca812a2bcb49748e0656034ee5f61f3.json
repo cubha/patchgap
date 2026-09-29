@@ -1,0 +1,42 @@
+{
+  "deltaId": "unit:DA_18_Camille:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "cec85295d212f7ac2e0fc0214acc9f217841a8fdd73ad4328d7b64164567a822",
+  "generatedAt": "2026-09-20T15:03:56.596Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:은빛-여명:185091b8",
+        "text": "은빛 여명 공격력 125%→150% 상향으로 공격력 기반 카밀의 아이템 가치가 올랐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:피바라기:69a953de",
+        "text": "피바라기 공격력/주문력 15%→18%, 발동 체력 40%→50% 상향이 근접 공격력 캐리 채용을 밀어올렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:마스터-이:5c211705",
+        "text": "마스터 이 공격력 65→60 하향으로 공격력 캐리 수요가 카밀 쪽으로 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:champion:렝가:4a189382",
+        "text": "렝가 공격 속도 0.8→0.75 하향도 근접 딜러 자리 경쟁을 완화했습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카밀은 스킬 피해 하향에도 등장률이 2.8%→3.3% 올랐는데, 은빛 여명·피바라기 상향으로 공격력 캐리 아이템 가치가 커진 영향입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:은빛-여명:185091b8",
+      "note:tft:18.2:item:피바라기:69a953de"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 13393,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 816
+  }
+}

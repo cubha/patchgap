@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Vi:banRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:08:31.448Z",
+  "parsed": {
+    "causes": [],
+    "summary": "바이 밴률은 2.9%→3.0%로 0.1%p 변동이며 신뢰구간이 0을 포함해(-0.5~0.7%p) 통계적 잡음 수준입니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 181
+  }
+}

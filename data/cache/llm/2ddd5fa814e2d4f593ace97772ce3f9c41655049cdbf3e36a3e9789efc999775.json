@@ -1,0 +1,18 @@
+{
+  "deltaId": "champion:Yone:TOP:pickRate",
+  "model": "claude-sonnet-5",
+  "promptVersion": "v2",
+  "candidateSetHash": "c94f229bef0b0743951b9d8cf6693cf6475904100de721720f6dfec586dddd6b",
+  "generatedAt": "2026-09-13T03:13:25.637Z",
+  "parsed": {
+    "causes": [],
+    "summary": "요네의 픽률은 5.93%에서 8.82%로 약 2.89%p 상승했으나(95% CI [1.995%, 3.822%], n=10000/5000), 후보 목록에서 이 변화를 설명할 만한 간접 영향(다른 챔피언·아이템·시스템 변경) 근거는 발견되지 않았습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 16705,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 387
+  }
+}

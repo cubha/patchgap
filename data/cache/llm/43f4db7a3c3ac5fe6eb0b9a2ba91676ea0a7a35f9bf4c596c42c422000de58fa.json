@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Qiyana:MIDDLE:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T03:02:45.860Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:080e761c",
+        "text": "제라스 체력 596→575 너프로 미드 라인 경쟁 챔피언 입지가 약화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:champion:xerath:43a6f4aa",
+        "text": "제라스 Q 피해량 하향으로 빠진 미드 지분이 키아나로 이동한 것으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "키아나 미드 픽률이 3.7%→4.5%(+0.8%p) 상승했고, 제라스 체력·Q 피해량 너프로 생긴 미드 공백이 유입 경로로 보입니다.",
+    "summaryCites": [
+      "note:26.17:champion:xerath:080e761c",
+      "note:26.17:champion:xerath:43a6f4aa"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 6237,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 603
+  }
+}

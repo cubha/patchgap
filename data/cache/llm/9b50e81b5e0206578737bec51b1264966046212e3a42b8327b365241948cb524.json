@@ -1,0 +1,31 @@
+{
+  "deltaId": "champion:Thresh:UTILITY:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v4",
+  "candidateSetHash": "8b5283da8c314a3a1c45d206973b026e466fbd6d782e1598bc2aa0e6504f5201",
+  "generatedAt": "2026-09-19T00:53:44.646Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.17:champion:vayne:1da6ddd1",
+        "text": "베인 W 고정 피해 하향으로 봇 구도가 바뀌며 유틸 서포터 선호가 커졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.17:item:stormrazor:0a1d6b43",
+        "text": "폭풍갈퀴 공격 속도 20%→25% 상향으로 공속 원딜이 늘며 보호형 서포터 수요가 올랐을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "쓰레쉬는 E 피해량 하향에도 픽률이 7.3%→10.5%(+3.3%p) 올랐고, 베인 하향 등 봇 구도 변화가 유력한 간접 요인입니다.",
+    "summaryCites": [
+      "note:26.17:champion:vayne:1da6ddd1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 134,
+    "cacheReadInputTokens": 6052,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 550
+  }
+}

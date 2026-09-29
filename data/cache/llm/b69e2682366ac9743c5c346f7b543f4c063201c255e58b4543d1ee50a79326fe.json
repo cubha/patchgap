@@ -1,0 +1,36 @@
+{
+  "deltaId": "champion:Khazix:winRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "31f1b63de267f19b2a8e449ce9ad957d97aa9d039a922d283ecc1ccd62a4b5cc",
+  "generatedAt": "2026-09-26T09:01:46.731Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
+        "text": "녹턴 R 쿨다운 140/115/90초→160/130/100초 너프로 암살자 정글 경쟁자가 줄었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:masteryi:871d9688",
+        "text": "마스터 이 Q 쿨 회수의 스킬 가속 비례 제거로 후반 정글 픽 경쟁이 완화됐습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:vi:8f97f057",
+        "text": "바이 보호막 최대 체력 12%→10% 너프로 갱킹형 정글 상대 난도가 낮아졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카직스 승률 45.2%→52.0%(+6.8%p, CI 하한 -0.8%p)는 녹턴 R 쿨다운 너프 등 정글 경쟁자 약화가 겹친 결과입니다.",
+    "summaryCites": [
+      "note:26.19:champion:nocturne:daf7f9d0"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 7941,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 600
+  }
+}

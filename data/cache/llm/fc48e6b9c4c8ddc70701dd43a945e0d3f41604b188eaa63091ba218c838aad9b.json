@@ -1,0 +1,42 @@
+{
+  "deltaId": "champion:Olaf:pickRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "619b3f20079c5b243c2ea5438ea6072975a0ad5e4e24d77de5420633431ea023",
+  "generatedAt": "2026-09-19T02:37:46.451Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.18:champion:viego:caf9b23d",
+        "text": "비에고 군주의 지배 회복량이 추가 능력치 비례로 확대돼 정글 1티어 수요가 올라프를 밀어냈습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:masteryi:d392c3c6",
+        "text": "마스터 이가 레벨당 방어력 5로 상향돼 정글 픽 경쟁에서 올라프 지분을 잠식했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.18:champion:ekko:dfd6f002",
+        "text": "에코 Q 마나 소모 10 감소로 정글 수급이 편해져 올라프 대신 선택된 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.18:item:guinsoos-rageblade:f624219b",
+        "text": "구인수 중첩 지속시간 4초 상향이 평타 정글러 선호를 키워 올라프 수요를 분산시켰습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "올라프 픽률이 12.8%→9.5%(-3.3%p)로 떨어졌습니다. 직접 조항은 없고 비에고·마스터 이 버프로 정글 경쟁에서 밀린 결과입니다.",
+    "summaryCites": [
+      "note:26.18:champion:viego:caf9b23d",
+      "note:26.18:champion:masteryi:d392c3c6"
+    ]
+  },
+  "usage": {
+    "inputTokens": 123,
+    "cacheReadInputTokens": 6165,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 743
+  }
+}

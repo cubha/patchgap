@@ -1,0 +1,37 @@
+{
+  "deltaId": "item:DA_18_EmblemVanguard:top4Rate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "af5290635bf002eeee47214e987d3a47b0271b413eb0340635dae22619c92f98",
+  "generatedAt": "2026-09-21T11:16:04.047Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.2:item:요정-상징:4abbb549",
+        "text": "요정 상징이 공격력/주문력 15%→10%로 깎이며 상징 선택이 선봉대 쪽으로 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:싸움꾼-상징:93051b8e",
+        "text": "싸움꾼 상징 체력 250→150 너프로 탱킹 상징 대안이 줄어 선봉대 상징 쪽 수요가 남았습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.2:item:전쟁기계-상징:83270fa5",
+        "text": "전쟁기계 상징 체력 350→250 너프도 같은 방향으로 선봉대 상징의 상대 가치를 높였습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "선봉대 상징은 방어력·마저 30→25 너프에도 순방률이 58.0%로 1.3%p 올랐지만 CI가 0을 포함해 노이즈이며, 경쟁 상징 동반 너프가 완충한 것으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.2:item:요정-상징:4abbb549",
+      "note:tft:18.2:item:싸움꾼-상징:93051b8e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 133,
+    "cacheReadInputTokens": 17083,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 704
+  }
+}
