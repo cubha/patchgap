@@ -32,12 +32,11 @@ interface DeltasFile {
   rows: PubgDeltaRow[];
 }
 
-async function main(): Promise<void> {
-  const args = parseCliArgs("run-pubg-llm", process.argv.slice(2), [
-    { name: "llmMax", type: "number", default: 40 },
-    { name: "dryRun", type: "boolean", default: false },
-  ]);
-
+/**
+ * 엔진 입력 조립(판정 파일·후보 조항·프로필) — `run-llm-compare.ts`(모델 비교)가 운영과 **같은 입력**을 쓰도록
+ * 떼어 냈다(2026-09-30). 입력이 갈리면 비교가 모델이 아니라 입력 차이를 잰다.
+ */
+export function loadPubgLlmInputs() {
   const deltasPath = path.join(AGG_DIR, "deltas.json");
   const deltas = JSON.parse(fs.readFileSync(deltasPath, "utf8")) as DeltasFile;
   const notesPath = path.join(AGG_DIR, `notes-${deltas.meta.to}.json`);
@@ -61,6 +60,17 @@ async function main(): Promise<void> {
     totalPickupsRelChange,
     beforeShareByWeapon: new Map(before.weapons.map((w) => [w.weaponKey, w.share] as const)),
   });
+
+  return { deltasPath, deltas, candidates, profile, redistribution };
+}
+
+async function main(): Promise<void> {
+  const args = parseCliArgs("run-pubg-llm", process.argv.slice(2), [
+    { name: "llmMax", type: "number", default: 40 },
+    { name: "dryRun", type: "boolean", default: false },
+  ]);
+
+  const { deltasPath, deltas, candidates, profile, redistribution } = loadPubgLlmInputs();
 
   const targets = deltas.rows.filter(
     (row) => row.status === "unannounced" || row.status === "announced-inconsistent"

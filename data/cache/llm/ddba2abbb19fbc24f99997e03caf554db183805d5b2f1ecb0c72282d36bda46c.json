@@ -1,0 +1,43 @@
+{
+  "deltaId": "item:DA_ArchangelsStaff:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "777f9b98e3d740dc18b1848c911cf0fa954d9f6b4ed6dc68fb93ff5c218454b7",
+  "generatedAt": "2026-09-30T08:47:38.411Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
+        "text": "베이가 스킬 피해량이 기본·강화 모두 상향되며 주문력 캐리 채택이 늘어 대천사 장착이 증가했습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:카시오페아:3e896e3e",
+        "text": "카시오페아 스킬 피해량 상향으로 장기전 주문력 캐리 수요가 커졌습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+        "text": "사냥꾼 추가 공격력 너프로 공격력 캐리 축이 약해지며 주문력 아이템으로 무게가 옮겨갔습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:황금-징수의-총:cce21382",
+        "text": "황금 징수의 총 공격력 40%→35% 너프가 공격력 아이템 선호를 낮췄을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "대천사의 지팡이 등장률이 17.4%→23.0%(+5.7%p) 오른 것은 베이가·카시오페아 스킬 피해 상향으로 주문력 캐리 비중이 커진 결과입니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:베이가:c44fce5f",
+      "note:tft:18.3:champion:카시오페아:3e896e3e"
+    ]
+  },
+  "usage": {
+    "inputTokens": 134,
+    "cacheReadInputTokens": 9928,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 915
+  },
+  "proseRepairAttempts": 0
+}
