@@ -1,0 +1,43 @@
+{
+  "deltaId": "unit:DA_18_Rengar:avgPlacement",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "777f9b98e3d740dc18b1848c911cf0fa954d9f6b4ed6dc68fb93ff5c218454b7",
+  "generatedAt": "2026-09-30T15:13:36.045Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:카직스:721aa591",
+        "text": "카직스 고립 피해 너프로 근접 암살 캐리 경쟁자가 약해지며 렝가로 아이템·자리가 몰렸습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:카밀:ee0ba0ac",
+        "text": "카밀 스킬 피해 너프(공격력 700→640)로 공격력 캐리 대안 수요가 렝가에 집중됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:드레이븐:66f8c74a",
+        "text": "드레이븐 현상금 사냥꾼 조건 전반 너프로 공격력 캐리 축이 렝가로 이동했습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:system:진형-유지:5b4cf303",
+        "text": "진형 유지 공격력 9%→11% 상향이 공격력 기반 렝가의 딜에 직접 더해졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "렝가 평균 등수가 4.44등→4.08등으로 강화됐는데, 카직스·카밀 피해량 너프로 공격력 근접 캐리 경쟁이 줄어든 반사 이익입니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:카직스:721aa591",
+      "note:tft:18.3:champion:카밀:ee0ba0ac"
+    ]
+  },
+  "usage": {
+    "inputTokens": 148,
+    "cacheReadInputTokens": 9928,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 961
+  },
+  "proseRepairAttempts": 0
+}

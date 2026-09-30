@@ -1,0 +1,38 @@
+{
+  "deltaId": "trait:DA_18_Solar:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "777f9b98e3d740dc18b1848c911cf0fa954d9f6b4ed6dc68fb93ff5c218454b7",
+  "generatedAt": "2026-09-30T15:15:37.952Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
+        "text": "베이가 스킬 피해량 대폭 상향으로 주문력 캐리 수요가 옮겨가며 햇빛 채용이 밀렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
+        "text": "알리스타 스킬 피해량이 약 1.8배로 올라 전열 조합 선택지가 넓어졌습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
+        "text": "스태틱의 단검 주문력 상향으로 다른 마법 피해 조합의 가치가 커졌습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "햇빛 등장률이 4.7%→2.6%(-2.1%p)로 떨어졌습니다. 럭스 상향에도 하락한 만큼 베이가·알리스타 등 경쟁 조합 강화의 반작용으로 보입니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:베이가:c44fce5f",
+      "note:tft:18.3:champion:알리스타:d527c10f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 9928,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 815
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,38 @@
+{
+  "deltaId": "trait:DA_FloraFatalis18:playRate",
+  "model": "claude-opus-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "777f9b98e3d740dc18b1848c911cf0fa954d9f6b4ed6dc68fb93ff5c218454b7",
+  "generatedAt": "2026-09-30T15:14:17.017Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:카시오페아:3e896e3e",
+        "text": "카시오페아 스킬 피해량 상향(400/600/950→425/630/1,020)이 연계 조합 채택을 끌어올렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:카직스:2c342480",
+        "text": "카직스 스킬 피해량 하향으로 밀려난 딜러 수요가 대체 조합으로 이동한 것으로 보입니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.3:champion:릴리아:da2771dd",
+        "text": "릴리아 회복량 상향(325/475→350/525)이 해당 계열 유닛 기용을 늘렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "치명적인 꽃 등장률이 25.6%→32.7%(+7.1%p)로 올랐으나 직접 조항은 없고, 카시오페아 상향과 카직스 하향에 따른 조합 이동이 원인으로 추정됩니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:카시오페아:3e896e3e",
+      "note:tft:18.3:champion:카직스:2c342480"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 9928,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 669
+  },
+  "proseRepairAttempts": 0
+}
