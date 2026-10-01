@@ -13,7 +13,12 @@
 // 2026-09-18(사용자 확정 M1, SCOPE §3 갱신): Sonnet 5 → Opus 5. 동일 델타 12건 A/B에서 간접 원인
 // 탐지 12/12 vs 1/12(`docs/plan/LLM-AB-2026-09-17.md`). 캐시 키에 model이 들어가므로 옛 Sonnet
 // 캐시와 충돌하지 않는다. 저신뢰(low) 후보는 화면에서 회색으로만 나간다(home/logic.resolveGapCause).
-export const LLM_MODEL = "claude-opus-5";
+// 2026-10-01(사용자 확정, SCOPE §3 갱신): Opus 5 → Opus 5.5. 같은 45건(LoL 20·TFT 20·PUBG 5) × 3회 × 4모델을
+// 블라인드 1~5점으로 채점 — Opus 5 2.46(2점 이하 55%) · Sonnet 5 2.96 · **Opus 5.5 3.21(2%)** · Sonnet 5.5 3.01(9%).
+// 9/18의 Opus 5 채택 근거(탐지 수 12/12)는 억지 원인까지 센 축이었다. 건당 실측 Opus 5.5 $0.0149 < Opus 5 $0.0258.
+// 버전 없는 별칭(claude-opus/-latest)은 API가 받지 않는다(실측) — 새 버전은 비교 후 여기서 올린다.
+// 모델이 바뀌면 캐시 키가 갈려 첫 실행에 현 쌍을 다시 부른다(호출 전 견적 게이트가 보인다).
+export const LLM_MODEL = "claude-opus-5-5";
 
 // v3(2026-09-18, 채점 라운드1 ST-3): 규칙 7~9 추가 — 요약문이 사용자용 문장이어야 한다. 실측
 // 26.17→26.18 요약 50건 중 41건이 "제공된 후보 목록에는…"(프롬프트 맥락 노출)·"0.571에서
@@ -47,4 +52,4 @@ export const LLM_BUDGET_ENV = "PATCHGAP_LLM_BUDGET_USD";
 export const DEFAULT_LLM_BUDGET_USD = 8;
 // 건당 추정 단가 — 캐시 1,841건 usage 합산 $46.11 ÷ 1,841 ≈ $0.025(Opus 5, 2026-09-29)에 여유를 둔 값.
 // **추정**이다: 청구 단가가 바뀌면 여기만 고친다.
-export const LLM_EST_USD_PER_CALL = 0.03;
+export const LLM_EST_USD_PER_CALL = 0.03; // Opus 5.5 실측 ≈$0.015 — 견적은 보수적으로 둔다

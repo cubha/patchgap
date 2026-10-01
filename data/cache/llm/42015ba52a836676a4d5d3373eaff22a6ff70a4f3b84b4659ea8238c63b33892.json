@@ -1,0 +1,27 @@
+{
+  "deltaId": "champion:Gangplank:banRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-10-01T14:57:02.239Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:f037ef05",
+        "text": "상단 퀘스트 강화 순간이동 재사용 대기시간이 300~210초로 줄어 상단 갱플랭크의 합류력이 오른 영향일 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "갱플랭크 밴률이 11.2%에서 15.6%로 4.4%p 올랐고, 상단 강화 순간이동 쿨감(300~210초)이 간접 원인일 수 있습니다.",
+    "summaryCites": [
+      "note:26.19:system:순간이동-재사용-대기시간:f037ef05"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 379
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Ambessa:TOP:pickRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-10-01T15:00:06.431Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라의 R 회복량·범위와 체력 증가량 상향으로 탑 브루저 수요가 피오라로 옮겨갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aatrox:5bc9f3f5",
+        "text": "아트록스 W 재사용 대기시간과 E 회복 계수 상향이 탑 픽 일부를 가져갔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "암베사 탑 픽률은 8.9%에서 6.7%로 2.2%p 하락했으며, 같은 탑 브루저인 피오라 상향이 수요를 가져갔습니다.",
+    "summaryCites": [
+      "note:26.19:champion:fiora:4ff3c93f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 609
+  },
+  "proseRepairAttempts": 0
+}

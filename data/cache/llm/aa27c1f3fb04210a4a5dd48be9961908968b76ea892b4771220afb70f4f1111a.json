@@ -1,0 +1,25 @@
+{
+  "deltaId": "trait:DA_FloraFatalis18:playRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "777f9b98e3d740dc18b1848c911cf0fa954d9f6b4ed6dc68fb93ff5c218454b7",
+  "generatedAt": "2026-10-01T12:59:17.208Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:system:보석-연꽃-i:391d6664",
+        "text": "보석 연꽃 I의 치명타 확률이 10%→15%로 올라 치명타 기반 조합 채택이 늘었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "치명적인 꽃 등장률이 25.6%→32.7%(+7.1%p, CI 6.2~8.0%p)로 확실히 올랐지만 직접 원인 조항은 불분명합니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 134,
+    "cacheReadInputTokens": 9928,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 835
+  },
+  "proseRepairAttempts": 0
+}

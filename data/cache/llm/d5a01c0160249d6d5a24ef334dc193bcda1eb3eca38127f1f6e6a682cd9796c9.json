@@ -1,0 +1,33 @@
+{
+  "deltaId": "champion:LeeSin:banRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-10-01T12:56:18.948Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:vi:8f97f057",
+        "text": "바이 보호막 너프로 바이 밴 수요가 줄고, 그 밴이 리 신으로 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:nocturne:daf7f9d0",
+        "text": "녹턴 궁극기 재사용 대기시간 증가로 녹턴 밴이 줄어 리 신 밴이 늘었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "리 신 밴률이 51.6%에서 56.4%로 4.7%p 올랐으며, 녹턴·바이 너프로 정글 밴 수요가 옮겨갔을 가능성이 있습니다.",
+    "summaryCites": [
+      "note:26.19:champion:vi:8f97f057",
+      "note:26.19:champion:nocturne:daf7f9d0"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 687
+  },
+  "proseRepairAttempts": 0
+}

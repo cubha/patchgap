@@ -3,7 +3,7 @@
     "game": "tft",
     "from": "18.2",
     "to": "18.3",
-    "generatedAt": "2026-09-30T15:17:04.903Z",
+    "generatedAt": "2026-10-01T15:02:25.498Z",
     "qAlpha": 0.1,
     "boards": {
       "before": 20000,
@@ -15,8 +15,8 @@
     },
     "noteCount": 84,
     "counts": {
-      "unannounced": 12,
-      "indirect-effect": 14,
+      "unannounced": 24,
+      "indirect-effect": 2,
       "announced-inconsistent": 75,
       "announced-consistent": 17,
       "below-threshold": 67,
@@ -24,28 +24,28 @@
       "no-change": 375
     },
     "llm": {
-      "calls": 19,
-      "cacheHits": 9,
+      "calls": 8,
+      "cacheHits": 20,
       "skipped": 0,
       "proseRepairs": 0,
       "usage": {
-        "inputTokens": 2500,
-        "cacheReadInputTokens": 178704,
+        "inputTokens": 1062,
+        "cacheReadInputTokens": 69496,
         "cacheCreationInputTokens": 9928,
-        "outputTokens": 15073
+        "outputTokens": 4930
       },
       "prose": {
         "summaryCount": 28,
         "summaryOverLength": 0,
-        "summaryHedged": 3,
-        "maxSummaryLength": 94,
-        "causeCount": 104,
+        "summaryHedged": 4,
+        "maxSummaryLength": 91,
+        "causeCount": 32,
         "causeOverLength": 0,
-        "causeHedged": 29,
+        "causeHedged": 27,
         "causeHedgedConfident": 0,
         "causeNounEnding": 0,
-        "causeUnnamedTarget": 4,
-        "summaryDeterministic": 9
+        "causeUnnamedTarget": 1,
+        "summaryDeterministic": 0
       }
     }
   },
@@ -73,20 +73,8 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "싸움꾼 상징 피해량이 최대 체력 2%→2.5%로 올라 전면 탱커형 유닛의 가치가 상승했습니다.",
+          "text": "코부코가 싸움꾼이라면 싸움꾼 상징 피해량 상향(최대 체력의 2%→2.5%)이 순위를 끌어올렸을 수 있습니다.",
           "candidateNoteId": "note:tft:18.3:item:싸움꾼-상징:a497a9e0",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "진형 유지 공격력이 9%→11%로 올라 전열 유닛 위주 조합의 기대치가 올랐습니다.",
-          "candidateNoteId": "note:tft:18.3:system:진형-유지:5b4cf303",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카직스 스킬 피해 하향으로 유사 역할 유닛 수요가 코부코 쪽으로 이동했습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카직스:2c342480",
           "verified": true,
           "confidence": "low"
         }
@@ -109,10 +97,112 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "코부코 평균 등수가 4.73등→4.25등으로 개선됐으며, 싸움꾼 상징·진형 유지 강화가 간접 원인으로 보입니다.",
+        "summary": "코부코 평균 등수가 4.73등→4.25등으로 0.47등 개선됐고 CI [-0.78, -0.17]로 유의하나 직접 조항은 없습니다.",
+        "summaryCites": [],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "unit:DA_18_Rengar:avgPlacement",
+      "entityType": "unit",
+      "entityKey": "DA_18_Rengar",
+      "entityName": "렝가",
+      "metric": "avgPlacement",
+      "before": 4.4413075780089155,
+      "after": 4.082683307332293,
+      "delta": -0.3586242706766223,
+      "ci": [
+        -0.6128640985667728,
+        -0.10438444278647174
+      ],
+      "n": {
+        "before": 673,
+        "after": 641
+      },
+      "q": 0.03158763346585399,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8393206520",
+          "KR_8393142832",
+          "KR_8391863176",
+          "KR_8393102715",
+          "KR_8392421565",
+          "KR_8391696119",
+          "KR_8398781280",
+          "KR_8395908210",
+          "KR_8394441932",
+          "KR_8394296476"
+        ],
+        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_18_Rengar]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "item:DA_HextechGunblade:playRate",
+      "entityType": "item",
+      "entityKey": "DA_HextechGunblade",
+      "entityName": "마법공학 총검",
+      "metric": "playRate",
+      "before": 0.2097,
+      "after": 0.29055,
+      "delta": 0.08084999999999998,
+      "ci": [
+        0.07239158108744682,
+        0.08929387671686599
+      ],
+      "n": {
+        "before": 20000,
+        "after": 20000
+      },
+      "q": 0,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "니달리 주문력 형태 강화로 공격력·주문력을 함께 주는 총검 채용이 늘었을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:champion:니달리:0d67b189",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "워윅 스킬 회복량 상향이 흡혈 아이템인 총검 수요를 키웠을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:champion:워윅:7b46e2b4",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8396026338",
+          "KR_8393377881",
+          "KR_8393325700",
+          "KR_8393293089",
+          "KR_8393255439",
+          "KR_8393206520",
+          "KR_8393142832",
+          "KR_8391944865",
+          "KR_8391893837",
+          "KR_8391863176"
+        ],
+        "aggregatePath": "data/aggregated/tft/boards-18.3.json#items[key=DA_HextechGunblade]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "마법공학 총검 등장률은 21.0%에서 29.1%로 8.1%p 올랐고, 니달리 주문력 형태 강화가 원인일 수 있으나 근거는 약합니다.",
         "summaryCites": [
-          "note:tft:18.3:item:싸움꾼-상징:a497a9e0",
-          "note:tft:18.3:system:진형-유지:5b4cf303"
+          "note:tft:18.3:champion:니달리:0d67b189"
         ],
         "summaryVerified": true
       }
@@ -140,20 +230,8 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "싸움꾼 상징 피해량이 최대 체력의 2%→2.5%로 올라 전방 탱커 조합의 가치가 높아졌습니다.",
+          "text": "코부코가 싸움꾼이라면 싸움꾼 상징 피해량 상향(최대 체력의 2%→2.5%)이 순방률을 올렸을 수 있습니다.",
           "candidateNoteId": "note:tft:18.3:item:싸움꾼-상징:a497a9e0",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "구원의 영혼 회복량 7.5%→9% 상향이 전방 유지력을 키워 순방에 보탬이 됐을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:system:구원의-영혼:55645219",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카직스 스킬 피해 하향으로 고비용 대체 픽 수요가 분산된 영향으로 보입니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카직스:2c342480",
           "verified": true,
           "confidence": "low"
         }
@@ -176,10 +254,63 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "코부코 순방률이 47.7%→55.6%(+7.9%p)로 올랐습니다. 직접 변경은 없고 탱커 강화 계열 조정의 파급으로 추정됩니다.",
+        "summary": "코부코 순방률이 47.7%→55.6%(+7.9%p, CI 1.5~14.2%p)로 올랐으나 직접 조항은 없고 싸움꾼 상징 상향이 약한 후보입니다.",
         "summaryCites": [
-          "note:tft:18.3:item:싸움꾼-상징:a497a9e0",
-          "note:tft:18.3:system:구원의-영혼:55645219"
+          "note:tft:18.3:item:싸움꾼-상징:a497a9e0"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "unit:DA_18_Rengar:top4Rate",
+      "entityType": "unit",
+      "entityKey": "DA_18_Rengar",
+      "entityName": "렝가",
+      "metric": "top4Rate",
+      "before": 0.5066864784546805,
+      "after": 0.5803432137285491,
+      "delta": 0.07365673527386862,
+      "ci": [
+        0.019771107886859797,
+        0.12691503045529776
+      ],
+      "n": {
+        "before": 673,
+        "after": 641
+      },
+      "q": 0.03938842879079848,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "카직스 스킬 피해량 하향으로 같은 암살형 아이템이 렝가에게 몰렸을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:champion:카직스:2c342480",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8393206520",
+          "KR_8393142832",
+          "KR_8391863176",
+          "KR_8393102715",
+          "KR_8392421565",
+          "KR_8391696119",
+          "KR_8398781280",
+          "KR_8395908210",
+          "KR_8394441932",
+          "KR_8394296476"
+        ],
+        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_18_Rengar]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "렝가 순방률이 50.7%에서 58.0%로 7.4%p 올랐으며, 카직스 하향의 반사이익일 수 있습니다.",
+        "summaryCites": [
+          "note:tft:18.3:champion:카직스:2c342480"
         ],
         "summaryVerified": true
       }
@@ -207,20 +338,8 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "카시오페아 스킬 피해량 상향(400/600/950→425/630/1,020)이 연계 조합 채택을 끌어올렸을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카시오페아:3e896e3e",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카직스 스킬 피해량 하향으로 밀려난 딜러 수요가 대체 조합으로 이동한 것으로 보입니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카직스:2c342480",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "릴리아 회복량 상향(325/475→350/525)이 해당 계열 유닛 기용을 늘렸을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:릴리아:da2771dd",
+          "text": "보석 연꽃 I의 치명타 확률이 10%→15%로 올라 치명타 기반 조합 채택이 늘었을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:system:보석-연꽃-i:391d6664",
           "verified": true,
           "confidence": "low"
         }
@@ -243,10 +362,160 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "치명적인 꽃 등장률이 25.6%→32.7%(+7.1%p)로 올랐으나 직접 조항은 없고, 카시오페아 상향과 카직스 하향에 따른 조합 이동이 원인으로 추정됩니다.",
+        "summary": "치명적인 꽃 등장률이 25.6%→32.7%(+7.1%p, CI 6.2~8.0%p)로 확실히 올랐지만 직접 원인 조항은 불분명합니다.",
+        "summaryCites": [],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "trait:DA_18_Summoner:playRate",
+      "entityType": "trait",
+      "entityKey": "DA_18_Summoner",
+      "entityName": "소환사",
+      "metric": "playRate",
+      "before": 0.16215,
+      "after": 0.2228,
+      "delta": 0.06065000000000001,
+      "ci": [
+        0.052942363938527644,
+        0.06835129208979152
+      ],
+      "n": {
+        "before": 20000,
+        "after": 20000
+      },
+      "q": 0,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "아지르 스킬 피해량 상향(43/65/103→46/69/110)이 소환사 소속이라면 특성 채용을 끌어올렸을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:champion:아지르:1ba720f7",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8396026338",
+          "KR_8393377881",
+          "KR_8393325700",
+          "KR_8393293089",
+          "KR_8393255439",
+          "KR_8393206520",
+          "KR_8393142832",
+          "KR_8391944865",
+          "KR_8391893837",
+          "KR_8391863176"
+        ],
+        "aggregatePath": "data/aggregated/tft/boards-18.3.json#traits[key=DA_18_Summoner]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "소환사 등장률이 16.2%에서 22.3%로 6.1%p 올랐으며, 원인 후보는 아지르 스킬 피해량 상향 하나로 근거는 약합니다.",
         "summaryCites": [
-          "note:tft:18.3:champion:카시오페아:3e896e3e",
-          "note:tft:18.3:champion:카직스:2c342480"
+          "note:tft:18.3:champion:아지르:1ba720f7"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "unit:DA_18_Akali_AD:top4Rate",
+      "entityType": "unit",
+      "entityKey": "DA_18_Akali_AD",
+      "entityName": "아칼리",
+      "metric": "top4Rate",
+      "before": 0.494921514312096,
+      "after": 0.43437077131258456,
+      "delta": -0.060550742999511464,
+      "ci": [
+        -0.10671641988744049,
+        -0.01388673099136365
+      ],
+      "n": {
+        "before": 1083,
+        "after": 739
+      },
+      "q": 0.054052181151741124,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8396026338",
+          "KR_8393142832",
+          "KR_8395553189",
+          "KR_8394531052",
+          "KR_8393981783",
+          "KR_8393653490",
+          "KR_8392421565",
+          "KR_8391696119",
+          "KR_8391281655",
+          "KR_8391258854"
+        ],
+        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_18_Akali_AD]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "unit:DA_Fiddlesticks18:playRate",
+      "entityType": "unit",
+      "entityKey": "DA_Fiddlesticks18",
+      "entityName": "피들스틱",
+      "metric": "playRate",
+      "before": 0.2184,
+      "after": 0.27635,
+      "delta": 0.057949999999999974,
+      "ci": [
+        0.04950704864046482,
+        0.06638264754888434
+      ],
+      "n": {
+        "before": 20000,
+        "after": 20000
+      },
+      "q": 0,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "악의 여단 패배당 정기 상향(18/25/32→22/28/35)이 소속 유닛 채용을 늘렸을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:system:악의-여단:b0b8eca1",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8396026338",
+          "KR_8393325700",
+          "KR_8393293089",
+          "KR_8393255439",
+          "KR_8393206520",
+          "KR_8393142832",
+          "KR_8391944865",
+          "KR_8391893837",
+          "KR_8391863176",
+          "KR_8391794907"
+        ],
+        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_Fiddlesticks18]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "피들스틱 등장률이 21.8%→27.6%로 5.8%p 올랐으며, 악의 여단 패배당 정기 상향의 파급일 수 있습니다.",
+        "summaryCites": [
+          "note:tft:18.3:system:악의-여단:b0b8eca1"
         ],
         "summaryVerified": true
       }
@@ -274,20 +543,14 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "베이가 스킬 피해량 상향으로 주문력 캐리 보드가 늘며 회복 지원인 소라카 동반 채용이 늘어난 것으로 보입니다.",
-          "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "타릭 기본 보호막이 100/225에서 75/150으로 깎여, 대체 지원 유닛으로 소라카가 선택된 흐름입니다.",
-          "candidateNoteId": "note:tft:18.3:champion:타릭:21e22d94",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "구원의 영혼 회복량 7.5%→9% 상향이 회복 중심 후방 구성의 가치를 올렸습니다.",
+          "text": "구원의 영혼 체력 회복량이 7.5%에서 9%로 늘어 회복형 구성 채택이 늘었을 수 있습니다.",
           "candidateNoteId": "note:tft:18.3:system:구원의-영혼:55645219",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "타릭 회복량 상향이 회복 중심 덱을 키워 소라카 동반 기용을 늘렸을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:champion:타릭:f0d46c43",
           "verified": true,
           "confidence": "low"
         }
@@ -310,10 +573,65 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "소라카 등장률이 14.6%에서 19.8%로 바뀌었습니다(+5.2%p). 패치노트에 직접 조항이 없습니다.",
-        "summaryCites": [],
-        "summaryVerified": true,
-        "summaryDeterministic": true
+        "summary": "소라카 등장률이 14.6%에서 19.8%로 5.2%p 올랐으며, 구원의 영혼 회복량 상향의 파급일 수 있으나 근거는 약합니다.",
+        "summaryCites": [
+          "note:tft:18.3:system:구원의-영혼:55645219"
+        ],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "unit:DA_18_Zyra:playRate",
+      "entityType": "unit",
+      "entityKey": "DA_18_Zyra",
+      "entityName": "자이라",
+      "metric": "playRate",
+      "before": 0.1459,
+      "after": 0.1972,
+      "delta": 0.051299999999999985,
+      "ci": [
+        0.04392612970354024,
+        0.0586706030788199
+      ],
+      "n": {
+        "before": 20000,
+        "after": 20000
+      },
+      "q": 0,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "꽃의 부름의 4단계 유닛 획득 최소 가격이 6/4골드에서 5/3골드로 낮아져 자이라 기용이 늘었을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:system:꽃의-부름:3d5c2646",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8396026338",
+          "KR_8393377881",
+          "KR_8393325700",
+          "KR_8393293089",
+          "KR_8393255439",
+          "KR_8393206520",
+          "KR_8393142832",
+          "KR_8391944865",
+          "KR_8391893837",
+          "KR_8391863176"
+        ],
+        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_18_Zyra]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "자이라 등장률이 14.6%에서 19.7%로 5.1%p 올랐으며, 꽃의 부름 획득 비용 완화와의 연관성은 약합니다.",
+        "summaryCites": [
+          "note:tft:18.3:system:꽃의-부름:3d5c2646"
+        ],
+        "summaryVerified": true
       }
     },
     {
@@ -337,26 +655,7 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "카시오페아 스킬 피해량 상향(400/600/950→425/630/1,020)이 해당 특성 기용을 늘렸을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카시오페아:3e896e3e",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "사냥꾼 추가 공격력 하향으로 경쟁 조합이 밀려나며 반사 계열 특성 채용이 늘어난 것으로 보입니다.",
-          "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "싸움꾼 상징 피해량 2%→2.5% 상향이 체력 기반 전열 구성의 수요를 키웠습니다.",
-          "candidateNoteId": "note:tft:18.3:item:싸움꾼-상징:a497a9e0",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8396026338",
@@ -375,10 +674,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "가시의 여인 등장률이 14.6%→19.7%(+5.1%p)로 올랐지만 직접 조항은 없고, 사냥꾼 특성 하향 등 경쟁 조합 약화의 반사 효과로 추정됩니다.",
-        "summaryCites": [
-          "note:tft:18.3:system:사냥꾼:616a50ac"
-        ],
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -403,32 +700,7 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "사냥꾼 추가 공격력이 4/5단계에서 하향돼 밀려난 수요가 경쟁자 조합으로 옮겨갔을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "드레이븐 현상금 사냥꾼 보상 연쇄 하향으로 상위 캐리 축이 바뀌며 경쟁자 채용이 늘었습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:드레이븐:9fa21721",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "알리스타 스킬 피해량이 주문력 225→420(3성)까지 대폭 상향돼 전방 유닛 채용이 늘었습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "워윅 스킬 피해량·회복 동시 상향으로 함께 서는 특성의 등장률이 밀려 올라갔습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:워윅:adef4bb0",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8396026338",
@@ -447,10 +719,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "경쟁자 등장률이 7.9%에서 11.7%로 바뀌었습니다(+3.8%p). 패치노트에 직접 조항이 없습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
         "summaryCites": [],
-        "summaryVerified": true,
-        "summaryDeterministic": true
+        "summaryVerified": true
       }
     },
     {
@@ -474,32 +745,7 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "기원자 4단계 마나 재생이 9에서 8로 낮아져 기원자 기반 구성의 가치가 떨어졌습니다.",
-          "candidateNoteId": "note:tft:18.3:system:기원자:3f993458",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "기원자 상징 마나 재생이 3에서 2로 줄어 상징으로 기원자 수를 늘리는 구성의 매력이 감소했습니다.",
-          "candidateNoteId": "note:tft:18.3:item:기원자-상징:04e357a3",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "베이가 스킬 피해량이 대폭 상향되어 같은 주문력 캐리 자리 경쟁에서 밀렸습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카시오페아 스킬 피해량이 상향되어 대체 주문력 캐리 선택지가 강해졌습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카시오페아:3e896e3e",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393325700",
@@ -518,10 +764,82 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "케일 등장률이 4.9%에서 2.6%로 바뀌었습니다(-2.3%p). 패치노트에 직접 조항이 없습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
-        "summaryVerified": true,
-        "summaryDeterministic": true
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "unit:DA_18_Leona:playRate",
+      "entityType": "unit",
+      "entityKey": "DA_18_Leona",
+      "entityName": "레오나",
+      "metric": "playRate",
+      "before": 0.0607,
+      "after": 0.03865,
+      "delta": -0.02205,
+      "ci": [
+        -0.026316129605795567,
+        -0.017803818796777327
+      ],
+      "n": {
+        "before": 20000,
+        "after": 20000
+      },
+      "q": 0,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "알리스타 스킬 피해량이 크게 올라 앞라인 자리를 레오나 대신 차지했을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "람머스 보호막 강화로 탱커 수요가 람머스로 옮겨갔을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:champion:람머스:9b820b51",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "레오나가 엄호대 소속이라면 3단계 방어력 120→115 하향이 채용을 줄였을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:system:엄호대:ad7723b2",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "영원한 서약의 탱커 마나 15→10 하향이 탱커 운용을 약화시켰을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:item:영원한-서약:2e842b57",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8393325700",
+          "KR_8391893837",
+          "KR_8391863176",
+          "KR_8395553189",
+          "KR_8393299358",
+          "KR_8393102715",
+          "KR_8392636864",
+          "KR_8391696119",
+          "KR_8399295767",
+          "KR_8398719305"
+        ],
+        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_18_Leona]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "레오나 등장률이 6.1%에서 3.9%로 2.2%p 하락했으며, 알리스타·람머스 등 경쟁 탱커 상향이 원인일 수 있습니다.",
+        "summaryCites": [
+          "note:tft:18.3:champion:알리스타:d527c10f",
+          "note:tft:18.3:champion:람머스:9b820b51"
+        ],
+        "summaryVerified": true
       }
     },
     {
@@ -545,26 +863,7 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "베이가 스킬 피해량 대폭 상향으로 주문력 캐리 수요가 옮겨가며 햇빛 채용이 밀렸을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "알리스타 스킬 피해량이 약 1.8배로 올라 전열 조합 선택지가 넓어졌습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "스태틱의 단검 주문력 상향으로 다른 마법 피해 조합의 가치가 커졌습니다.",
-          "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393325700",
@@ -583,11 +882,53 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "햇빛 등장률이 4.7%→2.6%(-2.1%p)로 떨어졌습니다. 럭스 상향에도 하락한 만큼 베이가·알리스타 등 경쟁 조합 강화의 반작용으로 보입니다.",
-        "summaryCites": [
-          "note:tft:18.3:champion:베이가:c44fce5f",
-          "note:tft:18.3:champion:알리스타:d527c10f"
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "unit:DA_18_Akali_AD:playRate",
+      "entityType": "unit",
+      "entityKey": "DA_18_Akali_AD",
+      "entityName": "아칼리",
+      "metric": "playRate",
+      "before": 0.05415,
+      "after": 0.03695,
+      "delta": -0.0172,
+      "ci": [
+        -0.021295407424766544,
+        -0.01312222747525178
+      ],
+      "n": {
+        "before": 20000,
+        "after": 20000
+      },
+      "q": 0,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8396026338",
+          "KR_8393142832",
+          "KR_8395553189",
+          "KR_8394531052",
+          "KR_8393981783",
+          "KR_8393653490",
+          "KR_8392421565",
+          "KR_8391696119",
+          "KR_8391281655",
+          "KR_8391258854"
         ],
+        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_18_Akali_AD]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -612,26 +953,7 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "스태틱의 단검 기본 주문력 15%→25% 상향으로 주문력 캐리 수요가 늘며 유나라 기용이 증가했을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "사냥꾼 추가 공격력 45/65%→40/60% 너프로 공격력 캐리가 밀려난 자리를 유나라가 대체한 것으로 보입니다.",
-          "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카직스 스킬 피해 하향으로 동일 슬롯 캐리 경쟁이 약해지며 유나라 채용이 늘었습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카직스:2c342480",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393325700",
@@ -650,10 +972,69 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "유나라 등장률이 6.0%에서 7.8%로 바뀌었습니다(+1.8%p). 패치노트에 직접 조항이 없습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
-        "summaryVerified": true,
-        "summaryDeterministic": true
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "unit:DA_18_Tristana:playRate",
+      "entityType": "unit",
+      "entityKey": "DA_18_Tristana",
+      "entityName": "트리스타나",
+      "metric": "playRate",
+      "before": 0.0443,
+      "after": 0.03215,
+      "delta": -0.012150000000000001,
+      "ci": [
+        -0.015917960451802424,
+        -0.008397930516734292
+      ],
+      "n": {
+        "before": 20000,
+        "after": 20000
+      },
+      "q": 0,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "트리스타나가 사냥꾼이라면 추가 공격력 하향(45/65%→40/60%)으로 기용이 줄었을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "공격력 딜러 아이템인 황금 징수의 총 공격력 하향(40%→35%)이 일부 영향을 줬을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:item:황금-징수의-총:cce21382",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8393377881",
+          "KR_8391944865",
+          "KR_8391633077",
+          "KR_8395553189",
+          "KR_8392471981",
+          "KR_8392421565",
+          "KR_8391281655",
+          "KR_8391258854",
+          "KR_8399295767",
+          "KR_8398801455"
+        ],
+        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_18_Tristana]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "트리스타나 등장률은 4.4%에서 3.2%로 1.2%p 줄었으며, 사냥꾼 추가 공격력 하향 등 간접 약화의 근거는 약합니다.",
+        "summaryCites": [
+          "note:tft:18.3:system:사냥꾼:616a50ac"
+        ],
+        "summaryVerified": true
       }
     },
     {
@@ -677,32 +1058,7 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "영원한 서약의 탱커 스킬 마나 15→10 너프로 전방 탱커 채용 자체가 줄었을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:item:영원한-서약:2e842b57",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "람머스 보호막 350/450/550→400/550/725 버프로 경쟁 탱커에 자리를 내준 것으로 보입니다.",
-          "candidateNoteId": "note:tft:18.3:champion:람머스:9b820b51",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "알리스타 스킬 피해·회복 대폭 버프가 탱커 슬롯 경쟁을 심화시켰습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "엄호대 방어·마저 120→115 너프로 방어 조합 전반의 선호도가 낮아졌습니다.",
-          "candidateNoteId": "note:tft:18.3:system:엄호대:ad7723b2",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8396026338",
@@ -721,10 +1077,112 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "코부코 등장률이 3.0%에서 1.9%로 바뀌었습니다(-1.1%p). 패치노트에 직접 조항이 없습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다.",
         "summaryCites": [],
-        "summaryVerified": true,
-        "summaryDeterministic": true
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "item:DA_18_EmblemElderwood:playRate",
+      "entityType": "item",
+      "entityKey": "DA_18_EmblemElderwood",
+      "entityName": "나무정령 상징",
+      "metric": "playRate",
+      "before": 0.02665,
+      "after": 0.0359,
+      "delta": 0.009250000000000001,
+      "ci": [
+        0.005843082167331059,
+        0.012672649834837303
+      ],
+      "n": {
+        "before": 20000,
+        "after": 20000
+      },
+      "q": 9.509089127224257e-7,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [
+        {
+          "text": "사냥꾼 상징 약화(처치 관여당 공격력 18%→15%)로 상징 선택이 나무정령 상징으로 옮겨갔을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "기원자 상징 마나 재생 3→2 약화로 다른 상징 수요가 나무정령 상징에 일부 흡수됐을 가능성이 있습니다.",
+          "candidateNoteId": "note:tft:18.3:item:기원자-상징:04e357a3",
+          "verified": true,
+          "confidence": "low"
+        }
+      ],
+      "evidence": {
+        "matchIds": [
+          "KR_8396026338",
+          "KR_8393255439",
+          "KR_8391255818",
+          "KR_8398460328",
+          "KR_8392471981",
+          "KR_8391281655",
+          "KR_8399086390",
+          "KR_8398801455",
+          "KR_8398778826",
+          "KR_8398748402"
+        ],
+        "aggregatePath": "data/aggregated/tft/boards-18.3.json#items[key=DA_18_EmblemElderwood]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "나무정령 상징 등장률이 2.7%→3.6%(+0.9%p, CI 0.6~1.3%p)로 유의하게 올랐으나 직접 조항은 없습니다.",
+        "summaryCites": [],
+        "summaryVerified": true
+      }
+    },
+    {
+      "id": "item:DA_18_EmblemBlackthorn:playRate",
+      "entityType": "item",
+      "entityKey": "DA_18_EmblemBlackthorn",
+      "entityName": "검은 가시 상징",
+      "metric": "playRate",
+      "before": 0.0274,
+      "after": 0.0352,
+      "delta": 0.007800000000000001,
+      "ci": [
+        0.0043901670492403335,
+        0.011223069077243152
+      ],
+      "n": {
+        "before": 20000,
+        "after": 20000
+      },
+      "q": 0.00005965617738268001,
+      "status": "unannounced",
+      "matchedNoteId": null,
+      "matchedNoteIds": [],
+      "causes": [],
+      "evidence": {
+        "matchIds": [
+          "KR_8396026338",
+          "KR_8398460328",
+          "KR_8393981783",
+          "KR_8393102715",
+          "KR_8392471981",
+          "KR_8391258854",
+          "KR_8399247124",
+          "KR_8399086390",
+          "KR_8398801455",
+          "KR_8398778826"
+        ],
+        "aggregatePath": "data/aggregated/tft/boards-18.3.json#items[key=DA_18_EmblemBlackthorn]",
+        "noteAnchor": null
+      },
+      "llm": {
+        "skipped": false,
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
+        "summaryVerified": true
       }
     },
     {
@@ -748,32 +1206,7 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "사냥꾼 추가 공격력이 20/30/40/60%로 하향되며 공격력 캐리 조합 수요가 줄었습니다.",
-          "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "황금 징수의 총 공격력이 35%로 하향돼 공격력 아이템 조합 선택이 축소됐습니다.",
-          "candidateNoteId": "note:tft:18.3:item:황금-징수의-총:cce21382",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카직스 스킬 피해량 하향으로 주요 공격력 캐리 채용이 줄었습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카직스:2c342480",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카밀 스킬 피해량이 공격력 375/640으로 하향돼 공격력 캐리 수요가 감소했습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카밀:ee0ba0ac",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393293089",
@@ -792,12 +1225,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "생선대가리 등장률이 1.2%→0.9%로 내렸습니다. 사냥꾼 공격력 하향과 카직스·카밀 너프로 공격력 캐리 수요가 줄어든 여파로 보입니다.",
-        "summaryCites": [
-          "note:tft:18.3:system:사냥꾼:616a50ac",
-          "note:tft:18.3:champion:카직스:2c342480",
-          "note:tft:18.3:champion:카밀:ee0ba0ac"
-        ],
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
@@ -822,26 +1251,7 @@
       "status": "unannounced",
       "matchedNoteId": null,
       "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "사냥꾼 추가 공격력이 45/65%에서 40/60%로 하향되며 공격력 캐리 빌드 자체가 줄어든 영향으로 보입니다.",
-          "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카밀 스킬 피해량 하향으로 근접 공격력 캐리 채용이 줄며 동일 아이템 수요가 감소했을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카밀:ee0ba0ac",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "황금 징수의 총 공격력 40%→35% 하향과 함께 공격력 아이템군 전반의 선호가 낮아진 정황입니다.",
-          "candidateNoteId": "note:tft:18.3:item:황금-징수의-총:cce21382",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
+      "causes": [],
       "evidence": {
         "matchIds": [
           "KR_8393325700",
@@ -860,233 +1270,8 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "은빛 여명 등장률이 1.1%→0.8%로 소폭 하락했는데, 사냥꾼 공격력 하향 등 공격력 캐리 축 약화의 파급으로 추정됩니다.",
-        "summaryCites": [
-          "note:tft:18.3:system:사냥꾼:616a50ac"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "unit:DA_18_Rengar:avgPlacement",
-      "entityType": "unit",
-      "entityKey": "DA_18_Rengar",
-      "entityName": "렝가",
-      "metric": "avgPlacement",
-      "before": 4.4413075780089155,
-      "after": 4.082683307332293,
-      "delta": -0.3586242706766223,
-      "ci": [
-        -0.6128640985667728,
-        -0.10438444278647174
-      ],
-      "n": {
-        "before": 673,
-        "after": 641
-      },
-      "q": 0.03158763346585399,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "카직스 고립 피해 너프로 근접 암살 캐리 경쟁자가 약해지며 렝가로 아이템·자리가 몰렸습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카직스:721aa591",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "카밀 스킬 피해 너프(공격력 700→640)로 공격력 캐리 대안 수요가 렝가에 집중됐습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카밀:ee0ba0ac",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "드레이븐 현상금 사냥꾼 조건 전반 너프로 공격력 캐리 축이 렝가로 이동했습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:드레이븐:66f8c74a",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "진형 유지 공격력 9%→11% 상향이 공격력 기반 렝가의 딜에 직접 더해졌습니다.",
-          "candidateNoteId": "note:tft:18.3:system:진형-유지:5b4cf303",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8393206520",
-          "KR_8393142832",
-          "KR_8391863176",
-          "KR_8393102715",
-          "KR_8392421565",
-          "KR_8391696119",
-          "KR_8398781280",
-          "KR_8395908210",
-          "KR_8394441932",
-          "KR_8394296476"
-        ],
-        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_18_Rengar]",
-        "noteAnchor": "https://teamfighttactics.leagueoflegends.com/ko-kr/news/game-updates/teamfight-tactics-patch-18-3/#patch-midpatch-updates"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "렝가 평균 등수가 4.44등→4.08등으로 강화됐는데, 카직스·카밀 피해량 너프로 공격력 근접 캐리 경쟁이 줄어든 반사 이익입니다.",
-        "summaryCites": [
-          "note:tft:18.3:champion:카직스:721aa591",
-          "note:tft:18.3:champion:카밀:ee0ba0ac"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "item:DA_HextechGunblade:playRate",
-      "entityType": "item",
-      "entityKey": "DA_HextechGunblade",
-      "entityName": "마법공학 총검",
-      "metric": "playRate",
-      "before": 0.2097,
-      "after": 0.29055,
-      "delta": 0.08084999999999998,
-      "ci": [
-        0.07239158108744682,
-        0.08929387671686599
-      ],
-      "n": {
-        "before": 20000,
-        "after": 20000
-      },
-      "q": 0,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "베이가 스킬 기본 피해량이 크게 올라 주문력 캐리 채용이 늘며 총검 장착이 증가했습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "알리스타 스킬 피해량이 주문력 100/150/225에서 180/270/420으로 급등해 주문력 아이템 수요가 커졌습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "스태틱의 단검 기본 주문력 15%→25% 버프로 주문력 조합 자체가 강해졌습니다.",
-          "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "황금 징수의 총 공격력 40%→35% 너프로 공격력 캐리가 밀리며 주문력 아이템으로 수요가 이동했습니다.",
-          "candidateNoteId": "note:tft:18.3:item:황금-징수의-총:cce21382",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "사냥꾼 추가 공격력 너프로 공격력 축이 약화된 반사이익을 받았을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카시오페아 스킬 피해량 버프도 주문력 캐리 채용을 늘렸습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카시오페아:3e896e3e",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8396026338",
-          "KR_8393377881",
-          "KR_8393325700",
-          "KR_8393293089",
-          "KR_8393255439",
-          "KR_8393206520",
-          "KR_8393142832",
-          "KR_8391944865",
-          "KR_8391893837",
-          "KR_8391863176"
-        ],
-        "aggregatePath": "data/aggregated/tft/boards-18.3.json#items[key=DA_HextechGunblade]",
-        "noteAnchor": "https://teamfighttactics.leagueoflegends.com/ko-kr/news/game-updates/teamfight-tactics-patch-18-3/#patch-large-changes"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "마법공학 총검 등장률이 21.0%에서 29.1%로 바뀌었습니다(+8.1%p). 패치노트에 직접 조항이 없습니다.",
+        "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
         "summaryCites": [],
-        "summaryVerified": true,
-        "summaryDeterministic": true
-      }
-    },
-    {
-      "id": "unit:DA_18_Rengar:top4Rate",
-      "entityType": "unit",
-      "entityKey": "DA_18_Rengar",
-      "entityName": "렝가",
-      "metric": "top4Rate",
-      "before": 0.5066864784546805,
-      "after": 0.5803432137285491,
-      "delta": 0.07365673527386862,
-      "ci": [
-        0.019771107886859797,
-        0.12691503045529776
-      ],
-      "n": {
-        "before": 673,
-        "after": 641
-      },
-      "q": 0.03938842879079848,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "카직스 스킬 기본 피해량 하향으로 같은 자리 근접 캐리 수요가 렝가로 이동했습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카직스:2c342480",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "카직스 고립 피해량까지 하향되며 암살 캐리 1순위가 렝가로 교체됐습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카직스:721aa591",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "카밀 스킬 피해량 하향으로 공격력 아이템 배분이 렝가 쪽으로 쏠린 영향일 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카밀:ee0ba0ac",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8393206520",
-          "KR_8393142832",
-          "KR_8391863176",
-          "KR_8393102715",
-          "KR_8392421565",
-          "KR_8391696119",
-          "KR_8398781280",
-          "KR_8395908210",
-          "KR_8394441932",
-          "KR_8394296476"
-        ],
-        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_18_Rengar]",
-        "noteAnchor": "https://teamfighttactics.leagueoflegends.com/ko-kr/news/game-updates/teamfight-tactics-patch-18-3/#patch-midpatch-updates"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "카직스 스킬 피해량 이중 하향으로 근접 캐리 수요가 렝가로 옮겨져 순방률이 50.7%→58.0%로 올랐습니다.",
-        "summaryCites": [
-          "note:tft:18.3:champion:카직스:2c342480",
-          "note:tft:18.3:champion:카직스:721aa591"
-        ],
         "summaryVerified": true
       }
     },
@@ -1113,26 +1298,32 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "베이가 스킬 피해량이 기본·강화 모두 상향되며 주문력 캐리 채택이 늘어 대천사 장착이 증가했습니다.",
+          "text": "베이가 스킬 기본 피해량이 주문력 175/265/395/670에서 200/300/450/765로 올라 주문력 캐리 수요가 늘었습니다.",
           "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "카시오페아 스킬 피해량 상향으로 장기전 주문력 캐리 수요가 커졌습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카시오페아:3e896e3e",
+          "text": "베이가 강화 스킬 피해량도 올라 주문력 계수 효율이 커졌고, 대천사의 지팡이 채용이 늘었습니다.",
+          "candidateNoteId": "note:tft:18.3:champion:베이가:726dcf8f",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "사냥꾼 추가 공격력 너프로 공격력 캐리 축이 약해지며 주문력 아이템으로 무게가 옮겨갔습니다.",
-          "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
+          "text": "카르마 폭발 피해량 상향으로 주문력 캐리 채용이 늘어 지팡이 수요를 끌어올렸을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:champion:카르마:98f7ca1f",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "황금 징수의 총 공격력 40%→35% 너프가 공격력 아이템 선호를 낮췄을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:item:황금-징수의-총:cce21382",
+          "text": "카시오페아 스킬 피해량 상향이 주문력 아이템 수요 증가에 기여했을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:champion:카시오페아:3e896e3e",
+          "verified": true,
+          "confidence": "low"
+        },
+        {
+          "text": "알리스타 스킬 피해량이 주문력 100/150/225에서 180/270/420으로 올라 주문력 아이템 채용이 늘었을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
           "verified": true,
           "confidence": "low"
         }
@@ -1155,301 +1346,10 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "대천사의 지팡이 등장률이 18.3%에서 25.2%로 바뀌었습니다(+6.9%p). 패치노트에 직접 조항이 없습니다.",
-        "summaryCites": [],
-        "summaryVerified": true,
-        "summaryDeterministic": true
-      }
-    },
-    {
-      "id": "trait:DA_18_Summoner:playRate",
-      "entityType": "trait",
-      "entityKey": "DA_18_Summoner",
-      "entityName": "소환사",
-      "metric": "playRate",
-      "before": 0.16215,
-      "after": 0.2228,
-      "delta": 0.06065000000000001,
-      "ci": [
-        0.052942363938527644,
-        0.06835129208979152
-      ],
-      "n": {
-        "before": 20000,
-        "after": 20000
-      },
-      "q": 0,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "베이가 스킬 기본 피해량이 주문력 175/265/395/670에서 200/300/450/765로 상향돼 소환사 채용이 늘었습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
-          "verified": true,
-          "confidence": "high"
-        },
-        {
-          "text": "베이가 강화 스킬 피해량도 주문력 265/400/595에서 300/450/675로 올라 코어 캐리 가치가 커졌습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:베이가:726dcf8f",
-          "verified": true,
-          "confidence": "high"
-        },
-        {
-          "text": "아지르 스킬 피해량 43/65/103 → 46/69/110 상향이 소환사 저비용 축을 보강했습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:아지르:1ba720f7",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "기원자 마나 재생 9 → 8 너프로 주문력 조합 수요가 소환사 쪽으로 이동했을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:system:기원자:3f993458",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "스태틱의 단검 기본 주문력 15% → 25% 상향이 주문력 캐리 중심 소환사 구성을 밀어줬습니다.",
-          "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8396026338",
-          "KR_8393377881",
-          "KR_8393325700",
-          "KR_8393293089",
-          "KR_8393255439",
-          "KR_8393206520",
-          "KR_8393142832",
-          "KR_8391944865",
-          "KR_8391893837",
-          "KR_8391863176"
-        ],
-        "aggregatePath": "data/aggregated/tft/boards-18.3.json#traits[key=DA_18_Summoner]",
-        "noteAnchor": "https://teamfighttactics.leagueoflegends.com/ko-kr/news/game-updates/teamfight-tactics-patch-18-3/#patch-large-changes"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "소환사 등장률 16.2%→22.3%(+6.1%p) 상승은 베이가 스킬 피해량 이중 상향과 아지르 피해량 상향이 특성 핵심 유닛을 강화한 결과입니다.",
+        "summary": "대천사의 지팡이 등장률이 18.3%→25.2%(+6.9%p)로 올랐고, 베이가 스킬 피해량 상향으로 주문력 캐리 수요가 늘었습니다.",
         "summaryCites": [
           "note:tft:18.3:champion:베이가:c44fce5f",
-          "note:tft:18.3:champion:베이가:726dcf8f",
-          "note:tft:18.3:champion:아지르:1ba720f7"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "unit:DA_18_Akali_AD:top4Rate",
-      "entityType": "unit",
-      "entityKey": "DA_18_Akali_AD",
-      "entityName": "아칼리",
-      "metric": "top4Rate",
-      "before": 0.494921514312096,
-      "after": 0.43437077131258456,
-      "delta": -0.060550742999511464,
-      "ci": [
-        -0.10671641988744049,
-        -0.01388673099136365
-      ],
-      "n": {
-        "before": 1083,
-        "after": 739
-      },
-      "q": 0.054052181151741124,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "사냥꾼 추가 공격력이 4·5단계에서 45/65%→40/60%로 깎여 사냥꾼 캐리 라인의 체급이 하락했습니다.",
-          "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "사냥꾼 상징 처치 관여당 공격력 18%→15% 너프로 사냥꾼 확장 구성의 기대치가 낮아졌습니다.",
-          "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카직스 스킬 피해 너프로 같은 암살 계열 조합 전체의 순방 기대치가 내려갔을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카직스:2c342480",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "황금 징수의 총 공격력 40%→35% 너프가 근접 딜러 아이템 선택지를 약화시켰습니다.",
-          "candidateNoteId": "note:tft:18.3:item:황금-징수의-총:cce21382",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8396026338",
-          "KR_8393142832",
-          "KR_8395553189",
-          "KR_8394531052",
-          "KR_8393981783",
-          "KR_8393653490",
-          "KR_8392421565",
-          "KR_8391696119",
-          "KR_8391281655",
-          "KR_8391258854"
-        ],
-        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_18_Akali_AD]",
-        "noteAnchor": "https://teamfighttactics.leagueoflegends.com/ko-kr/news/game-updates/teamfight-tactics-patch-18-3/#patch-large-changes"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "아칼리 순방률 49.5%→43.4%(-6.1%p)는 직접 조항 없이, 사냥꾼 추가 공격력(45/65%→40/60%)과 사냥꾼 상징 너프로 소속 라인이 약화된 결과입니다.",
-        "summaryCites": [
-          "note:tft:18.3:system:사냥꾼:616a50ac",
-          "note:tft:18.3:item:사냥꾼-상징:da474098"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "unit:DA_Fiddlesticks18:playRate",
-      "entityType": "unit",
-      "entityKey": "DA_Fiddlesticks18",
-      "entityName": "피들스틱",
-      "metric": "playRate",
-      "before": 0.2184,
-      "after": 0.27635,
-      "delta": 0.057949999999999974,
-      "ci": [
-        0.04950704864046482,
-        0.06638264754888434
-      ],
-      "n": {
-        "before": 20000,
-        "after": 20000
-      },
-      "q": 0,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "악의 여단 패배당 정기가 18/25/32에서 22/28/35로 올라 소속 유닛 채용이 늘었습니다.",
-          "candidateNoteId": "note:tft:18.3:system:악의-여단:b0b8eca1",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "스태틱의 단검 기본 주문력이 15%에서 25%로 올라 주문력 광역 딜러 가치가 상승했습니다.",
-          "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "카직스 스킬 피해 너프로 밀려난 딜러 자리를 대체했을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카직스:2c342480",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8396026338",
-          "KR_8393325700",
-          "KR_8393293089",
-          "KR_8393255439",
-          "KR_8393206520",
-          "KR_8393142832",
-          "KR_8391944865",
-          "KR_8391893837",
-          "KR_8391863176",
-          "KR_8391794907"
-        ],
-        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_Fiddlesticks18]",
-        "noteAnchor": "https://teamfighttactics.leagueoflegends.com/ko-kr/news/game-updates/teamfight-tactics-patch-18-3/#patch-large-changes"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "피들스틱 등장률이 21.8%→27.6%(+5.8%p) 상승했습니다. 악의 여단 정기 버프와 스태틱의 단검 주문력 25% 상향이 주 동인입니다.",
-        "summaryCites": [
-          "note:tft:18.3:system:악의-여단:b0b8eca1",
-          "note:tft:18.3:item:스태틱의-단검:ccfc29ef"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "unit:DA_18_Zyra:playRate",
-      "entityType": "unit",
-      "entityKey": "DA_18_Zyra",
-      "entityName": "자이라",
-      "metric": "playRate",
-      "before": 0.1459,
-      "after": 0.1972,
-      "delta": 0.051299999999999985,
-      "ci": [
-        0.04392612970354024,
-        0.0586706030788199
-      ],
-      "n": {
-        "before": 20000,
-        "after": 20000
-      },
-      "q": 0,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "스태틱의 단검 기본 주문력이 15%→25%로 올라 주문력 유닛 기용이 늘었습니다.",
-          "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "사냥꾼 추가 공격력 너프(45/65%→40/60%)로 공격력 조합이 밀리며 주문력 보드가 반사이익을 얻었습니다.",
-          "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "베이가 스킬 피해량 상향으로 주문력 캐리 보드가 늘어 함께 서는 유닛 등장률이 올랐습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:베이가:c44fce5f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카직스 스킬 피해량 너프로 밀려난 자리를 주문력 유닛이 대체했을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카직스:2c342480",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8396026338",
-          "KR_8393377881",
-          "KR_8393325700",
-          "KR_8393293089",
-          "KR_8393255439",
-          "KR_8393206520",
-          "KR_8393142832",
-          "KR_8391944865",
-          "KR_8391893837",
-          "KR_8391863176"
-        ],
-        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_18_Zyra]",
-        "noteAnchor": "https://teamfighttactics.leagueoflegends.com/ko-kr/news/game-updates/teamfight-tactics-patch-18-3/#patch-large-changes"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "자이라 등장률 14.6%→19.7%(+5.1%p)는 스태틱의 단검 주문력 25% 상향과 사냥꾼 공격력 너프로 주문력 보드가 힘을 얻은 결과입니다.",
-        "summaryCites": [
-          "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
-          "note:tft:18.3:system:사냥꾼:616a50ac"
+          "note:tft:18.3:champion:베이가:726dcf8f"
         ],
         "summaryVerified": true
       }
@@ -1477,37 +1377,25 @@
       "matchedNoteIds": [],
       "causes": [
         {
-          "text": "드레이븐 현상금 사냥꾼 7골드 보상 요구 피해량이 8,000→10,000으로 올라 보상 체감이 크게 줄었습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:드레이븐:66f8c74a",
-          "verified": true,
-          "confidence": "high"
-        },
-        {
-          "text": "12골드 획득 요구 처치가 6회→8회로 늘어 골드 수급형 운영의 기대값이 떨어졌습니다.",
+          "text": "드레이븐의 현상금 사냥꾼 12골드 요구 처치가 6회→8회로 늘어 현상금 운영 보상이 줄었습니다.",
           "candidateNoteId": "note:tft:18.3:champion:드레이븐:5391bfea",
           "verified": true,
-          "confidence": "high"
+          "confidence": "medium"
         },
         {
-          "text": "스킬 8회 사용 보상 새로고침이 10회→6회로 줄어 리롤 이득이 축소됐습니다.",
+          "text": "현상금 사냥꾼 스킬 8회 보상이 새로고침 10회→6회로 줄어 채용 동기가 약해졌습니다.",
           "candidateNoteId": "note:tft:18.3:champion:드레이븐:9fa21721",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "5단계 유닛 보상 기본 공격 요구가 50회→60회로 늘어 후반 보상 달성이 어려워졌습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:드레이븐:a0771ecf",
+          "text": "7골드 요구 피해량이 8,000→10,000으로 올라 보상 획득이 늦어졌습니다.",
+          "candidateNoteId": "note:tft:18.3:champion:드레이븐:66f8c74a",
           "verified": true,
           "confidence": "medium"
         },
         {
-          "text": "4단계 유닛 보상 스킬 사용 요구가 5회→6회로 늘어난 점도 채용률을 낮췄습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:드레이븐:5d081426",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "황금 징수의 총 공격력이 40%→35%로 줄어 골드 연계 빌드의 매력이 함께 감소했을 수 있습니다.",
+          "text": "황금 징수의 총 공격력 40%→35% 하향이 골드 수급 조합 선호를 낮췄을 수 있습니다.",
           "candidateNoteId": "note:tft:18.3:item:황금-징수의-총:cce21382",
           "verified": true,
           "confidence": "low"
@@ -1531,368 +1419,9 @@
       },
       "llm": {
         "skipped": false,
-        "summary": "현상금 추적자 등장률이 10.9%에서 7.1%로 바뀌었습니다(-3.8%p). 패치노트에 직접 조항이 없습니다.",
-        "summaryCites": [],
-        "summaryVerified": true,
-        "summaryDeterministic": true
-      }
-    },
-    {
-      "id": "unit:DA_18_Leona:playRate",
-      "entityType": "unit",
-      "entityKey": "DA_18_Leona",
-      "entityName": "레오나",
-      "metric": "playRate",
-      "before": 0.0607,
-      "after": 0.03865,
-      "delta": -0.02205,
-      "ci": [
-        -0.026316129605795567,
-        -0.017803818796777327
-      ],
-      "n": {
-        "before": 20000,
-        "after": 20000
-      },
-      "q": 0,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "영원한 서약의 탱커 마나 회복이 15에서 10으로 줄어, 전방 탱커 채용 가치가 하락했습니다.",
-          "candidateNoteId": "note:tft:18.3:item:영원한-서약:2e842b57",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "엄호대 3단계 방어력·마법저항이 120에서 115로 하향돼 해당 전방 라인 수요가 감소했습니다.",
-          "candidateNoteId": "note:tft:18.3:system:엄호대:ad7723b2",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "알리스타 스킬 피해가 크게 상향되며 같은 전방 탱커 자리를 대체했을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:알리스타:d527c10f",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8393325700",
-          "KR_8391893837",
-          "KR_8391863176",
-          "KR_8395553189",
-          "KR_8393299358",
-          "KR_8393102715",
-          "KR_8392636864",
-          "KR_8391696119",
-          "KR_8399295767",
-          "KR_8398719305"
-        ],
-        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_18_Leona]",
-        "noteAnchor": "https://teamfighttactics.leagueoflegends.com/ko-kr/news/game-updates/teamfight-tactics-patch-18-3/#patch-large-changes"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "레오나 등장률이 6.1%→3.9%(-2.2%p)로 하락했는데, 영원한 서약 마나 10 하향과 엄호대 저항 115 하향으로 전방 탱커 수요가 줄어든 여파입니다.",
+        "summary": "현상금 추적자 등장률이 10.9%→7.1%(-3.8%p)로 떨어졌고, 드레이븐 현상금 사냥꾼 보상 요구치 상향(처치 6→8회 등)이 원인입니다.",
         "summaryCites": [
-          "note:tft:18.3:item:영원한-서약:2e842b57",
-          "note:tft:18.3:system:엄호대:ad7723b2"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "unit:DA_18_Akali_AD:playRate",
-      "entityType": "unit",
-      "entityKey": "DA_18_Akali_AD",
-      "entityName": "아칼리",
-      "metric": "playRate",
-      "before": 0.05415,
-      "after": 0.03695,
-      "delta": -0.0172,
-      "ci": [
-        -0.021295407424766544,
-        -0.01312222747525178
-      ],
-      "n": {
-        "before": 20000,
-        "after": 20000
-      },
-      "q": 0,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "사냥꾼 추가 공격력이 4/6단계에서 45/65%→40/60%로 낮아져 해당 계열 AD 딜러 채용이 줄었습니다.",
-          "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "사냥꾼 상징 처치 관여당 공격력 18%→15% 너프로 사냥꾼 편입 구성의 가치가 떨어졌습니다.",
-          "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "카직스 스킬 피해 너프로 암살 계열 조합 전체가 약해지며 동반 픽률이 감소했을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카직스:2c342480",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "황금 징수의 총 공격력 40%→35% 너프로 AD 캐리 빌드 선호도가 낮아졌습니다.",
-          "candidateNoteId": "note:tft:18.3:item:황금-징수의-총:cce21382",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8396026338",
-          "KR_8393142832",
-          "KR_8395553189",
-          "KR_8394531052",
-          "KR_8393981783",
-          "KR_8393653490",
-          "KR_8392421565",
-          "KR_8391696119",
-          "KR_8391281655",
-          "KR_8391258854"
-        ],
-        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_18_Akali_AD]",
-        "noteAnchor": "https://teamfighttactics.leagueoflegends.com/ko-kr/news/game-updates/teamfight-tactics-patch-18-3/#patch-large-changes"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "아칼리 등장률이 5.4%→3.7%(-1.7%p)로 떨어졌습니다. 사냥꾼 특성 공격력 너프와 사냥꾼 상징 하향이 주된 간접 원인입니다.",
-        "summaryCites": [
-          "note:tft:18.3:system:사냥꾼:616a50ac",
-          "note:tft:18.3:item:사냥꾼-상징:da474098"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "unit:DA_18_Tristana:playRate",
-      "entityType": "unit",
-      "entityKey": "DA_18_Tristana",
-      "entityName": "트리스타나",
-      "metric": "playRate",
-      "before": 0.0443,
-      "after": 0.03215,
-      "delta": -0.012150000000000001,
-      "ci": [
-        -0.015917960451802424,
-        -0.008397930516734292
-      ],
-      "n": {
-        "before": 20000,
-        "after": 20000
-      },
-      "q": 0,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "사냥꾼 추가 공격력 4/6단계 45→40%, 65→60% 너프로 사냥꾼 계열 원거리 딜러 채택이 줄었습니다.",
-          "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "사냥꾼 상징 처치 관여당 공격력 18%→15% 하향이 해당 시너지 확장 빌드를 밀어냈습니다.",
-          "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "황금 징수의 총 공격력 40%→35% 너프로 평타 캐리 아이템 가치가 떨어진 영향으로 보입니다.",
-          "candidateNoteId": "note:tft:18.3:item:황금-징수의-총:cce21382",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "응징 치명타 확률 25%→15% 하향으로 치명타 기반 평타 캐리 조합 선호가 낮아졌습니다.",
-          "candidateNoteId": "note:tft:18.3:system:응징:f65a1f15",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8393377881",
-          "KR_8391944865",
-          "KR_8391633077",
-          "KR_8395553189",
-          "KR_8392471981",
-          "KR_8392421565",
-          "KR_8391281655",
-          "KR_8391258854",
-          "KR_8399295767",
-          "KR_8398801455"
-        ],
-        "aggregatePath": "data/aggregated/tft/boards-18.3.json#units[key=DA_18_Tristana]",
-        "noteAnchor": "https://teamfighttactics.leagueoflegends.com/ko-kr/news/game-updates/teamfight-tactics-patch-18-3/#patch-large-changes"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "트리스타나 등장률이 4.4%→3.2%로 내렸습니다. 사냥꾼 추가 공격력 너프와 사냥꾼 상징 하향으로 평타 캐리 수요가 줄어든 여파입니다.",
-        "summaryCites": [
-          "note:tft:18.3:system:사냥꾼:616a50ac",
-          "note:tft:18.3:item:사냥꾼-상징:da474098"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "item:DA_18_EmblemElderwood:playRate",
-      "entityType": "item",
-      "entityKey": "DA_18_EmblemElderwood",
-      "entityName": "나무정령 상징",
-      "metric": "playRate",
-      "before": 0.02665,
-      "after": 0.0359,
-      "delta": 0.009250000000000001,
-      "ci": [
-        0.005843082167331059,
-        0.012672649834837303
-      ],
-      "n": {
-        "before": 20000,
-        "after": 20000
-      },
-      "q": 9.509089127224257e-7,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "사냥꾼 상징 처치 관여당 공격력 18%→15% 너프로 상징 선택 수요가 다른 상징으로 이동했습니다.",
-          "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "기원자 상징 마나 재생 3→2 하향으로 경쟁 상징의 가치가 떨어졌습니다.",
-          "candidateNoteId": "note:tft:18.3:item:기원자-상징:04e357a3",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "전쟁기계 상징 사망 시 마나 15→10 너프가 상징 선택지 분산을 키웠습니다.",
-          "candidateNoteId": "note:tft:18.3:item:전쟁기계-상징:1438f13f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "사냥꾼 특성 공격력 4/5단계 하향으로 사냥꾼 상징 투자 가치가 함께 낮아졌습니다.",
-          "candidateNoteId": "note:tft:18.3:system:사냥꾼:616a50ac",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8396026338",
-          "KR_8393255439",
-          "KR_8391255818",
-          "KR_8398460328",
-          "KR_8392471981",
-          "KR_8391281655",
-          "KR_8399086390",
-          "KR_8398801455",
-          "KR_8398778826",
-          "KR_8398748402"
-        ],
-        "aggregatePath": "data/aggregated/tft/boards-18.3.json#items[key=DA_18_EmblemElderwood]",
-        "noteAnchor": "https://teamfighttactics.leagueoflegends.com/ko-kr/news/game-updates/teamfight-tactics-patch-18-3/#patch-large-changes"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "사냥꾼·기원자·전쟁기계 상징이 나란히 너프되면서 대체 선택지인 나무정령 상징 등장률이 2.7%→3.6%로 올랐습니다.",
-        "summaryCites": [
-          "note:tft:18.3:item:사냥꾼-상징:da474098",
-          "note:tft:18.3:item:기원자-상징:04e357a3",
-          "note:tft:18.3:item:전쟁기계-상징:1438f13f"
-        ],
-        "summaryVerified": true
-      }
-    },
-    {
-      "id": "item:DA_18_EmblemBlackthorn:playRate",
-      "entityType": "item",
-      "entityKey": "DA_18_EmblemBlackthorn",
-      "entityName": "검은 가시 상징",
-      "metric": "playRate",
-      "before": 0.0274,
-      "after": 0.0352,
-      "delta": 0.007800000000000001,
-      "ci": [
-        0.0043901670492403335,
-        0.011223069077243152
-      ],
-      "n": {
-        "before": 20000,
-        "after": 20000
-      },
-      "q": 0.00005965617738268001,
-      "status": "indirect-effect",
-      "matchedNoteId": null,
-      "matchedNoteIds": [],
-      "causes": [
-        {
-          "text": "사냥꾼 상징이 처치 관여당 공격력 18%→15%로 너프되며 상징 선택이 검은 가시로 분산됐습니다.",
-          "candidateNoteId": "note:tft:18.3:item:사냥꾼-상징:da474098",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "기원자 상징 마나 재생 3→2 너프로 경쟁 상징의 가치가 떨어졌습니다.",
-          "candidateNoteId": "note:tft:18.3:item:기원자-상징:04e357a3",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "전쟁기계 상징 사망 시 마나 회복 15→10 너프도 상징 선택 이동에 힘을 보탰습니다.",
-          "candidateNoteId": "note:tft:18.3:item:전쟁기계-상징:1438f13f",
-          "verified": true,
-          "confidence": "low"
-        },
-        {
-          "text": "검은 가시 증폭 14%→12% 너프에도 등장률이 올랐으므로, 상승 원인은 특성 자체가 아닙니다.",
-          "candidateNoteId": "note:tft:18.3:system:검은-가시:1a85a875",
-          "verified": true,
-          "confidence": "low"
-        }
-      ],
-      "evidence": {
-        "matchIds": [
-          "KR_8396026338",
-          "KR_8398460328",
-          "KR_8393981783",
-          "KR_8393102715",
-          "KR_8392471981",
-          "KR_8391258854",
-          "KR_8399247124",
-          "KR_8399086390",
-          "KR_8398801455",
-          "KR_8398778826"
-        ],
-        "aggregatePath": "data/aggregated/tft/boards-18.3.json#items[key=DA_18_EmblemBlackthorn]",
-        "noteAnchor": "https://teamfighttactics.leagueoflegends.com/ko-kr/news/game-updates/teamfight-tactics-patch-18-3/#patch-large-changes"
-      },
-      "llm": {
-        "skipped": false,
-        "summary": "검은 가시 상징 등장률 2.7%→3.5%(+0.8%p)는 사냥꾼·기원자 상징 너프로 상징 선택이 이동한 결과입니다.",
-        "summaryCites": [
-          "note:tft:18.3:item:사냥꾼-상징:da474098",
-          "note:tft:18.3:item:기원자-상징:04e357a3"
+          "note:tft:18.3:champion:드레이븐:5391bfea"
         ],
         "summaryVerified": true
       }
@@ -2893,20 +2422,14 @@
       ],
       "causes": [
         {
-          "text": "카밀 스킬 피해 너프로 공격력 기반 딜러 자리가 비면서 카직스가 대체 픽으로 올라섰습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카밀:ee0ba0ac",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "르블랑 복사본 확률 40%→30% 너프로 암살 계열 경쟁 딜러 수요가 카직스로 이동했습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:르블랑:6b3d68dd",
+          "text": "스태틱의 단검 기본 주문력 15%→25% 상향이 주문력 계수 딜러인 카직스 채용을 늘렸을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "티모 버섯 피해 너프로 같은 비용대 딜러 선호가 카직스 쪽으로 옮겨갔을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:티모:68e7c01d",
+          "text": "카밀 스킬 피해량 하향으로 대체 근접 딜러인 카직스로 수요가 옮겨갔을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:champion:카밀:ee0ba0ac",
           "verified": true,
           "confidence": "low"
         }
@@ -2930,10 +2453,9 @@
       "directionAgreement": "inconsistent",
       "llm": {
         "skipped": false,
-        "summary": "카직스 등장률이 5.2%에서 9.0%로 바뀌었습니다(+3.8%p). 노트가 예고한 방향과 다르게 움직였습니다.",
+        "summary": "카직스는 피해량 하향에도 등장률이 5.2%→9.0%(+3.8%p, CI [3.2%p, 4.3%p])로 올라 노트와 반대이며, 뚜렷한 간접 원인은 확인되지 않습니다.",
         "summaryCites": [],
-        "summaryVerified": true,
-        "summaryDeterministic": true
+        "summaryVerified": true
       }
     },
     {
@@ -3773,20 +3295,14 @@
       ],
       "causes": [
         {
-          "text": "스태틱의 단검 기본 주문력이 15%→25%로 올라, 주문력 캐리인 티모의 아이템 효율이 상승했습니다.",
+          "text": "스태틱의 단검 기본 주문력이 15%에서 25%로 올라 주문력 딜러인 티모 채용이 늘었을 수 있습니다.",
           "candidateNoteId": "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
-          "verified": true,
-          "confidence": "medium"
-        },
-        {
-          "text": "르블랑 복사본 확률이 40%→30%로 하향되며 주문력 캐리 자리가 티모 쪽으로 밀려났습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:르블랑:6b3d68dd",
           "verified": true,
           "confidence": "low"
         },
         {
-          "text": "카직스 고립 피해량 하향으로 경쟁 캐리가 약해지면서 티모 채용이 늘었을 수 있습니다.",
-          "candidateNoteId": "note:tft:18.3:champion:카직스:721aa591",
+          "text": "출세가도 레벨당 새로고침 1→2 상향으로 저비용 리롤 덱이 늘어 티모 채용이 함께 증가했을 수 있습니다.",
+          "candidateNoteId": "note:tft:18.3:system:출세가도:8eb52d0d",
           "verified": true,
           "confidence": "low"
         }
@@ -3810,12 +3326,8 @@
       "directionAgreement": "inconsistent",
       "llm": {
         "skipped": false,
-        "summary": "티모는 버섯 피해 하향에도 등장률이 1.6%→3.1% 올랐는데, 스태틱의 단검 주문력 25% 상향과 르블랑·카직스 하향에 따른 캐리 자리 이동이 원인입니다.",
-        "summaryCites": [
-          "note:tft:18.3:item:스태틱의-단검:ccfc29ef",
-          "note:tft:18.3:champion:르블랑:6b3d68dd",
-          "note:tft:18.3:champion:카직스:721aa591"
-        ],
+        "summary": "티모 등장률은 1.6%에서 3.1%로 1.5%p 올랐으나(CI 1.2~1.8%p), 이를 뚜렷이 설명할 간접 조항은 약합니다.",
+        "summaryCites": [],
         "summaryVerified": true
       }
     },
