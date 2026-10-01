@@ -60,7 +60,7 @@ PUBG는 PUBG API `/samples` + 텔레메트리 축약이 어댑터다.
 | 저장·집계 | JSONL reduce-on-ingest + 순수 TS 집계 | 네이티브 의존 0, CI에서 그대로 재현 |
 | 통계 | Wilson / Newcombe / BH-FDR 자체 구현 | 판정 규칙을 블랙박스에 두지 않는다 |
 | 파서 | `cheerio` | 정적 HTML 패치노트 |
-| LLM | `@anthropic-ai/sdk` — Claude Opus 5, 캐시 우선·세션 상한 | 아래 "AI 사용 경계" |
+| LLM | `@anthropic-ai/sdk` — Claude Opus 5.5, 캐시 우선·호출 opt-in·견적 게이트 | 아래 "AI 사용 경계" |
 | 배포·모니터링 | Vercel(정적) + UptimeRobot 5분 | |
 | 품질 | vitest + eslint + tsc + `verify.sh` | |
 

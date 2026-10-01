@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Rell:pickRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-10-01T14:57:39.358Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:item:세계-지도집:29bcd928",
+        "text": "서포터 시작 아이템 세계 지도집의 체력이 30에서 0으로 줄어 초반 교전형 탱커인 렐의 선호가 낮아졌을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:item:룬-나침반:6931f115",
+        "text": "업그레이드 단계인 룬 나침반의 체력도 100에서 60으로 줄어 라인전 버티기가 약해졌을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "렐 픽률이 11.7%에서 8.4%로 3.3%p 하락했으며, 세계 지도집 체력 30→0 하향이 원인 후보입니다.",
+    "summaryCites": [
+      "note:26.19:item:세계-지도집:29bcd928"
+    ]
+  },
+  "usage": {
+    "inputTokens": 124,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 842
+  },
+  "proseRepairAttempts": 0
+}

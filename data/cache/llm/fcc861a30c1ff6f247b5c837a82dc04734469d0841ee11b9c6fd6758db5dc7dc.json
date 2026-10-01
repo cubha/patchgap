@@ -1,0 +1,27 @@
+{
+  "deltaId": "champion:Jhin:pickRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-10-01T14:59:04.465Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:lucian:98722aa4",
+        "text": "루시안 기본 지속 효과 피해량 하향으로 원거리 딜러 수요 일부가 진으로 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "진 픽률이 22.0%에서 24.6%로 2.6%p 올랐고(CI 1.1~4.2%p), 루시안 기본 지속 효과 하향의 반사이익이 원인 후보입니다.",
+    "summaryCites": [
+      "note:26.19:champion:lucian:98722aa4"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 409
+  },
+  "proseRepairAttempts": 0
+}

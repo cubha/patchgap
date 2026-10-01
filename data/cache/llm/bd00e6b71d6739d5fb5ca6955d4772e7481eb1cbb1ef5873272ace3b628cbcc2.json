@@ -1,0 +1,27 @@
+{
+  "deltaId": "unit:DA_18_Rengar:top4Rate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "777f9b98e3d740dc18b1848c911cf0fa954d9f6b4ed6dc68fb93ff5c218454b7",
+  "generatedAt": "2026-10-01T13:00:34.845Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.3:champion:카직스:2c342480",
+        "text": "카직스 스킬 피해량 하향으로 같은 암살형 아이템이 렝가에게 몰렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "렝가 순방률이 50.7%에서 58.0%로 7.4%p 올랐으며, 카직스 하향의 반사이익일 수 있습니다.",
+    "summaryCites": [
+      "note:tft:18.3:champion:카직스:2c342480"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 9928,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 455
+  },
+  "proseRepairAttempts": 0
+}

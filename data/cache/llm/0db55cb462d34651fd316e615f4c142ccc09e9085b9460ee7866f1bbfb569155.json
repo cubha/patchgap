@@ -1,0 +1,32 @@
+{
+  "deltaId": "item:3046:adoptionRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-10-01T15:01:02.635Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
+        "text": "아펠리오스가 여러 무기에서 강화되며 치명타 아이템인 유령 무희 구매가 함께 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:masteryi:871d9688",
+        "text": "마스터 이 Q의 반환 시간이 1초로 고정되면서 스킬 가속 대신 공격 속도 아이템을 선호했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "유령 무희 채택률이 1.8%에서 2.5%로 0.7%p 올랐고, 아펠리오스 강화의 파급일 수 있습니다.",
+    "summaryCites": [
+      "note:26.19:champion:aphelios:ccd9a119"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 934
+  },
+  "proseRepairAttempts": 0
+}

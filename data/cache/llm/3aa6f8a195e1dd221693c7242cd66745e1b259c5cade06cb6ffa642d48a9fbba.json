@@ -1,0 +1,38 @@
+{
+  "deltaId": "item:3075:adoptionRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-10-01T15:01:19.447Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:5a77f71f",
+        "text": "아펠리오스 절단검 체력 회복량 상향으로 평타 기반 회복 견제용 치유 감소 수요가 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:fiora:4ff3c93f",
+        "text": "피오라 대결투 회복량 상향으로 상단 상대 라이너의 치유 감소 구매가 늘었습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+        "text": "드레이븐 기본 공격력 상향으로 평타 견제용 방어 아이템 선호가 늘었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "가시 갑옷 채택률이 1.0%에서 1.5%로 0.5%p 올랐으며, 아펠리오스 절단검·피오라 대결투 회복량 상향에 따른 치유 감소 수요가 원인입니다.",
+    "summaryCites": [
+      "note:26.19:champion:aphelios:5a77f71f",
+      "note:26.19:champion:fiora:4ff3c93f"
+    ]
+  },
+  "usage": {
+    "inputTokens": 128,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 917
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,27 @@
+{
+  "deltaId": "pubg:weapon:Item_Weapon_BerylM762_C:pickupShare",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5+pubg-redistribution-bound",
+  "candidateSetHash": "cc94f398846bd16ac234d7524a67e793470189b97753b1ab31f37a48ee0ca7d1",
+  "generatedAt": "2026-10-01T13:03:49.018Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:pubg-43.1:spawn:lmg",
+        "text": "RPD·M249 스폰율 감소(100%→70%)의 재분배 몫이 일부 기여했을 수 있으나, 기대치 +1.9%에 불과합니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "Beryl M762 점유율 +15.7%는 RPD·M249 스폰 감소의 재분배 기대치 +1.9%를 크게 넘어, 재분배만으로는 설명되지 않습니다.",
+    "summaryCites": [
+      "note:pubg-43.1:spawn:lmg"
+    ]
+  },
+  "usage": {
+    "inputTokens": 222,
+    "cacheReadInputTokens": 2449,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 830
+  },
+  "proseRepairAttempts": 0
+}

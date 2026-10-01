@@ -1,0 +1,37 @@
+{
+  "deltaId": "champion:Kaisa:BOTTOM:pickRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-10-01T15:00:22.009Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:ccd9a119",
+        "text": "아펠리오스 화염포 Q 재사용 대기시간 단축 등 다수 상향으로 원딜 픽이 아펠리오스로 분산됐습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:aphelios:fa3a30c8",
+        "text": "아펠리오스 만월총 Q 피해량 상향이 원딜 경쟁력을 높여 카이사 픽을 일부 가져갔습니다.",
+        "confidence": "medium"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:draven:d1cc348b",
+        "text": "드레이븐 기본 공격력 상향(62→64)이 원딜 픽 분산에 일부 기여했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카이사 픽률이 20.9%에서 18.7%로 2.2%p 하락했으며, 아펠리오스 다수 상향으로 원딜 픽이 분산됐습니다.",
+    "summaryCites": [
+      "note:26.19:champion:aphelios:ccd9a119"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 664
+  },
+  "proseRepairAttempts": 0
+}

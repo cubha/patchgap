@@ -10,7 +10,7 @@
 //  - 도전 모델은 별도 cacheDir(data/cache/llm-ab/{model}, gitignore) — 운영 캐시에 섞이지 않는다.
 //  - 지표는 운영 게이트 그대로(verifyCauses·요약 인용·수치 사실성·문장 위생). 임계를 따로 두지 않는다.
 //
-// 사용: npx tsx scripts/run-llm-compare.ts --game lol|tft|pubg [--n 20] [--models claude-sonnet-5,claude-haiku-4-5-20251001] [--plan] [--baseline-calls]
+// 사용: npx tsx scripts/run-llm-compare.ts --game lol|tft|pubg [--n 20] [--models claude-sonnet-5,claude-haiku-4-5-20251001] [--plan] [--baseline-calls] [--run N]
 //      실제 호출은 PATCHGAP_LLM=1 (호출 정책). --plan은 견적만.
 import "dotenv/config";
 import fs from "node:fs";
@@ -32,6 +32,9 @@ const PRICE: Record<string, [number, number, number, number]> = {
   "claude-opus-5": [5, 25, 6.25, 0.5],
   "claude-sonnet-5": [2, 10, 2.5, 0.2],
   "claude-haiku-4-5-20251001": [1, 5, 1.25, 0.1],
+  // 5.5 세대 — claude.com/pricing 확인(2026-10-01). Opus 5.5가 Opus 5보다 싸다.
+  "claude-opus-5-5": [4, 20, 5, 0.2],
+  "claude-sonnet-5-5": [2, 10, 2.5, 0.2],
 };
 
 function arg(name: string, fallback: string): string {
@@ -105,7 +108,8 @@ async function runModel(
   targets: LlmDelta[],
   baseline: boolean,
   planOnly: boolean,
-  allowBaselineCalls = false
+  allowBaselineCalls = false,
+  run = 1
 ): Promise<ModelOutcome> {
   const result = await inferIndirectCandidates(targets, inputs.notes, inputs.profile, {
     model,
@@ -113,7 +117,8 @@ async function runModel(
     // 기준은 운영 캐시만(호출 0). 운영 캐시가 없어진 쌍(예: TFT 18.3 — CI 캐시 휘발)만 --baseline-calls로
     // 운영 모델을 **운영 캐시에** 부른다: 같은 키라 다음 운영 실행이 그대로 재사용한다(이중 지출 아님).
     maxTotalCalls: baseline && !allowBaselineCalls ? 0 : targets.length * 2,
-    cacheDir: baseline ? undefined : path.join(AB_ROOT, model),
+    // 다회 표본(2026-10-01): 2회차부터는 회차별 디렉토리 — 같은 키라도 새로 부르게 해 실행 간 편차를 잰다.
+    cacheDir: baseline ? undefined : run > 1 ? path.join(AB_ROOT, `run-${run}`, model) : path.join(AB_ROOT, model),
     planOnly,
   });
   const out: ModelOutcome = {
@@ -179,6 +184,7 @@ async function main(): Promise<void> {
   const models = arg("models", "claude-sonnet-5,claude-haiku-4-5-20251001").split(",").filter(Boolean);
   const planOnly = process.argv.includes("--plan");
   const allowBaselineCalls = process.argv.includes("--baseline-calls");
+  const run = Number(arg("run", "1"));
   const inputs = loadInputs(game);
 
   // 운영이 물었던 상태로 되돌린다 — 3단 재분류 이전.
@@ -191,7 +197,7 @@ async function main(): Promise<void> {
 
   const baseline = await runModel(LLM_MODEL, inputs, targets, true, planOnly, allowBaselineCalls);
   const others: ModelOutcome[] = [];
-  for (const model of models) others.push(await runModel(model, inputs, targets, false, planOnly));
+  for (const model of models) others.push(await runModel(model, inputs, targets, false, planOnly, false, run));
   if (planOnly) return;
 
   for (const out of [baseline, ...others]) {
@@ -204,7 +210,7 @@ async function main(): Promise<void> {
     );
   }
   fs.mkdirSync(AB_ROOT, { recursive: true });
-  const outFile = path.join(AB_ROOT, `compare-${game}.json`);
+  const outFile = path.join(AB_ROOT, run > 1 ? `compare-${game}-run${run}.json` : `compare-${game}.json`);
   fs.writeFileSync(outFile, `${JSON.stringify({ generatedAt: new Date().toISOString(), game, pair: inputs.pair, targetIds: targets.map((t) => t.id), baseline, others }, null, 2)}\n`);
   console.log(`[llm-compare] 원자료: ${path.relative(ROOT, outFile)}`);
 }

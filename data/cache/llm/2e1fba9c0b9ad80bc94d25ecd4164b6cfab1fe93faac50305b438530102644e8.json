@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Qiyana:banRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-10-01T12:55:52.813Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
+        "text": "같은 미드 라인 오로라의 E 피해량 상향으로 밴이 오로라 쪽으로 분산됐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:khazix:defcade0",
+        "text": "카직스 기본 지속 효과 피해량이 늘며 정글 암살자 밴 수요가 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "키아나 밴률은 50.8%에서 45.1%로 5.7%p 줄었으며, 오로라 E 상향으로 밴이 분산됐을 수 있습니다.",
+    "summaryCites": [
+      "note:26.19:champion:aurora:537dcee9"
+    ]
+  },
+  "usage": {
+    "inputTokens": 125,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 455
+  },
+  "proseRepairAttempts": 0
+}

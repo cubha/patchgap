@@ -1,0 +1,27 @@
+{
+  "deltaId": "champion:Cassiopeia:banRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-10-01T12:55:14.455Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:champion:aurora:537dcee9",
+        "text": "같은 미드 메이지인 오로라의 E 피해량·R 지속시간 상향으로 밴이 오로라 쪽으로 분산됐을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "카시오페아 밴률이 11.2%에서 4.4%로 6.8%p 하락했고, 직접 조항이 없어 오로라 상향에 따른 밴 분산이 약한 후보로 꼽힙니다.",
+    "summaryCites": [
+      "note:26.19:champion:aurora:537dcee9"
+    ]
+  },
+  "usage": {
+    "inputTokens": 127,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 728
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,32 @@
+{
+  "deltaId": "champion:Ambessa:winRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "9254cbbcca93140b2b8136282b6424960e1109ea8b2afb0ab3dbb4785d73b480",
+  "generatedAt": "2026-10-01T14:56:38.895Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.19:system:순간이동-재사용-대기시간:f037ef05",
+        "text": "상단 퀘스트 강력 순간이동 대기시간이 300~210초로 줄어 상단 암베사의 합류력이 올랐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.19:champion:rumble:17e40d96",
+        "text": "럼블 과열 공격 속도가 30~100%로 하향되어 상단 맞상대 부담이 줄었을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "암베사 승률이 48.4%에서 55.9%로 7.6%p 올랐으나 이후 표본이 379판으로 적고, 상단 순간이동 단축 등 간접 요인의 근거는 약합니다.",
+    "summaryCites": [
+      "note:26.19:system:순간이동-재사용-대기시간:f037ef05"
+    ]
+  },
+  "usage": {
+    "inputTokens": 122,
+    "cacheReadInputTokens": 8037,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 629
+  },
+  "proseRepairAttempts": 0
+}
