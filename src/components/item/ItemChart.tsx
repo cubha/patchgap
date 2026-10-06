@@ -64,7 +64,9 @@ export default function ItemChart({ data }: ItemChartProps) {
       </ResponsiveContainer>
       <div className="grid grid-cols-2 px-2 text-center font-mono text-lg font-bold text-fg">
         {rows.map((row, index) => (
-          <span key={row.key}>{data.valueText?.[index] ?? formatMetricValue(row.rawValue, data.kind)}</span>
+          <span key={row.key} className="truncate">
+            {data.valueText?.[index] ?? formatMetricValue(row.rawValue, data.kind)}
+          </span>
         ))}
       </div>
       {data.errorSuppressed ? (

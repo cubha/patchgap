@@ -75,7 +75,8 @@ export default function ObservationTabs({ metrics, segmentLabel, noSegmentNote, 
   return (
     <div className="flex flex-col">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-soft px-5 py-3">
-        <div role="tablist" aria-label="지표" className="flex flex-wrap gap-1">
+        {/* gap-2 — 375px에서 탭 사이가 4px이면 Fitts 간격 8px에 못 미친다(2026-10-07 레이아웃 게이트 D-UX-10). */}
+        <div role="tablist" aria-label="지표" className="flex flex-wrap gap-2">
           {metrics.map((m, index) => {
             const on = m.key === metric.key;
             return (

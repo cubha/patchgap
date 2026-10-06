@@ -43,7 +43,7 @@ import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import { DISPLAY_SORT_PRIORITY, displayStatus, isNoiseStatus } from "@/pipeline/shared/display-status";
 import { loadChampions, loadDeltas, loadDeltasRaw, loadItems, loadNotes, type PatchPair } from "@/lib/data";
-import { entityTypeLabel, fmtCiHalf, fmtInt, itemIdFromSlug } from "@/lib/format";
+import { entityTypeLabel, fmtInt, itemIdFromSlug } from "@/lib/format";
 import { WIN_RATE_MIN_N } from "@/pipeline/aggregate/stats";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import { loadDdragonSafe } from "@/pipeline/match/ddragon";
@@ -52,7 +52,7 @@ import ItemChart from "@/components/item/ItemChart";
 import NoteContrastPanel from "@/components/item/NoteContrastPanel";
 import SourceMatchesPanel from "@/components/item/SourceMatchesPanel";
 import { buildChartData } from "@/components/item/chartData";
-import { formatCiRange, formatMetricValue, metricKind } from "@/components/item/metricFormat";
+import { formatMetricValue, metricKind } from "@/components/item/metricFormat";
 import { resolveNoteContrast } from "@/components/item/noteContrast";
 import { resolveStoredCi } from "@/components/item/storedCi";
 import { snapshotHash } from "@/components/item/snapshotHash";
@@ -177,21 +177,29 @@ function EmptyState() {
 
 /** LoL 통계 게이트 행 — 이 게임 판정이 실제로 쓰는 것만(BH-FDR · 승률 최소 표본). */
 function lolGateRows(row: DeltaRecord): { label: string; value: string }[] {
-  const kind = metricKind(row.metric);
-  const scale = kind === "pp" ? 100 : 1;
-  const unit = kind === "pp" ? "%p" : kind === "sec" ? "s" : "";
+  // 변화량의 95% CI는 게이트 칸이 아니라 막대 아래 캡션이 말한다(시안 배치 — 2026-10-07 화면 대조 V2).
   const gate = [
     { label: "n(전)", value: fmtInt(row.n.before) },
     { label: "n(후)", value: fmtInt(row.n.after) },
-    {
-      label: "관측 델타 CI(95%)",
-      value: `${fmtCiHalf([row.ci[0] * scale, row.ci[1] * scale], kind === "pp" ? 1 : 0)}${unit}`,
-    },
     { label: "BH-FDR q", value: row.q === null ? "—" : row.q.toFixed(3) },
   ];
   // 승률만 개체 표본 게이트가 걸린다(verdict.ts). 이 패널에 오는 행은 보고 자격을 통과했으므로 늘 통과다.
   if (row.metric === "winRate") gate.push({ label: "승률 최소 표본", value: `n≥${WIN_RATE_MIN_N} · 통과` });
   return gate;
+}
+
+/**
+ * 막대 아래 캡션 — 시안대로 **변화량(Δ)의 95% CI**가 먼저다(2026-10-07 화면 대조 V2). 막대의 오차 막대가 무엇인지는
+ * 뒤에 붙인다: 패치별 저장 CI가 있으면 전·후 막대 각각의 구간, 없으면 후 막대에 얹은 변화량 구간이다(`buildChartData`).
+ */
+function deltaCiCaption(row: DeltaRecord, perPatchBars: boolean): string {
+  const kind = metricKind(row.metric);
+  const scale = kind === "pp" ? 100 : 1;
+  const digits = kind === "pp" ? 1 : 0;
+  const unit = kind === "pp" ? "%p" : kind === "sec" ? "s" : "";
+  const fmt = (v: number) => `${v >= 0 ? "+" : "−"}${Math.abs(v * scale).toFixed(digits)}`;
+  const range = `[${fmt(row.ci[0])}, ${fmt(row.ci[1])}]${unit}`;
+  return `Δ 95% CI ${range} · 오차 막대: ${perPatchBars ? "패치별 95% CI" : "변화량 CI"}`;
 }
 
 export default function LolItemDetail({ id, pairs, pairBase = null }: LolItemDetailProps) {
@@ -243,11 +251,7 @@ export default function LolItemDetail({ id, pairs, pairBase = null }: LolItemDet
         delta={<DeltaValue delta={row.delta} ci={row.ci} kind={kind} />}
         segmentName={hasLaneAxis ? (segmentKey === ALL_SEGMENT ? "전체 라인" : segmentName) : undefined}
         chart={<ItemChart data={chartData} />}
-        chartCaption={
-          chartData.barCi
-            ? `패치별 95% CI ${formatCiRange(chartData.barCi.before)} · ${formatCiRange(chartData.barCi.after)}`
-            : `오차 막대: ${pair.to} 막대에 변화량의 95% CI`
-        }
+        chartCaption={deltaCiCaption(row, chartData.barCi !== null)}
         gate={lolGateRows(row)}
         gateLink={{ href: "/lol/methodology/#gates", label: "판정 규칙 보기 →" }}
         source={

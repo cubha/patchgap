@@ -243,6 +243,19 @@ export default function PubgMapDetail({
           stats={[]}
         />
 
+        {/* 선언 대조 — 네 상세가 같은 골격이다(머리 → 패치노트 대조 → 관측, 2026-10-07 화면 대조 V6). 맵은 노트가 말한
+            항목이 0건이라 그 사실을 같은 자리에서 말한다 — 머리 문장으로만 흡수하면 이 상세만 섹션이 하나 빈다. */}
+        <SectionCard
+          eyebrow="선언 대조"
+          title="패치노트 대조"
+          variant="glass"
+          action={<span className="font-mono text-xs text-muted">말한 것 0</span>}
+        >
+          <p className="px-5 py-4 text-sm text-muted">
+            {to} 패치노트에 이 맵을 언급한 항목이 없습니다. 그래서 아래 관측은 판정 없이 값만 보입니다.
+          </p>
+        </SectionCard>
+
         <ObservationSection
           mode="descriptive"
           metrics={metrics}

@@ -54,11 +54,9 @@ export interface TftUnitDetailProps {
 
 /** TFT 통계 게이트 행 — 이 게임 판정이 실제로 쓰는 것(보드 표본 · BH-FDR · 효과크기 바닥 대비 배수). */
 function tftGateRows(record: DeltaRecord): { label: string; value: string }[] {
-  const [low, high] = record.ci;
   const gate = [
     { label: "n(전) 보드", value: fmtInt(record.n.before) },
     { label: "n(후) 보드", value: fmtInt(record.n.after) },
-    { label: "95% CI", value: low === null || high === null ? "—" : `${low.toFixed(4)} ~ ${high.toFixed(4)}` },
     { label: "BH-FDR q", value: record.q === null ? "—" : record.q.toExponential(2) },
     { label: "바닥 대비", value: `${effectStrength(record).toFixed(2)}배` },
   ];
@@ -143,7 +141,8 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
             data={{ ...buildChartData(record, deltas.meta.from, deltas.meta.to), valueText: [before, after] }}
           />
         }
-        chartCaption={`오차 막대: ${deltas.meta.to} 막대에 변화량의 95% CI`}
+        // 변화량의 95% CI는 막대 아래 캡션이 말한다(시안 배치 — LoL과 같은 자리, 2026-10-07 화면 대조 V2).
+        chartCaption={`Δ 95% CI ${record.ci[0].toFixed(4)} ~ ${record.ci[1].toFixed(4)} · 오차 막대: 변화량 CI`}
         gate={tftGateRows(record)}
         gateLink={{ href: "/tft/methodology/#gates", label: "판정 규칙 보기 →" }}
         source={<SourceMatchesPanel matchIds={record.evidence.matchIds} aggregatePath={record.evidence.aggregatePath} />}
@@ -272,11 +271,8 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
             initial={resolveSelection(model, null)}
             segmentLabel={null}
             noSegmentNote="구간 축 없음 — 보드는 위치를 갖지 않습니다"
-            emptyText={
-              row.submarineChanges.length + row.mismatchChanges.length > 0
-                ? "보고할 지표 변화가 없습니다 — 이 대상의 기록은 위 대조의 수치 변경입니다."
-                : "보고할 관측이 없습니다."
-            }
+            // 네 상세가 같은 한 줄이다(UX-BRIEF §8-3-1). 수치 축만 있는 대상의 기록은 위 대조 카드가 이미 말한다.
+            emptyText="보고할 관측이 없습니다."
           />
         </div>
       </Container>

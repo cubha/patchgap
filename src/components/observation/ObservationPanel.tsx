@@ -86,7 +86,11 @@ export default function ObservationPanel({
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <div className="min-w-0 rounded-md border border-border-soft bg-bg/40 p-3">
           {chart}
-          <p className="px-2 pt-2 font-mono text-xs text-muted">{chartCaption}</p>
+          {/* 한 줄로 자른다 — 캡션이 길어지면 막대 상자 전체가 늘어 옆 칸과 높이가 갈린다(2026-10-07 레이아웃 게이트
+              D-STRESS-02, 네 상세 공통). 전문은 title로 남긴다. */}
+          <p className="truncate px-2 pt-2 font-mono text-xs text-muted" title={chartCaption}>
+            {chartCaption}
+          </p>
         </div>
         <div className="flex min-w-0 flex-col gap-4">
           <div>

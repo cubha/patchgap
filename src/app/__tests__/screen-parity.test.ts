@@ -240,7 +240,8 @@ describe("§8-1 상세 관측 — 네 상세가 같은 공통 섹션을 쓴다(2
   }
 
   it("패치노트 대조가 관측 섹션보다 앞이다 — 무엇이 바뀌었나가 어떻게 움직였나보다 먼저다", () => {
-    for (const body of bodies.filter((b) => !b.endsWith("PubgMapDetail.tsx"))) {
+    // 2026-10-07: PUBG 맵도 대조 카드를 갖는다(화면 대조 V6 — 노트가 말한 항목 0건을 같은 자리에서 말한다).
+    for (const body of bodies) {
       const src = codeOf(body);
       const contrast = src.indexOf('title="패치노트 대조"');
       expect(contrast, `${body}: 패치노트 대조 없음`).toBeGreaterThanOrEqual(0);
