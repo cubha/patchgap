@@ -24,6 +24,14 @@
 // 같은 id가 여러 패치 쌍에 걸쳐 나타날 수 있다(엔티티+지표 조합은 패치 쌍을 포함하지 않는 id
 // 포맷이라 원리적으로 충돌 가능) — `pairs`가 최신 우선 내림차순이므로 최신 쌍을 먼저
 // 찾아 그 쌍의 레코드를 대표로 쓴다(구현 결정, ST-12.md 참고).
+//
+// **2026-10-06 상세 공통 관측 섹션**(사용자 확정 — PLAN-detail-observation-section-2026-10-06.md): 지표마다 카드 한
+// 장씩 쌓던 구획을 **지표 탭 × 라인 선택 → 패널 하나**(`ObservationSection`)로 바꿨다. 세 게임 상세가 같은 섹션을
+// 쓰고, 이 화면이 그 기준(LoL 기준 통일)이다. 바뀐 것 셋:
+//   ① 탭·선택지는 **보고 자격 조합만**(`lolObservationModel` → `isReportableRecord`). 전에는 이 술어를 거치지 않아
+//      아트록스 한 화면에 카드 13장(포지션별 승률 「표본 부족」 n=1~316 포함)을 그렸다 — 걸러내면 1건이다.
+//   ② 대상 단위 「추정 원인」 카드를 없애고 원인을 **그 지표·구간 패널 안**으로 옮겼다(원인은 델타 단위로 물었다).
+//   ③ 패치노트 대조가 좌우 2분할에서 **전체 폭**이 됐다(TFT·PUBG와 같은 한 줄).
 
 import Link from "next/link";
 import Container from "@/components/Container";
@@ -33,24 +41,18 @@ import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
-import { displayStatus, isNoiseStatus } from "@/pipeline/shared/display-status";
+import { DISPLAY_SORT_PRIORITY, displayStatus, isNoiseStatus } from "@/pipeline/shared/display-status";
 import { loadChampions, loadDeltas, loadDeltasRaw, loadItems, loadNotes, type PatchPair } from "@/lib/data";
 import { entityTypeLabel, fmtInt, itemIdFromSlug } from "@/lib/format";
+import { WIN_RATE_MIN_N } from "@/pipeline/aggregate/stats";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import { loadDdragonSafe } from "@/pipeline/match/ddragon";
 import AmbientDetailSplash from "@/components/item/AmbientDetailSplash";
-import CausesPanel from "@/components/causes/CausesPanel";
 import ItemChart from "@/components/item/ItemChart";
 import NoteContrastPanel from "@/components/item/NoteContrastPanel";
 import SourceMatchesPanel from "@/components/item/SourceMatchesPanel";
-import StatsGatePanel from "@/components/item/StatsGatePanel";
 import { buildChartData } from "@/components/item/chartData";
-import {
-  displayMetricLabel,
-  formatCiRange,
-  formatMetricValue,
-  metricKind,
-} from "@/components/item/metricFormat";
+import { formatMetricValue, metricKind } from "@/components/item/metricFormat";
 import { resolveNoteContrast } from "@/components/item/noteContrast";
 import { resolveStoredCi } from "@/components/item/storedCi";
 import { snapshotHash } from "@/components/item/snapshotHash";
@@ -58,7 +60,16 @@ import { championSplashUrl } from "@/components/item/detailSplash";
 import SiteFooter from "@/components/SiteFooter";
 import PageHeader from "@/components/PageHeader";
 import { detailCrumbs } from "@/lib/breadcrumbs";
-import { DISPLAY_SORT_PRIORITY } from "@/pipeline/shared/display-status";
+import ObservationCauses from "@/components/observation/ObservationCauses";
+import ObservationPanel from "@/components/observation/ObservationPanel";
+import ObservationSection from "@/components/observation/ObservationSection";
+import {
+  ALL_SEGMENT,
+  lolObservationModel,
+  lolSelectionFromId,
+  resolveSelection,
+  type ObservationModel,
+} from "@/components/observation/observationModel";
 
 export interface LolItemDetailProps {
   /** 라우트 파라미터 그대로(정준 `champion~Ahri` · 구 지표 별칭 · `_placeholder`). */
@@ -71,10 +82,15 @@ export interface LolItemDetailProps {
 
 interface FoundEntity {
   pair: PatchPair;
-  /** 이 대상의 관측 전부 — 표시 우선순위 → |Δ| 순. 구획 하나가 관측 하나다. */
+  /** 이 대상의 행 전부(노이즈 포함) — 패치노트 대조·수치 축이 대상 단위로 읽는다. 관측 섹션은 `model`만 본다. */
   rows: DeltaRecord[];
+  /** 보고 자격 조합만 묶은 관측 모델(탭 × 라인). */
+  model: ObservationModel<DeltaRecord>;
   generatedAt: string;
   qAlpha?: number;
+  /** 그 쌍의 판정 행 수 — 푸터 「판정 N건」. 브리핑·대조표·TFT·PUBG 상세와 같은 쌍 단위로 센다(전에는 이 화면만
+   * 대상의 행 수를 넘겨 같은 푸터가 화면마다 다른 것을 셌다). */
+  pairVerdicts: number;
 }
 
 /**
@@ -100,38 +116,51 @@ function decodeIdParam(id: string): string {
  * 슬러그는 두 형태를 받는다: 정준 `champion~MonkeyKing`과 구 지표 별칭
  * `champion~MonkeyKing~JUNGLE~winRate`. 둘 다 `champion:MonkeyKing`으로 접어 같은 화면을 그린다.
  *
- * **판정이 선 쌍을 우선**한다(2026-09-19 재판정 K2-4). 라우트 자격은 「어느 한 쌍에서라도 판정이
- * 서면」 주는 합집합이라, 최신 쌍을 무조건 쓰면 옛 쌍에서 미공지였고 최신에서 노이즈가 된 대상이
- * 상세에서 "표본 부족"만 렌더한다 — 자격을 준 바로 그 쌍을 고르게 한다.
+ * 쌍 선택 우선순위(2026-10-06 갱신): **보고할 관측이 있는 쌍** → 판정이 선(노이즈 아닌) 쌍 → 아무 쌍.
+ * 라우트 자격은 「어느 한 쌍에서라도 판정이 서면」 주는 합집합이다(2026-09-19 재판정 K2-4). 상태만 보고 고르면
+ * 최신 쌍의 비유의 「공지」 행이 옛 쌍의 실제 관측을 이겨 섹션이 빈다 — 섹션이 그리는 기준(보고 자격)으로 고른다.
  */
 function findEntity(rawId: string, pairs: readonly PatchPair[]): FoundEntity | null {
   // `champion:MonkeyKing:JUNGLE:winRate` → `champion:MonkeyKing`. 세그먼트 2개면 이미 대상 키다.
   const segments = rawId.split(":");
   const entityKey = segments.length <= 2 ? rawId : `${segments[0]}:${segments[1]}`;
 
+  let judged: FoundEntity | null = null;
   let fallback: FoundEntity | null = null;
   for (const pair of pairs) {
     const deltas = loadDeltas(pair.from, pair.to);
     if (!deltas) continue;
     const rows = deltas.rows.filter((row) => `${row.entityType}:${row.entityKey}` === entityKey);
     if (rows.length === 0) continue;
-    // 표시 우선순위대로 — 첫 구획이 그 대상에서 가장 할 말이 많은 지표가 된다.
-    const sorted = [...rows].sort(
-      (a, b) =>
-        DISPLAY_SORT_PRIORITY[displayStatus(a, deltas.meta.qAlpha)] -
-          DISPLAY_SORT_PRIORITY[displayStatus(b, deltas.meta.qAlpha)] ||
-        Math.abs(b.delta ?? 0) - Math.abs(a.delta ?? 0)
-    );
     const found: FoundEntity = {
       pair,
-      rows: sorted,
+      rows,
+      model: lolObservationModel(rows, deltas.meta.qAlpha),
       generatedAt: deltas.meta.generatedAt,
       qAlpha: deltas.meta.qAlpha,
+      pairVerdicts: deltas.rows.length,
     };
-    if (sorted.some((row) => !isNoiseStatus(row.status))) return found;
+    if (found.model.count > 0) return found;
+    if (rows.some((row) => !isNoiseStatus(row.status))) judged ??= found;
     fallback ??= found;
   }
-  return fallback;
+  return judged ?? fallback;
+}
+
+/**
+ * 머리 뱃지가 대표할 행 — 보고 자격 행 중 표시 우선순위 → |Δ| 순 첫 행. 자격 행이 없으면(공지됐지만 유의한
+ * 변화가 없는 대상) 판정이 선 행 중에서 고른다 — 노이즈 상태를 뱃지로 올리지 않는다.
+ */
+function headRow(found: FoundEntity): DeltaRecord {
+  const pool = found.model.count > 0
+    ? found.model.metrics.flatMap((m) => m.segments.map((s) => s.item))
+    : found.rows.filter((row) => !isNoiseStatus(row.status));
+  const candidates = pool.length > 0 ? pool : found.rows;
+  return [...candidates].sort(
+    (a, b) =>
+      DISPLAY_SORT_PRIORITY[displayStatus(a, found.qAlpha)] - DISPLAY_SORT_PRIORITY[displayStatus(b, found.qAlpha)] ||
+      Math.abs(b.delta ?? 0) - Math.abs(a.delta ?? 0)
+  )[0];
 }
 
 function EmptyState() {
@@ -146,125 +175,43 @@ function EmptyState() {
   );
 }
 
+/** LoL 통계 게이트 행 — 이 게임 판정이 실제로 쓰는 것만(BH-FDR · 승률 최소 표본). */
+function lolGateRows(row: DeltaRecord): { label: string; value: string }[] {
+  // 변화량의 95% CI는 게이트 칸이 아니라 막대 아래 캡션이 말한다(시안 배치 — 2026-10-07 화면 대조 V2).
+  const gate = [
+    { label: "n(전)", value: fmtInt(row.n.before) },
+    { label: "n(후)", value: fmtInt(row.n.after) },
+    { label: "BH-FDR q", value: row.q === null ? "—" : row.q.toFixed(3) },
+  ];
+  // 승률만 개체 표본 게이트가 걸린다(verdict.ts). 이 패널에 오는 행은 보고 자격을 통과했으므로 늘 통과다.
+  if (row.metric === "winRate") gate.push({ label: "승률 최소 표본", value: `n≥${WIN_RATE_MIN_N} · 통과` });
+  return gate;
+}
+
 /**
- * 지표 하나 = 구획 하나. 전에는 이 내용이 **한 화면 전체**였다(라우트가 지표 단위였으므로).
- * 라우트가 대상 단위가 되면서 여기가 지표의 자리가 됐다 — 내용은 그대로다.
+ * 막대 아래 캡션 — 시안대로 **변화량(Δ)의 95% CI**가 먼저다(2026-10-07 화면 대조 V2). 막대의 오차 막대가 무엇인지는
+ * 뒤에 붙인다: 패치별 저장 CI가 있으면 전·후 막대 각각의 구간, 없으면 후 막대에 얹은 변화량 구간이다(`buildChartData`).
  */
-function MetricSection({
-  row,
-  pair,
-  qAlpha,
-  ddragon,
-  championsFrom,
-  championsTo,
-  itemsFrom,
-  itemsTo,
-  snapshot,
-}: {
-  row: DeltaRecord;
-  pair: PatchPair;
-  qAlpha?: number;
-  ddragon: ReturnType<typeof loadDdragonSafe>;
-  championsFrom: Parameters<typeof resolveStoredCi>[2];
-  championsTo: Parameters<typeof resolveStoredCi>[3];
-  itemsFrom: Parameters<typeof resolveStoredCi>[4];
-  itemsTo: Parameters<typeof resolveStoredCi>[5];
-  snapshot: string;
-}) {
+function deltaCiCaption(row: DeltaRecord, perPatchBars: boolean): string {
   const kind = metricKind(row.metric);
-  // UX-BRIEF §1 불변 원칙: "승률은 n 게이트 미달 시 '표본 부족' 라벨(델타 미제시)" — 표본이 극히
-  // 작으면 ci가 크게 벌어져 막대에 거대한 오차 막대가 붙는다. 값 자체는 계속 보여준다.
-  const suppressDelta = row.status === "insufficient-sample";
-  const storedCi = resolveStoredCi(row, ddragon, championsFrom, championsTo, itemsFrom, itemsTo);
-  const chartData = buildChartData(row, pair.from, pair.to, suppressDelta, storedCi);
-
-  return (
-    <SectionCard eyebrow="관측" title={displayMetricLabel(row)}>
-      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-border-soft px-5 py-4">
-        <StatusBadge status={displayStatus(row, qAlpha)} />
-        <span className="font-mono text-sm tabular-nums text-fg-2">
-          {formatMetricValue(row.before, kind)} → {formatMetricValue(row.after, kind)}
-        </span>
-        {suppressDelta ? (
-          <span className="text-xs font-bold text-muted">
-            표본 부족 — 델타 미제시, n({fmtInt(row.n.before)}/{fmtInt(row.n.after)})
-          </span>
-        ) : (
-          <DeltaValue delta={row.delta} ci={row.ci} kind={kind} />
-        )}
-      </div>
-
-      {/* 이 지표에 대한 LLM 한 줄 — **지표 단위**라 여기가 제 자리다. 검증에 실패한 문장은
-          회색이고, 실행되지 않았으면 그 사유를 말한다(무근거 회색 원칙). */}
-      {row.llm ? (
-        <p
-          className={`border-b border-border-soft px-5 py-3 text-sm leading-relaxed ${
-            row.llm.skipped || !row.llm.summaryVerified ? "text-muted" : "text-fg-2"
-          }`}
-        >
-          {row.llm.skipped
-            ? `LLM 미실행(${row.llm.reason ?? "사유 없음"})`
-            : (row.llm.summary ?? "LLM이 이 변화를 설명할 조항을 찾지 못했습니다.")}
-        </p>
-      ) : null}
-
-      <div className="max-w-xl">
-        <ItemChart data={chartData} />
-      </div>
-      <div className="flex flex-wrap gap-4 border-t border-border-soft px-5 py-4 text-xs text-muted">
-        <span className="inline-flex items-center gap-2">
-          <span className="inline-block h-2.5 w-2.5 rounded-sm bg-fg-2" aria-hidden="true" />
-          전({pair.from})
-        </span>
-        <span className="inline-flex items-center gap-2">
-          <span className="inline-block h-2.5 w-2.5 rounded-sm bg-accent" aria-hidden="true" />
-          후({pair.to})
-        </span>
-        <span className="inline-flex items-center gap-2">
-          <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: "var(--muted)" }} aria-hidden="true" />
-          95% CI
-          {chartData.barCi ? (
-            <span className="font-mono">
-              {formatCiRange(chartData.barCi.before)} · {formatCiRange(chartData.barCi.after)}
-            </span>
-          ) : null}
-        </span>
-      </div>
-
-      {/* 통계 게이트·원천 매치는 **관측마다** 다르다 — 지표 구획 안에 둔다. 높이를 고정하고
-          안에서 스크롤하는 규약은 그대로(원천 매치 ID 수에 따라 옆 카드가 늘어나지 않게). */}
-      <div className="grid grid-cols-1 gap-px border-t border-border-soft bg-border-soft lg:grid-cols-2">
-        <div className="flex h-64 flex-col bg-surface">
-          <p className="px-5 pt-4 font-body text-xs font-bold text-muted">통계 게이트</p>
-          <div className="min-h-0 flex-1 overflow-y-auto">
-            <StatsGatePanel delta={row} kind={kind} />
-          </div>
-        </div>
-        <div className="flex h-64 flex-col bg-surface">
-          <p className="px-5 pt-4 font-body text-xs font-bold text-muted">원천 매치</p>
-          <div className="flex min-h-0 flex-1 flex-col">
-            <SourceMatchesPanel
-              matchIds={row.evidence.matchIds}
-              aggregatePath={row.evidence.aggregatePath}
-              snapshotHash={snapshot}
-            />
-          </div>
-        </div>
-      </div>
-    </SectionCard>
-  );
+  const scale = kind === "pp" ? 100 : 1;
+  const digits = kind === "pp" ? 1 : 0;
+  const unit = kind === "pp" ? "%p" : kind === "sec" ? "s" : "";
+  const fmt = (v: number) => `${v >= 0 ? "+" : "−"}${Math.abs(v * scale).toFixed(digits)}`;
+  const range = `[${fmt(row.ci[0])}, ${fmt(row.ci[1])}]${unit}`;
+  return `Δ 95% CI ${range} · 오차 막대: ${perPatchBars ? "패치별 95% CI" : "변화량 CI"}`;
 }
 
 export default function LolItemDetail({ id, pairs, pairBase = null }: LolItemDetailProps) {
   const rawId = id === "_placeholder" ? null : decodeIdParam(id);
   const found = rawId ? findEntity(rawId, pairs) : null;
 
-  if (!found) {
+  if (!rawId || !found) {
     return <EmptyState />;
   }
 
-  const { pair, rows, generatedAt, qAlpha } = found;
-  const head = rows[0];
+  const { pair, rows, model, generatedAt, qAlpha, pairVerdicts } = found;
+  const head = headRow(found);
   const notes = loadNotes(pair.to);
   const notesById = new Map<string, PatchNoteItem>((notes?.items ?? []).map((item) => [item.id, item]));
   const ddragon = loadDdragonSafe();
@@ -273,36 +220,71 @@ export default function LolItemDetail({ id, pairs, pairBase = null }: LolItemDet
   const itemsFrom = loadItems(pair.from)?.rows ?? null;
   const itemsTo = loadItems(pair.to)?.rows ?? null;
 
-  // 패치노트 대조는 **대상 단위**다 — 이 대상의 모든 관측이 짝지은 노트를 합쳐서 본다.
+  // 패치노트 대조는 **대상 단위**다 — 이 대상의 모든 관측이 짝지은 노트를 합쳐서 본다(선언 축이라 관측의 보고
+  // 자격과 무관하다: 노트가 말한 것은 관측이 움직이지 않았어도 말한 것이다).
   const matchedNoteIds = Array.from(new Set(rows.flatMap((row) => row.matchedNoteIds)));
   const noteContrast = resolveNoteContrast(
     { matchedNoteIds, entityName: head.entityName },
     notes,
     pair.to
   );
-  // 추정 원인도 대상 단위로 합친다. 같은 문장이 여러 지표에 붙을 수 있어 노트 id로 접는다.
-  const causes = Array.from(
-    new Map(
-      rows.flatMap((row) => row.causes).map((cause) => [`${cause.candidateNoteId ?? ""}:${cause.text}`, cause])
-    ).values()
-  );
-  /**
-   * **대상 단위 요약은 만들지 않는다**(2026-09-23 scope-critic 지적).
-   *
-   * `llm.summary`는 **지표 하나**에 대한 브리핑 한 줄이다. 여러 지표를 묶은 이 패널에 그중
-   * 하나를 올리면, 한 지표의 문장이 대상 전체를 대표하는 것처럼 읽힌다 — 더 나쁜 것은 그
-   * 문장의 `summaryVerified`가 **다른 지표에서 온 원인들**의 신뢰도인 양 읽히는 것이다.
-   * 그 문장은 **각 지표 구획**이 말한다(`MetricSection`). 여기 남기는 것은 검토 시각 캡션뿐이다.
-   */
-  const entityLlm = rows.some((row) => row.llm && !row.llm.skipped) ? { skipped: false } : undefined;
 
   // 수치 축(F9) — 이 대상에서 **게임사가 바꿨는데 말하지 않은 것**. 지표 축(위 판정)과 직교한다.
   const gameData = loadGameDataDiff("lol", pair.from, pair.to);
   const submarineChanges = submarineChangesFor(gameData, head.entityType, head.entityKey);
   const mismatchChanges = noteMismatchChangesFor(gameData, head.entityType, head.entityKey);
   const rawDeltas = loadDeltasRaw(pair.from, pair.to);
-  const hash = rawDeltas ? snapshotHash(rawDeltas) : null;
+  const hash = rawDeltas ? snapshotHash(rawDeltas) : undefined;
   const splashUrl = championSplashUrl(head);
+
+  // 구간 축은 챔피언에만 있다(라인). 아이템·라인·오브젝트는 구간 없이 탭만.
+  const hasLaneAxis = head.entityType === "champion";
+  const panelFor = (row: DeltaRecord, segmentKey: string, segmentName: string) => {
+    const kind = metricKind(row.metric);
+    const storedCi = resolveStoredCi(row, ddragon, championsFrom, championsTo, itemsFrom, itemsTo);
+    const chartData = buildChartData(row, pair.from, pair.to, false, storedCi);
+    return (
+      <ObservationPanel
+        badge={<StatusBadge status={displayStatus(row, qAlpha)} />}
+        before={formatMetricValue(row.before, kind)}
+        after={formatMetricValue(row.after, kind)}
+        delta={<DeltaValue delta={row.delta} ci={row.ci} kind={kind} />}
+        segmentName={hasLaneAxis ? (segmentKey === ALL_SEGMENT ? "전체 라인" : segmentName) : undefined}
+        chart={<ItemChart data={chartData} />}
+        chartCaption={deltaCiCaption(row, chartData.barCi !== null)}
+        gate={lolGateRows(row)}
+        gateLink={{ href: "/lol/methodology/#gates", label: "판정 규칙 보기 →" }}
+        source={
+          <SourceMatchesPanel
+            matchIds={row.evidence.matchIds}
+            aggregatePath={row.evidence.aggregatePath}
+            snapshotHash={hash}
+          />
+        }
+        causes={
+          <ObservationCauses
+            causes={row.causes}
+            llm={row.llm}
+            notesById={notesById}
+            generatedAt={generatedAt}
+            noteMatched={row.matchedNoteIds.length > 0}
+          />
+        }
+      />
+    );
+  };
+
+  const metrics = model.metrics.map((metric) => ({
+    key: metric.key,
+    label: metric.label,
+    segments: metric.segments.map((segment) => ({
+      key: segment.key,
+      label: segment.label,
+      panel: panelFor(segment.item, segment.key, segment.label),
+    })),
+  }));
+  // 구 지표 별칭으로 들어왔으면 그 탭·라인으로 연다. 자격 없는 조합이면 기본 조합(숨긴 행을 그리지 않는다).
+  const initial = resolveSelection(model, lolSelectionFromId(rawId));
 
   return (
     <div className="flex flex-1 flex-col">
@@ -311,7 +293,7 @@ export default function LolItemDetail({ id, pairs, pairBase = null }: LolItemDet
         {/* width="narrow"(1040px) — 전역 Container(1320px)는 그대로 두고 이 페이지만 좁힌다.
             1440px에서 우측 여백이 넓어져 .ambient-duo(상세 스플래시) 가시 면적이 실제로 늘어난다. */}
         <Container width="narrow" className="flex flex-col gap-6 py-8">
-          {/* 제목은 **대상 이름**이다 — 지표를 붙이지 않는다(§8-5). 지표는 아래 구획이 말한다. */}
+          {/* 제목은 **대상 이름**이다 — 지표를 붙이지 않는다(§8-5). 지표는 아래 관측 섹션의 탭이 말한다. */}
           <PageHeader
             crumbs={detailCrumbs("lol", head.entityName, pairBase)}
             title={
@@ -329,14 +311,23 @@ export default function LolItemDetail({ id, pairs, pairBase = null }: LolItemDet
             titleAside={
               <span className="flex items-center gap-2">
                 {entityTypeLabel(head.entityType)}
-                <StatusBadge status={displayStatus(head, qAlpha)} />
+                {/* 대상의 행이 전부 노이즈인 쌍(과거 쌍 상세는 그 쌍 하나만 본다)이면 뱃지를 그리지 않는다 — 노이즈 상태를
+                    뱃지로 올리지 않는다. */}
+                {isNoiseStatus(head.status) ? null : <StatusBadge status={displayStatus(head, qAlpha)} />}
               </span>
             }
             lead={
-              <>
-                {pair.from} → {pair.to} 관측 <strong className="text-fg">{rows.length}</strong>건.
-                지표마다 전/후 값·통계 게이트·원천 매치를 아래에서 볼 수 있습니다.
-              </>
+              model.count > 0 ? (
+                <>
+                  {pair.from} → {pair.to} 보고할 관측 <strong className="text-fg">{model.count}</strong>건.
+                  지표 탭{hasLaneAxis ? "과 라인 선택" : ""}으로 값·통계 게이트·원천 매치·추정 원인을 봅니다.
+                </>
+              ) : (
+                // 숨긴 상태의 사유(표본 부족·바닥 미달·변화 없음)를 꺼내지 않는다 — 9/18 확정 규칙(10/6 재확인).
+                <>
+                  {pair.from} → {pair.to} 보고할 관측이 없습니다. 패치노트가 말한 것은 아래 대조에서 볼 수 있습니다.
+                </>
+              )
             }
             actions={
               // §8-7 #18: 이 액션 줄이 LoL 상세에만 있었다. 자리는 `PageHeader`가 소유하므로
@@ -350,42 +341,28 @@ export default function LolItemDetail({ id, pairs, pairBase = null }: LolItemDet
             }
           />
 
-          {/* 1행 [패치노트 대조 | 추정 원인(LLM)] — 대상 단위로 한 번만 그린다. */}
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <SectionCard eyebrow="선언 대조" title="패치노트 대조" className="flex min-h-80 flex-col">
-              <NoteContrastPanel result={noteContrast} />
-              <div className="border-t border-border-soft" />
-              <SubmarineDetailBlock
-                changes={submarineChanges}
-                mismatchChanges={mismatchChanges}
-                source={gameData?.meta.source ?? null}
-                notePatch={pair.to}
-                patch={gameData ? { from: gameData.meta.from, to: gameData.meta.to } : null}
-              />
-            </SectionCard>
-            <SectionCard eyebrow="원인" title="추정 원인(LLM)" className="flex h-80 flex-col">
-              <CausesPanel causes={causes} llm={entityLlm} notesById={notesById} generatedAt={generatedAt} />
-            </SectionCard>
-          </div>
-
-          {/* 지표마다 한 구획 — 라우트가 대상 단위가 되면서 여기가 지표의 자리가 됐다. */}
-          {rows.map((row) => (
-            <MetricSection
-              key={row.id}
-              row={row}
-              pair={pair}
-              qAlpha={qAlpha}
-              ddragon={ddragon}
-              championsFrom={championsFrom}
-              championsTo={championsTo}
-              itemsFrom={itemsFrom}
-              itemsTo={itemsTo}
-              snapshot={hash ?? "unknown"}
+          {/* 선언 대조 — 전체 폭(2026-10-06). 「추정 원인」 카드가 있던 오른쪽 칸은 관측 패널 안으로 옮겼다. */}
+          <SectionCard eyebrow="선언 대조" title="패치노트 대조" variant="glass">
+            <NoteContrastPanel result={noteContrast} />
+            <div className="border-t border-border-soft" />
+            <SubmarineDetailBlock
+              changes={submarineChanges}
+              mismatchChanges={mismatchChanges}
+              source={gameData?.meta.source ?? null}
+              notePatch={pair.to}
+              patch={gameData ? { from: gameData.meta.from, to: gameData.meta.to } : null}
             />
-          ))}
+          </SectionCard>
+
+          <ObservationSection
+            metrics={metrics}
+            initial={initial}
+            segmentLabel={hasLaneAxis ? "라인" : null}
+            emptyText="보고할 관측이 없습니다."
+          />
         </Container>
         <Container>
-          <SiteFooter game="lol" generatedAt={generatedAt} nVerdicts={rows.length} />
+          <SiteFooter game="lol" generatedAt={generatedAt} nVerdicts={pairVerdicts} />
         </Container>
       </main>
     </div>

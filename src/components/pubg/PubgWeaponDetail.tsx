@@ -5,18 +5,31 @@
 //
 // output:'export'라 generateStaticParams가 필수다. 집계가 없으면 `_placeholder` 1건을 남긴다 —
 // 빈 배열을 반환하면 `next build`가 즉시 실패한다(2026-09-05 실측, `/item/[id]`와 동일).
+//
+// **2026-10-06 상세 공통 관측 섹션**(사용자 확정 — PLAN-detail-observation-section-2026-10-06.md): 「추정 원인(LLM)」
+// 카드와 「이렇게 판정했습니다」 카드를 LoL 기준의 공통 섹션(`ObservationSection`) 패널 하나로 흡수했다. 판정 문장
+// (2026-09-19 사용자 지시 「자연어로 근거」)은 패널의 첫 줄에 서고, 원천(집계 경로·표본 매치)은 그 아래 원천 칸이다.
+// **판정이 서지 않은 무기는 관측을 그리지 않는다** — 9/18 라운드6 C1(「직접 연 상세에서는 관측값과 판정 보류 사유를
+// 말한다」)은 사용자 재확인(2026-10-06 「표본부족, 바닥미달은 분명히 보여주지 말라고 했는데?」)으로 대체됐다.
+// 머리 문장도 사유(표본 부족·바닥 미달)를 꺼내지 않고, 스플래시는 렌더 이미지만 든다(수치는 관측 섹션의 몫이다).
 import { buildPubgEvidenceProse } from "@/components/pubg/evidenceProse";
 import Link from "next/link";
 import Container from "@/components/Container";
 import PageHeader from "@/components/PageHeader";
 import { detailCrumbs } from "@/lib/breadcrumbs";
 import SectionCard from "@/components/SectionCard";
-import CausesPanel from "@/components/causes/CausesPanel";
-import { pubgNotesAsPatchNotes } from "@/pipeline/match/pubg-delta";
+import ItemChart from "@/components/item/ItemChart";
+import SourceMatchesPanel from "@/components/item/SourceMatchesPanel";
+import { valuesChartData } from "@/components/item/chartData";
+import ObservationCauses from "@/components/observation/ObservationCauses";
+import ObservationPanel from "@/components/observation/ObservationPanel";
+import ObservationSection from "@/components/observation/ObservationSection";
+import { ALL_SEGMENT } from "@/components/observation/observationModel";
+import { ANNOUNCED_RATIO_BAND, PICKUP_MIN_N, pubgNotesAsPatchNotes, type PubgDeltaRow } from "@/pipeline/match/pubg-delta";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
-import PubgDetailSplash, { type PubgDetailStat } from "@/components/pubg/PubgDetailSplash";
+import PubgDetailSplash from "@/components/pubg/PubgDetailSplash";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { isReportable, loadPubgAssets, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
 import { displayStatusOf } from "@/pipeline/shared/display-status";
@@ -24,6 +37,23 @@ import { weaponKeyFromSlug } from "@/lib/pubgRoutes";
 import { publicWeaponPath } from "@/pipeline/pubg/asset-path";
 import { weaponCategoryLabel } from "@/pipeline/aggregate/pubg-weapon-key";
 import ExternalLink from "@/components/ExternalLink";
+
+/** PUBG 통계 게이트 행 — 이 게임 판정이 실제로 쓰는 것(획득 표본 하한 · 상대 변화 로그비 CI · 공지 밴드/자체 바닥).
+ * BH-FDR을 쓰지 않으므로 q를 말하지 않는다(#74에서 바로잡은 「판정 엔진 게임 무관」 과장과 같은 이유). */
+function pubgGateRows(row: PubgDeltaRow, noteMatched: boolean, effectFloor: number | undefined): { label: string; value: string }[] {
+  const gate = [
+    { label: "n(전) 획득", value: row.n.before.toLocaleString() },
+    { label: "n(후) 획득", value: row.n.after.toLocaleString() },
+    { label: "획득 최소 표본", value: `n≥${PICKUP_MIN_N} · 통과` },
+    { label: "상대 변화 95% CI", value: `[${signedPct(row.relCi[0])}, ${signedPct(row.relCi[1])}]` },
+  ];
+  if (noteMatched) {
+    gate.push({ label: "공지 일치 밴드", value: `기대 변화의 ${ANNOUNCED_RATIO_BAND[0]}~${ANNOUNCED_RATIO_BAND[1]}배` });
+  } else if (effectFloor !== undefined) {
+    gate.push({ label: "효과크기 바닥", value: `±${pct(effectFloor, 1)}` });
+  }
+  return gate;
+}
 
 export default function PubgWeaponDetail({
   slug,
@@ -88,45 +118,79 @@ export default function PubgWeaponDetail({
   const assets = loadPubgAssets();
   const hasRender = assets?.weapons.includes(weaponKey) ?? false;
 
-  // 2026-09-18 라운드6(C1 + scope-critic ST9): 목록(브리핑·대조표·그리드)은 판정이 선 무기만 강조하지만,
-  // 사용자가 **직접 연 상세**에서는 관측값(변화·CI)을 숨기지 않고 판정이 없는 이유를 사실대로 말한다 —
-  // 표본 부족을 "유의한 관측 없음"이라 부르면 거짓이다. 배지는 판정이 선 행에만.
-  // 2026-09-19 최종 채점 K4-4(R6): 같은 뜻을 LoL은 "유의한 관측 없음", PUBG는 "유의한 변화 없음"
-  // 으로 부르고 있었다(17 라우트). 게임이 달라도 같은 판정이면 같은 말이어야 한다 — LoL 쪽 어휘로
-  // 맞춘다(`NoteNavigator.tsx:137`·`ReleaseNoteRow.tsx:273`·`ReleaseNoteStream.tsx:216`).
+  // 보고 자격은 PUBG 판정 경로의 같은 자리 술어(`isReportable`)가 정한다 — PUBG 판정기는 바닥·CI를 이미 상태에
+  // 접어 넣는다(classify). 자격이 없으면 관측 섹션은 탭을 만들지 않는다.
   const judged = row !== null && isReportable(row.status);
-  const rel = row?.relChange ?? null;
-  const unjudgedReason =
-    row === null
-      ? "판정 대상 아님"
-      : row.status === "insufficient-sample"
-        ? "획득 표본이 부족해 판정하지 않음"
-        : row.status === "below-threshold"
-          ? "변화가 효과크기 바닥 미만이라 판정하지 않음"
-          : "유의한 관측 없음";
-  const stats: PubgDetailStat[] = [
-    {
-      label: "획득 점유율",
-      value: `${pct(statBefore?.share ?? 0, 2)} → ${pct(statAfter.share, 2)}`,
-    },
-  ];
-  if (rel !== null) {
-    stats.push({
-      label: "상대 변화",
-      value: signedPct(rel),
-      tone: rel > 0 ? "up" : "down",
-    });
-  }
-  if (row) {
-    stats.push({
-      label: "95% CI",
-      value: `[${signedPct(row.relCi[0])}, ${signedPct(row.relCi[1])}]`,
-    });
-    stats.push({
-      label: "표본 n",
-      value: `${row.n.before.toLocaleString()} → ${row.n.after.toLocaleString()}`,
-    });
-  }
+  const noteMatched = row?.matchedNoteId != null;
+  const metrics =
+    row && judged
+      ? [
+          {
+            key: "pickupShare",
+            label: "획득 점유율",
+            segments: [
+              {
+                key: ALL_SEGMENT,
+                label: "전체",
+                panel: (
+                  <ObservationPanel
+                    badge={<StatusBadge status={displayStatusOf(row.status)} />}
+                    before={pct(statBefore?.share ?? 0, 2)}
+                    after={pct(statAfter.share, 2)}
+                    delta={
+                      <span
+                        className={`font-mono text-sm font-bold tabular-nums ${
+                          (row.relChange ?? 0) > 0 ? "text-success" : (row.relChange ?? 0) < 0 ? "text-danger" : "text-muted"
+                        }`}
+                      >
+                        {signedPct(row.relChange ?? 0)} (상대)
+                      </span>
+                    }
+                    chart={
+                      <ItemChart
+                        data={valuesChartData(
+                          statBefore?.share ?? null,
+                          statAfter.share,
+                          [pct(statBefore?.share ?? 0, 2), pct(statAfter.share, 2)],
+                          deltas.meta.from,
+                          deltas.meta.to
+                        )}
+                      />
+                    }
+                    chartCaption={`상대 변화 95% CI [${signedPct(row.relCi[0])}, ${signedPct(row.relCi[1])}]`}
+                    prose={buildPubgEvidenceProse({
+                      subjectName: statAfter.weaponName,
+                      subjectKind: "무기",
+                      metricLabel: "획득 점유율",
+                      from: deltas.meta.from,
+                      to: deltas.meta.to,
+                      before: statBefore?.share ?? null,
+                      after: statAfter.share,
+                      row,
+                      noteSummary: note?.summary ?? null,
+                      effectFloor: deltas.meta.effectFloor,
+                    })}
+                    gate={pubgGateRows(row, noteMatched, deltas.meta.effectFloor)}
+                    gateLink={{ href: "/pubg/methodology/#gates", label: "판정 규칙 보기 →" }}
+                    source={
+                      <SourceMatchesPanel matchIds={row.evidence.matchIds} aggregatePath={row.evidence.aggregatePath} />
+                    }
+                    causes={
+                      <ObservationCauses
+                        causes={row.causes ?? []}
+                        llm={row.llm}
+                        notesById={notesById}
+                        generatedAt={deltas.meta.generatedAt}
+                        noteMatched={noteMatched}
+                      />
+                    }
+                  />
+                ),
+              },
+            ],
+          },
+        ]
+      : [];
 
   return (
     <main>
@@ -170,7 +234,8 @@ export default function PubgWeaponDetail({
                 {note ? ` · 공지 “${note.summary}” 대조` : ` · ${deltas.meta.to} 패치노트에 이 무기 항목 없음`}
               </>
             ) : (
-              unjudgedReason
+              // 판정이 서지 않은 사유(표본 부족·바닥 미달·변화 없음)를 꺼내지 않는다 — 9/18 확정 규칙(2026-10-06 재확인).
+              `${deltas.meta.from} → ${deltas.meta.to} 보고할 획득 점유율 변화가 없습니다.`
             )
           }
           actions={
@@ -189,7 +254,7 @@ export default function PubgWeaponDetail({
           imageSrc={hasRender ? publicWeaponPath(weaponKey) : null}
           fit="contain"
           fallbackMark={statAfter.weaponName}
-          stats={stats}
+          stats={[]}
         />
 
         {/* B안(2026-09-21 사용자 확정) — 세 게임이 같은 자리에 같은 제목을 쓴다. PUBG 상세에는
@@ -239,80 +304,13 @@ export default function PubgWeaponDetail({
           />
         </SectionCard>
 
-        {/* 추정 원인 — 이 게임에도 축이 생겼다(2026-09-23, `scripts/run-pubg-llm.ts`).
-            LoL·TFT 상세와 **같은 패널**을 쓴다: 검증 통과 문장만 본문색이고 나머지는 회색이다.
-            원인이 0건인 무기에서는 패널이 그 사실을 말한다(빈 카드를 만들지 않는다). */}
-        <SectionCard eyebrow="원인" title="추정 원인(LLM)" variant="glass" className="flex min-h-64 flex-col">
-          <CausesPanel
-            causes={row?.causes ?? []}
-            llm={row?.llm}
-            notesById={notesById}
-            generatedAt={deltas.meta.generatedAt}
-          />
-        </SectionCard>
-
-        <SectionCard eyebrow="근거" title="이렇게 판정했습니다" variant="glass">
-          <div className="flex flex-col gap-4 p-5 text-sm">
-            {/* 2026-09-19 사용자 지적("근거가 전혀 사용자가 알아볼 수 없게되어있어 … 자연어로
-                근거를 제공받아야함"): 집계 파일 경로와 매치 UUID는 감사 흔적이지 사람이 읽는
-                근거가 아니다. 문장이 먼저 오고 식별자는 접힌 영역으로 내린다 — 원천을 지우는
-                것은 "모든 판정문은 원천 링크를 가진다"(CLAUDE.md) 위반이라 위계만 바꾼다. */}
-            <div className="flex flex-col gap-2 leading-relaxed text-fg-2">
-              {buildPubgEvidenceProse({
-                subjectName: statAfter.weaponName,
-                subjectKind: "무기",
-                metricLabel: "획득 점유율",
-                from: deltas.meta.from,
-                to: deltas.meta.to,
-                before: statBefore?.share ?? null,
-                after: statAfter.share,
-                row,
-                noteSummary: note?.summary ?? null,
-                effectFloor: deltas.meta.effectFloor,
-              }).map((sentence) => (
-                <p key={sentence}>{sentence}</p>
-              ))}
-            </div>
-
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-              <Link href="/pubg/methodology/" className="text-xs font-bold text-accent hover:underline">
-                판정 규칙 보기 →
-              </Link>
-              {row?.evidence.noteAnchor ? (
-                <ExternalLink
-                  className="text-xs font-bold text-accent underline-offset-2 hover:underline"
-                  href={row.evidence.noteAnchor}
-                >
-                  패치노트 원문 보기 ↗
-                </ExternalLink>
-              ) : null}
-            </div>
-
-            <details className="rounded-md border border-border-soft">
-              <summary className="cursor-pointer list-none px-4 py-2 text-xs font-bold text-muted hover:text-fg-2 [&::-webkit-details-marker]:hidden">
-                원천 데이터 보기
-              </summary>
-              <div className="flex flex-col gap-2 border-t border-border-soft px-4 py-3 text-muted">
-                <div className="flex flex-wrap items-baseline gap-x-2">
-                  <span className="font-bold text-fg-2">집계 파일</span>
-                  <span className="font-mono text-xs break-all">
-                    {row?.evidence.aggregatePath ??
-                      `data/aggregated/pubg/weapons-${deltas.meta.to}.json#weapons[weaponKey=${weaponKey}]`}
-                  </span>
-                </div>
-                {row && row.evidence.matchIds.length > 0 ? (
-                  <div>
-                    <span className="font-bold text-fg-2">표본 매치</span>{" "}
-                    <span className="font-mono text-xs break-all">
-                      {row.evidence.matchIds.slice(0, 3).join(" · ")}
-                      {row.evidence.matchIds.length > 3 ? ` 외 ${row.evidence.matchIds.length - 3}건` : ""}
-                    </span>
-                  </div>
-                ) : null}
-              </div>
-            </details>
-          </div>
-        </SectionCard>
+        <ObservationSection
+          metrics={metrics}
+          initial={metrics.length > 0 ? { metric: "pickupShare", segment: ALL_SEGMENT } : null}
+          segmentLabel={null}
+          noSegmentNote="구간 축 없음 — 맵별 판정은 내지 않습니다"
+          emptyText="보고할 관측이 없습니다."
+        />
 
         <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
       </div>

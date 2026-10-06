@@ -4,26 +4,38 @@
 // `tftDetailRows`가 소유한다 — 과거 쌍 상세는 **그 쌍의 번들**만 본다).
 // TFT 엔티티 상세 — LoL `/lol/item/*`·PUBG `/pubg/weapon/*`와 같은 자리다.
 // 유닛뿐 아니라 특성·아이템도 여기로 들어온다(라우트 이름은 `unit`이지만 키에 종류가 들어 있다).
+//
+// **2026-10-06 상세 공통 관측 섹션**(사용자 확정 — PLAN-detail-observation-section-2026-10-06.md): 「지표별 변화」 3칸
+// 그리드와 「추정 원인(LLM)」 카드를 LoL 기준의 공통 섹션(`ObservationSection`) 하나로 바꿨다 — 지표 탭(등장률·
+// 순방률·평균 등수) → 패널 하나, 원인은 그 지표 패널 안. 보드는 위치를 갖지 않아 구간 선택은 없다. 자격 없는 지표는
+// 탭을 만들지 않는다(전에는 「보고 자격을 얻은 관측 없음」 회색 칸으로 자리를 채웠다).
 import Link from "next/link";
 
-import CausesPanel from "@/components/causes/CausesPanel";
 import Container from "@/components/Container";
 import PageHeader from "@/components/PageHeader";
 import EntityIcon from "@/components/EntityIcon";
 import AmbientDetailSplash from "@/components/item/AmbientDetailSplash";
+import ItemChart from "@/components/item/ItemChart";
+import SourceMatchesPanel from "@/components/item/SourceMatchesPanel";
+import { buildChartData } from "@/components/item/chartData";
 import { publicTftAssetPath } from "@/pipeline/tft/asset-path";
 import { detailCrumbs } from "@/lib/breadcrumbs";
 import ExternalLink from "@/components/ExternalLink";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
+import ObservationCauses from "@/components/observation/ObservationCauses";
+import ObservationPanel from "@/components/observation/ObservationPanel";
+import ObservationSection from "@/components/observation/ObservationSection";
+import { ALL_SEGMENT, groupObservations, resolveSelection } from "@/components/observation/observationModel";
 import { TFT_METRICS, effectStrength } from "@/lib/tftEntityRows";
 import { TftFooter, TftUnavailable, deltaDisplay, formatMetricValue } from "@/components/tft/shared";
-import { entityTypeLabel, isLowerBetter, metricLabel, statusLabel } from "@/lib/format";
+import { entityTypeLabel, fmtInt, isLowerBetter, metricLabel, statusLabel } from "@/lib/format";
 import { loadGameDataDiff } from "@/lib/gamedata";
 import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
 import { tftDetailRows } from "@/lib/pairPages";
-import type { DeltaMetric, DeltaRecord } from "@/pipeline/types";
+import { displayStatus } from "@/pipeline/shared/display-status";
+import type { DeltaRecord } from "@/pipeline/types";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import { entityKeyFromSlug as unslug } from "@/lib/tftRoutes";
 
@@ -40,62 +52,29 @@ export interface TftUnitDetailProps {
   pairBase?: string | null;
 }
 
-function MetricBlock({ record }: { record: DeltaRecord }) {
-  const d = deltaDisplay(record.metric, record.delta ?? 0);
-  const [low, high] = record.ci;
-  return (
-    <div className="flex flex-col gap-1 rounded-md border border-border-soft bg-surface p-4">
-      <span className="font-body text-xs font-bold text-muted">
-        {metricLabel(record.metric)}
-        {isLowerBetter(record.metric) ? <span className="ml-1 font-normal">(낮을수록 좋음)</span> : null}
-      </span>
-      <span className="font-mono text-sm tabular-nums text-fg-2">
-        {formatMetricValue(record.metric, record.before ?? 0)} → {formatMetricValue(record.metric, record.after ?? 0)}
-      </span>
-      <span className={`font-mono text-lg font-bold tabular-nums ${d.improved ? "text-success" : "text-danger"}`}>
-        {d.text}
-      </span>
-      <dl className="mt-1 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 font-mono text-xs tabular-nums text-muted">
-        <dt>95% CI</dt>
-        <dd>
-          {low === null || high === null ? "—" : `${low.toFixed(4)} ~ ${high.toFixed(4)}`}
-        </dd>
-        <dt>q</dt>
-        <dd>{record.q === null ? "—" : record.q.toExponential(2)}</dd>
-        <dt>표본</dt>
-        <dd>
-          {record.n.before.toLocaleString()} → {record.n.after.toLocaleString()}
-        </dd>
-        <dt>바닥 대비</dt>
-        <dd>{effectStrength(record).toFixed(2)}배</dd>
-      </dl>
-      {/* §8-7 #9: 전에는 이 자리에 **JSON 경로 문자열만** 떠 있어서 그것이 무엇인지 말하지
-          않았다. LoL 상세(`SourceMatchesPanel`)와 같은 라벨을 붙인다. `break-all`은 이 줄에만
-          건다 — 공백 없는 긴 토큰이라 래핑 지점이 없으면 열 폭을 밀어낸다(실측). */}
-      <span className="mt-1 font-mono text-xs leading-relaxed break-all text-muted">
-        집계 경로: {record.evidence.aggregatePath}
-      </span>
-      {/* 원천 매치(2026-09-27) — PUBG 무기 상세와 같은 한 줄 표기(앞 3건 + 나머지 수). 없으면 줄을
-          그리지 않는다(지어내지 않는다 — 이 필드 이전의 집계 파일이면 비어 있다). */}
-      {/* `break-all`을 걸지 않는다 — 매치 ID가 토큰 중간에서 끊겨 읽거나 복사할 수 없게 된다(LoL
-          `SourceMatchesPanel`이 2026-09-05에 고친 결함, 인수검증 V2에서 여기서 재발). ID마다 nowrap으로 감싸
-          구분자(·) 자리에서만 줄이 바뀐다. */}
-      {record.evidence.matchIds.length > 0 ? (
-        <span className="flex flex-wrap gap-x-1 font-mono text-xs leading-relaxed text-muted">
-          <span>표본 매치:</span>
-          {record.evidence.matchIds.slice(0, 3).map((id, i) => (
-            <span key={id} className="whitespace-nowrap">
-              {id}
-              {i < Math.min(3, record.evidence.matchIds.length) - 1 ? " ·" : ""}
-            </span>
-          ))}
-          {record.evidence.matchIds.length > 3 ? (
-            <span className="whitespace-nowrap">외 {record.evidence.matchIds.length - 3}건</span>
-          ) : null}
-        </span>
-      ) : null}
-    </div>
-  );
+/**
+ * 변화량 95% CI — LoL 캡션과 같은 서식(`[+3.2, +4.3]%p`, 2026-10-07 화면 대조 V2b). 평균 등수만 단위가 「등」이다
+ * (`deltaDisplay`와 같은 구분).
+ */
+function tftCiRange(record: DeltaRecord): string {
+  const placement = record.metric === "avgPlacement";
+  const fmt = (v: number) => {
+    const shown = placement ? Math.abs(v).toFixed(2) : Math.abs(v * 100).toFixed(1);
+    return `${v >= 0 ? "+" : "−"}${shown}`;
+  };
+  return `[${fmt(record.ci[0])}, ${fmt(record.ci[1])}]${placement ? "등" : "%p"}`;
+}
+
+/** TFT 통계 게이트 행 — 이 게임 판정이 실제로 쓰는 것(보드 표본 · BH-FDR · 효과크기 바닥 대비 배수). */
+function tftGateRows(record: DeltaRecord): { label: string; value: string }[] {
+  const gate = [
+    { label: "n(전) 보드", value: fmtInt(record.n.before) },
+    { label: "n(후) 보드", value: fmtInt(record.n.after) },
+    { label: "BH-FDR q", value: record.q === null ? "—" : record.q.toExponential(2) },
+    { label: "바닥 대비", value: `${effectStrength(record).toFixed(2)}배` },
+  ];
+  if (isLowerBetter(record.metric)) gate.push({ label: "방향", value: "낮을수록 좋음" });
+  return gate;
 }
 
 export default function TftUnitDetail({ slug, bundle, declaration, pairBase = null }: TftUnitDetailProps) {
@@ -144,15 +123,59 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
   // 이 엔티티에 걸린 패치노트 — 이름 정확일치(판정과 같은 규칙).
   const matchedNotes = notes.items.filter((n) => n.entity === row.name);
 
-  // 추정 원인은 **지표마다** 따로 물었다(LLM 2단은 델타 단위로 호출된다) — 등장률이 움직인
-  // 이유와 평균 등수가 움직인 이유가 같으리라는 보장이 없으므로 합치지 않고 지표별로 보인다.
-  // `llm`이 없는 지표는 애초에 2단 대상이 아니었다(1단에서 노트와 짝지어졌거나 미공지·
-  // 공지-불일치가 아니었다) — 그 사실을 빈칸이 아니라 문장으로 말한다.
+  // 관측 섹션 — 행의 칸(`cells`)은 이미 보고 자격을 통과한 관측만 담는다(`buildTftEntityRows`가 `isReportableRecord`로
+  // 거른다). 추정 원인은 **지표마다** 따로 물었으므로(LLM 2단은 델타 단위) 그 지표 패널 안에 둔다.
   const notesById = new Map(notes.items.map((n) => [n.id, n] as const));
-  const causeBlocks = TFT_METRICS.map((metric) => ({ metric, record: row.cells[metric] })).filter(
-    (entry): entry is { metric: DeltaMetric; record: DeltaRecord } =>
-      entry.record !== undefined && entry.record.llm !== undefined
-  );
+  const qAlpha = deltas.meta.qAlpha;
+  const records = TFT_METRICS.flatMap((metric) => {
+    const record = row.cells[metric];
+    return record ? [record] : [];
+  });
+  const model = groupObservations(records, {
+    metricOf: (record) => record.metric,
+    segmentOf: () => ALL_SEGMENT,
+    metricLabel: (key) => metricLabel(key),
+    segmentLabel: () => "전체",
+    metricOrder: TFT_METRICS,
+    segmentOrder: [ALL_SEGMENT],
+  });
+  const panelFor = (record: DeltaRecord) => {
+    const d = deltaDisplay(record.metric, record.delta ?? 0);
+    const before = formatMetricValue(record.metric, record.before ?? 0);
+    const after = formatMetricValue(record.metric, record.after ?? 0);
+    return (
+      <ObservationPanel
+        badge={<StatusBadge status={displayStatus(record, qAlpha)} />}
+        before={before}
+        after={after}
+        delta={<span className={`font-mono text-sm font-bold tabular-nums ${d.improved ? "text-success" : "text-danger"}`}>{d.text}</span>}
+        chart={
+          <ItemChart
+            data={{ ...buildChartData(record, deltas.meta.from, deltas.meta.to), valueText: [before, after] }}
+          />
+        }
+        // 변화량의 95% CI는 막대 아래 캡션이 말한다(시안 배치 — LoL과 같은 자리, 2026-10-07 화면 대조 V2).
+        chartCaption={`Δ 95% CI ${tftCiRange(record)} · 오차 막대: 변화량 CI`}
+        gate={tftGateRows(record)}
+        gateLink={{ href: "/tft/methodology/#gates", label: "판정 규칙 보기 →" }}
+        source={<SourceMatchesPanel matchIds={record.evidence.matchIds} aggregatePath={record.evidence.aggregatePath} />}
+        causes={
+          <ObservationCauses
+            causes={record.causes}
+            llm={record.llm}
+            notesById={notesById}
+            generatedAt={deltas.meta.generatedAt}
+            noteMatched={record.matchedNoteIds.length > 0}
+          />
+        }
+      />
+    );
+  };
+  const metrics = model.metrics.map((metric) => ({
+    key: metric.key,
+    label: metric.label,
+    segments: metric.segments.map((segment) => ({ key: segment.key, label: segment.label, panel: panelFor(segment.item) })),
+  }));
 
   return (
     <main>
@@ -224,7 +247,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
             </div>
             {matchedNotes.length === 0 ? (
               <p className="px-5 pb-4 text-sm text-muted">
-                이 엔티티를 언급한 패치노트 항목이 없습니다. 위 관측은 <strong className="text-fg">미공지 변화</strong>입니다.
+                이 엔티티를 언급한 패치노트 항목이 없습니다. 아래 관측은 <strong className="text-fg">미공지 변화</strong>입니다.
               </p>
             ) : (
               <ul className={`flex flex-col ${PANEL_SCROLL_BODY}`}>
@@ -256,59 +279,14 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
             />
           </SectionCard>
 
-          <SectionCard eyebrow="관측" title="지표별 변화" variant="glass">
-            <div className="grid gap-3 px-5 pb-5 sm:grid-cols-2 lg:grid-cols-3">
-              {TFT_METRICS.map((m) => {
-                const record = row.cells[m];
-                return record ? (
-                  <MetricBlock key={m} record={record} />
-                ) : (
-                  <div
-                    key={m}
-                    className="flex flex-col gap-1 rounded-md border border-border-soft bg-surface p-4 opacity-60"
-                  >
-                    <span className="font-body text-xs font-bold text-muted">{metricLabel(m)}</span>
-                    {/* 관측이 없는 것과 0인 것은 다르다. */}
-                    <span className="font-mono text-sm text-muted">보고 자격을 얻은 관측 없음</span>
-                  </div>
-                );
-              })}
-            </div>
-          </SectionCard>
-
-          {/* 이 사이트의 목적이 여기 있다 — 수치만 나열하지 않고 **왜 그랬는지**를 말한다.
-              2026-09-20 이전 TFT 상세에는 이 카드가 아예 없었다(파이프라인이 2단을 돌지 않아
-              causes가 전부 비어 있었고, 화면은 "무근거는 회색" 규칙대로 조용히 생략했다). */}
-          <SectionCard
-            eyebrow="원인"
-            title="추정 원인(LLM)"
-            variant="glass"
-            action={<span className="font-mono text-xs text-muted">{causeBlocks.length}개 지표</span>}
-          >
-            {causeBlocks.length === 0 ? (
-              <p className="px-5 py-8 text-center text-sm text-muted">
-                이 엔티티의 관측은 LLM 2단 대상이 아니었습니다 — 패치노트와 짝지어졌거나(공지-일치),
-                판정이 미공지·공지-불일치가 아니기 때문입니다. 없는 원인을 지어내지 않습니다.
-              </p>
-            ) : (
-              <div className={`flex flex-col ${PANEL_SCROLL_BODY}`}>
-                {causeBlocks.map(({ metric, record }) => (
-                  <div key={metric} className="border-t border-border-soft first:border-t-0">
-                    <div className="px-5 pt-4 font-mono text-xs font-bold tracking-wider text-muted uppercase">
-                      {metricLabel(metric)}
-                    </div>
-                    <CausesPanel
-                      causes={record.causes}
-                      llm={record.llm}
-                      notesById={notesById}
-                      generatedAt={deltas.meta.generatedAt}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </SectionCard>
-
+          <ObservationSection
+            metrics={metrics}
+            initial={resolveSelection(model, null)}
+            segmentLabel={null}
+            noSegmentNote="구간 축 없음 — 보드는 위치를 갖지 않습니다"
+            // 네 상세가 같은 한 줄이다(UX-BRIEF §8-3-1). 수치 축만 있는 대상의 기록은 위 대조 카드가 이미 말한다.
+            emptyText="보고할 관측이 없습니다."
+          />
         </div>
       </Container>
       <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.rows.length} />

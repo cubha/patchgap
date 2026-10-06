@@ -7,16 +7,27 @@
 // 어휘를 붙이면 "노트에 없다"가 관측이 아니라 전제가 된다 — LoL에서 집계 엔티티를 미공지에서
 // 빼낸 것과 같은 판단이다(PLAN-patchgap.md 계약 확장 이력 2026-09-13 2차). 이 화면은 기술
 // 통계만 말하고, 그 사실을 화면에서도 명시한다.
+//
+// **2026-10-06 상세 공통 관측 섹션 — 기술통계 모드**(사용자 확정, PLAN D5): 무기·LoL·TFT 상세와 **같은 섹션**을 쓰되
+// 판정이 없는 축임을 그 자리에서 말한다 — 뱃지 「판정 없음」 · Δ 중립색 · CI 「산출하지 않음」 · 원천 매치 칸 없음 ·
+// 원인 칸은 맵 풀 로테이션 사실(산출물에서 계산). 지표 탭은 매치 점유율 · 평균 매치 시간 · 봇 비율 · 매치당 획득.
+// 스플래시는 지형도만 들고(수치는 섹션의 몫), 「많이 줍는 총」 표는 섹션 아래에 그대로 둔다.
 import Link from "next/link";
 import Container from "@/components/Container";
 import PageHeader from "@/components/PageHeader";
 import { detailCrumbs } from "@/lib/breadcrumbs";
 import SectionCard from "@/components/SectionCard";
-import PubgDetailSplash, { type PubgDetailStat } from "@/components/pubg/PubgDetailSplash";
+import ItemChart from "@/components/item/ItemChart";
+import { valuesChartData } from "@/components/item/chartData";
+import ObservationPanel, { NoVerdictBadge } from "@/components/observation/ObservationPanel";
+import ObservationSection from "@/components/observation/ObservationSection";
+import { ALL_SEGMENT } from "@/components/observation/observationModel";
+import PubgDetailSplash from "@/components/pubg/PubgDetailSplash";
+import { mapRotationSentence } from "@/components/pubg/mapRotation";
 import { PubgFooter, PubgUnavailable, pct } from "@/components/pubg/shared";
 import { loadPubgAssets, loadPubgMaps, pubgMapKeys, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
 import { mapKeyFromSlug, weaponHref } from "@/lib/pubgRoutes";
-import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
+import { mapIdentity, type PubgMapDeltaRow } from "@/pipeline/aggregate/pubg-maps";
 import { publicMapPath } from "@/pipeline/pubg/asset-path";
 
 function fmtDuration(sec: number | null): string {
@@ -24,6 +35,73 @@ function fmtDuration(sec: number | null): string {
   const m = Math.floor(sec / 60);
   const s = Math.round(sec % 60);
   return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+/** 부호 붙은 시간 차(「+1:02」). 기술통계라 방향에 좋고 나쁨이 없다 — 색은 호출부가 중립으로 둔다. */
+function fmtDurationDelta(before: number | null, after: number | null): string {
+  if (before === null || after === null) return "—";
+  const diff = after - before;
+  return `${diff >= 0 ? "+" : "−"}${fmtDuration(Math.abs(diff))}`;
+}
+
+/** 부호 붙은 %p 차. */
+function fmtPpDelta(before: number, after: number, digits = 1): string {
+  const diff = (after - before) * 100;
+  return `${diff >= 0 ? "+" : "−"}${Math.abs(diff).toFixed(digits)}%p`;
+}
+
+interface MapMetric {
+  key: string;
+  label: string;
+  before: number | null;
+  after: number | null;
+  beforeText: string;
+  afterText: string;
+  deltaText: string;
+}
+
+/** 맵 기술통계 탭 — 비교행(`PubgMapDeltaRow`)의 네 값. 판정을 만들지 않으므로 자격 필터가 없다(전부 관측값이다). */
+function mapMetrics(delta: PubgMapDeltaRow): MapMetric[] {
+  return [
+    {
+      key: "matchShare",
+      label: "매치 점유율",
+      before: delta.matchShare.before,
+      after: delta.matchShare.after,
+      beforeText: pct(delta.matchShare.before, 1),
+      afterText: pct(delta.matchShare.after, 1),
+      deltaText: fmtPpDelta(delta.matchShare.before, delta.matchShare.after),
+    },
+    {
+      key: "avgDurationSec",
+      label: "평균 매치 시간",
+      before: delta.avgDurationSec.before,
+      after: delta.avgDurationSec.after,
+      beforeText: fmtDuration(delta.avgDurationSec.before),
+      afterText: fmtDuration(delta.avgDurationSec.after),
+      deltaText: fmtDurationDelta(delta.avgDurationSec.before, delta.avgDurationSec.after),
+    },
+    {
+      key: "botShare",
+      label: "봇 비율",
+      before: delta.botShare.before,
+      after: delta.botShare.after,
+      beforeText: pct(delta.botShare.before),
+      afterText: pct(delta.botShare.after),
+      deltaText: fmtPpDelta(delta.botShare.before, delta.botShare.after),
+    },
+    {
+      key: "pickupsPerMatch",
+      label: "매치당 획득",
+      before: delta.pickupsPerMatch.before,
+      after: delta.pickupsPerMatch.after,
+      beforeText: delta.pickupsPerMatch.before.toFixed(0),
+      afterText: delta.pickupsPerMatch.after.toFixed(0),
+      deltaText: `${delta.pickupsPerMatch.after >= delta.pickupsPerMatch.before ? "+" : "−"}${Math.abs(
+        delta.pickupsPerMatch.after - delta.pickupsPerMatch.before
+      ).toFixed(0)}`,
+    },
+  ];
 }
 
 export default function PubgMapDetail({
@@ -76,33 +154,53 @@ export default function PubgMapDetail({
   // 한쪽 구간에만 표본이 잡힌 맵 — 비교행이 없다는 사실을 문장으로 말한다.
   const oneSided = delta === null;
 
-  const stats: PubgDetailStat[] = [
-    {
-      label: "매치 점유율",
-      value: delta
-        ? `${pct(delta.matchShare.before, 1)} → ${pct(delta.matchShare.after, 1)}`
-        : pct(shown.matchShare, 1),
-      tone: delta ? (delta.matchShareDelta > 0 ? "up" : "down") : undefined,
-    },
-    {
-      label: "평균 매치 시간",
-      value: delta
-        ? `${fmtDuration(delta.avgDurationSec.before)} → ${fmtDuration(delta.avgDurationSec.after)}`
-        : fmtDuration(shown.avgDurationSec),
-    },
-    {
-      label: "봇 비율",
-      value: delta
-        ? `${pct(delta.botShare.before)} → ${pct(delta.botShare.after)}`
-        : pct(shown.botShare),
-    },
-    {
-      label: "매치 수",
-      value: delta
-        ? `${delta.n.before.toLocaleString()} → ${delta.n.after.toLocaleString()}`
-        : shown.nMatches.toLocaleString(),
-    },
-  ];
+  const { from, to } = maps.deltas.meta;
+  // 이 수치가 어디서 나왔는지 한 문장 — 판정 근거 문단이 성립하지 않는 축이라 출처만 말한다(2026-09-19 사용자 지적
+  // 「근거가 전혀 사용자가 알아볼 수 없게」의 맵 쪽 대응). 패널의 첫 줄에 선다.
+  const sourceProse = delta
+    ? [
+        `이 수치는 Steam 전 지역·전 티어 매치 중 ${identity.koName}에서 진행된 ` +
+          `${(statBefore?.nMatches ?? 0).toLocaleString()}건(${from}) · ${(statAfter?.nMatches ?? 0).toLocaleString()}건(${to})을 집계한 것입니다.`,
+      ]
+    : [];
+  const rotation = mapRotationSentence(maps.deltas.meta);
+  const metrics = delta
+    ? mapMetrics(delta).map((metric) => ({
+        key: metric.key,
+        label: metric.label,
+        segments: [
+          {
+            key: ALL_SEGMENT,
+            label: "전체",
+            panel: (
+              <ObservationPanel
+                badge={<NoVerdictBadge />}
+                before={metric.beforeText}
+                after={metric.afterText}
+                delta={<span className="font-mono text-sm font-bold tabular-nums text-fg-2">{metric.deltaText}</span>}
+                chart={
+                  <ItemChart
+                    data={valuesChartData(metric.before, metric.after, [metric.beforeText, metric.afterText], from, to)}
+                  />
+                }
+                chartCaption="95% CI 산출하지 않음 — 판정 대상이 아닙니다"
+                prose={sourceProse}
+                gate={[
+                  { label: "n(전) 매치", value: delta.n.before.toLocaleString() },
+                  { label: "n(후) 매치", value: delta.n.after.toLocaleString() },
+                  { label: "판정", value: `없음 — ${to} 패치노트에 맵 항목 없음` },
+                ]}
+                gateLink={{ href: "/pubg/methodology/", label: "방법론 보기 →" }}
+                source={null}
+                causes={
+                  <p className="pt-3 text-sm text-muted">판정이 없어 원인을 추정하지 않습니다 — {rotation}</p>
+                }
+              />
+            ),
+          },
+        ],
+      }))
+    : [];
 
   return (
     <main>
@@ -114,7 +212,13 @@ export default function PubgMapDetail({
         <PageHeader
           crumbs={detailCrumbs("pubg", identity.koName)}
           title={identity.koName}
-          titleAside={`맵 · ${identity.sizeLabel}`}
+          titleAside={
+            // 머리 뱃지 자리도 다른 상세와 같다 — 판정이 없는 축이라 상태 어휘 대신 「판정 없음」을 둔다.
+            <span className="flex items-center gap-2">
+              {`맵 · ${identity.sizeLabel}`}
+              <NoVerdictBadge />
+            </span>
+          }
           lead={
             // 맵에는 통계 판정 행이 없다 — 없는 판정을 있는 것처럼 쓰지 않고 관측값만 말한다.
             oneSided
@@ -136,22 +240,30 @@ export default function PubgMapDetail({
           imageSrc={hasRender ? publicMapPath(identity.assetName) : null}
           fit="cover"
           fallbackMark={identity.koName}
-          stats={stats}
+          stats={[]}
         />
 
-        {/* 2026-09-19 사용자 지적("근거가 전혀 사용자가 알아볼 수 없게되어있어")의 맵 쪽 대응.
-            무기 상세와 달리 맵에는 통계 판정 행이 없어 판정 근거 문단이 성립하지 않는다 —
-            대신 **이 숫자가 어디서 나왔는지**를 한 문장으로 말한다. 없는 판정을 있는 것처럼
-            서술하지 않는 쪽이 "무근거 문장은 회색" 원칙과 같은 계열의 정직이다. */}
-        <p className="text-sm leading-relaxed text-fg-2">
-          {delta
-            ? `이 수치는 Steam 전 지역·전 티어 매치 중 ${identity.koName}에서 진행된 ` +
-              `${(statBefore?.nMatches ?? 0).toLocaleString()}건(${maps.deltas.meta.from}) · ` +
-              `${(statAfter?.nMatches ?? 0).toLocaleString()}건(${maps.deltas.meta.to})을 집계한 것입니다. ` +
-              `${maps.deltas.meta.to} 패치노트에는 맵 항목이 없어 관측값만 표시합니다.`
-            : `이 수치는 Steam 전 지역·전 티어 매치 중 ${identity.koName}에서 진행된 ` +
-              `${shown.nMatches.toLocaleString()}건을 집계한 것입니다. 한쪽 구간에만 표본이 잡혀 두 패치를 비교하지 않았습니다.`}
-        </p>
+        {/* 선언 대조 — 네 상세가 같은 골격이다(머리 → 패치노트 대조 → 관측, 2026-10-07 화면 대조 V6). 맵은 노트가 말한
+            항목이 0건이라 그 사실을 같은 자리에서 말한다 — 머리 문장으로만 흡수하면 이 상세만 섹션이 하나 빈다. */}
+        <SectionCard
+          eyebrow="선언 대조"
+          title="패치노트 대조"
+          variant="glass"
+          action={<span className="font-mono text-xs text-muted">말한 것 0</span>}
+        >
+          <p className="px-5 py-4 text-sm text-muted">
+            {to} 패치노트에 이 맵을 언급한 항목이 없습니다. 그래서 아래 관측은 판정 없이 값만 보입니다.
+          </p>
+        </SectionCard>
+
+        <ObservationSection
+          mode="descriptive"
+          metrics={metrics}
+          initial={metrics.length > 0 ? { metric: metrics[0].key, segment: ALL_SEGMENT } : null}
+          segmentLabel={null}
+          noSegmentNote={`판정 없음 — ${to} 패치노트에 맵 항목이 없어 관측값만 보입니다`}
+          emptyText={`이 맵은 한쪽 구간에만 표본이 잡혀 두 패치를 비교하지 않았습니다(${shown.nMatches.toLocaleString()}매치). ${rotation}`}
+        />
 
         <SectionCard
           eyebrow="구성"

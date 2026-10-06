@@ -55,6 +55,11 @@ export interface ItemChartData {
    * 폴백(after 막대만 CI)이거나 errorSuppressed면 null — before의 "자기 CI"가 없는데
    * 값을 지어내지 않는다(무근거 문장 금지). */
   barCi: { before: Interval; after: Interval } | null;
+  /**
+   * 막대 아래 값 표기를 호출부가 정한다(2026-10-06 상세 공통 관측 섹션 — 네 상세가 같은 차트를 쓴다). 없으면
+   * `kind`로 포맷한다. TFT 평균 등수(「4.35등」)·PUBG 맵 평균 매치 시간(「29:29」)처럼 세 단위 밖의 값이 이 길로 온다.
+   */
+  valueText?: [string, string];
 }
 
 function scaleFor(kind: MetricKind): number {
@@ -141,4 +146,29 @@ export function buildChartData(
   }
 
   return { kind, hasData, errorSuppressed, bars, barCi };
+}
+
+/**
+ * 판정 행이 아닌 값 두 개로 차트 데이터를 만든다(2026-10-06 상세 공통 관측 섹션 — PUBG 무기·맵).
+ * 오차 막대는 그리지 않는다: PUBG 무기의 CI는 **상대 변화**의 구간이라 막대 높이와 같은 축이 아니고, 맵은
+ * 판정을 만들지 않아 CI가 없다. `chartValue`는 원시값 그대로이며 표기는 `valueText`가 소유한다.
+ */
+export function valuesChartData(
+  before: number | null,
+  after: number | null,
+  valueText: [string, string],
+  beforeLabel = "전",
+  afterLabel = "후"
+): ItemChartData {
+  return {
+    kind: "gold",
+    hasData: before !== null && after !== null,
+    errorSuppressed: false,
+    bars: [
+      { key: "before", label: beforeLabel, rawValue: before, chartValue: before, error: [0, 0] },
+      { key: "after", label: afterLabel, rawValue: after, chartValue: after, error: [0, 0] },
+    ],
+    barCi: null,
+    valueText,
+  };
 }
