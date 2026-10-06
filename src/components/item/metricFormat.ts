@@ -1,7 +1,7 @@
 // src/components/item/metricFormat.ts
-// 항목 상세(ST-12) 전용 지표 표시 헬퍼 — src/lib/format.ts(다른 SubTask 소유, 편집 금지)가
-// 커버하지 못하는 "firstSec"(오브젝트 첫 획득 시각, src/pipeline/match/delta.ts 확정 metric
-// 이름 — entityName에 이미 "용"/"전령"/"바론"/"포탑"이 들어있고 metricLabel엔 이 키가 없다)
+// 항목 상세(ST-12) 전용 지표 표시 헬퍼 — 값 분류·표기는 src/lib/format.ts가 소유하고 여기선
+// 재노출만 한다. 이 파일 고유의 것은 lib/format.ts가 커버하지 못하는 "firstSec"(오브젝트 첫
+// 획득 시각, src/pipeline/match/delta.ts 확정 metric 이름 — entityName에 이미 "용"/"전령"/"바론"/"포탑"이 들어있고 metricLabel엔 이 키가 없다)
 // 표시와, DeltaRecord.metric → DeltaValue/차트가 쓰는 단위 종류(kind) 매핑을 이 파일에 모은다.
 // 순수 함수만 — 부수효과 없음(테스트 대상).
 

@@ -16,6 +16,19 @@
 - next 16.3.8 업(의존성 변경) → ST-17
 - 계획 9건 중 3번 워크플로(persist-credentials) → ST-2(PR-1에서 브랜치 dispatch로 검증)
 
+### 리팩토링 계획(대화) 9건 → SubTask 대응
+| 계획 # | 내용 | SubTask |
+|---|---|---|
+| 1 | LoL `maxTotalCalls` 누락(상한 150 고정) | ST-1 |
+| 2 | `cacheKeyFor` effort 기준값 | ST-3 |
+| 3 | 워크플로 checkout 토큰 범위 | ST-2 |
+| 4 | 미사용 export 6건 | ST-4 |
+| 5 | `PATCH_ID_PATTERN` 4벌 + `trimmed()` 3벌 | ST-5 |
+| 6 | `defaultSleep`/`backoffMs` 3벌 | ST-6 |
+| 7 | `pct`/`signedPct` 사본 | ST-7 |
+| 8 | 문서 드리프트 주석 4곳 | ST-12 |
+| 9 | vitest `e2e/**` exclude | ST-12 |
+
 ## ② 확정 제약
 - 리팩토링 = **기능 보존**. 동작이 바뀌는 것은 🔴#1(버그 수정)과 #3(CI 인증 배선)뿐이며 명시한다.
 - 의미가 다른 사본(signedPct 변종·readJson 변종)은 **출력을 하나로 합치지 않는다** — 옵션/명시 변종으로 단일 소스화하고,
@@ -39,7 +52,7 @@
 |---|---|---|
 | ST-3 | effort 캐시 키: 비교 기준을 고정 리터럴(캐시 생성 기준 effort)로 분리, `cacheKeyFor`가 기준값을 인자로 받음. 실제 캐시 파일 golden 테스트 + 기본값 변경 시나리오 테스트 | [TDD] |
 | ST-4 | 미사용 export 6건 제거(PubgPageHeader·TftPageHeader·TftMetricCaption·gameDataEntityCount·noteAnchorHash·TELEMETRY_RETENTION_HOURS) + 앵커 해시 이중 구현 정리 | — |
-| ST-5 | `PATCH_ID_PATTERN` 4벌 + `trimmed()` 3벌 → `scripts/shared/cli.ts` 단일 export | — |
+| ST-5 | `PATCH_ID_PATTERN` 4벌 + `trimmed()` 3벌 → `scripts/shared/cli.ts` 단일 export(공용화하며 `envValue(name, env?)`로 개명 — 3개 determine 스크립트가 import) | — |
 | ST-6 | `defaultSleep`/`backoffMs` 3벌 → `pipeline/shared/retry.ts`(base는 인자) | — |
 | ST-7 | `pct`/`signedPct` 사본 전부 → `pipeline/shared/percent.ts`(단위 `%`/`%p`·부호 규칙·마이너스 기호를 옵션으로), 호출부별 특성화 테스트 선고정 | — |
 | ST-8 | `readJson` 변종 → 명시 2변종(없으면 null+깨지면 throw / 깨져도 null)으로 단일화(lib 3곳 + scripts 동일 사본) | — |
