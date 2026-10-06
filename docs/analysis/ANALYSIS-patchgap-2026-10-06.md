@@ -61,7 +61,7 @@ PUBG만 집계와 판정이 `run-pubg-aggregate.ts` 한 스크립트에 합쳐�
 ### 평가
 | 항목 | 평가 | 근거 |
 |---|---|---|
-| 레이어 분리 | 높음 | Riot/PUBG 호출은 collect만, Claude는 `llm-match.ts`만, aggregate fs 0, pipeline→lib/components 역참조 0 |
+| 레이어 분리 | 높음 | Riot/PUBG 호출은 collect만, Claude는 `llm-match.ts`만, aggregate fs 0, pipeline→components 역참조 0(※정정 2026-10-06: pipeline/discord → lib의 순수 유틸 3개(format·detailRoutes·pubgRoutes) 의존은 있다 — 디스코드가 화면과 같은 링크·포맷을 써야 하는 정당한 의존) |
 | 패턴 일관성 | 보통 | LLM 2단·UI 쉘(CompareToolbar/NoteNavPanel/BriefingTabs)은 공용, 수집·1단 판정·로더·표 본문은 게임별 평행 3벌 |
 | 확장성 | 보통 | 4번째 게임 = LLM 프로필 1개 + 나머지 평행 파일 세트 신설. `adapterMatrixData.ts`가 서술하는 `NoteSource`/`MatchSource` 인터페이스는 코드에 없음 |
 | 테스트 가능성 | 높음 | fetchImpl 주입, 순수 함수 판정, 171 테스트 파일, screen-parity 계약 테스트 |
