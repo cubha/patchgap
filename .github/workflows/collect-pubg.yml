@@ -78,6 +78,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # 토큰을 .git/config에 남기지 않는다 — push 스텝이 그때만 주입한다(아래 Commit + push 참고).
+          persist-credentials: false
 
       - name: Setup Node 22
         uses: actions/setup-node@v4
@@ -300,10 +303,15 @@ jobs:
       - name: Commit + push generated data
         if: ${{ !cancelled() && (steps.determine.outputs.mode == 'declaration' || steps.determine.outputs.notes_ready == 'true') && (success() || steps.crash_stub.outcome == 'success') }}
         env:
+          GH_TOKEN: ${{ github.token }}
           MODE: ${{ steps.crash_stub.outcome == 'success' && 'declaration after crash' || steps.determine.outputs.mode }}
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
         run: |
+          # 쓰기 토큰은 이 스텝에서만 붙인다(2026-10-06 /analyze). checkout은 persist-credentials: false라
+          # npm ci의 postinstall·tsx 등 앞 스텝의 임의 코드가 contents:write 토큰을 .git/config에서 읽지 못한다.
+          # 헤더 형식은 actions/checkout@v4가 붙이던 것과 같다.
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
           git config user.name "patchgap-bot"
           git config user.email "patchgap-bot@users.noreply.github.com"
           # PUBG 네임스페이스만 건드린다 — LoL·TFT 산출물은 이 워크플로의 소관이 아니다.

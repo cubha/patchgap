@@ -1,8 +1,8 @@
 // src/pipeline/match/llm-match.ts
-// F4 2단(LLM): Claude Sonnet 5로 짝 없는(또는 노트와 불일치하는) 델타의 간접 영향 후보를
+// F4 2단(LLM): Claude(모델은 `llm-config.ts` LLM_MODEL)로 짝 없는(또는 노트와 불일치하는) 델타의 간접 영향 후보를
 // 추론한다. 반환된 후보 ID는 반드시 후보셋 검증(verified) 뒤에만 유색 링크로 노출한다 — 무근거
 // 문장은 회색(verdict.ts 원칙과 동일). 배치 1회 상한·캐시 우선·예산 소진 시 캐시 폴백.
-// 런타임 외부 API 호출은 이 모듈에 한정한다(diretory 규칙: match/llm-match.ts만 Claude API 호출).
+// 런타임 외부 API 호출은 이 모듈에 한정한다(directory 규칙: match/llm-match.ts만 Claude API 호출).
 //
 // 캐시: data/cache/llm/{sha256(model+promptVersion+deltaId+candidateSetHash)}.json — 있으면 API
 // 호출 0. 프롬프트 캐싱(Anthropic 서버 측, cache_control:ephemeral)과는 다른 개념 — 이건 우리
@@ -46,6 +46,15 @@ export const DEFAULT_MAX_DELTAS = 120;
 // 2026-09-19 v5: 130 → 150. 길이 재요청이 같은 지갑에서 나가므로(델타당 최대 1회), 대상 120건에
 // 재요청 여지 30건을 더한다. 실측 위반은 120건 중 3건·110건 중 2건이라 여유가 충분하다.
 export const DEFAULT_MAX_TOTAL_CALLS = 150;
+// 2026-10-06: 총 상한을 호출부가 따로 챙기게 두면 한쪽만 고쳐진다 — TFT는 `llmMax + 40`을 넘겼지만 LoL은
+// 안 넘겨 CI `--llm-max 400`이 이 기본 150에 묶였다. 그래서 미지정이면 엔진이 maxDeltas에서 유도한다.
+// 여유 40은 TFT가 실측으로 쓰던 값(문장 재요청 몫)이다.
+export const PROSE_REPAIR_HEADROOM = 40;
+
+/** 호출 총 상한 — 명시값이 있으면 그것, 없으면 `max(기본 150, maxDeltas + 재요청 여유)`. */
+export function totalCallCapFor(maxDeltas: number, explicit?: number): number {
+  return explicit ?? Math.max(DEFAULT_MAX_TOTAL_CALLS, maxDeltas + PROSE_REPAIR_HEADROOM);
+}
 
 const OutputSchema = z.object({
   causes: z.array(
@@ -586,9 +595,9 @@ export function summaryNumbersGrounded(summaryText: string, candidates: readonly
 }
 
 export interface LlmMatchOptions {
-  /** 세션당 LLM 2단 시도 대상 델타 수 상한(`--llm-max`, 기본 50). */
+  /** 세션당 LLM 2단 시도 대상 델타 수 상한(`--llm-max`, 기본 `DEFAULT_MAX_DELTAS`). */
   maxDeltas?: number;
-  /** 세션당 실제 API 호출 총 상한(캐시 히트는 포함 안 됨, 기본 60). */
+  /** 세션당 실제 API 호출 총 상한(캐시 히트는 포함 안 됨). 없으면 `totalCallCapFor(maxDeltas)`. */
   maxTotalCalls?: number;
   /** 기본 data/cache/llm/. */
   cacheDir?: string;
@@ -684,7 +693,7 @@ export async function inferIndirectCandidates<TDelta extends LlmDelta = DeltaRec
   options: LlmMatchOptions = {}
 ): Promise<LlmMatchResult<TDelta>> {
   const maxDeltas = options.maxDeltas ?? DEFAULT_MAX_DELTAS;
-  const maxTotalCalls = options.maxTotalCalls ?? DEFAULT_MAX_TOTAL_CALLS;
+  const maxTotalCalls = totalCallCapFor(maxDeltas, options.maxTotalCalls);
   const cacheDir = options.cacheDir ?? llmCacheDir();
   // 호출부 옵션이 있으면 그것이 우선(일회성 실험용), 평소 태그는 프로필이 지시문 옆에서 든다(C5).
   const revision = options.promptRevision || profile.promptRevision;

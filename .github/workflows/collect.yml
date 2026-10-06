@@ -119,6 +119,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # 토큰을 .git/config에 남기지 않는다 — push 스텝이 그때만 주입한다(아래 Commit + push 참고).
+          persist-credentials: false
 
       - name: Setup Node 22
         uses: actions/setup-node@v4
@@ -263,6 +266,10 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           # 실제 호출 opt-in(2026-09-29 호출 정책) — 없으면 엔진은 캐시 전용이라 미스가 있으면 견적과 함께 멈춘다.
           PATCHGAP_LLM: "1"
+          # 예산은 상한에 맞춘다(2026-10-06): 총 상한 = llm_max 400 + 재요청 40 = 440건 × 견적 $0.03 ≈ $13.2.
+          # 기본 $8로 두면 미스 266건을 넘는 패치에서 엔진이 호출 전에 던져 그 패치 커밋 자체가 막힌다
+          # (예전엔 상한이 150에 묶여 견적도 $4.5에서 잘렸기 때문에 이 충돌이 안 보였다). 실단가는 ≈$0.015.
+          PATCHGAP_LLM_BUDGET_USD: "14"
         run: |
           npx tsx scripts/run-match.ts \
             --from "$PATCH_FROM" \
@@ -395,9 +402,14 @@ jobs:
       - name: Commit + push generated data
         if: steps.determine.outputs.should_run == 'true'
         env:
+          GH_TOKEN: ${{ github.token }}
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
         run: |
+          # 쓰기 토큰은 이 스텝에서만 붙인다(2026-10-06 /analyze). checkout은 persist-credentials: false라
+          # npm ci의 postinstall·tsx 등 앞 스텝의 임의 코드가 contents:write 토큰을 .git/config에서 읽지 못한다.
+          # 헤더 형식은 actions/checkout@v4가 붙이던 것과 같다.
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
           git config user.name "patchgap-bot"
           git config user.email "patchgap-bot@users.noreply.github.com"
           git add data/aggregated public/dd data/ddragon data/cache/llm

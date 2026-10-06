@@ -6,6 +6,8 @@ import os from "node:os";
 import path from "node:path";
 
 import { assertNoLlmDowngrade, llmResultCount } from "../shared/llm-guard";
+import { DEFAULT_MAX_DELTAS, totalCallCapFor } from "../../src/pipeline/match/llm-match";
+import { DEFAULT_LLM_BUDGET_USD, LLM_EST_USD_PER_CALL } from "../../src/pipeline/match/llm-config";
 
 const read = (p: string) => fs.readFileSync(path.join(process.cwd(), p), "utf8");
 
@@ -22,6 +24,22 @@ describe("CI 워크플로 — LLM 호출 opt-in · 즉시 저장 · 커밋", () 
     });
     it(`${wf}: 커밋 스텝이 data/cache/llm을 올린다(로컬과 공유 · 7일 휘발 방지)`, () => {
       expect(src).toMatch(/git add [^\n]*data\/cache\/llm/);
+    });
+  }
+  // 2026-10-06: 상한을 올리면 견적도 따라 올라 기본 예산($8)을 넘는다 — 넘으면 엔진이 호출 전에 던져 그 패치
+  // 커밋이 막힌다. 워크플로의 llm_max 기본값과 예산이 서로를 모르고 바뀌지 않게 묶는다.
+  it("collect: 예산이 llm_max 기본값의 최대 견적(총 상한 × 건당 추정치)을 덮는다", () => {
+    const src = read(".github/workflows/collect.yml");
+    const llmMax = Number(/LLM_MAX: \$\{\{ github\.event\.inputs\.llm_max \|\| '(\d+)' \}\}/.exec(src)?.[1]);
+    const budget = Number(/PATCHGAP_LLM_BUDGET_USD: "([\d.]+)"/.exec(src)?.[1]);
+    expect(llmMax).toBeGreaterThan(0);
+    expect(budget).toBeGreaterThanOrEqual(totalCallCapFor(llmMax) * LLM_EST_USD_PER_CALL);
+  });
+  for (const wf of ["collect-tft", "collect-pubg"]) {
+    it(`${wf}: 예산을 명시하지 않으면 기본 상한의 견적이 기본 예산 안이다`, () => {
+      const src = read(`.github/workflows/${wf}.yml`);
+      expect(src).not.toMatch(/llm-max/);
+      expect(totalCallCapFor(DEFAULT_MAX_DELTAS) * LLM_EST_USD_PER_CALL).toBeLessThanOrEqual(DEFAULT_LLM_BUDGET_USD);
     });
   }
   it(".gitignore가 data/cache/llm만 추적 대상으로 연다", () => {

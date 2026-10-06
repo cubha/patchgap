@@ -186,9 +186,8 @@ async function main(): Promise<void> {
     const result = await inferIndirectCandidates(final, notes, tftLlmProfile, {
       maxDeltas: llmMax,
       planOnly: args.dryRun,
-      // 문장 재요청이 **같은 지갑에서** 나가므로 호출 총 상한을 대상 수보다 위에 둔다 —
-      // 그러지 않으면 뒤쪽 델타가 `call-budget-exceeded`로 떨어져 화면에 "LLM 미실행"으로 보인다.
-      maxTotalCalls: llmMax + 40,
+      // 호출 총 상한은 엔진이 maxDeltas에서 유도한다(`totalCallCapFor` — 대상 수 + 재요청 여유 40).
+      // 전엔 여기서 `llmMax + 40`을 직접 넘겼고 LoL은 그걸 빠뜨려 150에 묶였다(2026-10-06).
     });
     final = result.deltas;
     llmSummary = result.summary;
