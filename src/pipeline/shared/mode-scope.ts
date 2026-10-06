@@ -10,7 +10,7 @@
 // 모드 노트에만 걸려 있었다.
 //
 // **왜 section을 고치지 않는가**: 노트 id가 `note:{patch}:{section}:{slug}:{내용해시}`라 section을
-// 바꾸면 id가 바뀐다 → 커밋된 두 델타 파일의 matchedNoteIds가 전부 댕글링되고, llm-match의
+// 바꾸면 id가 바뀐다 → 커밋된 두 델타 파일의 matchedNoteIds가 전부 댕글링되고, llm-cache.ts의
 // candidateSetHash(= 전체 노트 직렬화 해시, section 포함)가 바뀌어 LLM 캐시 388건이 전량 무효가
 // 된다. 새 필드는 `toCandidateView`가 직렬화하지 않으므로 캐시·id가 모두 불변이다.
 // 근거: docs/plan/BRAINTRUST-root-fix-2026-09-19.md §4.

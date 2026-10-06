@@ -1,5 +1,8 @@
 # PLAN — /analyze 기술부채 전건 리팩토링 (2026-10-06)
 
+> **상태: 완료 — #71(8810212)·#72(815010c) main 머지(2026-10-06).** /verify-impl 축A 2라운드 마감, 미충족은 ST-15 clause 2
+> (랜딩 어댑터 매핑표 문구 — 사용자 결정 대기, `PLAN-residuals-sweep-2026-09-27.md` §⑥ B6) 1건.
+
 ## ① 사용자 요구사항 원문
 - "우선 /analyze 및 /refactoring 진행해"
 - (리팩토링 계획 제시 후) **"이월없이 전건진행 /sh-dev-loop --tdd --auto"**
