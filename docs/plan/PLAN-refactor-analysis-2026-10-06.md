@@ -50,7 +50,7 @@
 ### PR-2 `refactor/analysis-debt` (구조 정리)
 | ID | 내용 | 태그 |
 |---|---|---|
-| ST-3 | effort 캐시 키: 비교 기준을 고정 리터럴(캐시 생성 기준 effort)로 분리, `cacheKeyFor`가 기준값을 인자로 받음. 실제 캐시 파일 golden 테스트 + 기본값 변경 시나리오 테스트 | [TDD] |
+| ST-3 | effort 캐시 키: 비교 기준을 고정 리터럴(캐시 생성 기준 effort)로 분리 — `llm-config.ts` `UNTAGGED_CACHE_EFFORT` 상수를 `cacheKeyFor`가 직접 참조(인자로 열면 호출부가 다른 기준을 넘겨 키를 가를 수 있어 상수로 닫음, ST-3.md). 실제 캐시 파일 golden 테스트 + 기본값 변경 시나리오 테스트 | [TDD] |
 | ST-4 | 미사용 export 6건 제거(PubgPageHeader·TftPageHeader·TftMetricCaption·gameDataEntityCount·noteAnchorHash·TELEMETRY_RETENTION_HOURS) + 앵커 해시 이중 구현 정리 | — |
 | ST-5 | `PATCH_ID_PATTERN` 4벌 + `trimmed()` 3벌 → `scripts/shared/cli.ts` 단일 export(공용화하며 `envValue(name, env?)`로 개명 — 3개 determine 스크립트가 import) | — |
 | ST-6 | `defaultSleep`/`backoffMs` 3벌 → `pipeline/shared/retry.ts`(base는 인자) | — |
