@@ -9,6 +9,7 @@
 // 그렇다고 원천을 지우지는 않는다 — "모든 판정문은 원천 링크를 가진다"(CLAUDE.md)가 이 프로젝트의
 // 불변식이다. 그래서 위계를 바꾼다: 자연어 문장이 먼저 오고, 식별자는 접힌 영역에 남는다.
 import type { PubgDeltaRow } from "@/pipeline/match/pubg-delta";
+import { formatPercent, formatSignedPercent, SIGNED_PERCENT_PROSE } from "@/pipeline/shared/percent";
 
 export interface PubgEvidenceProseInput {
   /** 대상 이름 — "Beryl M762" 또는 맵 이름. */
@@ -29,9 +30,7 @@ export interface PubgEvidenceProseInput {
   effectFloor?: number;
 }
 
-function pct(value: number, digits = 2): string {
-  return `${(value * 100).toFixed(digits)}%`;
-}
+const pct = (value: number, digits = 2): string => formatPercent(value, digits);
 
 /**
  * 구간이 0을 걸치는가 — **문장이 인용하는 바로 그 수치**로 판정한다(2026-09-19 최종 채점 K2-1).
@@ -46,10 +45,7 @@ function ciIncludesZero(ci: readonly [number, number]): boolean {
   return ci[0] <= 0 && ci[1] >= 0;
 }
 
-function signedPct(value: number, digits = 1): string {
-  const formatted = `${(Math.abs(value) * 100).toFixed(digits)}%`;
-  return value >= 0 ? `+${formatted}` : `−${formatted}`;
-}
+const signedPct = (value: number, digits = 1): string => formatSignedPercent(value, digits, SIGNED_PERCENT_PROSE);
 
 /**
  * 근거 문단을 문장 배열로 돌려준다(렌더는 호출부 몫). 문장은 넷으로 나뉜다 —

@@ -8,17 +8,13 @@ import { isLowerBetter } from "@/lib/format";
 import type { DeltaMetric } from "@/pipeline/types";
 import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
 import type { ObservationFailure } from "@/pipeline/types";
+import { formatPercent, formatSignedPercent, SIGNED_POINT } from "@/pipeline/shared/percent";
 
 /** 0.5231 → "52.3%". */
-export function pct(value: number, digits = 1): string {
-  return `${(value * 100).toFixed(digits)}%`;
-}
+export const pct = (value: number, digits = 1): string => formatPercent(value, digits);
 
 /** +0.0231 → "+2.3%p". */
-export function signedPct(value: number, digits = 1): string {
-  const p = value * 100;
-  return `${p >= 0 ? "+" : ""}${p.toFixed(digits)}%p`;
-}
+export const signedPct = (value: number, digits = 1): string => formatSignedPercent(value, digits, SIGNED_POINT);
 
 /** 4.352 → "4.35등". */
 export function placement(value: number): string {

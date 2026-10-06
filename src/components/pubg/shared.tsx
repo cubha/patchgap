@@ -5,15 +5,12 @@
 import SiteFooter from "@/components/SiteFooter";
 import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
 import type { ObservationFailure } from "@/pipeline/types";
+import { formatPercent, formatSignedPercent, SIGNED_PERCENT } from "@/pipeline/shared/percent";
 
-export function pct(value: number, digits = 1): string {
-  return `${(value * 100).toFixed(digits)}%`;
-}
+export const pct = (value: number, digits = 1): string => formatPercent(value, digits);
 
-export function signedPct(value: number, digits = 1): string {
-  const sign = value > 0 ? "+" : "";
-  return `${sign}${(value * 100).toFixed(digits)}%`;
-}
+/** 디스코드(`pipeline/discord/pubg-briefing.ts`)와 같은 스타일 상수를 쓴다 — 두 표면이 같은 출력. */
+export const signedPct = (value: number, digits = 1): string => formatSignedPercent(value, digits, SIGNED_PERCENT);
 
 /** 표본 성격 고지 — 방법론 화면 상단. 판정 숫자를 읽기 전에 알아야 할 표본의 성격만 말한다. */
 export function PubgSampleNotice({ sampleScope }: { sampleScope: string }) {
