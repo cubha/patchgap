@@ -131,7 +131,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
-          git push --dry-run origin "HEAD:${GITHUB_REF}"
+          # 존재하지 않는 고유 ref로 민다 — `HEAD:${GITHUB_REF}`면 체크아웃 뒤 main이 앞서간 순간 non-fast-forward로
+          # 빨간불이 되는데, 그건 인증 문제가 아니다(한 신호가 두 상태를 덮는다). 새 ref 생성은 언제나 fast-forward다.
+          git push --dry-run origin "HEAD:refs/heads/_auth-canary-${GITHUB_RUN_ID}"
 
       - name: Upload logs on failure
         if: failure()
