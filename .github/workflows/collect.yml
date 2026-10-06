@@ -161,7 +161,8 @@ jobs:
         # 즉 매 실행이 같은 델타에 예산을 다시 쓰고, 그 결과를 커밋 없이 버렸다. 실제 피해는
         # 예산 낭비만이 아니다: 같은 입력에 대해 low-confidence 후보가 재현되지 않아
         # (실측 6건) 같은 델타의 "추정 원인"이 실행마다 나타났다 사라졌다 한다.
-        # `data/cache/`는 gitignore라 저장소로는 보존되지 않으므로 여기서 보존해야 한다.
+        # 장기 보존은 git이다(`data/cache/llm`만 gitignore 예외로 커밋 — 2026-09-29). 이 복원은 같은 날 재실행이
+        # 직전 실행의 미커밋 캐시를 잇게 하는 몫이다.
         if: steps.determine.outputs.should_run == 'true'
         uses: actions/cache/restore@v4
         with:

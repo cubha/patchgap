@@ -323,6 +323,11 @@ if [ -n "$DESIGN_TARGETS" ] && [ -f "$DESIGN_LINT" ] && command -v node >/dev/nu
     FAIL_COUNT=$((FAIL_COUNT + 1))
   fi
   [ -f docs/design/DESIGN-TOKENS.md ] || warn "DESIGN-TOKENS.md 없음 — 토큰 위생 검사 스킵(/init-design 권장)"
+elif [ -n "$DESIGN_TARGETS" ]; then
+  # 시안은 있는데 린터가 없다(CI 러너는 항상 이 경로 — 린터는 로컬 ~/.claude 스킬이다). 조용히 넘기면
+  # "통과"와 "미실행"이 같은 출력이 된다(2026-10-06 /analyze) — 미실행임을 말한다. 게이트는 로컬 실행이 소유한다.
+  header "디자인 게이트 (design-lint)"
+  warn "design-lint 미실행 — 린터 없음($DESIGN_LINT). 로컬에서 bash verify.sh로 확인한다"
 else
   [ -n "$DESIGN_TARGETS" ] && warn "design-lint 스킵 — node 또는 스킬 스크립트 없음"
 fi
