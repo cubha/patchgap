@@ -1,17 +1,17 @@
 # patchgap
 
-**26.18 패치노트는 12개 챔피언·아이템을 바꿨다고 말했고, 통계는 62개 변화를 말한다.**
+**LoL 26.19 패치노트는 19개 항목을 바꿨다고 말했고, 통계는 76개 변화를 말한다.**
 
 patchgap는 게임 공식 패치노트가 *말한 것*과 매치 통계가 *실제로 말하는 것* 사이의 괴리 —
 미공지 변화·간접 메타 이동 — 를 통계 게이트와 원천 링크를 붙여 보여주는 정적 브리핑 사이트다.
-26.17→26.18 기준 미공지 Gap 29개 엔티티, 전부 원천 매치·집계·패치노트 앵커로 되짚을 수 있다.
+26.18→26.19 기준 미공지 Gap 36개 엔티티(TFT 18.2→18.3 25개 · PUBG 42.3→43.1 5개), 전부 원천 매치·집계·패치노트 앵커로 되짚을 수 있다.
 
 - 🔗 **서비스**: https://patchgap.vercel.app
 - 🎯 **타겟**: LoL KR 코치·클랜장·분석 스트리머 — "패치 첫 주에 뭘 먼저 봐야 하나"를 24~72h 안에 답해야 하는 사람
 - ❓ **문제**: 패치노트는 *바꾼 것*만 적는다. 실제 메타를 흔드는 것은 적히지 않은 변화와 간접 파급인데,
   그걸 알려면 각자 통계 사이트에서 수치를 눈으로 대조해야 하고 그 대조는 재현되지 않는다.
 - ✅ **완성 기준**: ① 패치노트 항목 ↔ 관측 델타 자동 대조 ② 통계 게이트를 통과한 미공지 변화(원천 링크 첨부)
-  ③ 런타임 외부 API 호출 0의 정적 배포 ④ 동일 브리핑 Discord 웹훅 전송 ⑤ 두 번째 게임(PUBG) 어댑터 실동작
+  ③ 런타임 외부 API 호출 0의 정적 배포 ④ 동일 브리핑 Discord 웹훅 전송 ⑤ 같은 엔진으로 세 게임(LoL·TFT·PUBG) 실동작
 
 ## 화면
 
@@ -21,10 +21,13 @@ patchgap는 게임 공식 패치노트가 *말한 것*과 매치 통계가 *실�
 | `/lol` | LoL 브리핑 — 공지된 변화 / 미공지 Gap 두 축, 라인 필터 |
 | `/lol/compare` | 패치노트 항목 ↔ 관측 델타 대조표(엔티티 1행) |
 | `/lol/item/[id]` | 관측 1건의 상세 — 전후 수치·CI·원천 링크·추정 원인(LLM) |
-| `/lol/methodology` | 통계 게이트·파이프라인·어댑터 매핑표(LoL ↔ PUBG)·LLM 사용 경계 |
-| `/pubg` | 두 번째 게임 어댑터 — 42.3→43.1 무기 47종 판정(미공지 5건) + 맵 기술통계 |
+| `/lol/methodology` | 통계 게이트·파이프라인·어댑터 매핑표·LLM 사용 경계 |
+| `/lol/history/[pair]/**` | 과거 패치쌍(26.16→26.17 · 26.17→26.18)의 같은 브리핑·대조표·상세 |
+| `/tft` · `/tft/compare` · `/tft/unit/[key]` · `/tft/methodology` · `/tft/history/[pair]/**` | TFT — 18.2→18.3 유닛·특성·아이템 판정(미공지 25건), 같은 화면 구조 |
+| `/pubg` · `/pubg/compare` · `/pubg/weapon/[key]` · `/pubg/map/[key]` · `/pubg/methodology` | PUBG — 42.3→43.1 무기 47종 판정(미공지 5건) + 맵 기술통계 |
 
-게임은 **경로 접두**다(`/lol`, `/pubg`). 루트는 어느 게임에도 속하지 않는 랜딩이고, 랜딩은
+세 게임은 메뉴별 레이아웃·뱃지·어휘·푸터가 같다(`docs/design/UX-BRIEF.md` §8 동등성 계약, `screen-parity.test.ts`가 강제).
+게임은 **경로 접두**다(`/lol`, `/tft`, `/pubg`). 루트는 어느 게임에도 속하지 않는 랜딩이고, 랜딩은
 `GAMES` 레지스트리를 순회해 패널을 그린다 — 게임이 늘면 화면 코드는 그대로다. 구 무접두 경로
 (`/compare`·`/item/{id}`·`/methodology`)는 `vercel.json` 리다이렉트가 `/lol/**`로 넘긴다.
 
@@ -35,8 +38,9 @@ patchgap는 게임 공식 패치노트가 *말한 것*과 매치 통계가 *실�
 ```
 
 판정 엔진(`verdict.ts`)은 **게임을 모른다** — `{entity, metric, before, after, n}`만 받는다.
-게임별 어댑터가 그 형태로 정규화하면 같은 엔진이 판정한다. LoL은 Riot Match-v5,
-PUBG는 PUBG API `/samples` + 텔레메트리 축약이 어댑터다.
+게임별 어댑터가 그 형태로 정규화하면 같은 엔진이 판정한다. LoL은 Riot Match-v5, TFT는 Riot TFT Match-v1,
+PUBG는 PUBG API `/samples` + 텔레메트리 축약이 어댑터다. 세 게임의 실행 판정은 공통 타입
+`PatchRunDecisionBase`(`src/pipeline/types.ts`)를 따르고, LLM 2단 엔진은 게임별 어휘(`llm-profile-*.ts`)만 갈아 끼운다.
 
 1. **수집** — KR 챌린저/GM/마스터 시드 → puuid → 패치 라이브 시간창 매치ID → 상세 전량(패치당 1만)
    + 타임라인 표본. `fetch` + bottleneck 2단 리밋(20/1s ⟵ 100/120s), 429 재시도, `gameVersion` 접두 컷,
@@ -82,18 +86,22 @@ LLM은 **결정론 단계가 못 푸는 두 가지에만** 쓴다 — 짝 없는
 - 모델이 돌려준 후보 노트 ID는 **입력 후보셋 안에 있을 때만** 인정한다. 밖이면 통째로 버린다.
 - 검증 실패 문장은 삭제하지 않고 **회색(`--muted`)으로 떨어뜨린다** — "AI가 말했다"와 "근거가 있다"를 화면에서 구분한다.
 - 판정(`MatchStatus`)은 LLM이 정하지 않는다. 통계 게이트가 정하고, LLM은 *왜*만 제안한다.
-- 캐시 키는 `sha256(model|promptVersion|deltaId|candidateSetHash)` — 같은 입력은 두 번 호출하지 않는다.
-  예산 소진·API 장애 시 캐시 폴백, 그래도 없으면 회색. 크래시하지 않는다.
+- 캐시 키는 `sha256(model|promptVersion|deltaId|candidateSetHash[|effort=X])`(`llm-cache.ts`) — 같은 입력은 두 번 호출하지 않는다.
+  effort는 기준값(medium)이 아닐 때만 키에 들어가 기존 캐시가 그대로 적중한다. 캐시는 `data/cache/llm/`에 **커밋**한다.
+- 실제 호출은 `PATCHGAP_LLM=1`일 때만(CI가 명시). 로컬 기본은 캐시 전용이고, 미스가 있으면 견적만 보이고 멈춘다.
+  실행 1회 예산(`PATCHGAP_LLM_BUDGET_USD`, 기본 $8 · LoL CI $14)과 총 호출 상한(`max(150, maxDeltas+40)`)을
+  **호출 전에** 견적으로 검사한다. 예산 소진·API 장애 시 캐시 폴백, 그래도 없으면 회색. 크래시하지 않는다.
 
 ## 품질 게이트·에러 추적
 
 | 층 | 무엇을 잡나 |
 |---|---|
 | `bash verify.sh --full` | Spec(토큰 우회·하드코딩) → tsc → eslint → vitest → 빌드 → design-lint 6단 |
-| vitest **85 파일 / 1,026 케이스** | 순수 로직·컴포넌트 렌더·파서 fixture |
+| vitest **175 파일 / 2,101 케이스** | 순수 로직·컴포넌트 렌더·파서 fixture·워크플로 배선 가드 |
 | **산출물 불변식 테스트** | 커밋된 `deltas/*.json`을 직접 검사 — 댕글링 노트 id 0, 모드 노트 짝 0, 모드 노트 인용 0. 결함을 *그 형태 그대로* 인코딩해, 다음에 같은 결함이 나면 데이터 단계에서 깨진다 |
 | `assertModeScopeConsistent` | 패치노트 h2 제목과 앵커 id 신호가 엇갈리면 파싱 시점에 **크게 실패**한다(조용한 오귀속 방지) |
 | GitHub Actions `ci.yml` | main push·모든 PR에서 동일 게이트 재실행 |
+| 쓰기 토큰 범위 | 모든 checkout이 `persist-credentials: false` — 쓰기 토큰은 push 스텝에서만 주입(`npm ci` 등에 노출 0). `patch-watch`가 매일 push 인증을 dry-run으로 확인 |
 | Actions artifact | 수집·매칭 실패 시 `logs/**`·`data/aggregated/**` 스냅샷 업로드 → 실패한 run에서 회수 |
 | UptimeRobot 5분 | `https://patchgap.vercel.app/health.txt`(순수 정적) HTTP 모니터 |
 
@@ -120,7 +128,7 @@ LLM은 **결정론 단계가 못 푸는 두 가지에만** 쓴다 — 짝 없는
 ## 로컬 실행
 
 ```bash
-cp .env.example .env   # RIOT_API_KEY 필수, ANTHROPIC_API_KEY/DISCORD_WEBHOOK_URL 선택
+cp .env.example .env   # RIOT_API_KEY 필수, 나머지 선택(.env.example 주석 참고)
 #   PATCH_FROM=26.17 PATCH_TO=26.18 처럼 짝을 채운 뒤:
 npm ci
 npm run pipeline:all   # collect→timeline→aggregate→ddragon→match→build, out/ 산출
@@ -140,17 +148,23 @@ npm run build
 scripts/collect-all.sh --patches 26.18,26.17 --target 10000 --sample 1500   # 수집만 일괄
 ```
 
+TFT·PUBG는 `pipeline:tft-*`·`pipeline:pubg-*` 스크립트(`package.json`)가 같은 단계를 맡는다. LLM 단계는 로컬에서
+캐시 전용이다 — 새로 호출하려면 `PATCHGAP_LLM=1`, 견적만 보려면 `--dry-run`.
+
 ## 운영
 
-**패치 D+1 체크리스트** (KR 라이브는 관측상 매주 목요일 KST)
+**무인 운영** — 사람이 할 일은 없다. 매일 네 워크플로가 돈다(UTC).
 
-1. `src/pipeline/collect/patch-calendar.ts`의 `PATCH_CALENDAR`에 새 패치 라이브일이 있는지 확인(시간창의 유일한 소스).
-2. 실매치 1건으로 `info.gameVersion` 포맷·`startTime`·`challenges` 존재 확인 — 라이엇이 스키마를 조용히 바꾸는 사고 대비.
-3. Actions `collect` 워크플로를 수동 트리거(`workflow_dispatch`, 입력을 비우면 캘린더 자동 판정)하거나 로컬 절차대로.
-4. `deltas/{from}_{to}.json`의 `meta.counts`에서 `unannounced` ≥1인지, 짝짓기 비율이 합리적인지 확인.
-5. 커밋된 `data/aggregated/**`를 Vercel이 감지해 자동 재배포.
+| 시각 | 워크플로 | 하는 일 |
+|---|---|---|
+| 19:00 | `patch-watch.yml` | 세 게임 새 패치 탐지(LoL·TFT 공개 패치노트, PUBG Steam 뉴스) → `data/patch-calendar/{game}.json` 오버레이에 한 줄 커밋 + 수집 격차 표 + push 인증 카나리아 |
+| 20:00 | `collect-pubg.yml` | PUBG 수집→집계→판정→LLM→디스코드 |
+| 21:00 | `collect-tft.yml` | TFT 수집→집계→판정→LLM→디스코드 |
+| 00:00 | `collect.yml` | LoL 수집→타임라인→집계→판정→LLM→디스코드 |
 
-예약 실행은 매주 목요일 00:00 UTC에 깨어나 그날 라이브하는 패치가 캘린더에 없으면 그대로 종료한다(no-op).
+캘린더(`src/pipeline/collect/patch-calendar.ts` 상수 + 오버레이)에 그날 수집할 패치가 없으면 사유를 남기고 초록불 no-op으로 끝난다.
+수동 실행은 각 워크플로의 `workflow_dispatch`(입력을 비우면 캘린더 자동 판정). 결과 확인은 `deltas` 산출물의 `meta.counts`.
+커밋된 `data/aggregated/**`를 Vercel이 감지해 자동 재배포한다.
 `{patch}/summary.json`이 이미 있으면 같은 패치를 다시 수집하지 않는다(강제는 `force: true`).
 `run-collect.ts`/`run-timeline.ts`는 파일 단위 idempotent 재개이며, Actions는 `data/raw`를 패치별로 캐시해
 6h 타임아웃에 끊겨도 다음 실행이 이어받는다.
@@ -159,9 +173,12 @@ scripts/collect-all.sh --patches 26.18,26.17 --target 10000 --sample 1500   # �
 
 | 종류 | 이름 | 필수 | 비고 |
 |---|---|---|---|
-| Secret | `RIOT_API_KEY` | ✅ | Riot Developer Portal Personal Key |
+| Secret | `RIOT_API_KEY` | ✅ | Riot Developer Portal Personal Key(LoL) |
+| Secret | `RIOT_TFT_API_KEY` | TFT ✅ | TFT 제품 키(Riot 제품 등록은 게임별) |
+| Secret | `PUBG_API_KEY` | PUBG ✅ | PUBG Developer Portal |
 | Secret | `ANTHROPIC_API_KEY` | — | 없으면 LLM 2단이 캐시 폴백/스킵 |
-| Secret | `DISCORD_WEBHOOK_URL` | — | 없으면 브리핑 스텝 자체를 건너뜀 |
+| Secret | `DISCORD_WEBHOOK_URL_{LOL,TFT,PUBG}` | — | 게임별 브리핑 채널(LoL은 옛 `DISCORD_WEBHOOK_URL`도 받음). 없으면 브리핑 스텝을 건너뜀 |
+| Secret | `DISCORD_ROLE_ID_{LOL,TFT,PUBG}` | — | 브리핑 멘션 역할 |
 | Variable | `PATCHGAP_SITE_URL` | 배포 후 ✅ | 미등록이면 브리핑 embed 링크가 자리표시 기본값으로 나간다 |
 
 ## 데이터 계약
@@ -172,13 +189,15 @@ scripts/collect-all.sh --patches 26.18,26.17 --target 10000 --sample 1500   # �
 - `data/aggregated/{patch}/{champions,items,lanes,objectives,summary}.json` — 5종 집계(**커밋**)
 - `data/aggregated/notes/{patch}.json` — 패치노트 파서 출력(**커밋**)
 - `data/aggregated/deltas/{from}_{to}.json` — 판정 최종 산출, 모든 판정문에 원천 링크(**커밋**)
+- `data/aggregated/tft/*.json` — TFT 어댑터 보드·노트·판정(**커밋**)
 - `data/aggregated/pubg/*.json` — PUBG 어댑터 집계·판정(**커밋**)
-- `data/cache/llm/*.json` — LLM 캐시(**커밋 안 함**)
+- `data/patch-calendar/{lol,tft,pubg}.json` — 감시자가 쓰는 캘린더 오버레이(**커밋**)
+- `data/cache/llm/*.json` — LLM 캐시(**커밋** — 로컬·CI가 같은 답을 두 번 사지 않게. 나머지 `data/cache/*`는 커밋 안 함)
 - `public/dd/**`, `data/ddragon/{v}/*.json` — Data Dragon 정적 자산(**커밋**)
 
 ## 고지
 
-Riot Games Developer Portal의 Personal API Key로 고정 레이트 리밋(20req/1s, 100req/120s) 안에서만 호출한다.
+Riot Games Developer Portal의 API Key로 고정 레이트 리밋(20req/1s, 100req/120s) 안에서만 호출한다.
 Riot Games의 지식재산(챔피언·아이템 명칭·이미지, Data Dragon 자산)은 표시 목적으로만 사용하며
 **재판매·유료화 기능은 포함하지 않는다**. 아레나·무작위 총력전 승률 통계는 생성하지 않는다.
 PUBG 데이터는 PUBG Developer Portal API의 공개 `/samples`·`/matches` 응답만 사용한다.

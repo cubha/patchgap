@@ -188,11 +188,9 @@ export function entityTypeLabel(entityType: string): string {
  * `DeltaMetric` → 값 표시 단위 종류(2026-09-05 리팩토링 — `discord/webhook.ts`의 로컬
  * `MetricKind`("ratio"/"gold"/"seconds")와 `components/home/logic.ts`의 로컬 `metricKind`
  * (Set 기반, "pp"/"sec"/"gold")를 이 하나의 `Record`로 통합했다. 유니온을 전수 커버하므로
- * "알려지지 않은 metric" 폴백 분기가 없다 — 그런 폴백이 필요한 소비처(예: `home/logic.ts`가
- * `"unknownMetric"` 같은 임의 문자열도 받아야 하는 기존 계약)는 자체적으로 얇은 어댑터를 둔다.
- * `src/components/item/metricFormat.ts`(ST-12 소유, 별도 `MetricKind`="pp"/"sec"/"gold")는
- * 의도적으로 이 함수를 쓰지 않는다 — 알려지지 않은 metric까지 "gold"로 안전하게 받는 별도 계약이라
- * 통합하면 그 계약이 깨진다.
+ * "알려지지 않은 metric" 폴백 분기가 없다.
+ * 화면 쪽 표기 단위(알려지지 않은 metric 문자열까지 "gold"로 받는 계약)는 아래 `displayMetricKind`가
+ * 맡는다 — `home/logic.ts`·`item/metricFormat.ts`는 2026-10-06부터 그것을 재노출만 한다.
  */
 export const METRIC_KIND: Record<DeltaMetric, "pp" | "seconds" | "gold" | "placement"> = {
   pickRate: "pp",
@@ -225,7 +223,7 @@ const DISPLAY_KIND_OF: Record<MetricKind, DisplayMetricKind> = {
   seconds: "sec",
   gold: "gold",
   // 평균 등수는 LoL 화면 경로에 오지 않는다 — 오면 원시 숫자(정수)로 보인다(단일화 전 동작 그대로).
-  // TFT 화면은 등수를 자기 표기(`tft/shared.tsx` placement)로 그린다.
+  // TFT 화면은 등수를 아래 `formatTftMetricValue`·`fmtPlacement`로 그린다.
   placement: "gold",
 };
 

@@ -73,7 +73,7 @@ export default function HeroSummary({ stats, patch, action, gapCount, pairBase =
   return (
     <div className="flex flex-col gap-8">
       {/* 2026-09-30 사용자 지시 「배틀그라운드 기준으로 문구(항목/변화)와 폰트사이즈 맞춰라」 — 머리줄·h1·강조
-          범위를 PUBG 브리핑(`app/pubg/page.tsx`)과 같은 마크업으로 맞췄다. 배경 위 그림자(ambient-hero-*)는
+          범위를 PUBG 브리핑(`components/pubg/PubgBriefing.tsx`)과 같은 마크업으로 맞췄다. 배경 위 그림자(ambient-hero-*)는
           LoL 키아트 대비 때문에 유지한다(크기·서체에는 영향 없음). */}
       <div className="flex flex-col gap-2 pt-1">
         {/* 2026-09-18(채점 라운드1 ST-10): 첫 줄에 제품이 답하는 질문을 사람 말로 — 심사석·투표자는

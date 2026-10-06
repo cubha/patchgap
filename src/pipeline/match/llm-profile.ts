@@ -72,7 +72,7 @@ export interface GameLlmProfile<TDelta extends LlmDelta = DeltaRecord> {
   /**
    * 검증 단계에서 **인용 가능한** 노트인가. `candidatesOf`와 따로 두는 이유는 LoL의 실측
    * 때문이다 — 모드 노트를 후보 풀에서 빼면 해시가 바뀌어 캐시가 죽으므로, 이미 캐시된 답에
-   * 대해서는 *검증 지점*에서 거른다(llm-match.ts `verifyCauses` 주석 참고).
+   * 대해서는 *검증 지점*에서 거른다(llm-verify.ts `verifyCauses` 주석 참고).
    */
   isCitable(note: PatchNoteItem): boolean;
 

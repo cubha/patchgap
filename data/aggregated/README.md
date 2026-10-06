@@ -4,8 +4,8 @@
 에서 이 디렉토리를 다시 fetch하지 않는다 — 새 패치 데이터가 필요하면 파이프라인을 다시 돌리고
 Next.js를 재빌드해야 한다(F7 "정적 배포·상시 작동" 원칙).
 
-`data/raw/`(원본 매치·타임라인 JSONL)와 `data/cache/`(LLM 캐시)는 이 디렉토리와 반대로
-**커밋하지 않는다**(`.gitignore`). 이 디렉토리만 git에 커밋해 레포만 clone해도 즉시
+`data/raw/`(원본 매치·타임라인 JSONL)와 `data/cache/*`(LLM 캐시 제외)는 이 디렉토리와 반대로
+**커밋하지 않는다**(`.gitignore`). `data/cache/llm/`만 예외로 커밋한다(아래 커밋 규칙). 이 디렉토리만 git에 커밋해 레포만 clone해도 즉시
 `npm run build`가 성립하도록 한다(재현 가능한 빌드).
 
 ## 파일 레이아웃
@@ -24,9 +24,15 @@ data/aggregated/
 │                               #   "이 줄이 어디에 적용되나". core(소환사의 협곡)만 짝짓기·인과 추론
 │                               #   대상이다. 값은 섹션 앵커에서 파생하며 파서와 마이그레이션이 같은
 │                               #   규칙(src/pipeline/shared/mode-scope.ts)을 쓴다.
-└── deltas/
-    └── {from}_{to}.json        # ST-08/09 최종 판정 — {meta:{from,to,generatedAt,n,counts,qAlpha,llm?}, rows: DeltaRecord[]}
+├── deltas/
+│   └── {from}_{to}.json        # ST-08/09 최종 판정 — {meta:{from,to,generatedAt,n,counts,qAlpha,llm?}, rows: DeltaRecord[]}
+├── gamedata/                   # 게임 데이터 diff(pipeline:gamedata-diff) — 잠수함 패치 수치 축
+├── tft/                        # TFT 어댑터 — boards-{patch} · notes-{patch} · deltas-{from}-{to} · assets · {from}_{to}.notify
+└── pubg/                       # PUBG 어댑터 — weapons-{patch} · maps-{patch} · notes-{patch} · deltas · map-deltas · assets
 ```
+
+TFT·PUBG 파일의 생성 명령은 `package.json`의 `pipeline:tft-*`·`pipeline:pubg-*`, 매일 실행은
+`.github/workflows/collect-tft.yml`·`collect-pubg.yml`이다.
 
 > ⚠️ **노트 파일은 재파싱하지 않는다**(2026-09-19). 라이엇은 발행 후 패치노트 페이지를 수정한다 —
 > 실측으로 26.18은 저장본 180건 대비 오늘자 페이지가 162건이었고(아수라장 증강 18건 삭제), 문구가
@@ -64,8 +70,9 @@ npm run pipeline:match -- --from 26.17 --to 26.18
 
 - **커밋한다**: 이 디렉토리 전체(`{patch}/*.json`, `notes/*.json`, `deltas/{from}_{to}.json`).
   파이프라인 재실행 없이 `git clone` → `npm ci` → `npm run build`만으로 사이트가 재현돼야 한다.
-- **커밋하지 않는다**: `data/raw/**`(원본, 용량·terms 이유), `data/cache/llm/**`(LLM 캐시는
-  별도 gitignore 대상 — 예산 보호용 로컬/CI 재사용 캐시이지 웹이 읽는 계약이 아니다).
+- **커밋하지 않는다**: `data/raw/**`(원본, 용량·terms 이유), `data/cache/*`(`llm/` 제외).
+- **`data/cache/llm/**`는 커밋한다** — 웹이 읽는 계약은 아니지만, 로컬·CI가 같은 LLM 답을 두 번 사지 않게
+  (actions 캐시는 7일이면 휘발한다) 저장소에 둔다. 캐시 키 규칙은 `src/pipeline/match/llm-cache.ts`.
 - **자기쌍 파일(`{patch}_{patch}.json`, 예 `26.17_26.17.json`) — 커밋하지 않는다.**
   같은 패치를 from/to에 동시에 넣어 `pipeline:match`를 실행하면 델타가 전부 0이 되는
   개발·스모크 테스트용 산출물이다(실제 두 패치를 비교하는 게 아니므로 미공지 판정이

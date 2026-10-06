@@ -15,7 +15,7 @@
 // `delta` 자리에 넣으면 `fmtPp`가 **"+675.8%p"**를 찍는다(실제 값은 ×6.76). `q`를 지어내 채우는
 // 것은 이 저장소의 무근거 금지 원칙에 정면으로 어긋난다.
 //
-// **게이트는 화면과 같은 것을 쓴다.** `src/app/pubg/page.tsx`가 `isReportable(row.status)`와
+// **게이트는 화면과 같은 것을 쓴다.** `src/components/pubg/PubgBriefing.tsx`(PUBG 브리핑 본문)가 `isReportable(row.status)`와
 // `displayStatusOf(row.status)`를 쓰므로 여기서도 그 쌍을 부른다 — webhook.ts S11 주석(2026-09-18)이
 // 기록한 결함이 정확히 이 계열이었다: 같은 행을 두고 웹은 회색으로 강등하고 디스코드는
 // "공지-불일치"로 방송했다. 표면이 늘 때마다 술어를 복제하지 않는 것이 그 처방이다.

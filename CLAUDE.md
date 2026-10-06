@@ -34,13 +34,14 @@
 ## 📁 프로젝트 핵심 구조
 
 ```
-src/app/            페이지(App Router) — 브리핑 홈 · compare · item/[id] · methodology
-src/components/     UI 컴포넌트 (Header, FilterBar, …)
-src/lib/            빌드 타임 데이터 로더(data.ts) · 포맷 유틸(format.ts)
+src/app/            페이지(App Router) — 랜딩 + 게임 접두 /lol·/tft·/pubg(브리핑 · compare · 상세 · methodology · history). 로드만 하고 본문은 components/
+src/components/     UI 컴포넌트 — 게임별 본문(home/·detail/·tft/·pubg/) + 공용(Header, FilterBar, …)
+src/lib/            빌드 타임 데이터 로더(data.ts·tftData.ts·pubgData.ts) · 포맷 유틸(format.ts) · 순수 화면 로직(라우트·헤드라인 등). components를 import하지 않는다
 src/styles/         tokens.css (디자인 토큰 Ground Truth 실체)
-src/pipeline/       도메인 타입(types.ts) + collect/aggregate/match/discord 파이프라인
+src/pipeline/       도메인 타입(types.ts) + collect/aggregate/match/discord 파이프라인 + shared/(경로·패치 ID·퍼센트·재시도·JSON 읽기 공용)
 scripts/            pipeline:* 진입점 (dotenv 로드 + pipeline 함수 호출)
-data/aggregated/    빌드 타임에 소비하는 집계 결과 JSON (커밋 대상)
+data/aggregated/    빌드 타임에 소비하는 집계 결과 JSON (커밋 대상) — LoL 루트 · tft/ · pubg/
+data/patch-calendar/ 감시자(patch-watch.yml)가 쓰는 게임별 캘린더 오버레이 (커밋 대상)
 data/raw/           원본 수집 데이터 (gitignore, `.gitkeep`만 커밋)
 public/dd/          Data Dragon 정적 자산(챔피언/아이템 아이콘) — 빌드 타임 다운로드, 런타임 외부 호출 0
 ```
@@ -51,8 +52,8 @@ public/dd/          Data Dragon 정적 자산(챔피언/아이템 아이콘) —
 - **사전 인덱싱** — 수집(F1) → 집계(F2) → 매칭/판정(F3~F4) → 빌드(F5) 순서를 반드시 지킨다. 각 단계 산출물은 다음 단계 입력 파일로만 연결한다.
 - **모든 판정문은 원천 링크를 가진다** — `DeltaRecord.evidence`(`DeltaEvidence.matchIds`·`aggregatePath`·`noteAnchor`)가 채워지지 않은 판정은 화면에 링크를 걸지 않는다.
 - **무근거 문장은 회색** — `DeltaRecord.causes[].verified`가 `false`이거나 `causes`가 비어 있으면 `--muted` 토큰으로만 렌더한다. 임의로 근거를 지어내 채우지 않는다. (2026-09-05: 미사용 `Verdict` 인터페이스는 `DeltaEvidence`/`DeltaRecord.status`로 완전히 대체되어 삭제됐다 — ST-08 확정.)
-- **LLM 배치·캐시·상한** — `llm-match.ts`는 세션당 처리 델타 수 상한(`LlmMatchOptions.maxDeltas`)을 지키고, 캐시 파일이 있으면 우선 사용한다. 예산 소진 시 캐시 폴백 — 실패해도 무근거 회색으로 떨어질 뿐 크래시하지 않는다.
-- **LLM 호출 정책(2026-09-29, 키 누적 $54.59 중 85%가 로컬 재실행)** — 실제 호출은 `PATCHGAP_LLM=1`일 때만(CI 워크플로가 명시). 로컬 기본은 캐시 전용이라 미스가 있으면 견적(건수·추정 $)을 보이고 멈춘다. 실행 1회 예산 `PATCHGAP_LLM_BUDGET_USD`(기본 $8) 초과도 호출 전에 멈춘다. `--dry-run`은 견적만(호출 0), 프롬프트·파서를 고치는 동안은 `--llm-sample N`(상위 N건만, 파일 기록 없음). `--no-llm` 실행은 기존 LLM 결과를 줄이는 쓰기를 거부한다(`scripts/shared/llm-guard.ts`). effort 등 호출 설정을 바꾸면 캐시 키가 갈려야 한다(`llm-config.ts`).
+- **LLM 배치·캐시·상한** — 엔진 `llm-match.ts`(SDK 호출·배치·견적)는 세션당 처리 델타 수 상한(`LlmMatchOptions.maxDeltas`)을 지키고, 총 호출 상한(문장 재요청 포함)은 엔진이 `totalCallCapFor` = max(150, maxDeltas+40)로 유도한다 — 실행 스크립트가 따로 넘기지 않는다(2026-10-06, LoL만 150에 묶였던 결함). 캐시(`llm-cache.ts`)가 있으면 우선 사용하고, 후보셋 검증은 `llm-verify.ts`, 문장 규칙은 `llm-prose.ts`, 응답 스키마는 `llm-schema.ts`가 맡는다. 예산 소진 시 캐시 폴백 — 실패해도 무근거 회색으로 떨어질 뿐 크래시하지 않는다.
+- **LLM 호출 정책(2026-09-29, 키 누적 $54.59 중 85%가 로컬 재실행)** — 실제 호출은 `PATCHGAP_LLM=1`일 때만(CI 워크플로가 명시). 로컬 기본은 캐시 전용이라 미스가 있으면 견적(건수·추정 $)을 보이고 멈춘다. 실행 1회 예산 `PATCHGAP_LLM_BUDGET_USD`(기본 $8 · LoL CI는 상한 440×건당 견적에 맞춰 $14 — `llm-cost-policy.test.ts`가 예산 ≥ 상한 견적을 강제) 초과도 호출 전에 멈춘다. `--dry-run`은 견적만(호출 0), 프롬프트·파서를 고치는 동안은 `--llm-sample N`(상위 N건만, 파일 기록 없음). `--no-llm` 실행은 기존 LLM 결과를 줄이는 쓰기를 거부한다(`scripts/shared/llm-guard.ts`). effort 등 호출 설정을 바꾸면 캐시 키가 갈려야 한다(`llm-config.ts` `UNTAGGED_CACHE_EFFORT` — 키 태그 기준은 기본값이 아니라 캐시를 만든 강도 medium에 고정).
 - **라이엇 API terms 준수** — Personal 키 고정 리밋 이내로만 호출, 유료화·재판매 기능 금지, 아레나/무작위 총력전 승률 통계 생성 금지(Won't 항목).
 
 ## 🔷 TypeScript 규칙
@@ -65,7 +66,8 @@ public/dd/          Data Dragon 정적 자산(챔피언/아이템 아이콘) —
 ## 📦 디렉토리 규칙
 
 - `src/pipeline/collect/*`: Riot API 호출이 발생하는 유일한 계층. 다른 계층에서 직접 `fetch`로 Riot API를 호출하지 않는다.
-- `src/pipeline/match/llm-match.ts`: Claude API 호출이 발생하는 유일한 계층.
+- `src/pipeline/match/llm-match.ts`: Claude API 호출이 발생하는 유일한 계층(`import Anthropic`·`new Anthropic()`은 이 파일에만 — 캐시·검증·문장 규칙 모듈로 나눠도 SDK는 옮기지 않는다).
+- `.github/workflows/*`: checkout은 전부 `persist-credentials: false`, 쓰기 토큰은 `git push`가 있는 스텝에서만 `http.extraheader`로 주입한다(`scripts/__tests__/workflow-credentials.test.ts`가 강제).
 - `src/pipeline/aggregate/*`: 순수 함수만 — 부수효과(파일 I/O) 금지, 입력 `MatchSlim[]`/출력 `*Stat[]`.
 - `src/app/*`: 데이터 페칭은 빌드 타임(`src/lib/data.ts`)에서만. `"use client"` 없이 서버 컴포넌트 우선.
 - `data/raw/`: 절대 커밋하지 않는다(`.gitkeep`만 예외). `data/aggregated/`: 빌드 재현을 위해 커밋한다. `data/cache/llm/`: 커밋한다(로컬·CI가 같은 LLM 답을 두 번 사지 않게, actions 캐시 7일 휘발 방지) — 나머지 `data/cache/*`는 gitignore.
