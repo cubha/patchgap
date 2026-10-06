@@ -19,7 +19,7 @@ import {
 } from "@/components/tft/shared";
 import { selectTftCauseRows } from "@/components/tft/causeRows";
 import { tftEntityHref } from "@/lib/tftRoutes";
-import { tftEntityRows } from "@/components/tft/entityRows";
+import { tftEntityRows } from "@/lib/tftEntityRows";
 import { entityTypeLabel, metricLabel } from "@/lib/format";
 import { tftGapRows, tftGapTotal } from "@/lib/gapTotals";
 import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";

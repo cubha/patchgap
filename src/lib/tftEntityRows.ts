@@ -1,4 +1,4 @@
-// src/components/tft/entityRows.ts
+// src/lib/tftEntityRows.ts
 // 델타 목록 → **엔티티 행 × 지표 열**. LoL 대조표(`components/compare/entityRows.ts`)와 같은 구조다.
 //
 // **왜 평평한 표가 아닌가**(2026-09-20 실측으로 뒤집힌 판단): 처음엔 델타를 한 줄씩 늘어놓고

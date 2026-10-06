@@ -34,7 +34,7 @@ import ExternalLink from "@/components/ExternalLink";
 import EntityIcon from "@/components/EntityIcon";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineCell from "@/components/gamedata/SubmarineCell";
-import { TFT_METRICS, type TftEntityRow } from "@/components/tft/entityRows";
+import { TFT_METRICS, type TftEntityRow } from "@/lib/tftEntityRows";
 import { deltaDisplay, formatMetricValue } from "@/components/tft/shared";
 import { entityTypeLabel, isLowerBetter, metricLabel } from "@/lib/format";
 import { PANEL_SPLIT_BODY } from "@/lib/panelScroll";

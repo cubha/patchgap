@@ -38,7 +38,7 @@
 
 import { fmtInt } from "@/lib/format";
 import type { ReactNode } from "react";
-import type { HeadlineStats } from "./logic";
+import type { HeadlineStats } from "@/lib/headline";
 import StatTiles from "@/components/StatTiles";
 
 export interface HeroSummaryProps {

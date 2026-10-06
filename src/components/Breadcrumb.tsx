@@ -6,12 +6,9 @@
 // 규칙: 출발은 항상 그 게임의 **브리핑**, 구분자는 `›`, 마지막 마디는 **대상 이름**이고
 // 링크가 아니다(현재 위치). 엔티티 유형은 마디가 아니다 — 제목 옆 라벨이 이미 말한다.
 import Link from "next/link";
+import type { Crumb } from "@/lib/breadcrumbs";
 
-export interface Crumb {
-  label: string;
-  /** 마지막 마디는 링크를 걸지 않는다(현재 위치). */
-  href?: string;
-}
+export type { Crumb };
 
 export default function Breadcrumb({ items }: { items: readonly Crumb[] }) {
   return (

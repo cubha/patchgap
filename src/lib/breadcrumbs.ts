@@ -3,9 +3,16 @@
 //
 // 세 게임이 각자 자기 경로를 적고 있었고 그래서 형식이 셋으로 갈렸다(§8-7 #8). 문자열을 화면에서
 // 조립하는 한 또 갈린다 — 여기서 만든다.
-import type { Crumb } from "@/components/Breadcrumb";
 import { sectionHref, type GameId } from "@/lib/game";
 import { pairSectionHref } from "@/lib/pairRoutes";
+
+/** 이동 경로 한 마디(2026-10-06 `components/Breadcrumb.tsx`에서 이관 — 내용을 만드는 lib가 모양 모듈을 import하던
+ * 역방향 의존을 없앤다). */
+export interface Crumb {
+  label: string;
+  /** 마지막 마디는 링크를 걸지 않는다(현재 위치). */
+  href?: string;
+}
 
 const BRIEFING = "브리핑";
 const COMPARE = "대조표";

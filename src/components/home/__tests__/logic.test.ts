@@ -9,7 +9,6 @@ import type { DeltasFile } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
 import {
   absDelta,
-  computeHeadline,
   countRelevantNoteEntities,
   excludeObservation,
   resolveGapCause,
@@ -19,6 +18,7 @@ import {
   metricKind,
   selectAnnouncedPreview,
   } from "../logic";
+import { computeHeadline } from "@/lib/headline";
 
 function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
   return {

@@ -12,7 +12,7 @@ import { DISPLAY_SORT_PRIORITY, displayStatus, type DisplayStatus } from "@/pipe
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import type { DeltaRecord, LlmCause } from "@/pipeline/types";
 import { sortCauses } from "@/components/causes/causeOrder";
-import { effectStrength } from "./entityRows";
+import { effectStrength } from "@/lib/tftEntityRows";
 
 export interface TftCauseRow {
   record: DeltaRecord;
