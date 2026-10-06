@@ -19,8 +19,27 @@ import { ENTITY_INDEX_TITLE } from "@/components/EntityIndexSection";
 const COMPARE_FILTER_KEYS = COMPARE_FILTERS.map((f) => f.key);
 
 const ROOT = path.resolve(__dirname, "..", "..", "..");
-const read = (p: string) => fs.readFileSync(path.join(ROOT, p), "utf8");
-const exists = (p: string) => fs.existsSync(path.join(ROOT, p));
+// 읽기·존재 확인을 한 번만 한다(2026-10-06). 소스는 테스트 도중 바뀌지 않는데, `closureOf`가 라우트마다 같은 공용 파일을
+// 다시 읽어 /mnt/d(WSL 9p)에서 「lol의 모든 라우트가 푸터를 가진다」가 5초 상한을 넘었다(verify.sh --full 2회 연속 5.5~5.8s,
+// 단독 실행은 통과 — LoL 상세의 임포트 폐포가 공통 관측 섹션만큼 커진 뒤). 검사 내용은 그대로이고 I/O만 줄인다.
+const readCache = new Map<string, string>();
+const existsCache = new Map<string, boolean>();
+const read = (p: string): string => {
+  let src = readCache.get(p);
+  if (src === undefined) {
+    src = fs.readFileSync(path.join(ROOT, p), "utf8");
+    readCache.set(p, src);
+  }
+  return src;
+};
+const exists = (p: string): boolean => {
+  let hit = existsCache.get(p);
+  if (hit === undefined) {
+    hit = fs.existsSync(path.join(ROOT, p));
+    existsCache.set(p, hit);
+  }
+  return hit;
+};
 
 /** 게임 목록은 `lib/game.ts`가 소유한다 — 네 번째 게임을 붙이면 아래 전부가 자동으로 그 게임을 요구한다. */
 const GAME_IDS = GAMES.map((g) => g.id);
@@ -182,6 +201,74 @@ describe("§8-1 상세 머리 — 유형과 판정이 머리에 있다", () => {
       const asideBlock = src.slice(aside, aside + 400);
       expect(asideBlock, `${page}: 머리에 판정 뱃지 없음`).toContain("StatusBadge");
     }
+  });
+});
+
+describe("§8-1 상세 관측 — 네 상세가 같은 공통 섹션을 쓴다(2026-10-06 사용자 확정)", () => {
+  /**
+   * 기준은 LoL 상세다(PLAN-detail-observation-section-2026-10-06.md). 골격: 머리 → 패치노트 대조(전체 폭) → 관측 공통
+   * 섹션(지표 탭 × 구간 → 패널 하나, 원인은 패널 안) → 푸터. PUBG 맵은 같은 섹션의 기술통계 모드다.
+   * 전에는 LoL은 지표마다 카드 한 장 + 대상 단위 원인 카드, TFT는 지표 3칸 그리드 + 원인 카드, PUBG는 원인 카드 +
+   * 「이렇게 판정했습니다」 카드로 네 화면의 관측 자리가 전부 달랐다.
+   */
+  /** 주석을 걷어낸 소스 — 주석은 옛 구조의 이력을 말하므로 렌더 문구 검사에서 뺀다. */
+  const codeOf = (file: string): string =>
+    read(file)
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/^\s*\/\/.*$/gm, "");
+  const bodies = Object.values(DETAIL_BODY) as string[];
+
+  for (const body of bodies) {
+    it(`${body} — 공통 관측 섹션을 쓰고 관측·원인 카드를 따로 두지 않는다`, () => {
+      const src = codeOf(body);
+      expect(src).toContain("<ObservationSection");
+      expect(src).toContain("<ObservationPanel");
+      // 섹션 제목은 공통 섹션이 소유한다 — 화면이 같은 제목의 카드를 다시 만들면 관측 자리가 둘이 된다.
+      expect(src).not.toContain('title="지표별 변화"');
+      expect(src).not.toContain('title="추정 원인(LLM)"');
+      expect(src).not.toContain('title="이렇게 판정했습니다"');
+    });
+
+    it(`${body} — 숨긴 판정 상태(표본 부족·바닥 미달·변화 없음)를 렌더 문구로 말하지 않는다`, () => {
+      // 9/18 확정 규칙(2026-10-06 재확인): 그 상태는 탭도 선택지도 문장도 만들지 않는다. 문자열 검사는 필터가 틀려도
+      // 통과하므로, 실제 필터는 observationModel.test.ts가 커밋된 산출물 전 행으로 잰다 — 여기는 문구 회귀만 막는다.
+      const src = codeOf(body);
+      for (const hidden of ["표본 부족", "표본이 부족", "바닥 미달", "바닥 미만", "변화 없음", "판정하지 않음"]) {
+        expect(src, hidden).not.toContain(hidden);
+      }
+    });
+  }
+
+  it("패치노트 대조가 관측 섹션보다 앞이다 — 무엇이 바뀌었나가 어떻게 움직였나보다 먼저다", () => {
+    for (const body of bodies.filter((b) => !b.endsWith("PubgMapDetail.tsx"))) {
+      const src = codeOf(body);
+      const contrast = src.indexOf('title="패치노트 대조"');
+      expect(contrast, `${body}: 패치노트 대조 없음`).toBeGreaterThanOrEqual(0);
+      expect(contrast, body).toBeLessThan(src.indexOf("<ObservationSection"));
+    }
+  });
+
+  it("LoL 대조는 전체 폭이다 — 좌우 2분할(대조 | 원인)을 되살리지 않는다", () => {
+    const src = codeOf("src/components/detail/LolItemDetail.tsx");
+    const contrast = src.indexOf('title="패치노트 대조"');
+    // 2분할 그리드는 대조 카드 바로 앞에서 열렸다(`grid … lg:grid-cols-2`).
+    expect(src.slice(Math.max(0, contrast - 300), contrast)).not.toMatch(/lg:grid-cols-2/);
+  });
+
+  it("관측 모델은 보고 자격 술어 하나로 거른다 — LoL은 행을 직접 그리지 않는다", () => {
+    expect(read("src/components/observation/observationModel.ts")).toContain("isReportableRecord");
+    expect(codeOf("src/components/detail/LolItemDetail.tsx")).toContain("lolObservationModel");
+    // TFT 칸은 `buildTftEntityRows`가 같은 술어로 이미 거른다. PUBG 무기는 그 판정 경로의 같은 자리 술어다.
+    expect(read("src/lib/tftEntityRows.ts")).toContain("isReportableRecord");
+    expect(codeOf("src/components/pubg/PubgWeaponDetail.tsx")).toContain("isReportable(row.status)");
+  });
+
+  it("PUBG 맵은 같은 섹션의 기술통계 모드다", () => {
+    const src = codeOf("src/components/pubg/PubgMapDetail.tsx");
+    expect(src).toContain('mode="descriptive"');
+    expect(src).toContain("NoVerdictBadge");
+    // 로테이션 문장은 산출물에서 만든다(손으로 쓴 맵 이름은 다음 패치에서 낡는다).
+    expect(src).toContain("mapRotationSentence");
   });
 });
 

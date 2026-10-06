@@ -47,20 +47,29 @@ describe("V1 — TFT 홈 배지가 방향 중립을 반영한다", () => {
 });
 
 describe("V2 — 표본 매치 ID는 끊기지 않는다", () => {
-  it("매치 ID마다 nowrap 단위이고, 그 줄에 break-all이 없다", async () => {
+  // 2026-10-06 **명세 변경**(상세 공통 관측 섹션 — PLAN-detail-observation-section-2026-10-06.md): TFT 상세의 「표본 매치:」
+  // 한 줄이 LoL과 같은 원천 칸(`SourceMatchesPanel` 칩)으로 바뀌었다. 지키는 것은 그대로다 — ID 하나가 nowrap 단위이고
+  // ID 칩에 break-all이 없다. 행은 **상세가 실제로 그리는 관측**(보고 자격 조합의 첫 탭)에서 고른다 — 아무 행이나 고르면
+  // 자격 없는 행을 골라 패널이 그 ID를 그리지 않는다.
+  it("매치 ID마다 nowrap 단위이고, 그 칩에 break-all이 없다", async () => {
     const bundle = loadTft();
-    const row = bundle?.deltas.rows.find((r) => r.entityType === "unit" && r.evidence.matchIds.length > 0);
-    expect(row, "원천 매치가 있는 유닛 행").toBeDefined();
+    const row = bundle?.deltas.rows.find(
+      (r) =>
+        r.entityType === "unit" &&
+        r.metric === "playRate" &&
+        r.evidence.matchIds.length > 0 &&
+        isReportableRecord(r, bundle.deltas.meta.qAlpha)
+    );
+    expect(row, "원천 매치가 있는 유닛 등장률 관측").toBeDefined();
     if (!row) return;
     const el = await TftUnitPage({ params: Promise.resolve({ key: entitySlug(`unit:${row.entityKey}`) }) });
     // 상세는 레이아웃의 AmbientProvider 아래에서만 렌더된다(render.test.tsx와 같은 래퍼).
     const { container } = render(<AmbientProvider>{el}</AmbientProvider>);
-    const line = [...container.querySelectorAll("span")].find((s) => (s.textContent ?? "").startsWith("표본 매치:"));
-    expect(line, "표본 매치 줄").toBeDefined();
-    expect(line?.className ?? "").not.toContain("break-all");
     const first = row.evidence.matchIds[0];
-    const idSpan = [...(line?.querySelectorAll("span") ?? [])].find((s) => (s.textContent ?? "").includes(first));
+    const idSpan = [...container.querySelectorAll("span")].find((s) => (s.textContent ?? "") === first);
+    expect(idSpan, "첫 매치 ID 칩").toBeDefined();
     expect(idSpan?.className ?? "").toContain("whitespace-nowrap");
+    expect(idSpan?.className ?? "").not.toContain("break-all");
   });
 });
 

@@ -45,6 +45,8 @@ export default function ItemChart({ data }: ItemChartProps) {
             axisLine={{ stroke: "var(--border)" }}
           />
           <YAxis
+            // 표기를 호출부가 정한 차트(`valueText`)는 축 눈금의 단위를 모른다 — 틀린 눈금 대신 눈금을 접는다.
+            hide={data.valueText !== undefined}
             stroke="var(--border)"
             tick={{ fill: "var(--muted)", fontSize: 11 }}
             tickLine={false}
@@ -61,8 +63,8 @@ export default function ItemChart({ data }: ItemChartProps) {
         </BarChart>
       </ResponsiveContainer>
       <div className="grid grid-cols-2 px-2 text-center font-mono text-lg font-bold text-fg">
-        {rows.map((row) => (
-          <span key={row.key}>{formatMetricValue(row.rawValue, data.kind)}</span>
+        {rows.map((row, index) => (
+          <span key={row.key}>{data.valueText?.[index] ?? formatMetricValue(row.rawValue, data.kind)}</span>
         ))}
       </div>
       {data.errorSuppressed ? (

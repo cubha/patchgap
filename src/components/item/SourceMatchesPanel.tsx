@@ -11,8 +11,9 @@
 export interface SourceMatchesPanelProps {
   matchIds: string[];
   aggregatePath: string;
-  /** deltas 파일 sha256 앞 12자(서버에서 snapshotHash로 계산해 전달). */
-  snapshotHash: string;
+  /** deltas 파일 sha256 앞 12자(서버에서 snapshotHash로 계산해 전달). 스냅샷 해시를 만들지 않는 게임(TFT·PUBG)은
+   * 생략한다 — 없는 지문을 지어내지 않는다(2026-10-06 상세 공통 관측 섹션). */
+  snapshotHash?: string;
 }
 
 export default function SourceMatchesPanel({
@@ -54,7 +55,7 @@ export default function SourceMatchesPanel({
             이력이 있다(매치 ID가 칩 내부에서 끊겨 복사 불가). 같은 속성을 컨테이너나 칩에 걸면
             그 수정을 회귀시킨다 — 그래서 span 단위로만 준다. */}
         <span className="break-all">집계 경로: {aggregatePath}</span>
-        <span className="break-all">데이터 스냅샷 sha256:{snapshotHash}</span>
+        {snapshotHash ? <span className="break-all">데이터 스냅샷 sha256:{snapshotHash}</span> : null}
       </div>
     </div>
   );

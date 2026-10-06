@@ -10,6 +10,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import type { DeltaRecord, MatchStatus } from "@/pipeline/types";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
+import { displayStatus } from "@/pipeline/shared/display-status";
 import {
   groupObservations,
   lolObservationModel,
@@ -188,6 +189,23 @@ describe("실데이터 — 커밋된 판정 산출물로 잰다", () => {
       }
     }
     expect(checked).toBeGreaterThan(0);
+  });
+
+  // 구현 항목 6(2026-10-06 조사): 아트록스 원딜 픽률 0.01%→0%가 엔진 상태 「announced-inconsistent」인 것은 **결함이 아니다**.
+  // verdict.ts 3번 분기(노트 짝 있음 + 비유의 → announced-inconsistent)의 설계대로이고, 화면 표시 키는 비유의라 「공지」로
+  // 접히며(displayStatus), 보고 자격도 없어 상세 관측에 오르지 않는다. 이 세 사실을 고정한다 — 하나가 바뀌면 그 행이
+  // 「공지 · 이상 관측」으로 다시 보일 수 있다.
+  it("0 근처 기준값의 공지-불일치 행은 설계된 엔진 값이고 화면에는 오르지 않는다", () => {
+    const file = files.find((f) => f === "26.18_26.19.json");
+    if (!file) return;
+    const { meta, rows } = load(file);
+    const row = rows.find((r) => r.id === "champion:Aatrox:BOTTOM:pickRate");
+    expect(row, "아트록스 원딜 픽률 행").toBeDefined();
+    if (!row) return;
+    expect(row.status).toBe("announced-inconsistent");
+    expect(row.matchedNoteIds.length).toBeGreaterThan(0);
+    expect(displayStatus(row, meta.qAlpha)).toBe("announced");
+    expect(isReportableRecord(row, meta.qAlpha)).toBe(false);
   });
 
   it("26.18 → 26.19: 아트록스는 1건(픽률·전체), 암베사는 4건(승률·픽률 × 전체·탑)", () => {

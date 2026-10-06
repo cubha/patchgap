@@ -90,7 +90,9 @@ describe("LoL 과거 쌍 — 화면의 링크가 그 쌍 안에 머문다", () =
       const page = LolHistoryItemPage({ params: Promise.resolve({ pair: slug, id }) });
       const { container } = render(<AmbientProvider>{await page}</AmbientProvider>);
       const text = container.textContent ?? "";
-      expect(text).toContain(`${pair.from} → ${pair.to} 관측`);
+      // 2026-10-06 **명세 변경**(상세 공통 관측 섹션): 머리 문장이 「관측 N건」(숨김 상태까지 센 행 수) → 「보고할 관측 N건」
+      // 또는 자격 조합이 0인 대상의 「통계 게이트 … 변화가 없습니다」로 바뀌었다. 지키는 것은 그대로 — 그 쌍을 그린다.
+      expect(text).toMatch(new RegExp(`${pair.from} → ${pair.to} (보고할 관측|통계 게이트)`));
       const crumbs = Array.from(container.querySelectorAll("a[href]")).map((a) => (a.getAttribute("href") ?? "").replace(/\/$/, ""));
       expect(crumbs).toContain(`/lol/history/${slug}`);
       expect(crumbs).toContain(`/lol/history/${slug}/compare`);
