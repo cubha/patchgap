@@ -3,6 +3,8 @@
 // 스타일(StatusDefinitionTable.tsx)을 그대로 따른다("레이아웃은 그대로" 원칙). 순수 렌더.
 // 2026-09-10 verify-impl 축B: 4열을 "PUBG 상태" → "어댑터 인터페이스"로 교체하고 상태는
 // 게임 머리글로, 판정 엔진은 표 밖 문단 → 마지막 행으로 옮겼다(시안 구조 그대로).
+// 2026-10-06: 4열 머리글 "어댑터 인터페이스" → "공유 코드" — 적혀 있던 인터페이스가 코드에 없었다
+// (adapterMatrixData.ts 머리 주석). 이제 세 게임이 실제로 공유하는 타입·파일 이름만 싣는다.
 //
 // 2026-09-20(사용자 지시): 게임 열을 **`GAMES` 레지스트리 순회로** 그린다. 이전엔 `lol` 셀과
 // `pubg` 셀을 손으로 각각 렌더해, 세 번째 게임이 붙으면 이 파일도 고쳐야 했다 — 표가 증명하려는
@@ -37,7 +39,7 @@ export default function AdapterMatrix() {
                   {gameLabel(game.id)} ({COLUMN_STATUS[game.id]})
                 </th>
               ))}
-              <th className={HEAD_CLASS}>어댑터 인터페이스</th>
+              <th className={HEAD_CLASS}>공유 코드</th>
             </tr>
           </thead>
           <tbody>

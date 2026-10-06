@@ -13,6 +13,14 @@
 // 여는 게임이면 어댑터만 붙습니다"라고 말하고 있다 — 이 표가 그 문장의 증거다.
 //
 // 각 칸은 "확인된 사실만" 적는다. 아직 연결하지 않은 제안은 `(설계)`를 앞에 붙인다.
+//
+// **2026-10-06 `iface` 열 정정(사용자 결정 — "문구 고치고 필요하면 구현")**: 이 열은
+// `NoteSource.fetch()`·`MatchSource.collect()`·`Segment[]`·`AssetSource.icon()` 같은 **코드에 없는
+// 인터페이스 이름**과 「어댑터 8줄」을 말하고 있었다(/analyze·/verify-impl 축A 적발). 표의 원칙(확인된
+// 사실만)을 표 자신이 어긴 셈이라, 각 계층에서 **실제로 공유하는 코드/타입**과 게임별로 새로 쓰는 부분을
+// 적는다. 공통 인터페이스는 세 게임 구현이 쌓인 뒤 네 번째 게임(도타2)을 붙일 때 실제 코드에서 뽑는다 —
+// 쓰는 곳 없이 미리 만들지 않는다. 판정 엔진 행도 PUBG가 BH-FDR·Newcombe를 쓰지 않는 사실에 맞췄다
+// (PUBG는 같은 판정 어휘에 자체 바닥·로그비 CI — /pubg/methodology 「q(BH-FDR) 열이 없는 이유」).
 
 import type { GameId } from "@/lib/game";
 
@@ -25,7 +33,7 @@ export interface AdapterMatrixRow {
   byGame: Record<GameId, string> | null;
   /** `byGame`이 null인 행에서 게임 열 전체를 덮는 한 칸. */
   shared?: string;
-  /** 이 계층에서 게임별로 갈아끼우는 인터페이스. 판정 엔진은 갈아끼우지 않으므로 "고정". */
+  /** 이 계층에서 실제로 공유하는 코드·타입, 또는 게임별로 새로 쓰는 부분(코드에 실재하는 이름만). */
   iface: string;
 }
 
@@ -37,7 +45,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
       pubg: "공식 패치노트 — 동일한 A ⇒ B 구조",
       tft: "공식 패치노트 — 같은 CMS·같은 ⇒ 구조이나 엔티티 앵커(h3.change-title)가 0건이라 DDragon 카탈로그 대조로 대상을 판별합니다",
     },
-    iface: "NoteSource.fetch()",
+    iface: "PatchNoteItem",
   },
   {
     layer: "관측 소스",
@@ -46,7 +54,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
       pubg: "PUBG Developer API — 실측 완료(2026-09-16) · 매치·텔레메트리 조회 리밋 없음 · 표본 API 10 RPM · 보존 336시간",
       tft: "Riot TFT-League-V1 → TFT-Match-V1 — game_version이 비어 있어(\"TFT Unreal Version ?.?.?.?\") 패치 구분은 노트 발행 시각 창으로 합니다",
     },
-    iface: "MatchSource.collect()",
+    iface: "(게임별) collect/*",
   },
   {
     layer: "주 엔티티",
@@ -55,7 +63,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
       pubg: "무기 47종 · 맵 관측 7종(자산 9종) · 차량·소모품 미수집",
       tft: "유닛 56 · 특성 36 · 아이템 141 (Set 18). 증강은 응답에 필드가 없어 미수집",
     },
-    iface: "Entity{type,key,name}",
+    iface: "DeltaRecord.entityType (LoL·TFT)",
   },
   {
     layer: "공간 축",
@@ -64,7 +72,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
       pubg: "맵 (설계: 낙하 구역)",
       tft: "없음 — 보드는 위치 축을 갖지 않습니다",
     },
-    iface: "Segment[]",
+    iface: "(게임별)",
   },
   {
     layer: "채택률 지표",
@@ -73,7 +81,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
       pubg: "무기 획득 점유율 (설계: 초반 교전 사용률)",
       tft: "등장률 — 분모가 매치가 아니라 **보드(참가자)**입니다. 한 보드에 여러 유닛이 서므로 제로섬이 아닙니다",
     },
-    iface: "Metric.adoption",
+    iface: "DeltaMetric (LoL·TFT)",
   },
   {
     layer: "성과 지표",
@@ -82,7 +90,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
       pubg: "(설계) 순위 · 생존 시간",
       tft: "순방률(상위 4등, n≥200 게이트) · 평균 등수 — 평균 등수만 **작을수록 개선**이라 방향이 반대입니다",
     },
-    iface: "Metric.outcome",
+    iface: "DeltaMetric (LoL·TFT)",
   },
   {
     layer: "시계열 지표",
@@ -91,7 +99,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
       pubg: "(설계) 첫 교전 시각 · 자기장 단계별 생존",
       tft: "(설계) 탈락 라운드 · 탈락 시각 — 수집은 되고 있으나 델타로는 아직 내지 않습니다",
     },
-    iface: "Metric.timeline",
+    iface: "DeltaMetric (LoL·TFT)",
   },
   {
     layer: "엔티티 자산",
@@ -103,13 +111,13 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
       // (UX-BRIEF §8-7 말미가 이 자기모순을 기록했다). 자산 조달을 배선한 뒤 실측 수로 고친다.
       tft: "Data Dragon 스플래시·아이콘(유닛 55 · 특성 36 · 아이템 140 — 미보유 2)",
     },
-    iface: "AssetSource.icon()",
+    iface: "(게임별) assets.json",
   },
   {
     layer: "판정 엔진",
     byGame: null,
-    shared: "게임 무관 — BH-FDR q<0.10 · Newcombe CI · 표본 게이트 · 짝짓기 · LLM 2단 인용검증",
-    iface: "고정",
+    shared: "판정 어휘(공지-일치·공지-불일치·미공지 …)와 LLM 2단 인용검증은 세 게임 공유(게임별 프로파일만 교체) · BH-FDR q<0.10·Newcombe CI는 LoL·TFT 공유 · PUBG는 자체 효과크기 바닥과 로그비 CI",
+    iface: "verdict.ts · llm-match.ts",
   },
 ] as const;
 
@@ -135,4 +143,4 @@ export const COLUMN_STATUS: Record<GameId, string> = {
 
 /** 표 아래 강조 문단 — 시안 `.note-blocked`. 마지막 행(판정 엔진)이 왜 핵심인지 말한다. */
 export const JUDGMENT_ENGINE_NOTE =
-  "마지막 행이 핵심입니다 — 게임을 바꿀 때 달라지는 것은 어댑터 8줄이고 판정 엔진은 그대로입니다. (설계) 표시가 붙은 칸은 아직 연결하지 않은 제안이고, 나머지는 실제로 연결된 값입니다.";
+  "마지막 행이 핵심입니다 — 게임을 붙일 때 새로 쓰는 것은 수집기·노트 파서·집계이고, 판정 어휘와 LLM 2단은 그대로 씁니다. 오른쪽 열은 실제로 공유하는 코드 이름이고(괄호가 없으면 세 게임 공유, 「(LoL·TFT)」는 두 게임만), 「(게임별)」은 공유하는 것이 없다는 뜻입니다. 공통 인터페이스는 네 번째 게임을 붙일 때 세 게임의 구현에서 뽑습니다. (설계) 표시가 붙은 칸은 아직 연결하지 않은 제안이고, 나머지는 실제로 연결된 값입니다.";
