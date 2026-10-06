@@ -20,7 +20,8 @@ describe("상한은 데이터량이 아니라 구조로 보장된다", () => {
     // 본문을 쓴다) — 상한을 재는 대상도 본문 파일로 따라간다.
     ["src/components/tft/TftBriefing.tsx", "TFT 브리핑 표 2종"],
     ["src/components/tft/TftUnitDetail.tsx", "TFT 상세 — 한 엔티티에 노트가 여러 건일 수 있다"],
-    ["src/app/pubg/page.tsx", "PUBG 브리핑 — 공지 표·미공지 목록·맵 그리드"],
+    // 2026-10-06 명세 변경(/analyze ST-16): PUBG 브리핑 본문도 컴포넌트로 옮겼다 — 상한을 재는 대상이 따라간다.
+    ["src/components/pubg/PubgBriefing.tsx", "PUBG 브리핑 — 공지 표·미공지 목록·맵 그리드"],
     ["src/components/pubg/PubgCompareExplorer.tsx", "PUBG 대조표 — 무기 수가 는다"],
     // 2026-09-21 — 이 목록이 **파일 이름을 손으로 세는 게이트**라 F9 신설 컴포넌트가 그대로
     // 빠져나갔다(사용자 재지적: "미공지 Gap의 패치노트에 없는 수치 변경 섹션이 스크롤 폭발").

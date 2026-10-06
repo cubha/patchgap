@@ -68,6 +68,14 @@ function readJson<T>(file: string): T | null {
  * 메타데이터가 `42.3`·`43.1`을 하드코딩해, 43.2 노트와 판정이 커밋돼도 화면은 43.1에 머물렀다(결정 8 —
  * 선언 축은 항상 최신 — 을 코드가 깨는 자리).
  */
+/** 맵 키 후보 — 두 구간 합집합(한쪽에만 표본이 잡힌 맵도 상세는 존재한다). 맵 상세의 정적 경로와 본문이 같은 집합을 쓴다
+ * (2026-10-06 `app/pubg/map/[key]/page.tsx`에서 이관). */
+export function pubgMapKeys(): string[] {
+  const maps = loadPubgMaps();
+  if (!maps) return [];
+  return [...new Set([...maps.before.maps, ...maps.after.maps].map((m) => m.mapKey))];
+}
+
 export function pubgPair(): { from: string; to: string } | null {
   const deltas = readJson<PubgDeltasFile>("deltas.json");
   return deltas ? { from: deltas.meta.from, to: deltas.meta.to } : null;
