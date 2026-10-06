@@ -10,6 +10,7 @@
 // 스텝이 읽어야 한다. 스크립트 안에 두면 CI가 같은 규칙을 다시 적게 되고, 그러면 두 곳이
 // 조용히 갈라진다(이 저장소가 반복해서 고쳐 온 결함군 — `shared/headline.ts` 헤더 참고).
 import type { TftPatchWindow } from "./tft-crawler";
+import type { PatchRunDecisionBase } from "../types";
 
 /**
  * 패치 창 — 공식 패치노트 발행 시각(2026-09-20 실측). `endMs: null`이 "지금 라이브"다.
@@ -96,7 +97,7 @@ export interface TftPlanInput {
   force?: boolean;
 }
 
-export interface TftRunPlan {
+export interface TftRunPlan extends PatchRunDecisionBase {
   mode: TftRunMode;
   patch: string | null;
   from: string | null;

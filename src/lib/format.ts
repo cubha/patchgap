@@ -247,6 +247,19 @@ export function formatDisplayValue(value: number | null, kind: DisplayMetricKind
   return fmtInt(value);
 }
 
+/** 평균 등수 표기 — 4.352 → "4.35등". */
+export function fmtPlacement(value: number): string {
+  return `${value.toFixed(2)}등`;
+}
+
+/**
+ * TFT 화면의 값 표기 — 평균 등수만 단위가 다르고 나머지(순방률·등장률)는 비율이다. `displayMetricKind`(DeltaValue
+ * 3종)와 따로 두는 이유: 등수 단위를 그리는 화면은 TFT뿐이고, DeltaValue 유니온에 넣으면 LoL 컴포넌트까지 번진다.
+ */
+export function formatTftMetricValue(metric: DeltaMetric, value: number): string {
+  return metric === "avgPlacement" ? fmtPlacement(value) : fmtPct(value);
+}
+
 /** 값이 **작을수록 개선**인 지표. 평균 등수가 유일하다 — 화살표·색을 뒤집는 소비처가 쓴다. */
 export function isLowerBetter(metric: DeltaMetric): boolean {
   return metric === "avgPlacement";

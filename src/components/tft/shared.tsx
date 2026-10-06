@@ -4,7 +4,7 @@
 // `STATUS_SORT_PRIORITY`가 전부 그냥 걸린다. TFT 전용 술어를 만들지 않는다.
 
 import SiteFooter from "@/components/SiteFooter";
-import { isLowerBetter } from "@/lib/format";
+import { fmtPlacement, formatTftMetricValue, isLowerBetter } from "@/lib/format";
 import type { DeltaMetric } from "@/pipeline/types";
 import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
 import type { ObservationFailure } from "@/pipeline/types";
@@ -16,15 +16,11 @@ export const pct = (value: number, digits = 1): string => formatPercent(value, d
 /** +0.0231 → "+2.3%p". */
 export const signedPct = (value: number, digits = 1): string => formatSignedPercent(value, digits, SIGNED_POINT);
 
-/** 4.352 → "4.35등". */
-export function placement(value: number): string {
-  return `${value.toFixed(2)}등`;
-}
+/** 4.352 → "4.35등" — 표기는 `lib/format.ts`가 소유한다(2026-10-06 단일화). */
+export const placement = fmtPlacement;
 
-/** 지표에 맞는 값 표기 — 평균 등수만 단위가 다르다. */
-export function formatMetricValue(metric: DeltaMetric, value: number): string {
-  return metric === "avgPlacement" ? placement(value) : pct(value);
-}
+/** 지표에 맞는 값 표기 — 평균 등수만 단위가 다르다(`lib/format.ts` formatTftMetricValue). */
+export const formatMetricValue = formatTftMetricValue;
 
 /**
  * 지표에 맞는 변화량 표기 + **개선 방향**.
