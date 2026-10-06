@@ -13,7 +13,7 @@
 // `computeHeadline`을 그대로 부른다. 여기서 따로 세면 랜딩과 브리핑이 다른 숫자를 주장하게
 // 되고, 그건 이 프로젝트가 반복해서 고쳐온 결함군이다(채점표 B2 "페이지 간 수치 정합").
 import "server-only";
-import { computeHeadline } from "@/components/home/logic";
+import { computeHeadline } from "./headline";
 import { isReportable, loadPubg, loadPubgDeclaration } from "./pubgData";
 import { loadTft, loadTftDeclaration } from "./tftData";
 import { isReportableRecord } from "@/pipeline/shared/reportable";

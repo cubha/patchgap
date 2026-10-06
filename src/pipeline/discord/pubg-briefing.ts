@@ -29,6 +29,7 @@ import {
   type DiscordEmbed,
   type DiscordEmbedField,
 } from "./webhook";
+import { formatSignedPercent, SIGNED_PERCENT } from "../shared/percent";
 
 /** 이 파일이 다루는 최소 형태 — `src/lib/pubgData.ts`의 `PubgDeltasFile`과 구조가 같되 `node:fs`를
  * 끌고 오지 않으려고 여기서 다시 좁힌다(그 모듈은 로더라 fs에 의존한다). */
@@ -37,12 +38,9 @@ export interface PubgBriefingSourceFile {
   rows: readonly PubgDeltaRow[];
 }
 
-/** 화면(`components/pubg/shared.tsx`의 `signedPct`)과 **같은 출력**을 낸다. 그 파일은 `.tsx`
- * 컴포넌트 모듈이라 파이프라인에서 import하지 않고, 대신 규칙을 같게 유지한다. */
-export function signedPct(value: number, digits = 1): string {
-  const sign = value > 0 ? "+" : "";
-  return `${sign}${(value * 100).toFixed(digits)}%`;
-}
+/** 화면(`components/pubg/shared.tsx`의 `signedPct`)과 **같은 출력** — 둘 다 `SIGNED_PERCENT`를 쓴다(2026-10-06 전엔
+ * 규칙을 손으로 같게 유지했다). */
+export const signedPct = (value: number, digits = 1): string => formatSignedPercent(value, digits, SIGNED_PERCENT);
 
 /** 획득 점유율 자체(비율)의 표기 — 변화량(`signedPct`)과 달리 부호를 붙이지 않는다. */
 export function sharePct(value: number, digits = 3): string {

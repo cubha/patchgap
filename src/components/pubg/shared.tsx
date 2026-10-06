@@ -2,43 +2,15 @@
 // PUBG 화면 3개(브리핑·대조표·방법론)가 함께 쓰는 조각. 2026-09-18 라운드6(사용자 P2): 이 파일의
 // 사용자 노출 문구에서 다른 게임과의 비교 서술을 전부 뺐다 — PUBG는 PUBG의 판정표로만 말한다.
 // 표본 성격 고지는 방법론에만 붙는다(브리핑·대조표는 결과만).
-import type { ReactNode } from "react";
 import SiteFooter from "@/components/SiteFooter";
 import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
 import type { ObservationFailure } from "@/pipeline/types";
+import { formatPercent, formatSignedPercent, SIGNED_PERCENT } from "@/pipeline/shared/percent";
 
-export function pct(value: number, digits = 1): string {
-  return `${(value * 100).toFixed(digits)}%`;
-}
+export const pct = (value: number, digits = 1): string => formatPercent(value, digits);
 
-export function signedPct(value: number, digits = 1): string {
-  const sign = value > 0 ? "+" : "";
-  return `${sign}${(value * 100).toFixed(digits)}%`;
-}
-
-/**
- * 화면 상단 제목 블록 — 세 라우트가 같은 위계로 시작하게 한다.
- *
- * `ambient-hero-*` 그림자는 LoL 히어로(`HeroSummary.tsx`)와 같은 처리다 — 이 제목은 패널
- * 안이 아니라 **배경 사진 위에 직접** 앉으므로, 키아트의 밝은 지점(연기·역광 하이라이트)에서
- * 글자가 묻히지 않게 시안 `.hero-body h2`의 text-shadow를 승계한다. 사진이 깔리지 않는
- * 라우트(대조표·방법론)에서도 그림자는 무해하다(배경이 단색이면 보이지 않는다).
- */
-export function PubgPageHeader({ title, lead }: { title: ReactNode; lead: ReactNode }) {
-  return (
-    <header className="flex flex-col gap-3">
-      <p className="ambient-hero-sub font-mono text-xs font-bold tracking-wide text-accent uppercase">
-        PUBG: BATTLEGROUNDS
-      </p>
-      <h1 className="ambient-hero-headline font-display text-3xl leading-tight font-bold text-balance break-keep text-fg">
-        {title}
-      </h1>
-      <p className="ambient-hero-sub text-sm leading-relaxed text-fg" style={{ maxWidth: "var(--measure)" }}>
-        {lead}
-      </p>
-    </header>
-  );
-}
+/** 디스코드(`pipeline/discord/pubg-briefing.ts`)와 같은 스타일 상수를 쓴다 — 두 표면이 같은 출력. */
+export const signedPct = (value: number, digits = 1): string => formatSignedPercent(value, digits, SIGNED_PERCENT);
 
 /** 표본 성격 고지 — 방법론 화면 상단. 판정 숫자를 읽기 전에 알아야 할 표본의 성격만 말한다. */
 export function PubgSampleNotice({ sampleScope }: { sampleScope: string }) {

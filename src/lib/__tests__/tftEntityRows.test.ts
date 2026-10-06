@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-import { TFT_METRICS, buildTftEntityRows, effectStrength } from "../entityRows";
+import { TFT_METRICS, buildTftEntityRows, effectStrength } from "../tftEntityRows";
 import type { DeltaRecord, DeltaMetric, MatchStatus } from "@/pipeline/types";
 
 function rec(

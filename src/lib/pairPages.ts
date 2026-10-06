@@ -15,7 +15,7 @@ import { loadGameDataDiff } from "@/lib/gamedata";
 import { pairFromSlug, pairSlug, type PairLike, type PairRouteGame } from "@/lib/pairRoutes";
 import { entitySlug } from "@/lib/tftRoutes";
 import { listTftPairs, loadTft, type TftBundle } from "@/lib/tftData";
-import { tftEntityRows, type TftEntityRow } from "@/components/tft/entityRows";
+import { tftEntityRows, type TftEntityRow } from "@/lib/tftEntityRows";
 
 export const PLACEHOLDER = "_placeholder";
 

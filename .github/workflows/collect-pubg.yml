@@ -52,7 +52,7 @@ on:
     - cron: "0 20 * * *"
 
 concurrency:
-  # 🔴 collect.yml:83 · collect-tft.yml과 동일해야 한다. 위 헤더 「concurrency」 절 참고.
+  # 🔴 collect.yml · collect-tft.yml의 concurrency 블록과 동일해야 한다. 위 헤더 「concurrency」 절 참고.
   group: patchgap-collect
   cancel-in-progress: false
 

@@ -1,0 +1,192 @@
+// src/components/pubg/PubgMapDetail.tsx — 2026-10-06 `app/pubg/map/[key]/page.tsx`에서 본문 이관(무기 상세와 같은 구조).
+// 페이지는 로드·정적 경로만 맡는다. 이하 원 헤더:
+// PUBG 맵 상세 — 승인 아티팩트 §4의 `맵` 탭. 시안이 격하시킨 "항공뷰 지도"를 바로 여기서 쓴다
+// ("항공뷰 지도는 격하돼 §4 맵 상세 탭에서만 쓴다 — 특정 맵 패치를 조회할 때는 여전히 필요").
+//
+// **판정 뱃지가 없는 이유**: 43.1 패치노트에 맵 항목이 0건이다. 짝지을 선언이 없는 축에 판정
+// 어휘를 붙이면 "노트에 없다"가 관측이 아니라 전제가 된다 — LoL에서 집계 엔티티를 미공지에서
+// 빼낸 것과 같은 판단이다(PLAN-patchgap.md 계약 확장 이력 2026-09-13 2차). 이 화면은 기술
+// 통계만 말하고, 그 사실을 화면에서도 명시한다.
+import Link from "next/link";
+import Container from "@/components/Container";
+import PageHeader from "@/components/PageHeader";
+import { detailCrumbs } from "@/lib/breadcrumbs";
+import SectionCard from "@/components/SectionCard";
+import PubgDetailSplash, { type PubgDetailStat } from "@/components/pubg/PubgDetailSplash";
+import { PubgFooter, PubgUnavailable, pct } from "@/components/pubg/shared";
+import { loadPubgAssets, loadPubgMaps, pubgMapKeys, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
+import { mapKeyFromSlug, weaponHref } from "@/lib/pubgRoutes";
+import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
+import { publicMapPath } from "@/pipeline/pubg/asset-path";
+
+function fmtDuration(sec: number | null): string {
+  if (sec === null) return "—";
+  const m = Math.floor(sec / 60);
+  const s = Math.round(sec % 60);
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+export default function PubgMapDetail({
+  slug,
+  bundle,
+  declaration,
+}: {
+  slug: string;
+  bundle: PubgBundle | null;
+  declaration: PubgDeclaration | null;
+}) {
+  const maps = loadPubgMaps();
+  if (!bundle || !maps) {
+    return (
+      <main>
+      <Container>
+        <PubgUnavailable failure={declaration?.failure} />
+      </Container>
+    </main>
+    );
+  }
+
+  const mapKey = mapKeyFromSlug(slug, pubgMapKeys());
+  const statAfter = mapKey ? (maps.after.maps.find((m) => m.mapKey === mapKey) ?? null) : null;
+  const statBefore = mapKey ? (maps.before.maps.find((m) => m.mapKey === mapKey) ?? null) : null;
+  const shown = statAfter ?? statBefore;
+
+  if (!mapKey || !shown) {
+    return (
+      <main>
+      <Container>
+        <div className="py-12">
+          <h1 className="font-display text-2xl font-bold text-fg">알 수 없는 맵</h1>
+          <p className="mt-3 text-sm text-muted">
+            이 표본에 그 맵이 없습니다.{" "}
+            <Link href="/pubg/" className="text-accent underline-offset-2 hover:underline">
+              브리핑으로 →
+            </Link>
+          </p>
+        </div>
+      </Container>
+    </main>
+    );
+  }
+
+  const identity = mapIdentity(mapKey);
+  const assets = loadPubgAssets();
+  const hasRender = identity.assetName !== "" && (assets?.maps.includes(identity.assetName) ?? false);
+  const delta = maps.deltas.rows.find((r) => r.mapKey === mapKey) ?? null;
+  // 한쪽 구간에만 표본이 잡힌 맵 — 비교행이 없다는 사실을 문장으로 말한다.
+  const oneSided = delta === null;
+
+  const stats: PubgDetailStat[] = [
+    {
+      label: "매치 점유율",
+      value: delta
+        ? `${pct(delta.matchShare.before, 1)} → ${pct(delta.matchShare.after, 1)}`
+        : pct(shown.matchShare, 1),
+      tone: delta ? (delta.matchShareDelta > 0 ? "up" : "down") : undefined,
+    },
+    {
+      label: "평균 매치 시간",
+      value: delta
+        ? `${fmtDuration(delta.avgDurationSec.before)} → ${fmtDuration(delta.avgDurationSec.after)}`
+        : fmtDuration(shown.avgDurationSec),
+    },
+    {
+      label: "봇 비율",
+      value: delta
+        ? `${pct(delta.botShare.before)} → ${pct(delta.botShare.after)}`
+        : pct(shown.botShare),
+    },
+    {
+      label: "매치 수",
+      value: delta
+        ? `${delta.n.before.toLocaleString()} → ${delta.n.after.toLocaleString()}`
+        : shown.nMatches.toLocaleString(),
+    },
+  ];
+
+  return (
+    <main>
+      <Container>
+      <div className="flex flex-col gap-6 pt-12 pb-8">
+
+        {/* 이동 경로 + h1은 `PageHeader`가 소유한다(§8-7 #1·#8): 전에는 이 화면에 h1이 없고
+            이동 경로 구분자도 `/`라 다른 두 게임과 달랐다. 스플래시 카드는 그 아래 시각 블록이다. */}
+        <PageHeader
+          crumbs={detailCrumbs("pubg", identity.koName)}
+          title={identity.koName}
+          titleAside={`맵 · ${identity.sizeLabel}`}
+          lead={
+            // 맵에는 통계 판정 행이 없다 — 없는 판정을 있는 것처럼 쓰지 않고 관측값만 말한다.
+            oneSided
+              ? "한쪽 구간에만 표본이 잡혀 두 패치를 비교하지 않았습니다."
+              : `${bundle.deltas.meta.to} 패치노트에 맵 항목이 없어 판정 없이 관측값만 표시합니다.`
+          }
+          actions={
+            <Link
+              href="/pubg/methodology/#discord"
+              className="inline-flex min-h-10 items-center justify-center rounded-md bg-accent px-5 text-sm font-bold text-accent-on hover:opacity-90"
+            >
+              방송 규칙 보기 →
+            </Link>
+          }
+        />
+
+        {/* 유형·이름·판정은 위 머리가 소유한다(§8-1). 이 카드는 지형도와 수치만 든다. */}
+        <PubgDetailSplash
+          imageSrc={hasRender ? publicMapPath(identity.assetName) : null}
+          fit="cover"
+          fallbackMark={identity.koName}
+          stats={stats}
+        />
+
+        {/* 2026-09-19 사용자 지적("근거가 전혀 사용자가 알아볼 수 없게되어있어")의 맵 쪽 대응.
+            무기 상세와 달리 맵에는 통계 판정 행이 없어 판정 근거 문단이 성립하지 않는다 —
+            대신 **이 숫자가 어디서 나왔는지**를 한 문장으로 말한다. 없는 판정을 있는 것처럼
+            서술하지 않는 쪽이 "무근거 문장은 회색" 원칙과 같은 계열의 정직이다. */}
+        <p className="text-sm leading-relaxed text-fg-2">
+          {delta
+            ? `이 수치는 Steam 전 지역·전 티어 매치 중 ${identity.koName}에서 진행된 ` +
+              `${(statBefore?.nMatches ?? 0).toLocaleString()}건(${maps.deltas.meta.from}) · ` +
+              `${(statAfter?.nMatches ?? 0).toLocaleString()}건(${maps.deltas.meta.to})을 집계한 것입니다. ` +
+              `${maps.deltas.meta.to} 패치노트에는 맵 항목이 없어 관측값만 표시합니다.`
+            : `이 수치는 Steam 전 지역·전 티어 매치 중 ${identity.koName}에서 진행된 ` +
+              `${shown.nMatches.toLocaleString()}건을 집계한 것입니다. 한쪽 구간에만 표본이 잡혀 두 패치를 비교하지 않았습니다.`}
+        </p>
+
+        <SectionCard
+          eyebrow="구성"
+          title={`${identity.koName}에서 많이 줍는 총`}
+          variant="glass"
+          action={<span className="font-mono text-xs text-muted">{maps.deltas.meta.to} 기준</span>}
+        >
+          {(statAfter ?? shown).topWeapons.length === 0 ? (
+            <p className="p-5 text-sm text-muted">이 구간 표본에 무기 획득 기록이 없습니다.</p>
+          ) : (
+            <ul className="flex flex-col divide-y divide-border-soft">
+              {(statAfter ?? shown).topWeapons.map((weapon) => (
+                <li key={weapon.weaponKey} className="flex items-baseline justify-between gap-3 px-5 py-3">
+                  <Link
+                    href={weaponHref(weapon.weaponKey)}
+                    className="font-display font-bold text-fg hover:text-accent"
+                  >
+                    {weapon.weaponName}
+                  </Link>
+                  <span className="font-mono text-sm tabular-nums text-fg-2">
+                    {pct(weapon.share, 2)}
+                    <span className="ml-2 text-xs text-muted">
+                      {weapon.pickups.toLocaleString()}회
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className="px-5 pt-3 pb-5 text-xs text-muted">이 맵 안의 총 무기 획득 대비 점유율</p>
+        </SectionCard>
+
+        <PubgFooter generatedAt={maps.deltas.meta.generatedAt} nVerdicts={bundle.deltas.meta.n} />
+      </div>
+    </Container>
+    </main>
+  );
+}

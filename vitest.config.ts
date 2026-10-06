@@ -7,7 +7,7 @@ export default defineConfig({
   test: {
     // RTL 자동 cleanup 등록(globals:false라 자동 등록이 안 된다) — vitest.setup.ts 주석 참고
     setupFiles: ["./vitest.setup.ts"],
-    exclude: ["e2e/**", "node_modules/**"],
+    exclude: ["node_modules/**"],
     // 워커 상한(2026-09-28 실측). 기본값(코어 20 → 워커 19)이면 /mnt/d(WSL 9p) 위에서 jsdom 워커가 동시에
     // 뜨며 시작 응답 60s(vitest START_TIMEOUT)를 넘겨 「Failed to start forks worker」가 파일 164개에서
     // 결정론적으로 재현됐다(테스트는 전부 통과, 오류 1건으로 게이트 실패 · PR-B tip 160개에선 무발생).

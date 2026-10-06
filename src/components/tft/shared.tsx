@@ -2,34 +2,25 @@
 // TFT 화면 공용 조각. PUBG `shared.tsx`와 같은 자리이되, **표시 규칙은 LoL 쪽을 쓴다** —
 // TFT는 `DeltaRecord`를 그대로 내므로 `isReportableRecord`·`displayStatus`·
 // `STATUS_SORT_PRIORITY`가 전부 그냥 걸린다. TFT 전용 술어를 만들지 않는다.
-import type { ReactNode } from "react";
 
 import SiteFooter from "@/components/SiteFooter";
-import { metricLabel, isLowerBetter } from "@/lib/format";
+import { fmtPlacement, formatTftMetricValue, isLowerBetter } from "@/lib/format";
 import type { DeltaMetric } from "@/pipeline/types";
 import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
 import type { ObservationFailure } from "@/pipeline/types";
+import { formatPercent, formatSignedPercent, SIGNED_POINT } from "@/pipeline/shared/percent";
 
 /** 0.5231 → "52.3%". */
-export function pct(value: number, digits = 1): string {
-  return `${(value * 100).toFixed(digits)}%`;
-}
+export const pct = (value: number, digits = 1): string => formatPercent(value, digits);
 
 /** +0.0231 → "+2.3%p". */
-export function signedPct(value: number, digits = 1): string {
-  const p = value * 100;
-  return `${p >= 0 ? "+" : ""}${p.toFixed(digits)}%p`;
-}
+export const signedPct = (value: number, digits = 1): string => formatSignedPercent(value, digits, SIGNED_POINT);
 
-/** 4.352 → "4.35등". */
-export function placement(value: number): string {
-  return `${value.toFixed(2)}등`;
-}
+/** 4.352 → "4.35등" — 표기는 `lib/format.ts`가 소유한다(2026-10-06 단일화). */
+export const placement = fmtPlacement;
 
-/** 지표에 맞는 값 표기 — 평균 등수만 단위가 다르다. */
-export function formatMetricValue(metric: DeltaMetric, value: number): string {
-  return metric === "avgPlacement" ? placement(value) : pct(value);
-}
+/** 지표에 맞는 값 표기 — 평균 등수만 단위가 다르다(`lib/format.ts` formatTftMetricValue). */
+export const formatMetricValue = formatTftMetricValue;
 
 /**
  * 지표에 맞는 변화량 표기 + **개선 방향**.
@@ -42,15 +33,6 @@ export function deltaDisplay(metric: DeltaMetric, delta: number): { text: string
   return { text, improved };
 }
 
-export function TftPageHeader({ title, lead }: { title: ReactNode; lead: ReactNode }) {
-  return (
-    <header className="flex flex-col gap-3">
-      <h1 className="font-display text-3xl font-bold tracking-tight text-fg sm:text-4xl">{title}</h1>
-      <p className="max-w-3xl text-sm leading-relaxed text-fg-2">{lead}</p>
-    </header>
-  );
-}
-
 /** 표본 범위 한 줄 — 헤더 칩·방법론과 **같은 어휘**를 쓴다(화면끼리 다른 말을 하지 않게). */
 export function TftSampleNotice({ boards, matches }: { boards: number; matches: number }) {
   return (
@@ -60,15 +42,6 @@ export function TftSampleNotice({ boards, matches }: { boards: number; matches: 
       <strong className="text-fg-2">보드(참가자)</strong>입니다 — 한 판에 8명이 각자 보드를 들고, 한 보드에 여러 유닛이
       동시에 서므로 제로섬이 아닙니다.
     </p>
-  );
-}
-
-export function TftMetricCaption({ metric }: { metric: DeltaMetric }) {
-  return (
-    <span className="font-mono text-xs text-muted">
-      {metricLabel(metric)}
-      {isLowerBetter(metric) ? " (작을수록 개선)" : ""}
-    </span>
   );
 }
 

@@ -31,6 +31,7 @@ import { canonicalWeaponKey } from "../src/pipeline/aggregate/pubg-weapon-key";
 import { accuracyByWeapon, type PubgAccuracyStat } from "../src/pipeline/aggregate/pubg-accuracy";
 import { aggregatePubgMaps, buildPubgMapDeltas } from "../src/pipeline/aggregate/pubg-maps";
 import { buildPubgDeltas, type PubgNoteItem } from "../src/pipeline/match/pubg-delta";
+import { formatPercent } from "../src/pipeline/shared/percent";
 
 const ROOT = process.cwd();
 
@@ -257,7 +258,7 @@ function main(): void {
     )
   );
 
-  const pct = (x: number, digits = 1) => `${(x * 100).toFixed(digits)}%`;
+  const pct = formatPercent;
   console.log(`[pubg] ${args.from} ${before.nMatches}매치 / ${args.to} ${after.nMatches}매치`);
   console.log(
     `[pubg] 맵 ${mapsBefore.maps.length} → ${mapsAfter.maps.length}종 · 비교행 ${mapDeltas.rows.length}` +

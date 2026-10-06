@@ -97,34 +97,3 @@ export function noteMismatchChangesFor(
     (c) => isNoteMismatchChange(c) && c.entityType === entityType && c.entityKey === entityKey
   );
 }
-
-/**
- * 홈 「미공지 Gap」 탭이 세는 **수치 축 대상 수** — 잠수함 + 공지값 불일치.
- *
- * 함수로 두는 이유: 세 홈이 같은 식을 각자 쓰고 있었고, 2026-09-21에 수치 축이 두 갈래가 되자
- * 세 곳을 전부 고쳐야 했다. 다음에 갈래가 늘어도 여기만 고치면 된다.
- */
-export function gameDataEntityCount(summary: SubmarineSummary | null): number {
-  if (!summary) return 0;
-  return summary.entities.length + summary.mismatches.length;
-}
-
-/**
- * 「미공지 Gap」의 통계 축 대상 키(`entityType:entityKey`) — 행이 아니라 **대상**(사용자 확정 7).
- * 호출부가 이미 걸러 낸 Gap 행(화면 규칙 `displayStatus`)을 넘긴다(2026-09-28, C15).
- */
-export function gapEntityKeys(rows: readonly { entityType: string; entityKey: string }[]): Set<string> {
-  return new Set(rows.map((row) => `${row.entityType}:${row.entityKey}`));
-}
-
-/**
- * 「미공지 Gap」 탭 배지 = (통계 Gap 대상) ∪ (수치 축 대상: 잠수함 + 값 어긋남) **합집합** 크기(C15).
- * 더하면 두 축에 다 걸린 대상을 두 번 센다 — TFT 18.3 「마스터 이」가 그랬다(탭 39 = 행 35 + 잠수함 4).
- */
-export function gapUnionCount(gapKeys: ReadonlySet<string>, submarine: SubmarineSummary | null): number {
-  const union = new Set(gapKeys);
-  for (const entity of [...(submarine?.entities ?? []), ...(submarine?.mismatches ?? [])]) {
-    union.add(`${entity.entityType}:${entity.entityKey}`);
-  }
-  return union.size;
-}

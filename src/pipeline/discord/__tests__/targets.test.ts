@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest";
 
 import {
-  configuredTargets,
   isNotifyGameId,
   mentionContent,
   mentionPayload,
@@ -51,17 +50,6 @@ describe("resolveDiscordTarget", () => {
 
   it("빈 문자열은 미설정으로 본다 — 빈 Secret이 조용히 통과하면 안 된다", () => {
     expect(() => resolveDiscordTarget("tft", { DISCORD_WEBHOOK_URL_TFT: "   " })).toThrow();
-  });
-});
-
-describe("configuredTargets", () => {
-  it("설정된 게임만 돌려준다", () => {
-    const targets = configuredTargets({ DISCORD_WEBHOOK_URL_LOL: HOOK, DISCORD_WEBHOOK_URL_TFT: HOOK2 });
-    expect(targets.map((t) => t.game)).toEqual(["lol", "tft"]);
-  });
-
-  it("아무것도 없으면 빈 배열 — 던지지 않는다", () => {
-    expect(configuredTargets({})).toEqual([]);
   });
 });
 

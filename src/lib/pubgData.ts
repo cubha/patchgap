@@ -5,7 +5,7 @@
 // **출하 게이트**(SCOPE 2026-09-16 해제 조건): 파일이 없거나 근거 딸린 판정이 0건이면
 // `loadPubg()`가 null을 반환하고, 그 경우 페이지·네비 링크를 렌더하지 않는다. 빈 껍데기 탭이
 // 배포되면 LoL 본편 신뢰도까지 깎이므로 "데이터가 없으면 아예 없다"가 기본값이다.
-import fs from "node:fs";
+import "server-only";
 import path from "node:path";
 import type { MatchStatus, ObservationFailure } from "@/pipeline/types";
 import { isObservationStub } from "@/pipeline/shared/observation-stub";
@@ -14,6 +14,7 @@ import type { PubgAccuracyStat } from "@/pipeline/aggregate/pubg-accuracy";
 import type { PubgMapAggregate, PubgMapDeltaRow } from "@/pipeline/aggregate/pubg-maps";
 import type { PubgAssetManifest } from "@/pipeline/pubg/asset-path";
 import type { PubgDeltaRow, PubgNoteItem } from "@/pipeline/match/pubg-delta";
+import { readJsonIfExists } from "@/pipeline/shared/json-file";
 
 const PUBG_DIR = path.resolve(process.cwd(), "data", "aggregated", "pubg");
 
@@ -59,9 +60,7 @@ export interface PubgBundle {
 }
 
 function readJson<T>(file: string): T | null {
-  const full = path.join(PUBG_DIR, file);
-  if (!fs.existsSync(full)) return null;
-  return JSON.parse(fs.readFileSync(full, "utf8")) as T;
+  return readJsonIfExists<T>(path.join(PUBG_DIR, file));
 }
 
 /**
@@ -69,6 +68,14 @@ function readJson<T>(file: string): T | null {
  * 메타데이터가 `42.3`·`43.1`을 하드코딩해, 43.2 노트와 판정이 커밋돼도 화면은 43.1에 머물렀다(결정 8 —
  * 선언 축은 항상 최신 — 을 코드가 깨는 자리).
  */
+/** 맵 키 후보 — 두 구간 합집합(한쪽에만 표본이 잡힌 맵도 상세는 존재한다). 맵 상세의 정적 경로와 본문이 같은 집합을 쓴다
+ * (2026-10-06 `app/pubg/map/[key]/page.tsx`에서 이관). */
+export function pubgMapKeys(): string[] {
+  const maps = loadPubgMaps();
+  if (!maps) return [];
+  return [...new Set([...maps.before.maps, ...maps.after.maps].map((m) => m.mapKey))];
+}
+
 export function pubgPair(): { from: string; to: string } | null {
   const deltas = readJson<PubgDeltasFile>("deltas.json");
   return deltas ? { from: deltas.meta.from, to: deltas.meta.to } : null;

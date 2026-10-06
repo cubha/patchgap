@@ -15,7 +15,6 @@ import type {
   DataFile as PipelineDataFile,
   DeltasFile as PipelineDeltasFile,
   ItemStat,
-  LaneGoldStat,
   ObjectiveStat,
   PatchId,
   PatchNoteItem,
@@ -32,6 +31,7 @@ import {
   skinIndexFile,
   spellIconsFile,
 } from "@/pipeline/shared/paths";
+import { readJsonIfExists } from "@/pipeline/shared/json-file";
 
 /** run-aggregate.ts가 각 산출 파일에 공통으로 얹는 메타 블록 — `src/pipeline/types.ts`의
  * `AggregateMeta`를 그대로 재export한다(2026-09-05 리팩토링 — 원래 이 파일 로컬 정의였다). */
@@ -72,11 +72,8 @@ export interface PatchPair {
   to: PatchId;
 }
 
-function readJsonFile<T>(filePath: string): T | null {
-  if (!fs.existsSync(filePath)) return null;
-  const raw = fs.readFileSync(filePath, "utf-8");
-  return JSON.parse(raw) as T;
-}
+// 없으면 null(아직 집계 안 된 패치), 깨졌으면 던진다(산출물 손상은 빌드에서 드러나야 한다).
+const readJsonFile = readJsonIfExists;
 
 /** "26.17" 같은 점(.) 구분 패치 번호를 내림차순(최신 우선) 비교한다. 세그먼트 수가 달라도
  * 없는 세그먼트는 0으로 취급한다. */
@@ -145,10 +142,6 @@ export function loadItems(patch: PatchId, dataRoot: string = DATA_ROOT): RowsFil
   return readJsonFile(path.join(aggregatedDir(patch, dataRoot), "items.json"));
 }
 
-export function loadLanes(patch: PatchId, dataRoot: string = DATA_ROOT): RowsFile<LaneGoldStat> | null {
-  return readJsonFile(path.join(aggregatedDir(patch, dataRoot), "lanes.json"));
-}
-
 export function loadObjectives(
   patch: PatchId,
   dataRoot: string = DATA_ROOT
@@ -168,6 +161,15 @@ export function loadDeltas(from: PatchId, to: PatchId, dataRoot: string = DATA_R
   // 노트 파일이 없으면 원본 그대로(왕복 테스트·빈 데이터 빌드).
   const raw = readJsonFile<DeltasFile>(deltasFile(from, to, dataRoot));
   return normalizeDeltasForDisplay(raw, loadNotes(to, dataRoot)?.items ?? null);
+}
+
+/**
+ * 판정 파일 **원문 텍스트** — 항목 상세의 스냅숏 해시용. `loadDeltas`는 화면 정규화를 거친 객체를 돌려주므로
+ * 해시(커밋된 바이트의 지문)에는 쓸 수 없다. 전엔 `LolItemDetail`이 경로를 직접 조립해 다시 읽었다(2026-10-06 이관).
+ */
+export function loadDeltasRaw(from: PatchId, to: PatchId, dataRoot: string = DATA_ROOT): string | null {
+  const file = deltasFile(from, to, dataRoot);
+  return fs.existsSync(file) ? fs.readFileSync(file, "utf-8") : null;
 }
 
 /** data/aggregated/spell-icons.json — scripts/run-ddragon.ts 미실행이거나 노트에 스킬 표기가

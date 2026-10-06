@@ -9,7 +9,7 @@
 // 빌드는 초록인데 본문이 "보고할 관측이 없는 엔티티다"로 뜬다. 그래서 **진입점을 하나로 만든다**.
 import { describe, it, expect } from "vitest";
 
-import { tftEntityRows } from "../entityRows";
+import { tftEntityRows } from "../tftEntityRows";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 import type { DeltaMetric, DeltaRecord, MatchStatus } from "@/pipeline/types";
 

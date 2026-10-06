@@ -9,20 +9,16 @@ import type { DeltasFile } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
 import {
   absDelta,
-  computeHeadline,
   countRelevantNoteEntities,
-  entityFallbackLabel,
   excludeObservation,
   resolveGapCause,
   formatMetricValue,
-  formatNotePreviewText,
-  formatObservedSummary,
   indexNotesById,
   isSignificantDelta,
   metricKind,
   selectAnnouncedPreview,
-  selectTopUnannounced,
-} from "../logic";
+  } from "../logic";
+import { computeHeadline } from "@/lib/headline";
 
 function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
   return {
@@ -179,29 +175,6 @@ describe("computeHeadline", () => {
   });
 });
 
-describe("selectTopUnannounced", () => {
-  it("unannounced만 필터링하고 파일 순서를 신뢰한다(재정렬 없음)", () => {
-    const rows = deltasFile([
-      delta({ id: "1", status: "unannounced", delta: 0.01 }),
-      delta({ id: "2", status: "no-change" }),
-      delta({ id: "3", status: "unannounced", delta: 0.05 }),
-    ]);
-    const result = selectTopUnannounced(rows, 5);
-    expect(result.map((r) => r.id)).toEqual(["1", "3"]);
-  });
-
-  it("limit을 넘지 않는다", () => {
-    const rows = deltasFile(
-      Array.from({ length: 10 }, (_, i) => delta({ id: `u${i}`, status: "unannounced" }))
-    );
-    expect(selectTopUnannounced(rows, 5)).toHaveLength(5);
-  });
-
-  it("deltas가 null이면 빈 배열", () => {
-    expect(selectTopUnannounced(null)).toEqual([]);
-  });
-});
-
 describe("selectAnnouncedPreview", () => {
   it("matchedNoteIds가 있는 행만 뽑아(서로 다른 엔티티) |delta| 내림차순으로 정렬한다(상태 라벨 무관)", () => {
     const rows = deltasFile([
@@ -265,34 +238,6 @@ describe("selectAnnouncedPreview", () => {
   });
 });
 
-describe("formatNotePreviewText", () => {
-  it("엔티티명이 문장 맨 앞에 오도록 조립한다(스킬 있음)", () => {
-    const n = note({ entity: "나서스", skill: "기본 지속 효과", summary: "생명력 흡수 12/18/24% ⇒ 10/15/20%" });
-    expect(formatNotePreviewText(n, 1, "폴백")).toBe(
-      "나서스 · 기본 지속 효과 — 생명력 흡수 12/18/24% ⇒ 10/15/20%"
-    );
-  });
-
-  it("skill이 null이면 가운뎃점 없이 조립한다", () => {
-    const n = note({ entity: "클래식", skill: null, summary: "룬 페이지 2개 추가 지급" });
-    expect(formatNotePreviewText(n, 1, "폴백")).toBe("클래식 — 룬 페이지 2개 추가 지급");
-  });
-
-  it("matchedNoteCount>1이면 '외 K건'을 덧붙인다", () => {
-    const n = note({ entity: "아우렐리온 솔", skill: "Q", summary: "초당 마나 소모량 조정" });
-    expect(formatNotePreviewText(n, 3, "폴백")).toBe("아우렐리온 솔 · Q — 초당 마나 소모량 조정 외 2건");
-  });
-
-  it("matchedNoteCount===1이면 '외 K건'을 붙이지 않는다", () => {
-    const n = note({ entity: "트런들", skill: null, summary: "사거리 표시 개선" });
-    expect(formatNotePreviewText(n, 1, "폴백")).toBe("트런들 — 사거리 표시 개선");
-  });
-
-  it("note가 없으면(방어적 케이스) 폴백 엔티티명만 반환한다", () => {
-    expect(formatNotePreviewText(undefined, 1, "말파이트")).toBe("말파이트");
-  });
-});
-
 describe("absDelta", () => {
   it("null은 -Infinity", () => {
     expect(absDelta(delta({ delta: null }))).toBe(-Infinity);
@@ -332,15 +277,6 @@ describe("formatMetricValue", () => {
   });
 });
 
-describe("formatObservedSummary", () => {
-  it("metric 라벨 + 부호 있는 값", () => {
-    expect(formatObservedSummary(delta({ metric: "pickRate", delta: -0.018 }))).toBe("픽률 −1.8%p");
-  });
-  it("delta===null이면 관측 불가", () => {
-    expect(formatObservedSummary(delta({ delta: null }))).toBe("픽률 관측 불가");
-  });
-});
-
 describe("indexNotesById", () => {
   it("null이면 빈 객체", () => {
     expect(indexNotesById(null)).toEqual({});
@@ -352,23 +288,6 @@ describe("indexNotesById", () => {
   });
 });
 
-
-describe("entityFallbackLabel", () => {
-  it("objective 4종은 한 글자 라벨", () => {
-    expect(entityFallbackLabel({ entityType: "objective", entityKey: "dragon" })).toBe("용");
-    expect(entityFallbackLabel({ entityType: "objective", entityKey: "herald" })).toBe("전");
-    expect(entityFallbackLabel({ entityType: "objective", entityKey: "baron" })).toBe("바");
-    expect(entityFallbackLabel({ entityType: "objective", entityKey: "tower" })).toBe("포");
-  });
-  it("lane은 골, summary는 경", () => {
-    expect(entityFallbackLabel({ entityType: "lane", entityKey: "TOP" })).toBe("골");
-    expect(entityFallbackLabel({ entityType: "summary", entityKey: "avgDurationSec" })).toBe("경");
-  });
-  it("champion/item은 undefined(EntityIcon 기본 동작에 위임)", () => {
-    expect(entityFallbackLabel({ entityType: "champion", entityKey: "Trundle" })).toBeUndefined();
-    expect(entityFallbackLabel({ entityType: "item", entityKey: "3047" })).toBeUndefined();
-  });
-});
 
 describe("excludeObservation", () => {
   // 홈 릴리즈노트 스트림 미공지 카드: 헤더(ObservationLine)가 대표 관측 1건을 이미 보여주므로,

@@ -16,6 +16,8 @@
 //   - `patch+9` 이후에는 before 창의 첫날(`patch-5`)이 336시간을 넘겨 CDN에서 사라진다.
 // 그래서 워크플로는 **매일** 돌고 이 판정이 사흘 중 하루를 고른다(놓치면 그 패치는 영영 못 쓴다).
 
+import type { PatchRunDecisionBase } from "../../types";
+
 /** 패치 1건 — 라이브 시작 날짜(UTC)와 텔레메트리 패치 라벨. */
 export interface PubgPatchWindow {
   /** 화면·파일명에 쓰는 표기(`43.1`). */
@@ -94,7 +96,7 @@ export interface PubgRunInput {
   force?: boolean;
 }
 
-export interface PubgRunDecision {
+export interface PubgRunDecision extends PatchRunDecisionBase {
   shouldRun: boolean;
   from: string | null;
   to: string | null;

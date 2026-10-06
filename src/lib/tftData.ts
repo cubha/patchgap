@@ -13,6 +13,7 @@ import type { DeltaRecord, DeltasRunLlmMeta, MatchStatus, ObservationFailure, Pa
 import { isObservationStub } from "@/pipeline/shared/observation-stub";
 import type { NamedStat } from "@/pipeline/match/tft-delta";
 import { comparePatchId } from "@/pipeline/collect/calendar-overlay";
+import { readJsonOrNull } from "@/pipeline/shared/json-file";
 
 const TFT_DIR = path.join(process.cwd(), "data", "aggregated", "tft");
 
@@ -62,14 +63,8 @@ export interface TftBundle {
   notes: TftNotesFile;
 }
 
-function readJson<T>(file: string): T | null {
-  if (!fs.existsSync(file)) return null;
-  try {
-    return JSON.parse(fs.readFileSync(file, "utf8")) as T;
-  } catch {
-    return null;
-  }
-}
+// TFT 산출물은 없거나 깨져도 null — 화면이 「미연결」로 떨어진다.
+const readJson = readJsonOrNull;
 
 /**
  * 델타 산출 파일명만 매치한다 — `deltas-{from}-{to}.json`(PatchId = `{숫자}.{숫자}`).

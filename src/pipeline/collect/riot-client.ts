@@ -7,6 +7,7 @@
 import Bottleneck from "bottleneck";
 import type { MatchSlim, ParticipantSlim, TeamObjectiveRecord, TeamObjectives, TeamSlim } from "../types";
 import { canonicalPatch } from "../shared/patches";
+import { exponentialBackoffMs, sleep } from "../shared/retry";
 
 const RETRYABLE_429_MAX_ATTEMPTS = 5;
 const RETRYABLE_5XX_MAX_ATTEMPTS = 3;
@@ -161,13 +162,7 @@ export interface RiotClient {
   dispose(): Promise<void>;
 }
 
-function defaultSleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function backoffMs(attempt: number): number {
-  return BASE_BACKOFF_MS * 2 ** attempt;
-}
+const backoffMs = (attempt: number): number => exponentialBackoffMs(BASE_BACKOFF_MS, attempt);
 
 export function maskedUrl(url: string): string {
   // API 키는 헤더로만 전달하므로 URL엔 원래 포함되지 않는다 — 쿼리스트링을 떼어 로그를 짧게 유지한다.
@@ -183,7 +178,7 @@ export function maskedUrl(url: string): string {
 
 export function createRiotClient(options: RiotClientOptions): RiotClient {
   const fetchImpl = options.fetchImpl ?? fetch;
-  const sleepImpl = options.sleepImpl ?? defaultSleep;
+  const sleepImpl = options.sleepImpl ?? sleep;
 
   const appLimiter = new Bottleneck({
     reservoir: 20,

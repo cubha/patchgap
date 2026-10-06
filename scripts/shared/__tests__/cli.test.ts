@@ -1,6 +1,6 @@
 import { pathToFileURL } from "node:url";
 import { describe, expect, it } from "vitest";
-import { isMainModule, parseCliArgs } from "../cli";
+import { envValue, isMainModule, parseCliArgs, PATCH_ID_PATTERN } from "../cli";
 
 describe("isMainModule", () => {
   it("process.argv[1]을 pathToFileURL로 변환한 값과 일치하면 true", () => {
@@ -75,5 +75,19 @@ describe("parseCliArgs — type: 'patch' (패치 ID 형식 강제, security-audi
     expect(() => parseCliArgs("run-x", ["--patch", "26"], patchSpec)).toThrow(
       /run-x: --patch must look like 26.17/
     );
+  });
+});
+
+describe("envValue / PATCH_ID_PATTERN — determine 세 진입점 공용(2026-10-06 단일화)", () => {
+  it("공백을 걷고 빈 값은 undefined", () => {
+    expect(envValue("X", { X: "  26.19 " })).toBe("26.19");
+    expect(envValue("X", { X: "   " })).toBeUndefined();
+    expect(envValue("X", {})).toBeUndefined();
+  });
+  it("패치 ID 형식만 통과한다", () => {
+    expect(PATCH_ID_PATTERN.test("26.19")).toBe(true);
+    expect(PATCH_ID_PATTERN.test("18.3")).toBe(true);
+    expect(PATCH_ID_PATTERN.test("26.19; rm -rf /")).toBe(false);
+    expect(PATCH_ID_PATTERN.test("../26.19")).toBe(false);
   });
 });

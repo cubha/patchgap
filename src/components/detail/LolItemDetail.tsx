@@ -25,8 +25,6 @@
 // 포맷이라 원리적으로 충돌 가능) — `pairs`가 최신 우선 내림차순이므로 최신 쌍을 먼저
 // 찾아 그 쌍의 레코드를 대표로 쓴다(구현 결정, ST-12.md 참고).
 
-import fs from "node:fs";
-import path from "node:path";
 import Link from "next/link";
 import Container from "@/components/Container";
 import DeltaValue from "@/components/DeltaValue";
@@ -36,7 +34,7 @@ import StatusBadge from "@/components/StatusBadge";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import { displayStatus, isNoiseStatus } from "@/pipeline/shared/display-status";
-import { loadChampions, loadDeltas, loadItems, loadNotes, type PatchPair } from "@/lib/data";
+import { loadChampions, loadDeltas, loadDeltasRaw, loadItems, loadNotes, type PatchPair } from "@/lib/data";
 import { entityTypeLabel, fmtInt, itemIdFromSlug } from "@/lib/format";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import { loadDdragonSafe } from "@/pipeline/match/ddragon";
@@ -134,20 +132,6 @@ function findEntity(rawId: string, pairs: readonly PatchPair[]): FoundEntity | n
     fallback ??= found;
   }
   return fallback;
-}
-
-/** deltas 파일 원문 텍스트(스냅샷 해시 계산용) — data.ts(loadDeltas)는 파싱된 객체만 반환하고
- * 원문 문자열은 버리므로, 해시 목적으로만 파일을 다시 읽는다(data.ts 미소유라 재구현). */
-function readDeltasRaw(pair: PatchPair): string | null {
-  const filePath = path.resolve(
-    process.cwd(),
-    "data",
-    "aggregated",
-    "deltas",
-    `${pair.from}_${pair.to}.json`
-  );
-  if (!fs.existsSync(filePath)) return null;
-  return fs.readFileSync(filePath, "utf-8");
 }
 
 function EmptyState() {
@@ -316,7 +300,7 @@ export default function LolItemDetail({ id, pairs, pairBase = null }: LolItemDet
   const gameData = loadGameDataDiff("lol", pair.from, pair.to);
   const submarineChanges = submarineChangesFor(gameData, head.entityType, head.entityKey);
   const mismatchChanges = noteMismatchChangesFor(gameData, head.entityType, head.entityKey);
-  const rawDeltas = readDeltasRaw(pair);
+  const rawDeltas = loadDeltasRaw(pair.from, pair.to);
   const hash = rawDeltas ? snapshotHash(rawDeltas) : null;
   const splashUrl = championSplashUrl(head);
 

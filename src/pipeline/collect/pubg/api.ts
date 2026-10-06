@@ -21,8 +21,6 @@ import type { TelemetryEvent } from "./telemetry-reduce";
 export const PUBG_BASE = "https://api.pubg.com/shards";
 /** `/samples` 리밋 10 RPM에 맞춘 호출 간격(여유 1초 포함). */
 export const SAMPLES_INTERVAL_MS = 7_000;
-/** 텔레메트리 보존창 — 이보다 오래된 매치는 CDN에서 404다. */
-export const TELEMETRY_RETENTION_HOURS = 336;
 
 /**
  * 텔레메트리 CDN 호스트 허용 목록.

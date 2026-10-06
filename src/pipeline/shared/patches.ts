@@ -4,6 +4,13 @@
 
 import type { PatchId } from "../types";
 
+/**
+ * 패치 ID 형식(예: "26.17") — 두 자리 메이저 + 1~2자리 마이너. 이 값은 파일 경로·URL 슬러그·GH Actions 입력으로
+ * 흘러들므로 형식 밖의 문자열(경로 조작·셸 메타문자)을 막는 보안 가드이기도 하다. 다섯 곳(CLI·determine·환경변수·
+ * 캘린더 오버레이·쌍 라우트)이 같은 정규식을 각자 들고 있었다(2026-10-06 단일화).
+ */
+export const PATCH_ID_PATTERN = /^\d{2}\.\d{1,2}$/;
+
 /** 패치노트 major(예: 26)와 gameVersion/ddragon major(예: 16) 사이의 고정 오프셋. */
 export const PATCH_MAJOR_OFFSET = 10;
 
@@ -36,10 +43,4 @@ export function toDdragonMajor(patch: PatchId): string {
     throw new Error(`toDdragonMajor expects a canonical patch (major>=20): "${patch}"`);
   }
   return `${major - PATCH_MAJOR_OFFSET}.${minor}`;
-}
-
-/** gameVersion 원문을 파싱해 major/minor 숫자와 정규화된 PatchId를 함께 반환한다. */
-export function parseGameVersion(v: string): { major: number; minor: number; canonical: PatchId } {
-  const { major, minor } = extractMajorMinor(v);
-  return { major, minor, canonical: canonicalPatch(v) };
 }

@@ -12,7 +12,6 @@ import {
   nextPatchCandidates,
   extractDatePublished,
   kstDateOf,
-  pubgPatchOfLabel,
   telemetryMajor,
   lolLiveKstOf,
   pubgPatchOfSteamTitle,
@@ -69,13 +68,8 @@ describe("PUBG — 텔레메트리 라벨", () => {
     expect(telemetryMajor("pc-2018-43")).toBe(43);
   });
 
-  it("★ 라벨은 메이저까지만 담는다 — 표기는 언제나 {메이저}.1이다", () => {
-    expect(pubgPatchOfLabel("pc-2018-44")).toBe("44.1");
-  });
-
   it("형식이 아니면 null", () => {
     expect(telemetryMajor("pc-2018")).toBeNull();
-    expect(pubgPatchOfLabel("nonsense")).toBeNull();
   });
 });
 

@@ -15,16 +15,11 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
-import { z } from "zod";
-import crypto from "node:crypto";
-import fs from "node:fs";
-import path from "node:path";
-import type { DeltaRecord, LlmCause, PatchNoteItem } from "../types";
+import type { DeltaRecord, PatchNoteItem } from "../types";
 import { llmCacheDir } from "../shared/paths";
 import type { GameLlmProfile, LlmDelta } from "./llm-profile";
 
 export { LLM_MODEL, PROMPT_VERSION } from "./llm-config";
-import { splitCombinedEntity } from "./entity-match";
 import {
   DEFAULT_LLM_BUDGET_USD,
   LLM_BUDGET_ENV,
@@ -35,7 +30,36 @@ import {
   PROMPT_VERSION,
   type LlmEffort,
 } from "./llm-config";
-import { arrowClaimsGrounded, noteNumbersOf, unsignedPercentChangeClaimsGrounded } from "./cause-factuality";
+import { OutputSchema, type LlmOutput, type LlmUsageTotals } from "./llm-schema";
+import { cacheKeyFor, candidateSetHash, readCache, serializeCandidates, writeCache } from "./llm-cache";
+import { citedMentionNames, ownNameOf, summaryCitesAllMismatched, verifyCauses, verifySummaryCites } from "./llm-verify";
+import {
+  buildProseRepairNote,
+  countProseViolations,
+  mergeRepairedProse,
+  summarizeProseHygiene,
+  summaryNumbersGrounded,
+  SUMMARY_MAX_CHARS,
+  type ProseHygieneStats,
+} from "./llm-prose";
+
+// 2026-10-06 분할: 아래 모듈로 옮긴 공개 심볼을 이 경로로도 계속 노출한다(호출부·테스트의 import 경로 불변).
+// Claude SDK 호출(`new Anthropic`·`messages.parse`)은 이 파일에만 남는다 — CLAUDE.md 「Claude API 호출이 발생하는 유일한 계층」.
+export type { LlmOutput, LlmUsageTotals } from "./llm-schema";
+export { cacheKeyFor, candidateSetHash, serializeCandidates } from "./llm-cache";
+export { namesOtherEntityThanCited, summaryCitesAllMismatched, verifyCauses, verifySummaryCites } from "./llm-verify";
+export {
+  buildProseRepairNote,
+  CAUSE_MAX_CHARS,
+  countProseViolations,
+  isNounEnding,
+  mergeRepairedProse,
+  summarizeProseHygiene,
+  summaryNumbersGrounded,
+  SUMMARY_MAX_CHARS,
+  type ProseCauseEntry,
+  type ProseHygieneStats,
+} from "./llm-prose";
 // 2026-09-17: 50 → 120. 실측 후보가 113건(미공지 47 + 간접 2 + 공지-불일치 64)인데 상한이
 // 50이라 미공지 14건이 LLM을 **아예 거치지 못했고**, 화면은 그것을 "근거 미확인"으로 표시해
 // "검토했으나 후보 없음"과 구분되지 않았다(사용자 지적 B5).
@@ -56,73 +80,9 @@ export function totalCallCapFor(maxDeltas: number, explicit?: number): number {
   return explicit ?? Math.max(DEFAULT_MAX_TOTAL_CALLS, maxDeltas + PROSE_REPAIR_HEADROOM);
 }
 
-const OutputSchema = z.object({
-  causes: z.array(
-    z.object({
-      candidateNoteId: z.string().nullable(),
-      text: z.string(),
-      confidence: z.enum(["high", "medium", "low"]),
-    })
-  ),
-  summary: z.string(),
-  /** B4 후속 수정(S3 인용 강제) — summary가 근거로 인용한 후보 노트 id 목록. 델타 수치만 근거로
-   * 썼으면(자기 델타 외 인용 없음) 빈 배열. verifySummaryCites가 구조적으로 검증한다. */
-  summaryCites: z.array(z.string()),
-});
-
-export type LlmOutput = z.infer<typeof OutputSchema>;
-
-/** system 프롬프트에 넣는 후보 항목 축약 뷰 — 델타 인과 추론에 필요한 필드만. */
-type CandidateView = Pick<
-  PatchNoteItem,
-  "id" | "entity" | "skill" | "stat" | "before" | "after" | "direction" | "section"
->;
-
-function toCandidateView(note: PatchNoteItem): CandidateView {
-  return {
-    id: note.id,
-    entity: note.entity,
-    skill: note.skill,
-    stat: note.stat,
-    before: note.before,
-    after: note.after,
-    direction: note.direction,
-    section: note.section,
-  };
-}
-
-/**
- * 후보 패치노트 항목을 id 오름차순으로 정렬한 뒤 직렬화한다. **타임스탬프·랜덤 미포함** —
- * 같은 후보셋이면 언제 호출해도 바이트 단위로 동일한 문자열이 나와야 한다(프롬프트 캐싱 전제).
- */
-export function serializeCandidates(notes: readonly PatchNoteItem[]): string {
-  const sorted = [...notes].map(toCandidateView).sort((a, b) => a.id.localeCompare(b.id));
-  return JSON.stringify(sorted);
-}
-
-export function candidateSetHash(serialized: string): string {
-  return crypto.createHash("sha256").update(serialized).digest("hex");
-}
-
-function cacheKeyFor(model: string, promptVersion: string, deltaId: string, candSetHash: string, effort: LlmEffort): string {
-  // effort는 기본값이 아닐 때만 키에 든다(llm-config.ts LLM_EFFORT 주석) — 기존 캐시를 그대로 적중시킨다.
-  const effortTag = effort === LLM_EFFORT ? "" : `|effort=${effort}`;
-  return crypto
-    .createHash("sha256")
-    .update(`${model}|${promptVersion}|${deltaId}|${candSetHash}${effortTag}`)
-    .digest("hex");
-}
-
 /** 골든 가드(`prompt-golden.test.ts`)가 렌더 결과를 해시하려고 노출한다 — 후보 목록을 감싸는 문구는 캐시 키에 없다. */
 export function buildSystemPrompt<TDelta extends LlmDelta>(profile: GameLlmProfile<TDelta>, notes: readonly PatchNoteItem[]): string {
   return `${profile.systemInstructions}\n\n후보 패치노트 항목 목록(JSON):\n${serializeCandidates(notes)}`;
-}
-
-export interface LlmUsageTotals {
-  inputTokens: number;
-  cacheReadInputTokens: number;
-  cacheCreationInputTokens: number;
-  outputTokens: number;
 }
 
 function emptyUsage(): LlmUsageTotals {
@@ -187,412 +147,8 @@ export async function callLlmForDelta<TDelta extends LlmDelta = DeltaRecord>(
   return { parsed: response.parsed_output, usage };
 }
 
-interface CacheFileShape {
-  deltaId: string;
-  model: string;
-  promptVersion: string;
-  candidateSetHash: string;
-  generatedAt: string;
-  parsed: LlmOutput;
-  usage: LlmUsageTotals;
-  /**
-   * 문장 규칙 재요청을 이 항목에 몇 번 했나(2026-09-28, C1). 캐시 적중 경로는 이 값이 1 미만일 때만
-   * 되묻는다 — 없으면 고쳐지지 않는 위반을 **매 실행마다** 다시 물었다(실행당 약 11건, 영구 누수).
-   * 필드가 없는 옛 캐시는 0으로 읽혀 한 번 더 묻는다(사용자 결정 D1의 「1회 추가 재요청」).
-   */
-  proseRepairAttempts?: number;
-}
-
 /** 재요청은 캐시 항목 하나당 이 횟수까지. */
 const MAX_PROSE_REPAIR_ATTEMPTS = 1;
-
-function readCache(cacheDir: string, key: string): CacheFileShape | null {
-  const filePath = path.join(cacheDir, `${key}.json`);
-  if (!fs.existsSync(filePath)) return null;
-  try {
-    return JSON.parse(fs.readFileSync(filePath, "utf8")) as CacheFileShape;
-  } catch {
-    return null; // 손상된 캐시 파일 — 재호출 유도(폐기 아님, 그냥 miss 취급)
-  }
-}
-
-function writeCache(cacheDir: string, key: string, value: CacheFileShape): void {
-  fs.mkdirSync(cacheDir, { recursive: true });
-  fs.writeFileSync(path.join(cacheDir, `${key}.json`), `${JSON.stringify(value, null, 2)}\n`, "utf8");
-}
-
-/**
- * LLM이 반환한 causes를 후보셋 검증한다 — 존재하지 않는 id·자기 엔티티 참조는 candidateNoteId를
- * null로, verified를 false로 폐기(text/confidence는 회색 표기용으로 보존).
- */
-/** 노트 대상의 이름들 — 합친 이름(「세계 지도집과 룬 나침반」)은 조각까지. 2자 미만은 버린다(「룬」 같은 범주어). */
-function entityNames(entity: string): string[] {
-  return [entity, ...splitCombinedEntity(entity)].filter((name) => name.length >= 2);
-}
-
-/**
- * 인용 노트를 "말했다"고 볼 이름 — 대상 전체 이름 + 어절(「순간이동 재사용 대기시간」의 「순간이동」) +
- * 수치 이름의 앞 세 어절(TFT 18.3: 개화 노트의 「주술 마나가 풍부한 토양 …」을 문장이 그대로 말한다).
- * 세 어절 미만의 수치 이름은 보지 않는다 — 「스킬 피해량」·「체력」 같은 일반어를 인정하면 다른 노트를
- * 말한 문장이 통과한다(실측: 베이가 문장이 알리스타 「스킬 피해량」 노트를 인용한 행이 새어 나갔다).
- */
-function citedMentionNames(note: PatchNoteItem): string[] {
-  const names = entityNames(note.entity);
-  const words = names.flatMap((name) => name.split(/\s+/u)).filter((word) => word.length >= 2);
-  const statWords = (note.stat ?? "").trim().split(/\s+/u);
-  const statHead = statWords.length >= 3 ? statWords.slice(0, 3).join(" ") : "";
-  return [...new Set([...names, ...words, ...(statHead ? [statHead] : [])])];
-}
-
-/**
- * 원인 문장이 **인용 노트와 다른 대상을 말하는가**(2026-09-27).
- *
- * 참이 되는 조건: 문장이 인용 노트 대상의 이름(또는 그 어절)을 하나도 말하지 않으면서, 다른 후보 노트
- * 대상의 이름을 말한다. 다음은 "다른 대상"으로 세지 않는다 — 델타 **자신의** 이름(「기원자 빌드가
- * 약화됐습니다」는 자연스러운 문장이다), 인용 대상 이름과 부분 문자열 관계인 이름, 인용 노트의 수치 이름에
- * 든 이름. 어느 대상도 이름으로
- * 말하지 않는 문장("서포터 아이템 체력 재생…")은 판단하지 않는다(거짓) — 이 게이트는 보수적이다.
- *
- * 왜 필요한가: 재요청 병합이 위치로 짝지어 26.19 LoL 3행·TFT 18.3 4행의 문장이 다른 노트의 인용을
- * 달고 verified로 나갔고, 그 결과가 캐시에 되쓰여 재생성으로도 고쳐지지 않았다.
- */
-export function namesOtherEntityThanCited(
-  text: string,
-  cited: PatchNoteItem,
-  candidates: readonly PatchNoteItem[],
-  ownName: string | null = null
-): boolean {
-  if (citedMentionNames(cited).some((name) => text.includes(name))) return false;
-  const citedNames = entityNames(cited.entity);
-  // 인용 노트의 수치 이름 안에 든 이름도 "다른 대상"이 아니다 — TFT 18.2 「경쟁을 넘어서」의 수치가
-  // 「카직스가 렝가에게 부여하는 마나」라, 카직스·렝가를 말한 문장은 그 노트를 말한 것이다.
-  const citedStat = cited.stat ?? "";
-  const excluded = (name: string) =>
-    name === ownName || citedStat.includes(name) || citedNames.some((c) => c.includes(name) || name.includes(c));
-  return candidates.some(
-    (note) => note.id !== cited.id && entityNames(note.entity).some((name) => !excluded(name) && text.includes(name))
-  );
-}
-
-/**
- * 요약 ↔ 인용 대상 게이트(2026-09-28, C4). 요약은 여러 노트를 한 문장에 엮으므로 **인용 전부가** 문장이
- * 말하지 않는 다른 대상일 때만 참이다(원인 게이트 `namesOtherEntityThanCited`를 인용마다 적용). 인용이
- * 없으면 델타 수치만의 요약이라 거짓. 없는 id는 `verifySummaryCites`가 이미 거르므로 여기선 건너뛴다.
- */
-export function summaryCitesAllMismatched(
-  summary: string,
-  cites: readonly string[],
-  candidates: readonly PatchNoteItem[],
-  ownName: string | null
-): boolean {
-  const byId = new Map(candidates.map((note) => [note.id, note] as const));
-  const cited = cites.map((id) => byId.get(id)).filter((note): note is PatchNoteItem => note !== undefined);
-  if (cited.length === 0) return false;
-  return cited.every((note) => namesOtherEntityThanCited(summary, note, candidates, ownName));
-}
-
-/** 델타 자신의 표시 이름 — LoL·TFT `entityName`, PUBG `weaponName`. 엔진은 `LlmDelta`만 알므로 좁혀 읽는다. */
-function ownNameOf(delta: LlmDelta): string | null {
-  if ("entityName" in delta && typeof delta.entityName === "string") return delta.entityName;
-  if ("weaponName" in delta && typeof delta.weaponName === "string") return delta.weaponName;
-  return null;
-}
-
-export function verifyCauses<TDelta extends LlmDelta = DeltaRecord>(
-  rawCauses: LlmOutput["causes"],
-  candidates: readonly PatchNoteItem[],
-  delta: TDelta,
-  profile: GameLlmProfile<TDelta>
-): LlmCause[] {
-  const candidateIds = new Set(candidates.map((note) => note.id));
-  const notesById = new Map(candidates.map((note) => [note.id, note] as const));
-
-  return rawCauses.map((cause): LlmCause => {
-    if (cause.candidateNoteId === null) {
-      return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
-    }
-    if (!candidateIds.has(cause.candidateNoteId)) {
-      return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
-    }
-    const note = notesById.get(cause.candidateNoteId);
-    // 2026-09-19: 다른 게임 모드(LoL 클래식·아수라장·아레나)의 노트는 SR 관측의 원인이 될 수 없다.
-    // 실측으로 26.16→26.17 쌍의 verified 원인 453건 중 282건이 모드 노트를 인용하고 있었다
-    // ("클래식 피오라의 공격 속도 계수 상향으로 탑 결투 구도가…" — 라이브 협곡에 없던 변경).
-    // 후보 풀 자체를 거르면 candidateSetHash가 바뀌어 LLM 캐시가 전량 무효가 되므로, 교정은
-    // **검증 지점**에서 한다(BRAINTRUST-root-fix-2026-09-19.md §4).
-    if (note && !profile.isCitable(note)) {
-      return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
-    }
-    if (note && profile.isSameEntity(note, delta)) {
-      return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
-    }
-    // 문장과 인용은 한 쌍이다 — 문장이 다른 대상을 말하면 인용 링크가 거짓 근거가 된다.
-    if (note && namesOtherEntityThanCited(cause.text, note, candidates, ownNameOf(delta))) {
-      return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
-    }
-    // 사실성(2026-09-28, C3) — 문장이 숫자로 단정한 「A→B」가 인용 노트(또는 같은 대상의 형제 노트)·델타
-    // 자신의 수치와 맞나. 게임 고유 검사(PUBG 부호 백분율·전체 감소 귀속)는 프로필이 든다.
-    if (note) {
-      const siblings = candidates.filter((other) => other.entity === note.entity);
-      const own = profile.ownNumbersOf?.(delta) ?? [];
-      if (
-        !arrowClaimsGrounded(cause.text, siblings, own) ||
-        // 부호 없는 「X% 줄어」(R14) — 형제 노트가 말한 수치나 델타·맥락 수치여야 한다(세 게임 공통).
-        !unsignedPercentChangeClaimsGrounded(cause.text, [], [...siblings.flatMap(noteNumbersOf), ...own]) ||
-        (profile.isCauseGrounded !== undefined && !profile.isCauseGrounded(cause.text, note, delta))
-      ) {
-        return { text: cause.text, candidateNoteId: null, verified: false, confidence: cause.confidence };
-      }
-    }
-    return {
-      text: cause.text,
-      candidateNoteId: cause.candidateNoteId,
-      verified: true,
-      confidence: cause.confidence,
-    };
-  });
-}
-
-/**
- * B4 후속 수정(S3 인용 강제) — `summaryCites`의 모든 id가 입력 후보셋에 실제로 존재하는지만
- * 확인한다(causes와 달리 자기참조 배제는 요구되지 않음 — summary는 델타 자신의 수치를 근거로
- * 쓰는 것이 정상이므로). 빈 배열은 "인용 없음"이라 항상 통과(true).
- */
-export function verifySummaryCites<TDelta extends LlmDelta = DeltaRecord>(
-  summaryCites: readonly string[],
-  candidates: readonly PatchNoteItem[],
-  profile: GameLlmProfile<TDelta>
-): boolean {
-  if (summaryCites.length === 0) return true;
-  // 존재 + core. 모드 노트를 근거로 쓴 요약은 본문색으로 단언할 수 없다(위 verifyCauses와 같은 이유).
-  const coreIds = new Set(candidates.filter((note) => profile.isCitable(note)).map((note) => note.id));
-  return summaryCites.every((id) => coreIds.has(id));
-}
-
-/** 완곡 종결 어미 — 추론 문장에서 정당하지만, 두어 종에 몰리면 그것이 "AI스러움"의 실체가 된다. */
-const HEDGE_ENDINGS = [
-  "수 있습니다",
-  "가능성이 있습니다",
-  "보입니다",
-  "것으로 추정됩니다",
-  "일 수 있습니다",
-  "듯합니다",
-];
-
-/**
- * 길이 상한 — **프롬프트 규칙 9와 같은 값을 쓴다.** 하나로 묶어 두었더니 요약을 80자 기준으로
- * 세면서 프롬프트는 100자를 지시하는 어긋남이 생겼다(독립 채점 K1-7 지적: 집계 수치가 프롬프트
- * 상한과 다른 것을 말한다). 규칙과 계측이 같은 숫자를 보게 분리한다.
- */
-export const SUMMARY_MAX_CHARS = 100;
-export const CAUSE_MAX_CHARS = 80;
-
-/** 위생 집계 입력 — 완곡 표현의 정당성은 confidence에 달려 있으므로 텍스트만으로는 셀 수 없다. */
-export interface ProseCauseEntry {
-  text: string;
-  confidence: LlmCause["confidence"];
-}
-
-/**
- * 재요청이 필요한 문장 수(길이 초과 + 명사형 종결). 0이면 재요청하지 않는다.
- *
- * 2026-09-19 최종 채점 K1-7로 **길이에서 문장 위생 전반으로 넓혔다**(이전 이름
- * `countLengthViolations`). 길이만 보던 조건은 명사형 종결 11건을 전부 통과시켰다.
- */
-export function countProseViolations(parsed: LlmOutput): number {
-  const summaryOver = parsed.summary.length > SUMMARY_MAX_CHARS ? 1 : 0;
-  const causeBad = parsed.causes.filter(
-    (cause) => cause.text.length > CAUSE_MAX_CHARS || isNounEnding(cause.text)
-  ).length;
-  return summaryOver + causeBad;
-}
-
-/**
- * 재요청 문구. **어느 문장이 무엇을 어겼는지 숫자와 함께 알려준다** — v4에서 배운 것이 "어림수보다
- * 숫자"였는데, 재요청은 그보다 한 걸음 더 나아가 *이 응답의* 실제 위반을 짚어 줄 수 있다.
- * (이전 이름 `buildLengthRepairNote` — 대상이 길이만이 아니게 되어 바꿨다.)
- */
-/**
- * 재요청 응답에서 **문장만** 가져오고 근거(인용·신뢰도)는 원본을 지킨다.
- *
- * 왜 필요한가(2026-09-19 재판정): 재요청 응답을 통째로 채택했더니 인용 7행·confidence 3행이
- * 바뀌고 `champion:Pyke:banRate`의 판정이 unannounced → indirect-effect로 뒤집혔다(3단 재분류가
- * 원인 문장을 보기 때문이다). 계획은 "판정 엔진 불변 · 전부 표시·산문 계층"이었고 재요청 문구도
- * "candidateNoteId와 confidence는 그대로 두세요"라고 적고 있었지만 **아무것도 그것을 강제하지
- * 않았다**. 문구는 계약이 아니다 — 코드가 계약이다.
- *
- * 원인 개수가 달라지면 병합을 포기한다(null). 원인은 인용 id로 짝짓는다(위치가 아니라). 요약은 `summaryCites`가
- * 그대로일 때만 새 문장을 쓴다 — 문장과 인용은 한 쌍이라 한쪽만 바꾸면 인용이 문장을 벗어난다.
- */
-export function mergeRepairedProse(
-  original: LlmOutput,
-  repaired: LlmOutput,
-  acceptSummaryCites: (summary: string, cites: readonly string[]) => boolean = () => false
-): LlmOutput | null {
-  if (repaired.causes.length !== original.causes.length) return null;
-  const citesUnchanged =
-    repaired.summaryCites.length === original.summaryCites.length &&
-    repaired.summaryCites.every((id, index) => id === original.summaryCites[index]);
-  // 인용이 바뀐 재요청 요약도, 새 인용이 검증을 통과하면 문장·인용을 **쌍째** 채택한다(2026-09-28, C1).
-  // 원본을 지키면 긴 요약이 그대로 남았다 — ACCEPT-prose-v5 A1(요약 100자 초과 0) 회귀의 원인이다.
-  const adoptSummary = citesUnchanged || acceptSummaryCites(repaired.summary, repaired.summaryCites);
-  // 원인 문장은 **인용 id로** 짝짓는다(2026-09-27). 위치로 짝지으면 재요청이 순서를 바꿨을 때 문장이
-  // 다른 노트의 인용을 달고 나간다 — 26.19 나피리 밴률 등 LoL 3행·TFT 4행이 그렇게 verified로 나갔다.
-  // 같은 id가 여럿이면 등장 순서대로 소비한다. 짝이 없는 원인은 원본 문장을 지킨다(위반이 남더라도
-  // 문장과 인용이 어긋나는 것보다 낫다 — 전자는 계측에 잡히고 후자는 화면에서 조용히 틀린다).
-  const pool = new Map<string | null, string[]>();
-  for (const cause of repaired.causes) {
-    const texts = pool.get(cause.candidateNoteId) ?? [];
-    texts.push(cause.text);
-    pool.set(cause.candidateNoteId, texts);
-  }
-  return {
-    summary: adoptSummary ? repaired.summary : original.summary,
-    summaryCites: adoptSummary ? repaired.summaryCites : original.summaryCites,
-    causes: original.causes.map((cause) => ({
-      candidateNoteId: cause.candidateNoteId,
-      confidence: cause.confidence,
-      text: pool.get(cause.candidateNoteId)?.shift() ?? cause.text,
-    })),
-  };
-}
-
-export function buildProseRepairNote(parsed: LlmOutput): string {
-  const lines: string[] = ["직전 답의 문장 규칙 위반을 고쳐 **같은 내용으로** 다시 답하세요."];
-  if (parsed.summary.length > SUMMARY_MAX_CHARS) {
-    lines.push(`- summary가 ${parsed.summary.length}자입니다. ${SUMMARY_MAX_CHARS}자 이하로 줄이세요.`);
-  }
-  parsed.causes.forEach((cause, index) => {
-    if (cause.text.length > CAUSE_MAX_CHARS) {
-      lines.push(`- causes[${index}]가 ${cause.text.length}자입니다. ${CAUSE_MAX_CHARS}자 이하로 줄이세요.`);
-    }
-    if (isNounEnding(cause.text)) {
-      lines.push(
-        `- causes[${index}]가 명사로 끝납니다("${cause.text.trim().slice(-12)}"). ` +
-          "합쇼체 문장으로 바꾸세요(예: \"…밀린 영향.\" → \"…밀렸습니다.\")."
-      );
-    }
-  });
-  lines.push("수치와 인과는 남기고 수식어·부연부터 버리세요. candidateNoteId와 confidence는 그대로 두세요.");
-  return lines.join("\n");
-}
-
-export interface ProseHygieneStats {
-  summaryCount: number;
-  summaryOverLength: number;
-  summaryHedged: number;
-  maxSummaryLength: number;
-  causeCount: number;
-  causeOverLength: number;
-  causeHedged: number;
-  /**
-   * confidence가 high·medium인데 완곡 종결로 끝난 원인 문장 수(2026-09-19 v5). **이것이 항목7의
-   * 진짜 계측점이다** — 완곡 표현 자체는 low 문장에서 정당하므로 `causeHedged` 총량은 0이 목표가
-   * 아니다. 근거가 분명한 문장까지 흐린 경우만 결함이다.
-   */
-  causeHedgedConfident: number;
-  /**
-   * 합쇼체로 끝나지 않은 원인 문장 수(2026-09-19, 최종 채점 K1-7). v5 산출에서 11건이
-   * "…밀린 영향."처럼 명사로 끝나 같은 카드의 다른 문장과 문체가 섞였다. 길이·완곡만 세던
-   * 게이트가 그것을 못 봤다 — `ACCEPT-prose-v5`가 위험으로 적어 둔 바로 그 형태다.
-   */
-  causeNounEnding: number;
-  /**
-   * 검증 통과 원인 중 인용 노트 대상의 이름을 **하나도 말하지 않는** 문장 수(2026-09-28, C6). 문장-인용
-   * 게이트(`namesOtherEntityThanCited`)는 이름이 없는 문장을 판단하지 않는다(보수적 설계) — 그 사각지대의
-   * 크기를 잰다. 게이트를 넓히면 오탐이 생기므로 계측으로 둔다. 엔진이 채운다(없으면 미계측).
-   */
-  causeUnnamedTarget?: number;
-  /** 결정론 수치 요약으로 바뀐 요약 수(C1·D1). */
-  summaryDeterministic?: number;
-}
-
-/**
- * 합쇼체로 끝나지 않는가 — 이 프로젝트의 산문은 전부 합쇼체이므로 명사형 종결은 문체 혼입이다.
- *
- * 왜 프롬프트가 아니라 여기서 보는가: 규칙을 더하려면 `PROMPT_VERSION`을 올려야 하고, 그러면
- * 캐시 236건이 전량 무효가 되어 **지금 통과하는 문장까지 전부 다시 굴린다**(새 위반이 다른 자리에
- * 생길 수 있다). 결함은 230건 중 13건이므로 그 13건만 고치는 것이 옳다.
- */
-export function isNounEnding(text: string): boolean {
-  // 말미 구두점에 닫는 괄호·따옴표까지 포함한다(2026-09-19 재판정 지적): 그전에는 `.!?`만 벗겨
-  // "…했습니다(26.18 기준)."처럼 괄호주로 끝나는 정상 문장을 명사형으로 잘못 셌다. 산출물에는
-  // 그런 요약이 1건 있었고 b24d22b에도 있었으므로 이번 회귀는 아니지만, 오탐은 **불필요한
-  // 재요청을 부른다** — 재요청이 근거를 건드릴 수 있다는 것을 이 라운드에 배웠으므로 그냥 둘 수 없다.
-  // 말미 구두점뿐 아니라 **말미 괄호주 전체**를 벗긴다. 구두점만 벗기면
-  // "…밀렸습니다(26.18 기준)."이 "…기준"으로 끝나 명사형으로 잡힌다.
-  let trimmed = text.trim();
-  for (;;) {
-    const next = trimmed
-      .replace(/[.!?。\s"'”’」』]+$/u, "")
-      .replace(/[(（[［][^()（）[\]［］]*[)）\]］]$/u, "");
-    if (next === trimmed) break;
-    trimmed = next;
-  }
-  if (trimmed.length === 0) return false;
-  return !/[다요]$/.test(trimmed);
-}
-
-function isHedged(text: string): boolean {
-  const trimmed = text.trim().replace(/[.!?]+$/, "");
-  return HEDGE_ENDINGS.some((ending) => trimmed.endsWith(ending));
-}
-
-/**
- * 산출 문장의 길이·종결 위생을 집계한다(2026-09-19, 항목7).
- *
- * 문구로는 닫히지 않는다는 것이 실측이다: "80자 안팎"이 프롬프트에 **있는데도** 요약 113건 중
- * 82건(72%)이 초과했고, 숫자로 못박은 v4에서도 2~4%가 남았다. 그래서 v5는 레버를 바꿨다 —
- * 길이는 호출부의 1회 한정 재요청(`needsLengthRepair`)이 닫고, 완곡 표현은 confidence와 묶어
- * (프롬프트 규칙 10) 줄인다. 이 함수는 그 두 레버가 실제로 들었는지 **매 실행 측정**한다.
- * 길이를 이유로 문장을 회색 처리하지는 않는다 — 근거 있는 문장을 숨기는 것이 더 나쁘다.
- */
-export function summarizeProseHygiene(
-  entries: readonly { summary: string | null; causes: readonly ProseCauseEntry[] }[]
-): ProseHygieneStats {
-  const stats: ProseHygieneStats = {
-    summaryCount: 0,
-    summaryOverLength: 0,
-    summaryHedged: 0,
-    maxSummaryLength: 0,
-    causeCount: 0,
-    causeOverLength: 0,
-    causeHedged: 0,
-    causeHedgedConfident: 0,
-    causeNounEnding: 0,
-  };
-  for (const entry of entries) {
-    if (entry.summary !== null && entry.summary.length > 0) {
-      stats.summaryCount += 1;
-      if (entry.summary.length > SUMMARY_MAX_CHARS) stats.summaryOverLength += 1;
-      if (isHedged(entry.summary)) stats.summaryHedged += 1;
-      stats.maxSummaryLength = Math.max(stats.maxSummaryLength, entry.summary.length);
-    }
-    for (const cause of entry.causes) {
-      stats.causeCount += 1;
-      if (cause.text.length > CAUSE_MAX_CHARS) stats.causeOverLength += 1;
-      if (isHedged(cause.text)) {
-        stats.causeHedged += 1;
-        if (cause.confidence !== "low") stats.causeHedgedConfident += 1;
-      }
-      if (isNounEnding(cause.text)) stats.causeNounEnding += 1;
-    }
-  }
-  return stats;
-}
-
-/**
- * 요약의 「A→B」·변화 백분율이 후보 노트나 **지금** 델타 수치와 맞나(2026-09-29). 델타 수치는 표시 반올림
- * 경계(42.45 → 42.4/42.5)를 허용하려고 ±0.1을 더한다 — 실측으로 현 데이터 148건 중 6건이 그 경계에서만
- * 어긋났고, 옛 수치는 그보다 훨씬 크게 벗어난다.
- */
-export function summaryNumbersGrounded(summaryText: string, candidates: readonly PatchNoteItem[], own: readonly number[]): boolean {
-  const tolerant = own.flatMap((n) => [n, Math.round((n - 0.1) * 10) / 10, Math.round((n + 0.1) * 10) / 10]);
-  return (
-    arrowClaimsGrounded(summaryText, candidates, tolerant) &&
-    unsignedPercentChangeClaimsGrounded(summaryText, [], [...candidates.flatMap(noteNumbersOf), ...tolerant])
-  );
-}
 
 export interface LlmMatchOptions {
   /** 세션당 LLM 2단 시도 대상 델타 수 상한(`--llm-max`, 기본 `DEFAULT_MAX_DELTAS`). */

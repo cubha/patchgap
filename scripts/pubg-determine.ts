@@ -23,13 +23,8 @@ import path from "node:path";
 import { planPubgRun } from "../src/pipeline/collect/pubg/patch-calendar";
 import { deltasStateOf } from "../src/pipeline/shared/observation-stub";
 import { loadPubgWindows } from "./shared/calendar";
-import { isMainModule } from "./shared/cli";
+import { envValue, isMainModule } from "./shared/cli";
 import { reportDeclaration, reportRun, reportSkip, warn, type SkipReason } from "./shared/determine-report";
-
-function trimmed(name: string): string | undefined {
-  const v = (process.env[name] ?? "").trim();
-  return v.length > 0 ? v : undefined;
-}
 
 /**
  * 판정(2026-09-28, C13·C14): 관측(수확 창 규칙 그대로)은 `planPubgRun`이 정하고, 그 앞단에 **선언 축**을
@@ -38,9 +33,9 @@ function trimmed(name: string): string | undefined {
  * stub은 산출물로 치지 않는다 — 쌍이 같은 stub이 수확을 영원히 막으면 초록불로 멈춘다.
  */
 export function main(): void {
-  const dataRoot = trimmed("PUBG_DATA_ROOT") ?? "data";
-  const force = trimmed("MANUAL_FORCE") === "true";
-  const hasKey = trimmed("PUBG_API_KEY") !== undefined;
+  const dataRoot = envValue("PUBG_DATA_ROOT") ?? "data";
+  const force = envValue("MANUAL_FORCE") === "true";
+  const hasKey = envValue("PUBG_API_KEY") !== undefined;
 
   // 캘린더도 **같은 dataRoot**에서 읽는다 — 산출물만 옮기고 캘린더는 기본 경로에서 읽으면
   // 테스트·모사에서 두 쪽이 다른 세계를 본다.

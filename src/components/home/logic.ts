@@ -4,15 +4,13 @@
 // UX-BRIEF §3 "01 브리핑 홈" + 코디네이터 지시(ST-11 프롬프트) 기준.
 
 import type { DeltaKind } from "@/components/DeltaValue";
-import type { DeltaMetric, DeltaRecord, DeltasFile, LlmCause, PatchNoteItem } from "@/pipeline/types";
+import type { DeltaRecord, DeltasFile, LlmCause, PatchNoteItem } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
-import { METRIC_KIND, fmtDeltaInt, fmtDeltaSec, fmtInt, fmtPct, fmtPp, fmtSec, metricLabel } from "@/lib/format";
+import { displayMetricKind, formatDisplayValue } from "@/lib/format";
 import { countRelevantNoteEntities as countRelevantNoteEntitiesInFile } from "@/pipeline/shared/notes-count";
 import { isSignificantDelta } from "@/pipeline/shared/significance";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
-import { FDR_ALPHA } from "@/pipeline/aggregate/stats";
 import { isGapStatus } from "@/pipeline/shared/status-order";
-import { countGapEntities, countReportable } from "@/pipeline/shared/headline";
 
 /** 패치노트 항목(section champion|item)을 "entity" 단위로 묶어 몇 개의 서로 다른 엔티티가
  * 언급됐는지 센다 — ST-08 `matchedNoteIds`가 같은 엔티티의 노트 여러 줄을 한 묶음으로 취급하는
@@ -35,9 +33,9 @@ export function countRelevantNoteEntities(notes: NotesFile | null): number {
  * PLAN ②의 "미달=insufficient-sample"과 동일한 무조건 우선순위.
  *
  * 실제 판정 로직은 `pipeline/shared/significance.ts`(`discord/webhook.ts`와 공유, 2026-09-05
- * 리팩토링으로 단일화)에 있다 — 이 재export는 기존 호출부(`compare/logic.ts`·`page.tsx`·이
- * 파일의 `computeHeadline`)의 import 경로를 그대로 보존한다. `qAlpha` 기본값은 `FDR_ALPHA`
- * (0.1, 이전 하드코딩 값과 동일)이며, `computeHeadline`은 `deltas.meta.qAlpha`를 넘겨 실제 그
+ * 리팩토링으로 단일화)에 있다 — 이 재export는 기존 호출부(`compare/logic.ts`·`page.tsx`)의 import 경로를
+ * 그대로 보존한다. `qAlpha` 기본값은 `FDR_ALPHA`
+ * (0.1, 이전 하드코딩 값과 동일)이며, `computeHeadline`(`lib/headline.ts`)은 `deltas.meta.qAlpha`를 넘겨 실제 그
  * 델타 파일이 만들어질 때 쓴 값을 재사용한다.
  */
 export { isSignificantDelta };
@@ -51,74 +49,6 @@ export { isReportableRecord };
  * 보존하기 위해 재export만 한다 — `isSignificantDelta`를 이 파일이 재export하는 것과 같은 관례다.
  */
 export { isGapStatus };
-
-/** 요약 카드 헤드라인 수치(+스탯 타일이 그대로 이 수치를 쓴다 — 코디네이터 정정, 2026-09-05:
- * 타일 "공지된 변화"는 별도 델타 집계가 아니라 `noteEntityCount`(N)를 그대로 재사용한다).
- *
- * `noteEntityCount`/`noteItemCount` 리네임(HANDOFF-redesign-2026-09-10.md §4-1, 2026-09-10):
- * 기존 필드명 `noteItemCount`가 실제로는 "노트 **항목** 수"가 아니라 "노트 **엔티티** 수"를
- * 담고 있어 오라벨이었다 — `src/components/methodology/pipelineSteps.ts`(ST-07)는 이미
- * `noteEntityCount`/`noteItemCount`(=`NotesFile.meta.itemCount`)로 올바르게 분리해 썼으므로,
- * 그 기존 컨벤션에 홈을 맞춘다. 소비처 3곳(`page.tsx`·`HeroSummary.tsx`·이 파일의 테스트)
- * 전수 확인 후 리네임 — 외부 공개 API가 아니므로 `tsc --noEmit`가 누락을 전부 잡는다. */
-export interface HeadlineStats {
-  /** "패치노트는 N개 항목을 말했고" + 스탯 타일 "공지된 변화" — countRelevantNoteEntities. */
-  noteEntityCount: number;
-  /** 원문 패치노트 "항목" 수(`NotesFile.meta.itemCount`) — HANDOFF §4-1 "35 엔티티 / 215 항목"
-   * 분리 표기에 쓰는 참고 병기 수치. */
-  noteItemCount: number;
-  /**
-   * "통계는 M개 변화를 말합니다" + 스탯 타일 "유의한 관측" — **`isReportableRecord` 통과 건수**.
-   *
-   * 2026-09-19 계약 변경(사용자 지적): 이전엔 `isSignificantDelta` 단독이라 **효과크기 바닥
-   * 미달(`below-threshold`)까지 세고 있었다**. 26.17→26.18 실측으로 403건 중 321건(80%)이
-   * 그것이었고, 그 321건은 **어느 목록에도 렌더되지 않는다**(표시 자격 없음). 즉 히어로가
-   * 자기 화면이 보여주지 않는 것을 세고 "유의한 관측"이라 부르고 있었다 — 라벨과 수치가
-   * 어긋난다. 사용자 판정: "유의미한 내용만 cnt한다고 하면 히어로를 바꾸는 게 맞다."
-   * 이제 목록·대조표가 쓰는 술어와 같은 것을 쓴다(403 → 62). 판정 엔진은 건드리지 않았다 —
-   * 세는 술어만 표시 계층의 것으로 맞춘 것이다.
-   */
-  statCount: number;
-  /**
-   * 스탯 타일·Gap 탭 배지 "미공지 Gap" — **`unannounced` + `indirect-effect`** 건수.
-   *
-   * 2026-09-17 계약 변경(사용자 지적 B2: "미공지 Gap 탭의 데이터와 노트에 없는 파급효과/간접
-   * 영향 섹션의 데이터가 동일한 목적으로 보이는데 다른영역에 별도로 표기되니 혼돈됨"):
-   * 두 상태는 **배타적이지만 같은 뿌리**다 — `verdict.assignStatus`가 "짝 없음 + 유의 +
-   * 효과크기 바닥 통과"를 `unannounced`로 확정한 뒤, `reclassifyIndirectEffects`가 **그
-   * `unannounced`만 대상으로** 원인이 신뢰도 게이트를 넘으면 `indirect-effect`로 재분류한다.
-   * 즉 `indirect-effect` ⊂ (원래 `unannounced`)이고, 차이는 **원인이 규명됐는가** 하나뿐이다.
-   * 그래서 화면에서도 한 곳(Gap 탭)에 모으고 그 안에서 규명 여부로 나눈다.
-   *
-   * ⚠️ 이 값은 **히어로 타일 · Gap 탭 배지 · 그리고 그 탭이 거르는 목록**이 공유한다.
-   * 셋이 어긋나면 화면이 스스로를 반박한다(PLAN-home-tab-split-intro-fix-2026-09-14.md
-   * "카운트 배지 소스").
-   */
-  /** 미공지 Gap **엔티티** 수(관측 행 수가 아니다 — Gap 탭 카드 수와 같다). */
-  unannouncedCount: number;
-}
-
-/** deltas/notes가 아직 없으면(ST-08 미착수 구간·빈 데이터 빌드) 전부 0을 반환한다(throw 없음 —
- * 빈 상태 카드 렌더 보장, ST-11 완료 조건). `qAlpha` 기본값은 `FDR_ALPHA` — 호출부(`page.tsx`)가
- * `deltas?.meta.qAlpha`를 명시적으로 넘기면 그 값을 우선한다(2026-09-05 리팩토링, 기존엔
- * `isSignificantDelta` 내부에 0.1이 하드코딩돼 있었다). */
-export function computeHeadline(
-  deltas: DeltasFile | null,
-  notes: NotesFile | null,
-  qAlpha: number = FDR_ALPHA
-): HeadlineStats {
-  const noteEntityCount = countRelevantNoteEntities(notes);
-  const noteItemCount = notes?.meta.itemCount ?? 0;
-  const rows = deltas?.rows ?? [];
-  // 세는 규칙은 `pipeline/shared/headline.ts`가 소유한다(2026-09-20) — 여기서 직접 세면
-  // 디스코드 브리핑이 같은 수치를 따로 세는 상태로 되돌아간다(그렇게 해서 403 vs 62가 났다).
-  return {
-    noteEntityCount,
-    noteItemCount,
-    statCount: countReportable(rows, qAlpha),
-    unannouncedCount: countGapEntities(rows),
-  };
-}
 
 /** delta===null은 "측정 불가"에 가까운 취급으로 정렬 맨 뒤로 보낸다(ST-08 verdict.sortDeltas와
  * 동일 관례). */
@@ -135,14 +65,6 @@ export function excludeObservation(
 ): DeltaRecord[] {
   if (!observation) return [...rows];
   return rows.filter((row) => row.id !== observation.id);
-}
-
-/** 미공지 변화 상위 N건 — ST-08 `writeDeltas`가 이미 상태 우선순위(unannounced 최우선) →
- * `|delta|` 내림차순으로 정렬해 기록하므로(verdict.sortDeltas), 여기서는 상태로 필터링만 하고
- * 파일 순서를 신뢰한다(재정렬하지 않음 — ST-11 프롬프트 "정렬은 파일 순서 신뢰"). */
-export function selectTopUnannounced(deltas: DeltasFile | null, limit = 5): DeltaRecord[] {
-  const rows = deltas?.rows ?? [];
-  return rows.filter((r) => r.status === "unannounced").slice(0, limit);
 }
 
 /** 챔피언 델타 id가 "scope=all"(포지션 무관) 행인지 — `champion:{key}:{metric}`(3세그먼트)이면
@@ -189,64 +111,12 @@ export function selectAnnouncedPreview(deltas: DeltasFile | null, limit = 5): De
   return representatives.sort((a, b) => absDelta(b) - absDelta(a)).slice(0, limit);
 }
 
-/** 공지 대조 미리보기 행 텍스트 — "{엔티티명}[ · {스킬}] — {노트 stat 라인}[ 외 K건]"(코디네이터
- * 지시, 2026-09-05 — 프로토타입 "나서스 기본 지속 효과 생명력 흡수 12/18/24% ⇒ 10/15/20%"처럼
- * 엔티티명이 문장 맨 앞에 오도록). `matchedNoteCount`가 1보다 크면(같은 엔티티에 노트가 여럿
- * 걸림, 예: 스킬 변경 2줄) "외 K건"(K=matchedNoteCount-1)을 덧붙인다. `note`가 없으면(방어적
- * 케이스 — matchedNoteId가 있는데 notesById에서 못 찾는 경우) 엔티티명만 표시. */
-export function formatNotePreviewText(
-  note: PatchNoteItem | undefined,
-  matchedNoteCount: number,
-  fallbackEntityName: string
-): string {
-  if (!note) return fallbackEntityName;
-  const skillPart = note.skill ? ` · ${note.skill}` : "";
-  const extra = matchedNoteCount > 1 ? ` 외 ${matchedNoteCount - 1}건` : "";
-  return `${note.entity}${skillPart} — ${note.summary}${extra}`;
-}
+/** DeltaRecord.metric → DeltaValue의 kind 3종 — 분류는 `lib/format.ts`의 `displayMetricKind`가 소유한다. */
+export const metricKind: (metric: string) => DeltaKind = displayMetricKind;
 
-/** `lib/format.ts`의 `"seconds"` → 이 파일(및 DeltaValue)이 쓰는 `"sec"` 표기로 옮긴다 — 하위
- * 소비처(DeltaValue.tsx의 `DeltaKind`, compare/logic.ts 등)가 전부 "sec"를 쓰므로 여기서만
- * 흡수한다(2026-09-05 리팩토링, `DeltaKind` 리네임은 범위 밖). */
-const SHARED_KIND_TO_UI: Record<"pp" | "seconds" | "gold", DeltaKind> = {
-  pp: "pp",
-  seconds: "sec",
-  gold: "gold",
-};
-
-/** DeltaRecord.metric → DeltaValue의 kind 3종. 분류 자체는 `lib/format.ts`의 `METRIC_KIND`
- * (`DeltaMetric` 전수 `Record`, 2026-09-05 리팩토링으로 단일화)에 위임한다. 알려지지 않은
- * metric은 "gold"(정수 그대로 표기)로 폴백한다(pp처럼 ×100 스케일링하면 임의 단위를 왜곡할
- * 위험이 더 크기 때문) — `METRIC_KIND`는 `DeltaMetric` 전수라 폴백이 없으므로, 이 폴백은
- * 여기 얇은 어댑터가 계속 책임진다. */
-export function metricKind(metric: string): DeltaKind {
-  const shared = METRIC_KIND[metric as DeltaMetric] as "pp" | "seconds" | "gold" | undefined;
-  return shared ? SHARED_KIND_TO_UI[shared] : "gold";
-}
-
-/** 공지 대조 미리보기 ".note-observed" 텍스트 — "픽률 −1.8%p" 형태. delta===null이면 "관측
- * 불가"(레코드 자체가 없는 경우는 애초에 이 함수에 안 들어옴 — buildDeltas가 측정 불가 케이스는
- * 레코드를 생략하므로 null은 방어적 케이스). */
-export function formatObservedSummary(record: DeltaRecord): string {
-  if (record.delta === null) return `${metricLabel(record.metric)} 관측 불가`;
-  const kind = metricKind(record.metric);
-  const valueText =
-    kind === "pp"
-      ? fmtPp(record.delta)
-      : kind === "sec"
-        ? fmtDeltaSec(record.delta)
-        : fmtDeltaInt(record.delta);
-  return `${metricLabel(record.metric)} ${valueText}`;
-}
-
-/** DeltaRecord.before/after(절대값) 표시 — kind별 단위: pp=퍼센트(`fmtPct`, 분수 입력) ·
- * sec=`fmtSec`(mm:ss) · gold=`fmtInt`(천단위 콤마). `value===null`이면 "—"(측정 불가 방어). */
+/** DeltaRecord.before/after(절대값) 표시 — 단위는 `metricKind`, 표기는 `lib/format.ts` `formatDisplayValue`. */
 export function formatMetricValue(value: number | null, metric: string): string {
-  if (value === null) return "—";
-  const kind = metricKind(metric);
-  if (kind === "pp") return fmtPct(value);
-  if (kind === "sec") return fmtSec(value);
-  return fmtInt(value);
+  return formatDisplayValue(value, metricKind(metric));
 }
 
 /** id 문자열 → notes.json PatchNoteItem 조회 맵. */
@@ -333,18 +203,4 @@ export function resolveGapCause(record: DeltaRecord): GapCauseDisplay {
   }
   // 문구 압축(2026-09-18 ST-8 → 라운드6 C3: 설명 꼬리를 뗐다. "왜"는 방법론이 말한다).
   return { mode: "none", text: "설명 후보 없음" };
-}
-
-/** entityType이 champion/item이 아닌 행(objective·lane·summary)의 EntityIcon 폴백 글자 —
- * DdragonPicture가 없는 엔티티에 프로토타입처럼 의미 있는 한 글자를 준다(기본 동작은 이름
- * 첫 글자라 "첫 용 처치 시각"이 "첫"이 되어 버려 무의미하다). champion/item은 undefined를
- * 반환해 EntityIcon 기본 동작(ddragon 이미지 우선)에 맡긴다. */
-export function entityFallbackLabel(record: Pick<DeltaRecord, "entityType" | "entityKey">): string | undefined {
-  if (record.entityType === "objective") {
-    const labels: Record<string, string> = { dragon: "용", herald: "전", baron: "바", tower: "포" };
-    return labels[record.entityKey];
-  }
-  if (record.entityType === "lane") return "골";
-  if (record.entityType === "summary") return "경";
-  return undefined;
 }

@@ -4,7 +4,7 @@
 // canonicalPatch(match.info.gameVersion) === patch로 한다(실제 배포는 수요일 새벽~오전이라
 // 라이브 일자를 KST 00:00으로 가정해도 그 날짜 이전 매치를 취급하지 않는 한 안전하다).
 
-import type { PatchId } from "../types";
+import type { PatchId, PatchRunDecisionBase } from "../types";
 
 export interface PatchCalendarEntry {
   /** 패치 라이브 일자(KST), "YYYY-MM-DD" 형식. */
@@ -86,7 +86,7 @@ export interface LolRunInput {
   force?: boolean;
 }
 
-export interface LolRunDecision {
+export interface LolRunDecision extends PatchRunDecisionBase {
   shouldRun: boolean;
   patch: string | null;
   from: string | null;

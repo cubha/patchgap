@@ -20,7 +20,6 @@ import {
   loadChampions,
   loadDeltas,
   loadItems,
-  loadLanes,
   loadNotes,
   loadObjectives,
   loadSummary,
@@ -91,11 +90,10 @@ describe("data.ts (dataRoot 주입 테스트)", () => {
       expect(getDefaultPair(tmpDir)).toBeNull();
     });
 
-    it("loadSummary/loadChampions/loadItems/loadLanes/loadObjectives/loadNotes: 파일 없으면 null", () => {
+    it("loadSummary/loadChampions/loadItems/loadObjectives/loadNotes: 파일 없으면 null", () => {
       expect(loadSummary("26.17", tmpDir)).toBeNull();
       expect(loadChampions("26.17", tmpDir)).toBeNull();
       expect(loadItems("26.17", tmpDir)).toBeNull();
-      expect(loadLanes("26.17", tmpDir)).toBeNull();
       expect(loadObjectives("26.17", tmpDir)).toBeNull();
       expect(loadNotes("26.17", tmpDir)).toBeNull();
     });

@@ -15,8 +15,8 @@
 import type { PatchCalendarEntry } from "./patch-calendar";
 import type { TftPatchWindow } from "./tft-crawler";
 import type { PubgPatchWindow } from "./pubg/patch-calendar";
+import { PATCH_ID_PATTERN } from "../shared/patches";
 
-const PATCH_ID = /^\d{2}\.\d{1,2}$/;
 const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
 /** PUBG 텔레메트리 라벨 — `pc-2018-43`. 연도 자리는 레거시 상수라 변하지 않는다. */
 const TELEMETRY_LABEL = /^pc-\d{4}-\d+$/;
@@ -29,7 +29,7 @@ export function comparePatchId(a: string, b: string): number {
 }
 
 function assertPatchId(patch: string): void {
-  if (!PATCH_ID.test(patch)) {
+  if (!PATCH_ID_PATTERN.test(patch)) {
     throw new Error(`캘린더 오버레이: 패치 ID 형식이 아니다 — ${JSON.stringify(patch)}`);
   }
 }

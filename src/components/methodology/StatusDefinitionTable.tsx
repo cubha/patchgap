@@ -10,6 +10,7 @@ import StatusBadge from "@/components/StatusBadge";
 import type { EffectFloor } from "@/pipeline/aggregate/stats";
 import type { DeltaMetric } from "@/pipeline/types";
 import type { DisplayStatus } from "@/pipeline/shared/display-status";
+import { formatPercent } from "@/pipeline/shared/percent";
 
 interface DefinitionRow {
   status: DisplayStatus;
@@ -24,9 +25,7 @@ export interface StatusDefinitionTableProps {
   floors: Record<DeltaMetric, EffectFloor>;
 }
 
-function pct(ratio: number): string {
-  return `${(ratio * 100).toFixed(0)}%`;
-}
+const pct = (ratio: number): string => formatPercent(ratio, 0);
 
 /** 절대 바닥을 사람이 읽는 단위로 — 비율 지표는 %p, 시간 지표는 초. */
 function abs(value: number, unit: "pp" | "sec"): string {

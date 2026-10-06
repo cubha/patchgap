@@ -553,3 +553,18 @@ export interface ObservationFailure {
   detail: string;
   at: string;
 }
+
+/**
+ * 게임별 수집 실행 판정의 **공통 계약**(2026-10-06). LoL `determineLolRun` · TFT `planTftRun` · PUBG `planPubgRun`은
+ * 입력(캘린더·발행 창·보존창)이 게임마다 다르지만, CI에 말하는 것은 같은 네 가지다 — 어느 쌍을, 캘린더가 낡았나,
+ * 왜. `scripts/*-determine.ts`가 이 필드로 `determine-report`(사유 동반 스킵)를 부른다. 게임을 붙일 때 이 계약을
+ * 지키면 워크플로·요약 표가 그대로 돈다.
+ */
+export interface PatchRunDecisionBase {
+  from: string | null;
+  to: string | null;
+  /** 캘린더 마지막 항목이 게임별 백스톱 일수보다 오래됐다 — 감시자 정지·피드 형식 변경 신호. */
+  staleCalendar: boolean;
+  /** 실행·스킵 사유(사람이 읽는 문장). */
+  reason: string;
+}

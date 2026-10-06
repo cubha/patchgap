@@ -63,9 +63,12 @@ const closureOf = (entry: string, depth = 2): string => {
  */
 // 2026-09-28 명세 변경(이월 R8): TFT도 과거 쌍 라우트(`/tft/history/[pair]/`)가 생겨 본문이
 // `components/tft/TftBriefing.tsx`로 옮겼다 — LoL과 같은 이유·같은 처리(검사 대상 파일만 바뀌고 검사 내용은 그대로).
+// 2026-10-06 명세 변경(/analyze ST-16): PUBG도 본문을 `components/pubg/PubgBriefing.tsx`로 옮겨 세 게임이 같은 구조가 됐다
+// (검사 대상 파일만 바뀌고 검사 내용은 그대로).
 const BRIEFING_BODY: Partial<Record<string, string>> = {
   lol: "src/components/home/LolBriefing.tsx",
   tft: "src/components/tft/TftBriefing.tsx",
+  pubg: "src/components/pubg/PubgBriefing.tsx",
 };
 const briefingSource = (id: string): string => BRIEFING_BODY[id] ?? `src/app/${id}/page.tsx`;
 
@@ -78,6 +81,9 @@ const briefingSource = (id: string): string => BRIEFING_BODY[id] ?? `src/app/${i
 const DETAIL_BODY: Partial<Record<string, string>> = {
   "src/app/lol/item/[id]/page.tsx": "src/components/detail/LolItemDetail.tsx",
   "src/app/tft/unit/[key]/page.tsx": "src/components/tft/TftUnitDetail.tsx",
+  // 2026-10-06 명세 변경(/analyze ST-16): PUBG 상세 본문도 컴포넌트로(검사 내용은 그대로).
+  "src/app/pubg/weapon/[key]/page.tsx": "src/components/pubg/PubgWeaponDetail.tsx",
+  "src/app/pubg/map/[key]/page.tsx": "src/components/pubg/PubgMapDetail.tsx",
 };
 const detailSource = (page: string): string => DETAIL_BODY[page] ?? page;
 
@@ -411,6 +417,7 @@ describe("§8-5 상세 — 세 게임이 같은 머리를 쓴다", () => {
       expect(read(page), page).toMatch(new RegExp(`import ${name} from "@/components/`));
     }
     expect(read("src/app/tft/page.tsx")).toMatch(/import TftBriefing from "@\/components\/tft\/TftBriefing"/);
+    expect(read("src/app/pubg/page.tsx")).toMatch(/import PubgBriefing from "@\/components\/pubg\/PubgBriefing"/);
   });
 
   it("이동 경로 형식은 하나뿐이다 — 화면이 마디를 직접 조립하지 않는다", () => {

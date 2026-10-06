@@ -8,6 +8,7 @@
 // **게임별로 일반화**(2026-09-28, 이월 R8): 처음엔 LoL 전용이었다(`/lol/history/…` 하드코딩). TFT도 쌍이 둘이 되면서
 // 같은 규칙을 복사하면 두 벌이 갈라진다 — 게임을 인자로 받는다. `lol*` 이름은 기존 호출부·테스트용 얇은 별칭이다.
 import { sectionHref, type GameId } from "@/lib/game";
+import { PATCH_ID_PATTERN } from "@/pipeline/shared/patches";
 
 export interface PairLike {
   from: string;
@@ -25,7 +26,6 @@ export function hasPairRoutes(game: GameId): game is PairRouteGame {
 /** 쌍 안에서 섹션으로 옮겨 갈 수 있는 곳 — 브리핑(`""`)과 대조표. 상세는 쌍마다 존재 여부가 달라 여기 없다. */
 export type PairSection = "" | "compare";
 
-const PATCH = /^\d{2}\.\d{1,2}$/;
 
 /**
  * 슬러그에는 **점을 쓰지 않는다** — `26_16-26_17`(2026-09-28, 이월 R8 후속). Next는 링크의 마지막 세그먼트에
@@ -76,7 +76,7 @@ export function pairFromSlug(slug: string, pairs: readonly PairLike[]): PairLike
   // 점 형식(`26.16`)도 받는다 — 옛 주소를 손으로 친 경우. 만드는 쪽은 언제나 `_` 형식이다.
   const from = rawFrom?.replace(/_/g, ".");
   const to = rawTo?.replace(/_/g, ".");
-  if (rest.length > 0 || !from || !to || !PATCH.test(from) || !PATCH.test(to)) return null;
+  if (rest.length > 0 || !from || !to || !PATCH_ID_PATTERN.test(from) || !PATCH_ID_PATTERN.test(to)) return null;
   return pairs.find((p) => p.from === from && p.to === to) ?? null;
 }
 
@@ -132,19 +132,4 @@ export function pairSelectHref(
   currentSection: string | null
 ): string {
   return pairHref(game, next, pairs, currentSection === "compare" ? "compare" : "");
-}
-
-// ── LoL 별칭(B3 호출부·테스트 호환) ─────────────────────────────────────────────
-
-export function lolPairSlug(pair: PairLike): string {
-  return pairSlug(pair);
-}
-
-/** 목록의 첫 쌍(최신)은 브리핑 홈, 나머지는 과거 쌍 라우트. */
-export function lolPairHref(pair: PairLike, pairs: readonly PairLike[]): string {
-  return pairHref("lol", pair, pairs);
-}
-
-export function lolPairFromSlug(slug: string, pairs: readonly PairLike[]): PairLike | null {
-  return pairFromSlug(slug, pairs);
 }

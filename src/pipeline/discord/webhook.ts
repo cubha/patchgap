@@ -8,6 +8,7 @@ import { fmtCiHalf, fmtDeltaInt, fmtDeltaSec, fmtInt, fmtKst, fmtPct, fmtPp, fmt
 import { lolEntityHref } from "../../lib/detailRoutes";
 import { displayStatus } from "../shared/display-status";
 import { countGapEntities, countReportable } from "../shared/headline";
+import { exponentialBackoffMs, sleep } from "../shared/retry";
 
 // ─── 디스코드 embed 제한(공식 API 제약, PLAN F6 "embed(≤10·6,000자)") ────────────────────────
 const MAX_EMBEDS = 10;
@@ -289,13 +290,7 @@ export interface SendWebhookResult {
   retries: number;
 }
 
-function defaultSleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function backoffMs(attempt: number): number {
-  return BASE_BACKOFF_MS * 2 ** attempt;
-}
+const backoffMs = (attempt: number): number => exponentialBackoffMs(BASE_BACKOFF_MS, attempt);
 
 function truncateForError(s: string): string {
   return s.length > 200 ? `${s.slice(0, 200)}…` : s;
@@ -333,7 +328,7 @@ export async function sendWebhook(
   options: SendWebhookOptions = {}
 ): Promise<SendWebhookResult> {
   const fetchImpl = options.fetchImpl ?? fetch;
-  const sleepImpl = options.sleepImpl ?? defaultSleep;
+  const sleepImpl = options.sleepImpl ?? sleep;
   const maxRetries = options.maxRetries ?? DEFAULT_MAX_RETRIES;
 
   let attempt = 0;
