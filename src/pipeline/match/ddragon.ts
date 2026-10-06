@@ -21,6 +21,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { DATA_ROOT } from "../shared/paths";
+import { readJsonRequired } from "../shared/json-file";
 
 /** 완성템 판정에서 제외하는 태그(부츠·소모품·장신구) — PLAN ③ ST-08 행 기준. */
 const EXCLUDED_COMPLETED_TAGS = new Set(["Boots", "Consumable", "Trinket"]);
@@ -139,12 +140,7 @@ function ddragonVersionDir(dataRoot: string, version: string): string {
 }
 
 function readJsonFile<T>(filePath: string): T {
-  if (!fs.existsSync(filePath)) {
-    throw new Error(
-      `ddragon data not found: ${filePath} — 먼저 실행: npx tsx scripts/run-ddragon.ts`
-    );
-  }
-  return JSON.parse(fs.readFileSync(filePath, "utf8")) as T;
+  return readJsonRequired<T>(filePath, `ddragon data not found: ${filePath} — 먼저 실행: npx tsx scripts/run-ddragon.ts`);
 }
 
 /** "16.17.1" 같은 점 구분 버전 문자열 내림차순 비교(semver 근사 — ddragon 버전은 항상 숫자 3단). */

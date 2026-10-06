@@ -5,7 +5,6 @@
 // **출하 게이트**(SCOPE 2026-09-16 해제 조건): 파일이 없거나 근거 딸린 판정이 0건이면
 // `loadPubg()`가 null을 반환하고, 그 경우 페이지·네비 링크를 렌더하지 않는다. 빈 껍데기 탭이
 // 배포되면 LoL 본편 신뢰도까지 깎이므로 "데이터가 없으면 아예 없다"가 기본값이다.
-import fs from "node:fs";
 import path from "node:path";
 import type { MatchStatus, ObservationFailure } from "@/pipeline/types";
 import { isObservationStub } from "@/pipeline/shared/observation-stub";
@@ -14,6 +13,7 @@ import type { PubgAccuracyStat } from "@/pipeline/aggregate/pubg-accuracy";
 import type { PubgMapAggregate, PubgMapDeltaRow } from "@/pipeline/aggregate/pubg-maps";
 import type { PubgAssetManifest } from "@/pipeline/pubg/asset-path";
 import type { PubgDeltaRow, PubgNoteItem } from "@/pipeline/match/pubg-delta";
+import { readJsonIfExists } from "@/pipeline/shared/json-file";
 
 const PUBG_DIR = path.resolve(process.cwd(), "data", "aggregated", "pubg");
 
@@ -59,9 +59,7 @@ export interface PubgBundle {
 }
 
 function readJson<T>(file: string): T | null {
-  const full = path.join(PUBG_DIR, file);
-  if (!fs.existsSync(full)) return null;
-  return JSON.parse(fs.readFileSync(full, "utf8")) as T;
+  return readJsonIfExists<T>(path.join(PUBG_DIR, file));
 }
 
 /**

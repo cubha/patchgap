@@ -18,6 +18,7 @@ import {
   remoteWeaponUrl,
   type PubgAssetManifest,
 } from "../src/pipeline/pubg/asset-path";
+import { readJsonRequired } from "../src/pipeline/shared/json-file";
 
 const ROOT = process.cwd();
 const AGG_DIR = path.join(ROOT, "data", "aggregated", "pubg");
@@ -32,12 +33,7 @@ interface MapsFile {
 }
 
 function readJson<T>(file: string): T {
-  if (!fs.existsSync(file)) {
-    throw new Error(
-      `TODO(run-pubg-assets): ${file} 가 없다. 'npx tsx scripts/run-pubg-aggregate.ts'를 먼저 실행한다.`
-    );
-  }
-  return JSON.parse(fs.readFileSync(file, "utf8")) as T;
+  return readJsonRequired<T>(file, `TODO(run-pubg-assets): ${file} 가 없다. 'npx tsx scripts/run-pubg-aggregate.ts'를 먼저 실행한다.`);
 }
 
 /** 이미 받아 둔 파일은 다시 받지 않는다 — 재실행이 싸야 사람이 실제로 재실행한다. */

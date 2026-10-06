@@ -34,6 +34,7 @@ import { STATUS_SORT_PRIORITY } from "../src/pipeline/shared/status-order";
 import type { DeltaRecord, MatchStatus, PatchNoteItem } from "../src/pipeline/types";
 import { isMainModule, parseCliArgs } from "./shared/cli";
 import { assertNoLlmDowngrade } from "./shared/llm-guard";
+import { readJsonRequired } from "../src/pipeline/shared/json-file";
 
 interface CliArgs {
   from: string;
@@ -71,8 +72,7 @@ export function parseArgs(argv: string[]): CliArgs {
 }
 
 function readJson<T>(file: string, what: string): T {
-  if (!fs.existsSync(file)) throw new Error(`${what}이 없다: ${file}`);
-  return JSON.parse(fs.readFileSync(file, "utf8")) as T;
+  return readJsonRequired<T>(file, `${what}이 없다: ${file}`);
 }
 
 /** 노트의 방향 다수결 — LoL `entity-match.ts`와 같은 규칙(buff/nerf만 세고 나머지는 중립). */

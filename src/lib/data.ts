@@ -32,6 +32,7 @@ import {
   skinIndexFile,
   spellIconsFile,
 } from "@/pipeline/shared/paths";
+import { readJsonIfExists } from "@/pipeline/shared/json-file";
 
 /** run-aggregate.ts가 각 산출 파일에 공통으로 얹는 메타 블록 — `src/pipeline/types.ts`의
  * `AggregateMeta`를 그대로 재export한다(2026-09-05 리팩토링 — 원래 이 파일 로컬 정의였다). */
@@ -72,11 +73,8 @@ export interface PatchPair {
   to: PatchId;
 }
 
-function readJsonFile<T>(filePath: string): T | null {
-  if (!fs.existsSync(filePath)) return null;
-  const raw = fs.readFileSync(filePath, "utf-8");
-  return JSON.parse(raw) as T;
-}
+// 없으면 null(아직 집계 안 된 패치), 깨졌으면 던진다(산출물 손상은 빌드에서 드러나야 한다).
+const readJsonFile = readJsonIfExists;
 
 /** "26.17" 같은 점(.) 구분 패치 번호를 내림차순(최신 우선) 비교한다. 세그먼트 수가 달라도
  * 없는 세그먼트는 0으로 취급한다. */

@@ -17,7 +17,7 @@
 // cron은 "지금 라이브인 패치"만 알고 게임 버전은 모르기 때문이다. 규칙은
 // `src/pipeline/gamedata/snapshot-version.ts`, 디스크 접근은 `scripts/shared/snapshot-version.ts`.
 
-import { mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
+import { mkdirSync, writeFileSync, existsSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { diffLol, type DdragonSnapshot } from "../src/pipeline/gamedata/lol";
 import {
@@ -40,13 +40,14 @@ import {
   resolveDdragonVersion,
   resolvePreviousSnapshotVersion,
 } from "./shared/snapshot-version";
+import { readJsonRequired } from "../src/pipeline/shared/json-file";
 
 interface DdragonListFile {
   readonly data: Record<string, unknown>;
 }
 
 function readJson<T>(path: string): T {
-  return JSON.parse(readFileSync(path, "utf8")) as T;
+  return readJsonRequired<T>(path, `run-gamedata-diff: 입력이 없다: ${path}`);
 }
 
 /**
