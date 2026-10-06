@@ -3,5 +3,10 @@
     "patch": "18.3",
     "startMs": 1790100000000,
     "endMs": null
+  },
+  {
+    "patch": "18.4",
+    "startMs": 1791309600000,
+    "endMs": null
   }
 ]
