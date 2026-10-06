@@ -1,4 +1,5 @@
 ### VERIFY-SPEC — SubTask ST-5
+- (scope-critic 후속, 2026-10-06) src 쪽 사본 3개(lib/pairRoutes·collect/calendar-overlay·shared/env)까지 pipeline/shared/patches.ts PATCH_ID_PATTERN으로 단일화 — cli.ts는 재노출
 - 기준선 요구사항: "`PATCH_ID_PATTERN` 4벌 + `trimmed()` 3벌 → `scripts/shared/cli.ts` 단일 export"
 - 변경 파일: scripts/shared/cli.ts(envValue·PATCH_ID_PATTERN export) · scripts/{lol,tft,pubg}-determine.ts · scripts/shared/__tests__/cli.test.ts(추가)
 - 관찰 가능한 계약: 같은 env 입력 → 같은 판정·같은 에러 메시지(메시지 문자열 무변). 경로 주입 문자열은 여전히 거부
