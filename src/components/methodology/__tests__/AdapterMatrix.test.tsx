@@ -26,7 +26,7 @@ describe("AdapterMatrix", () => {
 
   // 2026-09-16 명세 변경 — SCOPE Won't 해제로 PUBG가 실연결됐다(/pubg/). "수집 수치 0건"은
   // 데이터가 커밋된 시점부터 거짓이라 어서션을 사실에 맞춰 갱신한다(테스트 약화가 아니라 명세 반영).
-  it("PUBG 실연결 고지와 판정 엔진 게임 무관 고지를 렌더한다", () => {
+  it("PUBG 실연결 고지와 판정 엔진 공유 범위를 렌더한다", () => {
     const { container } = render(<AdapterMatrix />);
     // 2026-09-18 명세 변경(ST-7): 개발자 메모 톤("실연결 완료 … 판정했다")을 사용자 문장으로 —
     // 사실(실제 수집·집계·판정)은 그대로 어서션한다.
@@ -37,7 +37,10 @@ describe("AdapterMatrix", () => {
     expect(heads.some((h) => h?.includes("실연결"))).toBe(true);
     expect(container.textContent).not.toContain("수집 수치: 0건");
     expect(container.textContent).toContain("판정 엔진");
-    expect(container.textContent).toContain("게임 무관");
+    // 2026-10-06 명세 변경: 「게임 무관」은 과장이었다 — PUBG는 BH-FDR·Newcombe 대신 자체 바닥·로그비 CI를
+    // 쓴다(/pubg/methodology). 이제 공유 범위(판정 어휘·LLM 2단은 세 게임, 통계 게이트는 LoL·TFT)를 그대로 말한다.
+    expect(container.textContent).toContain("세 게임 공유");
+    expect(container.textContent).toContain("PUBG는 자체 효과크기 바닥");
   });
 
   // 2026-09-20 명세 변경: 열이 GAMES 레지스트리에서 나온다. 머리글 이름도 gameLabel()이 주므로
@@ -60,30 +63,28 @@ describe("AdapterMatrix", () => {
     expect(heads).not.toContain("PUBG (어댑터 확정 · 미연결)");
   });
 
-  it("마지막 열은 어댑터 인터페이스이고 8계층 전부 인터페이스 이름을 노출한다", () => {
+  // 2026-10-06 **명세 변경(사용자 결정 "문구 고치고 필요하면 구현")**: 이 테스트는 코드에 없는 인터페이스
+  // 이름(NoteSource.fetch() 등)이 노출되는지를 고정하고 있었다 — 표가 "확인된 사실만"이라는 자기 원칙을 어긴
+  // 문구를 테스트가 지키던 셈이다. 이제 반대로 **실재하는 이름만** 노출되는지와 옛 가공 이름이 돌아오지 않는지를 본다.
+  it("마지막 열은 공유 코드이고 코드에 실재하는 이름만 노출한다", () => {
     const { container } = render(<AdapterMatrix />);
     const heads = [...container.querySelectorAll("thead th")].map((th) => th.textContent);
-    expect(heads[heads.length - 1]).toBe("어댑터 인터페이스");
-    for (const iface of [
-      "NoteSource.fetch()",
-      "MatchSource.collect()",
-      "Entity{type,key,name}",
-      "Segment[]",
-      "Metric.adoption",
-      "Metric.outcome",
-      "Metric.timeline",
-      "AssetSource.icon()",
-    ]) {
-      expect(container.textContent).toContain(iface);
+    expect(heads[heads.length - 1]).toBe("공유 코드");
+    for (const name of ["PatchNoteItem", "DeltaRecord.entityType", "DeltaMetric", "verdict.ts", "llm-match.ts"]) {
+      expect(container.textContent).toContain(name);
+    }
+    for (const fiction of ["NoteSource", "MatchSource", "AssetSource", "Segment[]", "Metric.adoption", "어댑터 8줄"]) {
+      expect(container.textContent).not.toContain(fiction);
     }
   });
 
-  it("판정 엔진은 표 밖 문단이 아니라 마지막 행이며 인터페이스가 '고정'이다", () => {
+  it("판정 엔진은 표 밖 문단이 아니라 마지막 행이며 공유 파일을 가리킨다", () => {
     const { container } = render(<AdapterMatrix />);
     const rows = [...container.querySelectorAll("tbody tr")];
     const last = rows[rows.length - 1];
     expect(last.textContent).toContain("판정 엔진");
-    expect(last.textContent).toContain("고정");
+    // 2026-10-06 명세 변경: 「고정」(가공 인터페이스 열의 값) → 실제 공유 파일.
+    expect(last.textContent).toContain("verdict.ts");
     // 게임 무관이라 한 칸이 게임 열 전체를 가로지른다 — 계층 + 합친 칸 + 인터페이스 = 3.
     expect(last.querySelectorAll("td")).toHaveLength(3);
     expect(last.querySelector("td[colspan]")?.getAttribute("colspan")).toBe(String(GAMES.length));

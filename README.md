@@ -37,10 +37,12 @@ patchgap는 게임 공식 패치노트가 *말한 것*과 매치 통계가 *실�
 수집(F1/F8) → 집계+통계(F2) → 패치노트 파싱(F3) → 짝짓기+판정(F4) → 정적 빌드(F5/F7) → 디스코드(F6)
 ```
 
-판정 엔진(`verdict.ts`)은 **게임을 모른다** — `{entity, metric, before, after, n}`만 받는다.
-게임별 어댑터가 그 형태로 정규화하면 같은 엔진이 판정한다. LoL은 Riot Match-v5, TFT는 Riot TFT Match-v1,
-PUBG는 PUBG API `/samples` + 텔레메트리 축약이 어댑터다. 세 게임의 실행 판정은 공통 타입
-`PatchRunDecisionBase`(`src/pipeline/types.ts`)를 따르고, LLM 2단 엔진은 게임별 어휘(`llm-profile-*.ts`)만 갈아 끼운다.
+게임을 붙일 때 새로 쓰는 것은 수집기·노트 파서·집계(어댑터)이고, 세 게임이 실제로 공유하는 것은
+판정 어휘(`MatchStatus`)·노트 형태(`PatchNoteItem`)·LLM 2단 엔진(`llm-match.ts`, 게임별 어휘 `llm-profile-*.ts`만 교체)·
+실행 판정 타입(`PatchRunDecisionBase`)·화면 규칙이다. 통계 판정(`verdict.ts` — Newcombe CI·BH-FDR·표본 게이트)은 LoL·TFT가
+공유하고, PUBG는 무기 점유율 한 축이라 자체 효과크기 바닥과 로그비 CI로 판정한다(`pubg-delta.ts`).
+어댑터는 LoL Riot Match-v5, TFT Riot TFT Match-v1, PUBG PUBG API `/samples` + 텔레메트리 축약이다.
+공통 인터페이스는 아직 없다 — 네 번째 게임을 붙일 때 세 구현에서 뽑는다(랜딩 어댑터 매핑표가 실제 공유 범위를 보인다).
 
 1. **수집** — KR 챌린저/GM/마스터 시드 → puuid → 패치 라이브 시간창 매치ID → 상세 전량(패치당 1만)
    + 타임라인 표본. `fetch` + bottleneck 2단 리밋(20/1s ⟵ 100/120s), 429 재시도, `gameVersion` 접두 컷,
