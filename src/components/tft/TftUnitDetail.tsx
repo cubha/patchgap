@@ -52,6 +52,19 @@ export interface TftUnitDetailProps {
   pairBase?: string | null;
 }
 
+/**
+ * 변화량 95% CI — LoL 캡션과 같은 서식(`[+3.2, +4.3]%p`, 2026-10-07 화면 대조 V2b). 평균 등수만 단위가 「등」이다
+ * (`deltaDisplay`와 같은 구분).
+ */
+function tftCiRange(record: DeltaRecord): string {
+  const placement = record.metric === "avgPlacement";
+  const fmt = (v: number) => {
+    const shown = placement ? Math.abs(v).toFixed(2) : Math.abs(v * 100).toFixed(1);
+    return `${v >= 0 ? "+" : "−"}${shown}`;
+  };
+  return `[${fmt(record.ci[0])}, ${fmt(record.ci[1])}]${placement ? "등" : "%p"}`;
+}
+
 /** TFT 통계 게이트 행 — 이 게임 판정이 실제로 쓰는 것(보드 표본 · BH-FDR · 효과크기 바닥 대비 배수). */
 function tftGateRows(record: DeltaRecord): { label: string; value: string }[] {
   const gate = [
@@ -142,7 +155,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
           />
         }
         // 변화량의 95% CI는 막대 아래 캡션이 말한다(시안 배치 — LoL과 같은 자리, 2026-10-07 화면 대조 V2).
-        chartCaption={`Δ 95% CI ${record.ci[0].toFixed(4)} ~ ${record.ci[1].toFixed(4)} · 오차 막대: 변화량 CI`}
+        chartCaption={`Δ 95% CI ${tftCiRange(record)} · 오차 막대: 변화량 CI`}
         gate={tftGateRows(record)}
         gateLink={{ href: "/tft/methodology/#gates", label: "판정 규칙 보기 →" }}
         source={<SourceMatchesPanel matchIds={record.evidence.matchIds} aggregatePath={record.evidence.aggregatePath} />}
