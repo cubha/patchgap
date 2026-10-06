@@ -13,6 +13,7 @@
 // 실응답을 본 뒤 별도 모듈에서 한다. 여기서 읽는 필드는 수집 제어에 꼭 필요한 둘뿐이다
 // (`game_datetime` · `game_version`).
 import Bottleneck from "bottleneck";
+import { exponentialBackoffMs, sleep } from "../shared/retry";
 
 const BASE_BACKOFF_MS = 1_000;
 const MAX_429_RETRIES = 5;
@@ -69,13 +70,7 @@ export interface TftClient {
   dispose(): Promise<void>;
 }
 
-function defaultSleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function backoffMs(attempt: number): number {
-  return BASE_BACKOFF_MS * 2 ** attempt;
-}
+const backoffMs = (attempt: number): number => exponentialBackoffMs(BASE_BACKOFF_MS, attempt);
 
 export function maskedUrl(url: string): string {
   // API 키는 헤더로만 전달하므로 URL엔 원래 포함되지 않는다 — 쿼리스트링을 떼어 로그를 짧게 유지한다.
@@ -116,7 +111,7 @@ export function normalizeGameVersion(raw: string): string | null {
 
 export function createTftClient(options: TftClientOptions): TftClient {
   const fetchImpl = options.fetchImpl ?? fetch;
-  const sleepImpl = options.sleepImpl ?? defaultSleep;
+  const sleepImpl = options.sleepImpl ?? sleep;
 
   const appLimiter = new Bottleneck({
     reservoir: 20,

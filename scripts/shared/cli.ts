@@ -31,7 +31,7 @@ export const PATCH_ID_PATTERN = /^\d{2}\.\d{1,2}$/;
  * 각자 들고 있었다(2026-10-06 단일화). workflow_dispatch 입력은 env로 들어와 `parseCliArgs`를 거치지
  * 않으므로, 경로에 꿰어질 패치 값은 호출부가 `PATCH_ID_PATTERN`으로 다시 검사한다.
  */
-export function envValue(name: string, env: NodeJS.ProcessEnv = process.env): string | undefined {
+export function envValue(name: string, env: Readonly<Record<string, string | undefined>> = process.env): string | undefined {
   const v = (env[name] ?? "").trim();
   return v.length > 0 ? v : undefined;
 }
