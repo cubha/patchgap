@@ -217,6 +217,36 @@ export function metricKind(metric: DeltaMetric): MetricKind {
   return METRIC_KIND[metric];
 }
 
+/** 화면 값 표기의 단위 3종 — `DeltaValue`·항목 차트·전후 값 표기가 공유한다(`DeltaKind`와 같은 유니온). */
+export type DisplayMetricKind = "pp" | "sec" | "gold";
+
+const DISPLAY_KIND_OF: Record<MetricKind, DisplayMetricKind> = {
+  pp: "pp",
+  seconds: "sec",
+  gold: "gold",
+  // 평균 등수는 LoL 화면 경로에 오지 않는다 — 오면 원시 숫자(정수)로 보인다(단일화 전 동작 그대로).
+  // TFT 화면은 등수를 자기 표기(`tft/shared.tsx` placement)로 그린다.
+  placement: "gold",
+};
+
+/**
+ * 화면 값 표기 단위(2026-10-06 단일화 — `home/logic.ts`·`item/metricFormat.ts`가 같은 질문에 각자 답했다).
+ * 알려지지 않은 metric 문자열은 "gold"(원시 정수)로 떨어진다: ×100 스케일링으로 임의 단위를 왜곡하는 것보다
+ * 원시값을 그대로 보여 주는 쪽이 덜 위험하다(무근거 회색 원칙과 같은 판단).
+ */
+export function displayMetricKind(metric: string): DisplayMetricKind {
+  const kind = (METRIC_KIND as Partial<Record<string, MetricKind>>)[metric];
+  return kind ? DISPLAY_KIND_OF[kind] : "gold";
+}
+
+/** 원시 값(비율 0~1 / 초 / 골드) → 표기. null은 "—"(측정 불가 방어). */
+export function formatDisplayValue(value: number | null, kind: DisplayMetricKind): string {
+  if (value === null) return "—";
+  if (kind === "pp") return fmtPct(value);
+  if (kind === "sec") return fmtSec(value);
+  return fmtInt(value);
+}
+
 /** 값이 **작을수록 개선**인 지표. 평균 등수가 유일하다 — 화살표·색을 뒤집는 소비처가 쓴다. */
 export function isLowerBetter(metric: DeltaMetric): boolean {
   return metric === "avgPlacement";

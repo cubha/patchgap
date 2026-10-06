@@ -4,9 +4,9 @@
 // UX-BRIEF §3 "01 브리핑 홈" + 코디네이터 지시(ST-11 프롬프트) 기준.
 
 import type { DeltaKind } from "@/components/DeltaValue";
-import type { DeltaMetric, DeltaRecord, DeltasFile, LlmCause, PatchNoteItem } from "@/pipeline/types";
+import type { DeltaRecord, DeltasFile, LlmCause, PatchNoteItem } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
-import { METRIC_KIND, fmtDeltaInt, fmtDeltaSec, fmtInt, fmtPct, fmtPp, fmtSec, metricLabel } from "@/lib/format";
+import { displayMetricKind, fmtDeltaInt, fmtDeltaSec, fmtPp, formatDisplayValue, metricLabel } from "@/lib/format";
 import { countRelevantNoteEntities as countRelevantNoteEntitiesInFile } from "@/pipeline/shared/notes-count";
 import { isSignificantDelta } from "@/pipeline/shared/significance";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
@@ -205,24 +205,8 @@ export function formatNotePreviewText(
   return `${note.entity}${skillPart} — ${note.summary}${extra}`;
 }
 
-/** `lib/format.ts`의 `"seconds"` → 이 파일(및 DeltaValue)이 쓰는 `"sec"` 표기로 옮긴다 — 하위
- * 소비처(DeltaValue.tsx의 `DeltaKind`, compare/logic.ts 등)가 전부 "sec"를 쓰므로 여기서만
- * 흡수한다(2026-09-05 리팩토링, `DeltaKind` 리네임은 범위 밖). */
-const SHARED_KIND_TO_UI: Record<"pp" | "seconds" | "gold", DeltaKind> = {
-  pp: "pp",
-  seconds: "sec",
-  gold: "gold",
-};
-
-/** DeltaRecord.metric → DeltaValue의 kind 3종. 분류 자체는 `lib/format.ts`의 `METRIC_KIND`
- * (`DeltaMetric` 전수 `Record`, 2026-09-05 리팩토링으로 단일화)에 위임한다. 알려지지 않은
- * metric은 "gold"(정수 그대로 표기)로 폴백한다(pp처럼 ×100 스케일링하면 임의 단위를 왜곡할
- * 위험이 더 크기 때문) — `METRIC_KIND`는 `DeltaMetric` 전수라 폴백이 없으므로, 이 폴백은
- * 여기 얇은 어댑터가 계속 책임진다. */
-export function metricKind(metric: string): DeltaKind {
-  const shared = METRIC_KIND[metric as DeltaMetric] as "pp" | "seconds" | "gold" | undefined;
-  return shared ? SHARED_KIND_TO_UI[shared] : "gold";
-}
+/** DeltaRecord.metric → DeltaValue의 kind 3종 — 분류는 `lib/format.ts`의 `displayMetricKind`가 소유한다. */
+export const metricKind: (metric: string) => DeltaKind = displayMetricKind;
 
 /** 공지 대조 미리보기 ".note-observed" 텍스트 — "픽률 −1.8%p" 형태. delta===null이면 "관측
  * 불가"(레코드 자체가 없는 경우는 애초에 이 함수에 안 들어옴 — buildDeltas가 측정 불가 케이스는
@@ -239,14 +223,9 @@ export function formatObservedSummary(record: DeltaRecord): string {
   return `${metricLabel(record.metric)} ${valueText}`;
 }
 
-/** DeltaRecord.before/after(절대값) 표시 — kind별 단위: pp=퍼센트(`fmtPct`, 분수 입력) ·
- * sec=`fmtSec`(mm:ss) · gold=`fmtInt`(천단위 콤마). `value===null`이면 "—"(측정 불가 방어). */
+/** DeltaRecord.before/after(절대값) 표시 — 단위는 `metricKind`, 표기는 `lib/format.ts` `formatDisplayValue`. */
 export function formatMetricValue(value: number | null, metric: string): string {
-  if (value === null) return "—";
-  const kind = metricKind(metric);
-  if (kind === "pp") return fmtPct(value);
-  if (kind === "sec") return fmtSec(value);
-  return fmtInt(value);
+  return formatDisplayValue(value, metricKind(metric));
 }
 
 /** id 문자열 → notes.json PatchNoteItem 조회 맵. */

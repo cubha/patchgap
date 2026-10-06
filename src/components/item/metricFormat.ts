@@ -6,34 +6,13 @@
 // 순수 함수만 — 부수효과 없음(테스트 대상).
 
 import type { Interval } from "@/pipeline/types";
-import { fmtInt, fmtPct, fmtSec, metricLabel } from "@/lib/format";
+import { displayMetricKind, formatDisplayValue, metricLabel, type DisplayMetricKind } from "@/lib/format";
 
-/** DeltaValue/차트가 구분하는 값의 단위 종류. */
-export type MetricKind = "pp" | "sec" | "gold";
-
-const PP_METRICS = new Set(["pickRate", "banRate", "winRate", "adoptionRate"]);
-const SEC_METRICS = new Set(["firstSec", "avgDurationSec"]);
-const GOLD_METRICS = new Set(["goldAt10", "goldAt14"]);
-
-/**
- * DeltaRecord.metric 문자열 → 단위 종류. 알려지지 않은 metric은 "gold"(원시 정수 표시)로
- * 안전하게 떨어진다 — 비율로 오인해 ×100 스케일링하는 것보다 원시값을 그대로 보여주는 쪽이
- * 덜 위험하다는 판단(무근거 문장 회색 원칙과 동일하게, 모르면 가장 덜 왜곡된 표시를 택한다).
- */
-export function metricKind(metric: string): MetricKind {
-  if (PP_METRICS.has(metric)) return "pp";
-  if (SEC_METRICS.has(metric)) return "sec";
-  if (GOLD_METRICS.has(metric)) return "gold";
-  return "gold";
-}
-
-/** value(원시 단위: 비율 0~1 / 초 / 골드)를 kind에 맞는 사람이 읽는 문자열로. null은 "—". */
-export function formatMetricValue(value: number | null, kind: MetricKind): string {
-  if (value === null) return "—";
-  if (kind === "pp") return fmtPct(value);
-  if (kind === "sec") return fmtSec(value);
-  return fmtInt(value);
-}
+/** DeltaValue/차트가 구분하는 값의 단위 종류 — 분류·표기는 `lib/format.ts`가 소유한다(2026-10-06 단일화).
+ * 알려지지 않은 metric은 "gold"(원시 정수)로 떨어진다. */
+export type MetricKind = DisplayMetricKind;
+export const metricKind: (metric: string) => MetricKind = displayMetricKind;
+export const formatMetricValue: (value: number | null, kind: MetricKind) => string = formatDisplayValue;
 
 /**
  * 델타의 사람이 읽는 지표 라벨. "firstSec"만 `entityName`(오브젝트 한글명)과 조합해
