@@ -83,7 +83,9 @@ export default function ObservationPanel({
         </div>
       ) : null}
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+      {/* items-start — 막대 상자가 옆 칸(게이트·원천) 높이로 늘어나지 않게 한다. 기본 stretch면 게이트 문구가 길어질 때
+          고정 높이 차트가 든 상자가 따라 커진다(2026-10-07 레이아웃 게이트 D-STRESS-02). */}
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2">
         <div className="min-w-0 rounded-md border border-border-soft bg-bg/40 p-3">
           {chart}
           {/* 한 줄로 자른다 — 캡션이 길어지면 막대 상자 전체가 늘어 옆 칸과 높이가 갈린다(2026-10-07 레이아웃 게이트
