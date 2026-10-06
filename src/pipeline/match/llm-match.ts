@@ -104,7 +104,7 @@ export function candidateSetHash(serialized: string): string {
   return crypto.createHash("sha256").update(serialized).digest("hex");
 }
 
-function cacheKeyFor(model: string, promptVersion: string, deltaId: string, candSetHash: string, effort: LlmEffort): string {
+export function cacheKeyFor(model: string, promptVersion: string, deltaId: string, candSetHash: string, effort: LlmEffort): string {
   // effort는 기본값이 아닐 때만 키에 든다(llm-config.ts LLM_EFFORT 주석) — 기존 캐시를 그대로 적중시킨다.
   const effortTag = effort === LLM_EFFORT ? "" : `|effort=${effort}`;
   return crypto
