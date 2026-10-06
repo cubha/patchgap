@@ -41,12 +41,6 @@ export function pubgNoteNavItems(
   return out;
 }
 
-/** 내비 항목 id → 원래 노트 id. 표 행과 잇는 쪽은 무기 키를 쓰므로 이쪽은 진단·중복 제거용이다. */
-export function noteIdOfNavItem(navItemId: string): string {
-  const at = navItemId.indexOf("#");
-  return at === -1 ? navItemId : navItemId.slice(0, at);
-}
-
 /** 내비 항목 id → 무기 키. 무기가 없는 줄이면 null. */
 export function weaponKeyOfNavItem(navItemId: string): string | null {
   const at = navItemId.indexOf("#");

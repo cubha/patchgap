@@ -133,18 +133,3 @@ export function pairSelectHref(
 ): string {
   return pairHref(game, next, pairs, currentSection === "compare" ? "compare" : "");
 }
-
-// ── LoL 별칭(B3 호출부·테스트 호환) ─────────────────────────────────────────────
-
-export function lolPairSlug(pair: PairLike): string {
-  return pairSlug(pair);
-}
-
-/** 목록의 첫 쌍(최신)은 브리핑 홈, 나머지는 과거 쌍 라우트. */
-export function lolPairHref(pair: PairLike, pairs: readonly PairLike[]): string {
-  return pairHref("lol", pair, pairs);
-}
-
-export function lolPairFromSlug(slug: string, pairs: readonly PairLike[]): PairLike | null {
-  return pairFromSlug(slug, pairs);
-}

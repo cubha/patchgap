@@ -147,19 +147,6 @@ export function benjaminiHochberg(
   return { q, rejected };
 }
 
-/**
- * 경험적 베이즈(empirical Bayes) 축소 평균 — 저표본 챔피언 승률이 극단으로 튀는 것을 완화한다.
- * n=0 → priorMean로 수렴, n→∞ → 표본 비율(successes/n)로 수렴.
- */
-export function betaBinomialShrink(
-  successes: number,
-  n: number,
-  priorMean: number,
-  priorStrength: number
-): number {
-  return (successes + priorMean * priorStrength) / (n + priorStrength);
-}
-
 /** 승률 최소 n 게이트 — 전/후 둘 다 minN 이상이어야 통과. */
 export function passesSampleGate(nBefore: number, nAfter: number, minN = WIN_RATE_MIN_N): boolean {
   return nBefore >= minN && nAfter >= minN;

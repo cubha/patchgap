@@ -6,7 +6,7 @@
 import type { DeltaKind } from "@/components/DeltaValue";
 import type { DeltaRecord, DeltasFile, LlmCause, PatchNoteItem } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
-import { displayMetricKind, fmtDeltaInt, fmtDeltaSec, fmtPp, formatDisplayValue, metricLabel } from "@/lib/format";
+import { displayMetricKind, formatDisplayValue } from "@/lib/format";
 import { countRelevantNoteEntities as countRelevantNoteEntitiesInFile } from "@/pipeline/shared/notes-count";
 import { isSignificantDelta } from "@/pipeline/shared/significance";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
@@ -137,14 +137,6 @@ export function excludeObservation(
   return rows.filter((row) => row.id !== observation.id);
 }
 
-/** 미공지 변화 상위 N건 — ST-08 `writeDeltas`가 이미 상태 우선순위(unannounced 최우선) →
- * `|delta|` 내림차순으로 정렬해 기록하므로(verdict.sortDeltas), 여기서는 상태로 필터링만 하고
- * 파일 순서를 신뢰한다(재정렬하지 않음 — ST-11 프롬프트 "정렬은 파일 순서 신뢰"). */
-export function selectTopUnannounced(deltas: DeltasFile | null, limit = 5): DeltaRecord[] {
-  const rows = deltas?.rows ?? [];
-  return rows.filter((r) => r.status === "unannounced").slice(0, limit);
-}
-
 /** 챔피언 델타 id가 "scope=all"(포지션 무관) 행인지 — `champion:{key}:{metric}`(3세그먼트)이면
  * all, `champion:{key}:{pos}:{metric}`(4세그먼트)이면 position(ST-08 id 네임스페이스 확정).
  * 다른 entityType은 이 구분이 없어 항상 true(우선순위 동점 처리 — 실질적으로 아래 dedupe에서
@@ -189,39 +181,8 @@ export function selectAnnouncedPreview(deltas: DeltasFile | null, limit = 5): De
   return representatives.sort((a, b) => absDelta(b) - absDelta(a)).slice(0, limit);
 }
 
-/** 공지 대조 미리보기 행 텍스트 — "{엔티티명}[ · {스킬}] — {노트 stat 라인}[ 외 K건]"(코디네이터
- * 지시, 2026-09-05 — 프로토타입 "나서스 기본 지속 효과 생명력 흡수 12/18/24% ⇒ 10/15/20%"처럼
- * 엔티티명이 문장 맨 앞에 오도록). `matchedNoteCount`가 1보다 크면(같은 엔티티에 노트가 여럿
- * 걸림, 예: 스킬 변경 2줄) "외 K건"(K=matchedNoteCount-1)을 덧붙인다. `note`가 없으면(방어적
- * 케이스 — matchedNoteId가 있는데 notesById에서 못 찾는 경우) 엔티티명만 표시. */
-export function formatNotePreviewText(
-  note: PatchNoteItem | undefined,
-  matchedNoteCount: number,
-  fallbackEntityName: string
-): string {
-  if (!note) return fallbackEntityName;
-  const skillPart = note.skill ? ` · ${note.skill}` : "";
-  const extra = matchedNoteCount > 1 ? ` 외 ${matchedNoteCount - 1}건` : "";
-  return `${note.entity}${skillPart} — ${note.summary}${extra}`;
-}
-
 /** DeltaRecord.metric → DeltaValue의 kind 3종 — 분류는 `lib/format.ts`의 `displayMetricKind`가 소유한다. */
 export const metricKind: (metric: string) => DeltaKind = displayMetricKind;
-
-/** 공지 대조 미리보기 ".note-observed" 텍스트 — "픽률 −1.8%p" 형태. delta===null이면 "관측
- * 불가"(레코드 자체가 없는 경우는 애초에 이 함수에 안 들어옴 — buildDeltas가 측정 불가 케이스는
- * 레코드를 생략하므로 null은 방어적 케이스). */
-export function formatObservedSummary(record: DeltaRecord): string {
-  if (record.delta === null) return `${metricLabel(record.metric)} 관측 불가`;
-  const kind = metricKind(record.metric);
-  const valueText =
-    kind === "pp"
-      ? fmtPp(record.delta)
-      : kind === "sec"
-        ? fmtDeltaSec(record.delta)
-        : fmtDeltaInt(record.delta);
-  return `${metricLabel(record.metric)} ${valueText}`;
-}
 
 /** DeltaRecord.before/after(절대값) 표시 — 단위는 `metricKind`, 표기는 `lib/format.ts` `formatDisplayValue`. */
 export function formatMetricValue(value: number | null, metric: string): string {
@@ -312,18 +273,4 @@ export function resolveGapCause(record: DeltaRecord): GapCauseDisplay {
   }
   // 문구 압축(2026-09-18 ST-8 → 라운드6 C3: 설명 꼬리를 뗐다. "왜"는 방법론이 말한다).
   return { mode: "none", text: "설명 후보 없음" };
-}
-
-/** entityType이 champion/item이 아닌 행(objective·lane·summary)의 EntityIcon 폴백 글자 —
- * DdragonPicture가 없는 엔티티에 프로토타입처럼 의미 있는 한 글자를 준다(기본 동작은 이름
- * 첫 글자라 "첫 용 처치 시각"이 "첫"이 되어 버려 무의미하다). champion/item은 undefined를
- * 반환해 EntityIcon 기본 동작(ddragon 이미지 우선)에 맡긴다. */
-export function entityFallbackLabel(record: Pick<DeltaRecord, "entityType" | "entityKey">): string | undefined {
-  if (record.entityType === "objective") {
-    const labels: Record<string, string> = { dragon: "용", herald: "전", baron: "바", tower: "포" };
-    return labels[record.entityKey];
-  }
-  if (record.entityType === "lane") return "골";
-  if (record.entityType === "summary") return "경";
-  return undefined;
 }

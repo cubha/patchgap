@@ -11,33 +11,12 @@ import { isGapStatus } from "@/pipeline/shared/status-order";
 import { isDisplayExcludedNote } from "@/pipeline/shared/excluded-notes";
 import type { DeltaRecord, PatchNoteItem, PatchNoteSection } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
-import { fmtCiHalf, fmtDeltaInt, fmtDeltaSec, fmtInt, fmtPp } from "@/lib/format";
-import { countRelevantNoteEntities, metricKind } from "@/components/home/logic";
-import { parseLaneAxis, type LaneAxis } from "@/lib/lane";
+import { countRelevantNoteEntities } from "@/components/home/logic";
 import { DISPLAY_SORT_PRIORITY, displayStatus, type DisplayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "./entityRows";
 import type { StreamEntityIcon } from "@/components/home/releaseStreamEntity";
 import type { NoteNavItem } from "./noteNav";
 
-
-/**
- * 라인 필터 — 확정 시안(2026-09-10)이 대조표 필터바에도 라인 6종을 두므로 신설했다.
- * `"all"`은 전체 통과. 특정 라인을 고르면 남는 행은 둘뿐이다:
- *  - 챔피언 position-scope 행(`champion:{key}:{pos}:{metric}`) — `parseLaneAxis`가 판정
- *  - 라인 엔티티 행(`lane:{pos}:{metric}` — 골드@10/14) — entityType/entityKey로 판정
- *
- * 결과적으로 **밴률은 라인 선택 시 자동으로 사라진다** — 밴은 라인 무관이라 position-scope
- * 행에 banRate가 없고(ChampionStat.ci.ban은 scope!=="all"에서 null), all-scope 행은
- * `parseLaneAxis`가 `"all"`을 돌려주므로 특정 라인과 절대 일치하지 않는다. HANDOFF §6
- * "라인별 밴률 컬럼 — 컬럼 자체를 만들지 말 것"을 별도 분기 없이 구조로 만족한다.
- */
-export function filterByLane(rows: DeltaRecord[], lane: LaneAxis): DeltaRecord[] {
-  if (lane === "all") return rows;
-  return rows.filter(
-    (r) =>
-      parseLaneAxis(r.id) === lane || (r.entityType === "lane" && r.entityKey === lane)
-  );
-}
 
 /** 좌 내비게이터 섹션 라벨 — 프로토타입은 챔피언/아이템/시스템 3종만 두고 "기타"는 없다. */
 export const NAV_SECTION_LABEL: Partial<Record<PatchNoteSection, string>> = {
@@ -109,51 +88,6 @@ export function navBadgeStatus(
     if (best === null || DISPLAY_SORT_PRIORITY[shown] < DISPLAY_SORT_PRIORITY[best]) best = shown;
   }
   return best;
-}
-
-/** 변동 칩(▲▼•) — insufficient-sample은 판정 보류라 delta 부호와 무관하게 항상 "•"(회색)로
- * 표시한다(프로토타입 `.delta-flat` 대응). */
-export function directionSymbol(record: DeltaRecord): { symbol: string; colorClass: string } {
-  if (record.status === "insufficient-sample" || record.delta === null || record.delta === 0) {
-    return { symbol: "•", colorClass: "text-muted" };
-  }
-  return record.delta > 0
-    ? { symbol: "▲", colorClass: "text-success" }
-    : { symbol: "▼", colorClass: "text-danger" };
-}
-
-/** Δ 셀 텍스트 — insufficient-sample은 프로토타입처럼 "—"(승률 n 게이트 미달 상태에서는 델타
- * 수치 자체를 신뢰할 수 없다는 뜻, ST-11.md 구현 결정). */
-export function formatDeltaCell(record: DeltaRecord): string {
-  if (record.status === "insufficient-sample" || record.delta === null) return "—";
-  const kind = metricKind(record.metric);
-  if (kind === "pp") return fmtPp(record.delta);
-  if (kind === "sec") return fmtDeltaSec(record.delta);
-  return fmtDeltaInt(record.delta);
-}
-
-/** 95% CI 셀 텍스트 — DeltaValue.tsx의 kind별 스케일링 규칙과 동일(pp는 ×100, sec/gold는 그대로). */
-export function formatCiCell(record: DeltaRecord): string {
-  if (record.status === "insufficient-sample") return "—";
-  const kind = metricKind(record.metric);
-  if (kind === "pp") return fmtCiHalf([record.ci[0] * 100, record.ci[1] * 100], 1);
-  if (kind === "sec") return `${fmtCiHalf(record.ci, 0)}s`;
-  return fmtCiHalf(record.ci, 0);
-}
-
-/** n 셀 텍스트 — insufficient-sample은 실제 카운트 대신 "n<200"(게이트 조건 자체를 표기, 프로토타입
- * `02-comparison-table.html` 그대로). */
-export function formatNCell(record: DeltaRecord): string {
-  if (record.status === "insufficient-sample") return "n<200";
-  return `${fmtInt(record.n.before)}/${fmtInt(record.n.after)}`;
-}
-
-/** 짝 셀 텍스트 — matchedNoteId(예: "note:26.17:champion:qiyana:5a6d587d")를 그대로 쓰기엔 너무
- * 길어 마지막 콜론 세그먼트(해시)만 남겨 짧게 표기한다("—"는 짝 없음). */
-export function shortNoteId(matchedNoteId: string | null): string {
-  if (!matchedNoteId) return "—";
-  const parts = matchedNoteId.split(":");
-  return parts[parts.length - 1] ?? matchedNoteId;
 }
 
 /** 하단 커버리지 바 집계 — "노트 N엔티티(M항목) 중 관측 짝 K · 미공지 U · 표본 부족 I". N은 홈

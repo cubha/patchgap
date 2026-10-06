@@ -11,16 +11,10 @@ import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
 import {
   computeCoverage,
-  directionSymbol,
-  filterByLane,
-  formatCiCell,
-  formatDeltaCell,
-  formatNCell,
   lolNoteNavItems,
   navBadgeStatus,
   representativeStatus,
-  shortNoteId,
-} from "../logic";
+  } from "../logic";
 
 function delta(overrides: Partial<DeltaRecord>): DeltaRecord {
   return {
@@ -123,52 +117,6 @@ describe("navBadgeStatus — 엔티티 묶음의 배지(보고 가능 관측만)
   });
 });
 
-describe("directionSymbol", () => {
-  it("insufficient-sample은 항상 점(•)+muted", () => {
-    expect(directionSymbol(delta({ status: "insufficient-sample", delta: 0.5 }))).toEqual({
-      symbol: "•",
-      colorClass: "text-muted",
-    });
-  });
-  it("양수는 ▲/success", () => {
-    expect(directionSymbol(delta({ status: "unannounced", delta: 0.02 }))).toEqual({
-      symbol: "▲",
-      colorClass: "text-success",
-    });
-  });
-  it("음수는 ▼/danger", () => {
-    expect(directionSymbol(delta({ status: "unannounced", delta: -0.02 }))).toEqual({
-      symbol: "▼",
-      colorClass: "text-danger",
-    });
-  });
-});
-
-describe("formatDeltaCell / formatCiCell / formatNCell", () => {
-  it("insufficient-sample은 Δ·CI 모두 대시, n은 'n<200'", () => {
-    const row = delta({ status: "insufficient-sample", delta: 0.5, ci: [0.1, 0.9], n: { before: 8, after: 8 } });
-    expect(formatDeltaCell(row)).toBe("—");
-    expect(formatCiCell(row)).toBe("—");
-    expect(formatNCell(row)).toBe("n<200");
-  });
-
-  it("일반 pp 지표는 %p·CI·n/n을 정상 포맷한다", () => {
-    const row = delta({ status: "unannounced", delta: 0.025, ci: [0.021, 0.029], n: { before: 10240, after: 10118 } });
-    expect(formatDeltaCell(row)).toBe("+2.5%p");
-    expect(formatCiCell(row)).toBe("±0.4");
-    expect(formatNCell(row)).toBe("10,240/10,118");
-  });
-});
-
-describe("shortNoteId", () => {
-  it("null은 대시", () => {
-    expect(shortNoteId(null)).toBe("—");
-  });
-  it("콜론 마지막 세그먼트만 남긴다", () => {
-    expect(shortNoteId("note:26.17:champion:qiyana:5a6d587d")).toBe("5a6d587d");
-  });
-});
-
 // 2026-09-23 §8-3: 묶기 규칙 자체는 게임 중립이 되어 `noteNav.ts`로 갔고(거기서 테스트한다),
 // **제외 술어는 LoL 변환에 남았다** — 이 게이트를 잃으면 의회 투표 줄이 내비에 되살아난다.
 describe("lolNoteNavItems — 제외 노트(라운드6 재판정 보완 1·5)", () => {
@@ -225,48 +173,3 @@ describe("computeCoverage", () => {
     });
   });
 });
-
-describe("filterByLane — 대조표 라인 필터(시안 .m-filter, 2026-09-10)", () => {
-  const allScopeBan = delta({ id: "champion:Camille:banRate", metric: "banRate" });
-  const topWin = delta({ id: "champion:Anivia:TOP:winRate", metric: "winRate" });
-  const jungleWin = delta({ id: "champion:Ambessa:JUNGLE:winRate", metric: "winRate" });
-  const laneGold = delta({
-    id: "lane:BOTTOM:goldAt14",
-    entityType: "lane",
-    entityKey: "BOTTOM",
-    entityName: "바텀",
-    metric: "goldAt14",
-  });
-  const objective = delta({
-    id: "objective:dragon:firstSec",
-    entityType: "objective",
-    entityKey: "dragon",
-    entityName: "첫 용",
-    metric: "firstSec",
-  });
-  const rows = [allScopeBan, topWin, jungleWin, laneGold, objective];
-
-  it('"all"이면 전부 통과한다', () => {
-    expect(filterByLane(rows, "all")).toEqual(rows);
-  });
-
-  it("특정 라인은 그 라인의 position-scope 챔피언 행만 남긴다", () => {
-    expect(filterByLane(rows, "TOP").map((r) => r.id)).toEqual(["champion:Anivia:TOP:winRate"]);
-  });
-
-  it("라인 엔티티 행(lane:{pos}:{metric})도 같은 라인으로 묶인다", () => {
-    expect(filterByLane(rows, "BOTTOM").map((r) => r.id)).toEqual(["lane:BOTTOM:goldAt14"]);
-  });
-
-  it("밴률은 라인 선택 시 사라진다 — 밴은 라인 무관(HANDOFF §6)", () => {
-    for (const lane of ["TOP", "JUNGLE", "MIDDLE", "BOTTOM", "UTILITY"] as const) {
-      expect(filterByLane(rows, lane).some((r) => r.metric === "banRate")).toBe(false);
-    }
-  });
-
-  it("라인 축이 없는 엔티티(오브젝트·매치 평균)는 라인 선택에서 제외된다", () => {
-    expect(filterByLane(rows, "MIDDLE")).toEqual([]);
-  });
-});
-
-

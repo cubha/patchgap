@@ -37,9 +37,3 @@ export function toDdragonMajor(patch: PatchId): string {
   }
   return `${major - PATCH_MAJOR_OFFSET}.${minor}`;
 }
-
-/** gameVersion 원문을 파싱해 major/minor 숫자와 정규화된 PatchId를 함께 반환한다. */
-export function parseGameVersion(v: string): { major: number; minor: number; canonical: PatchId } {
-  const { major, minor } = extractMajorMinor(v);
-  return { major, minor, canonical: canonicalPatch(v) };
-}

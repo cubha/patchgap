@@ -7,14 +7,14 @@ import { describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
 
 import { listPatchPairs } from "@/lib/data";
-import { lolPairHref } from "@/lib/pairRoutes";
+import { pairHref } from "@/lib/pairRoutes";
 import { generateStaticParams } from "../page";
 
 describe("과거 쌍 라우트 = select 목적지", () => {
   it("select의 모든 과거 쌍 href가 generateStaticParams에 있다", () => {
     const pairs = listPatchPairs();
     const slugs = new Set(generateStaticParams().map((p) => p.pair));
-    const targets = pairs.map((pair) => lolPairHref(pair, pairs)).filter((href) => href !== "/lol/");
+    const targets = pairs.map((pair) => pairHref("lol", pair, pairs)).filter((href) => href !== "/lol/");
     expect(targets.length).toBeGreaterThan(0);
     for (const href of targets) {
       const slug = href.replace(/^\/lol\/history\//, "").replace(/\/$/, "");

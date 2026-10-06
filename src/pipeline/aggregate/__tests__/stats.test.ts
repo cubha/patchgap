@@ -4,7 +4,6 @@ import {
   newcombeDiffInterval,
   twoProportionPValue,
   benjaminiHochberg,
-  betaBinomialShrink,
   passesSampleGate,
   meanDiffInterval,
   summarize,
@@ -161,26 +160,6 @@ describe("benjaminiHochberg", () => {
     expect(q[3]).not.toBeNull();
     expect(Number.isFinite(q[0]!)).toBe(true);
     expect(Number.isFinite(q[3]!)).toBe(true);
-  });
-});
-
-describe("betaBinomialShrink", () => {
-  it("n=0 → priorMean으로 수렴", () => {
-    expect(betaBinomialShrink(0, 0, 0.5, 20)).toBe(0.5);
-  });
-
-  it("n→∞(매우 큼) → 표본 비율(successes/n)로 수렴", () => {
-    const shrunk = betaBinomialShrink(700000, 1000000, 0.5, 20);
-    expect(shrunk).toBeCloseTo(0.7, 4);
-  });
-
-  it("저표본에서는 prior 쪽으로 당겨진다", () => {
-    const shrunk = betaBinomialShrink(1, 2, 0.5, 20); // 표본비율 0.5 == prior라 당김 확인 어려우니 다른 값
-    const shrunk2 = betaBinomialShrink(2, 2, 0.5, 20); // 표본비율 1.0, prior 0.5, K=20
-    // (2 + 0.5*20)/(2+20) = 12/22 ≈ 0.545 — 1.0보다 prior 쪽에 훨씬 가깝다
-    expect(shrunk2).toBeLessThan(1.0);
-    expect(shrunk2).toBeGreaterThan(0.5);
-    expect(shrunk).toBeCloseTo(0.5, 5);
   });
 });
 

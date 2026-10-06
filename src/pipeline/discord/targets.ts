@@ -64,19 +64,6 @@ export function resolveDiscordTarget(
   return { game, webhookUrl, roleId };
 }
 
-/** 설정된 게임만 돌려준다 — 워크플로가 "있는 것만 보내기"를 할 수 있게. */
-export function configuredTargets(source: Partial<NodeJS.ProcessEnv> = process.env): DiscordTarget[] {
-  const out: DiscordTarget[] = [];
-  for (const game of NOTIFY_GAMES) {
-    try {
-      out.push(resolveDiscordTarget(game, source));
-    } catch {
-      // 미설정 게임은 조용히 건너뛴다 — 여기서는 "전부 보내라"가 아니라 "있는 것만"이 계약이다.
-    }
-  }
-  return out;
-}
-
 /**
  * 역할 멘션 한 줄. 역할이 없으면 `null`(멘션 없이 embed만 보낸다).
  * `allowed_mentions`와 **반드시 짝**이어야 실제 핑이 간다 — 아래 `mentionPayload` 참고.

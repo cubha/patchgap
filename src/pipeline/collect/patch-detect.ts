@@ -47,16 +47,6 @@ export function telemetryMajor(label: string): number | null {
   return m ? Number(m[1]) : null;
 }
 
-/**
- * 라벨 → 패치 표기. **언제나 `{메이저}.1`이다** — 라벨이 메이저까지만 담기 때문에
- * 43.2 같은 마이너는 애초에 탐지할 수 없다(그리고 넣어서도 안 된다: 두 창의 라벨이 같아지면
- * 피해 격자가 한 배열로 붕괴해 대조가 언제나 0건이 된다).
- */
-export function pubgPatchOfLabel(label: string): string | null {
-  const major = telemetryMajor(label);
-  return major === null ? null : `${major}.1`;
-}
-
 /** KST 목요일. 이 프로젝트가 관측한 LoL 라이브 요일이 전부 목요일이다(`collect.yml` cron 주석). */
 const LOL_LIVE_WEEKDAY_KST = 4;
 

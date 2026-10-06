@@ -2,9 +2,9 @@
 // 단위로 보이나)에 각자 답하던 것을 lib/format 하나로 모으면서, **지금 화면이 내는 문자열**을 지표 전수로 고정한다.
 import { describe, expect, it } from "vitest";
 import { METRIC_KIND } from "@/lib/format";
-import { formatMetricValue as homeFormat, formatObservedSummary, metricKind as homeKind } from "@/components/home/logic";
+import { formatMetricValue as homeFormat, metricKind as homeKind } from "@/components/home/logic";
 import { formatMetricValue as itemFormat, metricKind as itemKind } from "@/components/item/metricFormat";
-import type { DeltaMetric, DeltaRecord } from "@/pipeline/types";
+import type { DeltaMetric } from "@/pipeline/types";
 
 const METRICS = [...(Object.keys(METRIC_KIND) as DeltaMetric[]), "unknownMetric"];
 const VALUES = [0, 0.4567, 352.4, 10240.6, -0.0231, -11, null];
@@ -32,12 +32,4 @@ describe("메트릭 표시 golden — LoL 화면 경로", () => {
       });
     }
   }
-  it("관측 요약 문구", () => {
-    const rec = (metric: string, delta: number | null) => ({ metric, delta }) as unknown as DeltaRecord;
-    expect(formatObservedSummary(rec("pickRate", -0.018))).toBe("픽률 −1.8%p");
-    expect(formatObservedSummary(rec("firstSec", 22))).toBe("첫 처치 시각 +22s");
-    expect(formatObservedSummary(rec("goldAt10", -120))).toBe("골드@10 −120");
-    expect(formatObservedSummary(rec("avgPlacement", 0.12))).toMatch(/^.+ \+0$/);
-    expect(formatObservedSummary(rec("pickRate", null))).toBe("픽률 관측 불가");
-  });
 });

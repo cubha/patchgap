@@ -1,7 +1,7 @@
 // src/components/pubg/__tests__/noteNav.test.ts
 // PUBG 노트 → 좌 내비 항목 변환. 한 줄이 여러 무기를 말하므로 **무기마다 한 항목**으로 펼친다.
 import { describe, expect, it } from "vitest";
-import { noteIdOfNavItem, pubgNoteNavItems, weaponKeyOfNavItem } from "../noteNav";
+import { pubgNoteNavItems, weaponKeyOfNavItem } from "../noteNav";
 import type { PubgNoteItem } from "@/pipeline/match/pubg-delta";
 
 const note = (over: Partial<PubgNoteItem> & Pick<PubgNoteItem, "id">): PubgNoteItem => ({
@@ -49,7 +49,6 @@ describe("pubgNoteNavItems", () => {
 
   it("항목 id에서 원래 노트 id와 무기 키를 되찾는다", () => {
     const [item] = pubgNoteNavItems([note({ id: "n1", weaponKeys: ["Item_Weapon_RPD_C"] })], nameOf);
-    expect(noteIdOfNavItem(item.id)).toBe("n1");
     expect(weaponKeyOfNavItem(item.id)).toBe("Item_Weapon_RPD_C");
     expect(weaponKeyOfNavItem("n1")).toBeNull();
   });
