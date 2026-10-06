@@ -38,11 +38,6 @@ export function isExcludedNote(note: Pick<PatchNoteItem, "entity">): boolean {
 // 근본 수정(modeScope)이 들어가면서 이 층은 멱등 가드가 됐다.
 import { isCoreNote, modeScopeFromAnchorUrl } from "./mode-scope";
 
-export function noteAnchorHash(note: Pick<PatchNoteItem, "anchorUrl">): string {
-  const idx = note.anchorUrl.indexOf("#");
-  return idx < 0 ? "" : note.anchorUrl.slice(idx + 1);
-}
-
 /** 게임 모드 섹션(클래식·아수라장·아레나 …)에 속한 줄 — SR 챔피언·아이템 공지가 아니다. */
 export function isModeSectionNote(note: Pick<PatchNoteItem, "anchorUrl"> & Partial<Pick<PatchNoteItem, "modeScope">>): boolean {
   if (note.modeScope !== undefined) return !isCoreNote({ modeScope: note.modeScope });
