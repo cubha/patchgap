@@ -29,6 +29,7 @@ import {
   DEFAULT_LLM_BUDGET_USD,
   LLM_BUDGET_ENV,
   LLM_EFFORT,
+  UNTAGGED_CACHE_EFFORT,
   LLM_EST_USD_PER_CALL,
   LLM_MODEL,
   LLM_OPT_IN_ENV,
@@ -105,8 +106,9 @@ export function candidateSetHash(serialized: string): string {
 }
 
 export function cacheKeyFor(model: string, promptVersion: string, deltaId: string, candSetHash: string, effort: LlmEffort): string {
-  // effort는 기본값이 아닐 때만 키에 든다(llm-config.ts LLM_EFFORT 주석) — 기존 캐시를 그대로 적중시킨다.
-  const effortTag = effort === LLM_EFFORT ? "" : `|effort=${effort}`;
+  // effort는 무태그 기준 강도가 아닐 때만 키에 든다(llm-config.ts UNTAGGED_CACHE_EFFORT) — 기존 캐시를 그대로
+  // 적중시키되, 기준을 "지금 기본값"이 아닌 고정값으로 둬야 기본값을 바꾼 날 옛 답이 새 설정에 붙지 않는다.
+  const effortTag = effort === UNTAGGED_CACHE_EFFORT ? "" : `|effort=${effort}`;
   return crypto
     .createHash("sha256")
     .update(`${model}|${promptVersion}|${deltaId}|${candSetHash}${effortTag}`)
