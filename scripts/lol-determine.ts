@@ -13,28 +13,20 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { determineLolRun } from "../src/pipeline/collect/patch-calendar";
-import { isMainModule } from "./shared/cli";
+import { envValue, isMainModule, PATCH_ID_PATTERN } from "./shared/cli";
 import { loadLolCalendar } from "./shared/calendar";
 import { reportRun, reportSkip, warn } from "./shared/determine-report";
 
 const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
 
-
-function trimmed(name: string): string | undefined {
-  const v = (process.env[name] ?? "").trim();
-  return v.length > 0 ? v : undefined;
-}
-
 /**
- * 패치 ID 형식 — `scripts/shared/cli.ts`의 `type: "patch"`와 같은 규칙이다. 이 값은 argv가 아니라
+ * 패치 ID 형식 — `scripts/shared/cli.ts`의 `PATCH_ID_PATTERN`(`type: "patch"`와 같은 규칙)을 쓴다. 이 값은 argv가 아니라
  * `workflow_dispatch` 입력에서 env로 들어와 `parseCliArgs`를 거치지 않는데, 그대로 파일 경로
  * (`data/aggregated/{patch}/…`)에 꿰어지고 이 잡은 `RIOT_API_KEY`와 `contents: write`를 들고 있다
  * (security-auditor 2026-09-06·2026-09-17 지적과 같은 자리). 통과 못 하면 즉시 죽인다.
  */
-const PATCH_ID_PATTERN = /^\d{2}\.\d{1,2}$/;
-
 function checkedPatch(name: string): string | undefined {
-  const value = trimmed(name);
+  const value = envValue(name);
   if (value !== undefined && !PATCH_ID_PATTERN.test(value)) {
     throw new Error(`${name}이 패치 ID 형식이 아니다(예 26.19): ${JSON.stringify(value)}`);
   }
@@ -46,12 +38,12 @@ export function todayKst(nowMs: number = Date.now()): string {
 }
 
 function main(): void {
-  const dataRoot = trimmed("PATCHGAP_DATA_ROOT") ?? "data";
+  const dataRoot = envValue("PATCHGAP_DATA_ROOT") ?? "data";
   const calendar = loadLolCalendar(dataRoot);
   const manualPatch = checkedPatch("MANUAL_PATCH");
   const manualFrom = checkedPatch("MANUAL_FROM");
   const manualTo = checkedPatch("MANUAL_TO");
-  const force = trimmed("MANUAL_FORCE") === "true";
+  const force = envValue("MANUAL_FORCE") === "true";
   const today = todayKst();
 
   // 산출물 존재 확인만 여기서 한다(파일 I/O) — 어떤 패치인지는 캘린더가 정한다.

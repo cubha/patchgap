@@ -24,7 +24,17 @@ export type CliOptionType = "string" | "number" | "boolean" | "patch";
  * 강제한다(경로 조작·셸 메타문자 등 임의 문자열이 그대로 이 값을 소비하는 GH Actions run: 블록·
  * 파일 경로 조합(data/aggregated/{patch}/...)으로 흘러드는 것을 원천 차단 — security-auditor
  * Warning 대응, 2026-09-06). */
-const PATCH_ID_PATTERN = /^\d{2}\.\d{1,2}$/;
+export const PATCH_ID_PATTERN = /^\d{2}\.\d{1,2}$/;
+
+/**
+ * 환경변수 값 — 앞뒤 공백을 걷고 빈 문자열이면 `undefined`. `*-determine.ts` 세 진입점이 같은 함수를
+ * 각자 들고 있었다(2026-10-06 단일화). workflow_dispatch 입력은 env로 들어와 `parseCliArgs`를 거치지
+ * 않으므로, 경로에 꿰어질 패치 값은 호출부가 `PATCH_ID_PATTERN`으로 다시 검사한다.
+ */
+export function envValue(name: string, env: NodeJS.ProcessEnv = process.env): string | undefined {
+  const v = (env[name] ?? "").trim();
+  return v.length > 0 ? v : undefined;
+}
 
 export interface CliOptionSpec {
   /** camelCase 필드명. CLI 플래그는 이 이름을 kebab-case로 바꾼 `--{kebab}` 형태로 자동 유도한다

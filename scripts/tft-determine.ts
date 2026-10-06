@@ -22,26 +22,19 @@ import {
 import { deltasStateOf } from "../src/pipeline/shared/observation-stub";
 import { loadTftWindows } from "./shared/calendar";
 import { runTftPreflight } from "../src/pipeline/collect/tft-preflight";
-import { isMainModule } from "./shared/cli";
+import { envValue, isMainModule, PATCH_ID_PATTERN } from "./shared/cli";
 import { reportDeclaration, reportRun, reportSkip, warn, type SkipReason } from "./shared/determine-report";
 
-function trimmed(name: string): string | undefined {
-  const v = (process.env[name] ?? "").trim();
-  return v.length > 0 ? v : undefined;
-}
-
 /**
- * 패치 ID 형식 — `scripts/shared/cli.ts`의 `type: "patch"`와 **같은 규칙**이다.
+ * 패치 ID 형식 — `scripts/shared/cli.ts`의 `PATCH_ID_PATTERN`(`type: "patch"`와 **같은 규칙**)을 쓴다.
  *
  * 여기서 다시 검사하는 이유: 이 값은 argv가 아니라 `workflow_dispatch` 입력에서 env로 들어오므로
  * `parseCliArgs`를 거치지 않는다. 그런데 그대로 파일 경로(`deltas-{from}-{to}.json`)에 꿰어지고,
  * 이 잡은 `RIOT_API_KEY`와 `contents: write`를 들고 있다 — LoL 워크플로가 같은 이유로
  * security-auditor 지적을 받았다(2026-09-06·2026-09-17). 형식을 통과하지 못하면 즉시 죽인다.
  */
-const PATCH_ID_PATTERN = /^\d{2}\.\d{1,2}$/;
-
 function manualPatchOf(): string | undefined {
-  const raw = trimmed("MANUAL_PATCH");
+  const raw = envValue("MANUAL_PATCH");
   if (raw === undefined) return undefined;
   if (!PATCH_ID_PATTERN.test(raw)) {
     throw new Error(`tft-determine: MANUAL_PATCH 형식이 올바르지 않다: "${raw}" (예: 18.2)`);
@@ -68,14 +61,14 @@ export function readTftDeltasState(dataRoot: string, from: string, to: string): 
  * 앞이라 401 하나로 패치노트까지 멈췄다(2026-09-26~ 실측) — 선언 축은 공개 자원만 써서 키가 필요 없다.
  */
 export async function main(): Promise<void> {
-  const dataRoot = trimmed("TFT_DATA_ROOT") ?? "data";
+  const dataRoot = envValue("TFT_DATA_ROOT") ?? "data";
   const manualPatch = manualPatchOf();
-  const force = trimmed("MANUAL_FORCE") === "true";
-  const platform = trimmed("TFT_PLATFORM") ?? "kr";
+  const force = envValue("MANUAL_FORCE") === "true";
+  const platform = envValue("TFT_PLATFORM") ?? "kr";
   // **TFT 전용 키를 먼저 본다.** LoL 승인 키(RIOT_API_KEY)는 TFT 엔드포인트에 403이다
   // (2026-09-20 실측 — tft-preflight.ts 헤더 표). 폴백을 남기는 이유는 제품 승인 후
   // 키가 하나로 합쳐질 수 있어서다. 그때 403이면 프리플라이트가 그대로 알려 준다.
-  const apiKey = trimmed("RIOT_TFT_API_KEY") ?? trimmed("RIOT_API_KEY");
+  const apiKey = envValue("RIOT_TFT_API_KEY") ?? envValue("RIOT_API_KEY");
 
   const nowMs = Date.now();
   const windows = loadTftWindows(dataRoot);
