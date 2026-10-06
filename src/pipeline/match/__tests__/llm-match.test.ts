@@ -951,6 +951,40 @@ describe("호출 정책 — opt-in·견적·예산(2026-09-29)", () => {
     expect(parseFn).not.toHaveBeenCalled();
   });
 
+  // 2026-10-06 /analyze 🔴: LoL `run-match.ts`는 maxDeltas(CI 400)만 넘기고 호출 총 상한을 안 넘겨 엔진 기본
+  // 150에 묶였다 — 9/17 B5("상한을 올렸는데 뒤쪽이 LLM을 못 거침")가 TFT만 고쳐진 채 LoL에 남아 있었다. 호출부가
+  // 상한을 따로 챙겨야 하는 구조가 원인이라, 엔진이 maxDeltas로부터 총 상한을 유도한다.
+  it("maxTotalCalls를 안 주면 총 상한이 maxDeltas보다 아래로 내려가지 않는다(상한을 올리면 실제로 올라간다)", async () => {
+    const many = Array.from({ length: 200 }, (_, i) => delta({ id: `champion:C${i}:pickRate`, entityKey: `C${i}` }));
+    const out = await inferIndirectCandidates(many, [], profile(), {
+      cacheDir: dir,
+      client: fakeClient(vi.fn()),
+      planOnly: true,
+      maxDeltas: 200,
+    });
+    expect(out.summary.plan?.misses).toBe(200);
+    expect(out.summary.plan?.estimatedCalls).toBe(200);
+  });
+
+  it("maxDeltas가 기본 이하면 총 상한은 종전 기본(150)을 유지한다", async () => {
+    const many = Array.from({ length: 200 }, (_, i) => delta({ id: `champion:C${i}:pickRate`, entityKey: `C${i}` }));
+    const out = await inferIndirectCandidates(many, [], profile(), {
+      cacheDir: dir,
+      client: fakeClient(vi.fn()),
+      planOnly: true,
+      maxDeltas: 40,
+    });
+    expect(out.summary.plan?.estimatedCalls).toBe(40);
+    const capped = await inferIndirectCandidates(many, [], profile(), {
+      cacheDir: dir,
+      client: fakeClient(vi.fn()),
+      planOnly: true,
+      maxDeltas: 200,
+      maxTotalCalls: 150,
+    });
+    expect(capped.summary.plan?.estimatedCalls).toBe(150);
+  });
+
   it("effort를 바꾸면 기본값(medium)으로 받은 답을 재사용하지 않는다", async () => {
     const parseFn = vi.fn().mockResolvedValue(fakeResponse(answer));
     await inferIndirectCandidates([delta({})], [], profile(), { cacheDir: dir, client: fakeClient(parseFn) });

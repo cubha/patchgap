@@ -58,6 +58,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # 토큰을 .git/config에 남기지 않는다 — push 스텝이 그때만 주입한다(아래 Commit + push 참고).
+          persist-credentials: false
 
       - name: Setup Node 22
         uses: actions/setup-node@v4
@@ -88,7 +91,13 @@ jobs:
 
       - name: Commit + push calendar overlay
         if: steps.watch.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
+          # 쓰기 토큰은 이 스텝에서만 붙인다(2026-10-06 /analyze). checkout은 persist-credentials: false라
+          # npm ci의 postinstall·tsx 등 앞 스텝의 임의 코드가 contents:write 토큰을 .git/config에서 읽지 못한다.
+          # 헤더 형식은 actions/checkout@v4가 붙이던 것과 같다.
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
           git config user.name "patchgap-bot"
           git config user.email "patchgap-bot@users.noreply.github.com"
           # 오버레이만 건드린다 — 이 잡은 수집 산출물을 쓰지 않는다.
@@ -111,6 +120,20 @@ jobs:
               sleep $((attempt * 10))
             done
           fi
+
+      # push 인증 카나리아(2026-10-06). 네 워크플로가 같은 방식(checkout persist-credentials: false + push 스텝에서만
+      # 헤더 주입)으로 쓰기 토큰을 붙이는데, 수집 워크플로의 push는 **패치가 있는 날에만** 돈다 — 배선이 깨져도
+      # 몇 주 뒤 그 패치의 산출물이 버려질 때야 드러난다. 이 잡은 매일 돌므로 여기서 매일 확인한다.
+      # `--dry-run`도 receive-pack 협상(쓰기 인증)을 거치므로 토큰이 없으면 실패하고, 이미 같은 커밋이라 아무것도 안 쓴다.
+      - name: Push auth canary
+        if: steps.watch.outputs.changed != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          # 존재하지 않는 고유 ref로 민다 — `HEAD:${GITHUB_REF}`면 체크아웃 뒤 main이 앞서간 순간 non-fast-forward로
+          # 빨간불이 되는데, 그건 인증 문제가 아니다(한 신호가 두 상태를 덮는다). 새 ref 생성은 언제나 fast-forward다.
+          git push --dry-run origin "HEAD:refs/heads/_auth-canary-${GITHUB_RUN_ID}"
 
       - name: Upload logs on failure
         if: failure()
