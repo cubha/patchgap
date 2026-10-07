@@ -239,6 +239,29 @@ describe("§8-1 상세 관측 — 네 상세가 같은 공통 섹션을 쓴다(2
     });
   }
 
+  it("대조표·브리핑 본문도 숨긴 판정 상태를 렌더 문구로 말하지 않는다(건수 포함)", () => {
+    // 2026-10-07 사용자 확인: TFT 대조표 아래 「표에 올리지 않은 관측 — N건」이 변화 없음·바닥 미달 건수와 표본 부족 사유를
+    // 문장으로 내보내고 있었다(9/18 숨김 규칙에 건수 노출도 포함). 상세만 보던 이 검사가 대조표를 못 봤다 — 대상을 넓힌다.
+    // 규칙 자체는 방법론이 말한다(방법론은 대상 아님).
+    const surfaces = [
+      ...Object.values(BRIEFING_BODY),
+      "src/components/compare/LolCompareView.tsx",
+      "src/components/compare/CompareExplorer.tsx",
+      "src/components/compare/CoverageBar.tsx",
+      "src/components/tft/TftCompareView.tsx",
+      "src/components/tft/TftCompareExplorer.tsx",
+      "src/app/pubg/compare/page.tsx",
+      "src/components/pubg/PubgCompareExplorer.tsx",
+    ] as string[];
+    for (const file of surfaces) {
+      expect(exists(file), file).toBe(true);
+      const src = codeOf(file);
+      for (const hidden of ["표본 부족", "표본이 부족", "바닥 미달", "바닥 미만", "변화 없음", "유의한 변화가 없", "판정하지 않음"]) {
+        expect(src, `${file}: ${hidden}`).not.toContain(hidden);
+      }
+    }
+  });
+
   it("패치노트 대조가 관측 섹션보다 앞이다 — 무엇이 바뀌었나가 어떻게 움직였나보다 먼저다", () => {
     // 2026-10-07: PUBG 맵도 대조 카드를 갖는다(화면 대조 V6 — 노트가 말한 항목 0건을 같은 자리에서 말한다).
     for (const body of bodies) {
