@@ -17,6 +17,7 @@ import path from "node:path";
 
 import { extractTftSnapshot, type CdragonRaw } from "../src/pipeline/gamedata/cdragon";
 import { setNumberOfPatch } from "../src/pipeline/match/tft-catalog";
+import { fetchWithRetry } from "../src/pipeline/shared/retry";
 import { isMainModule, parseCliArgs } from "./shared/cli";
 
 const CDRAGON_BASE = "https://raw.communitydragon.org";
@@ -70,7 +71,7 @@ export function parseArgs(argv: string[]): CliArgs {
  */
 async function resolveBranch(given: string): Promise<string> {
   if (given) return given;
-  const res = await fetch(DDRAGON_VERSIONS);
+  const res = await fetchWithRetry(DDRAGON_VERSIONS);
   if (!res.ok) throw new Error(`DDragon versions.json ${res.status}`);
   const versions = (await res.json()) as string[];
   const latest = versions[0];
@@ -85,7 +86,7 @@ async function main(): Promise<void> {
   const url = cdragonUrl(branch, args.locale);
 
   console.log(`[cdragon] 가져오는 중: ${url} (Set ${setNumber})`);
-  const res = await fetch(url);
+  const res = await fetchWithRetry(url);
   if (!res.ok) throw new Error(`Community Dragon ${res.status} ${res.statusText} — ${url}`);
   const body = await res.text();
   const snapshot = extractTftSnapshot(JSON.parse(body) as CdragonRaw, setNumber);

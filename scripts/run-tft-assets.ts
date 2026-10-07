@@ -26,6 +26,7 @@ import {
   type TftAssetKind,
   type TftAssetManifest,
 } from "../src/pipeline/tft/asset-path";
+import { fetchWithRetry } from "../src/pipeline/shared/retry";
 import { isMainModule, parseCliArgs } from "./shared/cli";
 
 const ROOT = process.cwd();
@@ -56,7 +57,7 @@ function basenameOf(key: string): string {
 /** 이미 받아 둔 파일은 다시 받지 않는다 — 재실행이 싸야 사람이 실제로 재실행한다. */
 async function download(url: string, dest: string): Promise<boolean> {
   if (fs.existsSync(dest) && fs.statSync(dest).size > 0) return true;
-  const res = await fetch(url);
+  const res = await fetchWithRetry(url);
   if (!res.ok) return false;
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
@@ -87,7 +88,7 @@ export async function runTftAssets(version: string, patch: string): Promise<TftA
 
   const notInCatalog: { kind: TftAssetKind; key: string }[] = [];
   for (const kind of ["unit", "trait", "item"] as const) {
-    const res = await fetch(remoteTftCatalogUrl(version, kind));
+    const res = await fetchWithRetry(remoteTftCatalogUrl(version, kind));
     if (!res.ok) throw new Error(`run-tft-assets: ${kind} 카탈로그 HTTP ${res.status}`);
     const catalog = (await res.json()) as DdFile;
     // 키를 basename으로 색인한다 — 집계·델타가 쓰는 형태와 같아야 화면이 바로 찾는다.
@@ -142,7 +143,7 @@ interface CdragonNode extends CdragonIconFields {
 
 /** CDragon 원본 JSON 전체를 훑어 `apiName → 아이콘 필드`를 만든다(세트·아이템·특성 구조를 가정하지 않는다). */
 async function fetchCdragonIcons(): Promise<Map<string, CdragonIconFields>> {
-  const res = await fetch("https://raw.communitydragon.org/latest/cdragon/tft/ko_kr.json");
+  const res = await fetchWithRetry("https://raw.communitydragon.org/latest/cdragon/tft/ko_kr.json");
   if (!res.ok) throw new Error(`run-tft-assets: CDragon 원본 HTTP ${res.status}`);
   const root: unknown = await res.json();
   const out = new Map<string, CdragonIconFields>();
@@ -164,7 +165,7 @@ async function fetchCdragonIcons(): Promise<Map<string, CdragonIconFields>> {
 
 /** Data Dragon 최신 버전 — `--version`이 없을 때. */
 async function latestDdragonVersion(): Promise<string> {
-  const res = await fetch("https://ddragon.leagueoflegends.com/api/versions.json");
+  const res = await fetchWithRetry("https://ddragon.leagueoflegends.com/api/versions.json");
   if (!res.ok) throw new Error(`run-tft-assets: DDragon versions HTTP ${res.status}`);
   const versions = (await res.json()) as unknown;
   if (!Array.isArray(versions) || typeof versions[0] !== "string") {
