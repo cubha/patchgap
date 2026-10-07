@@ -12,10 +12,8 @@ vi.mock("next/navigation", () => ({ usePathname: () => "/lol/", useRouter: () =>
 window.matchMedia ??= ((query: string) => ({ matches: false, media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as unknown as typeof window.matchMedia;
 globalThis.ResizeObserver ??= class { observe() {} unobserve() {} disconnect() {} } as unknown as typeof ResizeObserver;
 import { AmbientProvider } from "@/components/AmbientContext";
-import LolPage from "../lol/page";
-import TftPage from "../tft/page";
-import PubgPage from "../pubg/page";
 import { landingCards } from "@/lib/landing";
+import { latestObservedPair, observedBriefing } from "./observed-briefing";
 
 function tileAndTab(container: HTMLElement): { tile: number; tab: number } {
   const tileLink = Array.from(container.querySelectorAll("a")).find((a) => a.textContent?.includes("미공지 Gap ↗"));
@@ -25,14 +23,18 @@ function tileAndTab(container: HTMLElement): { tile: number; tab: number } {
 }
 
 describe("미공지 Gap 타일 = 탭(합집합)", () => {
-  for (const [id, Page] of [["lol", LolPage], ["tft", TftPage], ["pubg", PubgPage]] as const) {
-    it(`${id}: 타일과 탭이 같은 수`, () => {
-      const { container } = render(<AmbientProvider><Page /></AmbientProvider>);
+  // 최신 쌍이 선언 중이면 그 직전 관측 쌍으로 검사한다(`observed-briefing.tsx` — 10/7 TFT 18.4).
+  for (const id of ["lol", "tft", "pubg"] as const) {
+    it(`${id}: 타일과 탭이 같은 수`, async () => {
+      const { container } = render(<AmbientProvider>{await observedBriefing(id)}</AmbientProvider>);
       const { tile, tab } = tileAndTab(container);
       expect(tile).toBeGreaterThan(0);
       expect(tile).toBe(tab);
       // 랜딩 카드도 같은 라벨(`TILE_LABELS.gap`)을 쓴다 — 같은 수여야 한다(`lib/gapTotals` 단일 소유).
-      expect(landingCards().find((card) => card.id === id)?.unannounced).toBe(tile);
+      // 랜딩 카드는 **최신** 쌍을 말하므로, 최신이 선언 중이면 비교 대상이 아니다(그때 카드는 「—」=null).
+      const latestIsObserved = id === "pubg" || latestObservedPair(id)?.isLatest === true;
+      const card = landingCards().find((c) => c.id === id);
+      expect(card?.unannounced).toBe(latestIsObserved ? tile : null);
     });
   }
 });
