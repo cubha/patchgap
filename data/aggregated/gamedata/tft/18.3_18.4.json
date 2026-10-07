@@ -1,0 +1,82 @@
+{
+  "meta": {
+    "game": "tft",
+    "from": "18.3",
+    "to": "18.4",
+    "source": {
+      "kind": "cdragon",
+      "from": "16.19",
+      "to": "16.20"
+    },
+    "generatedAt": "2026-10-07T12:46:26.255Z",
+    "changeCount": 5,
+    "submarineCount": 3
+  },
+  "changes": [
+    {
+      "id": "gdc:tft:18.4:DA_18_Ashe:stats.initialMana",
+      "entityKey": "DA_18_Ashe",
+      "entityName": "애쉬",
+      "entityType": "unit",
+      "field": "시작 마나",
+      "fieldPath": "stats.initialMana",
+      "before": 20,
+      "after": 0,
+      "relChange": -1,
+      "matchedNoteIds": [
+        "note:tft:18.4:champion:애쉬:e5e79465"
+      ]
+    },
+    {
+      "id": "gdc:tft:18.4:DA_18_Diana:stats.mana",
+      "entityKey": "DA_18_Diana",
+      "entityName": "다이애나",
+      "entityType": "unit",
+      "field": "최대 마나",
+      "fieldPath": "stats.mana",
+      "before": 30,
+      "after": 40,
+      "relChange": 0.3333333333333333,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.4:DA_18_Maokai:stats.mana",
+      "entityKey": "DA_18_Maokai",
+      "entityName": "마오카이",
+      "entityType": "unit",
+      "field": "최대 마나",
+      "fieldPath": "stats.mana",
+      "before": 90,
+      "after": 100,
+      "relChange": 0.1111111111111111,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.4:DA_18_MasterYi_AD:stats.damage",
+      "entityKey": "DA_18_MasterYi_AD",
+      "entityName": "마스터 이",
+      "entityType": "unit",
+      "field": "공격력",
+      "fieldPath": "stats.damage",
+      "before": 62,
+      "after": 60,
+      "relChange": -0.03225806451612903,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.4:DA_Stealthy18:effects.NumChampions",
+      "entityKey": "DA_Stealthy18",
+      "entityName": "은밀함",
+      "entityType": "item",
+      "field": "효과 NumChampions",
+      "fieldPath": "effects.NumChampions",
+      "before": 2,
+      "after": 3,
+      "relChange": 0.5,
+      "matchedNoteIds": [
+        "note:tft:18.4:item:은밀함:d9113d8d",
+        "note:tft:18.4:item:은밀함:66cd6c2b"
+      ]
+    }
+  ]
+}
