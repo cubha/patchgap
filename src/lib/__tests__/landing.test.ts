@@ -96,10 +96,17 @@ describe("landingCards — 커밋된 산출물 기준", () => {
       expect(c.sample.length, c.id).toBeGreaterThan(0);
       expect(c.pair.from.length, c.id).toBeGreaterThan(0);
       expect(c.pair.to.length, c.id).toBeGreaterThan(0);
-      expect(c.matches, c.id).toBeGreaterThan(0);
+      // 관측 전(선언 축만 — 새 패치 0~2일차, 결정 8) 카드는 매치 0을 「관측 전」으로 말한다(숫자 0을 그리지 않는다).
+      // 2026-10-07 TFT 18.4 선언 커밋으로 처음 실물이 생겼다. 관측 카드는 여전히 매치 > 0이어야 한다.
       expect(c.announced, c.id).toBeGreaterThanOrEqual(0);
-      expect(c.significant, c.id).toBeGreaterThanOrEqual(0);
-      expect(c.unannounced, c.id).toBeGreaterThanOrEqual(0);
+      if (c.significant === null) {
+        expect(c.sample, c.id).toBe("관측 전");
+        expect(c.matches, c.id).toBe(0);
+      } else {
+        expect(c.matches, c.id).toBeGreaterThan(0);
+        expect(c.significant, c.id).toBeGreaterThanOrEqual(0);
+        expect(c.unannounced, c.id).toBeGreaterThanOrEqual(0);
+      }
     }
   });
 

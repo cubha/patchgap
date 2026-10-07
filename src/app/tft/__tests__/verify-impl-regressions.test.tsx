@@ -10,15 +10,21 @@ import { render } from "@testing-library/react";
 import { AmbientProvider } from "@/components/AmbientContext";
 
 vi.mock("server-only", () => ({}));
-import TftPage from "../page";
 import TftUnitPage from "../unit/[key]/page";
+import TftHistoryUnitPage from "../history/[pair]/unit/[key]/page";
+import { latestObservedPair, observedBriefing } from "@/app/__tests__/observed-briefing";
+import { pairSlug } from "@/lib/pairRoutes";
 import { entitySlug } from "@/lib/tftRoutes";
 import { loadTft } from "@/lib/tftData";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 
+// 최신 쌍이 선언 중이면(관측 전) 직전 관측 쌍의 과거 쌍 라우트로 검사한다(`observed-briefing.tsx`, 10/7 18.4).
+const observed = latestObservedPair("tft");
+const observedBundle = observed ? loadTft(observed.pair) : null;
+
 describe("V1 — TFT 홈 배지가 방향 중립을 반영한다", () => {
-  const bundle = loadTft();
+  const bundle = observedBundle;
   const rows = bundle?.deltas.rows ?? [];
   const neutralNames = new Set(
     rows
@@ -31,8 +37,8 @@ describe("V1 — TFT 홈 배지가 방향 중립을 반영한다", () => {
   );
   const onlyNeutral = [...neutralNames].filter((n) => !anomalyNames.has(n));
 
-  it.runIf(onlyNeutral.length > 0)("방향 중립 대상은 홈에서 「공지 · 이상 관측」 배지를 달지 않는다", () => {
-    const { container } = render(<AmbientProvider><TftPage /></AmbientProvider>);
+  it.runIf(onlyNeutral.length > 0)("방향 중립 대상은 홈에서 「공지 · 이상 관측」 배지를 달지 않는다", async () => {
+    const { container } = render(<AmbientProvider>{await observedBriefing("tft")}</AmbientProvider>);
     for (const name of onlyNeutral) {
       const rowsWithName = [...container.querySelectorAll("li, [role='row'], article")].filter((el) =>
         (el.textContent ?? "").includes(name)
@@ -52,7 +58,7 @@ describe("V2 — 표본 매치 ID는 끊기지 않는다", () => {
   // ID 칩에 break-all이 없다. 행은 **상세가 실제로 그리는 관측**(보고 자격 조합의 첫 탭)에서 고른다 — 아무 행이나 고르면
   // 자격 없는 행을 골라 패널이 그 ID를 그리지 않는다.
   it("매치 ID마다 nowrap 단위이고, 그 칩에 break-all이 없다", async () => {
-    const bundle = loadTft();
+    const bundle = observedBundle;
     const row = bundle?.deltas.rows.find(
       (r) =>
         r.entityType === "unit" &&
@@ -61,8 +67,11 @@ describe("V2 — 표본 매치 ID는 끊기지 않는다", () => {
         isReportableRecord(r, bundle.deltas.meta.qAlpha)
     );
     expect(row, "원천 매치가 있는 유닛 등장률 관측").toBeDefined();
-    if (!row) return;
-    const el = await TftUnitPage({ params: Promise.resolve({ key: entitySlug(`unit:${row.entityKey}`) }) });
+    if (!row || !observed) return;
+    const key = entitySlug(`unit:${row.entityKey}`);
+    const el = observed.isLatest
+      ? await TftUnitPage({ params: Promise.resolve({ key }) })
+      : await TftHistoryUnitPage({ params: Promise.resolve({ pair: pairSlug(observed.pair), key }) });
     // 상세는 레이아웃의 AmbientProvider 아래에서만 렌더된다(render.test.tsx와 같은 래퍼).
     const { container } = render(<AmbientProvider>{el}</AmbientProvider>);
     const first = row.evidence.matchIds[0];
@@ -75,7 +84,9 @@ describe("V2 — 표본 매치 ID는 끊기지 않는다", () => {
 
 // 라우트 키 규칙이 바뀌면 위 V2가 엉뚱한 페이지를 렌더할 수 있다 — 실제 산출물 경로로 한 번 교차 확인.
 it("V2 전제: 상세 라우트 키 규칙이 빌드 산출물과 같다", () => {
-  const dir = path.join(process.cwd(), "out", "tft", "unit");
+  const dir = observed && !observed.isLatest
+    ? path.join(process.cwd(), "out", "tft", "history", pairSlug(observed.pair), "unit")
+    : path.join(process.cwd(), "out", "tft", "unit");
   if (!fs.existsSync(dir)) return;
   expect(fs.readdirSync(dir).some((d) => d.startsWith("unit~"))).toBe(true);
 });

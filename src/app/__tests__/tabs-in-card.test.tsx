@@ -10,14 +10,13 @@ window.matchMedia ??= ((query: string) => ({ matches: false, media: query, oncha
 globalThis.ResizeObserver ??= class { observe() {} unobserve() {} disconnect() {} } as unknown as typeof ResizeObserver;
 
 import { AmbientProvider } from "@/components/AmbientContext";
-import LolPage from "../lol/page";
-import TftPage from "../tft/page";
-import PubgPage from "../pubg/page";
+import { observedBriefing } from "./observed-briefing";
 
 describe("탭 바는 카드 안 맨 위(세 게임 동일)", () => {
-  for (const [id, Page] of [["lol", LolPage], ["tft", TftPage], ["pubg", PubgPage]] as const) {
-    it(`${id}: 탭 바를 품은 카드가 패널 내용까지 품고, 탭 바가 그 카드의 첫 자식이다`, () => {
-      const { container } = render(<AmbientProvider><Page /></AmbientProvider>);
+  // 최신 쌍이 선언 중이면(탭 없는 선언 화면) 그 직전 관측 쌍으로 검사한다(`observed-briefing.tsx`).
+  for (const id of ["lol", "tft", "pubg"] as const) {
+    it(`${id}: 탭 바를 품은 카드가 패널 내용까지 품고, 탭 바가 그 카드의 첫 자식이다`, async () => {
+      const { container } = render(<AmbientProvider>{await observedBriefing(id)}</AmbientProvider>);
       const tablist = container.querySelector('[role="tablist"]');
       expect(tablist).not.toBeNull();
       const card = tablist?.parentElement;
