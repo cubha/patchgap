@@ -22,7 +22,7 @@ import type { GameDataChange } from "@/pipeline/gamedata/types";
 function Line({ field, before, after }: { field: string; before: string; after: string }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="font-body text-xs font-bold text-fg-2">{field}</span>
+      <span title={field} className="block max-w-56 truncate font-body text-xs font-bold text-fg-2">{field}</span>
       <span className="whitespace-nowrap font-mono text-xs tabular-nums text-muted">
         {before} → <span className="font-bold text-accent">{after}</span>
       </span>
@@ -35,7 +35,7 @@ function MismatchLines({ changes }: { changes: readonly GameDataChange[] }) {
     <div className="flex flex-col gap-2">
       {mismatchCellLines(changes).map((line) => (
         <div key={line.field} className="flex flex-col gap-0.5">
-          <span className="font-body text-xs font-bold text-fg-2">{line.field}</span>
+          <span title={line.field} className="block max-w-56 truncate font-body text-xs font-bold text-fg-2">{line.field}</span>
           <span className="whitespace-nowrap font-mono text-xs tabular-nums text-muted">
             {line.before} → <span className="font-bold text-warn">{line.after}</span>
           </span>

@@ -52,8 +52,8 @@ export default function EntityIndexSection({ groups }: { groups: readonly Entity
             {/* 머리는 격자 칸과 구분되게 한 단계 밝은 띠로 — 이전엔 칸과 같은 바탕의 옅은 글씨라 어디서 묶음이
                 바뀌는지 모호했다. 개수는 라벨 바로 옆, 오른쪽 끝은 접기 표시. */}
             <summary className="flex cursor-pointer list-none items-center gap-2 border-border-soft bg-surface-warm group-open/index:border-b px-5 py-3 transition-colors hover:bg-accent/10 [&::-webkit-details-marker]:hidden">
-              <h3 className="font-display text-sm font-bold text-fg">{group.label}</h3>
-              <span className="rounded-pill border border-border-soft px-2 font-mono text-xs tabular-nums text-muted">
+              <h3 className="min-w-0 truncate font-display text-sm font-bold text-fg">{group.label}</h3>
+              <span className="shrink-0 whitespace-nowrap rounded-pill border border-border-soft px-2 font-mono text-xs tabular-nums text-muted">
                 {group.total}개
               </span>
               <span className="flex-1" />

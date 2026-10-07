@@ -153,7 +153,9 @@
 .landing-rail {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(min(18rem, 78vw), 1fr);
+  /* 17rem(2026-10-07): 1280px 레일 안쪽 폭 1166px에 카드 4장(게임 3 + 다음 자리)이 18rem이면 1200px라 마지막 카드 13px이
+     가로 스크롤 뒤로 숨었다(레이아웃 게이트 D-ALIGN-01). 4×17rem+3×1rem=1136px로 1280px부터 한 줄에 들어간다. */
+  grid-auto-columns: minmax(min(17rem, 78vw), 1fr);
   gap: 1rem;
   overflow-x: auto;
   overscroll-behavior-x: contain;

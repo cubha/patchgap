@@ -368,8 +368,8 @@ export default function PubgMethodologyPage() {
                 <tbody>
                   {accuracyComparison.map((row) => (
                     <tr key={row.weaponKey} className="border-b border-border-soft">
-                      <td className="py-2 pl-4 pr-3 font-display font-bold text-fg">{row.weaponName}</td>
-                      <td className="py-2 pr-3 text-xs text-muted">{row.nerfed ? "반동 너프" : "대조군(무변경)"}</td>
+                      <td className="max-w-40 truncate py-2 pl-4 pr-3 font-display font-bold text-fg" title={row.weaponName}>{row.weaponName}</td>
+                      <td className="whitespace-nowrap py-2 pr-3 text-xs text-muted">{row.nerfed ? "반동 너프" : "대조군(무변경)"}</td>
                       <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">{pct(row.before.accuracy, 2)}</td>
                       <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">{pct(row.after.accuracy, 2)}</td>
                       <td className="py-2 pr-4 text-right font-mono text-xs font-bold tabular-nums text-fg">

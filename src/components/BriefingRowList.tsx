@@ -62,7 +62,7 @@ export default function BriefingRowList({
                 </span>
                 {iconOf ? iconOf(group) : null}
                 {href ? (
-                  <Link href={href} className="text-sm font-bold text-fg hover:text-accent hover:underline">
+                  <Link href={href} className="max-w-full text-sm font-bold text-fg wrap-anywhere hover:text-accent hover:underline">
                     {group.entityName} →
                   </Link>
                 ) : (

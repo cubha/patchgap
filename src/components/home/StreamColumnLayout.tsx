@@ -58,15 +58,17 @@ export default function StreamColumnLayout({ leftHeader, left, right }: StreamCo
   const leftHeight = isDesktop && rightHeight ? rightHeight : undefined;
 
   return (
-    <div className="grid grid-cols-1 items-start gap-x-6 gap-y-6 lg:grid-cols-[2fr_1fr] lg:gap-y-4">
-      <div className="lg:col-start-1 lg:row-start-1">{leftHeader}</div>
+    // minmax(0,…) + min-w-0 — 트랙이 내용의 최소 폭으로 늘지 않는다. `fr`은 minmax(auto, Nfr)라 줄바꿈 못 하는 글자 하나가
+    // 2:1 배분을 이기고 좌우 칸을 재배분했다(2026-10-07 레이아웃 게이트 D-STRESS-01, /lol/).
+    <div className="grid grid-cols-1 items-start gap-x-6 gap-y-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-y-4">
+      <div className="min-w-0 lg:col-start-1 lg:row-start-1">{leftHeader}</div>
       <div
-        className="flex min-h-0 flex-col lg:col-start-1 lg:row-start-2"
+        className="flex min-h-0 min-w-0 flex-col lg:col-start-1 lg:row-start-2"
         style={leftHeight ? { height: leftHeight } : undefined}
       >
         {left}
       </div>
-      <div ref={rightRef} className="flex flex-col gap-6 lg:col-start-2 lg:row-start-2">
+      <div ref={rightRef} className="flex min-w-0 flex-col gap-6 lg:col-start-2 lg:row-start-2">
         {right}
       </div>
     </div>

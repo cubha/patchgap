@@ -51,7 +51,7 @@ export default function PubgWeaponGrid({ weapons, rows, assetKeys }: PubgWeaponG
                     className="max-h-14 w-full object-contain"
                   />
                 ) : (
-                  <span aria-hidden="true" className="font-display text-lg font-bold text-border select-none">
+                  <span aria-hidden="true" className="max-w-full truncate font-display text-lg font-bold text-border select-none">
                     {weapon.weaponName}
                   </span>
                 )}
