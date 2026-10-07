@@ -29,7 +29,7 @@
   --accent-active: color-mix(in oklab, var(--accent), black 14%);
   --success: #0ac8b9;
   --warn: #f59e0b;
-  --danger: #cf4740;
+  --danger: #d45b54;
   --game-wash: #0a1626;
   --game-glow: #c8a355;
   /* 반투명 크롬(2026-09-12) — 전역 앰비언트 배경이 상단 크롬 뒤로 비치게 한다.

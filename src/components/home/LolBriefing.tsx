@@ -273,10 +273,9 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
               ]}
             />
           </Container>
-          <Container>
-            {/* 푸터는 세 게임 공통이다(UX-BRIEF §8-1) — LoL만 전 화면에 없었다(2026-09-22 실측). */}
-            <SiteFooter game="lol" generatedAt={deltas?.meta.generatedAt ?? null} nVerdicts={deltas?.rows.length ?? null} />
-          </Container>
+          {/* 푸터는 세 게임 공통이다(UX-BRIEF §8-1) — LoL만 전 화면에 없었다(2026-09-22 실측). SiteFooter가 자체 Container를
+              가지므로 한 번 더 감싸지 않는다(여백 두 겹, 2026-10-07 D-ALIGN-01). */}
+          <SiteFooter game="lol" generatedAt={deltas?.meta.generatedAt ?? null} nVerdicts={deltas?.rows.length ?? null} />
         </main>
       </div>
     </PairBaseProvider>

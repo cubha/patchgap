@@ -75,9 +75,8 @@ export default function LolCompareView({ pair, pairBase = null }: LolCompareView
             gameDataChanges={gameDataChanges}
           />
         </PairBaseProvider>
-        <Container>
-          <SiteFooter game="lol" generatedAt={deltas?.meta.generatedAt ?? null} nVerdicts={rows.length} />
-        </Container>
+        {/* SiteFooter가 자체 Container를 갖는다 — 한 번 더 감싸면 여백이 두 겹이 된다(2026-10-07, D-ALIGN-01). */}
+        <SiteFooter game="lol" generatedAt={deltas?.meta.generatedAt ?? null} nVerdicts={rows.length} />
       </main>
     </div>
   );

@@ -26,7 +26,7 @@
   --accent-active: color-mix(in oklab, var(--accent), black 14%);
   --success: #0ac8b9;
   --warn: #f59e0b;
-  --danger: #cf4740;
+  --danger: #d45b54;
   --game-wash: #0a1626;
   --game-glow: #c8a355;
   --glass-chrome: color-mix(in srgb, var(--bg) 35%, transparent);
@@ -145,7 +145,7 @@
 | `--accent-hover` | derived (oklab, black 8%) | 버튼 호버 — 2026-09-12·6차: 유일 소비처(DiscordPanel.tsx)가 `@theme inline` 매핑 누락으로 `bg-[var(--accent-hover)]`(arbitrary bracket)를 쓰고 있었다. `--color-accent-hover` 매핑 추가(globals.css) 후 `hover:bg-accent-hover` 유틸로 교체 | — | ✓ |
 | `--accent-active` | derived (oklab, black 14%) | 버튼 활성 | — | ○ |
 | `--success` | #0ac8b9 | 상승 델타 ▲ | 미계측(§7 검증 시 추가) | ✓ |
-| `--danger` | #cf4740 | 하락 델타 ▼ · 공지-불일치 | 4.00:1 | ✓ |
+| `--danger` | #d45b54 | 하락 델타 ▼ · 공지-불일치 — **2026-10-07 #cf4740에서 보정**: 11px 굵은 뱃지(「공지 · 이상 관측」)가 세 게임 바탕 모두에서 4.31~4.35:1로 AA(4.5:1) 미달이었다(레이아웃 게이트 D-COLOR-05, TFT 상세에서 처음 표본에 잡힘). 같은 색조에서 밝기만 올려 세 게임 `--bg`·`--surface` 전부 ≥4.64:1 | 4.69:1 | ✓ |
 | `--warn` | #f59e0b | 표본 부족 | — | ✓ |
 | `--meta` | #c8a355 | (accent 중복값) 메타 라벨 | — | ○ |
 | `--game-wash` | #0a1626 | 히어로 앰비언트 그라디언트 시작색 | — | ✓ (신규) |

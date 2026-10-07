@@ -11,6 +11,9 @@
 import type { PatchNoteItem } from "@/pipeline/types";
 import type { NoteContrastResult } from "./noteContrast";
 import ExternalLink from "@/components/ExternalLink";
+// 줄 목록의 구조적 상한(2026-10-07): 대조 카드가 전체 폭이 되며(상세 공통 관측 섹션) 2분할 시절의 고정 카드 높이가 사라졌다 —
+// 노트 줄이 많거나 길어도 목록이 카드 밖으로 밀어내지 않게 목록 자체가 상한을 갖는다(레이아웃 게이트 D-STRESS-02, 녹턴 실측).
+import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 
 export interface NoteContrastPanelProps {
   result: NoteContrastResult;
@@ -60,7 +63,7 @@ export default function NoteContrastPanel({ result }: NoteContrastPanelProps) {
           {blocks.map((block) => (
             <div key={block.key} className="flex flex-col gap-1.5">
               {block.skill ? <strong className="text-xs font-bold text-fg-2">{block.skill}</strong> : null}
-              <ul className="flex flex-col gap-1 border-l-2 border-border pl-4">
+              <ul className={`flex flex-col gap-1 border-l-2 border-border pl-4 ${PANEL_SCROLL_BODY}`}>
                 {block.items.map((item) => (
                   <li key={item.id} className="text-sm text-fg-2">
                     {item.stat && item.before && item.after ? (
@@ -92,7 +95,7 @@ export default function NoteContrastPanel({ result }: NoteContrastPanelProps) {
         {result.adjacent.length > 0 ? (
           <div className="flex flex-col gap-2">
             <span className="text-xs font-bold text-muted">같은 엔티티의 인접 항목</span>
-            <ul className="flex flex-col gap-1 border-l-2 border-border pl-4">
+            <ul className={`flex flex-col gap-1 border-l-2 border-border pl-4 ${PANEL_SCROLL_BODY}`}>
               {result.adjacent.map((item) => (
                 <li key={item.id} className="text-sm text-muted">
                   {item.summary}
