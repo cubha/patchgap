@@ -356,6 +356,25 @@ describe("§8-1 푸터 — 모든 화면이 같은 컴포넌트를 쓴다", () =
     });
   }
 
+  it("SiteFooter를 Container로 한 번 더 감싸지 않는다 — 여백이 두 겹이 되어 그 화면만 푸터가 안쪽으로 밀린다", () => {
+    // 2026-10-07 실측(레이아웃 게이트 D-ALIGN-01): LoL 상세만 `<Container><SiteFooter/></Container>`라 375px에서 푸터 왼쪽 선이
+    // 32px(다른 화면 16px)였다. LoL 대조표·브리핑도 같은 구조였다(브리핑은 사이에 JSX 주석이 있어 첫 정규식이 놓쳤다 — 주석을 건너뛴다).
+    // SiteFooter는 기본으로 자기 Container를 갖고, 이미 감싼 곳은 `contained={false}`를 쓴다.
+    const offenders: string[] = [];
+    const walk = (dir: string) => {
+      for (const e of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
+        const rel = `${dir}/${e.name}`;
+        if (e.isDirectory()) {
+          if (e.name !== "__tests__") walk(rel);
+        } else if (/\.tsx$/.test(e.name) && /<Container[^>]*>(?:\s*\{\/\*(?:(?!\*\/)[\s\S])*\*\/\})*\s*<SiteFooter(?![^>]*contained=\{false\})/.test(read(rel))) {
+          offenders.push(rel);
+        }
+      }
+    };
+    walk("src");
+    expect(offenders).toEqual([]);
+  });
+
   it("게임별 푸터 래퍼는 SiteFooter로 위임한다 — 문구를 두 벌 쓰지 않는다", () => {
     for (const f of ["src/components/tft/shared.tsx", "src/components/pubg/shared.tsx"]) {
       expect(read(f)).toContain("SiteFooter");

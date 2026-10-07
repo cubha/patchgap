@@ -231,7 +231,7 @@ design-lint(2026-09-05, `--token-source docs/design/seed/catalog-tokens.css`): *
 ## 6. 디자인 토큰 요약
 Ground Truth: `docs/design/DESIGN-TOKENS.md`(값의 최종 소스 — 이 절이 갱신을 놓쳐도 그쪽이 항상 맞다). 색 램프 = **V4 협곡 나이트**(2026-09-10, patchgap 소유, HANDOFF §2 근거) — 비-색 토큰만 `docs/design/seed/catalog-tokens.css`(open-design/trading-terminal, Apache-2.0) verbatim.
 - 표면 `--bg #030d18` / `--surface #0a1626` / `--surface-warm #12213a` · 텍스트 `--fg #f0e6d2` / `--fg-2 #c3b79f` / `--muted #8b8677` · 보더 `--border #8c6b33`(골드 프레임) / `--border-soft #242c3a`
-- 상태 `--accent #c8a355`(미공지·링크·주요 버튼) · `--success #0ac8b9`(상승) · `--danger #cf4740`(하락·공지-불일치) · `--warn #f59e0b`(표본 부족) — `[data-game]` 확장 시에도 이 4종은 재정의 금지(불변식)
+- 상태 `--accent #c8a355`(미공지·링크·주요 버튼) · `--success #0ac8b9`(상승) · `--danger #d45b54`(하락·공지-불일치 — 2026-10-07 대비 보정, 구 #cf4740) · `--warn #f59e0b`(표본 부족) — `[data-game]` 확장 시에도 이 4종은 재정의 금지(불변식)
 - 게임 테마 확장용(미출하, 계약만) `--game-wash #0a1626` / `--game-glow #c8a355`
 - 타이포 Inter(display/body) · Roboto Mono(수치·ID, tabular-nums) · 스케일 11/12/14/16/20/28/40(/56)px
 - 간격 4/8/12/16/20/24/32(/48)px · 라운드 4/8/12/pill · 엘리베이션 ring(1px border)/raised · 모션 90/160ms

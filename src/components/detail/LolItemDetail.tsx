@@ -361,9 +361,9 @@ export default function LolItemDetail({ id, pairs, pairBase = null }: LolItemDet
             emptyText="보고할 관측이 없습니다."
           />
         </Container>
-        <Container>
-          <SiteFooter game="lol" generatedAt={generatedAt} nVerdicts={pairVerdicts} />
-        </Container>
+        {/* `SiteFooter`가 자체 Container를 갖는다 — 여기서 한 번 더 감싸면 좌우 여백이 두 겹(16+16px)이 되어 375px에서
+            푸터만 안쪽으로 밀렸다(2026-10-07 레이아웃 게이트 D-ALIGN-01). 다른 상세처럼 한 겹만. */}
+        <SiteFooter game="lol" generatedAt={generatedAt} nVerdicts={pairVerdicts} />
       </main>
     </div>
   );

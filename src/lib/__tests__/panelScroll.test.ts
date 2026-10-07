@@ -28,6 +28,9 @@ describe("상한은 데이터량이 아니라 구조로 보장된다", () => {
     // 세 게임 홈이 같은 컴포넌트를 쓰므로 여기 한 줄이 세 화면을 동시에 묶는다.
     ["src/components/gamedata/SubmarineSection.tsx", "잠수함 섹션 — 대상 수는 패치가 정한다(TFT 18.2 실측 31종)"],
     ["src/components/gamedata/SubmarineDetailBlock.tsx", "잠수함 상세 구획 — 한 엔티티의 변경 값 수도 데이터가 정한다"],
+    // 2026-10-07 — LoL 대조 카드가 전체 폭이 되며 2분할 시절의 고정 카드 높이가 사라졌다(상세 공통 관측 섹션). 노트 줄 목록이
+    // 상한 없이 늘던 것을 레이아웃 게이트가 녹턴에서 잡았다(D-STRESS-02).
+    ["src/components/item/NoteContrastPanel.tsx", "LoL 패치노트 대조 — 한 대상의 노트 줄 수는 패치가 정한다"],
   ] as const;
 
   for (const [file, why] of GROWABLE) {
