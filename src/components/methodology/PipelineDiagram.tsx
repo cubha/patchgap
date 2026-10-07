@@ -26,6 +26,8 @@ export default function PipelineDiagram({ steps }: PipelineDiagramProps) {
       className="flex flex-col flex-wrap items-stretch gap-3 p-5 wrap-anywhere sm:flex-row sm:items-center"
       role="img"
       aria-label="수집, 집계, 짝짓기, 판정 4단 파이프라인 다이어그램"
+      // 단계 제목·설명은 소스 상수다(meta 줄의 날짜·건수는 짧은 숫자 줄이라 부풀림이 원래 건너뛴다) — 2026-10-07 사용자 결정.
+      data-static-copy
     >
       {steps.map((step, i) => (
         <div key={step.step} className="flex min-w-0 flex-1 items-center gap-3 sm:basis-0">

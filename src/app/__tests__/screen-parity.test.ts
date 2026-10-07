@@ -356,6 +356,30 @@ describe("§8-1 푸터 — 모든 화면이 같은 컴포넌트를 쓴다", () =
     });
   }
 
+  it("data-static-copy 표식은 작성된 고정 문구 파일에만 — 데이터 칸에 달면 그 칸의 레이아웃 검사가 꺼진다", () => {
+    // 2026-10-07 사용자 결정: 레이아웃 게이트(probe DOM 부풀림)가 반복 구조의 **작성된 문구**(방법론 정의표·파이프라인 단계·
+    // 어댑터 매핑표)까지 부풀려 오류를 냈다. 표식으로 그 표들만 뺀다. 이 목록 밖에서 표식이 보이면 실패한다 — 늘리려면 그 문구가
+    // 정말 소스 상수인지 확인하고 여기에 사유와 함께 추가한다.
+    const ALLOWED = new Set([
+      "src/components/methodology/StatusDefinitionTable.tsx", // 상태 정의·조건 — display-status 정의표 상수
+      "src/app/pubg/methodology/page.tsx", // PUBG 상태 정의표 — 같은 파일의 상수 배열
+      "src/components/methodology/PipelineDiagram.tsx", // 단계 제목·설명 — pipelineSteps.ts 상수
+      "src/components/methodology/AdapterMatrix.tsx", // 매핑표 — adapterMatrixData.ts 상수
+    ]);
+    const found: string[] = [];
+    const walk = (dir: string) => {
+      for (const e of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
+        const rel = `${dir}/${e.name}`;
+        if (e.isDirectory()) {
+          if (e.name !== "__tests__") walk(rel);
+        } else if (/\.tsx$/.test(e.name) && /\bdata-static-copy\b/.test(read(rel))) found.push(rel);
+      }
+    };
+    walk("src");
+    expect(found.filter((f) => !ALLOWED.has(f))).toEqual([]);
+    expect(found.length).toBeGreaterThan(0);
+  });
+
   it("SiteFooter를 Container로 한 번 더 감싸지 않는다 — 여백이 두 겹이 되어 그 화면만 푸터가 안쪽으로 밀린다", () => {
     // 2026-10-07 실측(레이아웃 게이트 D-ALIGN-01): LoL 상세만 `<Container><SiteFooter/></Container>`라 375px에서 푸터 왼쪽 선이
     // 32px(다른 화면 16px)였다. LoL 대조표·브리핑도 같은 구조였다(브리핑은 사이에 JSX 주석이 있어 첫 정규식이 놓쳤다 — 주석을 건너뛴다).

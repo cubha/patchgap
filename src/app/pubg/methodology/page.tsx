@@ -160,7 +160,8 @@ export default function PubgMethodologyPage() {
     ),
     verdict: (
       <>
-        <div className="overflow-x-auto">
+        {/* data-static-copy — 상태 정의·판정 조건은 소스 상수(작성된 문구)다. 부풀림 대상에서 뺀다(2026-10-07 사용자 결정). */}
+        <div className="overflow-x-auto" data-static-copy>
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr>

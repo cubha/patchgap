@@ -102,7 +102,9 @@ export default function StatusDefinitionTable({ minN, alpha, floors }: StatusDef
   const hidden = buildHiddenRows(minN, alpha, floors);
   const head = "border-b border-border-soft px-5 py-3 text-left text-xs font-bold text-muted";
   return (
-    <div className="overflow-x-auto">
+    // data-static-copy — 정의·조건 문구는 소스 상수다(데이터가 늘려 놓을 수 없다). 레이아웃 게이트의 부풀림 대상에서 뺀다
+    // (2026-10-07 사용자 결정 · ~/.claude/tools/ui-probe/probe.mjs DOM_INFLATE).
+    <div className="overflow-x-auto" data-static-copy>
       <table className="w-full border-collapse text-sm">
         <thead>
           <tr>
