@@ -100,7 +100,7 @@ export default function TftCompareView({ bundle, declaration, pairBase = null }:
               <strong className="font-bold text-fg">{matchedEntities}</strong> · 미공지{" "}
               <strong className="font-bold text-fg">{gapEntities}</strong>
             </p>
-            <ul className="mt-3 grid gap-2 text-xs leading-relaxed text-fg-2 sm:grid-cols-2">
+            <ul className="mt-3 grid gap-2 text-xs leading-relaxed text-fg-2 wrap-anywhere sm:grid-cols-2">
               <li>
                 <strong className="font-mono text-muted">{bucket("no-change").toLocaleString()}</strong> · 통계적으로
                 유의한 변화가 없습니다

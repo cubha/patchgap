@@ -21,13 +21,17 @@ export interface PipelineDiagramProps {
 export default function PipelineDiagram({ steps }: PipelineDiagramProps) {
   return (
     <div
-      className="flex flex-col flex-wrap items-stretch gap-3 p-5 sm:flex-row sm:items-center"
+      // wrap-anywhere + 단계 칸 min-w-0·basis-0 — 칸 폭이 글자 길이가 아니라 줄 폭을 단계 수로 나눈 값으로 정해진다. 전에는
+      // 줄바꿈 못 하는 토큰 하나가 그 단계 칸을 넓혀 옆 단계를 밀었다(2026-10-07 레이아웃 게이트 D-STRESS-01, 방법론).
+      className="flex flex-col flex-wrap items-stretch gap-3 p-5 wrap-anywhere sm:flex-row sm:items-center"
       role="img"
       aria-label="수집, 집계, 짝짓기, 판정 4단 파이프라인 다이어그램"
+      // 단계 제목·설명은 소스 상수다(meta 줄의 날짜·건수는 짧은 숫자 줄이라 부풀림이 원래 건너뛴다) — 2026-10-07 사용자 결정.
+      data-static-copy
     >
       {steps.map((step, i) => (
-        <div key={step.step} className="flex flex-1 items-center gap-3">
-          <Card className="flex flex-1 flex-col gap-2">
+        <div key={step.step} className="flex min-w-0 flex-1 items-center gap-3 sm:basis-0">
+          <Card className="flex min-w-0 flex-1 flex-col gap-2">
             <span className="font-mono text-xs font-bold text-accent">STEP {step.step}</span>
             <span className="font-display text-base font-bold text-fg">{step.title}</span>
             <span className="text-xs text-fg-2">{step.detail}</span>

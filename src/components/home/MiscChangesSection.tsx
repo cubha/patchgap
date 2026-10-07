@@ -79,9 +79,10 @@ export default function MiscChangesSection({ sections, skinPreviews = {}, laneFi
                 aria-label={section.label}
                 className="overflow-hidden rounded-md border border-border-soft bg-surface"
               >
+                {/* 머리 띠는 한 줄이다 — 라벨이 길어지면 줄이 늘지 않고 잘린다(카드 머리 높이 고정, 2026-10-07 D-STRESS-02). */}
                 <h3 className="flex items-baseline gap-2 border-b border-border-soft bg-surface-warm px-4 py-2 text-xs font-bold text-fg-2">
-                  {section.label}
-                  <span className="font-mono font-normal tabular-nums text-muted">{section.notes.length}건</span>
+                  <span className="min-w-0 truncate">{section.label}</span>
+                  <span className="shrink-0 font-mono font-normal tabular-nums text-muted">{section.notes.length}건</span>
                 </h3>
                 <div className="flex flex-col gap-3 px-4 py-3">
                   {bundles.map((bundle) => (

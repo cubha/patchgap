@@ -180,11 +180,17 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                       {/* 잠수함 전용 행은 관측이 하나도 없어 상세로 갈 자리가 없다 —
                           없는 링크를 만들지 않고 이름만 그린다(2026-09-21). */}
                       {row.representative ? (
-                        <Link href={lolEntityHref(row.representative, pairBase)} className="font-bold text-fg hover:text-accent hover:underline">
+                        // 이름은 한 줄이다(max-w-48 truncate + title) — 줄이 늘면 행 높이가 따라 늘어 표 전체가 출렁인다(2026-10-07 레이아웃
+                        // 게이트 D-STRESS-02, /lol/compare/). 표는 가로 스크롤 영역 안이라 폭은 여기서 묶는다.
+                        <Link
+                          href={lolEntityHref(row.representative, pairBase)}
+                          title={row.entityName}
+                          className="block max-w-48 truncate font-bold text-fg hover:text-accent hover:underline"
+                        >
                           {row.entityName}
                         </Link>
                       ) : (
-                        <span className="font-bold text-fg">{row.entityName}</span>
+                        <span title={row.entityName} className="block max-w-48 truncate font-bold text-fg">{row.entityName}</span>
                       )}
                     </div>
                   </td>

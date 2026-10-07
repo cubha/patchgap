@@ -28,7 +28,8 @@ const CELL_CLASS = "border-b border-border-soft px-5 py-4 align-top text-fg-2";
 
 export default function AdapterMatrix() {
   return (
-    <div className="flex flex-col gap-4">
+    // data-static-copy — 매핑표 문구는 adapterMatrixData.ts 상수다. 부풀림 대상에서 뺀다(2026-10-07 사용자 결정).
+    <div className="flex flex-col gap-4" data-static-copy>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-sm" style={{ minWidth: "var(--table-min)" }}>
           <thead>

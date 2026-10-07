@@ -170,7 +170,7 @@ export default function LandingPage() {
 
       <Container>
         <section id="how" className="border-t border-border-soft py-9">
-          <div className="grid gap-6 sm:grid-cols-3">
+          <div className="grid gap-6 wrap-anywhere sm:grid-cols-3">
             {HOW.map((item) => (
               <div key={item.title}>
                 <h2 className="text-sm font-bold text-accent">{item.title}</h2>

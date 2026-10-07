@@ -337,7 +337,7 @@ export default function ReleaseNoteRow({
             )}
           </div>
           {itemCount > 0 ? (
-            <span className="shrink-0 font-mono text-xs text-muted">{itemCount}개 항목</span>
+            <span className="max-w-full shrink-0 truncate font-mono text-xs text-muted">{itemCount}개 항목</span>
           ) : null}
           <span
             aria-hidden="true"

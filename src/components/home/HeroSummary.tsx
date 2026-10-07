@@ -87,7 +87,7 @@ export default function HeroSummary({ stats, patch, action, gapCount, pairBase =
           패치노트는 <span className="text-accent">{fmtInt(noteEntityCount)}개 항목</span>을 말했고, 통계는{" "}
           <span className="text-accent">{fmtInt(statCount)}개 변화</span>를 말합니다
         </h1>
-        {caption ? <p className="ambient-hero-sub max-w-3xl text-sm leading-relaxed text-fg-2">{caption}</p> : null}
+        {caption ? <p className="ambient-hero-sub max-w-3xl text-sm leading-relaxed text-fg-2 wrap-anywhere">{caption}</p> : null}
         {/* 계산 방법 설명 문장("패치 전후 … 유의한 변화만 셉니다")은 방법론으로 옮겼다(재판정 보완 6, C3). */}
         {/* 인트로 재생 버튼은 2026-09-18 라운드6(사용자 C4 "인트로재생 버튼 제거")에 뺐다. `action`
             슬롯은 히어로 아래 조작 요소 주입용으로 남긴다(지금은 호출부가 넘기지 않는다). */}

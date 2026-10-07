@@ -36,7 +36,7 @@ export function deltaDisplay(metric: DeltaMetric, delta: number): { text: string
 /** 표본 범위 한 줄 — 헤더 칩·방법론과 **같은 어휘**를 쓴다(화면끼리 다른 말을 하지 않게). */
 export function TftSampleNotice({ boards, matches }: { boards: number; matches: number }) {
   return (
-    <p className="text-xs leading-relaxed text-muted">
+    <p className="text-xs leading-relaxed text-muted wrap-anywhere">
       표본은 KR 챌린저~마스터 랭크(큐 1100) <strong className="text-fg-2">{matches.toLocaleString()}</strong>매치 ={" "}
       <strong className="text-fg-2">{boards.toLocaleString()}</strong>보드입니다. 등장률의 분모는 매치가 아니라{" "}
       <strong className="text-fg-2">보드(참가자)</strong>입니다 — 한 판에 8명이 각자 보드를 들고, 한 보드에 여러 유닛이

@@ -137,7 +137,7 @@ export default function PubgBriefing({ bundle, declaration }: { bundle: PubgBund
               패치노트는 <span className="text-accent">{notes.length}개 항목</span>을 말했고, 통계는{" "}
               <span className="text-accent">{reportable.length}개 변화</span>를 말합니다
             </h1>
-            <p className="max-w-3xl text-sm leading-relaxed text-fg-2">
+            <p className="max-w-3xl text-sm leading-relaxed text-fg-2 wrap-anywhere">
               <strong className="text-fg">무기 획득 점유율</strong> · Steam · 전 지역·전 티어 <strong className="text-fg">{before.nMatches.toLocaleString()}</strong> →{" "}
               <strong className="text-fg">{after.nMatches.toLocaleString()}</strong>매치 · 무기{" "}
               <strong className="text-fg">{deltas.meta.n}</strong>종
@@ -273,11 +273,12 @@ export default function PubgBriefing({ bundle, declaration }: { bundle: PubgBund
                                   />
                                 ) : null}
                               </span>
-                              <span className="flex items-baseline justify-between gap-2">
-                                <span className="font-display font-bold text-fg">{identity.koName}</span>
-                                <span className="font-mono text-xs text-muted">{identity.sizeLabel}</span>
+                              {/* 칸은 높이를 지킨다 — 이름·크기·수치 줄은 한 줄씩이고 길면 잘린다(2026-10-07 레이아웃 게이트 D-STRESS-02). */}
+                              <span className="flex min-w-0 items-baseline justify-between gap-2">
+                                <span className="min-w-0 truncate font-display font-bold text-fg" title={identity.koName}>{identity.koName}</span>
+                                <span className="shrink-0 font-mono text-xs text-muted">{identity.sizeLabel}</span>
                               </span>
-                              <span className="flex items-baseline gap-2 font-mono text-xs text-muted">
+                              <span className="flex min-w-0 items-baseline gap-2 overflow-hidden whitespace-nowrap font-mono text-xs text-muted">
                                 <span className="tabular-nums text-fg-2">{pct(map.matchShare, 1)}</span>
                                 {delta ? (
                                   <span className={delta.matchShareDelta > 0 ? "tabular-nums text-success" : "tabular-nums text-danger"}>

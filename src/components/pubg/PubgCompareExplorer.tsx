@@ -228,7 +228,10 @@ export default function PubgCompareExplorer({
                           className="h-8 w-16 object-contain"
                         />
                       ) : null}
-                      <span>{row.weaponName} →</span>
+                      {/* 이름은 한 줄(max-w-40 truncate + title) — 줄이 늘면 행 높이가 따라 늘었다(2026-10-07 D-STRESS-02). */}
+                      <span className="block max-w-40 truncate" title={row.weaponName}>
+                        {row.weaponName} →
+                      </span>
                     </Link>
                   </td>
                   {/* 점유율이 null인 행은 그 패치에 관측 자체가 없었다는 뜻이다 — 0%로 적지 않는다. */}

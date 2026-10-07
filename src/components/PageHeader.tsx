@@ -45,7 +45,7 @@ export default function PageHeader({
         ) : null}
       </div>
       {lead ? (
-        <p className="ambient-hero-sub max-w-3xl text-sm leading-relaxed text-fg-2">{lead}</p>
+        <p className="ambient-hero-sub max-w-3xl text-sm leading-relaxed text-fg-2 wrap-anywhere">{lead}</p>
       ) : null}
       {actions ? <div className="flex flex-wrap items-center gap-3">{actions}</div> : null}
     </header>

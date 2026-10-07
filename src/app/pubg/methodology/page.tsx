@@ -160,7 +160,8 @@ export default function PubgMethodologyPage() {
     ),
     verdict: (
       <>
-        <div className="overflow-x-auto">
+        {/* data-static-copy — 상태 정의·판정 조건은 소스 상수(작성된 문구)다. 부풀림 대상에서 뺀다(2026-10-07 사용자 결정). */}
+        <div className="overflow-x-auto" data-static-copy>
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr>
@@ -368,8 +369,8 @@ export default function PubgMethodologyPage() {
                 <tbody>
                   {accuracyComparison.map((row) => (
                     <tr key={row.weaponKey} className="border-b border-border-soft">
-                      <td className="py-2 pl-4 pr-3 font-display font-bold text-fg">{row.weaponName}</td>
-                      <td className="py-2 pr-3 text-xs text-muted">{row.nerfed ? "반동 너프" : "대조군(무변경)"}</td>
+                      <td className="max-w-40 truncate py-2 pl-4 pr-3 font-display font-bold text-fg" title={row.weaponName}>{row.weaponName}</td>
+                      <td className="whitespace-nowrap py-2 pr-3 text-xs text-muted">{row.nerfed ? "반동 너프" : "대조군(무변경)"}</td>
                       <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">{pct(row.before.accuracy, 2)}</td>
                       <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">{pct(row.after.accuracy, 2)}</td>
                       <td className="py-2 pr-4 text-right font-mono text-xs font-bold tabular-nums text-fg">

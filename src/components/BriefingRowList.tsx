@@ -62,7 +62,7 @@ export default function BriefingRowList({
                 </span>
                 {iconOf ? iconOf(group) : null}
                 {href ? (
-                  <Link href={href} className="text-sm font-bold text-fg hover:text-accent hover:underline">
+                  <Link href={href} className="max-w-full text-sm font-bold text-fg wrap-anywhere hover:text-accent hover:underline">
                     {group.entityName} →
                   </Link>
                 ) : (
@@ -107,8 +107,10 @@ export default function BriefingRowList({
                         )}
                       </div>
                       {cause ? (
+                        // 원인 문장은 고정 높이 상자다(데스크톱 2줄·모바일 4줄 — 요약 100자 상한 기준). 넘치면 상자 안에서
+                        // 스크롤한다 — 문장이 길어도 행 카드 높이가 흔들리지 않는다(2026-10-07 사용자 결정, 레이아웃 게이트 D-STRESS-02).
                         <p
-                          className={`border-l-2 border-border-soft pl-3 text-xs leading-relaxed ${
+                          className={`h-20 overflow-y-auto border-l-2 border-border-soft pl-3 text-xs leading-relaxed sm:h-10 ${
                             cause.verified ? "text-fg-2" : "text-muted"
                           }`}
                         >
