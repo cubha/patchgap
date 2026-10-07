@@ -16,7 +16,6 @@ import { compareCrumbs } from "@/lib/breadcrumbs";
 import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
 import { tftDetailRows } from "@/lib/pairPages";
 import { PairBaseProvider } from "@/components/PairBaseContext";
-import type { MatchStatus } from "@/pipeline/types";
 
 export interface TftCompareViewProps {
   bundle: TftBundle | null;
@@ -48,14 +47,11 @@ export default function TftCompareView({ bundle, declaration, pairBase = null }:
         manifest.assets[kind].map((key) => `${kind}:${key}`)
       )
     : [];
-  const counts = deltas.meta.counts;
-  const bucket = (status: MatchStatus): number => counts[status] ?? 0;
   const shownDeltas = rows.reduce((sum, r) => sum + Object.keys(r.cells).length, 0);
   // 커버리지 단위는 **엔티티**다 — 표의 행 수와 같은 수가 나와야 화면이 스스로를 반박하지 않는다.
   const noteEntities = new Set(notes.items.map((n) => n.entity)).size;
   const matchedEntities = rows.filter((r) => r.noteAnchor !== null).length;
   const gapEntities = rows.filter((r) => r.status === "unannounced").length;
-  const excluded = deltas.rows.length - shownDeltas;
 
   return (
     <main>
@@ -74,7 +70,7 @@ export default function TftCompareView({ bundle, declaration, pairBase = null }:
             lead={
               <>
                 대상 <strong className="text-fg">{rows.length}</strong>종 · 보고 자격을 얻은 관측{" "}
-                <strong className="text-fg">{shownDeltas}</strong>건(전체 델타 {deltas.rows.length}건 중).
+                <strong className="text-fg">{shownDeltas}</strong>건.
                 왼쪽에서 패치노트 항목을 고르면 오른쪽 표의 그 대상으로 이동합니다.
               </>
             }
@@ -89,33 +85,21 @@ export default function TftCompareView({ bundle, declaration, pairBase = null }:
             />
           </PairBaseProvider>
 
-          {/* 커버리지 — **뺀 것을 밝힌다.** 세 게임이 같은 자리(표 아래)에 둔다(§8-7 #16). */}
+          {/* 커버리지 — 노트 대비 표가 다룬 범위만 말한다(세 게임 같은 자리, §8-7 #16). **숨김 상태(변화 없음·바닥 미달·표본
+              부족)의 건수와 사유는 말하지 않는다** — 2026-10-07 사용자 확인(9/18 숨김 규칙에 건수 노출도 포함). 그 규칙은 방법론이
+              말한다. LoL `CoverageBar`가 이미 같은 이유로 세지 않는다. */}
           <section className="rounded-lg border border-border-soft bg-surface p-5">
-            <h2 className="font-body text-xs font-bold text-muted">
-              표에 올리지 않은 관측 — {excluded.toLocaleString()}건
-            </h2>
+            <h2 className="font-body text-xs font-bold text-muted">표가 다룬 범위</h2>
             <p className="mt-3 text-sm text-muted">
               노트 <strong className="font-bold text-fg">{noteEntities}</strong>대상(
               <strong className="font-bold text-fg">{notes.items.length}</strong>항목) 중 관측 짝{" "}
               <strong className="font-bold text-fg">{matchedEntities}</strong> · 미공지{" "}
               <strong className="font-bold text-fg">{gapEntities}</strong>
             </p>
-            <ul className="mt-3 grid gap-2 text-xs leading-relaxed text-fg-2 wrap-anywhere sm:grid-cols-2">
-              <li>
-                <strong className="font-mono text-muted">{bucket("no-change").toLocaleString()}</strong> · 통계적으로
-                유의한 변화가 없습니다
-              </li>
-              <li>
-                <strong className="font-mono text-muted">{bucket("below-threshold").toLocaleString()}</strong> · 유의하나
-                효과크기 바닥 미달 — 실재하지만 실무상 무시 가능한 규모입니다
-              </li>
-            </ul>
             <p className="mt-3 text-xs leading-relaxed text-muted">
-              표본이 모자란 대상(등장 보드 200 미만)의 순방률·평균 등수는 표본 부족으로 판정하고 표에 올리지 않습니다 —
-              좁은 표본으로 유의한 것처럼 보이게 하지 않기 위해서입니다. 등장률은 그대로 남습니다. 패치노트 변경 줄{" "}
-              {notes.stats.lines}건 중 {notes.items.length}건(
-              {((notes.items.length / Math.max(1, notes.stats.lines)) * 100).toFixed(1)}%)에서 대상을 특정했고,
-              나머지 {notes.stats.unresolved}건은 대상이 없는 체계 변경이거나 사전에 없는 소환수입니다.
+              패치노트 변경 줄 {notes.stats.lines}건 중 {notes.items.length}건(
+              {((notes.items.length / Math.max(1, notes.stats.lines)) * 100).toFixed(1)}%)에서 대상을 특정했고, 나머지{" "}
+              {notes.stats.unresolved}건은 대상이 없는 체계 변경이거나 사전에 없는 소환수입니다.
             </p>
           </section>
 
