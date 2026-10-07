@@ -39,7 +39,8 @@ export default function GateGrid({ minN, alpha }: GateGridProps) {
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2">
+    // data-static-copy — 카드 문구는 이 파일의 상수다(숫자만 상수에서 주입). 부풀림 대상에서 뺀다(2026-10-07 사용자 결정).
+    <div className="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2" data-static-copy>
       {items.map((item) => (
         <Card key={item.title}>
           <h3 className="font-display text-sm font-bold text-fg">{item.title}</h3>

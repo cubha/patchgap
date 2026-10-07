@@ -63,10 +63,11 @@ export default function StatusBadge({ status, className = "" }: StatusBadgeProps
     <span
       // max-w-full + 라벨 truncate — 뱃지가 담긴 칸(BADGE_SLOT·표 셀)보다 넓어지지 않는다. 라벨은 고정 어휘라 실제로 잘릴 일은
       // 없지만, nowrap 요소가 칸을 넘으면 그리드 칸 전체를 밀어 페이지가 가로로 늘었다(2026-10-07 레이아웃 게이트 D-STRESS-01, /lol/).
-      className={`inline-flex max-w-full items-center gap-2 overflow-hidden whitespace-nowrap rounded-sm border px-2 py-1 font-mono text-xs font-bold ${colorClasses} ${className}`}
+      // inline-block + truncate(flex가 아니라야 글자에 말줄임이 걸린다). 마크업은 전과 같다 — 점 하나 + 라벨 글자.
+      className={`inline-block max-w-full truncate whitespace-nowrap rounded-sm border px-2 py-1 align-middle font-mono text-xs font-bold ${colorClasses} ${className}`}
     >
-      <span className="h-1.5 w-1.5 shrink-0 rounded-pill bg-current" aria-hidden="true" />
-      <span className="min-w-0 truncate">{statusLabel(status)}</span>
+      <span className="mr-2 inline-block h-1.5 w-1.5 rounded-pill bg-current align-middle" aria-hidden="true" />
+      {statusLabel(status)}
     </span>
   );
 }

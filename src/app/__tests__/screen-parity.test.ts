@@ -365,6 +365,7 @@ describe("§8-1 푸터 — 모든 화면이 같은 컴포넌트를 쓴다", () =
       "src/app/pubg/methodology/page.tsx", // PUBG 상태 정의표 — 같은 파일의 상수 배열
       "src/components/methodology/PipelineDiagram.tsx", // 단계 제목·설명 — pipelineSteps.ts 상수
       "src/components/methodology/AdapterMatrix.tsx", // 매핑표 — adapterMatrixData.ts 상수
+      "src/components/methodology/GateGrid.tsx", // 게이트 설명 카드 — 같은 파일의 상수(숫자만 주입)
     ]);
     const found: string[] = [];
     const walk = (dir: string) => {
