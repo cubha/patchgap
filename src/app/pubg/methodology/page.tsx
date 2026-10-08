@@ -21,6 +21,7 @@ import {
   REDISTRIBUTION_OVERCLAIM_FACTOR,
   redistributionExpectation,
 } from "@/pipeline/match/pubg-delta";
+import { pubgVerdictCount } from "@/pipeline/shared/headline";
 
 export const metadata: Metadata = {
   title: "PUBG 방법론 · patchgap",
@@ -406,7 +407,7 @@ export default function PubgMethodologyPage() {
       notice={<PubgSampleNotice sampleScope={deltas.meta.sampleScope} />}
       slots={slots}
       generatedAt={deltas.meta.generatedAt}
-      nVerdicts={deltas.meta.n}
+      nVerdicts={pubgVerdictCount(deltas.rows)}
     />
   );
 }

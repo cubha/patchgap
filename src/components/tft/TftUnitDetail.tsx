@@ -30,7 +30,7 @@ import ObservationSection from "@/components/observation/ObservationSection";
 import { ALL_SEGMENT, groupObservations, resolveSelection } from "@/components/observation/observationModel";
 import { TFT_METRICS, effectStrength } from "@/lib/tftEntityRows";
 import { TftFooter, TftUnavailable, deltaDisplay, formatMetricValue } from "@/components/tft/shared";
-import { entityTypeLabel, fmtInt, isLowerBetter, metricLabel, statusLabel } from "@/lib/format";
+import { entityTypeLabel, fmtInt, fmtQ, isLowerBetter, metricLabel, statusLabel } from "@/lib/format";
 import { delayedChangesFor, loadGameDataDiff } from "@/lib/gamedata";
 import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
 import { tftDetailRows } from "@/lib/pairPages";
@@ -38,6 +38,7 @@ import { displayStatus } from "@/pipeline/shared/display-status";
 import type { DeltaRecord } from "@/pipeline/types";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import { entityKeyFromSlug as unslug } from "@/lib/tftRoutes";
+import { verdictCount } from "@/pipeline/shared/headline";
 
 // 슬러그 규칙은 `@/lib/tftRoutes`가 소유한다 — 라우트 파일에 두면 클라이언트 컴포넌트가
 // 페이지 모듈을 import해야 하고, prop으로 넘기면 빌드가 막는다(2026-09-23 실측).
@@ -70,7 +71,7 @@ function tftGateRows(record: DeltaRecord): { label: string; value: string }[] {
   const gate = [
     { label: "n(전) 보드", value: fmtInt(record.n.before) },
     { label: "n(후) 보드", value: fmtInt(record.n.after) },
-    { label: "BH-FDR q", value: record.q === null ? "—" : record.q.toExponential(2) },
+    { label: "BH-FDR", value: fmtQ(record.q) ?? "—" },
     { label: "바닥 대비", value: `${effectStrength(record).toFixed(2)}배` },
   ];
   if (isLowerBetter(record.metric)) gate.push({ label: "방향", value: "낮을수록 좋음" });
@@ -290,7 +291,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
           />
         </div>
       </Container>
-      <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.rows.length} />
+      <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={verdictCount(deltas.rows, deltas.meta.qAlpha)} />
     </main>
   );
 }

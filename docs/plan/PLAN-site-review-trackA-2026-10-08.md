@@ -78,4 +78,8 @@
 - 색: 지연 반영 구획은 `--fg-2`(공지됨), 미반영은 기존 `--warn`, 무근거 요약은 `--muted`. 임의 색 추가 없음.
 
 ## ⑥ 명세 변경한 기존 테스트 (보고 대상 — 구현 중 추가)
-- (구현 중 기록)
+- `src/pipeline/gamedata/__tests__/tft.test.ts` 「18.1→18.2 불일치 = [마오카이·덩굴정령·어미 부리]」 → `!noteMismatch.unapplied` 필터로 좁힘(ST-03이 「미반영」 행을 같은 축에 더한다). 잠수함 31건 단언은 불변.
+- `src/components/home/__tests__/{logic,render}.test.ts(x)` — `HeadlineStats`에 `announcedObservedCount` 추가(ST-06)로 픽스처·`toEqual` 기대 객체에 필드 추가.
+- `src/components/compare/__tests__/render.test.tsx` 「▼ −10.8%p」 → 「▼ −10.9%p」(ST-09: 델타 = 표시된 끝값 55.4%→44.5%의 차).
+- 범위 이관: `lol-S21`(카드 「N개 항목」 vs 내비 「N줄」)은 틀린 수가 아니라 **다른 단위·다른 라벨**(카드 = 펼치면 나오는 줄 수, 2026-09-23 화면 대조 V2 계약 · 내비 = 노트 줄) → 트랙 B1. ST-13은 수행하지 않는다.
+- 태그 조정: ST-07 `[TDD]` 해제(한 줄 전달 — 3-AND (c) 불충족).

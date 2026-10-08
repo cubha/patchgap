@@ -14,6 +14,7 @@
 import type { DeltaRecord } from "@/pipeline/types";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
+import { isAllScopeChampionRow } from "@/lib/lane";
 
 // 자격 술어는 shared/reportable.ts 한 곳(라운드6 scope-critic ST2 — 세 곳 중복 제거).
 const reportable = isReportableRecord;
@@ -25,6 +26,11 @@ function better(a: DeltaRecord, b: DeltaRecord, qAlpha?: number): boolean {
   if (ra !== rb) return ra;
   const rank = STATUS_SORT_PRIORITY[a.status] - STATUS_SORT_PRIORITY[b.status];
   if (rank !== 0) return rank < 0;
+  // 자격·상태가 같으면 **전체(scope=all) 행**이 라인 행보다 대표다(ST-08) — 상세의 기본 보기와 같은 값을 카드가
+  // 보여 줘야 한다. |Δ|만 보면 라인 행(정글 3.0→8.5)이 전체 행(3.3→8.6)을 이겨 카드와 상세가 어긋났다.
+  const sa = isAllScopeChampionRow(a);
+  const sb = isAllScopeChampionRow(b);
+  if (sa !== sb) return sa;
   return Math.abs(a.delta ?? 0) > Math.abs(b.delta ?? 0);
 }
 

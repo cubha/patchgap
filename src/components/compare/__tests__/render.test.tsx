@@ -108,7 +108,9 @@ describe("DeltaTable — 엔티티 1행·인라인 지표(사용자 L3)", () => 
     const cell = container.querySelector('tr[data-entity-key="champion:MonkeyKing"] td:nth-child(3)');
     expect(cell).not.toBeNull();
     // 둘 다 남는다 — 라인 수치가 더 이상 버려지지 않는다.
-    expect(cell!.textContent).toContain("▼ −10.8%p");
+    // ST-09(2026-10-08 명세 변경): 델타는 원시 −0.108이 아니라 **표시된 끝값** 55.4% → 44.5%의 차다 — 읽는 사람이 검산하는
+    // 수와 같아야 한다(site-review lol-S20: 같은 끝값 표시에 +4.8·+4.7 두 델타).
+    expect(cell!.textContent).toContain("▼ −10.9%p");
     expect(cell!.textContent).toContain("▼ −11.6%p");
     // 축이 각각 붙는다("표기 없으면 전체"라는 암묵 규칙을 없앤다).
     expect(cell!.textContent).toContain("전체");

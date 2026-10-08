@@ -21,7 +21,7 @@ import { selectTftCauseRows } from "@/components/tft/causeRows";
 import { tftEntityHref } from "@/lib/tftRoutes";
 import { tftEntityRows } from "@/lib/tftEntityRows";
 import { entityTypeLabel, metricLabel } from "@/lib/format";
-import { tftGapRows, tftGapTotal } from "@/lib/gapTotals";
+import { tftGapTotal, tftMetricGapRows } from "@/lib/gapTotals";
 import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
 import DeclarationOnly from "@/components/DeclarationOnly";
 import { displayStatus } from "@/pipeline/shared/display-status";
@@ -38,6 +38,7 @@ import EntityIcon from "@/components/EntityIcon";
 import EntityIndexSection, { EntityIndexGrid } from "@/components/EntityIndexSection";
 import { buildEntityIndex } from "@/components/home/entityIndex";
 import { groupBriefingItems, type BriefingGroup } from "@/components/briefingRows";
+import { countAnnouncedObservedEntities, verdictCount } from "@/pipeline/shared/headline";
 
 export interface TftBriefingProps {
   /** 그 쌍의 관측 번들. 없으면(관측 stub·미수집) `declaration`을 본다. */
@@ -149,7 +150,9 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
   const reportable = deltas.rows.filter((row) => isReportableRecord(row, deltas.meta.qAlpha));
   // 대조표(`entityRows`)와 **같은 함수**로 표시 키를 낸다 — 상태값만 보는 `displayStatusOf`는 방향 중립
   // (동률 노트)을 모르므로, 같은 대상이 홈에선 「이상 관측」, 대조표에선 「공지」로 갈렸다(인수검증 V1, 오른).
-  const unannounced = tftGapRows(deltas.rows, deltas.meta.qAlpha);
+  // 지표 축 목록은 수치 축 대상을 뺀다(ST-10) — 한 대상은 한 섹션에만, 머리 수는 대조표 미공지 칩과 같은 대상 수.
+  const unannounced = tftMetricGapRows(deltas.rows, deltas.meta.qAlpha, submarine);
+  const unannouncedEntities = new Set(unannounced.map((r) => `${r.entityType}:${r.entityKey}`)).size;
   const announced = reportable.filter((row) => displayStatus(row, deltas.meta.qAlpha) !== "unannounced");
   const matches = before.matches + after.matches;
   // 시안 04-applied의 헤드라인 — 이 사이트가 무엇을 하는 곳인지 한 문장으로 말한다.
@@ -276,7 +279,8 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
                 {/* 세 게임이 같은 자리에서 같은 말을 한다(§8-1, 2026-09-23 화면 대조 V5). */}
                 <AnnouncedCoverageLine
                   noteTargets={noteEntities}
-                  observed={new Set(announced.map((r) => `${r.entityType}:${r.entityKey}`)).size}
+                  /* 세 게임이 같은 함수로 센다(ST-06) — 전에는 표시 상태로 걸러 간접 영향 행까지 공지로 셌다. */
+                  observed={countAnnouncedObservedEntities(deltas.rows, deltas.meta.qAlpha)}
                 />
                 </SectionCard>
               }
@@ -297,7 +301,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
                     eyebrow="발견 · 지표 축"
                     title="패치노트에 없는데 움직인 것"
                     variant="embedded"
-                    action={<span className="font-mono text-xs text-muted">{unannounced.length}건</span>}
+                    action={<span className="font-mono text-xs text-muted">대상 {unannouncedEntities}종</span>}
                   >
                     <div className={PANEL_SCROLL_BODY}>
                     <BriefingRowList
@@ -335,7 +339,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
           <TftSampleNotice boards={before.boards + after.boards} matches={matches} />
         </div>
       </Container>
-      <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.rows.length} />
+      <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={verdictCount(deltas.rows, deltas.meta.qAlpha)} />
     </main>
   );
 }

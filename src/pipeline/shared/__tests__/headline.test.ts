@@ -59,7 +59,7 @@ describe("countReportable — '통계는 M개 변화를 말합니다'", () => {
 // 분자에 **전체** 보고 자격 행 수(히어로 M)를 넣고 있었다 — 부분이 전체보다 크다. 분자는 공지 대상 중 보고 자격 행이
 // 있는 **대상** 수여야 하고, 세 게임이 같은 함수로 세야 한다.
 describe("countAnnouncedObservedEntities — '공지된 대상 X개 중 유의한 관측이 선 것은 Y개'의 Y", () => {
-  const announced = (key: string, metric: string, extra: Partial<DeltaRecord> = {}) =>
+  const announced = (key: string, metric: DeltaRecord["metric"], extra: Partial<DeltaRecord> = {}) =>
     row({ id: `champion:${key}:${metric}`, entityKey: key, metric, status: "announced-consistent", matchedNoteIds: [`note:${key}`], ...extra });
 
   it("공지 짝이 있고 보고 자격을 얻은 행의 **대상** 수 — 같은 대상의 여러 지표는 1", () => {

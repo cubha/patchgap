@@ -13,6 +13,7 @@ import { PubgFooter, PubgUnavailable } from "@/components/pubg/shared";
 import { compareCrumbs } from "@/lib/breadcrumbs";
 import { isReportable, loadPubg, loadPubgAssets, pubgPair, loadPubgDeclaration } from "@/lib/pubgData";
 import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { pubgVerdictCount } from "@/pipeline/shared/headline";
 
 // 쌍은 산출물에서 읽는다(`pubgPair`) — 하드코딩하면 다음 패치에서 설명문만 옛 쌍을 말한다.
 const PAIR = pubgPair();
@@ -79,7 +80,7 @@ export default function PubgComparePage() {
               자리가 갈렸다(2026-09-23 화면 대조 V4). 이 표에서는 「바뀐 것」 열이 그 대상의 수치
               변경을 말하고, 판정이 서지 않아 행이 없는 대상은 브리핑이 전량 보여 준다. */}
 
-          <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
+          <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={pubgVerdictCount(deltas.rows)} />
         </div>
       </Container>
     </main>

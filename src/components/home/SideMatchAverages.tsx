@@ -68,7 +68,7 @@ export default function SideMatchAverages({
               <span className="inline-flex items-baseline gap-2 font-mono text-sm tabular-nums">
                 {fmtSec(row.to)}
                 {row.from !== null ? (
-                  <DeltaValue delta={row.to - row.from} kind="sec" />
+                  <DeltaValue delta={row.to - row.from} kind="sec" endpoints={{ before: row.from, after: row.to }} />
                 ) : null}
               </span>
             )}

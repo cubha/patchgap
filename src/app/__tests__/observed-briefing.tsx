@@ -15,7 +15,7 @@ import TftHistoryPage from "../tft/history/[pair]/page";
 import PubgPage from "../pubg/page";
 import { listPatchPairs, loadDeltas } from "@/lib/data";
 import { pairSlug, type PairLike } from "@/lib/pairRoutes";
-import { listTftPairs, loadTft } from "@/lib/tftData";
+import { latestObservedTftPair } from "@/lib/tftData";
 import { isObservationStub } from "@/pipeline/shared/observation-stub";
 
 export type BriefingGame = "lol" | "tft" | "pubg";
@@ -27,9 +27,10 @@ function lolObserved(pair: PairLike): boolean {
 
 /** 최신 관측 쌍과, 그것이 최신 쌍인지. 관측 쌍이 하나도 없으면 null. */
 export function latestObservedPair(game: "lol" | "tft"): { pair: PairLike; isLatest: boolean } | null {
-  const pairs: PairLike[] = game === "lol" ? listPatchPairs() : listTftPairs();
-  const observed = game === "lol" ? lolObserved : (p: PairLike) => loadTft(p) !== null;
-  const index = pairs.findIndex(observed);
+  // TFT는 프로덕션 함수가 소유한다(ST-14) — 화면과 테스트가 같은 「최신 관측 쌍」을 본다.
+  if (game === "tft") return latestObservedTftPair();
+  const pairs: PairLike[] = listPatchPairs();
+  const index = pairs.findIndex(lolObserved);
   return index === -1 ? null : { pair: pairs[index], isLatest: index === 0 };
 }
 

@@ -22,3 +22,10 @@ export const tftGapTotal = (rows: readonly DeltaRecord[], qAlpha: number, submar
 
 export const pubgGapTotal = (rows: readonly PubgDeltaRow[], submarine: SubmarineSummary | null) =>
   gap.pubgGapTotal(rows, keysOf(submarine));
+
+/** Gap 탭 지표 축 목록(ST-10) — 수치 축 대상을 뺀 행. 타일 = 수치 축 대상 + 이 목록의 대상 수. */
+export const tftMetricGapRows = (rows: readonly DeltaRecord[], qAlpha: number, submarine: SubmarineSummary | null) =>
+  gap.tftMetricGapRows(rows, qAlpha, keysOf(submarine));
+
+export const pubgMetricGapRows = (rows: readonly PubgDeltaRow[], submarine: SubmarineSummary | null) =>
+  gap.pubgMetricGapRows(rows, keysOf(submarine));

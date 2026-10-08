@@ -43,7 +43,7 @@ import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { delayedChangesFor, loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import { DISPLAY_SORT_PRIORITY, displayStatus, isNoiseStatus } from "@/pipeline/shared/display-status";
 import { loadChampions, loadDeltas, loadDeltasRaw, loadItems, loadNotes, type PatchPair } from "@/lib/data";
-import { entityTypeLabel, fmtInt, itemIdFromSlug } from "@/lib/format";
+import { entityTypeLabel, fmtInt, fmtQ, itemIdFromSlug } from "@/lib/format";
 import { WIN_RATE_MIN_N } from "@/pipeline/aggregate/stats";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import { loadDdragonSafe } from "@/pipeline/match/ddragon";
@@ -70,6 +70,7 @@ import {
   resolveSelection,
   type ObservationModel,
 } from "@/components/observation/observationModel";
+import { verdictCount } from "@/pipeline/shared/headline";
 
 export interface LolItemDetailProps {
   /** 라우트 파라미터 그대로(정준 `champion~Ahri` · 구 지표 별칭 · `_placeholder`). */
@@ -138,7 +139,7 @@ function findEntity(rawId: string, pairs: readonly PatchPair[]): FoundEntity | n
       model: lolObservationModel(rows, deltas.meta.qAlpha),
       generatedAt: deltas.meta.generatedAt,
       qAlpha: deltas.meta.qAlpha,
-      pairVerdicts: deltas.rows.length,
+      pairVerdicts: verdictCount(deltas.rows, deltas.meta.qAlpha),
     };
     if (found.model.count > 0) return found;
     if (rows.some((row) => !isNoiseStatus(row.status))) judged ??= found;
@@ -181,7 +182,8 @@ function lolGateRows(row: DeltaRecord): { label: string; value: string }[] {
   const gate = [
     { label: "n(전)", value: fmtInt(row.n.before) },
     { label: "n(후)", value: fmtInt(row.n.after) },
-    { label: "BH-FDR q", value: row.q === null ? "—" : row.q.toFixed(3) },
+    // 카드·상세·TFT가 같은 q 글자(ST-09) — 전에는 여기만 「0.000」이었다.
+    { label: "BH-FDR", value: fmtQ(row.q) ?? "—" },
   ];
   // 승률만 개체 표본 게이트가 걸린다(verdict.ts). 이 패널에 오는 행은 보고 자격을 통과했으므로 늘 통과다.
   if (row.metric === "winRate") gate.push({ label: "승률 최소 표본", value: `n≥${WIN_RATE_MIN_N} · 통과` });
@@ -249,7 +251,7 @@ export default function LolItemDetail({ id, pairs, pairBase = null }: LolItemDet
         badge={<StatusBadge status={displayStatus(row, qAlpha)} />}
         before={formatMetricValue(row.before, kind)}
         after={formatMetricValue(row.after, kind)}
-        delta={<DeltaValue delta={row.delta} ci={row.ci} kind={kind} />}
+        delta={<DeltaValue delta={row.delta} ci={row.ci} kind={kind} endpoints={{ before: row.before, after: row.after }} />}
         segmentName={hasLaneAxis ? (segmentKey === ALL_SEGMENT ? "전체 라인" : segmentName) : undefined}
         chart={<ItemChart data={chartData} />}
         chartCaption={deltaCiCaption(row, chartData.barCi !== null)}

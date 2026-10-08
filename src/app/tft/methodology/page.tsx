@@ -8,6 +8,7 @@ import { computeLlmCauseStats, dominantConfidence } from "@/components/methodolo
 import { TftUnavailable } from "@/components/tft/shared";
 import { fmtKst } from "@/lib/format";
 import { loadTft, loadTftDeclaration } from "@/lib/tftData";
+import { verdictCount } from "@/pipeline/shared/headline";
 
 export const metadata = { title: "TFT 방법론 — patchgap" };
 
@@ -335,7 +336,7 @@ export default function TftMethodologyPage() {
       }
       slots={slots}
       generatedAt={deltas.meta.generatedAt}
-      nVerdicts={deltas.rows.length}
+      nVerdicts={verdictCount(deltas.rows, deltas.meta.qAlpha)}
     />
   );
 }

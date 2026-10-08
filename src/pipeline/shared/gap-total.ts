@@ -47,6 +47,15 @@ export function tftGapTotal(rows: readonly DeltaRecord[], qAlpha: number, numeri
   return unionSize(tftGapRows(rows, qAlpha).map(keyOf), numericKeys);
 }
 
+/**
+ * 브리핑 Gap 탭 **지표 축 목록**의 행(ST-10, 2026-10-08) — 통계 Gap 행에서 수치 축 대상을 **뺀** 것. 한 대상은 한 섹션에만
+ * 선다(수치 축이 이긴다 — 증거 등급). 전에는 렝가·아무무가 두 섹션에 다 올라 있었고, 머리 숫자(행 수 26)가 대조표 미공지
+ * 칩(대상 수 21)과 달랐다. 이 목록의 대상 수 + 수치 축 대상 수 = `tftGapTotal`(타일)이 항등식이다.
+ */
+export function tftMetricGapRows(rows: readonly DeltaRecord[], qAlpha: number, numericKeys: ReadonlySet<string>): DeltaRecord[] {
+  return tftGapRows(rows, qAlpha).filter((row) => !numericKeys.has(keyOf(row)));
+}
+
 /** PUBG 통계 Gap 행 — 보고 자격 + `isGapStatus`(미공지 정의의 소유자). */
 export function pubgGapRows(rows: readonly PubgDeltaRow[]): PubgDeltaRow[] {
   return rows.filter((row) => isReportable(row.status) && isGapStatus(row.status));
@@ -54,4 +63,9 @@ export function pubgGapRows(rows: readonly PubgDeltaRow[]): PubgDeltaRow[] {
 
 export function pubgGapTotal(rows: readonly PubgDeltaRow[], numericKeys: ReadonlySet<string>): number {
   return unionSize(pubgGapRows(rows).map((row) => `weapon:${row.weaponKey}`), numericKeys);
+}
+
+/** PUBG 지표 축 목록 — `tftMetricGapRows`와 같은 규칙(무기 키). */
+export function pubgMetricGapRows(rows: readonly PubgDeltaRow[], numericKeys: ReadonlySet<string>): PubgDeltaRow[] {
+  return pubgGapRows(rows).filter((row) => !numericKeys.has(`weapon:${row.weaponKey}`));
 }

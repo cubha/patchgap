@@ -7,6 +7,7 @@ import type { DeltaKind } from "@/components/DeltaValue";
 import type { DeltaRecord, DeltasFile, LlmCause, PatchNoteItem } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
 import { displayMetricKind, formatDisplayValue } from "@/lib/format";
+import { isAllScopeChampionRow } from "@/lib/lane";
 import { countRelevantNoteEntities as countRelevantNoteEntitiesInFile } from "@/pipeline/shared/notes-count";
 import { isSignificantDelta } from "@/pipeline/shared/significance";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
@@ -71,10 +72,7 @@ export function excludeObservation(
  * all, `champion:{key}:{pos}:{metric}`(4세그먼트)이면 position(ST-08 id 네임스페이스 확정).
  * 다른 entityType은 이 구분이 없어 항상 true(우선순위 동점 처리 — 실질적으로 아래 dedupe에서
  * `|delta|` 비교로만 갈린다). */
-function isAllScopeChampionRow(record: DeltaRecord): boolean {
-  if (record.entityType !== "champion") return true;
-  return record.id.split(":").length === 3;
-}
+// `isAllScopeChampionRow`는 `lib/lane.ts`로 이관(ST-08) — 카드 대표 선택과 같은 술어를 쓴다.
 
 /** 공지 대조 미리보기 상위 N건 — **엔티티 단위로 대표 1행만** 뽑아 `|delta|` 큰 순으로 정렬한다
  * (코디네이터 정정, 2026-09-05, 두 번째 라운드). 최초 구현은 `matchedNoteIds`가 있는 모든

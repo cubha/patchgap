@@ -29,6 +29,8 @@ import { loadPubgAssets, loadPubgMaps, pubgMapKeys, type PubgBundle, type PubgDe
 import { mapKeyFromSlug, weaponHref } from "@/lib/pubgRoutes";
 import { mapIdentity, type PubgMapDeltaRow } from "@/pipeline/aggregate/pubg-maps";
 import { publicMapPath } from "@/pipeline/pubg/asset-path";
+import { pubgVerdictCount } from "@/pipeline/shared/headline";
+import { fmtDisplayDelta } from "@/lib/format";
 
 function fmtDuration(sec: number | null): string {
   if (sec === null) return "—";
@@ -39,15 +41,13 @@ function fmtDuration(sec: number | null): string {
 
 /** 부호 붙은 시간 차(「+1:02」). 기술통계라 방향에 좋고 나쁨이 없다 — 색은 호출부가 중립으로 둔다. */
 function fmtDurationDelta(before: number | null, after: number | null): string {
-  if (before === null || after === null) return "—";
-  const diff = after - before;
-  return `${diff >= 0 ? "+" : "−"}${fmtDuration(Math.abs(diff))}`;
+  // 표시된 두 시각(분:초)의 차(ST-09) — 「29:29 → 30:31 +1:03」(차 1:02)이 나가던 결함. 소유자는 `lib/format`.
+  return fmtDisplayDelta(before, after, "sec");
 }
 
-/** 부호 붙은 %p 차. */
-function fmtPpDelta(before: number, after: number, digits = 1): string {
-  const diff = (after - before) * 100;
-  return `${diff >= 0 ? "+" : "−"}${Math.abs(diff).toFixed(digits)}%p`;
+/** 부호 붙은 %p 차 — 표시된 두 퍼센트(소수 1자리)의 차(ST-09). */
+function fmtPpDelta(before: number, after: number): string {
+  return fmtDisplayDelta(before, after, "pp");
 }
 
 interface MapMetric {
@@ -296,7 +296,7 @@ export default function PubgMapDetail({
           <p className="px-5 pt-3 pb-5 text-xs text-muted">이 맵 안의 총 무기 획득 대비 점유율</p>
         </SectionCard>
 
-        <PubgFooter generatedAt={maps.deltas.meta.generatedAt} nVerdicts={bundle.deltas.meta.n} />
+        <PubgFooter generatedAt={maps.deltas.meta.generatedAt} nVerdicts={pubgVerdictCount(bundle.deltas.rows)} />
       </div>
     </Container>
     </main>

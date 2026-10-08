@@ -10,6 +10,8 @@
 // 그래서 두 표면이 **이 파일을 부르는 것 말고는 셀 방법이 없게** 한다. 판정 엔진·상태값은
 // 건드리지 않는다 — 세는 술어만 표시 계층의 것으로 고정한다.
 import type { DeltaRecord } from "../types";
+import type { PubgDeltaRow } from "../match/pubg-delta";
+import { isReportable as isPubgReportable } from "./pubg-status";
 import { isReportableRecord } from "./reportable";
 import { isGapStatus } from "./status-order";
 
@@ -40,4 +42,35 @@ export function countGapEntities(rows: readonly DeltaRecord[]): number {
     if (isGapStatus(row.status)) entities.add(`${row.entityType}:${row.entityKey}`);
   }
   return entities.size;
+}
+
+/**
+ * "공지된 대상 X개 중 유의한 관측이 선 것은 Y개"의 **Y** — 공지 짝(`matchedNoteIds`)이 있고 보고 자격을 얻은 행의
+ * **대상** 수(ST-06, 2026-10-08 site-review lol-S2·parity-S4).
+ *
+ * 왜 따로 두나: LoL 브리핑이 이 자리에 `countReportable`(전체 유의 행 수, 히어로 M)을 넣어 「19개 중 76개」처럼 부분이
+ * 전체보다 큰 문장을 내보냈다. TFT·PUBG는 각자 Set으로 세고 있어 세 게임이 세 가지 방식이었다 — 한 함수로 모은다.
+ */
+export function countAnnouncedObservedEntities(rows: readonly DeltaRecord[], qAlpha?: number): number {
+  const entities = new Set<string>();
+  for (const row of rows) {
+    if (row.matchedNoteIds.length === 0) continue;
+    if (!isReportableRecord(row, qAlpha)) continue;
+    entities.add(`${row.entityType}:${row.entityKey}`);
+  }
+  return entities.size;
+}
+
+/**
+ * 푸터 「판정 N건」의 N(ST-11, 2026-10-08) — `countReportable`과 **같은 술어**다. 이름이 따로 있는 이유: 전에는 TFT가
+ * 노이즈까지 전 행(232 대상 × 3 지표 = 696, 두 쌍이 같은 수)을, PUBG가 무기 수(47)를, LoL이 전 행(1931)을 넘겼다 —
+ * 같은 라벨이 게임마다 다른 것을 셌다. 푸터는 타일 「유의한 관측」과 같은 수를 말한다.
+ */
+export function verdictCount(rows: readonly DeltaRecord[], qAlpha?: number): number {
+  return countReportable(rows, qAlpha);
+}
+
+/** PUBG 푸터 — 행 타입이 다르지만 뜻은 같다(보고 자격을 얻은 판정 수). */
+export function pubgVerdictCount(rows: readonly PubgDeltaRow[]): number {
+  return rows.filter((row) => isPubgReportable(row.status)).length;
 }

@@ -22,7 +22,7 @@ import { useRowFocus } from "./useRowFocus";
 import type { DeltaRecord } from "@/pipeline/types";
 import { PANEL_SPLIT_BODY } from "@/lib/panelScroll";
 import type { LaneAxis } from "@/lib/lane";
-import { metricLabel, positionLabel } from "@/lib/format";
+import { fmtDisplayDelta, metricLabel, positionLabel } from "@/lib/format";
 import { lolEntityHref } from "@/lib/detailRoutes";
 import { usePairBase } from "@/components/PairBaseContext";
 import EntityIcon from "@/components/EntityIcon";
@@ -30,7 +30,6 @@ import LaneGlyph from "@/components/LaneGlyph";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineCell from "@/components/gamedata/SubmarineCell";
 import { formatMetricValue, metricKind } from "@/components/home/logic";
-import { fmtPp } from "@/lib/format";
 import { ENTITY_METRICS, type EntityCell, type EntityCompareRow, type EntityMetric } from "./entityRows";
 
 export interface DeltaTableProps {
@@ -62,7 +61,8 @@ function Observation({
   const up = delta > 0;
   const kind = metricKind(record.metric);
   // 이 표의 4개 지표는 전부 비율(pp)이다 — 다른 kind가 오면 formatMetricValue가 단위를 안다.
-  const deltaText = kind === "pp" ? fmtPp(delta) : String(delta);
+  // 델타는 바로 위에 보이는 두 끝값의 차다(ST-09) — 같은 「10.5% → 15.3%」 두 셀이 +4.8과 +4.7을 달던 결함.
+  const deltaText = kind === "pp" ? fmtDisplayDelta(record.before, record.after, "pp") : String(delta);
   return (
     <Link
       href={lolEntityHref(record, pairBase)}

@@ -9,7 +9,7 @@
 // 호출부는 그 자리에 아무것도 렌더하지 않는다(StatusBadge "짝지은 관측 없음"이 이미 상태를 말한다).
 
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
-import { metricLabel } from "@/lib/format";
+import { fmtQ, metricLabel } from "@/lib/format";
 import { meetsEffectFloor } from "@/pipeline/aggregate/stats";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { absDelta, isSignificantDelta } from "./logic";
@@ -118,7 +118,6 @@ export function buildNoteVerdict(
  * 읽는 사람이 쓸 수 없으므로 부등호로 바꾼다(항목 상세 게이트 표기와 같은 관례). `q===null`
  * (계산 불가)이면 표기 자체를 생략한다 — 없는 값을 0으로 쓰지 않는다. */
 export function formatQ(q: number | null): string | null {
-  if (q === null) return null;
-  if (q < 0.001) return "q<0.001";
-  return `q=${q.toFixed(3).replace(/0+$/, "").replace(/\.$/, "")}`;
+  // 형식의 소유자는 `lib/format.fmtQ`다(ST-09) — 상세 게이트 행과 같은 글자를 내야 한다.
+  return fmtQ(q);
 }

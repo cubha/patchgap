@@ -85,6 +85,39 @@ export function fmtDeltaInt(n: number): string {
   return `${sign(n)}${fmtInt(Math.abs(n))}`;
 }
 
+/**
+ * **표시된 두 끝값의 차**(ST-09, 2026-10-08 site-review lol-S20·pubg-S17).
+ *
+ * 원시 델타를 따로 반올림하면 끝값 표시와 어긋난다 — 대조표에서 쓰레쉬 「10.5% → 15.3%」 두 셀이 하나는 +4.8, 하나는
+ * +4.7을 달았고, 맵 상세는 「29:29 → 30:31 +1:03」(차 1:02)이었다. 읽는 사람은 끝값으로 검산한다. 그래서 끝값을 표시
+ * 정밀도로 먼저 반올림하고 그 차를 적는다. 0이면 부호를 붙이지 않는다(`+0.0%p`는 "올랐다"로 읽힌다). 한쪽이 없으면 "—".
+ * 통계(CI·q)는 원시 델타 기준 그대로다 — 이 함수는 **표기**만 맞춘다.
+ */
+export function fmtDisplayDelta(before: number | null, after: number | null, kind: DisplayMetricKind): string {
+  if (before === null || after === null) return "—";
+  if (kind === "pp") {
+    const d = Math.round((Number((after * 100).toFixed(1)) - Number((before * 100).toFixed(1))) * 10) / 10;
+    return `${sign(d)}${Math.abs(d).toFixed(1)}%p`;
+  }
+  if (kind === "sec") {
+    const d = Math.round(after) - Math.round(before);
+    return `${sign(d)}${fmtSec(Math.abs(d))}`;
+  }
+  const d = Math.round(after) - Math.round(before);
+  return `${sign(d)}${fmtInt(Math.abs(d))}`;
+}
+
+/**
+ * q 표기 — 한 형식(ST-09). 카드 「q<0.001」·LoL 상세 「0.000」·TFT 상세 「1.00e-3」 세 가지였다. 0.001 미만은 유효숫자를
+ * 더 찍어도 읽는 사람이 쓸 수 없으므로 부등호, 그 외는 소수 셋째 자리까지(끝 0은 뗀다). `null`은 null — 없는 값을 0으로
+ * 쓰지 않는다(호출부가 "—"든 생략이든 정한다).
+ */
+export function fmtQ(q: number | null): string | null {
+  if (q === null) return null;
+  if (q < 0.001) return "q<0.001";
+  return `q=${q.toFixed(3).replace(/0+$/, "").replace(/\.$/, "")}`;
+}
+
 /** ISO 8601(UTC) 문자열을 KST(UTC+9) "YYYY-MM-DD HH:mm KST"로. fmtKst("2026-09-05T05:00:00.000Z")
  * => "2026-09-05 14:00 KST". Intl.DateTimeFormat의 Asia/Seoul 타임존으로 실제 오프셋을
  * 계산한다(고정 +9 가산이 아님 — 서머타임 없는 KST라 동일하지만 실 오프셋 계산이 더 안전). */

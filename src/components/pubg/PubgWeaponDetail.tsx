@@ -37,6 +37,7 @@ import { weaponKeyFromSlug } from "@/lib/pubgRoutes";
 import { publicWeaponPath } from "@/pipeline/pubg/asset-path";
 import { weaponCategoryLabel } from "@/pipeline/aggregate/pubg-weapon-key";
 import ExternalLink from "@/components/ExternalLink";
+import { pubgVerdictCount } from "@/pipeline/shared/headline";
 
 /** PUBG 통계 게이트 행 — 이 게임 판정이 실제로 쓰는 것(획득 표본 하한 · 상대 변화 로그비 CI · 공지 밴드/자체 바닥).
  * BH-FDR을 쓰지 않으므로 q를 말하지 않는다(#74에서 바로잡은 「판정 엔진 게임 무관」 과장과 같은 이유). */
@@ -315,7 +316,7 @@ export default function PubgWeaponDetail({
           emptyText="보고할 관측이 없습니다."
         />
 
-        <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
+        <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={pubgVerdictCount(deltas.rows)} />
       </div>
     </Container>
     </main>

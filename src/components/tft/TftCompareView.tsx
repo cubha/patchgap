@@ -16,6 +16,7 @@ import { compareCrumbs } from "@/lib/breadcrumbs";
 import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
 import { tftDetailRows } from "@/lib/pairPages";
 import { PairBaseProvider } from "@/components/PairBaseContext";
+import { verdictCount } from "@/pipeline/shared/headline";
 
 export interface TftCompareViewProps {
   bundle: TftBundle | null;
@@ -106,7 +107,7 @@ export default function TftCompareView({ bundle, declaration, pairBase = null }:
           <TftSampleNotice boards={before.boards + after.boards} matches={before.matches + after.matches} />
         </div>
       </Container>
-      <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.rows.length} />
+      <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={verdictCount(deltas.rows, deltas.meta.qAlpha)} />
     </main>
   );
 }

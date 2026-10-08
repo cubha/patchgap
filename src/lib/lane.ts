@@ -36,6 +36,17 @@ export function parseLaneAxis(id: string): LaneAxis | null {
 }
 
 /**
+ * 챔피언 **전체(scope=all)** 행인가 — 3세그먼트 id. 다른 entityType은 이 구분이 없어 항상 true(동점 처리).
+ * 2026-10-08 `components/home/logic.ts`에서 이관(ST-08) — 카드 대표 선택(`noteDeltaIndex`)과 미리보기(`logic.ts`)가
+ * 같은 술어를 보게 하려고. 전체 행을 라인 행보다 앞세우는 이유: 상세의 기본 보기가 전체 행이라, 카드가 라인 값을
+ * 라벨 없이 보여 주면 상세 도착 값과 어긋난다(카직스 3.0→8.5 vs 3.3→8.6 실측).
+ */
+export function isAllScopeChampionRow(record: Pick<DeltaRecord, "id" | "entityType">): boolean {
+  if (record.entityType !== "champion") return true;
+  return record.id.split(":").length === 3;
+}
+
+/**
  * 주어진 `entityKey`가 가진 라인별(scope=position) 델타 행에서 실제 라인 집합을 도출한다 —
  * 홈 릴리즈노트 스트림의 라인 필터(HANDOFF-redesign-2026-09-10.md §4-1 "라인 필터 6종")가
  * 쓴다. 노트 항목 자체에는 라인 정보가 없으므로(ST-B releaseStream.ts는 entity 한글명만
