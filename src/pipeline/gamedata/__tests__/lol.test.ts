@@ -18,6 +18,34 @@ function notes(patch: string): NoteLike[] {
   return raw.items;
 }
 
+/** 스킬 수치(`spells.json`)까지 읽는 스냅숏 — effectBurn 대조가 필요한 회귀에서만 쓴다. */
+function snapshotWithSpells(version: string): DdragonSnapshot {
+  return {
+    ...snapshot(version),
+    spells: JSON.parse(readFileSync(`data/ddragon/${version}/spells.json`, "utf8")) as DdragonSnapshot["spells"],
+  };
+}
+
+// ST-01(2026-10-08 site-review lol-S1): 26.19 엘리스 패시브 공지 「12/22/32/42 ⇒ 14/24/34/44」가 DDragon에서는 R 스펠
+// effect[2]에 있다. 슬롯 매칭만으로는 "기본 지속 효과" 문구에 R이 없어 잠수함으로 오판됐고, 그 1건이 브리핑 Gap 36 vs
+// 대조표 미공지 35의 차이였다. 노트가 그 값을 적었으면 슬롯과 무관하게 공지다.
+describe("diffLol — 26.18 → 26.19 회귀 (실측 고정, ST-01)", () => {
+  const changes = diffLol(snapshotWithSpells("16.18.1"), snapshotWithSpells("16.19.1"), notes("26.19"), "26.19");
+
+  it("★ 엘리스 R 수치 12/22/32/42 → 14/24/34/44는 패시브 공지와 값이 같다 — 잠수함이 아니다", () => {
+    const elise = changes.find((c) => c.entityKey === "Elise" && c.fieldPath === "spells.3.effect.2");
+    expect(elise).toBeDefined();
+    expect([elise!.before, elise!.after]).toEqual(["12/22/32/42", "14/24/34/44"]);
+    expect(elise!.matchedNoteIds).toContain("note:26.19:champion:elise:c62534d2");
+    expect(isSubmarineChange(elise!)).toBe(false);
+  });
+
+  it("★ 26.19 잠수함은 0건이다 — 13건 전부 공지됐다", () => {
+    expect(changes.length).toBeGreaterThanOrEqual(13);
+    expect(changes.filter(isSubmarineChange)).toEqual([]);
+  });
+});
+
 describe("diffLol — 모드 스코프 게이트", () => {
   it("소환사의 협곡(maps.11)이 아닌 아이템은 애초에 후보가 아니다", () => {
     // 실측 2026-09-21: 칼바람 전용 아이템 4종(도미닉 경의 인사·필멸자의 운명 = maps 30,

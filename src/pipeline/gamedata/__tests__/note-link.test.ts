@@ -244,6 +244,75 @@ describe("noteValueMismatch — 공지했는데 값이 다르다", () => {
   });
 });
 
+// ST-01(2026-10-08 site-review lol-S1): 엘리스 패시브 「기본 지속 효과 적중 시 마법 피해량 12/22/32/42 ⇒ 14/24/34/44」가
+// DDragon에서는 **R 스펠의 effect**에 들어 있다. 슬롯(Q~R)으로만 맞추면 "기본 지속 효과" 문구에 R이 없어 잠수함이 된다 —
+// 같은 화면 위 구획이 공지라고 말한 값을 아래 구획이 잠수함이라고 말했다. 노트가 **그 값 자체**를 적었으면 어느 슬롯이든 공지다.
+describe("linkedNotes — 값 토큰 경로(ST-01)", () => {
+  const elisePassive: NoteLike = {
+    id: "note:elise-passive",
+    entity: "엘리스",
+    skill: "기본 지속 효과 - 거미 여왕",
+    stat: "기본 지속 효과 적중 시 마법 피해량",
+    before: "12/22/32/42",
+    after: "14/24/34/44",
+  };
+  const eliseW: NoteLike = {
+    id: "note:elise-w",
+    entity: "엘리스",
+    skill: "W - 광란의 질주",
+    stat: "추가 공격 속도",
+    before: "60/75/90/105/120%",
+    after: "70/85/100/115/130%",
+  };
+
+  it("★ 노트가 적은 값과 변경 값이 토큰열로 같으면 스킬 키가 달라도 `value` 경로로 걸린다", () => {
+    const linked = linkedNotes(
+      { entityName: "엘리스", fieldKeywords: [], skillKey: "R", value: { before: "12/22/32/42", after: "14/24/34/44" } },
+      [elisePassive, eliseW]
+    );
+    expect(linked.map((l) => [l.note.id, l.via])).toEqual([["note:elise-passive", "value"]]);
+  });
+
+  it("`%`·쉼표·공백 표기 차이는 무시한다 — 60/75/90/105/120% ↔ 60/75/90/105/120", () => {
+    const linked = linkedNotes(
+      { entityName: "엘리스", fieldKeywords: [], skillKey: "E", value: { before: "60/75/90/105/120", after: "70/85/100/115/130" } },
+      [eliseW]
+    );
+    expect(linked.map((l) => l.via)).toEqual(["value"]);
+  });
+
+  it("★ 단일 숫자는 값 경로로 걸지 않는다 — 「공격력 65 ⇒ 60」이 「방어력 65→60」의 알리바이가 되면 안 된다", () => {
+    const ad: NoteLike = { id: "n-ad", entity: "마스터 이", skill: null, stat: "기본 공격력", before: "65", after: "60" };
+    expect(linkedNotes({ entityName: "마스터 이", fieldKeywords: ["방어력"], value: { before: 65, after: 60 } }, [ad])).toEqual([]);
+  });
+
+  it("토큰 수가 같아도 값이 하나라도 다르면 안 걸린다", () => {
+    expect(
+      linkedNotes(
+        { entityName: "엘리스", fieldKeywords: [], skillKey: "R", value: { before: "12/22/32/42", after: "14/24/34/45" } },
+        [elisePassive]
+      )
+    ).toEqual([]);
+  });
+
+  it("엔티티가 다르면 값이 같아도 안 걸린다", () => {
+    expect(
+      linkedNotes(
+        { entityName: "카직스", fieldKeywords: [], skillKey: "R", value: { before: "12/22/32/42", after: "14/24/34/44" } },
+        [elisePassive]
+      )
+    ).toEqual([]);
+  });
+
+  it("값 경로로 걸린 노트는 값이 같다는 뜻이므로 불일치 후보가 아니다", () => {
+    const linked = linkedNotes(
+      { entityName: "엘리스", fieldKeywords: [], skillKey: "R", value: { before: "12/22/32/42", after: "14/24/34/44" } },
+      [elisePassive]
+    );
+    expect(noteValueMismatch(linked, "12/22/32/42", "14/24/34/44")).toBeNull();
+  });
+});
+
 // 이월 R9: TFT 「마나 조정 40/100 ⇒ 30/100」은 (시작/최대) 두 값이다 — 성분 번호로 골라 견준다.
 describe("noteValueMismatch — a/b 성분 대조(R9)", () => {
   const mana = (anchorUrl?: string): NoteLike => ({
