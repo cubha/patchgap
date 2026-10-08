@@ -8,11 +8,32 @@
       "from": "16.16.1",
       "to": "16.17.1"
     },
-    "generatedAt": "2026-09-21T01:08:44.416Z",
-    "changeCount": 17,
+    "generatedAt": "2026-10-08T08:13:24.172Z",
+    "changeCount": 22,
     "submarineCount": 1
   },
   "changes": [
+    {
+      "id": "gdc:lol:26.17:Ahri:stats.hpregenperlevel",
+      "entityKey": "Ahri",
+      "entityName": "아리",
+      "entityType": "champion",
+      "field": "기본 체력 재생 증가량",
+      "fieldPath": "stats.hpregenperlevel",
+      "before": 0.6,
+      "after": 0.6,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:26.17:champion:아리:a1938c18",
+        "note:26.17:champion:아리:e3768396"
+      ],
+      "noteMismatch": {
+        "noteId": "note:26.17:champion:아리:e3768396",
+        "noteBefore": "0.6",
+        "noteAfter": "0.45",
+        "unapplied": true
+      }
+    },
     {
       "id": "gdc:lol:26.17:AurelionSol:spells.0.costBurn",
       "entityKey": "AurelionSol",
@@ -57,6 +78,26 @@
       ]
     },
     {
+      "id": "gdc:lol:26.17:MissFortune:stats.movespeed",
+      "entityKey": "MissFortune",
+      "entityName": "미스 포츈",
+      "entityType": "champion",
+      "field": "기본 이동 속도",
+      "fieldPath": "stats.movespeed",
+      "before": 325,
+      "after": 325,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:26.17:champion:미스-포츈:bd82e946"
+      ],
+      "noteMismatch": {
+        "noteId": "note:26.17:champion:미스-포츈:bd82e946",
+        "noteBefore": "325",
+        "noteAfter": "335",
+        "unapplied": true
+      }
+    },
+    {
       "id": "gdc:lol:26.17:Nocturne:stats.armor",
       "entityKey": "Nocturne",
       "entityName": "녹턴",
@@ -83,6 +124,69 @@
       "matchedNoteIds": [
         "note:26.17:champion:nocturne:fd4d5d23"
       ]
+    },
+    {
+      "id": "gdc:lol:26.17:Tristana:stats.mpperlevel",
+      "entityKey": "Tristana",
+      "entityName": "트리스타나",
+      "entityType": "champion",
+      "field": "기본 마나 증가량",
+      "fieldPath": "stats.mpperlevel",
+      "before": 32,
+      "after": 32,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:26.17:champion:트리스타나:572a1487",
+        "note:26.17:champion:트리스타나:68545344"
+      ],
+      "noteMismatch": {
+        "noteId": "note:26.17:champion:트리스타나:572a1487",
+        "noteBefore": "32",
+        "noteAfter": "40",
+        "unapplied": true
+      }
+    },
+    {
+      "id": "gdc:lol:26.17:Tryndamere:stats.hpregenperlevel",
+      "entityKey": "Tryndamere",
+      "entityName": "트린다미어",
+      "entityType": "champion",
+      "field": "기본 체력 재생 증가량",
+      "fieldPath": "stats.hpregenperlevel",
+      "before": 0.9,
+      "after": 0.9,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:26.17:champion:트린다미어:c1102785",
+        "note:26.17:champion:트린다미어:e5c1842a"
+      ],
+      "noteMismatch": {
+        "noteId": "note:26.17:champion:트린다미어:e5c1842a",
+        "noteBefore": "0.9",
+        "noteAfter": "0.75",
+        "unapplied": true
+      }
+    },
+    {
+      "id": "gdc:lol:26.17:Twitch:stats.attackspeed",
+      "entityKey": "Twitch",
+      "entityName": "트위치",
+      "entityType": "champion",
+      "field": "기본 공격 속도",
+      "fieldPath": "stats.attackspeed",
+      "before": 0.679,
+      "after": 0.679,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:26.17:champion:트위치:64a7906a",
+        "note:26.17:champion:트위치:8757056b"
+      ],
+      "noteMismatch": {
+        "noteId": "note:26.17:champion:트위치:64a7906a",
+        "noteBefore": "0.679",
+        "noteAfter": "0.658",
+        "unapplied": true
+      }
     },
     {
       "id": "gdc:lol:26.17:Vayne:stats.attackspeedperlevel",

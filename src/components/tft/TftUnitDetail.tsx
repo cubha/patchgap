@@ -31,7 +31,7 @@ import { ALL_SEGMENT, groupObservations, resolveSelection } from "@/components/o
 import { TFT_METRICS, effectStrength } from "@/lib/tftEntityRows";
 import { TftFooter, TftUnavailable, deltaDisplay, formatMetricValue } from "@/components/tft/shared";
 import { entityTypeLabel, fmtInt, isLowerBetter, metricLabel, statusLabel } from "@/lib/format";
-import { loadGameDataDiff } from "@/lib/gamedata";
+import { delayedChangesFor, loadGameDataDiff } from "@/lib/gamedata";
 import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
 import { tftDetailRows } from "@/lib/pairPages";
 import { displayStatus } from "@/pipeline/shared/display-status";
@@ -273,6 +273,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
             <SubmarineDetailBlock
               changes={row.submarineChanges}
               mismatchChanges={row.mismatchChanges}
+              delayedChanges={delayedChangesFor(gameData, row.entityType, row.key.split(":")[1] ?? "")}
               source={gameData?.meta.source ?? null}
               notePatch={deltas.meta.to}
               patch={gameData ? { from: gameData.meta.from, to: gameData.meta.to } : null}

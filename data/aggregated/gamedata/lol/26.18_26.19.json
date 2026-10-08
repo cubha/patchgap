@@ -8,9 +8,9 @@
       "from": "16.18.1",
       "to": "16.19.1"
     },
-    "generatedAt": "2026-09-28T10:40:39.556Z",
-    "changeCount": 13,
-    "submarineCount": 1
+    "generatedAt": "2026-10-08T08:13:26.085Z",
+    "changeCount": 15,
+    "submarineCount": 0
   },
   "changes": [
     {
@@ -26,6 +26,47 @@
       "matchedNoteIds": [
         "note:26.19:champion:aatrox:5bc9f3f5"
       ]
+    },
+    {
+      "id": "gdc:lol:26.19:Aphelios:stats.hpperlevel",
+      "entityKey": "Aphelios",
+      "entityName": "아펠리오스",
+      "entityType": "champion",
+      "field": "기본 체력 증가량",
+      "fieldPath": "stats.hpperlevel",
+      "before": 102,
+      "after": 102,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:26.19:champion:aphelios:5a77f71f",
+        "note:26.19:other:아펠리오스:ba838b5e"
+      ],
+      "noteMismatch": {
+        "noteId": "note:26.19:other:아펠리오스:ba838b5e",
+        "noteBefore": "102",
+        "noteAfter": "114",
+        "unapplied": true
+      }
+    },
+    {
+      "id": "gdc:lol:26.19:Aphelios:stats.movespeed",
+      "entityKey": "Aphelios",
+      "entityName": "아펠리오스",
+      "entityType": "champion",
+      "field": "기본 이동 속도",
+      "fieldPath": "stats.movespeed",
+      "before": 325,
+      "after": 325,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:26.19:other:아펠리오스:ee4d2a26"
+      ],
+      "noteMismatch": {
+        "noteId": "note:26.19:other:아펠리오스:ee4d2a26",
+        "noteBefore": "325",
+        "noteAfter": "330",
+        "unapplied": true
+      }
     },
     {
       "id": "gdc:lol:26.19:Draven:stats.attackdamage",
@@ -51,7 +92,9 @@
       "before": "12/22/32/42",
       "after": "14/24/34/44",
       "relChange": null,
-      "matchedNoteIds": []
+      "matchedNoteIds": [
+        "note:26.19:champion:elise:c62534d2"
+      ]
     },
     {
       "id": "gdc:lol:26.19:Fiora:stats.hpperlevel",

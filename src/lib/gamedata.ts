@@ -8,8 +8,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { DATA_ROOT } from "@/pipeline/shared/paths";
 import type { GameDataChange, GameDataDiffFile } from "@/pipeline/gamedata/types";
-import { isNoteMismatchChange, isSubmarineChange } from "@/pipeline/gamedata/types";
+import { isDelayedChange, isNoteMismatchChange, isSubmarineChange } from "@/pipeline/gamedata/types";
 import {
+  buildDelayedIndexFromChanges,
   buildNoteMismatchIndexFromChanges,
   buildSubmarineIndexFromChanges,
   type SubmarineEntity,
@@ -45,6 +46,11 @@ export interface SubmarineSummary {
    * 세지 않는다 — 하나로 뭉치면 "말하지 않았다"와 "말했는데 틀렸다" 중 하나는 거짓말이 된다.
    */
   readonly mismatches: readonly SubmarineEntity[];
+  /**
+   * 직전 패치 노트가 먼저 말한 값이 이번에 반영된 대상(ST-02, 2026-10-08). 잠수함이 아니라 공지의 **늦은 반영**이다 —
+   * 잠수함 목록에서 빠지는 만큼 각주로 어디로 갔는지 말한다.
+   */
+  readonly delayed: readonly SubmarineEntity[];
   /** 검출된 수치 변경 전체(공지된 것 포함). 0건 증명 문장의 분모. */
   readonly changeCount: number;
   readonly source: GameDataDiffFile["meta"]["source"];
@@ -63,6 +69,7 @@ export function summarizeGameData(file: GameDataDiffFile | null): SubmarineSumma
     submarines,
     entities: buildSubmarineIndexFromChanges(submarines).entities(),
     mismatches: buildNoteMismatchIndexFromChanges(file.changes).entities(),
+    delayed: buildDelayedIndexFromChanges(file.changes).entities(),
     changeCount: file.meta.changeCount,
     source: file.meta.source,
     patch: { from: file.meta.from, to: file.meta.to },
@@ -83,6 +90,18 @@ export function submarineChangesFor(
   if (!file) return [];
   return file.changes.filter(
     (c) => isSubmarineChange(c) && c.entityType === entityType && c.entityKey === entityKey
+  );
+}
+
+/** 한 엔티티의 **지연 반영**만(ST-02). 상세 「패치노트 대조」 카드의 세 번째 구획이 쓴다. */
+export function delayedChangesFor(
+  file: GameDataDiffFile | null,
+  entityType: string,
+  entityKey: string
+): readonly GameDataChange[] {
+  if (!file) return [];
+  return file.changes.filter(
+    (c) => isDelayedChange(c) && c.entityType === entityType && c.entityKey === entityKey
   );
 }
 

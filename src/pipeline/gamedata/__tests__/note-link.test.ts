@@ -407,6 +407,20 @@ describe("unappliedNoteMismatch — 공지됐는데 게임 파일이 안 바뀜(
     expect(unappliedNoteMismatch(linked, 0.8)).toBeNull();
   });
 
+  it("★ 낱말이 섞인 표기(「체력 0% ⇒ 체력 5%」)는 견주지 않는다 — 그 0은 기본 치명타 0이 아니다(26.17 트린다미어 실측)", () => {
+    const passive: NoteLike = { id: "n:tryn", entity: "트린다미어", skill: null, stat: "기본 치명타", before: "체력 0%", after: "체력 5%" };
+    expect(unappliedNoteMismatch(linkedNotes({ entityName: "트린다미어", fieldKeywords: ["치명타"] }, [passive]), 0)).toBeNull();
+  });
+
+  it("★ `%` 노트는 비율형 값(≤1)에만 — 「공격력 40% ⇒ 35%」가 기본 공격력 40에 걸리면 안 된다(18.3 럭스 실측)", () => {
+    const ratio: NoteLike = { id: "n:lux", entity: "럭스", skill: null, stat: "공격력", before: "40%", after: "35%" };
+    const linked = linkedNotes({ entityName: "럭스", fieldKeywords: ["공격력"] }, [ratio]);
+    expect(unappliedNoteMismatch(linked, 40)).toBeNull();
+    // 반대로 「공격 속도 0.7% ⇒ 0.75%」(노트가 %를 잘못 붙인 실측)는 0.7에 걸린다.
+    const as: NoteLike = { id: "n:varus", entity: "바루스", skill: null, stat: "공격 속도", before: "0.7%", after: "0.75%" };
+    expect(unappliedNoteMismatch(linkedNotes({ entityName: "바루스", fieldKeywords: ["공격 속도"] }, [as]), 0.7)).toMatchObject({ unapplied: true });
+  });
+
   it("a/b 성분은 성분 번호로 견준다 · 중간 패치 표식을 단다", () => {
     const mana: NoteLike = {
       id: "n:mk", entity: "마오카이", skill: null, stat: "마나 조정", before: "40/100", after: "30/100",

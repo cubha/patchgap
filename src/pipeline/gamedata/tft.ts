@@ -11,7 +11,14 @@
 // 수십 건 허위로 생긴다.
 
 import { buildChange, type GameDataValue } from "./diff";
-import { linkedNotes, noteValueMismatch, type NoteLike } from "./note-link";
+import {
+  linkPriorNote,
+  linkedNotes,
+  noteValueMismatch,
+  unappliedNoteMismatch,
+  type NoteLike,
+  type PriorNotes,
+} from "./note-link";
 import type { GameDataChange } from "./types";
 
 export interface CdragonUnit {
@@ -123,7 +130,9 @@ export function diffTft(
   before: CdragonSnapshot,
   after: CdragonSnapshot,
   notes: readonly NoteLike[],
-  patch: string
+  patch: string,
+  /** 직전 패치 노트들(최근 먼저, ST-02) — 현재 노트에 짝이 없을 때만 본다. 없으면 종전 판정과 같다. */
+  priorNotes: readonly PriorNotes[] = []
 ): GameDataChange[] {
   const out: GameDataChange[] = [];
 
@@ -138,7 +147,8 @@ export function diffTft(
     keywords: readonly string[],
     component?: number
   ) => {
-    const linked = linkedNotes({ entityName, fieldKeywords: keywords }, notes);
+    const input = { entityName, fieldKeywords: keywords, value: { before: b, after: a } };
+    const linked = linkedNotes(input, notes);
     out.push(
       buildChange({
         game: "tft",
@@ -152,8 +162,55 @@ export function diffTft(
         after: a,
         matchedNoteIds: linked.map((l) => l.note.id),
         noteMismatch: noteValueMismatch(linked, b, a, component),
+        // 현재 노트에 없을 때만 직전 노트를 본다 — 짝이 있는 변경에 출처를 둘 달지 않는다.
+        priorNote: linked.length === 0 ? linkPriorNote(input, priorNotes, component) : null,
       })
     );
+  };
+
+  /**
+   * **안 바뀐** 필드의 「공지값 미반영」(ST-03) — 노트가 바꾼다고 했는데 파일이 그대로면 `before === after`인 행을 낸다.
+   * 변경 행이 없으면 화면 어디에도 안 나오기 때문이다(18.2 렝가·마스터 이 실측). 값이 바뀐 필드는 `push`가 맡는다.
+   */
+  const pushUnapplied = (
+    entityKey: string,
+    entityName: string,
+    entityType: string,
+    field: string,
+    fieldPath: string,
+    value: GameDataValue,
+    keywords: readonly string[],
+    component?: number
+  ) => {
+    const linked = linkedNotes({ entityName, fieldKeywords: keywords }, notes);
+    const mismatch = unappliedNoteMismatch(linked, value, component);
+    if (!mismatch) return;
+    out.push(
+      buildChange({
+        game: "tft",
+        patch,
+        entityKey,
+        entityName,
+        entityType,
+        field,
+        fieldPath,
+        before: value,
+        after: value,
+        matchedNoteIds: linked.map((l) => l.note.id),
+        noteMismatch: mismatch,
+      })
+    );
+  };
+
+  /** 노트가 뭐라 부르는지 모르는 수치(스킬 변수·사전 밖 아이템 효과) — 엔티티 언급 또는 값 자체로만 짝짓는다. */
+  const linkUnnamed = (entityName: string, b: GameDataValue, a: GameDataValue) => {
+    const input = { entityName, fieldKeywords: [], entityMatchSuffices: true, value: { before: b, after: a } };
+    const linked = linkedNotes(input, notes);
+    return {
+      matchedNoteIds: linked.map((l) => l.note.id),
+      // 직전 노트는 **값 자체가 같을 때만** 출처가 된다(`linkPriorNote`는 엔티티 언급을 출처로 받지 않는다).
+      priorNote: linked.length === 0 ? linkPriorNote(input, priorNotes) : null,
+    };
   };
 
   for (const key of Object.keys(after.units).sort()) {
@@ -165,15 +222,20 @@ export function diffTft(
 
     if (prev.cost !== next.cost) {
       push(key, name, "unit", "비용", "cost", prev.cost, next.cost, ["비용", "골드"]);
+    } else {
+      pushUnapplied(key, name, "unit", "비용", "cost", next.cost, ["비용", "골드"]);
     }
 
     for (const stat of Object.keys(next.stats).sort()) {
       const a = prev.stats[stat];
       const b = next.stats[stat];
       if (typeof a !== "number" || typeof b !== "number") continue;
-      if (sameNumber(a, b)) continue;
       const label = UNIT_STAT_LABELS[stat];
       if (!label) continue;
+      if (sameNumber(a, b)) {
+        pushUnapplied(key, name, "unit", label[0], `stats.${stat}`, b, label[1], MANA_COMPONENT[stat]);
+        continue;
+      }
       push(key, name, "unit", label[0], `stats.${stat}`, a, b, label[1], MANA_COMPONENT[stat]);
     }
 
@@ -199,10 +261,7 @@ export function diffTft(
           after: b,
           // `entityMatchSuffices` 경로는 노트가 이 수치를 뭐라 부르는지 모른다는 뜻이라
           // 값을 견줄 수 없다 — 불일치 판정도 하지 않는다(`noteValueMismatch` 규약).
-          matchedNoteIds: linkedNotes(
-            { entityName: name, fieldKeywords: [], entityMatchSuffices: true },
-            notes
-          ).map((l) => l.note.id),
+          ...linkUnnamed(name, a, b),
         })
       );
     }
@@ -242,10 +301,7 @@ export function diffTft(
           after: b,
           // `entityMatchSuffices` 경로는 노트가 이 수치를 뭐라 부르는지 모른다는 뜻이라
           // 값을 견줄 수 없다 — 불일치 판정도 하지 않는다(`noteValueMismatch` 규약).
-          matchedNoteIds: linkedNotes(
-            { entityName: name, fieldKeywords: [], entityMatchSuffices: true },
-            notes
-          ).map((l) => l.note.id),
+          ...linkUnnamed(name, a, b),
         })
       );
     }

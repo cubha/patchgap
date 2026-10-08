@@ -28,7 +28,7 @@ import { ALL_SEGMENT } from "@/components/observation/observationModel";
 import { ANNOUNCED_RATIO_BAND, PICKUP_MIN_N, pubgNotesAsPatchNotes, type PubgDeltaRow } from "@/pipeline/match/pubg-delta";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
-import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
+import { delayedChangesFor, loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import PubgDetailSplash from "@/components/pubg/PubgDetailSplash";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { isReportable, loadPubgAssets, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
@@ -112,6 +112,8 @@ export default function PubgWeaponDetail({
   // 수치 축(F9) — PUBG는 게임사가 수치 파일을 배포하지 않아 텔레메트리 피해 격자를 대조한다.
   const gameData = loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to);
   const submarineChanges = submarineChangesFor(gameData, "weapon", weaponKey);
+  // PUBG 어댑터는 직전 노트를 보지 않아 지금은 비어 있다 — 공용 블록의 계약을 그대로 따른다.
+  const delayedChanges = delayedChangesFor(gameData, "weapon", weaponKey);
   const mismatchChanges = noteMismatchChangesFor(gameData, "weapon", weaponKey);
 
   // 자산 유무를 **빌드 타임에** 판정한다 — 없는 무기가 실제로 9종 있다(RPD 포함).
@@ -298,6 +300,7 @@ export default function PubgWeaponDetail({
           <SubmarineDetailBlock
             changes={submarineChanges}
             mismatchChanges={mismatchChanges}
+            delayedChanges={delayedChanges}
             source={gameData?.meta.source ?? null}
             notePatch={deltas.meta.to}
             patch={gameData ? { from: gameData.meta.from, to: gameData.meta.to } : null}

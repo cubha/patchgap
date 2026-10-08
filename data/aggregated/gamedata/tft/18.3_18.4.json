@@ -8,9 +8,9 @@
       "from": "16.19",
       "to": "16.20"
     },
-    "generatedAt": "2026-10-07T12:46:26.255Z",
-    "changeCount": 5,
-    "submarineCount": 3
+    "generatedAt": "2026-10-08T08:13:28.344Z",
+    "changeCount": 8,
+    "submarineCount": 1
   },
   "changes": [
     {
@@ -40,6 +40,46 @@
       "matchedNoteIds": []
     },
     {
+      "id": "gdc:tft:18.4:DA_18_Hecarim:stats.initialMana",
+      "entityKey": "DA_18_Hecarim",
+      "entityName": "헤카림",
+      "entityType": "unit",
+      "field": "시작 마나",
+      "fieldPath": "stats.initialMana",
+      "before": 30,
+      "after": 30,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:tft:18.4:champion:헤카림:2271f07d"
+      ],
+      "noteMismatch": {
+        "noteId": "note:tft:18.4:champion:헤카림:2271f07d",
+        "noteBefore": "30",
+        "noteAfter": "50",
+        "unapplied": true
+      }
+    },
+    {
+      "id": "gdc:tft:18.4:DA_18_Lux_Elderwood:stats.mana",
+      "entityKey": "DA_18_Lux_Elderwood",
+      "entityName": "럭스 (나무정령)",
+      "entityType": "unit",
+      "field": "최대 마나",
+      "fieldPath": "stats.mana",
+      "before": 70,
+      "after": 70,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:tft:18.4:system:나무정령:593f9490"
+      ],
+      "noteMismatch": {
+        "noteId": "note:tft:18.4:system:나무정령:593f9490",
+        "noteBefore": "70",
+        "noteAfter": "60",
+        "unapplied": true
+      }
+    },
+    {
       "id": "gdc:tft:18.4:DA_18_Maokai:stats.mana",
       "entityKey": "DA_18_Maokai",
       "entityName": "마오카이",
@@ -49,7 +89,11 @@
       "before": 90,
       "after": 100,
       "relChange": 0.1111111111111111,
-      "matchedNoteIds": []
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.2:champion:마오카이:d7ea1995",
+        "patch": "18.2"
+      }
     },
     {
       "id": "gdc:tft:18.4:DA_18_MasterYi_AD:stats.damage",
@@ -61,7 +105,31 @@
       "before": 62,
       "after": 60,
       "relChange": -0.03225806451612903,
-      "matchedNoteIds": []
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.2:champion:마스터-이:7f03951b",
+        "patch": "18.2"
+      }
+    },
+    {
+      "id": "gdc:tft:18.4:DA_18_Varus:stats.attackSpeed",
+      "entityKey": "DA_18_Varus",
+      "entityName": "바루스",
+      "entityType": "unit",
+      "field": "공격 속도",
+      "fieldPath": "stats.attackSpeed",
+      "before": 0.699999988079071,
+      "after": 0.699999988079071,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:tft:18.4:champion:바루스:7d8e7f60"
+      ],
+      "noteMismatch": {
+        "noteId": "note:tft:18.4:champion:바루스:7d8e7f60",
+        "noteBefore": "0.7%",
+        "noteAfter": "0.75%",
+        "unapplied": true
+      }
     },
     {
       "id": "gdc:tft:18.4:DA_Stealthy18:effects.NumChampions",

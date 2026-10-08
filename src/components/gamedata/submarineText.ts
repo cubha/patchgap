@@ -72,7 +72,12 @@ export interface MismatchLine extends SubmarineLine {
   readonly noteAfter: string;
   /** 어긋난 노트가 중간 패치 절의 것(R9) — 화면은 출처 이름을 바꾸고 사유 한 줄을 붙인다. */
   readonly midpatch: boolean;
+  /** 노트는 바꾼다고 했는데 파일이 그대로(ST-03) — `before === after`. 화면은 「게임 파일 미반영」을 덧붙인다. */
+  readonly unapplied: boolean;
 }
+
+/** 미반영의 사유(ST-03) — 「노트가 틀렸다」가 아니라 **아직 안 실렸다**일 수 있다(한두 패치 뒤 지연 반영으로 나타난 실측). */
+export const UNAPPLIED_MISMATCH_CAVEAT = "노트는 바꾼다고 했지만 이 게임 파일에는 아직 반영되지 않았습니다";
 
 /**
  * 중간 패치 불일치의 사유(2026-09-28, 이월 R9). 「노트가 틀렸다」가 아니다 — 중간 패치 핫픽스는 게임 파일에
@@ -82,7 +87,8 @@ export const MIDPATCH_MISMATCH_CAVEAT = "중간 패치 값은 게임 파일에 �
 
 /** 노트 쪽 값 한 줄 — 중간 패치면 출처 이름을 「중간 패치」로 바꾼다. */
 export function mismatchNoteText(line: MismatchLine, source: "노트" | "패치노트"): string {
-  return `${line.midpatch ? "중간 패치" : source} ${line.noteBefore} ⇒ ${line.noteAfter}`;
+  const head = `${line.midpatch ? "중간 패치" : source} ${line.noteBefore} ⇒ ${line.noteAfter}`;
+  return line.unapplied ? `${head} · 게임 파일 미반영` : head;
 }
 
 /**
@@ -107,6 +113,36 @@ export function mismatchCellLines(changes: readonly GameDataChange[]): readonly 
       noteBefore: mismatch.noteBefore,
       noteAfter: mismatch.noteAfter,
       midpatch: mismatch.midpatch === true,
+      unapplied: mismatch.unapplied === true,
+    });
+  }
+  return out;
+}
+
+/** 「지연 반영」 한 줄 — 어느 패치 노트가 먼저 말했는지가 곧 근거다. */
+export interface DelayedLine extends SubmarineLine {
+  /** 그 값을 먼저 말한 노트의 패치(`18.2`). */
+  readonly notePatch: string;
+}
+
+/**
+ * 지연 반영의 사유(ST-02, 2026-10-08). 「잠수함」도 「노트가 틀렸다」도 아니다 — 공지된 값이 게임 파일에 한두 패치 늦게
+ * 실린 것이다(TFT 18.2 노트 → 16.19·16.20 반영 실측). 원인(노트의 중간 패치 소급 반영 vs 단계적 반영)은 미확정이라
+ * 어느 쪽이라고 말하지 않는다.
+ */
+export const DELAYED_CAVEAT = "이전 패치노트가 공지한 값이 이번 게임 파일에 반영된 것입니다 — 미공지 변경이 아닙니다";
+
+/** 지연 반영도 접지 않는다 — 불일치와 같은 이유(갈 곳 없는 약속을 만들지 않는다). */
+export function delayedCellLines(changes: readonly GameDataChange[]): readonly DelayedLine[] {
+  const out: DelayedLine[] = [];
+  for (const change of changes) {
+    const prior = change.priorNote;
+    if (!prior) continue;
+    out.push({
+      field: change.field,
+      before: gameDataValue(change.before),
+      after: gameDataValue(change.after),
+      notePatch: prior.patch,
     });
   }
   return out;

@@ -40,7 +40,7 @@ import EntityIcon from "@/components/EntityIcon";
 import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
-import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
+import { delayedChangesFor, loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import { DISPLAY_SORT_PRIORITY, displayStatus, isNoiseStatus } from "@/pipeline/shared/display-status";
 import { loadChampions, loadDeltas, loadDeltasRaw, loadItems, loadNotes, type PatchPair } from "@/lib/data";
 import { entityTypeLabel, fmtInt, itemIdFromSlug } from "@/lib/format";
@@ -232,6 +232,7 @@ export default function LolItemDetail({ id, pairs, pairBase = null }: LolItemDet
   // 수치 축(F9) — 이 대상에서 **게임사가 바꿨는데 말하지 않은 것**. 지표 축(위 판정)과 직교한다.
   const gameData = loadGameDataDiff("lol", pair.from, pair.to);
   const submarineChanges = submarineChangesFor(gameData, head.entityType, head.entityKey);
+  const delayedChanges = delayedChangesFor(gameData, head.entityType, head.entityKey);
   const mismatchChanges = noteMismatchChangesFor(gameData, head.entityType, head.entityKey);
   const rawDeltas = loadDeltasRaw(pair.from, pair.to);
   const hash = rawDeltas ? snapshotHash(rawDeltas) : undefined;
@@ -348,6 +349,7 @@ export default function LolItemDetail({ id, pairs, pairBase = null }: LolItemDet
             <SubmarineDetailBlock
               changes={submarineChanges}
               mismatchChanges={mismatchChanges}
+              delayedChanges={delayedChanges}
               source={gameData?.meta.source ?? null}
               notePatch={pair.to}
               patch={gameData ? { from: gameData.meta.from, to: gameData.meta.to } : null}

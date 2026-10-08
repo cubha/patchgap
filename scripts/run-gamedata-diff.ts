@@ -31,8 +31,9 @@ import {
 import { comparisonWindows } from "../src/pipeline/collect/pubg/patch-calendar";
 import { loadPubgWindows } from "./shared/calendar";
 import { diffTft, type CdragonSnapshot } from "../src/pipeline/gamedata/tft";
-import { isSubmarineChange, type GameDataDiffFile } from "../src/pipeline/gamedata/types";
-import type { NoteLike } from "../src/pipeline/gamedata/note-link";
+import { isDelayedChange, isSubmarineChange, type GameDataChange, type GameDataDiffFile } from "../src/pipeline/gamedata/types";
+import type { NoteLike, PriorNotes } from "../src/pipeline/gamedata/note-link";
+import { comparePatchId } from "../src/pipeline/collect/calendar-overlay";
 import { isMainModule, parseCliArgs } from "./shared/cli";
 import {
   recordedVersionOf,
@@ -74,6 +75,28 @@ function loadNotes(dataRoot: string, game: string, patch: string): NoteLike[] {
       : join(dataRoot, "aggregated", game, `notes-${patch}.json`);
   const parsed = readJson<{ items?: NoteLike[] } | NoteLike[]>(path);
   return Array.isArray(parsed) ? parsed : (parsed.items ?? []);
+}
+
+/**
+ * 직전 패치 노트를 몇 개까지 볼 것인가(ST-02). 실측 최대 거리는 2(18.2 노트 → 18.4 반영: 마오카이·마스터 이).
+ * 너무 멀리 보면 우연히 옛 값으로 돌아온 변경을 "공지"로 읽을 수 있어 3에서 끊는다.
+ */
+const PRIOR_NOTE_PATCHES = 3;
+
+/**
+ * `to` 이전 패치의 노트들, **최근 먼저**(ST-02, 2026-10-08). 게임 파일은 공지보다 한두 패치 늦게 바뀌기도 한다 —
+ * 현재 노트만 보면 그 반영이 잠수함으로 찍힌다(렝가·덩굴정령·마오카이·마스터 이 실측).
+ */
+function loadPriorNotes(dataRoot: string, game: string, to: string): PriorNotes[] {
+  const dir = game === "lol" ? join(dataRoot, "aggregated", "notes") : join(dataRoot, "aggregated", game);
+  if (!existsSync(dir)) return [];
+  const pattern = game === "lol" ? /^(\d+\.\d+)\.json$/ : /^notes-(\d+\.\d+)\.json$/;
+  const patches = readdirSync(dir)
+    .map((file) => pattern.exec(file)?.[1])
+    .filter((patch): patch is string => patch !== undefined && comparePatchId(patch, to) < 0)
+    .sort((a, b) => comparePatchId(b, a))
+    .slice(0, PRIOR_NOTE_PATCHES);
+  return patches.map((patch) => ({ patch, notes: loadNotes(dataRoot, game, patch) }));
 }
 
 interface ReducedMatchFile {
@@ -212,12 +235,14 @@ function runTft(dataRoot: string, from: string, to: string, vFrom: string, vTo: 
     ...readJson<Omit<CdragonSnapshot, "version">>(join(dataRoot, "cdragon", version, "tft.json")),
   });
   const notes = loadNotes(dataRoot, "tft", to);
-  const changes = diffTft(load(vFrom), load(vTo), notes, to);
+  const prior = loadPriorNotes(dataRoot, "tft", to);
+  const changes = diffTft(load(vFrom), load(vTo), notes, to, prior);
   const submarines = changes.filter(isSubmarineChange);
 
   console.log(
-    `[gamedata] tft ${from} → ${to} · CDragon ${vFrom} → ${vTo} · 노트 ${notes.length}건`
+    `[gamedata] tft ${from} → ${to} · CDragon ${vFrom} → ${vTo} · 노트 ${notes.length}건 · 직전 노트 ${prior.map((p) => p.patch).join(",") || "없음"}`
   );
+  logDelayed(changes);
   console.log(`[gamedata] 수치 변경 ${changes.length}건 · 그중 노트에 없는 것 ${submarines.length}건`);
   for (const s of submarines.slice(0, 10)) {
     console.log(`[gamedata]   ★ ${s.entityName} ${s.field}: ${s.before} → ${s.after}`);
@@ -249,6 +274,16 @@ function assertVersionPair(game: string, from: string, to: string): void {
       `run-gamedata-diff: ${game} 전/후 버전이 같다(${from}) — ` +
         "스냅숏이 아직 이번 패치 버전으로 갱신되지 않았다. 잠시 뒤 다시 돌리거나 --version-to로 직접 준다"
     );
+  }
+}
+
+/** 지연 반영은 잠수함 목록에서 빠지므로 로그가 따로 말한다 — 조용히 사라진 것이 아니라 자리를 옮긴 것이다. */
+function logDelayed(changes: readonly GameDataChange[]): void {
+  const delayed = changes.filter(isDelayedChange);
+  if (delayed.length === 0) return;
+  console.log(`[gamedata] 지연 반영 ${delayed.length}건 — 직전 노트가 먼저 말한 값`);
+  for (const d of delayed) {
+    console.log(`[gamedata]   ↺ ${d.entityName} ${d.field}: ${d.before} → ${d.after} (${d.priorNote!.patch} 노트)`);
   }
 }
 
@@ -302,17 +337,19 @@ async function main(): Promise<void> {
   const before = loadDdragon(dataRoot, versionFrom);
   const after = loadDdragon(dataRoot, versionTo);
   const notes = loadNotes(dataRoot, game, to);
+  const prior = loadPriorNotes(dataRoot, game, to);
 
   const spellCoverage = Object.keys(after.spells).length;
   console.log(
-    `[gamedata] ${game} ${from} → ${to} · DDragon ${versionFrom} → ${versionTo} · 노트 ${notes.length}건 · 스킬 수치 ${spellCoverage}종`
+    `[gamedata] ${game} ${from} → ${to} · DDragon ${versionFrom} → ${versionTo} · 노트 ${notes.length}건 · 스킬 수치 ${spellCoverage}종 · 직전 노트 ${prior.map((p) => p.patch).join(",") || "없음"}`
   );
   if (spellCoverage === 0) {
     console.log("[gamedata] ::warning:: 스킬 수치 미보존 — 기본 능력치·아이템만 대조한다(ST-4 참고)");
   }
 
-  const changes = diffLol(before, after, notes, to);
+  const changes = diffLol(before, after, notes, to, prior);
   const submarines = changes.filter(isSubmarineChange);
+  logDelayed(changes);
 
   const file: GameDataDiffFile = {
     meta: {
