@@ -11,7 +11,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 
 import CompareSplit from "@/components/compare/CompareSplit";
 import CompareToolbar from "@/components/compare/CompareToolbar";
@@ -47,6 +47,8 @@ import type { DisplayStatus } from "@/pipeline/shared/display-status";
 export interface PubgCompareExplorerProps {
   rows: PubgDeltaRow[];
   notes: PubgNoteItem[];
+  /** 표 아래 커버리지 블록(ST-18) — 서버가 만들어 넘긴다(세 게임 공용 `CoverageSection`). */
+  coverage?: ReactNode;
   fromLabel: string;
   toLabel: string;
   /**
@@ -76,6 +78,7 @@ function byEntityKey(changes: readonly GameDataChange[]): Map<string, GameDataCh
 export default function PubgCompareExplorer({
   rows,
   notes,
+  coverage,
   fromLabel,
   toLabel,
   assetKeys = [],
@@ -168,6 +171,7 @@ export default function PubgCompareExplorer({
       <CompareSplit
         title="선언 ↔ 관측"
         meta={`${visible.length}개 대상`}
+        coverage={coverage}
         nav={
           <NoteNavPanel
             groups={visibleNav}

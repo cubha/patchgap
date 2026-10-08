@@ -14,7 +14,7 @@
 import type { DeltaRecord } from "@/pipeline/types";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
-import { isAllScopeChampionRow } from "@/lib/lane";
+import { isAllScopeChampionRow, parseLaneAxis, type LaneAxis } from "@/lib/lane";
 
 // 자격 술어는 shared/reportable.ts 한 곳(라운드6 scope-critic ST2 — 세 곳 중복 제거).
 const reportable = isReportableRecord;
@@ -56,6 +56,24 @@ export function indexNoteDeltaRows(
     }
   }
   return index;
+}
+
+/**
+ * 선택한 라인의 카드 대표(ST-19, 2026-10-08). 전체(`all`)면 모든 행에서 `better` 규칙(자격 → 상태 → scope=all → |Δ|), 라인이면
+ * **그 라인 행만** 후보다 — 다른 라인 값을 그 라인 값인 척 보이지 않는다(없으면 null). 자격 없는 행뿐이면 그 행을 돌려준다 —
+ * 카드가 짝을 잃지 않게(`indexNoteDeltas`와 같은 태도).
+ */
+export function representativeForLane(
+  rows: readonly DeltaRecord[],
+  lane: LaneAxis,
+  qAlpha?: number
+): DeltaRecord | null {
+  const candidates = lane === "all" ? rows : rows.filter((row) => parseLaneAxis(row.id) === lane);
+  let best: DeltaRecord | null = null;
+  for (const row of candidates) {
+    if (!best || better(row, best, qAlpha)) best = row;
+  }
+  return best;
 }
 
 export function indexNoteDeltas(

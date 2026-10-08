@@ -23,7 +23,10 @@ import { tftEntityRows } from "@/lib/tftEntityRows";
 import { entityTypeLabel, metricLabel } from "@/lib/format";
 import { tftGapTotal, tftMetricGapRows } from "@/lib/gapTotals";
 import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
-import DeclarationOnly from "@/components/DeclarationOnly";
+import { DeclarationHero, DeclarationNotesCard, declarationEntityCount } from "@/components/DeclarationOnly";
+import { pairSectionLink } from "@/lib/pairRoutes";
+import { latestObservedTftPair } from "@/lib/tftData";
+import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
@@ -350,19 +353,51 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
  */
 function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
   const submarine = summarizeGameData(loadGameDataDiff("tft", declaration.from, declaration.to));
+  const notes = declaration.notes.items.map((n) => ({ id: n.id, group: n.entity, summary: n.summary, anchorUrl: n.anchorUrl }));
+  // 관측이 있는 최신 쌍으로 가는 길(ST-16) — 전에는 헤더 select뿐이었다.
+  const observed = latestObservedTftPair();
+  const observedLink = observed ? pairSectionLink("tft", observed.pair, observed.isLatest, "", "브리핑") : null;
+  // 수치 축은 관측과 무관하게 실재한다(게임 파일 대조) — Gap 탭 배지는 그 대상 수.
+  const numericGap = tftGapTotal([], 0, submarine);
   return (
     <main>
       <Container>
-        <DeclarationOnly
-          from={declaration.from}
-          to={declaration.to}
-          failure={declaration.failure}
-          notes={declaration.notes.items.map((n) => ({ id: n.id, group: n.entity, summary: n.summary, anchorUrl: n.anchorUrl }))}
-          // 관측 없는 쌍엔 상세 라우트가 없다 — 링크 없이 이름만 그린다.
-          extra={submarine ? <SubmarineSection summary={submarine} hrefOf={() => null} /> : null}
-        />
-        <TftFooter generatedAt={declaration.generatedAt} nVerdicts={0} />
+        {/* 관측 전에도 **골격은 같다**(ST-16, §8-1 · site-review parity-S2): 히어로 → 3타일(관측 칸은 「—」) → 탭(패치 내용 /
+            미공지 Gap) + 디스코드 사이드 → 푸터. 전에는 1컬럼에 노트 목록만 있어 게임을 바꿔 들어온 사람이 다른 사이트처럼 읽었다. */}
+        <div className="flex flex-col gap-6 pt-40 pb-8">
+          <DeclarationHero from={declaration.from} to={declaration.to} notes={notes} failure={declaration.failure} observed={observedLink} />
+          <StatTiles
+            announcedCount={declarationEntityCount(notes)}
+            patch={declaration.to}
+            itemCount={notes.length}
+            significantCount={null}
+            gapCount={null}
+            game="tft"
+          />
+          <BriefingTabs
+            contentCount={notes.length}
+            gapCount={numericGap}
+            content={<DeclarationNotesCard to={declaration.to} notes={notes} variant="embedded" />}
+            gap={
+              <div>
+                {/* 관측 없는 쌍엔 상세 라우트가 없다 — 링크 없이 이름만 그린다. */}
+                {submarine ? (
+                  <div className="border-b border-border-soft p-5">
+                    <SubmarineSection summary={submarine} hrefOf={() => null} />
+                  </div>
+                ) : null}
+                <SectionCard eyebrow="발견 · 지표 축" title="패치노트에 없는데 움직인 것" variant="embedded">
+                  <p role="status" data-observation={declaration.failure.reason} className="p-5 text-sm leading-relaxed text-muted">
+                    {observationReasonLabel(declaration.failure.reason)}
+                  </p>
+                </SectionCard>
+              </div>
+            }
+            aside={<DiscordPanel game="tft" generatedAt={declaration.generatedAt} />}
+          />
+        </div>
       </Container>
+      <TftFooter generatedAt={declaration.generatedAt} nVerdicts={0} />
     </main>
   );
 }

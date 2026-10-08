@@ -12,6 +12,7 @@
 import Link from "next/link";
 
 import Container from "@/components/Container";
+import type { ObservedPairLink } from "@/components/ObservationPendingNotice";
 import PageHeader from "@/components/PageHeader";
 import EntityIcon from "@/components/EntityIcon";
 import AmbientDetailSplash from "@/components/item/AmbientDetailSplash";
@@ -51,6 +52,8 @@ export interface TftUnitDetailProps {
   declaration: TftDeclaration | null;
   /** 과거 쌍 화면이면 그 기준 경로(`/tft/history/{쌍}`) — 이동 경로가 그 쌍 안에 머문다. */
   pairBase?: string | null;
+  /** 관측 전일 때 관측이 있는 최신 쌍으로 가는 링크(ST-16). */
+  observed?: ObservedPairLink | null;
 }
 
 /**
@@ -78,13 +81,15 @@ function tftGateRows(record: DeltaRecord): { label: string; value: string }[] {
   return gate;
 }
 
-export default function TftUnitDetail({ slug, bundle, declaration, pairBase = null }: TftUnitDetailProps) {
+export default function TftUnitDetail({ slug, bundle, declaration, pairBase = null, observed = null }: TftUnitDetailProps) {
   if (!bundle) {
+    // 관측 전에도 골격(이동 경로·푸터)과 관측이 있는 쌍으로 가는 링크를 유지한다(ST-16).
     return (
       <main>
         <Container>
-          <TftUnavailable failure={declaration?.failure} />
+          <TftUnavailable failure={declaration?.failure} crumbs={detailCrumbs("tft", "관측 전", pairBase)} observed={observed} />
         </Container>
+        {declaration ? <TftFooter generatedAt={declaration.generatedAt} nVerdicts={0} /> : null}
       </main>
     );
   }

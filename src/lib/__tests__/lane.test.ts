@@ -7,8 +7,10 @@ import { describe, expect, it } from "vitest";
 import { lanesForEntityKey, parseLaneAxis } from "../lane";
 import type { DeltaRecord } from "@/pipeline/types";
 
-function stubRecord(id: string, entityKey: string): Pick<DeltaRecord, "id" | "entityKey"> {
-  return { id, entityKey };
+// ST-19(2026-10-08): `lanesForEntityKey`가 보고 자격을 보므로 전체 행이 필요하다 — 기존 케이스는 **자격 있는** 행으로 그대로 둔다
+// (라인 도출 규칙 자체는 바뀌지 않았다).
+function stubRecord(id: string, entityKey: string): DeltaRecord {
+  return fullRecord(id, { entityKey });
 }
 
 function fullRecord(id: string, overrides: Partial<DeltaRecord> = {}): DeltaRecord {

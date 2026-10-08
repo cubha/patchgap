@@ -103,6 +103,8 @@ export default function PubgWeaponDetail({
 
   const row = deltas.rows.find((r) => r.weaponKey === weaponKey) ?? null;
   const note = row?.matchedNoteId ? (notes.find((n) => n.id === row.matchedNoteId) ?? null) : null;
+  // 이 무기를 말한 조항 전부 — 대조표 좌 내비와 같은 집합(`matchedNoteIds`). 대표(`note`)는 머리 문장에만 쓴다.
+  const mentionedNotes = row ? notes.filter((n) => row.matchedNoteIds.includes(n.id)) : [];
   // 원인 문장이 인용한 노트 — 엔진과 **같은 변환**을 써야 id가 맞는다(사본 금지).
   const notesById = new Map(
     pubgNotesAsPatchNotes(notes, (key) => deltas.rows.find((r) => r.weaponKey === key)?.weaponName ?? null).map(
@@ -269,7 +271,7 @@ export default function PubgWeaponDetail({
           variant="glass"
           action={
             <span className="font-mono text-xs text-muted">
-              말한 것 {note ? 1 : 0} · 말하지 않은 것 {submarineChanges.length}
+              말한 것 {mentionedNotes.length} · 말하지 않은 것 {submarineChanges.length}
               {mismatchChanges.length > 0 ? ` · 값이 다른 것 ${mismatchChanges.length}` : ""}
             </span>
           }
@@ -278,18 +280,25 @@ export default function PubgWeaponDetail({
             <span className="h-1.5 w-1.5 rounded-pill bg-muted" aria-hidden="true" />
             <h3 className="font-body text-xs font-bold tracking-wide text-muted">패치노트가 말한 것</h3>
           </div>
-          {note ? (
-            <div className="flex flex-col gap-1 px-5 pb-4">
-              <span className="text-sm text-fg-2">{note.summary}</span>
-              {row?.evidence.noteAnchor ? (
-                <ExternalLink
-                  href={row.evidence.noteAnchor}
-                  className="w-fit font-mono text-xs text-accent hover:underline"
-                >
-                  원문 ↗
-                </ExternalLink>
-              ) : null}
-            </div>
+          {mentionedNotes.length > 0 ? (
+            // **이 무기를 말한 조항 전부**(ST-21, site-review pubg-S3) — 전에는 대표 노트 1줄만 실어 대조표(RPD 4줄)와 어긋났다.
+            // 기대값이 없는 조항(조준 전환·반동·차량 피해)은 이 데이터로 측정할 수 없어 회색으로, 사유와 함께.
+            <ul className="flex flex-col gap-2 px-5 pb-4">
+              {mentionedNotes.map((n) => {
+                const measurable = n.expectedRelChange !== null;
+                return (
+                  <li key={n.id} className="flex flex-col gap-0.5">
+                    <span className={`text-sm ${measurable ? "text-fg-2" : "text-muted"}`}>
+                      {n.summary}
+                      {measurable ? null : <span className="ml-2 font-mono text-xs text-muted">이 데이터로 측정 불가</span>}
+                    </span>
+                    <ExternalLink href={n.anchorUrl} className="w-fit font-mono text-xs text-accent hover:underline">
+                      원문 ↗
+                    </ExternalLink>
+                  </li>
+                );
+              })}
+            </ul>
           ) : (
             <p className="px-5 pb-4 text-sm text-muted">
               {deltas.meta.to} 패치노트에 이 무기를 언급한 항목이 없습니다.

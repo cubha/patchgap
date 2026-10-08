@@ -34,6 +34,7 @@
 
 import { useMemo, useState, type ReactNode } from "react";
 import type { DeltaRecord, LanePosition } from "@/pipeline/types";
+import { representativeForLane } from "./noteDeltaIndex";
 import { useAmbient } from "@/components/AmbientContext";
 import { panelSurfaceClass } from "@/lib/panelSurface";
 import ReleaseNoteRow from "./ReleaseNoteRow";
@@ -185,13 +186,33 @@ export default function ReleaseNoteStream({
     [laneFiltered, tab]
   );
 
+  // 라인을 고르면 카드의 대표 관측도 **그 라인 행**이다(ST-19, site-review lol-S6) — 전에는 목록만 걸러지고 값은 전체·정글
+  // 행이 그대로 남아 "탑을 골랐는데 정글 값"이 보였다. 방법론 「라인을 고르면 그 라인의 픽률·승률만 봅니다」의 화면 쪽.
+  const laneDeltas = useMemo(() => {
+    if (selectedLane === "all" || !noteDeltaRows) return noteDeltas;
+    const out: Record<string, DeltaRecord> = {};
+    for (const [noteId, rows] of Object.entries(noteDeltaRows)) {
+      const rep = representativeForLane(rows, selectedLane, qAlpha);
+      if (rep) out[noteId] = rep;
+    }
+    return out;
+  }, [noteDeltas, noteDeltaRows, selectedLane, qAlpha]);
+
+  // 탭 배지도 거른 뒤의 줄 수를 말한다 — 전체면 서버가 센 수(기타 변경 포함), 라인이면 그 라인에 남은 카드 줄 수.
+  const laneContentCount = useMemo(() => {
+    if (selectedLane === "all") return contentCount;
+    return laneFiltered
+      .filter((entry) => tabForGroup(entry.group) === "content")
+      .reduce((sum, entry) => sum + (entry.group.kind === "matched" ? entry.group.notes.length : 0), 0);
+  }, [selectedLane, contentCount, laneFiltered]);
+
   const renderRow = (entry: ReleaseStreamEntry) => (
     <ReleaseNoteRow
       key={groupKey(entry.group)}
       group={entry.group}
       icon={entry.icon}
       spellIcons={spellIcons}
-      noteDeltas={noteDeltas}
+      noteDeltas={laneDeltas}
       noteDeltaRows={noteDeltaRows}
       patch={patch}
       qAlpha={qAlpha}
@@ -213,7 +234,7 @@ export default function ReleaseNoteStream({
       <BriefingTabBar
         tab={tab}
         onSelect={setTab}
-        contentCount={contentCount}
+        contentCount={laneContentCount}
         gapCount={gapCount}
         className="flex gap-2 border-b border-border-soft px-5 pt-4"
       />

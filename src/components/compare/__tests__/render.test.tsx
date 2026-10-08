@@ -224,7 +224,8 @@ describe("CoverageBar — 전부 0", () => {
         stats={{ noteEntityCount: 0, noteItemCount: 0, matchedCount: 0, unannouncedCount: 0, lowSampleCount: 0, belowThresholdCount: 0, indirectEffectCount: 0, gapEntityCount: 0 }}
       />
     );
-    expect(container.textContent).toContain("노트 0엔티티(0항목) 중 관측 짝 0");
+    // ST-18(2026-10-08 명세 변경): 커버리지는 세 게임 공용 `CoverageSection` — 어휘도 사용자 말(「대상」)로 통일됐다.
+    expect(container.textContent).toContain("노트 0대상(0항목) 중 관측 짝 0");
     expect(container.textContent).not.toContain("표본 부족");
     expect(container.textContent).not.toContain("바닥 미달");
   });
@@ -240,7 +241,7 @@ describe("CompareExplorer — 통합", () => {
     expect(container.querySelectorAll("[aria-pressed]")).toHaveLength(10);
     expect(container.querySelector('[aria-label="라인 필터"]')).not.toBeNull();
     expect(container.textContent).toContain("표시할 델타가 없습니다");
-    expect(container.textContent).toContain("노트 0엔티티(0항목)");
+    expect(container.textContent).toContain("노트 0대상(0항목)");
   });
 
   it("내비 묶음을 클릭하면 표의 그 엔티티 행이 포커스되고, 표에 없는 엔티티면 머리 1줄로 말한다", () => {

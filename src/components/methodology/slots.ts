@@ -49,3 +49,14 @@ export function slotDef(key: MethodologySlotKey) {
   if (!hit) throw new Error(`slotDef: 등록되지 않은 슬롯 ${key}`);
   return hit;
 }
+
+/**
+ * 9슬롯 전부를 같은 사유로 비운다(ST-15, 2026-10-08) — 관측 쌍이 하나도 없어 방법론이 말할 표본·판정이 없을 때. 골격(이동
+ * 경로·9슬롯·푸터)은 유지하고 칸마다 그 사유를 적는다 — 전에는 한 줄짜리 빈 화면이었다(site-review parity-S1·S3).
+ */
+export function allUnusedSlots(reason: string): Record<MethodologySlotKey, UnusedAxis> {
+  return Object.fromEntries(METHODOLOGY_SLOTS.map((slot) => [slot.key, { unused: reason }])) as Record<
+    MethodologySlotKey,
+    UnusedAxis
+  >;
+}

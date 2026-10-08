@@ -83,3 +83,5 @@
 - `src/components/compare/__tests__/render.test.tsx` 「▼ −10.8%p」 → 「▼ −10.9%p」(ST-09: 델타 = 표시된 끝값 55.4%→44.5%의 차).
 - 범위 이관: `lol-S21`(카드 「N개 항목」 vs 내비 「N줄」)은 틀린 수가 아니라 **다른 단위·다른 라벨**(카드 = 펼치면 나오는 줄 수, 2026-09-23 화면 대조 V2 계약 · 내비 = 노트 줄) → 트랙 B1. ST-13은 수행하지 않는다.
 - 태그 조정: ST-07 `[TDD]` 해제(한 줄 전달 — 3-AND (c) 불충족).
+- `src/components/compare/__tests__/render.test.tsx` 「노트 0엔티티(0항목)」 → 「노트 0대상(0항목)」(ST-18: 커버리지가 공용 `CoverageSection`으로 바뀌며 어휘가 사용자 말 「대상」으로 통일 — parity-S16의 일부가 함께 닫힘).
+- `src/components/observation/__tests__/observationModel.test.ts` — 판정 파일 필터를 `{from}_{to}.json` 패턴으로(사전 결함: 로컬 `*.notify.json`을 순회해 `rows is not iterable`). 테스트 약화 아님.

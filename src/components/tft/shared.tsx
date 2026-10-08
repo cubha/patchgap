@@ -3,10 +3,12 @@
 // TFT는 `DeltaRecord`를 그대로 내므로 `isReportableRecord`·`displayStatus`·
 // `STATUS_SORT_PRIORITY`가 전부 그냥 걸린다. TFT 전용 술어를 만들지 않는다.
 
+import ObservationPendingNotice, { type ObservedPairLink } from "@/components/ObservationPendingNotice";
+import PageHeader from "@/components/PageHeader";
 import SiteFooter from "@/components/SiteFooter";
+import type { Crumb } from "@/lib/breadcrumbs";
 import { fmtPlacement, formatTftMetricValue, isLowerBetter } from "@/lib/format";
 import type { DeltaMetric } from "@/pipeline/types";
-import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
 import type { ObservationFailure } from "@/pipeline/types";
 import { formatPercent, formatSignedPercent, SIGNED_POINT } from "@/pipeline/shared/percent";
 
@@ -49,14 +51,30 @@ export function TftSampleNotice({ boards, matches }: { boards: number; matches: 
  * TFT 화면을 못 그릴 때. `failure`가 있으면 **관측만 없는** 상태다(C13·C14) — 최신 쌍의 패치노트는
  * 홈에 반영돼 있으므로 「미연결」이 아니라 관측 사유를 회색으로 말한다(한 문구가 두 상태를 덮지 않게).
  */
-export function TftUnavailable({ failure }: { failure?: ObservationFailure | null } = {}) {
+export function TftUnavailable({
+  failure,
+  crumbs = null,
+  observed = null,
+}: {
+  failure?: ObservationFailure | null;
+  /** 이동 경로(ST-16) — 관측 전 화면도 골격(브리핑 › 대조표)을 잃지 않는다. */
+  crumbs?: readonly Crumb[] | null;
+  /** 관측이 있는 최신 쌍의 같은 섹션으로 가는 링크(ST-16). */
+  observed?: ObservedPairLink | null;
+} = {}) {
   if (failure) {
     return (
-      <div className="flex flex-col gap-3 pt-40 pb-8">
-        <h1 className="font-display text-3xl font-bold text-fg">전략적 팀 전투 — 관측 전</h1>
-        <p role="status" data-observation={failure.reason} className="max-w-2xl text-sm leading-relaxed text-muted">
-          {observationReasonLabel(failure.reason)} 이 화면은 관측이 있어야 채워집니다 — 패치노트는 TFT 홈에서 볼 수 있습니다.
-        </p>
+      <div className="flex flex-col gap-6 pt-40 pb-8">
+        {crumbs ? (
+          <PageHeader
+            crumbs={crumbs}
+            title="전략적 팀 전투 — 관측 전"
+            lead="이 화면은 관측이 있어야 채워집니다. 최신 패치노트는 TFT 브리핑이 먼저 반영했습니다."
+          />
+        ) : (
+          <h1 className="font-display text-3xl font-bold text-fg">전략적 팀 전투 — 관측 전</h1>
+        )}
+        <ObservationPendingNotice failure={failure} observed={observed} className="max-w-2xl" />
       </div>
     );
   }

@@ -23,7 +23,10 @@ export interface CompareSplitProps {
 
 export default function CompareSplit({ nav, title, meta, children, coverage, notice }: CompareSplitProps) {
   return (
-    <div className={`grid grid-cols-1 gap-6 lg:grid-cols-[320px_1fr] ${PANEL_SPLIT_HEIGHT}`}>
+    // `minmax(0,1fr)` — `1fr`은 `minmax(auto,1fr)`이라 표의 최소 너비만큼 트랙이 늘어나고 section의 overflow-hidden이
+    // 판정 열을 잘랐다(ST-25, site-review parity-S15·lol-S8: 1280px 기본 상태에서 판정 열이 화면 밖). `StreamColumnLayout`이
+    // 같은 이유로 이미 쓰는 값이다.
+    <div className={`grid grid-cols-1 gap-6 lg:grid-cols-[320px_minmax(0,1fr)] ${PANEL_SPLIT_HEIGHT}`}>
       {nav}
       <section className={`${panelSurfaceClass("glass")} ${PANEL_SPLIT_COLUMN} overflow-hidden rounded-lg`}>
         <div className="panel-head-wash flex items-center justify-between gap-4 border-b border-border-soft px-5 py-5">

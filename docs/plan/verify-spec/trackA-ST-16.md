@@ -1,0 +1,7 @@
+### VERIFY-SPEC — SubTask ST-16 (관측 전 화면 골격)
+- 기준선 요구사항: "`TftUnavailable`·`PubgUnavailable`에 `observedHref` 링크 + `PageHeader` + 푸터. `DeclarationOnly` 배너에도 같은 링크. `TftDeclarationView`: 3타일(공지 N · — · —)·2컬럼(디스코드 사이드)·탭 자리(패치 내용 = 노트 목록 · 미공지 Gap = 수치 축 + '지표 축 관측 전')" (PLAN ST-16 · 리뷰 parity-S2·S3·tft-S6)
+- 변경 파일: `src/components/tft/shared.tsx`(수정 — `TftUnavailable` crumbs·observed) · `TftBriefing.tsx`(수정 — `TftDeclarationView` 골격) · `TftCompareView.tsx`·`src/app/tft/compare/page.tsx`(수정) · `TftUnitDetail.tsx`(수정) · `src/components/DeclarationOnly.tsx`(재작성 — `DeclarationHero`·`DeclarationNotesCard` 분리) · `src/components/StatTiles.tsx`(수정 — null → 「—」) · `ObservationPendingNotice.tsx`(신규)
+- 관찰 가능한 계약: `/tft/`(stub)가 히어로 → 3타일(공지 N · — · —, Gap 타일은 링크 없음) → 탭(패치 내용 N / 미공지 Gap = 수치 축 대상 수) + 디스코드 사이드 → 푸터. 배너·대조표·상세 stub에 `data-observed-link` 링크(18.2 → 18.3). 대조표·상세 stub에 이동 경로와 푸터.
+- 구현 결정: Gap 타일을 `null`(「—」)로 둔 이유 — 수치 축 발견은 실재하지만 랜딩 TFT 카드(`73 / — / —`)와 같은 모양을 지켜야 하고, 링크 착지(대조표)가 관측 전이라 보낼 곳이 없다. 수치 축 대상 수는 탭 배지에만. `PubgUnavailable`은 손대지 않았다(관측 쌍이 없어 링크를 만들 수 없고, 현재 도달 불가 상태) — PLAN의 "PubgUnavailable에 observedHref"는 **미수행**(사유: 줄 곳이 없다).
+- 인접 경계: `screen-parity` 브리핑 블록 순서 검사는 첫 `return (`만 보므로 영향 없음. `declaration-only.test.tsx`의 기존 단언(노트 보임·배너·대조표 「관측 전」)은 유지되는지 Phase 3에서 확인. `StatTiles` 호출부(LoL·PUBG·TFT)는 숫자 전달 그대로.
+- 미확인 사항: ① 캡처로 2컬럼 배치를 보지 않았다(`--ui` 미지정). ② `declaration-only.test`에 방법론·상세 케이스를 아직 추가하지 않았다 — Phase 3 결과를 보고 추가.

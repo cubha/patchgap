@@ -79,7 +79,8 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
     byGame: {
       lol: "픽률 · 밴률",
       pubg: "무기 획득 점유율 (설계: 초반 교전 사용률)",
-      tft: "등장률 — 분모가 매치가 아니라 **보드(참가자)**입니다. 한 보드에 여러 유닛이 서므로 제로섬이 아닙니다",
+      // 이 표는 평문으로 렌더된다 — 마크다운 강조(`**`)를 쓰면 별표가 그대로 화면에 나간다(site-review lol-S24 실측, ST-24).
+      tft: "등장률 — 분모가 매치가 아니라 보드(참가자)입니다. 한 보드에 여러 유닛이 서므로 제로섬이 아닙니다",
     },
     iface: "DeltaMetric (LoL·TFT)",
   },
@@ -88,7 +89,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
     byGame: {
       lol: "승률 (n≥200 게이트)",
       pubg: "(설계) 순위 · 생존 시간",
-      tft: "순방률(상위 4등, n≥200 게이트) · 평균 등수 — 평균 등수만 **작을수록 개선**이라 방향이 반대입니다",
+      tft: "순방률(상위 4등, n≥200 게이트) · 평균 등수 — 평균 등수만 작을수록 개선이라 방향이 반대입니다",
     },
     iface: "DeltaMetric (LoL·TFT)",
   },

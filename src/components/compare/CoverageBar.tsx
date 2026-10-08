@@ -1,27 +1,25 @@
 // src/components/compare/CoverageBar.tsx
-// 하단 커버리지 바 — 프로토타입 `.summary-bar` 1:1(docs/design/prototype/02-comparison-table.html).
-// 순수 렌더(상태 없음) — 부모(CompareExplorer)가 필터/검색과 무관하게 전체 델타 기준으로
-// 미리 계산한 수치를 그대로 받는다(ST-11.md "구현 결정" 참고 — 프로토타입의 값도 현재 필터와
-// 무관한 고정 총계다).
+// LoL 대조표 커버리지 — 2026-10-08(ST-18)부터 **세 게임 공용 `CoverageSection`**의 얇은 어댑터다. `CoverageStats`(LoL 집계)를
+// 공용 블록의 네 수로 옮길 뿐, 문구·모양은 `CoverageSection`이 소유한다(전에는 LoL만 표 바닥 한 줄이라 브리핑이 가리키는
+// "대조표 아래 커버리지"가 게임마다 다른 모양이었다 — site-review parity-S14).
+//
+// 2026-09-18 라운드6(사용자 C5·C1): 미공지 = `unannounced` + `indirect-effect`(같은 뿌리) 한 숫자. 표본 부족·바닥 미달은 표에
+// 올리지 않으므로 여기서도 세지 않는다 — 방법론이 그 규칙을 말한다. 단위는 **엔티티**(재판정 보완 4).
 
-import { fmtInt } from "@/lib/format";
 import type { CoverageStats } from "./logic";
+import CoverageSection from "./CoverageSection";
 
 export interface CoverageBarProps {
   stats: CoverageStats;
 }
 
 export default function CoverageBar({ stats }: CoverageBarProps) {
-  // 2026-09-18 라운드6(사용자 C5·C1): 미공지 = `unannounced` + `indirect-effect`(같은 뿌리) 한 숫자.
-  // 표본 부족·바닥 미달은 표에 올리지 않으므로 여기서도 세지 않는다 — 방법론이 그 규칙을 말한다.
-  // 단위는 **엔티티**(재판정 보완 4) — 표의 행·히어로 타일과 같은 수가 나온다.
-  const gapCount = stats.gapEntityCount;
   return (
-    <div className="border-t border-border-soft px-5 py-4 text-sm text-muted">
-      노트 <strong className="font-bold text-fg">{fmtInt(stats.noteEntityCount)}</strong>엔티티(
-      <strong className="font-bold text-fg">{fmtInt(stats.noteItemCount)}</strong>항목) 중 관측 짝{" "}
-      <strong className="font-bold text-fg">{fmtInt(stats.matchedCount)}</strong> · 미공지{" "}
-      <strong className="font-bold text-fg">{fmtInt(gapCount)}</strong>
-    </div>
+    <CoverageSection
+      noteEntities={stats.noteEntityCount}
+      noteItems={stats.noteItemCount}
+      matched={stats.matchedCount}
+      gap={stats.gapEntityCount}
+    />
   );
 }

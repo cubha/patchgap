@@ -1,13 +1,15 @@
 // src/app/tft/methodology/page.tsx
 // TFT 방법론 — **한계를 먼저 적는다**. 이 프로젝트가 반복해서 지켜온 규칙이고,
 // 특히 TFT는 수집 첫날이라 밝힐 것이 많다.
-import Container from "@/components/Container";
 import ExternalLink from "@/components/ExternalLink";
 import MethodologyLayout, { type MethodologySlots } from "@/components/methodology/MethodologyLayout";
 import { computeLlmCauseStats, dominantConfidence } from "@/components/methodology/llmStats";
+import ObservationPendingNotice from "@/components/ObservationPendingNotice";
+import { allUnusedSlots } from "@/components/methodology/slots";
 import { TftUnavailable } from "@/components/tft/shared";
 import { fmtKst } from "@/lib/format";
-import { loadTft, loadTftDeclaration } from "@/lib/tftData";
+import { pairSectionLink } from "@/lib/pairRoutes";
+import { latestObservedTftPair, loadTft, loadTftDeclaration } from "@/lib/tftData";
 import { verdictCount } from "@/pipeline/shared/headline";
 
 export const metadata = { title: "TFT 방법론 — patchgap" };
@@ -21,17 +23,43 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   );
 }
 
+const TFT_TITLE = "전략적 팀 전투 — 어떻게 판정하나";
+const TFT_LEAD = (
+  <>
+    판정 엔진은 LoL·배틀그라운드와 <strong className="text-fg">같은 것</strong>입니다. 갈리는
+    것은 무엇을 관측하느냐뿐입니다.
+  </>
+);
+
 export default function TftMethodologyPage() {
-  const bundle = loadTft();
+  // 방법론은 **판정 규칙**이라 관측 여부와 무관하게 9슬롯을 보여야 한다(ST-15, site-review tft-S7·parity-S1). 최신 쌍이
+  // 관측 stub이면 관측이 있는 최신 쌍의 번들로 표본·판정 칸을 채우고, 그 사실을 머리 아래에서 말한다. 전에는 과거 쌍
+  // 화면의 「판정 규칙 보기」까지 전부 한 줄짜리 「관측 전」으로 떨어졌다.
+  const latest = loadTft();
+  const observed = latest ? null : latestObservedTftPair();
+  const bundle = latest ?? (observed ? loadTft(observed.pair) : null);
+  const declaration = latest ? null : loadTftDeclaration();
   if (!bundle) {
     return (
-      <main>
-        <Container>
-          <TftUnavailable failure={loadTftDeclaration()?.failure} />
-        </Container>
-      </main>
+      <MethodologyLayout
+        game="tft"
+        title={TFT_TITLE}
+        lead={TFT_LEAD}
+        notice={declaration ? <ObservationPendingNotice failure={declaration.failure} /> : <TftUnavailable />}
+        slots={allUnusedSlots("관측이 있는 쌍이 아직 없어 표본·판정을 말할 수 없습니다. 판정 규칙은 LoL·배틀그라운드와 같습니다.")}
+        generatedAt={declaration?.generatedAt ?? null}
+        nVerdicts={null}
+      />
     );
   }
+  const pendingNotice =
+    declaration && observed ? (
+      <ObservationPendingNotice
+        failure={declaration.failure}
+        basis={`아래 표본·판정 수치는 관측이 있는 최신 쌍 ${observed.pair.from} → ${observed.pair.to} 기준입니다.`}
+        observed={pairSectionLink("tft", observed.pair, observed.isLatest, "", "브리핑")}
+      />
+    ) : undefined;
   const { deltas, before, after, notes } = bundle;
   const resolveRate = notes.stats.lines === 0 ? 0 : (notes.items.length / notes.stats.lines) * 100;
 
@@ -327,13 +355,9 @@ export default function TftMethodologyPage() {
   return (
     <MethodologyLayout
       game="tft"
-      title="전략적 팀 전투 — 어떻게 판정하나"
-      lead={
-        <>
-          판정 엔진은 LoL·배틀그라운드와 <strong className="text-fg">같은 것</strong>입니다. 갈리는
-          것은 무엇을 관측하느냐뿐입니다.
-        </>
-      }
+      title={TFT_TITLE}
+      lead={TFT_LEAD}
+      notice={pendingNotice}
       slots={slots}
       generatedAt={deltas.meta.generatedAt}
       nVerdicts={verdictCount(deltas.rows, deltas.meta.qAlpha)}

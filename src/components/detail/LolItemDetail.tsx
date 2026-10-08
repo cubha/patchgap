@@ -43,7 +43,8 @@ import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { delayedChangesFor, loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import { DISPLAY_SORT_PRIORITY, displayStatus, isNoiseStatus } from "@/pipeline/shared/display-status";
 import { loadChampions, loadDeltas, loadDeltasRaw, loadItems, loadNotes, type PatchPair } from "@/lib/data";
-import { entityTypeLabel, fmtInt, fmtQ, itemIdFromSlug } from "@/lib/format";
+import { entityTypeLabel, fmtInt, fmtQ, itemIdFromSlug, itemSlug } from "@/lib/format";
+import { pairBasePath } from "@/lib/pairRoutes";
 import { WIN_RATE_MIN_N } from "@/pipeline/aggregate/stats";
 import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import { loadDdragonSafe } from "@/pipeline/match/ddragon";
@@ -75,10 +76,18 @@ import { verdictCount } from "@/pipeline/shared/headline";
 export interface LolItemDetailProps {
   /** 라우트 파라미터 그대로(정준 `champion~Ahri` · 구 지표 별칭 · `_placeholder`). */
   id: string;
-  /** 이 화면이 볼 패치 쌍(최신 우선). 평소 상세는 전 쌍, 과거 쌍 상세는 그 쌍 하나. */
+  /**
+   * 이 화면이 볼 패치 쌍(최신 우선). **평소 주소는 최신 쌍 하나**(ST-20, 2026-10-08 site-review lol-S11 — 전에는 전 쌍을 훑어
+   * 현재 쌍 주소에 과거 쌍 데이터가 패치 선택기도 없이 떴다), 과거 쌍 상세는 그 쌍 하나.
+   */
   pairs: readonly PatchPair[];
   /** 과거 쌍 화면이면 그 기준 경로(`/lol/history/{쌍}`) — 이동 경로가 그 쌍 안에 머문다. */
   pairBase?: string | null;
+  /**
+   * 이 쌍에 없을 때 안내할 **다른 쌍**(ST-20) — 별칭·옛 링크로 들어온 사람에게 그 대상이 실재하는 과거 쌍 상세를 가리킨다.
+   * 디스코드로 나간 `/lol/item/…` 링크가 404 대신 여기 착지하므로 이 안내가 그 링크의 생명줄이다.
+   */
+  otherPairs?: readonly PatchPair[];
 }
 
 interface FoundEntity {
@@ -164,13 +173,29 @@ function headRow(found: FoundEntity): DeltaRecord {
   )[0];
 }
 
-function EmptyState() {
+function EmptyState({ elsewhere = [] }: { elsewhere?: readonly { pair: PatchPair; href: string }[] }) {
   return (
     <div className="flex flex-1 flex-col">
       {/* 직전 페이지가 챔피언 상세였다면 배경에 남은 스플래시를 지운다. */}
       <AmbientDetailSplash url={null} />
-      <main className="flex flex-1 items-center justify-center py-24 text-sm text-muted">
-        표시할 항목 데이터가 없습니다.
+      <main className="flex flex-1 flex-col items-center justify-center gap-4 py-24 text-sm text-muted">
+        {elsewhere.length > 0 ? (
+          // 이 쌍엔 판정이 없지만 다른 쌍엔 있다(ST-20) — 현재 쌍 주소에 옛 데이터를 그리는 대신 그 쌍으로 보낸다.
+          <>
+            <p>이 패치 쌍에는 이 대상의 판정이 없습니다. 판정이 있는 쌍:</p>
+            <ul className="flex flex-wrap gap-3" data-elsewhere="">
+              {elsewhere.map(({ pair, href }) => (
+                <li key={`${pair.from}-${pair.to}`}>
+                  <Link href={href} className="rounded-pill border border-border-soft px-4 py-2 font-bold text-fg hover:border-accent hover:text-accent">
+                    {pair.from} → {pair.to} 상세 →
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <p>표시할 항목 데이터가 없습니다.</p>
+        )}
       </main>
     </div>
   );
@@ -204,12 +229,22 @@ function deltaCiCaption(row: DeltaRecord, perPatchBars: boolean): string {
   return `Δ 95% CI ${range} · 오차 막대: ${perPatchBars ? "패치별 95% CI" : "변화량 CI"}`;
 }
 
-export default function LolItemDetail({ id, pairs, pairBase = null }: LolItemDetailProps) {
+export default function LolItemDetail({ id, pairs, pairBase = null, otherPairs = [] }: LolItemDetailProps) {
   const rawId = id === "_placeholder" ? null : decodeIdParam(id);
   const found = rawId ? findEntity(rawId, pairs) : null;
 
   if (!rawId || !found) {
-    return <EmptyState />;
+    // 이 쌍에 없으면 **다른 쌍에서 실재하는 곳**만 가리킨다(ST-20) — 없는 링크를 만들지 않는다.
+    const elsewhere = rawId
+      ? otherPairs
+          .filter((pair) => findEntity(rawId, [pair]) !== null)
+          .map((pair) => {
+            const segments = rawId.split(":");
+            const key = segments.length <= 2 ? rawId : `${segments[0]}:${segments[1]}`;
+            return { pair, href: `${pairBasePath("lol", pair)}/item/${itemSlug(key)}/` };
+          })
+      : [];
+    return <EmptyState elsewhere={elsewhere} />;
   }
 
   const { pair, rows, model, generatedAt, qAlpha, pairVerdicts } = found;

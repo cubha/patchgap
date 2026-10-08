@@ -5,12 +5,16 @@
 // 수집 워크플로가 관측 stub 판정 파일(`meta.observationFailed`)을 쓰고, 로더가 그것을 이 화면으로 보낸다.
 // 결정 8 「선언 축은 항상 최신」의 화면 쪽 짝이다 — 전에는 이 상태에서 새 노트가 화면에 **안 나왔다**.
 //
-// **무엇을 안 그리나.** 판정·타일·표본 숫자. 관측이 없으므로 0이 아니라 **없음**이다 — 0으로 그리면
+// **무엇을 안 그리나.** 판정·표본 숫자. 관측이 없으므로 0이 아니라 **없음**이다 — 0으로 그리면
 // 「통계는 0개 변화를 말합니다」가 관측된 사실처럼 읽힌다. 관측 영역은 회색 사유 한 줄로 대신한다.
+//
+// 2026-10-08(ST-16, site-review parity-S2·tft-S6): 머리(`DeclarationHero`)와 노트 카드(`DeclarationNotesCard`)를 나눠
+// 내보낸다 — 게임 홈이 그 사이에 3타일·탭·사이드 **골격**을 유지한 채 끼울 수 있게. 배너는 관측이 있는 최신 쌍으로 가는
+// 링크를 단다(전에는 "TFT 홈에서 볼 수 있습니다"라는 링크 아닌 문장뿐이었다).
 import type { ReactNode } from "react";
 import ExternalLink from "@/components/ExternalLink";
+import ObservationPendingNotice, { type ObservedPairLink } from "@/components/ObservationPendingNotice";
 import SectionCard from "@/components/SectionCard";
-import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
 import type { ObservationFailure } from "@/pipeline/types";
 
 export interface DeclarationNote {
@@ -21,32 +25,41 @@ export interface DeclarationNote {
   anchorUrl: string;
 }
 
-export interface DeclarationOnlyProps {
-  from: string;
-  to: string;
-  notes: readonly DeclarationNote[];
-  failure: ObservationFailure;
-  /** 선언 축의 다른 조각(수치 축 F9 등) — 있으면 노트 아래에 그린다. */
-  extra?: ReactNode;
-}
-
-export default function DeclarationOnly({ from, to, notes, failure, extra }: DeclarationOnlyProps) {
+/** 노트를 대상별로 묶는다 — 머리의 「N개 항목」(대상 수)과 카드의 묶음이 같은 함수를 본다. */
+export function groupDeclarationNotes(notes: readonly DeclarationNote[]): Map<string, DeclarationNote[]> {
   const groups = new Map<string, DeclarationNote[]>();
   for (const note of notes) {
     const key = note.group ?? "";
     groups.set(key, [...(groups.get(key) ?? []), note]);
   }
-  const entityCount = [...groups.keys()].filter((k) => k !== "").length;
+  return groups;
+}
 
+/** 머리가 말하는 「N개 항목」 — 대상이 있으면 대상 수, 없으면(PUBG) 조항 수. */
+export function declarationEntityCount(notes: readonly DeclarationNote[]): number {
+  const entityCount = [...groupDeclarationNotes(notes).keys()].filter((k) => k !== "").length;
+  return entityCount > 0 ? entityCount : notes.length;
+}
+
+export interface DeclarationHeroProps {
+  from: string;
+  to: string;
+  notes: readonly DeclarationNote[];
+  failure: ObservationFailure;
+  /** 관측이 있는 최신 쌍으로 가는 링크 — 배너가 단다. 없으면 문장만. */
+  observed?: ObservedPairLink | null;
+}
+
+/** 문장 1줄 + 캡션 + 관측 전 배너 — 관측 브리핑의 히어로와 같은 자리·같은 크기. */
+export function DeclarationHero({ from, to, notes, failure, observed = null }: DeclarationHeroProps) {
   return (
-    <div className="flex flex-col gap-6 pt-40 pb-8">
+    <>
       <div className="flex flex-col gap-2">
         <span className="font-mono text-xs font-bold tracking-wide text-accent uppercase">
           패치노트가 말한 것 vs 통계가 말하는 것
         </span>
         <h1 className="max-w-3xl font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
-          {to} 패치노트는{" "}
-          <span className="text-accent">{entityCount > 0 ? entityCount : notes.length}개 항목</span>을 말했고,
+          {to} 패치노트는 <span className="text-accent">{declarationEntityCount(notes)}개 항목</span>을 말했고,
           통계는 아직 관측 전입니다
         </h1>
         <p className="max-w-3xl text-sm leading-relaxed text-fg-2 wrap-anywhere">
@@ -54,33 +67,54 @@ export default function DeclarationOnly({ from, to, notes, failure, extra }: Dec
         </p>
       </div>
 
-      <p
-        role="status"
-        data-observation={failure.reason}
-        className="rounded-md border border-border-soft bg-surface px-4 py-3 text-sm leading-relaxed text-muted"
-      >
-        {observationReasonLabel(failure.reason)}
-      </p>
+      <ObservationPendingNotice failure={failure} observed={observed} />
+    </>
+  );
+}
 
-      <SectionCard eyebrow="선언" title={`${to} 패치노트`} variant="glass">
-        <ul className="flex flex-col gap-4">
-          {[...groups].map(([group, items]) => (
-            <li key={group || "_"} className="flex flex-col gap-1">
-              {group ? <span className="text-sm font-bold text-fg">{group}</span> : null}
-              <ul className="flex flex-col gap-1">
-                {items.map((note) => (
-                  <li key={note.id} className="text-sm leading-relaxed text-fg-2">
-                    <ExternalLink href={note.anchorUrl} className="hover:text-accent">
-                      {note.summary}
-                    </ExternalLink>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
-      </SectionCard>
+/** 「선언 · {to} 패치노트」 카드 — 대상별로 묶은 노트 목록. */
+export function DeclarationNotesCard({
+  to,
+  notes,
+  variant = "glass",
+}: {
+  to: string;
+  notes: readonly DeclarationNote[];
+  variant?: "glass" | "embedded";
+}) {
+  return (
+    <SectionCard eyebrow="선언" title={`${to} 패치노트`} variant={variant}>
+      <ul className="flex flex-col gap-4 p-5">
+        {[...groupDeclarationNotes(notes)].map(([group, items]) => (
+          <li key={group || "_"} className="flex flex-col gap-1">
+            {group ? <span className="text-sm font-bold text-fg">{group}</span> : null}
+            <ul className="flex flex-col gap-1">
+              {items.map((note) => (
+                <li key={note.id} className="text-sm leading-relaxed text-fg-2">
+                  <ExternalLink href={note.anchorUrl} className="hover:text-accent">
+                    {note.summary}
+                  </ExternalLink>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </SectionCard>
+  );
+}
 
+export interface DeclarationOnlyProps extends DeclarationHeroProps {
+  /** 선언 축의 다른 조각(수치 축 F9 등) — 있으면 노트 아래에 그린다. */
+  extra?: ReactNode;
+}
+
+/** 머리 + 노트 카드 + 보충 — 골격 없이 세로로 쌓는 기본 조합(PUBG 홈). TFT 홈은 조각을 따로 받아 골격 안에 둔다. */
+export default function DeclarationOnly({ from, to, notes, failure, observed = null, extra }: DeclarationOnlyProps) {
+  return (
+    <div className="flex flex-col gap-6 pt-40 pb-8">
+      <DeclarationHero from={from} to={to} notes={notes} failure={failure} observed={observed} />
+      <DeclarationNotesCard to={to} notes={notes} />
       {extra}
     </div>
   );

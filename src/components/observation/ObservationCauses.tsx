@@ -36,19 +36,10 @@ export default function ObservationCauses({
       </p>
     );
   }
+  // 요약 문장은 `CausesPanel`이 **한 번만** 그린다(ST-27, site-review tft-S16·pubg-S24: 같은 문장이 머리와 바닥에 두 번).
+  // 근거 등급에 따른 색도 그쪽이 정한다 — 근거가 전부 「신뢰도 낮음」이면 요약도 회색(무근거 회색 원칙).
   return (
     <div className="-mx-5 flex flex-col">
-      {llm ? (
-        <p
-          className={`px-5 pt-3 text-sm leading-relaxed ${
-            llm.skipped || !llm.summaryVerified ? "text-muted" : "text-fg-2"
-          }`}
-        >
-          {llm.skipped
-            ? `LLM 미실행(${llm.reason ?? "사유 없음"})`
-            : (llm.summary ?? "LLM이 이 변화를 설명할 조항을 찾지 못했습니다.")}
-        </p>
-      ) : null}
       <CausesPanel causes={causes} llm={llm} notesById={notesById} generatedAt={generatedAt} />
     </div>
   );

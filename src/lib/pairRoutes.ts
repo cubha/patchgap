@@ -133,3 +133,21 @@ export function pairSelectHref(
 ): string {
   return pairHref(game, next, pairs, currentSection === "compare" ? "compare" : "");
 }
+
+/**
+ * 어떤 쌍의 어떤 섹션으로 가는 링크 한 벌(ST-16, 2026-10-08) — 「관측 전」 안내가 관측이 있는 최신 쌍으로 보낼 때 쓴다.
+ * 최신 쌍이면 평소 주소, 과거 쌍이면 그 쌍의 라우트(`pairHref`와 같은 규칙). 라벨은 헤더 select와 같은 「from → to」.
+ */
+export function pairSectionLink(
+  game: PairRouteGame,
+  pair: PairLike,
+  isLatest: boolean,
+  section: PairSection,
+  sectionLabel: string
+): { href: string; label: string; section: string } {
+  return {
+    href: pairSectionHref(game, section, isLatest ? null : pairBasePath(game, pair)),
+    label: `${pair.from} → ${pair.to}`,
+    section: sectionLabel,
+  };
+}

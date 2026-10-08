@@ -20,8 +20,11 @@ export default function AnnouncedCoverageLine({ noteTargets, observed }: Announc
   return (
     <p className="border-t border-border-soft px-5 py-3 text-xs leading-relaxed text-muted">
       공지된 대상 <strong className="text-fg-2">{noteTargets}</strong>개 중 유의한 관측이 선 것은{" "}
+      {/* 약속은 실제 표시 범위만(ST-18): 숨김 상태의 건수·사유는 화면이 말하지 않기로 했다(2026-10-07, #78) — 전에는 이
+          문장이 "어느 쪽인지는 커버리지가 밝힙니다"라고 **없는 것**을 약속했다. 그 규칙은 방법론이 말한다. */}
       <strong className="text-fg-2">{observed}</strong>개입니다. 나머지는 패치노트가 말했지만 지표가
-      움직이지 않았거나 게이트를 넘지 못한 것이고, 어느 쪽인지는 대조표 아래 커버리지가 밝힙니다.
+      움직이지 않았거나 게이트를 넘지 못한 것입니다 — 대조표 하단 「표가 다룬 범위」가 노트 대상 중 관측 짝과 미공지 수를,
+      방법론이 게이트 규칙을 밝힙니다.
     </p>
   );
 }

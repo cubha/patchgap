@@ -79,7 +79,19 @@ function segmentsOf(pathname: string): string[] {
  * 경로 → 현재 게임. 게임에 속하지 않으면 `null`(랜딩, 그리고 리다이렉트 대상인 구 경로).
  * `/pubgfoo/`처럼 접두가 아닌 유사 경로를 오인하지 않도록 **세그먼트 단위**로 본다.
  */
+/**
+ * 404 페이지가 하이드레이션 **전에** 세우는 전역 표식(ST-26). 정적 `404.html`은 `/_not-found`로 렌더돼 서버 쪽 게임이 null인데,
+ * 클라이언트는 실제 주소(`/tft/…`)로 게임을 읽어 첫 렌더가 어긋났다(React #418). 표식이 있으면 서버와 같은 null을 돌려준다.
+ */
+export const NOT_FOUND_FLAG = "__PATCHGAP_NOT_FOUND";
+
+function isNotFoundDocument(): boolean {
+  if (typeof window === "undefined") return false;
+  return (window as unknown as Record<string, unknown>)[NOT_FOUND_FLAG] === true;
+}
+
 export function gameFromPathname(pathname: string): GameId | null {
+  if (isNotFoundDocument()) return null;
   const first = segmentsOf(pathname)[0];
   if (first === undefined) return null;
   return GAMES.find((g) => g.prefix === `/${first}`)?.id ?? null;

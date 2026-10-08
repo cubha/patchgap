@@ -164,7 +164,8 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
   const streamGroups = [...cardGroups, ...rawGroups.filter((g) => g.kind !== "matched")];
   const streamEntries: ReleaseStreamEntry[] = streamGroups.map((group) => {
     const icon = icons.get(group)!;
-    const lanes = icon.entityKey ? lanesForEntityKey(deltas?.rows ?? [], icon.entityKey) : [];
+    // 라인 소속 = 그 라인에서 보고 자격을 얻은 행이 있는 대상(ST-19) — 칩이 실제로 거른다.
+    const lanes = icon.entityKey ? lanesForEntityKey(deltas?.rows ?? [], icon.entityKey, deltas?.meta.qAlpha) : [];
     const tier = group.kind === "matched" ? tierOf(group) : undefined;
     return { group, icon, lanes, tier };
   });

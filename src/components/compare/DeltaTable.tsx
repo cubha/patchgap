@@ -129,8 +129,9 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
     "sticky top-0 z-10 whitespace-nowrap bg-surface px-4 py-3 text-left shadow-[inset_0_-1px_0_var(--border-soft)] font-body text-xs font-bold text-muted";
 
   return (
-    <div ref={scrollerRef} className={PANEL_SPLIT_BODY}>
-      <table className="w-full border-collapse font-mono text-sm tabular-nums">
+    // 좁으면 패널 안에서 가로 스크롤 — 열이 잘리지 않는다(ST-25). TFT·PUBG 표와 같은 규약(`overflow-x-auto` + 최소 너비).
+    <div ref={scrollerRef} className={`overflow-x-auto ${PANEL_SPLIT_BODY}`}>
+      <table className="w-full min-w-[640px] border-collapse font-mono text-sm tabular-nums">
         <thead ref={theadRef}>
           <tr>
             <th scope="col" className={thBase}>

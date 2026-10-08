@@ -6,6 +6,7 @@
 // 전제를 공유하되, 이 함수는 한 단계 더 나아가 실제 포지션 문자열까지 추출한다.
 
 import type { DeltaRecord, LanePosition } from "@/pipeline/types";
+import { isReportableRecord } from "@/pipeline/shared/reportable";
 
 /** 델타 id에서 도출 가능한 "라인 축" 값 — 5개 명명 포지션 + 전체(scope=all) 행. */
 export type LaneAxis = LanePosition | "all";
@@ -56,14 +57,19 @@ export function isAllScopeChampionRow(record: Pick<DeltaRecord, "id" | "entityTy
  *   '전체'에서만 노출"로 취급한다(라인을 추측해 채우지 않는다).
  */
 export function lanesForEntityKey(
-  records: readonly Pick<DeltaRecord, "id" | "entityKey">[],
-  entityKey: string
+  records: readonly DeltaRecord[],
+  entityKey: string,
+  qAlpha?: number
 ): LanePosition[] {
   const lanes = new Set<LanePosition>();
   for (const record of records) {
     if (record.entityKey !== entityKey) continue;
     const lane = parseLaneAxis(record.id);
-    if (lane !== null && lane !== "all") lanes.add(lane);
+    if (lane === null || lane === "all") continue;
+    // 그 라인에서 **보고 자격**을 얻은 행이 있을 때만 소속이다(ST-19, site-review lol-S6). 행이 있기만 하면 소속으로 치면
+    // 26.19처럼 TOP 302행·BOTTOM 224행이 있는 데이터에서 거의 모든 챔피언이 모든 라인에 속해 칩이 아무것도 거르지 않는다.
+    if (!isReportableRecord(record, qAlpha)) continue;
+    lanes.add(lane);
   }
   return LANE_POSITIONS.filter((lane) => lanes.has(lane));
 }

@@ -11,6 +11,8 @@
 import Container from "@/components/Container";
 import PageHeader from "@/components/PageHeader";
 import TftCompareExplorer from "@/components/tft/TftCompareExplorer";
+import CoverageSection from "@/components/compare/CoverageSection";
+import type { ObservedPairLink } from "@/components/ObservationPendingNotice";
 import { TftFooter, TftSampleNotice, TftUnavailable } from "@/components/tft/shared";
 import { compareCrumbs } from "@/lib/breadcrumbs";
 import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
@@ -24,15 +26,19 @@ export interface TftCompareViewProps {
   declaration: TftDeclaration | null;
   /** 과거 쌍 화면이면 그 기준 경로(`/tft/history/{쌍}`) — 이동 경로와 표의 대상 링크가 그 쌍 안에 머문다. */
   pairBase?: string | null;
+  /** 관측 전일 때 관측이 있는 최신 쌍의 대조표 링크(ST-16). */
+  observed?: ObservedPairLink | null;
 }
 
-export default function TftCompareView({ bundle, declaration, pairBase = null }: TftCompareViewProps) {
+export default function TftCompareView({ bundle, declaration, pairBase = null, observed = null }: TftCompareViewProps) {
   if (!bundle) {
+    // 관측 전에도 골격은 유지한다(ST-16, §8-1): 이동 경로 + 사유 + 관측이 있는 쌍으로 가는 링크 + 푸터.
     return (
       <main>
         <Container>
-          <TftUnavailable failure={declaration?.failure} />
+          <TftUnavailable failure={declaration?.failure} crumbs={compareCrumbs("tft", pairBase)} observed={observed} />
         </Container>
+        {declaration ? <TftFooter generatedAt={declaration.generatedAt} nVerdicts={0} /> : null}
       </main>
     );
   }
@@ -86,23 +92,21 @@ export default function TftCompareView({ bundle, declaration, pairBase = null }:
             />
           </PairBaseProvider>
 
-          {/* 커버리지 — 노트 대비 표가 다룬 범위만 말한다(세 게임 같은 자리, §8-7 #16). **숨김 상태(변화 없음·바닥 미달·표본
-              부족)의 건수와 사유는 말하지 않는다** — 2026-10-07 사용자 확인(9/18 숨김 규칙에 건수 노출도 포함). 그 규칙은 방법론이
-              말한다. LoL `CoverageBar`가 이미 같은 이유로 세지 않는다. */}
-          <section className="rounded-lg border border-border-soft bg-surface p-5">
-            <h2 className="font-body text-xs font-bold text-muted">표가 다룬 범위</h2>
-            <p className="mt-3 text-sm text-muted">
-              노트 <strong className="font-bold text-fg">{noteEntities}</strong>대상(
-              <strong className="font-bold text-fg">{notes.items.length}</strong>항목) 중 관측 짝{" "}
-              <strong className="font-bold text-fg">{matchedEntities}</strong> · 미공지{" "}
-              <strong className="font-bold text-fg">{gapEntities}</strong>
-            </p>
-            <p className="mt-3 text-xs leading-relaxed text-muted">
-              패치노트 변경 줄 {notes.stats.lines}건 중 {notes.items.length}건(
-              {((notes.items.length / Math.max(1, notes.stats.lines)) * 100).toFixed(1)}%)에서 대상을 특정했고, 나머지{" "}
-              {notes.stats.unresolved}건은 대상이 없는 체계 변경이거나 사전에 없는 소환수입니다.
-            </p>
-          </section>
+          {/* 커버리지 — 세 게임 공용 블록(ST-18). 노트 대비 표가 다룬 범위만 말한다(§8-7 #16). **숨김 상태(변화 없음·바닥 미달·
+              표본 부족)의 건수와 사유는 말하지 않는다** — 2026-10-07 사용자 확인. 그 규칙은 방법론이 말한다. 해소율은 TFT 고유 보충. */}
+          <CoverageSection
+            noteEntities={noteEntities}
+            noteItems={notes.items.length}
+            matched={matchedEntities}
+            gap={gapEntities}
+            extra={
+              <>
+                패치노트 변경 줄 {notes.stats.lines}건 중 {notes.items.length}건(
+                {((notes.items.length / Math.max(1, notes.stats.lines)) * 100).toFixed(1)}%)에서 대상을 특정했고, 나머지{" "}
+                {notes.stats.unresolved}건은 대상이 없는 체계 변경이거나 사전에 없는 소환수입니다.
+              </>
+            }
+          />
 
           <TftSampleNotice boards={before.boards + after.boards} matches={before.matches + after.matches} />
         </div>
