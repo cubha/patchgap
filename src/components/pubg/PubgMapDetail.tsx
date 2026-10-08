@@ -225,14 +225,7 @@ export default function PubgMapDetail({
               ? "한쪽 구간에만 표본이 잡혀 두 패치를 비교하지 않았습니다."
               : `${bundle.deltas.meta.to} 패치노트에 맵 항목이 없어 판정 없이 관측값만 표시합니다.`
           }
-          actions={
-            <Link
-              href="/pubg/methodology/#discord"
-              className="inline-flex min-h-10 items-center justify-center rounded-md bg-accent px-5 text-sm font-bold text-accent-on hover:opacity-90"
-            >
-              방송 규칙 보기 →
-            </Link>
-          }
+          // 액션 줄 없음(2026-10-08 사용자 결정, LolItemDetail 주석 참고) — §7-1 바인딩 상세 = 없음(열람).
         />
 
         {/* 유형·이름·판정은 위 머리가 소유한다(§8-1). 이 카드는 지형도와 수치만 든다. */}

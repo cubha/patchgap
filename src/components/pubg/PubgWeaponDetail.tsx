@@ -243,14 +243,7 @@ export default function PubgWeaponDetail({
               `${deltas.meta.from} → ${deltas.meta.to} 보고할 획득 점유율 변화가 없습니다.`
             )
           }
-          actions={
-            <Link
-              href="/pubg/methodology/#discord"
-              className="inline-flex min-h-10 items-center justify-center rounded-md bg-accent px-5 text-sm font-bold text-accent-on hover:opacity-90"
-            >
-              방송 규칙 보기 →
-            </Link>
-          }
+          // 액션 줄 없음(2026-10-08 사용자 결정, LolItemDetail 주석 참고) — §7-1 바인딩 상세 = 없음(열람).
         />
 
         {/* 유형·이름·판정은 위 머리가 소유한다(§8-1) — 여기 다시 그리면 한 화면에서

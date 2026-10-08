@@ -31,13 +31,24 @@ function walk(dir: string): string[] {
   });
 }
 
-/** `/route/#fragment` 형태의 내부 링크를 전부 뽑는다. */
+/**
+ * `/route/#fragment` 형태의 내부 링크를 전부 뽑는다 — 세 형태다(2026-10-08 확장):
+ *  ① JSX 속성 `href="/a/#x"` · ② 객체 키 `href: "/a/#x"`(`gateLink={{ href }}`) ·
+ *  ③ 헬퍼 템플릿 `` `${sectionHref(game, "a")}#x` ``(게임 접두는 호출 시점에 정해지므로 대표 게임 `/lol/`로 환원한다 —
+ *     방법론 앵커는 9슬롯 registry가 세 게임 공통으로 소유하고, 대조표는 상태 프래그먼트 라우트라 결과가 게임에 안 갈린다).
+ * ①만 보던 때는 상세 4곳의 「방송 규칙 보기 →」가 유일한 수집 대상이었고, 그것을 지우자(사용자 결정) 수집 0건으로 떨어졌다 —
+ * ②③은 그 전부터 검사 밖이었다(판정 규칙 링크 3곳·`discordRulesHref`·`StatTiles`의 `#unannounced`).
+ */
 function collectLinks(): { file: string; route: string; fragment: string }[] {
   const found: { file: string; route: string; fragment: string }[] = [];
   for (const file of walk(SRC)) {
     const source = fs.readFileSync(file, "utf8");
-    for (const match of source.matchAll(/href=\{?["'`](\/[^"'`\s{}]*?)#([^"'`\s{}]+)["'`]/g)) {
-      found.push({ file: path.relative(process.cwd(), file), route: match[1], fragment: match[2] });
+    const rel = path.relative(process.cwd(), file);
+    for (const match of source.matchAll(/href(?:=\{?|:\s*)["'`](\/[^"'`\s{}]*?)#([^"'`\s{}]+)["'`]/g)) {
+      found.push({ file: rel, route: match[1], fragment: match[2] });
+    }
+    for (const match of source.matchAll(/`\$\{(?:pair)?[sS]ectionHref\([^)]*?"([a-z]*)"[^)]*\)\}#([^`\s{}]+)`/g)) {
+      found.push({ file: rel, route: match[1].length === 0 ? "/lol/" : `/lol/${match[1]}/`, fragment: match[2] });
     }
   }
   return found;
