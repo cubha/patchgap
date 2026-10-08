@@ -25,3 +25,10 @@
 
 ## ⑤ UI 설계 명세
 Ground Truth: `docs/design/DESIGN-TOKENS.md` · `docs/design/UX-BRIEF.md` §7·§8-1 · 시안 `01-briefing-home.html`(사이드 `.discord-panel` 버튼과 같은 변형 primary). 하단 바는 시안에 없는 **모바일 전용 상태**(시안은 1280 데스크톱) — 신규 화면이 아니라 기존 화면의 뷰포트 상태라 `/frontend-design` 생략. 레이아웃: `fixed inset-x-0 bottom-0 z-30 border-t border-border-soft bg-surface px-4 py-3`, 버튼 `w-full min-h-11`(44px) primary. 접근성: `<nav aria-label="주 행동">`, 링크 라벨 그대로.
+
+## ⑥ Phase 3 기록 (2026-10-08)
+- 게이트: `verify.sh --full` ✅ ×2(FIX 전·후) · scope-critic ×2(ST-3 문서 1줄은 파급반경 없어 생략) · acceptance-critic ×1 · UI 게이트 `--ui`(probe 브리핑 3곳 × 1280/375 + design-lint `--gate --gate-layout --gate-ux --dispositions`) **PASS — D-UX-04 0건**(바 y 751·높이 61 fixed, CTA y 760 ≤ 812, 세 게임 동일).
+- scope-critic ST-1 `DECISION_CHANGED: yes` 반영: `min-h`는 호출처가 준다(`CTA_BASE`에서 제거 — 같은 속성 유틸 두 번 합성은 생성 CSS 순서 의존) · 바 `py-2`로 실높이 61px ≤ 스페이서 64px(푸터 가림 제거). acceptance V1(같은 항목) 함께 닫힘.
+- scope-critic ST-2 `DECISION_CHANGED: yes` → 조건 분기는 두지 않았다(사유: §8-1 파리티 행은 전부 파일 텍스트 게이트라 `DiscordPanel` 행과 같은 성질) — PUBG 선언 뷰 제외 정책을 테스트 주석으로 명시.
+- 테스트 변경 보고: RED 테스트 href 완전일치 → `toContain`(트레일링 슬래시 = Next 설정 산물, DiscordPanel.test 기존 사유). acceptance 이탈 0·미요청 0.
+- L1 `static-states.mjs`는 "no App Router dir" n/a(실행 인자 — 이번엔 L2만 유효).
