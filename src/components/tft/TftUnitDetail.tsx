@@ -9,7 +9,6 @@
 // 그리드와 「추정 원인(LLM)」 카드를 LoL 기준의 공통 섹션(`ObservationSection`) 하나로 바꿨다 — 지표 탭(등장률·
 // 순방률·평균 등수) → 패널 하나, 원인은 그 지표 패널 안. 보드는 위치를 갖지 않아 구간 선택은 없다. 자격 없는 지표는
 // 탭을 만들지 않는다(전에는 「보고 자격을 얻은 관측 없음」 회색 칸으로 자리를 채웠다).
-import Link from "next/link";
 
 import Container from "@/components/Container";
 import type { ObservedPairLink } from "@/components/ObservationPendingNotice";
@@ -221,14 +220,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
                 {matchedNotes.length === 0 ? " · 패치노트에 이 대상을 언급한 항목이 없습니다" : null}
               </>
             }
-            actions={
-              <Link
-                href="/tft/methodology/#discord"
-                className="inline-flex min-h-10 items-center justify-center rounded-md bg-accent px-5 text-sm font-bold text-accent-on hover:opacity-90"
-              >
-                방송 규칙 보기 →
-              </Link>
-            }
+            // 액션 줄 없음(2026-10-08 사용자 결정, LolItemDetail 주석 참고) — §7-1 바인딩 상세 = 없음(열람).
           />
 
           {/* B안(2026-09-21 사용자 확정) — 선언 카드를 「패치노트 대조」로 바꾸고 두 구획을 둔다.

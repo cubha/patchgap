@@ -563,7 +563,7 @@ describe("§8-5 상세 — 세 게임이 같은 머리를 쓴다", () => {
     it(`${id} 상세가 제목(h1)·이동 경로·액션을 공용 PageHeader로 둔다`, () => {
       // 실측 이탈(§8-7 #1·#8·#18): PUBG 상세엔 h1이 없었고, 이동 경로는 `대조표 › 챔피언 › 오공`
       // (LoL) / `← 대조표 / 유닛`(TFT) / `브리핑 / 대조표 / Groza`(PUBG)로 셋이 달랐다.
-      // 「방송 규칙 보기 →」는 LoL 상세에만 있었다.
+      // 「방송 규칙 보기 →」는 LoL 상세에만 있었다 → 세 게임에 복제했다가 2026-10-08 전부 제거(§8-7 #18) — 액션 줄은 이제 없다.
       for (const page of detailPagesOf(id)) {
         expect(read(detailSource(page)), page).toContain("PageHeader");
         expect(read(detailSource(page)), page).toContain("detailCrumbs");

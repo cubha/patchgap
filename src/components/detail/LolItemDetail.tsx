@@ -367,16 +367,9 @@ export default function LolItemDetail({ id, pairs, pairBase = null, otherPairs =
                 </>
               )
             }
-            actions={
-              // §8-7 #18: 이 액션 줄이 LoL 상세에만 있었다. 자리는 `PageHeader`가 소유하므로
-              // 세 게임이 같은 위치에 둘 수 있다.
-              <Link
-                href="/lol/methodology/#discord"
-                className="inline-flex min-h-10 items-center justify-center rounded-md bg-accent px-5 text-sm font-bold text-accent-on hover:opacity-90"
-              >
-                방송 규칙 보기 →
-              </Link>
-            }
+            // 액션 줄 없음(2026-10-08 사용자 결정): 「방송 규칙 보기 →」는 방법론 #discord로 가는 링크일 뿐이라 상세의
+            // 할 일(원문·지표·원천 매치)과 무관했고, 유일한 채움 버튼이라 그것들보다 먼저 보였다(site-review lol-S12).
+            // 같은 곳은 헤더 내비·브리핑 사이드 패널이 이미 간다. §7-1 바인딩도 상세 = 없음(열람)이다.
           />
 
           {/* 선언 대조 — 전체 폭(2026-10-06). 「추정 원인」 카드가 있던 오른쪽 칸은 관측 패널 안으로 옮겼다. */}
