@@ -170,6 +170,74 @@ describe("diffTft — 아이템 효과는 한국어 낱말로 노트를 찾는�
   });
 });
 
+// ST-02(2026-10-08 site-review tft-S1~S3): 18.2 노트가 「렝가 기본 공격 속도 0.8 ⇒ 0.75」·「덩굴정령 공격력 115 ⇒ 120」을
+// 말했는데 CDragon 16.18(18.2)엔 안 실렸고 16.19(18.3)에서야 바뀌었다. 현재 쌍 노트만 보면 "18.3 노트에 없다 → 잠수함"이
+// 되는데, 같은 사이트의 18.1→18.2 상세는 그 값을 공지로 보여 준다 — 화면이 스스로를 반박했다. 직전 노트들이 **그 값으로**
+// 바꾼다고 이미 말했으면 잠수함이 아니라 「지연 반영」이다. 아이템 추출 4→3처럼 어느 노트도 말하지 않은 것만 잠수함으로 남는다.
+describe("diffTft — 직전 노트 대조 → 지연 반영(ST-02)", () => {
+  const prior = (...patches: string[]) => patches.map((patch) => ({ patch, notes: notes(patch) }));
+
+  describe("18.2 → 18.3 (CDragon 16.18 → 16.19)", () => {
+    const changes = diffTft(snapshot("16.18"), snapshot("16.19"), notes("18.3"), "18.3", prior("18.2"));
+    const of = (name: string, path: string) => changes.find((c) => c.entityName === name && c.fieldPath === path);
+
+    it("★ 렝가 공격 속도 0.8 → 0.75는 18.2 노트가 공지한 값 — 지연 반영, 잠수함 아님", () => {
+      const rengar = of("렝가", "stats.attackSpeed")!;
+      expect(rengar).toBeDefined();
+      expect(rengar.matchedNoteIds).toEqual([]);
+      expect(rengar.priorNote).toEqual({ noteId: "note:tft:18.2:champion:렝가:4a189382", patch: "18.2" });
+      expect(isSubmarineChange(rengar)).toBe(false);
+    });
+
+    it("★ 덩굴정령 공격력 115 → 120도 18.2 노트(115 ⇒ 120)의 지연 반영이다", () => {
+      const bramble = of("덩굴정령", "stats.damage")!;
+      expect(bramble.priorNote?.patch).toBe("18.2");
+      expect(isSubmarineChange(bramble)).toBe(false);
+    });
+
+    it("★ 마스터 이 공격력 65 → 62는 18.2 노트(65 ⇒ 60)에 **못 미친다** — 여전히 잠수함", () => {
+      const yi = of("마스터 이", "stats.damage")!;
+      expect(yi.priorNote).toBeUndefined();
+      expect(isSubmarineChange(yi)).toBe(true);
+    });
+
+    it("★ 잠수함은 2건으로 준다 — 마스터 이 공격력 · 아이템 추출 조합 아이템 수", () => {
+      const submarines = changes.filter(isSubmarineChange);
+      expect(submarines.map((c) => `${c.entityName} ${c.field}`).sort()).toEqual(
+        ["마스터 이 공격력", "아이템 추출 효과 조합 아이템 수"].sort()
+      );
+    });
+
+    it("직전 노트를 안 주면 종전처럼 4건 전부 잠수함이다 — 이 테스트가 바뀐 명세의 분모", () => {
+      const legacy = diffTft(snapshot("16.18"), snapshot("16.19"), notes("18.3"), "18.3");
+      expect(legacy.filter(isSubmarineChange)).toHaveLength(4);
+    });
+  });
+
+  describe("18.3 → 18.4 (CDragon 16.19 → 16.20) — 두 패치 전 노트까지 본다", () => {
+    const changes = diffTft(snapshot("16.19"), snapshot("16.20"), notes("18.4"), "18.4", prior("18.3", "18.2"));
+    const of = (name: string, path: string) => changes.find((c) => c.entityName === name && c.fieldPath === path);
+
+    it("★ 마오카이 최대 마나 90 → 100은 18.2 노트(중간 패치 30/100)가 말한 값으로의 회복 — 지연 반영", () => {
+      const maokai = of("마오카이", "stats.mana")!;
+      expect(maokai.priorNote?.patch).toBe("18.2");
+      expect(isSubmarineChange(maokai)).toBe(false);
+    });
+
+    it("★ 마스터 이 공격력 62 → 60은 18.2 노트(65 ⇒ 60)에 드디어 도달 — 지연 반영", () => {
+      const yi = of("마스터 이", "stats.damage")!;
+      expect(yi.priorNote?.patch).toBe("18.2");
+      expect(isSubmarineChange(yi)).toBe(false);
+    });
+
+    it("지연 반영은 잠수함 수에서 빠지되 변경 수에는 남는다 — 사라지는 것이 아니라 자리를 옮긴다", () => {
+      const legacy = diffTft(snapshot("16.19"), snapshot("16.20"), notes("18.4"), "18.4");
+      expect(changes).toHaveLength(legacy.length);
+      expect(changes.filter(isSubmarineChange).length).toBeLessThan(legacy.filter(isSubmarineChange).length);
+    });
+  });
+});
+
 // 이월 R9(2026-09-28): 18.2 마오카이 노트는 본 패치 「40/100 ⇒ 30/90」에 중간 패치 「30/90 ⇒ 30/100」을 이은
 // 「마나 조정 40/100 ⇒ 30/100」(시작/최대)이다. CDragon 16.18은 중간 패치 이전 값(최대 90)이고 새로 받아도, 16.19도
 // 90이다. 「a/b」 값을 대조하지 못해 「최대 마나 100→90(공지됨)」이라는 틀린 말이 나갔다.

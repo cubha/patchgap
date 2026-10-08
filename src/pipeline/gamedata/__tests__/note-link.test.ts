@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   entityMatches,
   linkNotes,
+  linkPriorNote,
   linkedNotes,
   noteValueMismatch,
   type NoteLike,
@@ -310,6 +311,63 @@ describe("linkedNotes — 값 토큰 경로(ST-01)", () => {
       [elisePassive]
     );
     expect(noteValueMismatch(linked, "12/22/32/42", "14/24/34/44")).toBeNull();
+  });
+});
+
+// ST-02: 직전 패치 노트가 **그 값으로** 바꾼다고 이미 말했으면 잠수함이 아니라 「지연 반영」이다(TFT 렝가·덩굴정령 실측).
+describe("linkPriorNote — 직전 노트의 지연 반영(ST-02)", () => {
+  const rengar182: NoteLike = { id: "n:18.2:rengar", entity: "렝가", skill: null, stat: "기본 공격 속도", before: "0.8", after: "0.75" };
+  const yi182: NoteLike = { id: "n:18.2:yi", entity: "마스터 이", skill: null, stat: "공격력 형태 기본 공격력", before: "65", after: "60" };
+  const prior = [{ patch: "18.2", notes: [rengar182, yi182] }];
+
+  it("★ keyword 경로로 걸리고 노트의 after가 변경의 after와 같으면 그 노트가 지연 반영의 출처다", () => {
+    expect(
+      linkPriorNote({ entityName: "렝가", fieldKeywords: ["공격 속도"], value: { before: 0.8, after: 0.75 } }, prior)
+    ).toEqual({ noteId: "n:18.2:rengar", patch: "18.2" });
+  });
+
+  it("★ 노트의 after에 못 미치면(65 → 62, 노트 60) 지연 반영이 아니다 — null", () => {
+    expect(linkPriorNote({ entityName: "마스터 이", fieldKeywords: ["공격력"], value: { before: 65, after: 62 } }, prior)).toBeNull();
+  });
+
+  it("노트의 after에 도달하면(62 → 60) 출발점이 노트와 달라도 지연 반영이다 — 단계적 반영", () => {
+    expect(
+      linkPriorNote({ entityName: "마스터 이", fieldKeywords: ["공격력"], value: { before: 62, after: 60 } }, prior)
+    ).toEqual({ noteId: "n:18.2:yi", patch: "18.2" });
+  });
+
+  it("값 토큰 경로(레벨 배열)로 걸린 노트도 출처가 된다", () => {
+    const passive: NoteLike = { id: "n:p", entity: "엘리스", skill: "기본 지속 효과", stat: "피해량", before: "12/22/32/42", after: "14/24/34/44" };
+    expect(
+      linkPriorNote(
+        { entityName: "엘리스", fieldKeywords: [], skillKey: "R", value: { before: "12/22/32/42", after: "14/24/34/44" } },
+        [{ patch: "26.18", notes: [passive] }]
+      )
+    ).toEqual({ noteId: "n:p", patch: "26.18" });
+  });
+
+  it("엔티티 언급·재작업 경로는 값을 말한 것이 아니라 출처가 못 된다", () => {
+    const rework: NoteLike = { id: "n:rw", entity: "렝가", skill: "능력 개편", stat: null };
+    expect(linkPriorNote({ entityName: "렝가", fieldKeywords: ["공격 속도"], value: { before: 0.8, after: 0.75 } }, [{ patch: "18.2", notes: [rework] }])).toBeNull();
+  });
+
+  it("여러 패치를 주면 **앞에 준 것**(최근)부터 찾는다", () => {
+    const older: NoteLike = { id: "n:18.1:rengar", entity: "렝가", skill: null, stat: "기본 공격 속도", before: "0.85", after: "0.75" };
+    const found = linkPriorNote(
+      { entityName: "렝가", fieldKeywords: ["공격 속도"], value: { before: 0.8, after: 0.75 } },
+      [{ patch: "18.2", notes: [rengar182] }, { patch: "18.1", notes: [older] }]
+    );
+    expect(found?.patch).toBe("18.2");
+  });
+
+  it("a/b 성분(마나 조정 시작/최대)은 성분 번호로 견준다", () => {
+    const mana: NoteLike = { id: "n:mk", entity: "마오카이", skill: null, stat: "마나 조정", before: "40/100", after: "30/100" };
+    expect(
+      linkPriorNote({ entityName: "마오카이", fieldKeywords: ["마나"], value: { before: 90, after: 100 } }, [{ patch: "18.2", notes: [mana] }], 1)
+    ).toEqual({ noteId: "n:mk", patch: "18.2" });
+    expect(
+      linkPriorNote({ entityName: "마오카이", fieldKeywords: ["마나"], value: { before: 90, after: 95 } }, [{ patch: "18.2", notes: [mana] }], 1)
+    ).toBeNull();
   });
 });
 
