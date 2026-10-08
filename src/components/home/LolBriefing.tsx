@@ -17,6 +17,7 @@ import ReleaseNoteStream, { type ReleaseStreamEntry } from "@/components/home/Re
 import StreamLaneFilter from "@/components/home/StreamLaneFilter";
 import SideMatchAverages from "@/components/home/SideMatchAverages";
 import DiscordPanel from "@/components/home/DiscordPanel";
+import MobileActionBar from "@/components/home/MobileActionBar";
 import LaneGapPanel from "@/components/home/LaneGapPanel";
 import StreamColumnLayout from "@/components/home/StreamColumnLayout";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
@@ -292,6 +293,8 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
             generatedAt={deltas?.meta.generatedAt ?? null}
             nVerdicts={deltas ? verdictCount(deltas.rows, deltas.meta.qAlpha) : null}
           />
+          {/* 모바일 주 행동 — 375에서 사이드 패널은 첫 화면 밖이다(PLAN-mobile-cta). 세 게임 공통. */}
+          <MobileActionBar game="lol" />
         </main>
       </div>
     </PairBaseProvider>

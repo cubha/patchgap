@@ -64,3 +64,7 @@ scratch.md.precompact-backup-*
 
 # 루트의 임시 스크린샷 — 출품용은 docs/submission/screenshots/ 에만 둔다
 /*.png
+
+# ui-gate 산출물(캡처·서버 PID) — 처분 기록 dispositions.json만 커밋한다(ui-gate §2-5)
+.ui-gate/*
+!.ui-gate/dispositions.json

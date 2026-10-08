@@ -58,8 +58,9 @@ export default function MiscChangesSection({ sections, skinPreviews = {}, laneFi
       {/* `group/misc` — 요약행(group/fold)과 같은 규약으로 이름을 준다. */}
       <details className="group/misc">
         <summary className="flex cursor-pointer list-none items-center gap-4 px-5 py-3 text-xs text-muted [&::-webkit-details-marker]:hidden">
-          <span className="font-bold text-fg-2">기타 변경</span>
-          <span className="font-mono tabular-nums">{total}건</span>
+          {/* `shrink-0` — 375px에서 뒤의 truncate 줄이 공간을 당겨 「176건」이 세로로 쪼개졌다(ui-gate D-LAYOUT-12, 2026-10-08). */}
+          <span className="shrink-0 font-bold text-fg-2">기타 변경</span>
+          <span className="shrink-0 font-mono tabular-nums">{total}건</span>
           <span className="truncate text-muted">{sections.map((s) => s.label).join(" · ")}</span>
           {/* 2026-09-19 사용자 결정항목: 라인을 골라도 이 블록은 그대로 남는다. 버그 수정·스킨·
               증강·게임 모드 줄에는 라인 축이 원리적으로 없기 때문이고(클래식 피오라에 SR 라인을

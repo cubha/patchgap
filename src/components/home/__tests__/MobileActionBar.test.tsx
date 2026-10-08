@@ -49,7 +49,10 @@ describe("MobileActionBar", () => {
     invite.url = null;
     const bar = onlyLink(await renderBar());
     expect(bar.textContent).toContain("방송 규칙 보기 →");
-    expect(bar.getAttribute("href")).toBe("/tft/methodology/#discord");
+    // 트레일링 슬래시는 Next 설정의 산물이라 완전일치로 박지 않는다(DiscordPanel.test과 같은 이유).
+    const rules = bar.getAttribute("href") ?? "";
+    expect(rules).toContain("/tft/methodology");
+    expect(rules).toContain("#discord");
   });
 
   it("모바일 전용이다 — lg 이상에서 숨고, 푸터를 가리지 않게 같은 높이의 여백을 둔다", async () => {

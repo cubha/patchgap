@@ -34,6 +34,7 @@ import type { DeltaRecord } from "@/pipeline/types";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import StatTiles from "@/components/StatTiles";
 import DiscordPanel from "@/components/home/DiscordPanel";
+import MobileActionBar from "@/components/home/MobileActionBar";
 import BriefingTabs from "@/components/BriefingTabs";
 import BriefingRowList from "@/components/BriefingRowList";
 import AnnouncedCoverageLine from "@/components/home/AnnouncedCoverageLine";
@@ -347,6 +348,8 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
         </div>
       </Container>
       <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={verdictCount(deltas.rows, deltas.meta.qAlpha)} />
+      {/* 모바일 주 행동(PLAN-mobile-cta) — 세 게임 공통, 관측 전 선언 뷰도 같다. */}
+      <MobileActionBar game="tft" />
     </main>
   );
 }
@@ -402,6 +405,7 @@ function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
         </div>
       </Container>
       <TftFooter generatedAt={declaration.generatedAt} nVerdicts={0} />
+      <MobileActionBar game="tft" />
     </main>
   );
 }

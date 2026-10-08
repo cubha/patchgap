@@ -10,6 +10,7 @@
 import { describe, expect, it } from "vitest";
 import {
   GAMES,
+  NOT_FOUND_FLAG,
   gameFromPathname,
   gameHref,
   gameLabel,
@@ -20,6 +21,21 @@ import {
 } from "../game";
 
 describe("gameFromPathname", () => {
+  // 404 표식(ST-26 → verify-impl V2, 2026-10-08): 표식의 값은 404가 뜬 **주소**다. 그 주소를 물을 때만 null이고,
+  // 헤더 내비로 다른 경로에 가면(클라이언트 이동, 표식은 window에 남는다) 그 경로의 게임을 정상으로 읽어야 한다.
+  it("404 표식은 그 주소에만 적용된다 — 다른 경로의 게임까지 null로 읽지 않는다", () => {
+    const w = globalThis as unknown as Record<string, unknown>;
+    w[NOT_FOUND_FLAG] = "/tft/unit/unit~DA_18_Rengar/";
+    try {
+      expect(gameFromPathname("/tft/unit/unit~DA_18_Rengar/")).toBeNull();
+      expect(gameFromPathname("/tft/unit/unit~DA_18_Rengar")).toBeNull();
+      expect(gameFromPathname("/lol/")).toBe("lol");
+      expect(gameFromPathname("/tft/")).toBe("tft");
+    } finally {
+      delete w[NOT_FOUND_FLAG];
+    }
+  });
+
   it("/pubg 접두가 붙은 경로는 pubg다", () => {
     for (const p of ["/pubg/", "/pubg/compare/", "/pubg/methodology/"]) {
       expect(gameFromPathname(p), p).toBe("pubg");

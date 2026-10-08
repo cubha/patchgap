@@ -13,7 +13,8 @@ import { GAMES, NOT_FOUND_FLAG, sectionHref } from "@/lib/game";
 export default function NotFound() {
   return (
     <main>
-      <script dangerouslySetInnerHTML={{ __html: `window.${NOT_FOUND_FLAG}=true;` }} />
+      {/* 값은 주소다 — `gameFromPathname`이 "지금 묻는 경로가 404가 뜬 경로인가"로 판정한다(헤더 내비로 떠나면 자동 무효). */}
+      <script dangerouslySetInnerHTML={{ __html: `window.${NOT_FOUND_FLAG}=location.pathname;` }} />
       <Container>
         <div className="flex flex-col gap-6 pt-40 pb-8">
           <div className="flex flex-col gap-2">

@@ -33,6 +33,7 @@ import ExternalLink from "@/components/ExternalLink";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import StatTiles from "@/components/StatTiles";
 import DiscordPanel from "@/components/home/DiscordPanel";
+import MobileActionBar from "@/components/home/MobileActionBar";
 import BriefingTabs from "@/components/BriefingTabs";
 import BriefingRowList from "@/components/BriefingRowList";
 import AnnouncedCoverageLine from "@/components/home/AnnouncedCoverageLine";
@@ -308,6 +309,8 @@ export default function PubgBriefing({ bundle, declaration }: { bundle: PubgBund
 
           {/* 푸터 판정 수 = 보고 자격을 얻은 판정 수(ST-11) — 무기 수(47)는 「판정」이 아니었다. */}
           <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={pubgVerdictCount(deltas.rows)} />
+          {/* 모바일 주 행동(PLAN-mobile-cta) — 세 게임 공통. 관측 전 선언 뷰는 사이드 패널 자체가 없어 두지 않는다(PLAN ②). */}
+          <MobileActionBar game="pubg" />
         </div>
       </Container>
     </main>

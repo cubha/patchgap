@@ -86,9 +86,12 @@ export const UNAPPLIED_MISMATCH_CAVEAT = "노트는 바꾼다고 했지만 이 �
 export const MIDPATCH_MISMATCH_CAVEAT = "중간 패치 값은 게임 파일에 늦게 실리거나 서버에만 있을 수 있습니다";
 
 /** 노트 쪽 값 한 줄 — 중간 패치면 출처 이름을 「중간 패치」로 바꾼다. */
+/** 「미반영」 꼬리 — 좁은 칸(`SubmarineCell`)은 이 꼬리를 **따로 한 줄**로 그린다(문구의 소유자는 여기 하나). */
+export const UNAPPLIED_NOTE_TAIL = "게임 파일 미반영";
+
 export function mismatchNoteText(line: MismatchLine, source: "노트" | "패치노트"): string {
   const head = `${line.midpatch ? "중간 패치" : source} ${line.noteBefore} ⇒ ${line.noteAfter}`;
-  return line.unapplied ? `${head} · 게임 파일 미반영` : head;
+  return line.unapplied ? `${head} · ${UNAPPLIED_NOTE_TAIL}` : head;
 }
 
 /**

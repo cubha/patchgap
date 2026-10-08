@@ -85,13 +85,19 @@ function segmentsOf(pathname: string): string[] {
  */
 export const NOT_FOUND_FLAG = "__PATCHGAP_NOT_FOUND";
 
-function isNotFoundDocument(): boolean {
-  if (typeof window === "undefined") return false;
-  return (window as unknown as Record<string, unknown>)[NOT_FOUND_FLAG] === true;
+/**
+ * 표식의 값은 `true`가 아니라 **404가 뜬 주소**다(verify-impl 축A V2, 2026-10-08). 전역 불리언이면 404 화면의 헤더
+ * 내비(`<Link>`)로 다른 화면에 가도 표식이 살아 그 화면의 게임까지 null로 읽는다. 지금 묻는 경로가 404가 뜬 경로일 때만
+ * "404 문서"다 — 클라이언트 이동으로 경로가 바뀌면 표식은 저절로 무효가 된다.
+ */
+function isNotFoundDocument(pathname: string): boolean {
+  // `globalThis` — 브라우저에선 window고, 서버·테스트 런타임엔 404 스크립트가 없으니 표식도 없다(그래서 window 분기가 필요 없다).
+  const flagged = (globalThis as unknown as Record<string, unknown>)[NOT_FOUND_FLAG];
+  return typeof flagged === "string" && segmentsOf(flagged).join("/") === segmentsOf(pathname).join("/");
 }
 
 export function gameFromPathname(pathname: string): GameId | null {
-  if (isNotFoundDocument()) return null;
+  if (isNotFoundDocument(pathname)) return null;
   const first = segmentsOf(pathname)[0];
   if (first === undefined) return null;
   return GAMES.find((g) => g.prefix === `/${first}`)?.id ?? null;
