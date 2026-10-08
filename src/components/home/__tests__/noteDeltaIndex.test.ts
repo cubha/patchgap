@@ -5,7 +5,31 @@
 // 말했다(실측: 관측 보유 엔티티 1/20 — best-row면 7/20).
 import { describe, expect, it } from "vitest";
 import type { DeltaRecord } from "@/pipeline/types";
-import { indexNoteDeltaRows, indexNoteDeltas } from "../noteDeltaIndex";
+import { indexNoteDeltaRows, indexNoteDeltas, representativeForLane } from "../noteDeltaIndex";
+
+// ST-19(2026-10-08 site-review lol-S6): 라인 칩을 고르면 카드의 대표 관측도 **그 라인의 행**이어야 한다 — 방법론이 그렇게
+// 약속한다. 전체(all)면 scope=all 행(ST-08과 같은 우선순위), 라인이면 그 라인 행 중 자격 → 상태 → |Δ|.
+describe("representativeForLane — 라인별 카드 대표(ST-19)", () => {
+  const all = () => delta({ id: "champion:Khazix:pickRate", entityKey: "Khazix", delta: 0.0525, ci: [0.04, 0.065], q: 0.001 });
+  const jungle = () => delta({ id: "champion:Khazix:JUNGLE:pickRate", entityKey: "Khazix", delta: 0.0553, ci: [0.045, 0.066], q: 0.001 });
+  const top = () => delta({ id: "champion:Khazix:TOP:pickRate", entityKey: "Khazix", delta: 0.001, ci: [-0.01, 0.01], q: 0.9 });
+
+  it("★ 라인을 고르면 그 라인 행이 대표다", () => {
+    expect(representativeForLane([all(), jungle(), top()], "JUNGLE", 0.1)?.id).toBe("champion:Khazix:JUNGLE:pickRate");
+  });
+
+  it("전체면 scope=all 행이 대표다(ST-08 규칙)", () => {
+    expect(representativeForLane([jungle(), all()], "all", 0.1)?.id).toBe("champion:Khazix:pickRate");
+  });
+
+  it("그 라인에 행이 없으면 null — 다른 라인 값을 그 라인 값인 척 보이지 않는다", () => {
+    expect(representativeForLane([all(), jungle()], "TOP", 0.1)).toBeNull();
+  });
+
+  it("그 라인에 자격 없는 행뿐이면 그 행을 돌려준다(카드가 짝을 잃지 않는다) — 자격 판단은 호출부가 한다", () => {
+    expect(representativeForLane([all(), top()], "TOP", 0.1)?.id).toBe("champion:Khazix:TOP:pickRate");
+  });
+});
 
 function delta(overrides: Partial<DeltaRecord>): DeltaRecord {
   return {
