@@ -10,8 +10,9 @@ import type { GameId } from "@/lib/game";
 export default function MobileActionBar({ game }: { game: GameId }) {
   return (
     <>
+      {/* 스페이서 64px ≥ 바 실높이 61px(py-2 8×2 + min-h-11 44 + border-t 1) — 작으면 푸터 마지막 줄이 바 밑에 깔린다(scope-critic ST-1). */}
       <div aria-hidden="true" data-mobile-action-spacer="" className="h-16 lg:hidden" />
-      <nav aria-label="주 행동" className="fixed inset-x-0 bottom-0 z-30 border-t border-border-soft bg-surface px-4 py-3 lg:hidden">
+      <nav aria-label="주 행동" className="fixed inset-x-0 bottom-0 z-30 border-t border-border-soft bg-surface px-4 py-2 lg:hidden">
         {/* min-h-11 = 44px — 탭 타깃 하한(D-A11Y-02). */}
         <DiscordCta game={game} className="min-h-11 w-full" />
       </nav>

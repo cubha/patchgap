@@ -50,12 +50,13 @@ export function discordRulesHref(game: GameId): string {
 }
 
 const CTA_BASE =
-  "inline-flex min-h-10 max-w-full items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-md bg-accent px-5 text-sm font-bold text-accent-on transition-colors hover:bg-accent-hover";
+  "inline-flex max-w-full items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-md bg-accent px-5 text-sm font-bold text-accent-on transition-colors hover:bg-accent-hover";
 
 /**
  * 주 행동 버튼 한 벌 — 초대가 있으면 그 방으로, 없으면 방송 규칙으로(죽은 링크 금지). 사이드 패널과 모바일 고정 하단 바
  * (`MobileActionBar`, PLAN-mobile-cta 2026-10-08)가 **같은 버튼**을 그린다: 글자가 어긋나면 UI 게이트(D-UX-01)가 주 행동을
- * 둘로 센다. 폭은 호출처가 준다(패널 w-48 고정 · 하단 바 w-full).
+ * 둘로 센다. 폭·높이는 호출처가 준다(패널 min-h-10 w-48 고정 · 하단 바 min-h-11 w-full) — 같은 속성의 유틸을 두 번 합성하면
+ * 이기는 쪽이 생성 CSS 순서에 달려 불안정하다(scope-critic ST-1).
  */
 export function DiscordCta({ game, className }: { game: GameId; className: string }) {
   const rulesHref = discordRulesHref(game);
@@ -81,7 +82,7 @@ export default function DiscordPanel({ game, generatedAt }: DiscordPanelProps) {
           {DISCORD_INVITE_URL ? " 방은 읽기 전용으로 열려 있습니다." : null}
         </p>
         {/* 버튼 폭은 고정(w-48). */}
-        <DiscordCta game={game} className="w-48" />
+        <DiscordCta game={game} className="min-h-10 w-48" />
         {DISCORD_INVITE_URL ? (
           <Link href={rulesHref} className="text-xs text-fg-2 underline">
             무엇이 언제 나가나
