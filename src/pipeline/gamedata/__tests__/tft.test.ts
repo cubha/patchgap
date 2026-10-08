@@ -90,8 +90,10 @@ describe("diffTft — 18.1 → 18.2 회귀 (실측 고정)", () => {
 
   // 카탈로그 보강의 **진짜 값**은 미해소 숫자가 아니라 이 둘이다. 노트가 같은 항목을 말했는데
   // 값이 다르다 — 잠수함으로 세면 틀리고, 그냥 공지로 처리하면 **화면에서 사라진다**.
+  // ST-03(2026-10-08): 「공지값 미반영」(노트는 바꾼다고 했는데 파일이 그대로)은 불일치 축의 새 갈래다 — 아래 목록은
+  // **값이 바뀐** 불일치만 센다. 미반영은 그 다음 describe가 고정한다.
   it("★ 덩굴정령·어미 부리는 잠수함이 아니라 「값 불일치」다", () => {
-    const mismatches = changes.filter((c) => c.noteMismatch);
+    const mismatches = changes.filter((c) => c.noteMismatch && !c.noteMismatch.unapplied);
     // 2026-09-28 명세 변경(이월 R9): 「마나 조정 a/b」를 성분별로 견주면서 마오카이 최대 마나(게임 100→90, 노트
     // 최종 100 ⇒ 100)가 중간 패치 불일치로 들어왔다 — 아래 「마나 조정 a/b 대조와 중간 패치(R9)」 참고.
     expect(mismatches.map((c) => `${c.entityName} ${c.field}`)).toEqual([
@@ -167,6 +169,39 @@ describe("diffTft — 아이템 효과는 한국어 낱말로 노트를 찾는�
       if (!c.fieldPath.startsWith("effects.")) continue;
       expect(c.field.startsWith("효과 ")).toBe(true);
     }
+  });
+});
+
+// ST-03(2026-10-08 site-review tft-S4): 18.2 노트 「렝가 기본 공격 속도 0.8 ⇒ 0.75」·「마스터 이 공격력 형태 기본 공격력
+// 65 ⇒ 60」은 CDragon 16.18에 실리지 않았다(둘 다 그대로). 변경 행이 없으니 화면 어디에도 안 나왔고, 같은 상황의
+// 덩굴정령만 「공지값 불일치」로 보였다. 안 바뀐 필드도 노트의 출발값과 같으면 「공지값 미반영」 행을 낸다.
+describe("diffTft — 공지값 미반영(ST-03)", () => {
+  const changes = diffTft(snapshot("16.17"), snapshot("16.18"), notes("18.2"), "18.2");
+  const unapplied = changes.filter((c) => c.noteMismatch?.unapplied);
+  const of = (name: string, path: string) => unapplied.find((c) => c.entityName === name && c.fieldPath === path);
+
+  it("★ 렝가 공격 속도 — 노트 0.8 ⇒ 0.75, 파일 0.8 그대로", () => {
+    const rengar = of("렝가", "stats.attackSpeed")!;
+    expect(rengar).toBeDefined();
+    expect(rengar.before).toBe(rengar.after);
+    expect(rengar.matchedNoteIds).toContain("note:tft:18.2:champion:렝가:4a189382");
+    expect(rengar.noteMismatch).toMatchObject({ noteBefore: "0.8", noteAfter: "0.75", unapplied: true });
+    expect(isSubmarineChange(rengar)).toBe(false);
+  });
+
+  it("★ 마스터 이 공격력 — 노트 65 ⇒ 60, 파일 65 그대로(AD 형태)", () => {
+    const yi = unapplied.filter((c) => c.entityName === "마스터 이" && c.fieldPath === "stats.damage");
+    expect(yi.length).toBeGreaterThan(0);
+    for (const c of yi) expect(c.noteMismatch).toMatchObject({ noteBefore: "65", noteAfter: "60", unapplied: true });
+  });
+
+  it("미반영 행은 잠수함 수를 바꾸지 않는다 — 31건 그대로", () => {
+    expect(changes.filter(isSubmarineChange)).toHaveLength(31);
+  });
+
+  it("값이 바뀐 불일치(덩굴정령 110→115)에는 unapplied 표식이 없다", () => {
+    const bramble = changes.find((c) => c.entityName === "덩굴정령" && c.fieldPath === "stats.damage")!;
+    expect(bramble.noteMismatch?.unapplied).toBeUndefined();
   });
 });
 

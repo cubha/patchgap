@@ -6,6 +6,7 @@ import {
   linkPriorNote,
   linkedNotes,
   noteValueMismatch,
+  unappliedNoteMismatch,
   type NoteLike,
 } from "../note-link";
 
@@ -368,6 +369,52 @@ describe("linkPriorNote — 직전 노트의 지연 반영(ST-02)", () => {
     expect(
       linkPriorNote({ entityName: "마오카이", fieldKeywords: ["마나"], value: { before: 90, after: 95 } }, [{ patch: "18.2", notes: [mana] }], 1)
     ).toBeNull();
+  });
+});
+
+// ST-03(site-review tft-S4): 노트가 「0.8 ⇒ 0.75」라 했는데 게임 파일이 **그대로 0.8**이면 변경 행이 없어 화면 어디에도
+// 안 나온다 — 같은 상황인 덩굴정령(110→115 vs 노트 115⇒120)은 「공지값 불일치」로 보이는데 렝가만 조용했다.
+// 안 바뀐 필드도 노트의 출발값과 같으면 「공지값 미반영」이다.
+describe("unappliedNoteMismatch — 공지됐는데 게임 파일이 안 바뀜(ST-03)", () => {
+  const rengar: NoteLike = { id: "n:rengar", entity: "렝가", skill: null, stat: "기본 공격 속도", before: "0.8", after: "0.75" };
+  const link = (n: NoteLike, keywords = ["공격 속도"]) => linkedNotes({ entityName: "렝가", fieldKeywords: keywords }, [n]);
+
+  it("★ 현재값이 노트의 before와 같고 after와 다르면 미반영이다", () => {
+    expect(unappliedNoteMismatch(link(rengar), 0.8)).toEqual({
+      noteId: "n:rengar",
+      noteBefore: "0.8",
+      noteAfter: "0.75",
+      unapplied: true,
+    });
+  });
+
+  it("현재값이 노트의 after와 같으면 이미 반영된 것 — null", () => {
+    expect(unappliedNoteMismatch(link(rengar), 0.75)).toBeNull();
+  });
+
+  it("현재값이 노트의 before와도 다르면 이 노트가 이 필드를 말한 게 아닐 수 있다 — null(보수적)", () => {
+    expect(unappliedNoteMismatch(link(rengar), 0.9)).toBeNull();
+  });
+
+  it("keyword 경로가 아니면 값을 견주지 않는다", () => {
+    const linked = linkedNotes({ entityName: "렝가", fieldKeywords: [], entityMatchSuffices: true }, [rengar]);
+    expect(unappliedNoteMismatch(linked, 0.8)).toBeNull();
+  });
+
+  it("값이 맞는(이미 반영된) 노트가 하나라도 있으면 미반영이 아니다", () => {
+    const applied: NoteLike = { id: "n:applied", entity: "렝가", skill: null, stat: "기본 공격 속도", before: "0.75", after: "0.8" };
+    const linked = linkedNotes({ entityName: "렝가", fieldKeywords: ["공격 속도"] }, [rengar, applied]);
+    expect(unappliedNoteMismatch(linked, 0.8)).toBeNull();
+  });
+
+  it("a/b 성분은 성분 번호로 견준다 · 중간 패치 표식을 단다", () => {
+    const mana: NoteLike = {
+      id: "n:mk", entity: "마오카이", skill: null, stat: "마나 조정", before: "40/100", after: "30/100",
+      anchorUrl: "https://x/#patch-midpatch-updates",
+    };
+    const linked = linkedNotes({ entityName: "마오카이", fieldKeywords: ["마나"] }, [mana]);
+    expect(unappliedNoteMismatch(linked, 40, 0)).toMatchObject({ noteBefore: "40", noteAfter: "30", unapplied: true, midpatch: true });
+    expect(unappliedNoteMismatch(linked, 100, 1)).toBeNull();
   });
 });
 
