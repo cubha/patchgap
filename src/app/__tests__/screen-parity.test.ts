@@ -126,6 +126,10 @@ describe("§8-1 골격 — 세 게임이 같은 컴포넌트를 쓴다", () => {
       expect(read(home)).toContain("DiscordPanel");
     });
 
+    it(`${id} 홈이 모바일 고정 하단 CTA(MobileActionBar)를 둔다 — 주 행동이 375에서 첫 화면 안에 있어야 한다(D-UX-04)`, () => {
+      expect(read(home)).toContain("MobileActionBar");
+    });
+
     it(`${id} 홈이 공용 탭(BriefingTabs/BriefingTabBar)을 쓴다`, () => {
       const src = read(home);
       // LoL은 ReleaseNoteStream 안에서 탭 바를 쓴다 — 그 경유를 인정한다.
