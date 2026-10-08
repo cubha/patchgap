@@ -33,7 +33,7 @@ export default function PubgComparePage() {
     return (
       <main>
         <Container>
-          <PubgUnavailable failure={loadPubgDeclaration()?.failure} />
+          <PubgUnavailable failure={loadPubgDeclaration()?.failure} crumbs={compareCrumbs("pubg")} />
         </Container>
       </main>
     );

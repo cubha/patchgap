@@ -2,8 +2,10 @@
 // PUBG 화면 3개(브리핑·대조표·방법론)가 함께 쓰는 조각. 2026-09-18 라운드6(사용자 P2): 이 파일의
 // 사용자 노출 문구에서 다른 게임과의 비교 서술을 전부 뺐다 — PUBG는 PUBG의 판정표로만 말한다.
 // 표본 성격 고지는 방법론에만 붙는다(브리핑·대조표는 결과만).
+import ObservationPendingNotice from "@/components/ObservationPendingNotice";
+import PageHeader from "@/components/PageHeader";
 import SiteFooter from "@/components/SiteFooter";
-import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
+import type { Crumb } from "@/lib/breadcrumbs";
 import type { ObservationFailure } from "@/pipeline/types";
 import { formatPercent, formatSignedPercent, SIGNED_PERCENT } from "@/pipeline/shared/percent";
 
@@ -37,14 +39,24 @@ export function PubgFooter({ generatedAt, nVerdicts }: { generatedAt: string; nV
 /** 집계 산출물이 없을 때의 정직한 빈 화면 — 정적 export라 라우트는 항상 빌드된다(게이트는
  * 드롭다운 옵션을 가릴 뿐이므로, 직접 URL로 들어온 사람에게는 이 화면이 답한다). */
 /** PUBG 화면을 못 그릴 때 — `failure`가 있으면 관측만 없는 상태다(C13·C14, `TftUnavailable`과 같은 규약). */
-export function PubgUnavailable({ failure }: { failure?: ObservationFailure | null } = {}) {
+export function PubgUnavailable({
+  failure,
+  crumbs = null,
+}: {
+  failure?: ObservationFailure | null;
+  /** 이동 경로(ST-16) — 관측 전 화면도 골격(브리핑 › 대조표)을 잃지 않는다. TFT `TftUnavailable`과 같은 규약. */
+  crumbs?: readonly Crumb[] | null;
+} = {}) {
   if (failure) {
+    // PUBG는 과거 쌍(history) 라우트가 없어 관측이 있는 다른 쌍으로 보낼 링크가 없다 — 사유와 골격만.
     return (
-      <div className="py-12">
-        <h1 className="font-display text-2xl font-bold text-fg">PUBG — 관측 전</h1>
-        <p role="status" data-observation={failure.reason} className="mt-3 text-sm leading-relaxed text-muted" style={{ maxWidth: "var(--measure)" }}>
-          {observationReasonLabel(failure.reason)} 이 화면은 관측이 있어야 채워집니다 — 패치노트는 PUBG 홈에서 볼 수 있습니다.
-        </p>
+      <div className="flex flex-col gap-6 py-12">
+        {crumbs ? (
+          <PageHeader crumbs={crumbs} title="PUBG — 관측 전" lead="이 화면은 관측이 있어야 채워집니다. 최신 패치노트는 PUBG 브리핑이 먼저 반영했습니다." />
+        ) : (
+          <h1 className="font-display text-2xl font-bold text-fg">PUBG — 관측 전</h1>
+        )}
+        <ObservationPendingNotice failure={failure} className="max-w-2xl" />
       </div>
     );
   }

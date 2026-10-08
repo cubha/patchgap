@@ -164,14 +164,15 @@ export default function PubgBriefing({ bundle, declaration }: { bundle: PubgBund
               우측 패널이 좌측 **탭 바** 상단에 맞아 카드끼리 어긋난다 — 그 배치는 탭 바
               위치를 아는 쪽만 정할 수 있다(2026-09-24). */}
           <BriefingTabs
-              contentCount={announced.length}
+              /* 탭 배지 = 노트 조항 수(타일 부제·히어로와 같은 수) — tft-S8과 같은 규칙. */
+              contentCount={notes.length}
               gapCount={gapTotal}
               content={
                 <SectionCard
                   eyebrow="대조"
                   title="공지된 변경은 실제로 그렇게 됐나"
                   variant="embedded"
-                  action={<span className="font-mono text-xs text-muted">{announced.length}건</span>}
+                  action={<span className="font-mono text-xs text-muted">대상 {new Set(announced.map((r) => r.weaponKey)).size}종</span>}
                 >
                   {/* 단위 1줄 — 매치당 총 획득이 함께 내려가(490 → 427) 이 한 줄이 없으면 모든 무기가 하향으로
                       읽힌다. 왜 그런지는 방법론 "기저" 카드가 말한다. */}
@@ -194,6 +195,7 @@ export default function PubgBriefing({ bundle, declaration }: { bundle: PubgBund
                   <AnnouncedCoverageLine
                     noteTargets={new Set(notes.flatMap((n) => n.weaponKeys)).size}
                     observed={new Set(announced.map((r) => r.weaponKey)).size}
+                    alsoUnmeasured="이 데이터로 측정할 수 없는 조항(조준 전환·반동·차량 피해)"
                   />
                   {noteSource ? (
                     <div className="border-t border-border-soft px-5 py-3">

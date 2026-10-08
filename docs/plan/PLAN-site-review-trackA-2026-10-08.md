@@ -85,5 +85,6 @@
 - 태그 조정: ST-07 `[TDD]` 해제(한 줄 전달 — 3-AND (c) 불충족).
 - `src/components/compare/__tests__/render.test.tsx` 「노트 0엔티티(0항목)」 → 「노트 0대상(0항목)」(ST-18: 커버리지가 공용 `CoverageSection`으로 바뀌며 어휘가 사용자 말 「대상」으로 통일 — parity-S16의 일부가 함께 닫힘).
 - `src/lib/__tests__/lane.test.ts` `stubRecord`를 전체 `DeltaRecord`(보고 자격 있음)로 — `lanesForEntityKey`가 자격을 보게 된 ST-19 명세 변경. 라인 도출 규칙 케이스는 그대로 통과.
-- 부분 수행: ST-16의 「`PubgUnavailable`에 observedHref」는 하지 않았다(PUBG는 관측 쌍이 없어 줄 곳이 없다). ST-22는 9종 중 7종(JS9·RPD는 api-assets 전체에 없음). ST-23·ST-25·ST-26의 렌더 확인(캡처·콘솔)은 `--ui` 미지정이라 미실측 — Phase 3 빌드 산출물 grep으로 1차 확인.
+- 부분 수행: ST-16의 「`PubgUnavailable`에 observedHref」는 하지 않았다 — 정확한 사유(acceptance-critic 정정): PUBG는 관측 쌍은 있으나 **과거 쌍(history) 라우트 자체가 없어** 관측 전일 때 보낼 다른 쌍 주소가 없다. 이동 경로(`crumbs`)는 FIX 1회차에서 추가.
+- FIX 1회차(acceptance·scope 지적): 404 복귀 링크를 `<a>`(전체 로드)로 — `<Link>`면 `NOT_FOUND_FLAG`가 window에 남아 다음 화면도 게임 null. 고아 ID tft-S8(상위 PLAN A2에 있었으나 ③에 누락): TFT·PUBG 「패치 내용」 탭 배지 = 노트 항목 수(부제와 같은 수), 대조 카드 머리 = 「대상 N종」(결론 문장 분자와 같은 함수), TFT 커버리지 「관측 짝」 = 같은 함수 — 네 숫자 중 같은 개념은 같은 수, 다른 개념(항목/대상)은 라벨이 다르다. ST-22는 9종 중 7종(JS9·RPD는 api-assets 전체에 없음). ST-23·ST-25·ST-26의 렌더 확인(캡처·콘솔)은 `--ui` 미지정이라 미실측 — Phase 3 빌드 산출물 grep으로 1차 확인.
 - `src/components/observation/__tests__/observationModel.test.ts` — 판정 파일 필터를 `{from}_{to}.json` 패턴으로(사전 결함: 로컬 `*.notify.json`을 순회해 `rows is not iterable`). 테스트 약화 아님.

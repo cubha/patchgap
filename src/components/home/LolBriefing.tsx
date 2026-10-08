@@ -25,6 +25,7 @@ import { lolGapTotal } from "@/lib/gapTotals";
 import type { CosmeticSkinItem } from "@/components/home/CosmeticSkinPreview";
 import { isGapStatus } from "@/components/home/logic";
 import { computeHeadline } from "@/lib/headline";
+import { verdictCount } from "@/pipeline/shared/headline";
 import { isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
 import { matchSkinsInSummary, skinSplashPath } from "@/pipeline/shared/cosmetic-skin";
 import { indexIndirectCauses } from "@/components/home/indirectEffects";
@@ -286,7 +287,11 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
           {/* 푸터는 세 게임 공통이다(UX-BRIEF §8-1) — LoL만 전 화면에 없었다(2026-09-22 실측). SiteFooter가 자체 Container를
               가지므로 한 번 더 감싸지 않는다(여백 두 겹, 2026-10-07 D-ALIGN-01). */}
           {/* 푸터 판정 수 = 타일 「유의한 관측」과 같은 술어(ST-11) — 전 행 수(1931)는 화면 어디에도 없는 수였다. */}
-          <SiteFooter game="lol" generatedAt={deltas?.meta.generatedAt ?? null} nVerdicts={deltas ? headline.statCount : null} />
+          <SiteFooter
+            game="lol"
+            generatedAt={deltas?.meta.generatedAt ?? null}
+            nVerdicts={deltas ? verdictCount(deltas.rows, deltas.meta.qAlpha) : null}
+          />
         </main>
       </div>
     </PairBaseProvider>

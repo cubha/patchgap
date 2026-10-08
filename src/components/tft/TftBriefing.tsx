@@ -157,6 +157,8 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
   const unannounced = tftMetricGapRows(deltas.rows, deltas.meta.qAlpha, submarine);
   const unannouncedEntities = new Set(unannounced.map((r) => `${r.entityType}:${r.entityKey}`)).size;
   const announced = reportable.filter((row) => displayStatus(row, deltas.meta.qAlpha) !== "unannounced");
+  // 공지 대상 중 관측이 선 대상 수 — 카드 머리·결론 문장·대조표 커버리지가 같은 수를 본다(ST-06·tft-S8).
+  const announcedObserved = countAnnouncedObservedEntities(deltas.rows, deltas.meta.qAlpha);
   const matches = before.matches + after.matches;
   // 시안 04-applied의 헤드라인 — 이 사이트가 무엇을 하는 곳인지 한 문장으로 말한다.
   // 숫자는 아래 3타일과 **같은 출처**를 쓴다(따로 세면 화면이 스스로를 반박한다).
@@ -261,14 +263,16 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
               우측 패널이 좌측 **탭 바** 상단에 맞아 카드끼리 어긋난다 — 그 배치는 탭 바
               위치를 아는 쪽만 정할 수 있다(2026-09-24). */}
           <BriefingTabs
-              contentCount={announced.length}
+              /* 탭 배지 = 노트 항목 수(타일 부제와 같은 수), 카드 머리 = 공지 대상 중 관측이 선 **대상** 수(결론 문장과 같은
+                 함수) — tft-S8: 같은 개념은 같은 수, 다른 개념(항목/대상)은 라벨이 다르다. */
+              contentCount={notes.items.length}
               gapCount={gapTotal}
               content={
                 <SectionCard
                   eyebrow="대조"
                   title="공지된 변경은 실제로 그렇게 됐나"
                   variant="embedded"
-                  action={<span className="font-mono text-xs text-muted">{announced.length}건</span>}
+                  action={<span className="font-mono text-xs text-muted">대상 {announcedObserved}종</span>}
                 >
                   <div className={PANEL_SCROLL_BODY}>
                   <BriefingRowList
@@ -283,7 +287,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
                 <AnnouncedCoverageLine
                   noteTargets={noteEntities}
                   /* 세 게임이 같은 함수로 센다(ST-06) — 전에는 표시 상태로 걸러 간접 영향 행까지 공지로 셌다. */
-                  observed={countAnnouncedObservedEntities(deltas.rows, deltas.meta.qAlpha)}
+                  observed={announcedObserved}
                 />
                 </SectionCard>
               }

@@ -18,7 +18,7 @@ import { compareCrumbs } from "@/lib/breadcrumbs";
 import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
 import { tftDetailRows } from "@/lib/pairPages";
 import { PairBaseProvider } from "@/components/PairBaseContext";
-import { verdictCount } from "@/pipeline/shared/headline";
+import { countAnnouncedObservedEntities, verdictCount } from "@/pipeline/shared/headline";
 
 export interface TftCompareViewProps {
   bundle: TftBundle | null;
@@ -57,7 +57,8 @@ export default function TftCompareView({ bundle, declaration, pairBase = null, o
   const shownDeltas = rows.reduce((sum, r) => sum + Object.keys(r.cells).length, 0);
   // 커버리지 단위는 **엔티티**다 — 표의 행 수와 같은 수가 나와야 화면이 스스로를 반박하지 않는다.
   const noteEntities = new Set(notes.items.map((n) => n.entity)).size;
-  const matchedEntities = rows.filter((r) => r.noteAnchor !== null).length;
+  // 「관측 짝」 = 브리핑 결론 문장·카드 머리와 **같은 함수**(tft-S8) — 전에는 표 행 기준이라 네 화면이 네 숫자를 말했다.
+  const matchedEntities = countAnnouncedObservedEntities(deltas.rows, deltas.meta.qAlpha);
   const gapEntities = rows.filter((r) => r.status === "unannounced").length;
 
   return (
