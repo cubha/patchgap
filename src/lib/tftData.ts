@@ -132,6 +132,17 @@ export function loadTft(pair?: TftPair): TftBundle | null {
   return { deltas, before, after, notes };
 }
 
+/**
+ * **관측이 있는** 가장 최근 쌍과, 그것이 최신 쌍인지(ST-14, 2026-10-08). 최신 쌍이 관측 stub(C13·C14)이면 관측 화면
+ * (대조표·방법론·상세)은 비는데, 그때 사람을 보낼 곳이 이 쌍이다 — 전에는 테스트 헬퍼(`observed-briefing.tsx`)만 알았고
+ * 화면은 "TFT 홈에서 볼 수 있습니다"라는 링크 아닌 문장으로 끝났다(site-review tft-S6). 관측 쌍이 하나도 없으면 null.
+ */
+export function latestObservedTftPair(): { pair: TftPair; isLatest: boolean } | null {
+  const pairs = listTftPairs();
+  const index = pairs.findIndex((pair) => loadTft(pair) !== null);
+  return index === -1 ? null : { pair: pairs[index], isLatest: index === 0 };
+}
+
 /** 선언 축만 있는 최신 쌍(C13·C14) — 노트와 관측이 없는 사유. */
 export interface TftDeclaration {
   from: string;

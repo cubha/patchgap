@@ -5,7 +5,7 @@
 import type { DeltasFile } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
 import { FDR_ALPHA } from "@/pipeline/aggregate/stats";
-import { countGapEntities, countReportable } from "@/pipeline/shared/headline";
+import { countAnnouncedObservedEntities, countGapEntities, countReportable } from "@/pipeline/shared/headline";
 import { countRelevantNoteEntities as countRelevantNoteEntitiesInFile } from "@/pipeline/shared/notes-count";
 
 function countRelevantNoteEntities(notes: NotesFile | null): number {
@@ -56,6 +56,11 @@ export interface HeadlineStats {
    */
   /** 미공지 Gap **엔티티** 수(관측 행 수가 아니다 — Gap 탭 카드 수와 같다). */
   unannouncedCount: number;
+  /**
+   * 「공지된 대상 X개 중 유의한 관측이 선 것은 Y개」의 Y — 공지 짝이 있고 보고 자격을 얻은 **대상** 수(ST-06).
+   * `statCount`(전체 유의 행)를 여기 넣으면 분자가 분모(`noteEntityCount`)를 넘는다 — 26.19 실측 「19개 중 76개」.
+   */
+  announcedObservedCount: number;
 }
 
 /** deltas/notes가 아직 없으면(ST-08 미착수 구간·빈 데이터 빌드) 전부 0을 반환한다(throw 없음 —
@@ -77,5 +82,6 @@ export function computeHeadline(
     noteItemCount,
     statCount: countReportable(rows, qAlpha),
     unannouncedCount: countGapEntities(rows),
+    announcedObservedCount: countAnnouncedObservedEntities(rows, qAlpha),
   };
 }

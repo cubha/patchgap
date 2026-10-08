@@ -6,6 +6,7 @@
 // 전제를 공유하되, 이 함수는 한 단계 더 나아가 실제 포지션 문자열까지 추출한다.
 
 import type { DeltaRecord, LanePosition } from "@/pipeline/types";
+import { isReportableRecord } from "@/pipeline/shared/reportable";
 
 /** 델타 id에서 도출 가능한 "라인 축" 값 — 5개 명명 포지션 + 전체(scope=all) 행. */
 export type LaneAxis = LanePosition | "all";
@@ -36,6 +37,17 @@ export function parseLaneAxis(id: string): LaneAxis | null {
 }
 
 /**
+ * 챔피언 **전체(scope=all)** 행인가 — 3세그먼트 id. 다른 entityType은 이 구분이 없어 항상 true(동점 처리).
+ * 2026-10-08 `components/home/logic.ts`에서 이관(ST-08) — 카드 대표 선택(`noteDeltaIndex`)과 미리보기(`logic.ts`)가
+ * 같은 술어를 보게 하려고. 전체 행을 라인 행보다 앞세우는 이유: 상세의 기본 보기가 전체 행이라, 카드가 라인 값을
+ * 라벨 없이 보여 주면 상세 도착 값과 어긋난다(카직스 3.0→8.5 vs 3.3→8.6 실측).
+ */
+export function isAllScopeChampionRow(record: Pick<DeltaRecord, "id" | "entityType">): boolean {
+  if (record.entityType !== "champion") return true;
+  return record.id.split(":").length === 3;
+}
+
+/**
  * 주어진 `entityKey`가 가진 라인별(scope=position) 델타 행에서 실제 라인 집합을 도출한다 —
  * 홈 릴리즈노트 스트림의 라인 필터(HANDOFF-redesign-2026-09-10.md §4-1 "라인 필터 6종")가
  * 쓴다. 노트 항목 자체에는 라인 정보가 없으므로(ST-B releaseStream.ts는 entity 한글명만
@@ -45,14 +57,19 @@ export function parseLaneAxis(id: string): LaneAxis | null {
  *   '전체'에서만 노출"로 취급한다(라인을 추측해 채우지 않는다).
  */
 export function lanesForEntityKey(
-  records: readonly Pick<DeltaRecord, "id" | "entityKey">[],
-  entityKey: string
+  records: readonly DeltaRecord[],
+  entityKey: string,
+  qAlpha?: number
 ): LanePosition[] {
   const lanes = new Set<LanePosition>();
   for (const record of records) {
     if (record.entityKey !== entityKey) continue;
     const lane = parseLaneAxis(record.id);
-    if (lane !== null && lane !== "all") lanes.add(lane);
+    if (lane === null || lane === "all") continue;
+    // 그 라인에서 **보고 자격**을 얻은 행이 있을 때만 소속이다(ST-19, site-review lol-S6). 행이 있기만 하면 소속으로 치면
+    // 26.19처럼 TOP 302행·BOTTOM 224행이 있는 데이터에서 거의 모든 챔피언이 모든 라인에 속해 칩이 아무것도 거르지 않는다.
+    if (!isReportableRecord(record, qAlpha)) continue;
+    lanes.add(lane);
   }
   return LANE_POSITIONS.filter((lane) => lanes.has(lane));
 }

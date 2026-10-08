@@ -30,10 +30,10 @@ export interface StatTilesProps {
    */
   patch: string;
   itemCount?: number | null;
-  /** 유의한 관측 수. */
-  significantCount: number;
-  /** 미공지 Gap 수. */
-  gapCount: number;
+  /** 유의한 관측 수. `null`이면 **관측 전**(ST-16) — 0이 아니라 「—」로 그린다(0은 관측된 사실처럼 읽힌다). */
+  significantCount: number | null;
+  /** 미공지 Gap 수. `null`이면 관측 전 — 「—」이고 대조표로 보내지 않는다(그 대조표도 관측 전이다). */
+  gapCount: number | null;
   /**
    * 어느 게임의 타일인가 — **미공지 타일이 갈 곳을 여기서 계산한다**.
    *
@@ -79,17 +79,24 @@ export default function StatTiles({
       </div>
       <div className="border-r border-border-soft p-5">
         <strong className="block font-display text-3xl font-bold tabular-nums text-fg">
-          {fmtInt(significantCount)}
+          {significantCount === null ? "—" : fmtInt(significantCount)}
         </strong>
         <span className="mt-1 block text-xs text-muted">{TILE_LABELS.significant}</span>
       </div>
       {/* hover 채움은 반투명으로 — `bg-surface-warm`(불투명)은 hover 순간 이 타일만 유리가 꺼져 보인다. */}
-      <Link href={gapHrefOf(game, pairBase)} className="p-5 transition-colors hover:bg-accent/10">
-        <strong className="block font-display text-3xl font-bold tabular-nums text-accent">
-          {fmtInt(gapCount)}
-        </strong>
-        <span className="mt-1 block text-xs text-muted">{TILE_LABELS.gap} ↗</span>
-      </Link>
+      {gapCount === null ? (
+        <div className="p-5">
+          <strong className="block font-display text-3xl font-bold tabular-nums text-muted">—</strong>
+          <span className="mt-1 block text-xs text-muted">{TILE_LABELS.gap}</span>
+        </div>
+      ) : (
+        <Link href={gapHrefOf(game, pairBase)} className="p-5 transition-colors hover:bg-accent/10">
+          <strong className="block font-display text-3xl font-bold tabular-nums text-accent">
+            {fmtInt(gapCount)}
+          </strong>
+          <span className="mt-1 block text-xs text-muted">{TILE_LABELS.gap} ↗</span>
+        </Link>
+      )}
     </section>
   );
 }

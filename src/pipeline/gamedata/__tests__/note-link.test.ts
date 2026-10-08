@@ -3,8 +3,10 @@ import { describe, it, expect } from "vitest";
 import {
   entityMatches,
   linkNotes,
+  linkPriorNote,
   linkedNotes,
   noteValueMismatch,
+  unappliedNoteMismatch,
   type NoteLike,
 } from "../note-link";
 
@@ -241,6 +243,192 @@ describe("noteValueMismatch — 공지했는데 값이 다르다", () => {
   it("linkNotes는 linkedNotes의 id 목록과 같다 — 두 경로가 갈라지면 판정이 갈라진다", () => {
     const input = { entityName: "폭풍갈퀴", fieldKeywords: ["공격 속도"] };
     expect(linkNotes(input, NOTES_2617)).toEqual(linkedNotes(input, NOTES_2617).map((l) => l.note.id));
+  });
+});
+
+// ST-01(2026-10-08 site-review lol-S1): 엘리스 패시브 「기본 지속 효과 적중 시 마법 피해량 12/22/32/42 ⇒ 14/24/34/44」가
+// DDragon에서는 **R 스펠의 effect**에 들어 있다. 슬롯(Q~R)으로만 맞추면 "기본 지속 효과" 문구에 R이 없어 잠수함이 된다 —
+// 같은 화면 위 구획이 공지라고 말한 값을 아래 구획이 잠수함이라고 말했다. 노트가 **그 값 자체**를 적었으면 어느 슬롯이든 공지다.
+describe("linkedNotes — 값 토큰 경로(ST-01)", () => {
+  const elisePassive: NoteLike = {
+    id: "note:elise-passive",
+    entity: "엘리스",
+    skill: "기본 지속 효과 - 거미 여왕",
+    stat: "기본 지속 효과 적중 시 마법 피해량",
+    before: "12/22/32/42",
+    after: "14/24/34/44",
+  };
+  const eliseW: NoteLike = {
+    id: "note:elise-w",
+    entity: "엘리스",
+    skill: "W - 광란의 질주",
+    stat: "추가 공격 속도",
+    before: "60/75/90/105/120%",
+    after: "70/85/100/115/130%",
+  };
+
+  it("★ 노트가 적은 값과 변경 값이 토큰열로 같으면 스킬 키가 달라도 `value` 경로로 걸린다", () => {
+    const linked = linkedNotes(
+      { entityName: "엘리스", fieldKeywords: [], skillKey: "R", value: { before: "12/22/32/42", after: "14/24/34/44" } },
+      [elisePassive, eliseW]
+    );
+    expect(linked.map((l) => [l.note.id, l.via])).toEqual([["note:elise-passive", "value"]]);
+  });
+
+  it("`%`·쉼표·공백 표기 차이는 무시한다 — 60/75/90/105/120% ↔ 60/75/90/105/120", () => {
+    const linked = linkedNotes(
+      { entityName: "엘리스", fieldKeywords: [], skillKey: "E", value: { before: "60/75/90/105/120", after: "70/85/100/115/130" } },
+      [eliseW]
+    );
+    expect(linked.map((l) => l.via)).toEqual(["value"]);
+  });
+
+  it("★ 단일 숫자는 값 경로로 걸지 않는다 — 「공격력 65 ⇒ 60」이 「방어력 65→60」의 알리바이가 되면 안 된다", () => {
+    const ad: NoteLike = { id: "n-ad", entity: "마스터 이", skill: null, stat: "기본 공격력", before: "65", after: "60" };
+    expect(linkedNotes({ entityName: "마스터 이", fieldKeywords: ["방어력"], value: { before: 65, after: 60 } }, [ad])).toEqual([]);
+  });
+
+  it("토큰 수가 같아도 값이 하나라도 다르면 안 걸린다", () => {
+    expect(
+      linkedNotes(
+        { entityName: "엘리스", fieldKeywords: [], skillKey: "R", value: { before: "12/22/32/42", after: "14/24/34/45" } },
+        [elisePassive]
+      )
+    ).toEqual([]);
+  });
+
+  it("엔티티가 다르면 값이 같아도 안 걸린다", () => {
+    expect(
+      linkedNotes(
+        { entityName: "카직스", fieldKeywords: [], skillKey: "R", value: { before: "12/22/32/42", after: "14/24/34/44" } },
+        [elisePassive]
+      )
+    ).toEqual([]);
+  });
+
+  it("값 경로로 걸린 노트는 값이 같다는 뜻이므로 불일치 후보가 아니다", () => {
+    const linked = linkedNotes(
+      { entityName: "엘리스", fieldKeywords: [], skillKey: "R", value: { before: "12/22/32/42", after: "14/24/34/44" } },
+      [elisePassive]
+    );
+    expect(noteValueMismatch(linked, "12/22/32/42", "14/24/34/44")).toBeNull();
+  });
+});
+
+// ST-02: 직전 패치 노트가 **그 값으로** 바꾼다고 이미 말했으면 잠수함이 아니라 「지연 반영」이다(TFT 렝가·덩굴정령 실측).
+describe("linkPriorNote — 직전 노트의 지연 반영(ST-02)", () => {
+  const rengar182: NoteLike = { id: "n:18.2:rengar", entity: "렝가", skill: null, stat: "기본 공격 속도", before: "0.8", after: "0.75" };
+  const yi182: NoteLike = { id: "n:18.2:yi", entity: "마스터 이", skill: null, stat: "공격력 형태 기본 공격력", before: "65", after: "60" };
+  const prior = [{ patch: "18.2", notes: [rengar182, yi182] }];
+
+  it("★ keyword 경로로 걸리고 노트의 after가 변경의 after와 같으면 그 노트가 지연 반영의 출처다", () => {
+    expect(
+      linkPriorNote({ entityName: "렝가", fieldKeywords: ["공격 속도"], value: { before: 0.8, after: 0.75 } }, prior)
+    ).toEqual({ noteId: "n:18.2:rengar", patch: "18.2" });
+  });
+
+  it("★ 노트의 after에 못 미치면(65 → 62, 노트 60) 지연 반영이 아니다 — null", () => {
+    expect(linkPriorNote({ entityName: "마스터 이", fieldKeywords: ["공격력"], value: { before: 65, after: 62 } }, prior)).toBeNull();
+  });
+
+  it("노트의 after에 도달하면(62 → 60) 출발점이 노트와 달라도 지연 반영이다 — 단계적 반영", () => {
+    expect(
+      linkPriorNote({ entityName: "마스터 이", fieldKeywords: ["공격력"], value: { before: 62, after: 60 } }, prior)
+    ).toEqual({ noteId: "n:18.2:yi", patch: "18.2" });
+  });
+
+  it("값 토큰 경로(레벨 배열)로 걸린 노트도 출처가 된다", () => {
+    const passive: NoteLike = { id: "n:p", entity: "엘리스", skill: "기본 지속 효과", stat: "피해량", before: "12/22/32/42", after: "14/24/34/44" };
+    expect(
+      linkPriorNote(
+        { entityName: "엘리스", fieldKeywords: [], skillKey: "R", value: { before: "12/22/32/42", after: "14/24/34/44" } },
+        [{ patch: "26.18", notes: [passive] }]
+      )
+    ).toEqual({ noteId: "n:p", patch: "26.18" });
+  });
+
+  it("엔티티 언급·재작업 경로는 값을 말한 것이 아니라 출처가 못 된다", () => {
+    const rework: NoteLike = { id: "n:rw", entity: "렝가", skill: "능력 개편", stat: null };
+    expect(linkPriorNote({ entityName: "렝가", fieldKeywords: ["공격 속도"], value: { before: 0.8, after: 0.75 } }, [{ patch: "18.2", notes: [rework] }])).toBeNull();
+  });
+
+  it("여러 패치를 주면 **앞에 준 것**(최근)부터 찾는다", () => {
+    const older: NoteLike = { id: "n:18.1:rengar", entity: "렝가", skill: null, stat: "기본 공격 속도", before: "0.85", after: "0.75" };
+    const found = linkPriorNote(
+      { entityName: "렝가", fieldKeywords: ["공격 속도"], value: { before: 0.8, after: 0.75 } },
+      [{ patch: "18.2", notes: [rengar182] }, { patch: "18.1", notes: [older] }]
+    );
+    expect(found?.patch).toBe("18.2");
+  });
+
+  it("a/b 성분(마나 조정 시작/최대)은 성분 번호로 견준다", () => {
+    const mana: NoteLike = { id: "n:mk", entity: "마오카이", skill: null, stat: "마나 조정", before: "40/100", after: "30/100" };
+    expect(
+      linkPriorNote({ entityName: "마오카이", fieldKeywords: ["마나"], value: { before: 90, after: 100 } }, [{ patch: "18.2", notes: [mana] }], 1)
+    ).toEqual({ noteId: "n:mk", patch: "18.2" });
+    expect(
+      linkPriorNote({ entityName: "마오카이", fieldKeywords: ["마나"], value: { before: 90, after: 95 } }, [{ patch: "18.2", notes: [mana] }], 1)
+    ).toBeNull();
+  });
+});
+
+// ST-03(site-review tft-S4): 노트가 「0.8 ⇒ 0.75」라 했는데 게임 파일이 **그대로 0.8**이면 변경 행이 없어 화면 어디에도
+// 안 나온다 — 같은 상황인 덩굴정령(110→115 vs 노트 115⇒120)은 「공지값 불일치」로 보이는데 렝가만 조용했다.
+// 안 바뀐 필드도 노트의 출발값과 같으면 「공지값 미반영」이다.
+describe("unappliedNoteMismatch — 공지됐는데 게임 파일이 안 바뀜(ST-03)", () => {
+  const rengar: NoteLike = { id: "n:rengar", entity: "렝가", skill: null, stat: "기본 공격 속도", before: "0.8", after: "0.75" };
+  const link = (n: NoteLike, keywords = ["공격 속도"]) => linkedNotes({ entityName: "렝가", fieldKeywords: keywords }, [n]);
+
+  it("★ 현재값이 노트의 before와 같고 after와 다르면 미반영이다", () => {
+    expect(unappliedNoteMismatch(link(rengar), 0.8)).toEqual({
+      noteId: "n:rengar",
+      noteBefore: "0.8",
+      noteAfter: "0.75",
+      unapplied: true,
+    });
+  });
+
+  it("현재값이 노트의 after와 같으면 이미 반영된 것 — null", () => {
+    expect(unappliedNoteMismatch(link(rengar), 0.75)).toBeNull();
+  });
+
+  it("현재값이 노트의 before와도 다르면 이 노트가 이 필드를 말한 게 아닐 수 있다 — null(보수적)", () => {
+    expect(unappliedNoteMismatch(link(rengar), 0.9)).toBeNull();
+  });
+
+  it("keyword 경로가 아니면 값을 견주지 않는다", () => {
+    const linked = linkedNotes({ entityName: "렝가", fieldKeywords: [], entityMatchSuffices: true }, [rengar]);
+    expect(unappliedNoteMismatch(linked, 0.8)).toBeNull();
+  });
+
+  it("값이 맞는(이미 반영된) 노트가 하나라도 있으면 미반영이 아니다", () => {
+    const applied: NoteLike = { id: "n:applied", entity: "렝가", skill: null, stat: "기본 공격 속도", before: "0.75", after: "0.8" };
+    const linked = linkedNotes({ entityName: "렝가", fieldKeywords: ["공격 속도"] }, [rengar, applied]);
+    expect(unappliedNoteMismatch(linked, 0.8)).toBeNull();
+  });
+
+  it("★ 낱말이 섞인 표기(「체력 0% ⇒ 체력 5%」)는 견주지 않는다 — 그 0은 기본 치명타 0이 아니다(26.17 트린다미어 실측)", () => {
+    const passive: NoteLike = { id: "n:tryn", entity: "트린다미어", skill: null, stat: "기본 치명타", before: "체력 0%", after: "체력 5%" };
+    expect(unappliedNoteMismatch(linkedNotes({ entityName: "트린다미어", fieldKeywords: ["치명타"] }, [passive]), 0)).toBeNull();
+  });
+
+  it("★ `%` 노트는 비율형 값(≤1)에만 — 「공격력 40% ⇒ 35%」가 기본 공격력 40에 걸리면 안 된다(18.3 럭스 실측)", () => {
+    const ratio: NoteLike = { id: "n:lux", entity: "럭스", skill: null, stat: "공격력", before: "40%", after: "35%" };
+    const linked = linkedNotes({ entityName: "럭스", fieldKeywords: ["공격력"] }, [ratio]);
+    expect(unappliedNoteMismatch(linked, 40)).toBeNull();
+    // 반대로 「공격 속도 0.7% ⇒ 0.75%」(노트가 %를 잘못 붙인 실측)는 0.7에 걸린다.
+    const as: NoteLike = { id: "n:varus", entity: "바루스", skill: null, stat: "공격 속도", before: "0.7%", after: "0.75%" };
+    expect(unappliedNoteMismatch(linkedNotes({ entityName: "바루스", fieldKeywords: ["공격 속도"] }, [as]), 0.7)).toMatchObject({ unapplied: true });
+  });
+
+  it("a/b 성분은 성분 번호로 견준다 · 중간 패치 표식을 단다", () => {
+    const mana: NoteLike = {
+      id: "n:mk", entity: "마오카이", skill: null, stat: "마나 조정", before: "40/100", after: "30/100",
+      anchorUrl: "https://x/#patch-midpatch-updates",
+    };
+    const linked = linkedNotes({ entityName: "마오카이", fieldKeywords: ["마나"] }, [mana]);
+    expect(unappliedNoteMismatch(linked, 40, 0)).toMatchObject({ noteBefore: "40", noteAfter: "30", unapplied: true, midpatch: true });
+    expect(unappliedNoteMismatch(linked, 100, 1)).toBeNull();
   });
 });
 

@@ -30,6 +30,7 @@ import GateGrid from "@/components/methodology/GateGrid";
 import PipelineDiagram from "@/components/methodology/PipelineDiagram";
 import StatusDefinitionTable from "@/components/methodology/StatusDefinitionTable";
 import { buildPipelineSteps } from "@/components/methodology/pipelineSteps";
+import { verdictCount } from "@/pipeline/shared/headline";
 
 /** data/ddragon/{version}/ 디렉토리 이름(내림차순 최신)에서 Data Dragon 버전을 읽는다.
  * data.ts 미소유라 같은 "로컬 레이아웃 재구현" 관례(ST-06/ST-10 선례)를 따른다. 디렉토리가
@@ -348,7 +349,7 @@ export default function MethodologyPage() {
       lead="판정 엔진은 세 게임이 같은 것을 씁니다. 갈리는 것은 무엇을 관측하느냐뿐입니다."
       slots={slots}
       generatedAt={deltas?.meta.generatedAt ?? null}
-      nVerdicts={deltas?.rows.length ?? null}
+      nVerdicts={deltas ? verdictCount(deltas.rows, deltas.meta.qAlpha) : null}
     />
   );
 }

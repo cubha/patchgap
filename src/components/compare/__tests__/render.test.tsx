@@ -108,7 +108,9 @@ describe("DeltaTable — 엔티티 1행·인라인 지표(사용자 L3)", () => 
     const cell = container.querySelector('tr[data-entity-key="champion:MonkeyKing"] td:nth-child(3)');
     expect(cell).not.toBeNull();
     // 둘 다 남는다 — 라인 수치가 더 이상 버려지지 않는다.
-    expect(cell!.textContent).toContain("▼ −10.8%p");
+    // ST-09(2026-10-08 명세 변경): 델타는 원시 −0.108이 아니라 **표시된 끝값** 55.4% → 44.5%의 차다 — 읽는 사람이 검산하는
+    // 수와 같아야 한다(site-review lol-S20: 같은 끝값 표시에 +4.8·+4.7 두 델타).
+    expect(cell!.textContent).toContain("▼ −10.9%p");
     expect(cell!.textContent).toContain("▼ −11.6%p");
     // 축이 각각 붙는다("표기 없으면 전체"라는 암묵 규칙을 없앤다).
     expect(cell!.textContent).toContain("전체");
@@ -222,7 +224,8 @@ describe("CoverageBar — 전부 0", () => {
         stats={{ noteEntityCount: 0, noteItemCount: 0, matchedCount: 0, unannouncedCount: 0, lowSampleCount: 0, belowThresholdCount: 0, indirectEffectCount: 0, gapEntityCount: 0 }}
       />
     );
-    expect(container.textContent).toContain("노트 0엔티티(0항목) 중 관측 짝 0");
+    // ST-18(2026-10-08 명세 변경): 커버리지는 세 게임 공용 `CoverageSection` — 어휘도 사용자 말(「대상」)로 통일됐다.
+    expect(container.textContent).toContain("노트 0대상(0항목) 중 관측 짝 0");
     expect(container.textContent).not.toContain("표본 부족");
     expect(container.textContent).not.toContain("바닥 미달");
   });
@@ -238,7 +241,7 @@ describe("CompareExplorer — 통합", () => {
     expect(container.querySelectorAll("[aria-pressed]")).toHaveLength(10);
     expect(container.querySelector('[aria-label="라인 필터"]')).not.toBeNull();
     expect(container.textContent).toContain("표시할 델타가 없습니다");
-    expect(container.textContent).toContain("노트 0엔티티(0항목)");
+    expect(container.textContent).toContain("노트 0대상(0항목)");
   });
 
   it("내비 묶음을 클릭하면 표의 그 엔티티 행이 포커스되고, 표에 없는 엔티티면 머리 1줄로 말한다", () => {

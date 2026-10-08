@@ -236,7 +236,42 @@ Ground Truth: `docs/design/DESIGN-TOKENS.md`(값의 최종 소스 — 이 절이
 - 타이포 Inter(display/body) · Roboto Mono(수치·ID, tabular-nums) · 스케일 11/12/14/16/20/28/40(/56)px
 - 간격 4/8/12/16/20/24/32(/48)px · 라운드 4/8/12/pill · 엘리베이션 ring(1px border)/raised · 모션 90/160ms
 
-## 7. 구현 시 준수 원칙
+## 7. 구현 시 준수 원칙 <!-- ux-principles v1 -->
+원칙 출처: `~/.claude/skills/_shared/ux-principles.md` (복사 금지 — 이 절은 **바인딩**만 소유. 2026-10-02 백필, F-NEW-36)
+- 토큰: 프로토타입·`DESIGN-TOKENS.md` 값이 Ground Truth. 임의 컬러·스페이싱 금지(필요 시 토큰 먼저 추가)
+- 간격 역할(Proximity): 그룹 안=`--space-3` · 그룹 사이=`--space-6` (≥1.5×) — 실제 토큰 이름은 `src/styles/tokens.css` 간격 절과 맞출 것 — 토큰 **신설 금지**, 기존 이름 매핑만
+- 주 내비(Hick·Jakob): 상단 헤더 탭(브리핑·대조표·방법론·패치) · 항목 ≤7 · 위치 상단 고정. 포지션 칩(`aria-pressed`)·게임 선택(select)은 컨트롤 1개로 센다
+- 버튼 변형: primary(화면당 **1 라벨**) / secondary / ghost
+- 관습 준거(Jakob): `docs/design/REF-RECON.md` `## 구조 관측`(deeplol 2컬럼 · lol.ps 테이블 문법 · 릴리즈노트 스트림) — 대조표 골격은 §8 동등성 계약이 우선
+
+### 7-1. 화면별 주 행동 (기계판독 — L1 `static-states.mjs`가 라우트와 대조, UI 게이트 `D-UX-01/04`가 선언 라벨과 렌더를 대조. 라우트당 1행, 열 5개 고정)
+| 라우트 | 화면 | 주 행동 라벨 | selector | 모바일 첫 화면 |
+|---|---|---|---|---|
+| / | 랜딩 | 없음(열람) | — | — |
+| /lol | LoL 브리핑 홈 | 디스코드 방 들어가기 → | `aside a[href*="discord"]` | 고정 하단 바(`MobileActionBar`, lg 미만) |
+| /pubg | PUBG 브리핑 홈 | 디스코드 방 들어가기 → | `aside a[href*="discord"]` | 고정 하단 바(`MobileActionBar`, lg 미만) |
+| /tft | TFT 브리핑 홈 | 디스코드 방 들어가기 → | `aside a[href*="discord"]` | 고정 하단 바(`MobileActionBar`, lg 미만) |
+| /lol/compare | LoL 대조표 | 없음(열람) | — | — |
+| /pubg/compare | PUBG 대조표 | 없음(열람) | — | — |
+| /tft/compare | TFT 대조표 | 없음(열람) | — | — |
+| /lol/methodology | LoL 방법론 | 없음(열람) | — | — |
+| /pubg/methodology | PUBG 방법론 | 없음(열람) | — | — |
+| /tft/methodology | TFT 방법론 | 없음(열람) | — | — |
+| /lol/item/[id] | LoL 항목 상세 | 없음(열람) | — | — |
+| /pubg/weapon/[key] | PUBG 무기 상세 | 없음(열람) | — | — |
+| /pubg/map/[key] | PUBG 맵 상세 | 없음(열람) | — | — |
+| /tft/unit/[key] | TFT 유닛 상세 | 없음(열람) | — | — |
+| /lol/history/[pair] | LoL 과거 패치 | 없음(열람) | — | — |
+| /lol/history/[pair]/compare | LoL 과거 대조표 | 없음(열람) | — | — |
+| /lol/history/[pair]/item/[id] | LoL 과거 항목 | 없음(열람) | — | — |
+| /tft/history/[pair] | TFT 과거 패치 | 없음(열람) | — | — |
+| /tft/history/[pair]/compare | TFT 과거 대조표 | 없음(열람) | — | — |
+| /tft/history/[pair]/unit/[key] | TFT 과거 유닛 | 없음(열람) | — | — |
+
+> 모바일 첫 화면 열(2026-10-08): 게임 홈 3곳은 `lg` 미만에서 `MobileActionBar`(화면 바닥 고정, 사이드 패널과 같은 `DiscordCta`)가 주 행동을 첫 화면 안에 둔다 — 375에서 사이드 패널은 y 1348~4792라 게이트 D-UX-04가 세 번 울렸다(verify-impl 트랙 A, 사용자 결정 「지금 구현」). 같은 라벨 반복은 D-UX-01이 1로 센다.
+> 라벨 출처: **구현 캡처**(ui-probe 2026-10-02, 정적 빌드 `out/`) — 게임 홈 3곳의 유일한 강조 버튼이 사이드바 "디스코드 방 들어가기 →"였고(`/lol/`은 1280에서 첫 화면 밖), 대조표·방법론은 강조 버튼 0. 랜딩은 **게임 선택 화면**(카드 3장 = 선택지, 단일 주 행동 없음)이라 `없음(열람)`. 카드는 `<a>`가 카드 전체를 감싸 textContent가 카드 본문이 되므로 "시작하기 →" 글자로는 대조가 안 된다 — 단일 주 행동으로 선언하려면 카드 링크에 `aria-label`을 둔다(ux-principles §7 블록 규약). 상세 페이지의 "디스코드로 전송"(시안 03)은 구현에서 미관측 → `없음(열람)`, 다음 UI 작업 때 확인.
+
+### 7-2. 프로젝트 고유 규칙
 - 프로토타입·`DESIGN-TOKENS.md`의 토큰 값을 Ground Truth로 사용 — 임의 컬러·스페이싱 추가 금지(필요 시 토큰 먼저 추가)
 - 유채색은 상태(success/danger/warn/accent)에만 — 상승 `--success`, 하락 `--danger`, 표본 부족 `--warn`, 미공지 `--accent`
 - 무근거 문장은 `--muted` 회색, 근거 있는 문장만 `--fg`·링크

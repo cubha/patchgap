@@ -44,8 +44,36 @@ export interface DiscordPanelProps {
   generatedAt: string | null;
 }
 
+/** 방송 규칙(방법론 `#discord`) 주소 — 패널과 하단 바가 같은 곳을 가리킨다. */
+export function discordRulesHref(game: GameId): string {
+  return `${sectionHref(game, "methodology")}#discord`;
+}
+
+const CTA_BASE =
+  "inline-flex max-w-full items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-md bg-accent px-5 text-sm font-bold text-accent-on transition-colors hover:bg-accent-hover";
+
+/**
+ * 주 행동 버튼 한 벌 — 초대가 있으면 그 방으로, 없으면 방송 규칙으로(죽은 링크 금지). 사이드 패널과 모바일 고정 하단 바
+ * (`MobileActionBar`, PLAN-mobile-cta 2026-10-08)가 **같은 버튼**을 그린다: 글자가 어긋나면 UI 게이트(D-UX-01)가 주 행동을
+ * 둘로 센다. 폭·높이는 호출처가 준다(패널 min-h-10 w-48 고정 · 하단 바 min-h-11 w-full) — 같은 속성의 유틸을 두 번 합성하면
+ * 이기는 쪽이 생성 CSS 순서에 달려 불안정하다(scope-critic ST-1).
+ */
+export function DiscordCta({ game, className }: { game: GameId; className: string }) {
+  const rulesHref = discordRulesHref(game);
+  return DISCORD_INVITE_URL ? (
+    <ExternalLink href={DISCORD_INVITE_URL} className={`${CTA_BASE} ${className}`}>
+      {/* 라벨 길이가 버튼 폭을, 버튼이 옆 칸 배분을 흔들지 않는다(2026-10-07 D-STRESS-01, /lol/). */}
+      <span className="min-w-0 truncate">디스코드 방 들어가기 →</span>
+    </ExternalLink>
+  ) : (
+    <Link href={rulesHref} className={`${CTA_BASE} ${className}`}>
+      <span className="min-w-0 truncate">방송 규칙 보기 →</span>
+    </Link>
+  );
+}
+
 export default function DiscordPanel({ game, generatedAt }: DiscordPanelProps) {
-  const rulesHref = `${sectionHref(game, "methodology")}#discord`;
+  const rulesHref = discordRulesHref(game);
   return (
     <SectionCard title="디스코드 공유받기" variant="glass">
       <div className="flex flex-col items-start gap-3 p-5">
@@ -53,27 +81,13 @@ export default function DiscordPanel({ game, generatedAt }: DiscordPanelProps) {
           미공지 상위 항목과 이상 관측을 요약해 배치가 서버로 방송합니다.
           {DISCORD_INVITE_URL ? " 방은 읽기 전용으로 열려 있습니다." : null}
         </p>
+        {/* 버튼 폭은 고정(w-48). */}
+        <DiscordCta game={game} className="min-h-10 w-48" />
         {DISCORD_INVITE_URL ? (
-          <>
-            <ExternalLink
-              href={DISCORD_INVITE_URL}
-              className="inline-flex min-h-10 w-48 max-w-full items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-md bg-accent px-5 text-sm font-bold text-accent-on transition-colors hover:bg-accent-hover"
-            >
-              {/* 버튼 폭은 고정(w-48) — 라벨 길이가 버튼 폭을, 버튼이 옆 칸 배분을 흔들지 않는다(2026-10-07 D-STRESS-01, /lol/). */}
-              <span className="min-w-0 truncate">디스코드 방 들어가기 →</span>
-            </ExternalLink>
-            <Link href={rulesHref} className="text-xs text-fg-2 underline">
-              무엇이 언제 나가나
-            </Link>
-          </>
-        ) : (
-          <Link
-            href={rulesHref}
-            className="inline-flex min-h-10 w-48 max-w-full items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-md bg-accent px-5 text-sm font-bold text-accent-on transition-colors hover:bg-accent-hover"
-          >
-            <span className="min-w-0 truncate">방송 규칙 보기 →</span>
+          <Link href={rulesHref} className="text-xs text-fg-2 underline">
+            무엇이 언제 나가나
           </Link>
-        )}
+        ) : null}
         {generatedAt ? (
           <span className="text-xs text-muted">마지막 집계 {fmtKst(generatedAt)}</span>
         ) : null}

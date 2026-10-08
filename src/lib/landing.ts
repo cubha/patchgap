@@ -92,7 +92,7 @@ function pubgSummary(): LandingSummary | null {
   const bundle = loadPubg();
   if (!bundle) {
     const declaration = loadPubgDeclaration();
-    return declaration ? declarationSummary(declaration, declaration.notes.length) : null;
+    return declaration ? declarationSummary(declaration, pubgNoteTargets(declaration.notes)) : null;
   }
   const { deltas, before, after, notes } = bundle;
   const reportable = deltas.rows.filter((row) => isReportable(row.status));
@@ -101,7 +101,7 @@ function pubgSummary(): LandingSummary | null {
   return {
     pair: { from: deltas.meta.from, to: deltas.meta.to },
     sample: `Steam · 전 지역 · ${fmtInt(matches)}매치`,
-    announced: notes.length,
+    announced: pubgNoteTargets(notes),
     significant: reportable.length,
     // 게임 홈 「미공지 Gap」 타일과 **같은 함수**(2026-09-28, D2) — 통계 Gap 무기 ∪ 수치 축 무기.
     unannounced: pubgGapTotal(deltas.rows, summarizeGameData(loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to))),
@@ -113,6 +113,17 @@ function pubgSummary(): LandingSummary | null {
  * 선언 축만 있는 쌍의 카드(C13·C14) — 공지 수는 말하고 관측 수는 `null`(「—」)로 둔다. 0으로 두면
  * 관측된 사실처럼 읽힌다.
  */
+/**
+ * 카드의 「공지」는 세 게임 모두 **대상** 단위다(verify-impl V3, 2026-10-08 — 전에는 TFT·PUBG만 조항 수라 LoL 카드·브리핑 타일과
+ * 단위가 달랐다). 셈은 각 게임 브리핑과 **같은 식**이다: TFT = `TftBriefing` noteEntities, PUBG = `PubgBriefing` noteTargets.
+ */
+function tftNoteEntities(items: readonly { entity: string }[]): number {
+  return new Set(items.map((n) => n.entity)).size;
+}
+function pubgNoteTargets(notes: readonly { weaponKeys: readonly string[] }[]): number {
+  return new Set(notes.flatMap((n) => n.weaponKeys)).size;
+}
+
 function declarationSummary(declaration: { from: string; to: string }, announced: number): LandingSummary {
   return { pair: { from: declaration.from, to: declaration.to }, sample: "관측 전", announced, significant: null, unannounced: null, matches: 0 };
 }
@@ -121,7 +132,7 @@ function tftSummary(): LandingSummary | null {
   const bundle = loadTft();
   if (!bundle) {
     const declaration = loadTftDeclaration();
-    return declaration ? declarationSummary(declaration, declaration.notes.items.length) : null;
+    return declaration ? declarationSummary(declaration, tftNoteEntities(declaration.notes.items)) : null;
   }
   const { deltas, before, after, notes } = bundle;
   // **LoL과 같은 술어를 쓴다** — PUBG가 상태만 보는 `isReportable`을 쓰는 것은 그쪽
@@ -133,7 +144,7 @@ function tftSummary(): LandingSummary | null {
   return {
     pair: { from: deltas.meta.from, to: deltas.meta.to },
     sample: `KR · Master+ · ${fmtInt(matches)}매치`,
-    announced: notes.items.length,
+    announced: tftNoteEntities(notes.items),
     significant: reportable.length,
     // 게임 홈 「미공지 Gap」 타일과 **같은 함수**(2026-09-28, D2) — 대조표 표시 상태 기준 통계 Gap 대상
     // ∪ 수치 축 대상. 전에는 원시 status 행 수라 홈 타일(대상 수·합집합)과 달랐다.

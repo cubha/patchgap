@@ -25,7 +25,7 @@ describe("HeroSummary — 빈 상태(모든 수치 0)", () => {
   it("0을 그대로 렌더하고 크래시하지 않는다", () => {
     const { container } = render(
       <HeroSummary
-        stats={{ noteEntityCount: 0, noteItemCount: 0, statCount: 0, unannouncedCount: 0 }}
+        stats={{ noteEntityCount: 0, noteItemCount: 0, statCount: 0, unannouncedCount: 0, announcedObservedCount: 0 }}
         patch="26.18"
       />
     );

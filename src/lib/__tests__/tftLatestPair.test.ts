@@ -6,7 +6,39 @@ import { describe, expect, it, vi } from "vitest";
 import { latestPatchId } from "@/pipeline/collect/staleness";
 
 vi.mock("server-only", () => ({}));
-import { listTftPairs } from "@/lib/tftData";
+import { latestObservedTftPair, listTftPairs, loadTft } from "@/lib/tftData";
+import { isObservationStub } from "@/pipeline/shared/observation-stub";
+
+// ST-14(2026-10-08 site-review tft-S6·S7·parity-S1): 최신 쌍이 관측 stub일 때 화면이 「관측이 있는 최신 쌍」으로 안내하려면
+// 그 쌍을 아는 프로덕션 함수가 있어야 한다. 전에는 테스트 헬퍼(`observed-briefing.tsx`)에만 있었다.
+describe("latestObservedTftPair — 관측이 있는 가장 최근 쌍", () => {
+  it("돌려준 쌍은 관측 번들이 실재하고, 그보다 최근 쌍은 전부 stub이다", () => {
+    const found = latestObservedTftPair();
+    const pairs = listTftPairs();
+    if (pairs.length === 0) {
+      expect(found).toBeNull();
+      return;
+    }
+    expect(found).not.toBeNull();
+    expect(loadTft(found!.pair)).not.toBeNull();
+    const index = pairs.findIndex((p) => p.from === found!.pair.from && p.to === found!.pair.to);
+    expect(index).toBeGreaterThanOrEqual(0);
+    expect(found!.isLatest).toBe(index === 0);
+    for (const earlier of pairs.slice(0, index)) expect(loadTft(earlier)).toBeNull();
+  });
+
+  it("커밋된 데이터 실측: 최신 쌍이 stub이면 isLatest가 false이고 직전 관측 쌍을 가리킨다", () => {
+    const pairs = listTftPairs();
+    const latestIsStub = pairs.length > 0 && loadTft(pairs[0]) === null;
+    const found = latestObservedTftPair();
+    if (latestIsStub) {
+      expect(found?.isLatest).toBe(false);
+      expect(isObservationStub({ observationFailed: null })).toBe(false);
+    } else if (found) {
+      expect(found.isLatest).toBe(true);
+    }
+  });
+});
 
 /**
  * `loadTft`이 고르는 「최신 쌍」 규칙 — **파일명 사전순이 아니라 숫자 비교**다.

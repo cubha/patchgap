@@ -11,7 +11,7 @@
 // - "gold": delta·ci는 정수(골드) 단위 그대로 — fmtDeltaInt
 
 import type { Interval } from "@/pipeline/types";
-import { fmtCiHalf, fmtDeltaInt, fmtDeltaSec, fmtPp } from "@/lib/format";
+import { fmtCiHalf, fmtDeltaInt, fmtDeltaSec, fmtDisplayDelta, fmtPp } from "@/lib/format";
 
 export type DeltaKind = "pp" | "sec" | "gold";
 
@@ -20,18 +20,30 @@ export interface DeltaValueProps {
   ci?: Interval | null;
   kind: DeltaKind;
   className?: string;
+  /**
+   * 화면에 **함께 보이는** 전·후 값(ST-09). 주면 델타 글자를 원시 `delta`가 아니라 표시된 두 끝값의 차로 만든다 —
+   * 「10.5% → 15.3%」 옆에 +4.7이 서면 읽는 사람의 검산과 어긋난다. 방향·색도 그 차를 따른다(표시값이 같으면 중립).
+   * 끝값이 화면에 없는 자리(CI 캡션만 있는 곳)는 주지 않는다.
+   */
+  endpoints?: { before: number | null; after: number | null } | null;
 }
 
 function scaleInterval(ci: Interval, factor: number): Interval {
   return [ci[0] * factor, ci[1] * factor];
 }
 
-export default function DeltaValue({ delta, ci = null, kind, className = "" }: DeltaValueProps) {
+export default function DeltaValue({ delta, ci = null, kind, className = "", endpoints = null }: DeltaValueProps) {
   if (delta === null) {
     return <span className={`text-sm font-bold text-muted ${className}`}>—</span>;
   }
 
-  const direction = delta > 0 ? "up" : delta < 0 ? "down" : "flat";
+  // 끝값이 있으면 글자·방향 모두 표시된 끝값의 차를 따른다(ST-09). 없으면 원시 델타.
+  const displayText =
+    endpoints && endpoints.before !== null && endpoints.after !== null
+      ? fmtDisplayDelta(endpoints.before, endpoints.after, kind)
+      : null;
+  const effective = displayText === null ? delta : displayText.startsWith("+") ? 1 : displayText.startsWith("−") ? -1 : 0;
+  const direction = effective > 0 ? "up" : effective < 0 ? "down" : "flat";
   const colorClass =
     direction === "up" ? "text-success" : direction === "down" ? "text-danger" : "text-muted";
   const arrow = direction === "up" ? "▲" : direction === "down" ? "▼" : "";
@@ -40,13 +52,13 @@ export default function DeltaValue({ delta, ci = null, kind, className = "" }: D
   let ciText: string | null = null;
 
   if (kind === "pp") {
-    valueText = fmtPp(delta);
+    valueText = displayText ?? fmtPp(delta);
     if (ci) ciText = `CI ${fmtCiHalf(scaleInterval(ci, 100), 1)}`;
   } else if (kind === "sec") {
-    valueText = fmtDeltaSec(delta);
+    valueText = displayText ?? fmtDeltaSec(delta);
     if (ci) ciText = `CI ${fmtCiHalf(ci, 0)}s`;
   } else {
-    valueText = fmtDeltaInt(delta);
+    valueText = displayText ?? fmtDeltaInt(delta);
     if (ci) ciText = `CI ${fmtCiHalf(ci, 0)}`;
   }
 

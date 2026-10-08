@@ -11,7 +11,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 
 import CompareSplit from "@/components/compare/CompareSplit";
 import CompareToolbar from "@/components/compare/CompareToolbar";
@@ -47,6 +47,8 @@ import type { DisplayStatus } from "@/pipeline/shared/display-status";
 export interface PubgCompareExplorerProps {
   rows: PubgDeltaRow[];
   notes: PubgNoteItem[];
+  /** 표 아래 커버리지 블록(ST-18) — 서버가 만들어 넘긴다(세 게임 공용 `CoverageSection`). */
+  coverage?: ReactNode;
   fromLabel: string;
   toLabel: string;
   /**
@@ -76,6 +78,7 @@ function byEntityKey(changes: readonly GameDataChange[]): Map<string, GameDataCh
 export default function PubgCompareExplorer({
   rows,
   notes,
+  coverage,
   fromLabel,
   toLabel,
   assetKeys = [],
@@ -168,6 +171,7 @@ export default function PubgCompareExplorer({
       <CompareSplit
         title="선언 ↔ 관측"
         meta={`${visible.length}개 대상`}
+        coverage={coverage}
         nav={
           <NoteNavPanel
             groups={visibleNav}
@@ -201,7 +205,8 @@ export default function PubgCompareExplorer({
                 <th className={`${thBase} text-right`}>95% CI</th>
                 <th className={`${thBase} text-right`}>n (전→후)</th>
                 {showSubmarine ? <th className={thBase}>바뀐 것</th> : null}
-                <th className={`${thBase} pr-4`}>판정</th>
+                {/* 마지막 열 고정 — LoL·TFT 표와 같은 규약(ST-25). PUBG는 1280에 들어가지만 데이터가 늘어도 판정이 보이게 같은 구조를 둔다. */}
+                <th className={`${thBase} sticky right-0 bg-surface pr-4`}>판정</th>
               </tr>
             </thead>
             <tbody>
@@ -262,7 +267,7 @@ export default function PubgCompareExplorer({
                       />
                     </td>
                   ) : null}
-                  <td className="py-2.5 pr-4">
+                  <td className="sticky right-0 bg-surface py-2.5 pr-4 shadow-[inset_1px_0_0_var(--border-soft)]">
                     <StatusBadge status={statusOf(row)} />
                   </td>
                 </tr>

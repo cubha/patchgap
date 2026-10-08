@@ -9,7 +9,14 @@ import Link from "next/link";
 import SectionCard from "@/components/SectionCard";
 import { statusLabel } from "@/lib/format";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
-import { MIDPATCH_MISMATCH_CAVEAT, mismatchCellLines, mismatchNoteText, sourceLineText, submarineCellText } from "./submarineText";
+import {
+  MIDPATCH_MISMATCH_CAVEAT,
+  UNAPPLIED_MISMATCH_CAVEAT,
+  mismatchCellLines,
+  mismatchNoteText,
+  sourceLineText,
+  submarineCellText,
+} from "./submarineText";
 import type { SubmarineSummary } from "@/lib/gamedata";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 
@@ -33,7 +40,7 @@ export interface SubmarineSectionProps {
 }
 
 export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionProps) {
-  const { entities, mismatches, changeCount, source, patch } = summary;
+  const { entities, mismatches, delayed, changeCount, source, patch } = summary;
 
   return (
     <SectionCard
@@ -65,10 +72,21 @@ export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionPr
               </>
             )}
           </p>
-          <p className="mt-2 text-xs text-muted">
-            다른 항목의 &ldquo;없음&rdquo;과 다릅니다. 통계로 못 찾았다는 뜻이 아니라, 원본 수치를
-            전부 대조해 어긋난 것이 없음을 확인했다는 뜻입니다.
-          </p>
+          {/* 0건의 뜻은 출처마다 다르다(ST-04, site-review pubg-S1). DDragon·CDragon은 게임사가 배포한 원본 수치라 "전부
+              대조했다"가 참이지만, PUBG는 수치 파일이 없어 텔레메트리 피해 격자에서 **추정**한다 — 격자 밖 축(조준 전환·반동·
+              차량 피해)은 애초에 대조 대상이 아니다. 방법론이 밝힌 한계를 브리핑이 뒤집어 말하면 안 된다. */}
+          {source.kind === "telemetry-grid" ? (
+            <p className="mt-2 text-xs text-muted">
+              다른 항목의 &ldquo;없음&rdquo;과 다릅니다 — 통계로 못 찾았다는 뜻이 아니라, 피해 격자 추정에서 어긋난
+              것을 찾지 못했다는 뜻입니다. 다만 PUBG는 게임사가 수치 파일을 배포하지 않아 원본 전수 대조가 아니며,
+              격자 밖 축(조준 전환 시간·반동·차량 피해 배수)은 이 대조에 들어 있지 않습니다.
+            </p>
+          ) : (
+            <p className="mt-2 text-xs text-muted">
+              다른 항목의 &ldquo;없음&rdquo;과 다릅니다. 통계로 못 찾았다는 뜻이 아니라, 원본 수치를
+              전부 대조해 어긋난 것이 없음을 확인했다는 뜻입니다.
+            </p>
+          )}
         </div>
       ) : (
         <ul>
@@ -162,6 +180,9 @@ export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionPr
                       {line.midpatch ? (
                         <span className="basis-full font-body text-xs text-muted">{MIDPATCH_MISMATCH_CAVEAT}</span>
                       ) : null}
+                      {line.unapplied ? (
+                        <span className="basis-full font-body text-xs text-muted">{UNAPPLIED_MISMATCH_CAVEAT}</span>
+                      ) : null}
                     </div>
                   ))}
                 </li>
@@ -171,6 +192,16 @@ export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionPr
         </div>
       ) : null}
       </div>
+      {delayed.length > 0 ? (
+        // 각주(ST-02) — 잠수함 목록에서 빠진 지연 반영이 어디로 갔는지 말한다. 목록으로 올리지 않는 이유: 이 카드의 제목은
+        // 「패치노트에 없는」이고 지연 반영은 노트에 **있던** 값이다. 전부는 그 대상의 상세가 말한다.
+        <p className="border-t border-border-soft px-5 py-2 text-xs text-muted" data-delayed-count={delayed.length}>
+          이전 패치노트가 먼저 공지한 값이 이번 게임 파일에 반영된 대상{" "}
+          <span className="font-mono text-fg-2">{delayed.length}종</span>(
+          {delayed.map((e) => e.entityName).join(" · ")})은 미공지가 아니라 지연 반영이라 위 목록에서 뺐습니다 — 상세의
+          「이전 패치노트가 말한 것」 구획에 있습니다.
+        </p>
+      ) : null}
       <p className="border-t border-border-soft px-5 py-2 font-mono text-[0.65rem] text-muted">
         대조 원본: {sourceLineText(source, patch)}
       </p>

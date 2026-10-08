@@ -20,7 +20,7 @@ import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
 import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
-import { pubgGapRows, pubgGapTotal } from "@/lib/gapTotals";
+import { pubgGapTotal, pubgMetricGapRows } from "@/lib/gapTotals";
 import DeclarationOnly from "@/components/DeclarationOnly";
 import PubgWeaponGrid from "@/components/pubg/PubgWeaponGrid";
 import { loadPubgAssets, loadPubgMaps, isReportable, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
@@ -28,16 +28,19 @@ import { mapHref, weaponHref } from "@/lib/pubgRoutes";
 import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
 import { publicMapPath } from "@/pipeline/pubg/asset-path";
 import { pubgDisplayStatus } from "@/pipeline/shared/pubg-status";
+import { SIGNED_POINT, formatSignedPercent } from "@/pipeline/shared/percent";
 import ExternalLink from "@/components/ExternalLink";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import StatTiles from "@/components/StatTiles";
 import DiscordPanel from "@/components/home/DiscordPanel";
+import MobileActionBar from "@/components/home/MobileActionBar";
 import BriefingTabs from "@/components/BriefingTabs";
 import BriefingRowList from "@/components/BriefingRowList";
 import AnnouncedCoverageLine from "@/components/home/AnnouncedCoverageLine";
 import EntityIndexSection, { ENTITY_INDEX_CELL, ENTITY_INDEX_GRID } from "@/components/EntityIndexSection";
 import { groupBriefingItems } from "@/components/briefingRows";
 import { pubgNotesAsPatchNotes } from "@/pipeline/match/pubg-delta";
+import { pubgVerdictCount } from "@/pipeline/shared/headline";
 
 export default function PubgBriefing({ bundle, declaration }: { bundle: PubgBundle | null; declaration: PubgDeclaration | null }) {
   if (!bundle) {
@@ -67,7 +70,8 @@ export default function PubgBriefing({ bundle, declaration }: { bundle: PubgBund
   // 수치 축(F9) — 산출물이 없으면 섹션이 통째로 빠진다. 세 게임이 같은 컴포넌트를 쓴다.
   const submarine = summarizeGameData(loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to));
   const submarineKeys = new Set(submarine?.submarines.map((change) => change.entityKey) ?? []);
-  const unannounced = pubgGapRows(deltas.rows);
+  // 지표 축 목록은 수치 축 대상을 뺀다(ST-10) — 한 대상은 한 섹션에만. 행 = 무기 1종이라 길이가 곧 대상 수.
+  const unannounced = pubgMetricGapRows(deltas.rows, submarine);
   const gapTotal = pubgGapTotal(deltas.rows, submarine);
   const announced = reportable.filter((row) => !unannounced.includes(row));
   // 표 아래 원문 링크 1개 — 모든 공지 행이 같은 패치노트 페이지를 가리킨다(43.1 노트는 5항목 1페이지).
@@ -161,14 +165,15 @@ export default function PubgBriefing({ bundle, declaration }: { bundle: PubgBund
               우측 패널이 좌측 **탭 바** 상단에 맞아 카드끼리 어긋난다 — 그 배치는 탭 바
               위치를 아는 쪽만 정할 수 있다(2026-09-24). */}
           <BriefingTabs
-              contentCount={announced.length}
+              /* 탭 배지 = 노트 조항 수(타일 부제·히어로와 같은 수) — tft-S8과 같은 규칙. */
+              contentCount={notes.length}
               gapCount={gapTotal}
               content={
                 <SectionCard
                   eyebrow="대조"
                   title="공지된 변경은 실제로 그렇게 됐나"
                   variant="embedded"
-                  action={<span className="font-mono text-xs text-muted">{announced.length}건</span>}
+                  action={<span className="font-mono text-xs text-muted">대상 {new Set(announced.map((r) => r.weaponKey)).size}종</span>}
                 >
                   {/* 단위 1줄 — 매치당 총 획득이 함께 내려가(490 → 427) 이 한 줄이 없으면 모든 무기가 하향으로
                       읽힌다. 왜 그런지는 방법론 "기저" 카드가 말한다. */}
@@ -191,6 +196,7 @@ export default function PubgBriefing({ bundle, declaration }: { bundle: PubgBund
                   <AnnouncedCoverageLine
                     noteTargets={new Set(notes.flatMap((n) => n.weaponKeys)).size}
                     observed={new Set(announced.map((r) => r.weaponKey)).size}
+                    alsoUnmeasured="이 데이터로 측정할 수 없는 조항(조준 전환·반동·차량 피해)"
                   />
                   {noteSource ? (
                     <div className="border-t border-border-soft px-5 py-3">
@@ -215,7 +221,7 @@ export default function PubgBriefing({ bundle, declaration }: { bundle: PubgBund
                   eyebrow="발견 · 지표 축"
                   title="공지에 없는데 움직였습니다"
                   variant="embedded"
-                  action={<span className="font-mono text-xs text-muted">{unannounced.length}건</span>}
+                  action={<span className="font-mono text-xs text-muted">대상 {unannounced.length}종</span>}
                 >
                   <div className={PANEL_SCROLL_BODY}>
                     <BriefingRowList
@@ -280,9 +286,11 @@ export default function PubgBriefing({ bundle, declaration }: { bundle: PubgBund
                               </span>
                               <span className="flex min-w-0 items-baseline gap-2 overflow-hidden whitespace-nowrap font-mono text-xs text-muted">
                                 <span className="tabular-nums text-fg-2">{pct(map.matchShare, 1)}</span>
+                                {/* 점유율 차는 %p이고(ST-12, site-review pubg-S4) 맵에는 판정이 없다 — 무기 카드의 상대 %·판정색과
+                                    같은 모양이면 「론도 +3.2%」가 상대 +229%와 나란히 70배 작게 읽힌다. 단위는 %p, 색은 중립. */}
                                 {delta ? (
-                                  <span className={delta.matchShareDelta > 0 ? "tabular-nums text-success" : "tabular-nums text-danger"}>
-                                    {signedPct(delta.matchShareDelta, 1)}
+                                  <span className="tabular-nums text-fg-2">
+                                    {formatSignedPercent(delta.matchShareDelta, 1, SIGNED_POINT)}
                                   </span>
                                 ) : null}
                                 <span className="tabular-nums">n={map.nMatches.toLocaleString()}</span>
@@ -299,7 +307,10 @@ export default function PubgBriefing({ bundle, declaration }: { bundle: PubgBund
             ]}
           />
 
-          <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
+          {/* 푸터 판정 수 = 보고 자격을 얻은 판정 수(ST-11) — 무기 수(47)는 「판정」이 아니었다. */}
+          <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={pubgVerdictCount(deltas.rows)} />
+          {/* 모바일 주 행동(PLAN-mobile-cta) — 세 게임 공통. 관측 전 선언 뷰는 사이드 패널 자체가 없어 두지 않는다(PLAN ②). */}
+          <MobileActionBar game="pubg" />
         </div>
       </Container>
     </main>

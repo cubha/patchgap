@@ -79,7 +79,25 @@ function segmentsOf(pathname: string): string[] {
  * 경로 → 현재 게임. 게임에 속하지 않으면 `null`(랜딩, 그리고 리다이렉트 대상인 구 경로).
  * `/pubgfoo/`처럼 접두가 아닌 유사 경로를 오인하지 않도록 **세그먼트 단위**로 본다.
  */
+/**
+ * 404 페이지가 하이드레이션 **전에** 세우는 전역 표식(ST-26). 정적 `404.html`은 `/_not-found`로 렌더돼 서버 쪽 게임이 null인데,
+ * 클라이언트는 실제 주소(`/tft/…`)로 게임을 읽어 첫 렌더가 어긋났다(React #418). 표식이 있으면 서버와 같은 null을 돌려준다.
+ */
+export const NOT_FOUND_FLAG = "__PATCHGAP_NOT_FOUND";
+
+/**
+ * 표식의 값은 `true`가 아니라 **404가 뜬 주소**다(verify-impl 축A V2, 2026-10-08). 전역 불리언이면 404 화면의 헤더
+ * 내비(`<Link>`)로 다른 화면에 가도 표식이 살아 그 화면의 게임까지 null로 읽는다. 지금 묻는 경로가 404가 뜬 경로일 때만
+ * "404 문서"다 — 클라이언트 이동으로 경로가 바뀌면 표식은 저절로 무효가 된다.
+ */
+function isNotFoundDocument(pathname: string): boolean {
+  // `globalThis` — 브라우저에선 window고, 서버·테스트 런타임엔 404 스크립트가 없으니 표식도 없다(그래서 window 분기가 필요 없다).
+  const flagged = (globalThis as unknown as Record<string, unknown>)[NOT_FOUND_FLAG];
+  return typeof flagged === "string" && segmentsOf(flagged).join("/") === segmentsOf(pathname).join("/");
+}
+
 export function gameFromPathname(pathname: string): GameId | null {
+  if (isNotFoundDocument(pathname)) return null;
   const first = segmentsOf(pathname)[0];
   if (first === undefined) return null;
   return GAMES.find((g) => g.prefix === `/${first}`)?.id ?? null;

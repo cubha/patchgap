@@ -15,7 +15,7 @@ import path from "node:path";
 import { PUBG_MAPS } from "../src/pipeline/aggregate/pubg-maps";
 import {
   remoteMapUrl,
-  remoteWeaponUrl,
+  remoteWeaponUrlCandidates,
   type PubgAssetManifest,
 } from "../src/pipeline/pubg/asset-path";
 import { readJsonRequired } from "../src/pipeline/shared/json-file";
@@ -70,7 +70,12 @@ async function main(): Promise<void> {
   };
 
   for (const key of weaponKeys) {
-    const status = await download(remoteWeaponUrl(key), path.join(OUT_DIR, "weapon", `${key}.png`));
+    // 폴더 후보를 순서대로(Main → Handgun → Melee, ST-22) — 첫 200에서 멈춘다. 전부 실패하면 마지막 상태를 적는다.
+    let status = 0;
+    for (const url of remoteWeaponUrlCandidates(key)) {
+      status = await download(url, path.join(OUT_DIR, "weapon", `${key}.png`));
+      if (status === 200) break;
+    }
     if (status === 200) manifest.weapons.push(key);
     else manifest.missing.push({ kind: "weapon", key, status });
   }

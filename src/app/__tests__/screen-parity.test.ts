@@ -126,6 +126,12 @@ describe("§8-1 골격 — 세 게임이 같은 컴포넌트를 쓴다", () => {
       expect(read(home)).toContain("DiscordPanel");
     });
 
+    it(`${id} 홈이 모바일 고정 하단 CTA(MobileActionBar)를 둔다 — 주 행동이 375에서 첫 화면 안에 있어야 한다(D-UX-04)`, () => {
+      // 파일 게이트다(위 DiscordPanel 행과 같은 성질): "관측 브리핑이 공용 바를 쓴다"만 묻는다. PUBG 관측 전 선언 뷰는
+      // 사이드 디스코드 패널 자체가 없어 바도 두지 않는다(PLAN-mobile-cta ②) — 그 분기는 이 행의 대상이 아니다.
+      expect(read(home)).toContain("MobileActionBar");
+    });
+
     it(`${id} 홈이 공용 탭(BriefingTabs/BriefingTabBar)을 쓴다`, () => {
       const src = read(home);
       // LoL은 ReleaseNoteStream 안에서 탭 바를 쓴다 — 그 경유를 인정한다.

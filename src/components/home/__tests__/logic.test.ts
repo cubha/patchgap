@@ -125,6 +125,7 @@ describe("computeHeadline", () => {
       noteItemCount: 0,
       statCount: 0,
       unannouncedCount: 0,
+      announcedObservedCount: 0,
     });
   });
 
@@ -147,6 +148,8 @@ describe("computeHeadline", () => {
       noteItemCount: 2,
       statCount: 2,
       unannouncedCount: 1,
+      // ST-06(2026-10-08): 공지 짝이 있고 보고 자격을 얻은 행은 3번뿐 — 대상 1. 1번은 짝이 있어도 비유의라 제외.
+      announcedObservedCount: 1,
     });
   });
 

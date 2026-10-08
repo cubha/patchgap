@@ -63,10 +63,42 @@ export interface LinkNotesInput {
    * 없으므로 엔티티 언급을 알리바이로 받는다. 보수적으로 덜 찾는 쪽이다.
    */
   readonly entityMatchSuffices?: boolean;
+  /**
+   * 이 변경의 실제 값(ST-01, 2026-10-08). 노트가 **그 값 자체**(`12/22/32/42 ⇒ 14/24/34/44`)를 적었으면
+   * 스킬 키·필드 낱말과 무관하게 공지다 — 엘리스 패시브 피해량이 DDragon에서는 R 스펠 effect에 들어 있어
+   * 슬롯 매칭이 "기본 지속 효과" 문구에서 실패했고, 같은 화면 위 구획이 공지라 말한 값을 아래 구획이
+   * 잠수함이라 말했다(site-review lol-S1). 숫자 토큰이 **둘 이상**일 때만 견준다 — 단일 숫자는 우연히 겹친다.
+   */
+  readonly value?: { readonly before: number | string | null; readonly after: number | string | null };
 }
 
-/** 어떤 경로로 걸렸나. `"keyword"`만이 **노트가 이 필드를 이름으로 말했다**는 뜻이다. */
-export type NoteLinkVia = "rework" | "skill" | "entity" | "keyword";
+/** 어떤 경로로 걸렸나. `"keyword"`만이 **노트가 이 필드를 이름으로 말했다**는 뜻이다. `"value"`는 값 자체가 같다. */
+export type NoteLinkVia = "rework" | "skill" | "entity" | "keyword" | "value";
+
+/** 「60/75/90/105/120%」→ `[60,75,90,105,120]`. `%`·쉼표·공백은 표기일 뿐 값이 아니다. */
+function numberTokens(raw: number | string | null): number[] | null {
+  if (raw === null) return null;
+  const text = String(raw).replace(/,/g, "");
+  const tokens = text.match(/-?\d+(?:\.\d+)?/g);
+  if (!tokens) return null;
+  return tokens.map(Number);
+}
+
+function sameTokens(a: number[] | null, b: number[] | null): boolean {
+  if (!a || !b || a.length !== b.length) return false;
+  return a.every((x, i) => Math.abs(x - b[i]) <= 1e-6 * Math.max(1, Math.abs(x)));
+}
+
+/** 노트의 before⇒after와 변경 값의 토큰열이 둘 다 같은가(토큰 ≥2). */
+function valueMatches(
+  note: NoteLike,
+  value: NonNullable<LinkNotesInput["value"]>
+): boolean {
+  const before = numberTokens(value.before);
+  const after = numberTokens(value.after);
+  if (!before || !after || before.length < 2 || after.length < 2) return false;
+  return sameTokens(before, numberTokens(note.before ?? null)) && sameTokens(after, numberTokens(note.after ?? null));
+}
 
 export interface LinkedNote {
   readonly note: NoteLike;
@@ -86,6 +118,12 @@ export function linkedNotes(input: LinkNotesInput, notes: readonly NoteLike[]): 
     // 재작업 노트는 그 엔티티의 수치 변경 전부를 설명한다(위 헤더 ①의 반대 극단).
     if (REWORK_KEYWORDS.some((k) => text.includes(k))) {
       out.push({ note, via: "rework" });
+      continue;
+    }
+
+    // 값 자체가 같으면 슬롯·낱말 전에 공지다(ST-01) — 노트가 적은 값이 곧 이 변경이다.
+    if (input.value && valueMatches(note, input.value)) {
+      out.push({ note, via: "value" });
       continue;
     }
 
@@ -118,6 +156,50 @@ export function linkNotes(input: LinkNotesInput, notes: readonly NoteLike[]): st
   return linkedNotes(input, notes).map((linked) => linked.note.id);
 }
 
+/** 어느 패치의 노트인가 — `linkPriorNote`가 최근 것부터 훑는다(호출부가 그 순서로 준다). */
+export interface PriorNotes {
+  readonly patch: string;
+  readonly notes: readonly NoteLike[];
+}
+
+/** 지연 반영의 출처 — 이 값으로 바꾼다고 **먼저** 말한 노트. */
+export interface PriorNoteLink {
+  readonly noteId: string;
+  readonly patch: string;
+}
+
+/**
+ * 현재 쌍 노트에 짝이 없는 변경을 **직전 패치 노트들**과 견준다(ST-02, 2026-10-08).
+ *
+ * 왜(site-review tft-S1~S3 실측): 18.2 노트가 「렝가 기본 공격 속도 0.8 ⇒ 0.75」라 말했는데 CDragon 16.18엔 안 실렸고
+ * 16.19(18.3)에서야 바뀌었다. 현재 쌍 노트만 보면 "18.3 노트에 없다 → 잠수함"인데, 같은 사이트의 18.1→18.2 상세는
+ * 그 값을 공지로 보여 준다 — 화면이 스스로를 반박했다. 노트가 **그 값으로** 바꾼다고 이미 말했으면 잠수함이 아니다.
+ *
+ * 엄격함의 방향: 노트가 그 필드를 이름으로 말했고(`keyword`) **노트의 after가 변경의 after와 같을 때**, 또는 값 자체가
+ * 같을 때(`value`)만. 출발점(before)은 견주지 않는다 — 단계적 반영(마스터 이 65→62→60)의 마지막 단이 노트의 after에
+ * 도달하면 그때 지연 반영이고, 도달 전(65→62)은 어느 노트도 그 값을 말하지 않았으니 잠수함으로 남는다.
+ * 엔티티 언급·재작업·스킬 경로는 값을 말한 것이 아니라 출처가 못 된다.
+ */
+export function linkPriorNote(
+  input: LinkNotesInput,
+  prior: readonly PriorNotes[],
+  component?: number
+): PriorNoteLink | null {
+  const after = input.value?.after ?? null;
+  for (const { patch, notes } of prior) {
+    for (const { note, via } of linkedNotes(input, notes)) {
+      if (via === "value") return { noteId: note.id, patch };
+      if (via !== "keyword" || typeof after !== "number") continue;
+      const rawAfter = note.after ?? null;
+      if (rawAfter === null) continue;
+      const noteAfter = component === undefined ? rawAfter : componentOf(rawAfter, component);
+      if (noteAfter === null || soleNumber(noteAfter) === null) continue;
+      if (sameValue(noteAfter, after)) return { noteId: note.id, patch };
+    }
+  }
+  return null;
+}
+
 /**
  * 노트가 **같은 항목을 말했는데 값이 다르다**. 잠수함(말하지 않음)과 공지(말했고 맞음) 사이의
  * 세 번째 자리다.
@@ -136,9 +218,55 @@ export interface NoteValueMismatch {
    * 실리거나 서버에만 있을 수 있다 — 화면은 「노트가 틀렸다」가 아니라 이 사정을 함께 말한다.
    */
   readonly midpatch?: true;
+  /**
+   * 노트는 바꾼다고 했는데 게임 파일이 **그대로**다(ST-03, 2026-10-08). 변경 행이 없어 화면 어디에도 안 나오던 상태 —
+   * 18.2 렝가(노트 0.8 ⇒ 0.75, 파일 0.8)·마스터 이(65 ⇒ 60, 파일 65). 같은 상황의 덩굴정령(110→115)만 불일치로
+   * 보이고 이 둘은 조용했다(site-review tft-S4). 이 표식이 있으면 `before === after`다.
+   */
+  readonly unapplied?: true;
 }
 
 const MIDPATCH_ANCHOR = "#patch-midpatch-updates";
+
+/**
+ * **안 바뀐** 필드가 노트의 출발값과 같고 도착값과 다르면 「공지값 미반영」이다(ST-03).
+ *
+ * 보수적인 쪽: 현재값이 노트의 before와 **같을 때만** 그 노트가 이 필드를 말한 것으로 본다(같은 이름의 다른 형태 —
+ * 마스터 이 AP 형태의 공격력이 65가 아니면 걸리지 않는다). 노트 after와 같은 값을 가진 노트가 하나라도 있으면 이미
+ * 반영된 것이라 null. 견주는 자격은 `noteValueMismatch`와 같다(keyword 경로 · 숫자 토큰 하나).
+ */
+export function unappliedNoteMismatch(
+  linked: readonly LinkedNote[],
+  current: number | string | null,
+  component?: number
+): NoteValueMismatch | null {
+  if (typeof current !== "number") return null;
+  let candidate: NoteValueMismatch | null = null;
+  for (const { note, via } of linked) {
+    if (via !== "keyword") continue;
+    const rawBefore = note.before ?? null;
+    const rawAfter = note.after ?? null;
+    if (rawBefore === null || rawAfter === null) continue;
+    const noteBefore = component === undefined ? rawBefore : componentOf(rawBefore, component);
+    const noteAfter = component === undefined ? rawAfter : componentOf(rawAfter, component);
+    if (noteBefore === null || noteAfter === null) continue;
+    // 미반영은 「바뀐 것이 없다」에서 출발하므로 불일치보다 우연 일치에 약하다 — 두 가드를 더 건다(2026-10-08 실측):
+    //  · 숫자 **만** 적힌 표기(「체력 0% ⇒ 체력 5%」의 0이 기본 치명타 0에 걸렸다)
+    //  · `%` 노트는 비율형 값(≤1)에만(「공격력 40% ⇒ 35%」가 기본 공격력 40에 걸렸다)
+    if (!pureNumber(noteBefore) || !pureNumber(noteAfter)) continue;
+    if (noteBefore.includes("%") && Math.abs(current) > 1) continue;
+    if (sameValue(noteAfter, current)) return null;
+    if (!sameValue(noteBefore, current)) continue;
+    candidate ??= {
+      noteId: note.id,
+      noteBefore,
+      noteAfter,
+      unapplied: true,
+      ...(note.anchorUrl?.includes(MIDPATCH_ANCHOR) ? { midpatch: true as const } : {}),
+    };
+  }
+  return candidate;
+}
 
 /** 「40/100」의 `index`번째 성분. 성분이 하나뿐인 값(「최대 마나: 90 ⇒ 100」)은 그대로, 성분 수가 모자라면 null. */
 function componentOf(raw: string, index: number): string | null {
@@ -155,6 +283,11 @@ function soleNumber(raw: string): { value: number; percent: boolean } | null {
   const value = Number(tokens[0]);
   if (!Number.isFinite(value)) return null;
   return { value, percent: text.includes("%") };
+}
+
+/** 「0.75」·「1,000%」처럼 숫자(와 단위)만 적힌 표기인가 — 「체력 0%」처럼 낱말이 섞이면 아니다. */
+function pureNumber(raw: string): boolean {
+  return /^\s*-?[\d,]+(?:\.\d+)?\s*%?\s*$/.test(raw);
 }
 
 /**

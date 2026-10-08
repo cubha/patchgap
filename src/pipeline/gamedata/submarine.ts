@@ -14,6 +14,7 @@
 import type { DeltaRecord } from "../types";
 import { displayStatus, type DisplayStatus } from "../shared/display-status";
 import {
+  isDelayedChange,
   isNoteMismatchChange,
   isSubmarineChange,
   type GameDataChange,
@@ -66,6 +67,14 @@ export function buildNoteMismatchIndexFromChanges(
   changes: readonly GameDataChange[]
 ): SubmarineIndex {
   return buildIndex(changes, isNoteMismatchChange);
+}
+
+/**
+ * **지연 반영** 색인(ST-02, 2026-10-08) — 직전 패치 노트가 먼저 말한 값이 이번 데이터에 실린 변경. 잠수함 목록에서
+ * 빠지는 만큼 어디로 갔는지 화면이 말해야 한다(조용히 사라지면 "잠수함이 줄었다"로 읽힌다).
+ */
+export function buildDelayedIndexFromChanges(changes: readonly GameDataChange[]): SubmarineIndex {
+  return buildIndex(changes, isDelayedChange);
 }
 
 function buildIndex(

@@ -3,7 +3,9 @@ import {
   fmtCiHalf,
   fmtDeltaInt,
   fmtDeltaSec,
+  fmtDisplayDelta,
   fmtInt,
+  fmtQ,
   fmtKst,
   fmtPct,
   fmtPp,
@@ -15,6 +17,53 @@ import {
   positionLabel,
   statusLabel,  gameDataValue,
 } from "../format";
+
+// ST-09(2026-10-08 site-review lol-S20·pubg-S17): 대조표에서 쓰레쉬 「10.5→15.3 전체 +4.8」과 「10.5→15.3 서포터 +4.7」 —
+// 같은 표시값에 다른 델타. 원시 델타를 따로 반올림하면 끝값 표시와 어긋난다. 델타는 **표시된 두 끝값의 차**여야 한다.
+// 맵 상세 「29:29 → 30:31 +1:03」(차 1:02)도 같은 결함. q 표기도 카드 「q<0.001」·상세 「q 0.000」·TFT 「1.00e-3」 세 형식이었다.
+describe("fmtDisplayDelta — 표시된 끝값의 차", () => {
+  it("★ pp: 끝값을 표시 정밀도로 반올림한 뒤 뺀다 — 10.5% → 15.3%이면 +4.8%p(원시 차 4.74라도)", () => {
+    expect(fmtDisplayDelta(0.1053, 0.1527, "pp")).toBe("+4.8%p");
+    expect(fmtDisplayDelta(0.1046, 0.1534, "pp")).toBe("+4.8%p");
+  });
+
+  it("pp: 표시값이 같으면 +0.0%p가 아니라 0.0%p(부호 없음)", () => {
+    expect(fmtDisplayDelta(0.1051, 0.1049, "pp")).toBe("0.0%p");
+  });
+
+  it("pp: 음수는 유니코드 마이너스", () => {
+    expect(fmtDisplayDelta(0.153, 0.105, "pp")).toBe("−4.8%p");
+  });
+
+  it("★ sec: 분:초로 표시된 두 시각의 차 — 29:29 → 30:31은 +1:02", () => {
+    expect(fmtDisplayDelta(1769.4, 1831.4, "sec")).toBe("+1:02");
+    expect(fmtDisplayDelta(1831.4, 1769.4, "sec")).toBe("−1:02");
+    expect(fmtDisplayDelta(100.2, 100.4, "sec")).toBe("0:00");
+  });
+
+  it("gold: 정수 반올림 뒤 차", () => {
+    expect(fmtDisplayDelta(2999.6, 3200.2, "gold")).toBe("+200");
+  });
+
+  it("한쪽이 없으면 —", () => {
+    expect(fmtDisplayDelta(null, 0.1, "pp")).toBe("—");
+  });
+});
+
+describe("fmtQ — q 표기는 한 형식", () => {
+  it("0.001 미만은 부등호", () => {
+    expect(fmtQ(0.0004)).toBe("q<0.001");
+    expect(fmtQ(0)).toBe("q<0.001");
+  });
+  it("그 외는 소수 셋째 자리까지, 끝 0은 뗀다", () => {
+    expect(fmtQ(0.076)).toBe("q=0.076");
+    expect(fmtQ(0.5)).toBe("q=0.5");
+    expect(fmtQ(1)).toBe("q=1");
+  });
+  it("null은 null — 없는 값을 지어내지 않는다", () => {
+    expect(fmtQ(null)).toBeNull();
+  });
+});
 
 describe("fmtPct", () => {
   it("분수를 퍼센트 문자열로 변환한다", () => {

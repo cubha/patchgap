@@ -8,8 +8,8 @@
       "from": "16.17.1",
       "to": "16.18.1"
     },
-    "generatedAt": "2026-09-21T01:08:54.319Z",
-    "changeCount": 9,
+    "generatedAt": "2026-10-08T08:13:25.287Z",
+    "changeCount": 11,
     "submarineCount": 0
   },
   "changes": [
@@ -40,6 +40,26 @@
       "matchedNoteIds": [
         "note:26.18:champion:bard:453ef7b4"
       ]
+    },
+    {
+      "id": "gdc:lol:26.18:Cassiopeia:stats.mpperlevel",
+      "entityKey": "Cassiopeia",
+      "entityName": "카시오페아",
+      "entityType": "champion",
+      "field": "기본 마나 증가량",
+      "fieldPath": "stats.mpperlevel",
+      "before": 40,
+      "after": 40,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:26.18:champion:cassiopeia:571817a6"
+      ],
+      "noteMismatch": {
+        "noteId": "note:26.18:champion:cassiopeia:571817a6",
+        "noteBefore": "40",
+        "noteAfter": "45",
+        "unapplied": true
+      }
     },
     {
       "id": "gdc:lol:26.18:Cassiopeia:spells.0.effect.1",
@@ -83,6 +103,27 @@
       "matchedNoteIds": [
         "note:26.18:champion:ekko:dfd6f002"
       ]
+    },
+    {
+      "id": "gdc:lol:26.18:Malzahar:stats.attackspeed",
+      "entityKey": "Malzahar",
+      "entityName": "말자하",
+      "entityType": "champion",
+      "field": "기본 공격 속도",
+      "fieldPath": "stats.attackspeed",
+      "before": 0.625,
+      "after": 0.625,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:26.18:champion:말자하:16150c0d",
+        "note:26.18:champion:말자하:74f0cb92"
+      ],
+      "noteMismatch": {
+        "noteId": "note:26.18:champion:말자하:74f0cb92",
+        "noteBefore": "0.625",
+        "noteAfter": "0.658",
+        "unapplied": true
+      }
     },
     {
       "id": "gdc:lol:26.18:MasterYi:stats.armorperlevel",

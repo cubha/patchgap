@@ -14,7 +14,16 @@
 // 값 포맷은 `submarineText`가 소유한다 — 여기서 `change.before`를 직접 찍지 않는다(float32 잡음).
 import { gameDataValue, statusLabel } from "@/lib/format";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
-import { MIDPATCH_MISMATCH_CAVEAT, mismatchCellLines, mismatchNoteText, sourceLineText, type SourcePatchPair } from "./submarineText";
+import {
+  DELAYED_CAVEAT,
+  MIDPATCH_MISMATCH_CAVEAT,
+  UNAPPLIED_MISMATCH_CAVEAT,
+  delayedCellLines,
+  mismatchCellLines,
+  mismatchNoteText,
+  sourceLineText,
+  type SourcePatchPair,
+} from "./submarineText";
 import type { GameDataChange, GameDataSource } from "@/pipeline/gamedata/types";
 
 function relText(rel: number | null): string | null {
@@ -26,6 +35,8 @@ export interface SubmarineDetailBlockProps {
   changes: readonly GameDataChange[];
   /** 노트가 말했는데 값이 어긋난 변경. 있으면 아래 구획을 하나 더 그린다. */
   mismatchChanges?: readonly GameDataChange[];
+  /** 직전 패치 노트가 먼저 말한 값이 이번에 반영된 변경(ST-02). 있으면 「이전 패치노트가 말한 것」 구획을 그린다. */
+  delayedChanges?: readonly GameDataChange[];
   /** 대조 원본. 없으면(산출물 미생성) 출처 줄을 그리지 않는다 — 없는 근거를 지어내지 않는다. */
   source?: GameDataSource | null;
   /**
@@ -46,6 +57,7 @@ export interface SubmarineDetailBlockProps {
 export default function SubmarineDetailBlock({
   changes,
   mismatchChanges = [],
+  delayedChanges = [],
   source = null,
   notePatch = null,
   patch = null,
@@ -114,9 +126,38 @@ export default function SubmarineDetailBlock({
                 {line.midpatch ? (
                   <span className="basis-full font-body text-xs text-muted">{MIDPATCH_MISMATCH_CAVEAT}</span>
                 ) : null}
+                {line.unapplied ? (
+                  <span className="basis-full font-body text-xs text-muted">{UNAPPLIED_MISMATCH_CAVEAT}</span>
+                ) : null}
               </li>
             ))}
           </ul>
+        </div>
+      ) : null}
+
+      {delayedChanges.length > 0 ? (
+        // 세 번째 구획(ST-02) — 이쪽은 노트가 **먼저** 말했고 게임 파일이 늦게 따라왔다. 「말하지 않은 것」에 두면 위
+        // 구획(이전 쌍 상세의 「말한 것」)과 모순되고, 「말한 것」에 두면 이번 노트에 없는 줄이 섞인다 — 자리를 따로 둔다.
+        <div className="border-t border-border-soft">
+          <div className="flex items-center gap-2 px-5 pt-4 pb-2">
+            <span className="h-1.5 w-1.5 rounded-pill bg-fg-2" aria-hidden="true" />
+            <h3 className="font-body text-xs font-bold tracking-wide text-fg-2">이전 패치노트가 말한 것 · 지연 반영</h3>
+            <span className="ml-auto font-mono text-xs text-muted">{delayedChanges.length}건</span>
+          </div>
+          <ul className="flex flex-col">
+            {delayedCellLines(delayedChanges).map((line) => (
+              <li key={line.field} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-5 pb-3">
+                <span className="rounded-sm bg-surface-warm px-1.5 py-0.5 font-mono text-[0.65rem] font-bold text-fg-2">
+                  {line.notePatch} 노트
+                </span>
+                <span className="text-sm font-bold text-fg">{line.field}</span>
+                <span className="font-mono text-sm tabular-nums text-fg-2">
+                  {line.before} → <span className="text-fg">{line.after}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="px-5 pb-4 font-body text-xs text-muted">{DELAYED_CAVEAT}</p>
         </div>
       ) : null}
 

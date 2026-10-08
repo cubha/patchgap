@@ -1,0 +1,14 @@
+{
+  "_doc": "ui-gate §2-5 처분 기록 — 키 `<id>|<route>@<vw>`(화면별) 또는 `<id>`(전역). waived는 사유 ≥10자. 고친 항목은 여기 적지 않는다(사라져야 정상). 2026-10-08 트랙 A verify-impl에서 생성 — 17 error 전부 트랙 A 이전부터 있던 것이며, 고친 2건(D-LAYOUT-12 /lol/@375 기타 변경 건수 · D-UX-10 TFT 대조표 원문↔추정 원인 4px)은 이 파일에 없다.",
+  "D-A11Y-04": { "status": "waived", "reason": "recharts가 생성하는 g.recharts-zIndex-layer_300/400 — 라이브러리 내부 레이어라 사용자 행동이 없고 접근명을 줄 대상이 아니다. 아이콘 전용 버튼을 새로 추가하면 이 전역 면제를 화면별로 좁힌다." },
+  "D-UX-04|/lol/@375": { "status": "waived", "reason": "UX-BRIEF §7-1 모바일 첫 화면 열이 「권장」(필수 아님). 사이드바 CTA를 첫 화면으로 올리는 것은 레이아웃 결정 — 트랙 B4(모바일)에서 판단." },
+  "D-UX-04|/pubg/@375": { "status": "waived", "reason": "UX-BRIEF §7-1 모바일 첫 화면 열이 「권장」(필수 아님). 사이드바 CTA 위치는 트랙 B4(모바일)에서 판단 — 세 게임 공용 결정." },
+  "D-UX-04|/tft/@375": { "status": "waived", "reason": "UX-BRIEF §7-1 모바일 첫 화면 열이 「권장」(필수 아님). 사이드바 CTA 위치는 트랙 B4(모바일)에서 판단 — 세 게임 공용 결정." },
+  "D-UX-10|/lol/@375": { "status": "waived", "reason": "라인 칩 줄바꿈 행 간격은 gap-2(8px 토큰)인데 29.5px 행 높이 반올림으로 7px로 측정됨 — CSS 값은 기준 이상. 트랙 B4(모바일)에서 칩 행 간격 토큰을 재검토." },
+  "D-UX-10|/lol/compare/@375": { "status": "waived", "reason": "판정 칩 줄바꿈 행(gap-2=8px)과 인접 표 행의 지표 링크가 행 패딩 반올림으로 7px 측정 — CSS 값은 기준 이상. 트랙 B4(모바일)에서 재검토." },
+  "D-UX-10|/pubg/map/baltic/@375": { "status": "waived", "reason": "recharts 내부 g 레이어와 x축 눈금 라벨 g 사이 간격 — 라이브러리 SVG 구조라 탭 타깃이 아니다(D-A11Y-04 전역 면제와 같은 근거)." },
+  "D-UX-10|/pubg/weapon/rpd/@375": { "status": "waived", "reason": "recharts 내부 g 레이어와 x축 눈금 라벨 g 사이 간격 — 라이브러리 SVG 구조라 탭 타깃이 아니다(D-A11Y-04 전역 면제와 같은 근거)." },
+  "D-UX-10|/tft/history/18_2-18_3/unit/unit~DA_18_Rengar/@375": { "status": "waived", "reason": "recharts 내부 g 레이어와 x축 눈금 라벨 g 사이 간격 — 라이브러리 SVG 구조라 탭 타깃이 아니다(D-A11Y-04 전역 면제와 같은 근거)." },
+  "D-UX-10|/tft/unit/unit~DA_18_Rengar/@375": { "status": "waived", "reason": "recharts 내부 g 레이어와 x축 눈금 라벨 g 사이 간격 — 라이브러리 SVG 구조라 탭 타깃이 아니다(D-A11Y-04 전역 면제와 같은 근거)." },
+  "D-UX-02|/pubg/map/baltic/@1280": { "status": "waived", "reason": "PUBG 맵 상세 섹션 간격 비 1.15 — 2026-09-28 동등성 계약(#77) 이후 알려진 잔여(memory: PUBG 맵 간격 warn). 섹션 간격 토큰 조정은 트랙 B(통일성)에서 세 게임 상세와 함께 결정." }
+}

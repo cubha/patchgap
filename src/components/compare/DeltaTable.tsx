@@ -22,7 +22,7 @@ import { useRowFocus } from "./useRowFocus";
 import type { DeltaRecord } from "@/pipeline/types";
 import { PANEL_SPLIT_BODY } from "@/lib/panelScroll";
 import type { LaneAxis } from "@/lib/lane";
-import { metricLabel, positionLabel } from "@/lib/format";
+import { fmtDisplayDelta, metricLabel, positionLabel } from "@/lib/format";
 import { lolEntityHref } from "@/lib/detailRoutes";
 import { usePairBase } from "@/components/PairBaseContext";
 import EntityIcon from "@/components/EntityIcon";
@@ -30,7 +30,6 @@ import LaneGlyph from "@/components/LaneGlyph";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineCell from "@/components/gamedata/SubmarineCell";
 import { formatMetricValue, metricKind } from "@/components/home/logic";
-import { fmtPp } from "@/lib/format";
 import { ENTITY_METRICS, type EntityCell, type EntityCompareRow, type EntityMetric } from "./entityRows";
 
 export interface DeltaTableProps {
@@ -62,7 +61,8 @@ function Observation({
   const up = delta > 0;
   const kind = metricKind(record.metric);
   // 이 표의 4개 지표는 전부 비율(pp)이다 — 다른 kind가 오면 formatMetricValue가 단위를 안다.
-  const deltaText = kind === "pp" ? fmtPp(delta) : String(delta);
+  // 델타는 바로 위에 보이는 두 끝값의 차다(ST-09) — 같은 「10.5% → 15.3%」 두 셀이 +4.8과 +4.7을 달던 결함.
+  const deltaText = kind === "pp" ? fmtDisplayDelta(record.before, record.after, "pp") : String(delta);
   return (
     <Link
       href={lolEntityHref(record, pairBase)}
@@ -125,20 +125,27 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
   // sticky 헤더(2026-09-12·4차, R5) — `border-collapse`와 `position:sticky`를 같이 쓰면 th 하단
   // border가 사라지는 상호작용이 있어 `shadow-[inset_0_-1px_0_var(--border-soft)]`로 대체한다(색은
   // 토큰 참조). 헤더 배경은 불투명 단색 — 스크롤 시 그라디언트가 띠로 끊겨 보이지 않게.
+  // 가로 패딩은 열마다 준다(ST-25, 2026-10-08 실측): 가운데 열(지표·바뀐 것)은 `px-2`, 양끝 열은 `px-4`. 1280에서 표 자연폭이
+  // 1034px(가용 862px)이라 판정 열이 화면 밖이었다 — 패딩을 줄여도 30px이 남아 **마지막 열을 `sticky right-0`로 고정**한다.
+  // 그러면 데이터가 늘어 가운데가 스크롤해도 판정은 항상 보인다(현재 데이터에 맞춘 폭이 아니라 구조로 보장).
   const thBase =
-    "sticky top-0 z-10 whitespace-nowrap bg-surface px-4 py-3 text-left shadow-[inset_0_-1px_0_var(--border-soft)] font-body text-xs font-bold text-muted";
+    "sticky top-0 z-10 whitespace-nowrap bg-surface py-3 text-left shadow-[inset_0_-1px_0_var(--border-soft)] font-body text-xs font-bold text-muted";
+  const pinnedCol = "sticky right-0 bg-surface";
+  // 고정 칸의 왼쪽 1px 선 — 밑으로 지나가는 열이 어디서 잘리는지 보인다(색은 토큰).
+  const pinnedCell = `${pinnedCol} shadow-[inset_1px_0_0_var(--border-soft)]`;
 
   return (
-    <div ref={scrollerRef} className={PANEL_SPLIT_BODY}>
-      <table className="w-full border-collapse font-mono text-sm tabular-nums">
+    // 좁으면 패널 안에서 가로 스크롤 — 열이 잘리지 않는다(ST-25). TFT·PUBG 표와 같은 규약(`overflow-x-auto` + 최소 너비).
+    <div ref={scrollerRef} className={`overflow-x-auto ${PANEL_SPLIT_BODY}`}>
+      <table className="w-full min-w-[640px] border-collapse font-mono text-sm tabular-nums">
         <thead ref={theadRef}>
           <tr>
-            <th scope="col" className={thBase}>
+            <th scope="col" className={`${thBase} px-4`}>
               {/* 버전 이동은 여기 한 번만 — 열마다 "26.17"·"26.18"을 두지 않는다(L3). */}
               엔티티 <span className="ml-1 font-mono font-normal">{fromLabel} → {toLabel}</span>
             </th>
             {ENTITY_METRICS.map((metric) => (
-              <th key={metric} scope="col" className={thBase}>
+              <th key={metric} scope="col" className={`${thBase} px-2`}>
                 {metricLabel(metric)}
               </th>
             ))}
@@ -146,11 +153,11 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                 "게임사가 무엇을 바꿨나"를 말한다. LoL은 잠수함 전용 행에 상세가 없으므로
                 (그 엔티티엔 델타가 0건이다) **표에서 값을 끝까지 말해야** 한다. */}
             {showSubmarine ? (
-              <th scope="col" className={thBase}>
+              <th scope="col" className={`${thBase} px-2`}>
                 바뀐 것
               </th>
             ) : null}
-            <th scope="col" className={thBase}>
+            <th scope="col" className={`${thBase} ${pinnedCol} px-4`}>
               판정
             </th>
           </tr>
@@ -197,13 +204,13 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                   {ENTITY_METRICS.map((metric: EntityMetric) => {
                     const cell = row.cells[metric];
                     return (
-                      <td key={metric} className="px-3 py-2 align-middle">
+                      <td key={metric} className="px-2 py-2 align-middle">
                         {cell ? <MetricCell cell={cell} labelled={row.lane === "all"} /> : <span className="px-1 text-muted">—</span>}
                       </td>
                     );
                   })}
                   {showSubmarine ? (
-                    <td className="px-3 py-2 align-middle font-body">
+                    <td className="px-2 py-2 align-middle font-body">
                       {/* 상세로 갈 자리가 없는 행(`representative === null` = 델타 0건)은
                           접지 않는다 — "외 N건"은 나머지를 상세에서 본다는 약속인데
                           그 상세가 없다(2026-09-21 acceptance-critic V1). */}
@@ -214,7 +221,8 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                       />
                     </td>
                   ) : null}
-                  <td className="px-4 py-3 font-body">
+                  {/* 고정 열 — 배경이 있어야 스크롤하는 가운데 열이 밑으로 지나간다(행 강조는 이 칸엔 안 보인다). */}
+                  <td className={`${pinnedCell} px-4 py-3 font-body`}>
                     <StatusBadge status={row.status} />
                   </td>
                 </tr>

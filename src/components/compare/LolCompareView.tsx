@@ -18,6 +18,7 @@ import PageHeader from "@/components/PageHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { PairBaseProvider } from "@/components/PairBaseContext";
 import { compareCrumbs } from "@/lib/breadcrumbs";
+import { verdictCount } from "@/pipeline/shared/headline";
 
 export interface LolCompareViewProps {
   pair: PatchPair | null;
@@ -76,7 +77,11 @@ export default function LolCompareView({ pair, pairBase = null }: LolCompareView
           />
         </PairBaseProvider>
         {/* SiteFooter가 자체 Container를 갖는다 — 한 번 더 감싸면 여백이 두 겹이 된다(2026-10-07, D-ALIGN-01). */}
-        <SiteFooter game="lol" generatedAt={deltas?.meta.generatedAt ?? null} nVerdicts={rows.length} />
+        <SiteFooter
+          game="lol"
+          generatedAt={deltas?.meta.generatedAt ?? null}
+          nVerdicts={deltas ? verdictCount(deltas.rows, deltas.meta.qAlpha) : null}
+        />
       </main>
     </div>
   );

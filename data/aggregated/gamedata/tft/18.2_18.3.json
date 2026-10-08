@@ -8,9 +8,9 @@
       "from": "16.18",
       "to": "16.19"
     },
-    "generatedAt": "2026-09-30T15:17:06.391Z",
-    "changeCount": 4,
-    "submarineCount": 4
+    "generatedAt": "2026-10-08T08:13:27.569Z",
+    "changeCount": 5,
+    "submarineCount": 2
   },
   "changes": [
     {
@@ -35,7 +35,11 @@
       "before": 0.800000011920929,
       "after": 0.75,
       "relChange": -0.06250001396983841,
-      "matchedNoteIds": []
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.2:champion:렝가:4a189382",
+        "patch": "18.2"
+      }
     },
     {
       "id": "gdc:tft:18.3:DA_Brambleback18:stats.damage",
@@ -47,7 +51,31 @@
       "before": 115,
       "after": 120,
       "relChange": 0.043478260869565216,
-      "matchedNoteIds": []
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.2:champion:덩굴정령:321bfc23",
+        "patch": "18.2"
+      }
+    },
+    {
+      "id": "gdc:tft:18.3:DA_Gromp18_AP:stats.attackSpeed",
+      "entityKey": "DA_Gromp18_AP",
+      "entityName": "심술두꺼비",
+      "entityType": "unit",
+      "field": "공격 속도",
+      "fieldPath": "stats.attackSpeed",
+      "before": 0.699999988079071,
+      "after": 0.699999988079071,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:tft:18.3:champion:심술두꺼비:876016ba"
+      ],
+      "noteMismatch": {
+        "noteId": "note:tft:18.3:champion:심술두꺼비:876016ba",
+        "noteBefore": "0.7",
+        "noteAfter": "0.75",
+        "unapplied": true
+      }
     },
     {
       "id": "gdc:tft:18.3:DA_BlackthornTraitAugment:effects.NumComponents",

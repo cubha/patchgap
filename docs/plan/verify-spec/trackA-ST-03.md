@@ -1,0 +1,7 @@
+### VERIFY-SPEC — SubTask ST-03 (공지값 미반영)
+- 기준선 요구사항: "필드가 **안 바뀌었는데** keyword 경로 노트가 `before == 현재값`, `after ≠ 현재값`이면 `noteMismatch{…, unapplied: true}`를 단 변경(before=after)을 낸다(TFT 유닛 `stats`·`cost`, LoL 챔피언 `stats`·아이템 keyword 필드). 렝가 18.2가 「공지값 불일치 · 미반영」으로 보인다. 화면: `mismatchNoteText`에 「게임 파일 미반영」" (PLAN ST-03 · 리뷰 tft-S4)
+- 변경 파일: `note-link.ts`(수정 — `unappliedNoteMismatch`·`pureNumber`·`NoteValueMismatch.unapplied`) · `tft.ts`·`lol.ts`(수정 — `pushUnapplied`) · `submarineText.ts`(수정 — `MismatchLine.unapplied`·`UNAPPLIED_MISMATCH_CAVEAT`) · `SubmarineDetailBlock.tsx`·`SubmarineSection.tsx`(수정) · 테스트 RED 선커밋 5a1ff0b
+- 관찰 가능한 계약: `diffTft(16.17→16.18, notes 18.2)` → 렝가 `stats.attackSpeed` 행 `before===after===0.8`, `noteMismatch {noteBefore:"0.8", noteAfter:"0.75", unapplied:true}`; 잠수함 수 31 불변. 화면 줄 `패치노트 0.8 ⇒ 0.75 · 게임 파일 미반영` + 사유 1줄.
+- 구현 결정: 두 가드(실측 오탐 제거) — 노트 값이 **숫자만**인 표기(`pureNumber`)여야 하고, `%` 노트는 현재값 ≤1(비율형)에만. 기존 `noteValueMismatch`에는 가드를 넣지 않았다(값이 바뀐 불일치는 전제가 다르고 기존 산출을 흔들지 않기 위해). LoL은 `CHAMPION_STAT_LABELS`·아이템 `gold.total`·`ITEM_STAT_LABELS` 필드만.
+- 인접 경계: `isNoteMismatchChange` true → 불일치 색인·대조표 「공지값 불일치」 행·Gap 타일(수치 축 키)에 포함된다(스펙대로 "대상에 관계없이 공지값 불일치로 표시"). `meta.changeCount` 증가(미반영 행 포함). `relChange` 0.
+- 미확인 사항: ① LoL 실측 미반영 9건(미스 포츈 이동 속도 325⇒335 등)이 **DDragon 기준으로 사실**인지는 champion.json 값으로 확인했지만, DDragon 자체가 기본 능력치를 늦게 싣는 것인지 라이엇이 늦게 바꾼 것인지는 모른다 — 문구는 "이 게임 파일에는 아직"으로 한정. ② 기존 테스트 「18.1→18.2 불일치 3건」은 `!unapplied` 필터로 좁혔다(명세 변경, PLAN ⑥ 보고).

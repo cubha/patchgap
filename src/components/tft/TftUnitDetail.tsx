@@ -12,6 +12,7 @@
 import Link from "next/link";
 
 import Container from "@/components/Container";
+import type { ObservedPairLink } from "@/components/ObservationPendingNotice";
 import PageHeader from "@/components/PageHeader";
 import EntityIcon from "@/components/EntityIcon";
 import AmbientDetailSplash from "@/components/item/AmbientDetailSplash";
@@ -30,14 +31,15 @@ import ObservationSection from "@/components/observation/ObservationSection";
 import { ALL_SEGMENT, groupObservations, resolveSelection } from "@/components/observation/observationModel";
 import { TFT_METRICS, effectStrength } from "@/lib/tftEntityRows";
 import { TftFooter, TftUnavailable, deltaDisplay, formatMetricValue } from "@/components/tft/shared";
-import { entityTypeLabel, fmtInt, isLowerBetter, metricLabel, statusLabel } from "@/lib/format";
-import { loadGameDataDiff } from "@/lib/gamedata";
+import { entityTypeLabel, fmtInt, fmtQ, isLowerBetter, metricLabel, statusLabel } from "@/lib/format";
+import { delayedChangesFor, loadGameDataDiff } from "@/lib/gamedata";
 import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
 import { tftDetailRows } from "@/lib/pairPages";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import type { DeltaRecord } from "@/pipeline/types";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import { entityKeyFromSlug as unslug } from "@/lib/tftRoutes";
+import { verdictCount } from "@/pipeline/shared/headline";
 
 // 슬러그 규칙은 `@/lib/tftRoutes`가 소유한다 — 라우트 파일에 두면 클라이언트 컴포넌트가
 // 페이지 모듈을 import해야 하고, prop으로 넘기면 빌드가 막는다(2026-09-23 실측).
@@ -50,6 +52,8 @@ export interface TftUnitDetailProps {
   declaration: TftDeclaration | null;
   /** 과거 쌍 화면이면 그 기준 경로(`/tft/history/{쌍}`) — 이동 경로가 그 쌍 안에 머문다. */
   pairBase?: string | null;
+  /** 관측 전일 때 관측이 있는 최신 쌍으로 가는 링크(ST-16). */
+  observed?: ObservedPairLink | null;
 }
 
 /**
@@ -70,20 +74,22 @@ function tftGateRows(record: DeltaRecord): { label: string; value: string }[] {
   const gate = [
     { label: "n(전) 보드", value: fmtInt(record.n.before) },
     { label: "n(후) 보드", value: fmtInt(record.n.after) },
-    { label: "BH-FDR q", value: record.q === null ? "—" : record.q.toExponential(2) },
+    { label: "BH-FDR", value: fmtQ(record.q) ?? "—" },
     { label: "바닥 대비", value: `${effectStrength(record).toFixed(2)}배` },
   ];
   if (isLowerBetter(record.metric)) gate.push({ label: "방향", value: "낮을수록 좋음" });
   return gate;
 }
 
-export default function TftUnitDetail({ slug, bundle, declaration, pairBase = null }: TftUnitDetailProps) {
+export default function TftUnitDetail({ slug, bundle, declaration, pairBase = null, observed = null }: TftUnitDetailProps) {
   if (!bundle) {
+    // 관측 전에도 골격(이동 경로·푸터)과 관측이 있는 쌍으로 가는 링크를 유지한다(ST-16).
     return (
       <main>
         <Container>
-          <TftUnavailable failure={declaration?.failure} />
+          <TftUnavailable failure={declaration?.failure} crumbs={detailCrumbs("tft", "관측 전", pairBase)} observed={observed} />
         </Container>
+        {declaration ? <TftFooter generatedAt={declaration.generatedAt} nVerdicts={0} /> : null}
       </main>
     );
   }
@@ -273,6 +279,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
             <SubmarineDetailBlock
               changes={row.submarineChanges}
               mismatchChanges={row.mismatchChanges}
+              delayedChanges={delayedChangesFor(gameData, row.entityType, row.key.split(":")[1] ?? "")}
               source={gameData?.meta.source ?? null}
               notePatch={deltas.meta.to}
               patch={gameData ? { from: gameData.meta.from, to: gameData.meta.to } : null}
@@ -289,7 +296,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
           />
         </div>
       </Container>
-      <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.rows.length} />
+      <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={verdictCount(deltas.rows, deltas.meta.qAlpha)} />
     </main>
   );
 }

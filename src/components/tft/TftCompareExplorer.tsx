@@ -183,8 +183,12 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
   );
   const { scrollerRef, headRef } = useRowFocus<HTMLDivElement, HTMLTableSectionElement>(focusKey);
 
+  // 가로 패딩은 열마다(ST-25, 2026-10-08 실측 — LoL `DeltaTable`과 같은 규약): 가운데 열 `px-2`, 양끝 `px-4`, **마지막 열은
+  // `sticky right-0`로 고정**. 1280에서 표 자연폭 1028px(가용 862px)이라 판정·근거가 화면 밖이었다.
   const thBase =
-    "sticky top-0 z-10 whitespace-nowrap bg-surface px-4 py-3 text-left shadow-[inset_0_-1px_0_var(--border-soft)] font-body text-xs font-bold text-muted";
+    "sticky top-0 z-10 whitespace-nowrap bg-surface py-3 text-left shadow-[inset_0_-1px_0_var(--border-soft)] font-body text-xs font-bold text-muted";
+  const pinnedCol = "sticky right-0 bg-surface";
+  const pinnedCell = `${pinnedCol} shadow-[inset_1px_0_0_var(--border-soft)]`;
 
   return (
     <div className="flex flex-col gap-6">
@@ -224,9 +228,9 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
           <table className="w-full border-collapse text-sm">
             <thead ref={headRef}>
               <tr>
-                <th className={thBase}>대상</th>
+                <th className={`${thBase} px-4`}>대상</th>
                 {TFT_METRICS.map((m) => (
-                  <th key={m} className={thBase}>
+                  <th key={m} className={`${thBase} px-2`}>
                     {metricLabel(m)}
                     {isLowerBetter(m) ? <span className="ml-1 font-normal">(낮을수록 좋음)</span> : null}
                   </th>
@@ -234,7 +238,7 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
                 {/* 「바뀐 것」 — 수치 축(F9). 지표 열이 "지표가 어떻게 움직였나"를 말하면
                     이 열은 "게임사가 무엇을 바꿨나"를 말한다. */}
                 {(showSubmarine ? ["바뀐 것", "판정", "근거"] : ["판정", "근거"]).map((h) => (
-                  <th key={h} className={thBase}>
+                  <th key={h} className={`${thBase} ${h === "근거" ? `${pinnedCol} px-4` : "px-2"}`}>
                     {h}
                   </th>
                 ))}
@@ -274,20 +278,22 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
                     </Link>
                   </td>
                   {TFT_METRICS.map((m) => (
-                    <td key={m} className="px-4 py-3">
+                    <td key={m} className="px-2 py-3">
                       <MetricCell row={row} metric={m} />
                     </td>
                   ))}
                   {showSubmarine ? (
-                    <td className="px-4 py-3">
+                    <td className="px-2 py-3">
                       <SubmarineCell changes={row.submarineChanges} mismatchChanges={row.mismatchChanges} />
                     </td>
                   ) : null}
-                  <td className="px-4 py-3">
+                  <td className="px-2 py-3">
                     <StatusBadge status={row.status} />
                   </td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-col gap-1">
+                  {/* 고정 열 — 배경이 있어야 스크롤하는 가운데 열이 밑으로 지나간다. */}
+                  <td className={`${pinnedCell} px-4 py-3`}>
+                    {/* 탭 타깃 둘(원문·추정 원인)이 세로로 붙는다 — 간격 8px 미만은 Fitts 게이트(D-UX-10) 오류. */}
+                    <div className="flex flex-col gap-2">
                       {row.noteAnchor ? (
                         <ExternalLink href={row.noteAnchor} className="font-mono text-xs text-accent hover:underline">
                           원문 ↗

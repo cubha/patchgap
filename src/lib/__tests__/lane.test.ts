@@ -7,9 +7,55 @@ import { describe, expect, it } from "vitest";
 import { lanesForEntityKey, parseLaneAxis } from "../lane";
 import type { DeltaRecord } from "@/pipeline/types";
 
-function stubRecord(id: string, entityKey: string): Pick<DeltaRecord, "id" | "entityKey"> {
-  return { id, entityKey };
+// ST-19(2026-10-08): `lanesForEntityKey`가 보고 자격을 보므로 전체 행이 필요하다 — 기존 케이스는 **자격 있는** 행으로 그대로 둔다
+// (라인 도출 규칙 자체는 바뀌지 않았다).
+function stubRecord(id: string, entityKey: string): DeltaRecord {
+  return fullRecord(id, { entityKey });
 }
+
+function fullRecord(id: string, overrides: Partial<DeltaRecord> = {}): DeltaRecord {
+  return {
+    id,
+    entityType: "champion",
+    entityKey: id.split(":")[1],
+    entityName: "테스트",
+    metric: "pickRate",
+    before: 0.1,
+    after: 0.15,
+    delta: 0.05,
+    ci: [0.03, 0.07],
+    n: { before: 6000, after: 6000 },
+    q: 0.01,
+    status: "announced-consistent",
+    matchedNoteId: "n1",
+    matchedNoteIds: ["n1"],
+    causes: [],
+    evidence: { matchIds: [], aggregatePath: "x", noteAnchor: null },
+    ...overrides,
+  };
+}
+
+// ST-19(2026-10-08 site-review lol-S6): 라인 칩(탑·원딜)을 눌러도 목록이 거의 안 줄었다 — 그 라인에 **행이 있기만 하면**
+// 소속으로 쳤는데 26.19 데이터엔 TOP 302행·BOTTOM 224행이 있어 대부분의 챔피언이 모든 라인에 속했다. 소속은 그 라인에서
+// **보고 자격**을 얻은 행이 있을 때만이다 — 방법론 「라인을 고르면 그 라인의 픽률·승률만 봅니다」와 맞아야 한다.
+describe("lanesForEntityKey — 보고 자격이 있는 라인만(ST-19)", () => {
+  it("★ 행이 있어도 보고 자격이 없으면(비유의·바닥 미달) 그 라인에 속하지 않는다", () => {
+    const rows = [
+      fullRecord("champion:Khazix:JUNGLE:pickRate"),
+      fullRecord("champion:Khazix:TOP:pickRate", { q: 0.9, ci: [-0.01, 0.01], delta: 0.001, after: 0.101 }),
+    ];
+    expect(lanesForEntityKey(rows, "Khazix", 0.1)).toEqual(["JUNGLE"]);
+  });
+
+  it("qAlpha를 안 주면 기본 alpha로 같은 술어를 쓴다", () => {
+    const rows = [fullRecord("champion:Khazix:JUNGLE:pickRate")];
+    expect(lanesForEntityKey(rows, "Khazix")).toEqual(["JUNGLE"]);
+  });
+
+  it("scope=all 행은 라인이 아니다 — 자격이 있어도 결과에 없다", () => {
+    expect(lanesForEntityKey([fullRecord("champion:Khazix:pickRate")], "Khazix", 0.1)).toEqual([]);
+  });
+});
 
 describe("parseLaneAxis", () => {
   it("파싱: 5개 명명 포지션(scope=position, 4세그먼트) 각각", () => {

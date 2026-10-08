@@ -34,7 +34,8 @@ import StatusBadge, { BADGE_SLOT } from "@/components/StatusBadge";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/components/compare/entityRows";
 import DeltaValue from "@/components/DeltaValue";
-import { metricLabel } from "@/lib/format";
+import { metricLabel, positionLabel } from "@/lib/format";
+import { parseLaneAxis } from "@/lib/lane";
 import { lolEntityHref } from "@/lib/detailRoutes";
 import { usePairBase } from "@/components/PairBaseContext";
 import { isCosmeticGroup, isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
@@ -121,14 +122,24 @@ function CardIcon({ icon, entity }: { icon: StreamEntityIcon; entity: string }) 
 /** 시안 `.rn-obs` — 엔티티 대표 관측 1줄. "밴률 26.8% → 42.4% ▲ +15.7%p CI ±1.3 · q<0.001" */
 function ObservationLine({ record }: { record: DeltaRecord }) {
   const q = formatQ(record.q);
+  // 대표가 라인 행이면 어느 라인의 값인지 말한다(ST-08) — 라벨 없는 라인 값은 상세(전체 행)와 어긋나 보인다.
+  const lane = parseLaneAxis(record.id);
   return (
     <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-xs text-muted">
       <span className="font-bold text-fg-2">{metricLabel(record.metric)}</span>
+      {lane !== null && lane !== "all" ? (
+        <span className="rounded-sm bg-surface-warm px-1 font-mono text-[0.65rem] text-fg-2">{positionLabel(lane)}</span>
+      ) : null}
       <span className="font-mono tabular-nums">
         {formatMetricValue(record.before, record.metric)} →{" "}
         {formatMetricValue(record.after, record.metric)}
       </span>
-      <DeltaValue delta={record.delta} ci={record.ci} kind={metricKind(record.metric)} />
+      <DeltaValue
+        delta={record.delta}
+        ci={record.ci}
+        kind={metricKind(record.metric)}
+        endpoints={{ before: record.before, after: record.after }}
+      />
       {q ? <span className="font-mono">· {q}</span> : null}
     </div>
   );
@@ -380,7 +391,12 @@ export default function ReleaseNoteRow({
                         {formatMetricValue(row.after, row.metric)}
                       </span>
                     </div>
-                    <DeltaValue delta={row.delta} ci={row.ci} kind={metricKind(row.metric)} />
+                    <DeltaValue
+                      delta={row.delta}
+                      ci={row.ci}
+                      kind={metricKind(row.metric)}
+                      endpoints={{ before: row.before, after: row.after }}
+                    />
                     <Link href={lolEntityHref(row, pairBase)} className="text-xs font-bold text-accent hover:underline">
                       근거 보기 →
                     </Link>

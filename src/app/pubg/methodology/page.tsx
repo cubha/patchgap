@@ -10,8 +10,9 @@
 // 계산하지 않는다(Wilson CI + 바닥). LLM 원인 추정은 이 게임에 없다 — 43.1 노트가 5항목이라 짝지을
 // 후보 조항 자체가 없다.
 import type { Metadata } from "next";
-import Container from "@/components/Container";
 import MethodologyLayout, { type MethodologySlots } from "@/components/methodology/MethodologyLayout";
+import ObservationPendingNotice from "@/components/ObservationPendingNotice";
+import { allUnusedSlots } from "@/components/methodology/slots";
 import StatusBadge from "@/components/StatusBadge";
 import { PubgSampleNotice, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { loadPubg, loadPubgDeclaration } from "@/lib/pubgData";
@@ -21,6 +22,7 @@ import {
   REDISTRIBUTION_OVERCLAIM_FACTOR,
   redistributionExpectation,
 } from "@/pipeline/match/pubg-delta";
+import { pubgVerdictCount } from "@/pipeline/shared/headline";
 
 export const metadata: Metadata = {
   title: "PUBG 방법론 · patchgap",
@@ -38,12 +40,20 @@ const PIPELINE = [
 export default function PubgMethodologyPage() {
   const bundle = loadPubg();
   if (!bundle) {
+    // 방법론은 관측 여부와 무관하게 골격(이동 경로·9슬롯·푸터)을 유지한다(ST-15, TFT와 같은 규칙). PUBG는 과거 쌍
+    // 라우트가 없어 다른 쌍의 표본으로 채울 수 없다 — 칸마다 사유를 적는다.
+    const declaration = loadPubgDeclaration();
     return (
-      <main>
-        <Container>
-          <PubgUnavailable failure={loadPubgDeclaration()?.failure} />
-        </Container>
-      </main>
+      <MethodologyLayout
+        game="pubg"
+        eyebrow="PUBG: BATTLEGROUNDS"
+        title="어떻게 판정했고, 무엇을 못 했나"
+        lead={<>패치노트의 무기 변경을 매치 텔레메트리의 <strong className="text-fg">획득 점유율</strong> 한 축으로 대조합니다.</>}
+        notice={declaration ? <ObservationPendingNotice failure={declaration.failure} /> : <PubgUnavailable />}
+        slots={allUnusedSlots("관측이 있는 쌍이 아직 없어 표본·판정을 말할 수 없습니다. 판정 규칙은 LoL·TFT와 같은 엔진입니다.")}
+        generatedAt={declaration?.generatedAt ?? null}
+        nVerdicts={null}
+      />
     );
   }
 
@@ -406,7 +416,7 @@ export default function PubgMethodologyPage() {
       notice={<PubgSampleNotice sampleScope={deltas.meta.sampleScope} />}
       slots={slots}
       generatedAt={deltas.meta.generatedAt}
-      nVerdicts={deltas.meta.n}
+      nVerdicts={pubgVerdictCount(deltas.rows)}
     />
   );
 }

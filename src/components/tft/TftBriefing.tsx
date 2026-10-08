@@ -21,9 +21,12 @@ import { selectTftCauseRows } from "@/components/tft/causeRows";
 import { tftEntityHref } from "@/lib/tftRoutes";
 import { tftEntityRows } from "@/lib/tftEntityRows";
 import { entityTypeLabel, metricLabel } from "@/lib/format";
-import { tftGapRows, tftGapTotal } from "@/lib/gapTotals";
+import { tftGapTotal, tftMetricGapRows } from "@/lib/gapTotals";
 import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
-import DeclarationOnly from "@/components/DeclarationOnly";
+import { DeclarationHero, DeclarationNotesCard, declarationEntityCount } from "@/components/DeclarationOnly";
+import { pairSectionLink } from "@/lib/pairRoutes";
+import { latestObservedTftPair } from "@/lib/tftData";
+import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
@@ -31,6 +34,7 @@ import type { DeltaRecord } from "@/pipeline/types";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import StatTiles from "@/components/StatTiles";
 import DiscordPanel from "@/components/home/DiscordPanel";
+import MobileActionBar from "@/components/home/MobileActionBar";
 import BriefingTabs from "@/components/BriefingTabs";
 import BriefingRowList from "@/components/BriefingRowList";
 import AnnouncedCoverageLine from "@/components/home/AnnouncedCoverageLine";
@@ -38,6 +42,7 @@ import EntityIcon from "@/components/EntityIcon";
 import EntityIndexSection, { EntityIndexGrid } from "@/components/EntityIndexSection";
 import { buildEntityIndex } from "@/components/home/entityIndex";
 import { groupBriefingItems, type BriefingGroup } from "@/components/briefingRows";
+import { countAnnouncedObservedEntities, verdictCount } from "@/pipeline/shared/headline";
 
 export interface TftBriefingProps {
   /** 그 쌍의 관측 번들. 없으면(관측 stub·미수집) `declaration`을 본다. */
@@ -149,8 +154,12 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
   const reportable = deltas.rows.filter((row) => isReportableRecord(row, deltas.meta.qAlpha));
   // 대조표(`entityRows`)와 **같은 함수**로 표시 키를 낸다 — 상태값만 보는 `displayStatusOf`는 방향 중립
   // (동률 노트)을 모르므로, 같은 대상이 홈에선 「이상 관측」, 대조표에선 「공지」로 갈렸다(인수검증 V1, 오른).
-  const unannounced = tftGapRows(deltas.rows, deltas.meta.qAlpha);
+  // 지표 축 목록은 수치 축 대상을 뺀다(ST-10) — 한 대상은 한 섹션에만, 머리 수는 대조표 미공지 칩과 같은 대상 수.
+  const unannounced = tftMetricGapRows(deltas.rows, deltas.meta.qAlpha, submarine);
+  const unannouncedEntities = new Set(unannounced.map((r) => `${r.entityType}:${r.entityKey}`)).size;
   const announced = reportable.filter((row) => displayStatus(row, deltas.meta.qAlpha) !== "unannounced");
+  // 공지 대상 중 관측이 선 대상 수 — 카드 머리·결론 문장·대조표 커버리지가 같은 수를 본다(ST-06·tft-S8).
+  const announcedObserved = countAnnouncedObservedEntities(deltas.rows, deltas.meta.qAlpha);
   const matches = before.matches + after.matches;
   // 시안 04-applied의 헤드라인 — 이 사이트가 무엇을 하는 곳인지 한 문장으로 말한다.
   // 숫자는 아래 3타일과 **같은 출처**를 쓴다(따로 세면 화면이 스스로를 반박한다).
@@ -255,14 +264,16 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
               우측 패널이 좌측 **탭 바** 상단에 맞아 카드끼리 어긋난다 — 그 배치는 탭 바
               위치를 아는 쪽만 정할 수 있다(2026-09-24). */}
           <BriefingTabs
-              contentCount={announced.length}
+              /* 탭 배지 = 노트 항목 수(타일 부제와 같은 수), 카드 머리 = 공지 대상 중 관측이 선 **대상** 수(결론 문장과 같은
+                 함수) — tft-S8: 같은 개념은 같은 수, 다른 개념(항목/대상)은 라벨이 다르다. */
+              contentCount={notes.items.length}
               gapCount={gapTotal}
               content={
                 <SectionCard
                   eyebrow="대조"
                   title="공지된 변경은 실제로 그렇게 됐나"
                   variant="embedded"
-                  action={<span className="font-mono text-xs text-muted">{announced.length}건</span>}
+                  action={<span className="font-mono text-xs text-muted">대상 {announcedObserved}종</span>}
                 >
                   <div className={PANEL_SCROLL_BODY}>
                   <BriefingRowList
@@ -276,7 +287,8 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
                 {/* 세 게임이 같은 자리에서 같은 말을 한다(§8-1, 2026-09-23 화면 대조 V5). */}
                 <AnnouncedCoverageLine
                   noteTargets={noteEntities}
-                  observed={new Set(announced.map((r) => `${r.entityType}:${r.entityKey}`)).size}
+                  /* 세 게임이 같은 함수로 센다(ST-06) — 전에는 표시 상태로 걸러 간접 영향 행까지 공지로 셌다. */
+                  observed={announcedObserved}
                 />
                 </SectionCard>
               }
@@ -297,7 +309,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
                     eyebrow="발견 · 지표 축"
                     title="패치노트에 없는데 움직인 것"
                     variant="embedded"
-                    action={<span className="font-mono text-xs text-muted">{unannounced.length}건</span>}
+                    action={<span className="font-mono text-xs text-muted">대상 {unannouncedEntities}종</span>}
                   >
                     <div className={PANEL_SCROLL_BODY}>
                     <BriefingRowList
@@ -335,7 +347,9 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
           <TftSampleNotice boards={before.boards + after.boards} matches={matches} />
         </div>
       </Container>
-      <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.rows.length} />
+      <TftFooter generatedAt={deltas.meta.generatedAt} nVerdicts={verdictCount(deltas.rows, deltas.meta.qAlpha)} />
+      {/* 모바일 주 행동(PLAN-mobile-cta) — 세 게임 공통, 관측 전 선언 뷰도 같다. */}
+      <MobileActionBar game="tft" />
     </main>
   );
 }
@@ -346,19 +360,52 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
  */
 function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
   const submarine = summarizeGameData(loadGameDataDiff("tft", declaration.from, declaration.to));
+  const notes = declaration.notes.items.map((n) => ({ id: n.id, group: n.entity, summary: n.summary, anchorUrl: n.anchorUrl }));
+  // 관측이 있는 최신 쌍으로 가는 길(ST-16) — 전에는 헤더 select뿐이었다.
+  const observed = latestObservedTftPair();
+  const observedLink = observed ? pairSectionLink("tft", observed.pair, observed.isLatest, "", "브리핑") : null;
+  // 수치 축은 관측과 무관하게 실재한다(게임 파일 대조) — Gap 탭 배지는 그 대상 수.
+  const numericGap = tftGapTotal([], 0, submarine);
   return (
     <main>
       <Container>
-        <DeclarationOnly
-          from={declaration.from}
-          to={declaration.to}
-          failure={declaration.failure}
-          notes={declaration.notes.items.map((n) => ({ id: n.id, group: n.entity, summary: n.summary, anchorUrl: n.anchorUrl }))}
-          // 관측 없는 쌍엔 상세 라우트가 없다 — 링크 없이 이름만 그린다.
-          extra={submarine ? <SubmarineSection summary={submarine} hrefOf={() => null} /> : null}
-        />
-        <TftFooter generatedAt={declaration.generatedAt} nVerdicts={0} />
+        {/* 관측 전에도 **골격은 같다**(ST-16, §8-1 · site-review parity-S2): 히어로 → 3타일(관측 칸은 「—」) → 탭(패치 내용 /
+            미공지 Gap) + 디스코드 사이드 → 푸터. 전에는 1컬럼에 노트 목록만 있어 게임을 바꿔 들어온 사람이 다른 사이트처럼 읽었다. */}
+        <div className="flex flex-col gap-6 pt-40 pb-8">
+          <DeclarationHero from={declaration.from} to={declaration.to} notes={notes} failure={declaration.failure} observed={observedLink} />
+          <StatTiles
+            announcedCount={declarationEntityCount(notes)}
+            patch={declaration.to}
+            itemCount={notes.length}
+            significantCount={null}
+            gapCount={null}
+            game="tft"
+          />
+          <BriefingTabs
+            contentCount={notes.length}
+            gapCount={numericGap}
+            content={<DeclarationNotesCard to={declaration.to} notes={notes} variant="embedded" />}
+            gap={
+              <div>
+                {/* 관측 없는 쌍엔 상세 라우트가 없다 — 링크 없이 이름만 그린다. */}
+                {submarine ? (
+                  <div className="border-b border-border-soft p-5">
+                    <SubmarineSection summary={submarine} hrefOf={() => null} />
+                  </div>
+                ) : null}
+                <SectionCard eyebrow="발견 · 지표 축" title="패치노트에 없는데 움직인 것" variant="embedded">
+                  <p role="status" data-observation={declaration.failure.reason} className="p-5 text-sm leading-relaxed text-muted">
+                    {observationReasonLabel(declaration.failure.reason)}
+                  </p>
+                </SectionCard>
+              </div>
+            }
+            aside={<DiscordPanel game="tft" generatedAt={declaration.generatedAt} />}
+          />
+        </div>
       </Container>
+      <TftFooter generatedAt={declaration.generatedAt} nVerdicts={0} />
+      <MobileActionBar game="tft" />
     </main>
   );
 }

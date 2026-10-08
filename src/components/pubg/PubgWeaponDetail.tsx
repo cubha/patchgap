@@ -28,7 +28,7 @@ import { ALL_SEGMENT } from "@/components/observation/observationModel";
 import { ANNOUNCED_RATIO_BAND, PICKUP_MIN_N, pubgNotesAsPatchNotes, type PubgDeltaRow } from "@/pipeline/match/pubg-delta";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
-import { loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
+import { delayedChangesFor, loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import PubgDetailSplash from "@/components/pubg/PubgDetailSplash";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { isReportable, loadPubgAssets, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
@@ -37,6 +37,7 @@ import { weaponKeyFromSlug } from "@/lib/pubgRoutes";
 import { publicWeaponPath } from "@/pipeline/pubg/asset-path";
 import { weaponCategoryLabel } from "@/pipeline/aggregate/pubg-weapon-key";
 import ExternalLink from "@/components/ExternalLink";
+import { pubgVerdictCount } from "@/pipeline/shared/headline";
 
 /** PUBG 통계 게이트 행 — 이 게임 판정이 실제로 쓰는 것(획득 표본 하한 · 상대 변화 로그비 CI · 공지 밴드/자체 바닥).
  * BH-FDR을 쓰지 않으므로 q를 말하지 않는다(#74에서 바로잡은 「판정 엔진 게임 무관」 과장과 같은 이유). */
@@ -102,6 +103,8 @@ export default function PubgWeaponDetail({
 
   const row = deltas.rows.find((r) => r.weaponKey === weaponKey) ?? null;
   const note = row?.matchedNoteId ? (notes.find((n) => n.id === row.matchedNoteId) ?? null) : null;
+  // 이 무기를 말한 조항 전부 — 대조표 좌 내비와 같은 집합(`matchedNoteIds`). 대표(`note`)는 머리 문장에만 쓴다.
+  const mentionedNotes = row ? notes.filter((n) => row.matchedNoteIds.includes(n.id)) : [];
   // 원인 문장이 인용한 노트 — 엔진과 **같은 변환**을 써야 id가 맞는다(사본 금지).
   const notesById = new Map(
     pubgNotesAsPatchNotes(notes, (key) => deltas.rows.find((r) => r.weaponKey === key)?.weaponName ?? null).map(
@@ -112,6 +115,8 @@ export default function PubgWeaponDetail({
   // 수치 축(F9) — PUBG는 게임사가 수치 파일을 배포하지 않아 텔레메트리 피해 격자를 대조한다.
   const gameData = loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to);
   const submarineChanges = submarineChangesFor(gameData, "weapon", weaponKey);
+  // PUBG 어댑터는 직전 노트를 보지 않아 지금은 비어 있다 — 공용 블록의 계약을 그대로 따른다.
+  const delayedChanges = delayedChangesFor(gameData, "weapon", weaponKey);
   const mismatchChanges = noteMismatchChangesFor(gameData, "weapon", weaponKey);
 
   // 자산 유무를 **빌드 타임에** 판정한다 — 없는 무기가 실제로 9종 있다(RPD 포함).
@@ -266,7 +271,7 @@ export default function PubgWeaponDetail({
           variant="glass"
           action={
             <span className="font-mono text-xs text-muted">
-              말한 것 {note ? 1 : 0} · 말하지 않은 것 {submarineChanges.length}
+              말한 것 {mentionedNotes.length} · 말하지 않은 것 {submarineChanges.length}
               {mismatchChanges.length > 0 ? ` · 값이 다른 것 ${mismatchChanges.length}` : ""}
             </span>
           }
@@ -275,18 +280,25 @@ export default function PubgWeaponDetail({
             <span className="h-1.5 w-1.5 rounded-pill bg-muted" aria-hidden="true" />
             <h3 className="font-body text-xs font-bold tracking-wide text-muted">패치노트가 말한 것</h3>
           </div>
-          {note ? (
-            <div className="flex flex-col gap-1 px-5 pb-4">
-              <span className="text-sm text-fg-2">{note.summary}</span>
-              {row?.evidence.noteAnchor ? (
-                <ExternalLink
-                  href={row.evidence.noteAnchor}
-                  className="w-fit font-mono text-xs text-accent hover:underline"
-                >
-                  원문 ↗
-                </ExternalLink>
-              ) : null}
-            </div>
+          {mentionedNotes.length > 0 ? (
+            // **이 무기를 말한 조항 전부**(ST-21, site-review pubg-S3) — 전에는 대표 노트 1줄만 실어 대조표(RPD 4줄)와 어긋났다.
+            // 기대값이 없는 조항(조준 전환·반동·차량 피해)은 이 데이터로 측정할 수 없어 회색으로, 사유와 함께.
+            <ul className="flex flex-col gap-2 px-5 pb-4">
+              {mentionedNotes.map((n) => {
+                const measurable = n.expectedRelChange !== null;
+                return (
+                  <li key={n.id} className="flex flex-col gap-0.5">
+                    <span className={`text-sm ${measurable ? "text-fg-2" : "text-muted"}`}>
+                      {n.summary}
+                      {measurable ? null : <span className="ml-2 font-mono text-xs text-muted">이 데이터로 측정 불가</span>}
+                    </span>
+                    <ExternalLink href={n.anchorUrl} className="w-fit font-mono text-xs text-accent hover:underline">
+                      원문 ↗
+                    </ExternalLink>
+                  </li>
+                );
+              })}
+            </ul>
           ) : (
             <p className="px-5 pb-4 text-sm text-muted">
               {deltas.meta.to} 패치노트에 이 무기를 언급한 항목이 없습니다.
@@ -298,6 +310,7 @@ export default function PubgWeaponDetail({
           <SubmarineDetailBlock
             changes={submarineChanges}
             mismatchChanges={mismatchChanges}
+            delayedChanges={delayedChanges}
             source={gameData?.meta.source ?? null}
             notePatch={deltas.meta.to}
             patch={gameData ? { from: gameData.meta.from, to: gameData.meta.to } : null}
@@ -312,7 +325,7 @@ export default function PubgWeaponDetail({
           emptyText="보고할 관측이 없습니다."
         />
 
-        <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={deltas.meta.n} />
+        <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={pubgVerdictCount(deltas.rows)} />
       </div>
     </Container>
     </main>

@@ -13,7 +13,14 @@
 // 말하는 것이 이 프로젝트에서 더 큰 잘못이다.
 
 import { buildChange, diffValueMap, type GameDataValue } from "./diff";
-import { linkedNotes, noteValueMismatch, type NoteLike } from "./note-link";
+import {
+  linkPriorNote,
+  linkedNotes,
+  noteValueMismatch,
+  unappliedNoteMismatch,
+  type NoteLike,
+  type PriorNotes,
+} from "./note-link";
 import type { GameDataChange } from "./types";
 
 /** 소환사의 협곡. `item.json`의 `maps` 키. */
@@ -117,7 +124,9 @@ export function diffLol(
   before: DdragonSnapshot,
   after: DdragonSnapshot,
   notes: readonly NoteLike[],
-  patch: string
+  patch: string,
+  /** 직전 패치 노트들(최근 먼저, ST-02) — 현재 노트에 짝이 없을 때만 본다. 없으면 종전 판정과 같다. */
+  priorNotes: readonly PriorNotes[] = []
 ): GameDataChange[] {
   const out: GameDataChange[] = [];
 
@@ -132,7 +141,9 @@ export function diffLol(
     keywords: readonly string[],
     skillKey?: string
   ) => {
-    const linked = linkedNotes({ entityName, fieldKeywords: keywords, skillKey }, notes);
+    // 값 자체도 넘긴다(ST-01) — effectBurn은 슬롯 의미를 모르지만 노트가 그 값을 적었으면 공지다.
+    const input = { entityName, fieldKeywords: keywords, skillKey, value: { before: b, after: a } };
+    const linked = linkedNotes(input, notes);
     out.push(
       buildChange({
         game: "lol",
@@ -146,6 +157,40 @@ export function diffLol(
         after: a,
         matchedNoteIds: linked.map((l) => l.note.id),
         noteMismatch: noteValueMismatch(linked, b, a),
+        priorNote: linked.length === 0 ? linkPriorNote(input, priorNotes) : null,
+      })
+    );
+  };
+
+  /**
+   * **안 바뀐** 필드의 「공지값 미반영」(ST-03) — 노트가 바꾼다고 했는데 파일이 그대로면 `before === after`인 행을 낸다.
+   * TFT와 같은 규약(18.2 렝가·마스터 이 실측). 기본 능력치·아이템 가격·아이템 능력치처럼 낱말 사전이 있는 필드만.
+   */
+  const pushUnapplied = (
+    entityKey: string,
+    entityName: string,
+    entityType: string,
+    field: string,
+    fieldPath: string,
+    value: GameDataValue,
+    keywords: readonly string[]
+  ) => {
+    const linked = linkedNotes({ entityName, fieldKeywords: keywords }, notes);
+    const mismatch = unappliedNoteMismatch(linked, value);
+    if (!mismatch) return;
+    out.push(
+      buildChange({
+        game: "lol",
+        patch,
+        entityKey,
+        entityName,
+        entityType,
+        field,
+        fieldPath,
+        before: value,
+        after: value,
+        matchedNoteIds: linked.map((l) => l.note.id),
+        noteMismatch: mismatch,
       })
     );
   };
@@ -155,10 +200,19 @@ export function diffLol(
     const next = after.champions[id];
     if (!prev || !next) continue;
 
+    const changedStats = new Set<string>();
     for (const d of diffValueMap(prev.stats, next.stats)) {
+      changedStats.add(d.key);
       const label = CHAMPION_STAT_LABELS[d.key];
       if (!label) continue;
       push(id, next.name, "champion", label[0], `stats.${d.key}`, d.before, d.after, label[1]);
+    }
+    for (const key of Object.keys(CHAMPION_STAT_LABELS)) {
+      if (changedStats.has(key)) continue;
+      const value = next.stats[key] ?? null;
+      if (value === null) continue;
+      const [label, keywords] = CHAMPION_STAT_LABELS[key];
+      pushUnapplied(id, next.name, "champion", label, `stats.${key}`, value, keywords);
     }
 
     const prevSpells = before.spells[id]?.spells ?? [];
@@ -212,11 +266,21 @@ export function diffLol(
     const ng = next.gold?.total ?? null;
     if (pg !== ng) {
       push(id, next.name, "item", "가격", "gold.total", pg, ng, ["가격", "골드"]);
+    } else if (ng !== null) {
+      pushUnapplied(id, next.name, "item", "가격", "gold.total", ng, ["가격", "골드"]);
     }
+    const changedItemStats = new Set<string>();
     for (const d of diffValueMap(prev.stats ?? {}, next.stats ?? {})) {
+      changedItemStats.add(d.key);
       const label = ITEM_STAT_LABELS[d.key];
       if (!label) continue;
       push(id, next.name, "item", label[0], `stats.${d.key}`, d.before, d.after, label[1]);
+    }
+    for (const [key, value] of Object.entries(next.stats ?? {})) {
+      if (changedItemStats.has(key) || value === undefined || value === null) continue;
+      const label = ITEM_STAT_LABELS[key];
+      if (!label) continue;
+      pushUnapplied(id, next.name, "item", label[0], `stats.${key}`, value, label[1]);
     }
   }
 

@@ -14,6 +14,7 @@ import {
   MIDPATCH_MISMATCH_CAVEAT,
   mismatchCellLines,
   mismatchNoteText,
+  UNAPPLIED_NOTE_TAIL,
   submarineCellLines,
   submarineCellText,
 } from "./submarineText";
@@ -39,10 +40,15 @@ function MismatchLines({ changes }: { changes: readonly GameDataChange[] }) {
           <span className="whitespace-nowrap font-mono text-xs tabular-nums text-muted">
             {line.before} → <span className="font-bold text-warn">{line.after}</span>
           </span>
-          {/* 노트가 적은 값을 같은 칸에서 말해야 "불일치"가 주장이 아니라 대조가 된다. */}
+          {/* 노트가 적은 값을 같은 칸에서 말해야 "불일치"가 주장이 아니라 대조가 된다. 「미반영」 꼬리는 **따로 한 줄** — 한 줄로
+              묶으면 「바뀐 것」 열이 200px를 넘어 1280에서 판정 열을 화면 밖으로 밀었다(verify-impl ST-25 실측, 2026-10-08). 줄마다
+              nowrap은 유지한다: 줄 수가 고정이어야 글자가 늘어도 행 높이가 안 출렁인다(레이아웃 게이트 D-STRESS-02). */}
           <span className="whitespace-nowrap font-mono text-[0.65rem] tabular-nums text-muted">
-            {mismatchNoteText(line, "노트")}
+            {mismatchNoteText({ ...line, unapplied: false }, "노트")}
           </span>
+          {line.unapplied ? (
+            <span className="whitespace-nowrap font-mono text-[0.65rem] tabular-nums text-muted">{UNAPPLIED_NOTE_TAIL}</span>
+          ) : null}
           {line.midpatch ? (
             <span className="font-body text-[0.65rem] text-muted">{MIDPATCH_MISMATCH_CAVEAT}</span>
           ) : null}

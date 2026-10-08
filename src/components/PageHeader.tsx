@@ -36,12 +36,19 @@ export default function PageHeader({
           {eyebrow}
         </p>
       ) : null}
+      {/* 제목 옆 라벨이 제목 글자를 덮었다(ST-23, site-review pubg-S20: 맵 상세 「에란겔」이 「맵 · 8×8」 위에). `text-balance`는
+          flex 안에서 상자 너비를 글자 폭보다 좁게 잡을 수 있어 뒤따르는 라벨이 글자 위로 올라온다 — 라벨이 있을 때는 균형
+          줄바꿈을 끄고, 라벨은 줄바꿈 없이 자기 자리를 지킨다. */}
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <h1 className="ambient-hero-headline font-display text-3xl leading-tight font-bold text-balance break-keep text-fg sm:text-4xl">
+        <h1
+          className={`ambient-hero-headline font-display text-3xl leading-tight font-bold break-keep text-fg sm:text-4xl ${
+            titleAside ? "" : "text-balance"
+          }`}
+        >
           {title}
         </h1>
         {titleAside ? (
-          <span className="font-mono text-xs tracking-wider text-muted uppercase">{titleAside}</span>
+          <span className="shrink-0 whitespace-nowrap font-mono text-xs tracking-wider text-muted uppercase">{titleAside}</span>
         ) : null}
       </div>
       {lead ? (

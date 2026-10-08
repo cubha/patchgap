@@ -12,7 +12,7 @@
 // 방어구계수 × 거리감쇠`의 곱이라 이산값이고, **격자 위치는 방어구·거리 구성이 바뀌어도
 // 움직이지 않는다**(평균은 움직인다 — 그래서 평균을 쓰지 않는다).
 
-import type { NoteValueMismatch } from "./note-link";
+import type { NoteValueMismatch, PriorNoteLink } from "./note-link";
 
 /** 어디서 읽었는지. 화면이 근거 링크를 만들 때 쓴다. */
 export interface GameDataSource {
@@ -51,6 +51,12 @@ export interface GameDataChange {
    * 두지 않는다 — 산출물 대부분이 `null`로 채워지면 커밋 diff가 읽히지 않는다.
    */
   readonly noteMismatch?: NoteValueMismatch;
+  /**
+   * 현재 쌍 노트엔 없지만 **직전 패치 노트가 이 값으로 바꾼다고 먼저 말한** 변경(ST-02, 2026-10-08). 게임 파일에
+   * 한두 패치 늦게 실린 공지다 — 잠수함이 아니다(렝가·덩굴정령 18.3, 마오카이·마스터 이 18.4 실측). 없으면 키 자체를
+   * 두지 않는다(`noteMismatch`와 같은 이유).
+   */
+  readonly priorNote?: PriorNoteLink;
 }
 
 export interface GameDataDiffFile {
@@ -68,9 +74,17 @@ export interface GameDataDiffFile {
   readonly changes: readonly GameDataChange[];
 }
 
-/** 노트 짝이 없으면 잠수함 패치다. 이 술어가 정의의 **단일 소스**. */
+/**
+ * 노트 짝이 없으면 잠수함 패치다. 이 술어가 정의의 **단일 소스**.
+ * 직전 노트가 먼저 말한 값(`priorNote`)은 짝이 **있는** 것이다 — 지연 반영이지 잠수함이 아니다(ST-02).
+ */
 export function isSubmarineChange(change: GameDataChange): boolean {
-  return change.matchedNoteIds.length === 0;
+  return change.matchedNoteIds.length === 0 && change.priorNote === undefined;
+}
+
+/** 직전 패치 노트가 공지한 값이 이번에 반영된 변경 — 잠수함·공지·불일치와 배타적인 네 번째 자리. */
+export function isDelayedChange(change: GameDataChange): boolean {
+  return change.priorNote !== undefined;
 }
 
 /**

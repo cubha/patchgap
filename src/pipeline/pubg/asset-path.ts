@@ -17,6 +17,15 @@ export function remoteWeaponUrl(weaponKey: string): string {
   return `${ASSET_BASE}/Assets/Item/Weapon/Main/${weaponKey}.png`;
 }
 
+/**
+ * api-assets는 무기를 **폴더로 가른다**(`Main`·`Handgun`·`Melee`, 2026-10-08 실측 — ST-22). 권총 6종(데저트 이글·G18·M9·
+ * 나강·소드오프·스콜피온)이 `Main`에 없어 404로 떨어져 있었다(site-review pubg-S21). 후보를 순서대로 시도한다 — 키만 보고
+ * 폴더를 맞히려 들지 않는다(그 표는 금방 틀린다).
+ */
+export function remoteWeaponUrlCandidates(weaponKey: string): string[] {
+  return ["Main", "Handgun", "Melee"].map((folder) => `${ASSET_BASE}/Assets/Item/Weapon/${folder}/${weaponKey}.png`);
+}
+
 /** 맵 지형도 원격 URL — `assetName`은 공식 표시명(`Erangel`)이다(텔레메트리 키 아님). */
 export function remoteMapUrl(assetName: string): string {
   return `${ASSET_BASE}/Assets/Maps/${assetName}_Main_No_Text_Low_Res.png`;

@@ -17,6 +17,7 @@ import ReleaseNoteStream, { type ReleaseStreamEntry } from "@/components/home/Re
 import StreamLaneFilter from "@/components/home/StreamLaneFilter";
 import SideMatchAverages from "@/components/home/SideMatchAverages";
 import DiscordPanel from "@/components/home/DiscordPanel";
+import MobileActionBar from "@/components/home/MobileActionBar";
 import LaneGapPanel from "@/components/home/LaneGapPanel";
 import StreamColumnLayout from "@/components/home/StreamColumnLayout";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
@@ -25,6 +26,7 @@ import { lolGapTotal } from "@/lib/gapTotals";
 import type { CosmeticSkinItem } from "@/components/home/CosmeticSkinPreview";
 import { isGapStatus } from "@/components/home/logic";
 import { computeHeadline } from "@/lib/headline";
+import { verdictCount } from "@/pipeline/shared/headline";
 import { isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
 import { matchSkinsInSummary, skinSplashPath } from "@/pipeline/shared/cosmetic-skin";
 import { indexIndirectCauses } from "@/components/home/indirectEffects";
@@ -164,7 +166,8 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
   const streamGroups = [...cardGroups, ...rawGroups.filter((g) => g.kind !== "matched")];
   const streamEntries: ReleaseStreamEntry[] = streamGroups.map((group) => {
     const icon = icons.get(group)!;
-    const lanes = icon.entityKey ? lanesForEntityKey(deltas?.rows ?? [], icon.entityKey) : [];
+    // 라인 소속 = 그 라인에서 보고 자격을 얻은 행이 있는 대상(ST-19) — 칩이 실제로 거른다.
+    const lanes = icon.entityKey ? lanesForEntityKey(deltas?.rows ?? [], icon.entityKey, deltas?.meta.qAlpha) : [];
     const tier = group.kind === "matched" ? tierOf(group) : undefined;
     return { group, icon, lanes, tier };
   });
@@ -220,7 +223,15 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
               같이 내려가므로 그 요구를 그대로 만족한다. 176px은 Tailwind 표준 스케일(11rem)이라
               arbitrary 불필요. */}
           <Container className="flex flex-col gap-6 pt-44 pb-8">
-            <HeroSummary stats={headline} patch={pair?.to ?? ""} gapCount={gapTotal} pairBase={pairBase} caption={heroCaption} />
+            {/* 타일 부제 「N개 항목」과 탭 배지 「패치 내용 N」은 **같은 수**다(ST-07, site-review lol-S3) — 전에는 부제가
+                `meta.itemCount`(231), 배지가 화면에 실리는 줄 수(233)라 한 화면이 두 값을 말했다. 화면이 실제로 싣는 수가 기준. */}
+            <HeroSummary
+              stats={{ ...headline, noteItemCount: contentLineCount }}
+              patch={pair?.to ?? ""}
+              gapCount={gapTotal}
+              pairBase={pairBase}
+              caption={heroCaption}
+            />
             <StreamColumnLayout
               leftHeader={<StreamLaneFilter />}
               left={
@@ -240,7 +251,8 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
                      없었다"는 사실을 LoL만 말하고 있었다(2026-09-23 화면 대조 V5). */
                   announcedCoverage={{
                     noteTargets: headline.noteEntityCount,
-                    observed: headline.statCount,
+                    // 분자는 **공지 대상 중** 관측이 선 대상 수다(ST-06) — `statCount`는 전체 유의 행이라 분모를 넘는다.
+                    observed: headline.announcedObservedCount,
                   }}
                   /* 수치 축(2026-09-21) — 미공지 Gap 탭의 **위쪽 갈래**. 세 번째 탭이 아닌
                      이유는 잠수함도 미공지이기 때문이다(잠수함 > 미공지 위계를 같은 탭 안에서
@@ -275,7 +287,14 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
           </Container>
           {/* 푸터는 세 게임 공통이다(UX-BRIEF §8-1) — LoL만 전 화면에 없었다(2026-09-22 실측). SiteFooter가 자체 Container를
               가지므로 한 번 더 감싸지 않는다(여백 두 겹, 2026-10-07 D-ALIGN-01). */}
-          <SiteFooter game="lol" generatedAt={deltas?.meta.generatedAt ?? null} nVerdicts={deltas?.rows.length ?? null} />
+          {/* 푸터 판정 수 = 타일 「유의한 관측」과 같은 술어(ST-11) — 전 행 수(1931)는 화면 어디에도 없는 수였다. */}
+          <SiteFooter
+            game="lol"
+            generatedAt={deltas?.meta.generatedAt ?? null}
+            nVerdicts={deltas ? verdictCount(deltas.rows, deltas.meta.qAlpha) : null}
+          />
+          {/* 모바일 주 행동 — 375에서 사이드 패널은 첫 화면 밖이다(PLAN-mobile-cta). 세 게임 공통. */}
+          <MobileActionBar game="lol" />
         </main>
       </div>
     </PairBaseProvider>

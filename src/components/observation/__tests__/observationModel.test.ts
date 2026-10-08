@@ -166,7 +166,9 @@ describe("초기 선택 — 구 지표 별칭 URL의 딥링크", () => {
 
 describe("실데이터 — 커밋된 판정 산출물로 잰다", () => {
   const dir = path.resolve(__dirname, "../../../../data/aggregated/deltas");
-  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".json"));
+  // 판정 파일만(`{from}_{to}.json`) — 같은 디렉터리에 알림 표식(`*.notify.json`, `run-notify`가 남긴다)이 생기면
+  // `rows`가 없어 순회가 죽는다(2026-10-08 사전 결함 실측: "rows is not iterable").
+  const files = fs.readdirSync(dir).filter((f) => /^\d+\.\d+_\d+\.\d+\.json$/.test(f));
   const load = (f: string) =>
     JSON.parse(fs.readFileSync(path.join(dir, f), "utf8")) as { meta: { qAlpha?: number }; rows: DeltaRecord[] };
 

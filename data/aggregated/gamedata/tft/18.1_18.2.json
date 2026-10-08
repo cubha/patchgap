@@ -8,8 +8,8 @@
       "from": "16.17",
       "to": "16.18"
     },
-    "generatedAt": "2026-09-28T13:03:59.141Z",
-    "changeCount": 44,
+    "generatedAt": "2026-10-08T08:13:26.851Z",
+    "changeCount": 46,
     "submarineCount": 31
   },
   "changes": [
@@ -200,6 +200,27 @@
       "matchedNoteIds": []
     },
     {
+      "id": "gdc:tft:18.2:DA_18_MasterYi_AD:stats.damage",
+      "entityKey": "DA_18_MasterYi_AD",
+      "entityName": "마스터 이",
+      "entityType": "unit",
+      "field": "공격력",
+      "fieldPath": "stats.damage",
+      "before": 65,
+      "after": 65,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:tft:18.2:champion:마스터-이:7f03951b",
+        "note:tft:18.2:champion:마스터-이:3e0ae055"
+      ],
+      "noteMismatch": {
+        "noteId": "note:tft:18.2:champion:마스터-이:7f03951b",
+        "noteBefore": "65",
+        "noteAfter": "60",
+        "unapplied": true
+      }
+    },
+    {
       "id": "gdc:tft:18.2:DA_18_MasterYi_AD:stats.magicResist",
       "entityKey": "DA_18_MasterYi_AD",
       "entityName": "마스터 이",
@@ -222,6 +243,26 @@
       "after": 65,
       "relChange": 0.08333333333333333,
       "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.2:DA_18_Rengar:stats.attackSpeed",
+      "entityKey": "DA_18_Rengar",
+      "entityName": "렝가",
+      "entityType": "unit",
+      "field": "공격 속도",
+      "fieldPath": "stats.attackSpeed",
+      "before": 0.800000011920929,
+      "after": 0.800000011920929,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:tft:18.2:champion:렝가:4a189382"
+      ],
+      "noteMismatch": {
+        "noteId": "note:tft:18.2:champion:렝가:4a189382",
+        "noteBefore": "0.8",
+        "noteAfter": "0.75",
+        "unapplied": true
+      }
     },
     {
       "id": "gdc:tft:18.2:DA_18_Sentry:stats.damage",

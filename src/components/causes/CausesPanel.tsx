@@ -30,6 +30,8 @@ export default function CausesPanel({ causes, llm, notesById, generatedAt }: Cau
   // 2026-09-18 라운드6(L5): 검증 high → medium → low → 미검증 순(causeOrder.ts). 본문은 카드 고정 높이
   // 안에서 내부 스크롤(min-h-0 + overflow-y-auto) — 캡션 블록은 항상 카드 하단에 남는다.
   const ordered = sortCauses(causes);
+  // 요약의 색은 근거의 등급을 넘지 못한다(ST-27) — 검증된 보통 이상 근거가 하나라도 있어야 본문색.
+  const hasStrongCause = ordered.some((cause) => cause.verified && cause.confidence !== "low");
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       {ordered.length === 0 ? (
@@ -76,7 +78,9 @@ export default function CausesPanel({ causes, llm, notesById, generatedAt }: Cau
           {llm.skipped ? (
             <p className="mb-2 text-xs text-muted">LLM 미실행({llm.reason ?? "사유 없음"})</p>
           ) : llm.summary ? (
-            <p className={`mb-2 text-sm ${llm.summaryVerified ? "text-fg" : "text-muted"}`}>
+            // 요약이 근거보다 세게 말하면 안 된다(ST-27, site-review lol-S10: 근거 3건이 전부 「신뢰도 낮음」인데 요약이 화면에서
+            // 가장 밝은 굵은 글씨로 단정했다). 검증된 보통 이상 근거가 하나라도 있을 때만 본문색, 아니면 회색·보통 굵기.
+            <p className={`mb-2 text-sm ${llm.summaryVerified && hasStrongCause ? "text-fg" : "font-normal text-muted"}`}>
               {llm.summary}
             </p>
           ) : null}
