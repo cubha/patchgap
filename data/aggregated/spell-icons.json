@@ -1,8 +1,8 @@
 {
   "meta": {
-    "ddragonVersion": "16.19.1",
-    "generatedAt": "2026-09-29T05:24:38.257Z",
-    "count": 194
+    "ddragonVersion": "16.20.1",
+    "generatedAt": "2026-10-08T07:40:38.647Z",
+    "count": 210
   },
   "icons": {
     "아지르\u001fQ - 사막의 맹습": "AzirQWrapper.png",
@@ -11,6 +11,8 @@
     "카밀\u001fW - 전술적 휩쓸기": "CamilleW.png",
     "그웬\u001f기본 지속 효과 - 가위 난도질": "Gwen_Passive.png",
     "케넨\u001fR - 날카로운 소용돌이": "KennenShurikenStorm.png",
+    "케넨\u001fE - 번개 질주": "KennenLightningRush.png",
+    "케넨\u001fW - 전류 방출": "KennenBringTheLight.png",
     "나서스\u001fQ - 흡수의 일격": "NasusQ.png",
     "나서스\u001fW - 쇠약": "NasusW.png",
     "나서스\u001f기본 지속 효과 - 영혼의 포식자": "Nasus_Passive.png",
@@ -198,6 +200,20 @@
     "트위스티드 페이트\u001fR - 운명": "Destiny.png",
     "질리언\u001f기본 지속 효과 - 깊은 깨달음": "Zilean_Passive.png",
     "질리언\u001fQ - 시한 폭탄": "ZileanQ.png",
-    "질리언\u001fE - 시간 왜곡": "TimeWarp.png"
+    "질리언\u001fE - 시간 왜곡": "TimeWarp.png",
+    "암베사\u001f기본 지속 효과 - 용사냥개의 발걸음": "Icon_Ambessa_Passive.png",
+    "다이애나\u001fW - 은빛 가호": "DianaOrbs.png",
+    "킨드레드\u001fW - 늑대의 광기": "KindredW.png",
+    "킨드레드\u001fE - 차오르는 공포": "KindredEWrapper.png",
+    "크산테\u001fW - 길을 여는 자": "KSanteW.png",
+    "모데카이저\u001fQ - 말살": "MordekaiserQ.png",
+    "모데카이저\u001fR - 죽음의 세계": "MordekaiserR.png",
+    "니코\u001fE - 칭칭올가미": "NeekoE.png",
+    "스몰더\u001f기본 지속 효과 - 용 훈련": "Icons_Smolder_Passive.png",
+    "스몰더\u001fR - 엄마아아아!": "SmolderR.png",
+    "스웨인\u001fW - 제국의 눈": "SwainW.png",
+    "탐 켄치\u001fQ - 혀 채찍": "TahmKenchQ.png",
+    "유나라\u001fQ - 영혼 단련": "YunaraQ.png",
+    "유나라\u001fW - 심판의 궤적": "YunaraW.png"
   }
 }

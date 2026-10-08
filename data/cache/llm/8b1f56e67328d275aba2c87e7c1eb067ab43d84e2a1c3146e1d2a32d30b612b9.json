@@ -1,0 +1,33 @@
+{
+  "deltaId": "champion:Ryze:pickRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "37d1463c8d12d64f413d644b8a88100b0a80b95b1f87d81e44fffad723178123",
+  "generatedAt": "2026-10-08T07:40:02.116Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.20:champion:neeko:f852c1d8",
+        "text": "미드 메이지 니코의 E 피해량·속박 상향으로 라이즈 픽 수요가 일부 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.20:champion:swain:75868de1",
+        "text": "스웨인 W 피해량·재사용 대기시간 상향이 미드 메이지 선택을 분산시켰을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "라이즈 픽률이 6.2%→4.2%(-2.0%p, CI [-3.2%p, -0.8%p])로 하락했고, 같은 패치에 미드 메이지 니코·스웨인이 상향됐습니다.",
+    "summaryCites": [
+      "note:26.20:champion:neeko:f852c1d8",
+      "note:26.20:champion:swain:75868de1"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 9136,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 764
+  },
+  "proseRepairAttempts": 0
+}

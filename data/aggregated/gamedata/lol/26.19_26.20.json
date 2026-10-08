@@ -1,0 +1,157 @@
+{
+  "meta": {
+    "game": "lol",
+    "from": "26.19",
+    "to": "26.20",
+    "source": {
+      "kind": "ddragon",
+      "from": "16.19.1",
+      "to": "16.20.1"
+    },
+    "generatedAt": "2026-10-08T07:40:39.042Z",
+    "changeCount": 10,
+    "submarineCount": 0
+  },
+  "changes": [
+    {
+      "id": "gdc:lol:26.20:Cassiopeia:stats.hp",
+      "entityKey": "Cassiopeia",
+      "entityName": "카시오페아",
+      "entityType": "champion",
+      "field": "기본 체력",
+      "fieldPath": "stats.hp",
+      "before": 630,
+      "after": 610,
+      "relChange": -0.031746031746031744,
+      "matchedNoteIds": [
+        "note:26.20:champion:cassiopeia:8fbcba4c"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.20:Cassiopeia:stats.mp",
+      "entityKey": "Cassiopeia",
+      "entityName": "카시오페아",
+      "entityType": "champion",
+      "field": "기본 마나",
+      "fieldPath": "stats.mp",
+      "before": 480,
+      "after": 450,
+      "relChange": -0.0625,
+      "matchedNoteIds": [
+        "note:26.20:champion:cassiopeia:9be54029"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.20:KSante:spells.1.costBurn",
+      "entityKey": "KSante",
+      "entityName": "크산테",
+      "entityType": "champion",
+      "field": "W 소모량",
+      "fieldPath": "spells.1.costBurn",
+      "before": "40/45/50/55/60",
+      "after": "45/50/55/60/65",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.20:champion:ksante:e9a0b5f6"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.20:Mordekaiser:spells.3.cooldownBurn",
+      "entityKey": "Mordekaiser",
+      "entityName": "모데카이저",
+      "entityType": "champion",
+      "field": "R 재사용 대기시간",
+      "fieldPath": "spells.3.cooldownBurn",
+      "before": "140/120/100",
+      "after": "120/110/100",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.20:champion:mordekaiser:b247483f"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.20:Swain:stats.armor",
+      "entityKey": "Swain",
+      "entityName": "스웨인",
+      "entityType": "champion",
+      "field": "기본 방어력",
+      "fieldPath": "stats.armor",
+      "before": 25,
+      "after": 23,
+      "relChange": -0.08,
+      "matchedNoteIds": [
+        "note:26.20:champion:swain:24a3ec33"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.20:Swain:stats.spellblock",
+      "entityKey": "Swain",
+      "entityName": "스웨인",
+      "entityType": "champion",
+      "field": "기본 마법 저항력",
+      "fieldPath": "stats.spellblock",
+      "before": 31,
+      "after": 34,
+      "relChange": 0.0967741935483871,
+      "matchedNoteIds": [
+        "note:26.20:champion:swain:f2cdc732"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.20:Swain:spells.1.cooldownBurn",
+      "entityKey": "Swain",
+      "entityName": "스웨인",
+      "entityType": "champion",
+      "field": "W 재사용 대기시간",
+      "fieldPath": "spells.1.cooldownBurn",
+      "before": "22/21/20/19/18",
+      "after": "20/19/18/17/16",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.20:champion:swain:23de20a0"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.20:Vayne:stats.hpregen",
+      "entityKey": "Vayne",
+      "entityName": "베인",
+      "entityType": "champion",
+      "field": "기본 체력 재생",
+      "fieldPath": "stats.hpregen",
+      "before": 4,
+      "after": 5.5,
+      "relChange": 0.375,
+      "matchedNoteIds": [
+        "note:26.20:champion:vayne:1ccc95ce"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.20:Vayne:stats.hpregenperlevel",
+      "entityKey": "Vayne",
+      "entityName": "베인",
+      "entityType": "champion",
+      "field": "기본 체력 재생 증가량",
+      "fieldPath": "stats.hpregenperlevel",
+      "before": 0.5,
+      "after": 0.4,
+      "relChange": -0.19999999999999996,
+      "matchedNoteIds": [
+        "note:26.20:champion:vayne:1ccc95ce"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.20:Vayne:spells.0.costBurn",
+      "entityKey": "Vayne",
+      "entityName": "베인",
+      "entityType": "champion",
+      "field": "Q 소모량",
+      "fieldPath": "spells.0.costBurn",
+      "before": "46/42/38/34/30",
+      "after": "30",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.20:champion:vayne:3cf065d7"
+      ]
+    }
+  ]
+}

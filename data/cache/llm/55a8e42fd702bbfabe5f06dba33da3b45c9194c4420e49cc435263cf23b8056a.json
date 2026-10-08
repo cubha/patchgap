@@ -1,0 +1,27 @@
+{
+  "deltaId": "champion:Ambessa:TOP:pickRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "37d1463c8d12d64f413d644b8a88100b0a80b95b1f87d81e44fffad723178123",
+  "generatedAt": "2026-10-08T07:40:32.524Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.20:champion:ksante:dec59463",
+        "text": "크산테 W 피해 감소율이 30/75%에서 25/70%로 줄어 탑 수요 일부가 암베사로 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "암베사는 지속 효과 너프에도 탑 픽률이 6.7%에서 8.7%로 2.1%p 올랐으며, 크산테 W 너프와의 연관은 근거가 약합니다.",
+    "summaryCites": [
+      "note:26.20:champion:ksante:dec59463"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 9136,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 479
+  },
+  "proseRepairAttempts": 0
+}
