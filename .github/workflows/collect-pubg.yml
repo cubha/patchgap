@@ -251,7 +251,8 @@ jobs:
             "${SITE_ARGS[@]}"
         continue-on-error: true
 
-      # 관측 stub(C14) — collect-tft.yml의 같은 스텝 주석 참고. PUBG는 `deltas.json`이 한 파일이라 이전 쌍의
+      # 관측 stub(C14) — collect-tft.yml의 같은 스텝 주석 참고. PUBG stub은 `declaration.json`에 따로 쓴다(2026-10-09 —
+      # 전에는 `deltas.json` 한 파일이라 이전 쌍의 관측을 지웠다; PLAN-home-observed-pair ST-9). 아래 옛 설명: 이전 쌍의
       # 관측을 새 쌍의 stub이 대신한다(화면은 최신 쌍의 노트를 보여준다). 같은 쌍의 실제 관측은 덮지 않는다.
       - name: Observation stub (선언 축만)
         if: steps.determine.outputs.mode == 'declaration'

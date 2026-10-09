@@ -37,7 +37,7 @@ export function pairSlug(pair: PairLike): string {
   return `${pair.from.replace(/\./g, "_")}-${pair.to.replace(/\./g, "_")}`;
 }
 
-function isSamePair(a: PairLike, b: PairLike): boolean {
+export function isSamePair(a: PairLike, b: PairLike): boolean {
   return a.from === b.from && a.to === b.to;
 }
 
@@ -49,15 +49,17 @@ export function pairBasePath(game: PairRouteGame, pair: PairLike): string {
   return `/${game}/history/${pairSlug(pair)}`;
 }
 
-/** 목록의 첫 쌍(최신)은 평소 주소, 나머지는 과거 쌍 라우트의 같은 섹션. */
+/**
+ * **홈 쌍**은 평소 주소, 나머지는 과거 쌍 라우트의 같은 섹션. 홈 = 관측이 있는 최신 쌍(PLAN-home-observed-pair, 2026-10-09) —
+ * 전에는 목록 첫 칸이었는데, 최신이 선언만 stub이면 그 빈 화면이 평소 주소를 차지했다. 홈이 없으면(관측 0) 전부 과거 쌍 라우트.
+ */
 export function pairHref(
   game: PairRouteGame,
   pair: PairLike,
-  pairs: readonly PairLike[],
+  home: PairLike | null,
   section: PairSection = ""
 ): string {
-  const latest = pairs[0];
-  if (latest && isSamePair(latest, pair)) return sectionHref(game, section);
+  if (home && isSamePair(home, pair)) return sectionHref(game, section);
   return pairSectionHref(game, section, pairBasePath(game, pair));
 }
 
@@ -128,10 +130,10 @@ export function historySectionOf(pathname: string): string | null {
 export function pairSelectHref(
   game: PairRouteGame,
   next: PairLike,
-  pairs: readonly PairLike[],
+  home: PairLike | null,
   currentSection: string | null
 ): string {
-  return pairHref(game, next, pairs, currentSection === "compare" ? "compare" : "");
+  return pairHref(game, next, home, currentSection === "compare" ? "compare" : "");
 }
 
 /**

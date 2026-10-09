@@ -28,15 +28,25 @@ function isReason(value: string): value is ObservationFailReason {
 }
 
 export interface StubTarget {
+  /** stub을 쓸 파일 — TFT는 그 쌍의 판정 파일, PUBG는 `declaration.json`. */
   deltasFile: string;
+  /** 같은 쌍의 **실제 관측**이 있는지 볼 파일 — TFT는 위와 같고, PUBG는 관측 `deltas.json`. */
+  observedFile: string;
   notesFile: string;
 }
 
-/** 게임별 파일 위치 — TFT는 쌍마다 파일, PUBG는 `deltas.json` 하나다. */
+/**
+ * 게임별 파일 위치 — TFT는 쌍마다 판정 파일, PUBG는 관측 `deltas.json` **하나**라 stub을 거기 쓰면 이전 쌍의 관측을 지운다
+ * (2026-10-09 전까지 실제로 그랬다 — 홈이 관측을 잃고 선언 뷰로 떨어지는 결함, TFT 18.4에서 사용자가 지적한 것과 같은 자리).
+ * 그래서 PUBG stub은 `declaration.json`에 따로 산다(PLAN-home-observed-pair ST-9). 로더(`lib/pubgData`)가 관측·선언 두 파일을
+ * 보고 "관측 쌍보다 새 stub"만 선언만 쌍으로 고른다.
+ */
 export function stubTarget(game: "tft" | "pubg", dataRoot: string, from: string, to: string): StubTarget {
   const dir = path.join(dataRoot, "aggregated", game);
+  const observedFile = path.join(dir, game === "tft" ? `deltas-${from}-${to}.json` : "deltas.json");
   return {
-    deltasFile: path.join(dir, game === "tft" ? `deltas-${from}-${to}.json` : "deltas.json"),
+    deltasFile: game === "tft" ? observedFile : path.join(dir, "declaration.json"),
+    observedFile,
     notesFile: path.join(dir, `notes-${to}.json`),
   };
 }
@@ -54,7 +64,7 @@ export function writeObservationStub(
   if (!fs.existsSync(target.notesFile)) {
     throw new Error(`write-observation-stub: ${target.notesFile}가 없다 — 선언 축 없는 stub은 쓰지 않는다`);
   }
-  const existing = fs.existsSync(target.deltasFile) ? (JSON.parse(fs.readFileSync(target.deltasFile, "utf8")) as unknown) : null;
+  const existing = fs.existsSync(target.observedFile) ? (JSON.parse(fs.readFileSync(target.observedFile, "utf8")) as unknown) : null;
   if (deltasStateOf(existing, from, to).kind === "observed") return false;
   const notes = JSON.parse(fs.readFileSync(target.notesFile, "utf8")) as { items?: unknown[] };
   const stub = buildObservationStub(game, from, to, { reason, detail, at: new Date().toISOString() }, notes.items?.length ?? 0);

@@ -21,13 +21,21 @@ const pair = (from: string, to: string) => ({ from, to });
 const lolChrome = {
   pairs: [pair("26.18", "26.19"), pair("26.17", "26.18"), pair("26.16", "26.17")],
   currentPair: pair("26.18", "26.19"),
+  homePair: pair("26.18", "26.19"),
   nBefore: 1,
   nAfter: 2,
   aggregatedAt: "2026-09-24T00:00:00Z",
   sampleChips: [],
   snapshotCaption: null,
 };
-const tftChrome = { ...lolChrome, pairs: [pair("18.2", "18.3")], currentPair: pair("18.2", "18.3") };
+const tftChrome = { ...lolChrome, pairs: [pair("18.2", "18.3")], currentPair: pair("18.2", "18.3"), homePair: pair("18.2", "18.3") };
+/** 홈(관측 18.2→18.3)보다 새 선언만 쌍(18.3→18.4 stub)이 목록 첫 칸 — PLAN-home-observed-pair ST-5. */
+const tftDeclaredChrome = {
+  ...lolChrome,
+  pairs: [{ ...pair("18.3", "18.4"), observed: false }, pair("18.2", "18.3"), pair("18.1", "18.2")],
+  currentPair: pair("18.2", "18.3"),
+  homePair: pair("18.2", "18.3"),
+};
 
 describe("헤더 패치쌍 select", () => {
   it("LoL: 쌍이 여럿이면 열리고, 과거 쌍을 고르면 그 쌍의 라우트로 간다", () => {
@@ -47,6 +55,27 @@ describe("헤더 패치쌍 select", () => {
     expect(select.value).toBe("2");
     fireEvent.change(select, { target: { value: "0" } });
     expect(push).toHaveBeenCalledWith("/lol/");
+  });
+  it("홈보다 새 선언만 쌍은 「· 선언만」 라벨이고, 고르면 과거 쌍 라우트(선언 뷰)로 간다 — 홈을 고르면 평소 주소", () => {
+    pathname = "/tft/";
+    push.mockClear();
+    const { container } = render(<Header chrome={{ lol: lolChrome, tft: tftDeclaredChrome, pubg: null }} />);
+    const select = container.querySelector("select[aria-describedby=\"pair-select-hint\"]") as HTMLSelectElement;
+    expect(select.disabled).toBe(false);
+    // 홈 쌍이 선택돼 있다(목록 첫 칸이 아니라).
+    expect(select.value).toBe("1");
+    const labels = Array.from(select.options).map((o) => o.textContent);
+    expect(labels[0]).toBe("18.3 → 18.4 · 선언만");
+    expect(labels[1]).toBe("18.2 → 18.3");
+    fireEvent.change(select, { target: { value: "0" } });
+    expect(push).toHaveBeenCalledWith("/tft/history/18_3-18_4/");
+    pathname = "/tft/history/18_3-18_4/";
+    push.mockClear();
+    const again = render(<Header chrome={{ lol: lolChrome, tft: tftDeclaredChrome, pubg: null }} />);
+    const select2 = again.container.querySelector("select[aria-describedby=\"pair-select-hint\"]") as HTMLSelectElement;
+    expect(select2.value).toBe("0");
+    fireEvent.change(select2, { target: { value: "1" } });
+    expect(push).toHaveBeenCalledWith("/tft/");
   });
   it("쌍이 하나뿐인 게임은 닫혀 있고 이유를 설명과 연결한다", () => {
     pathname = "/tft/";
@@ -74,7 +103,7 @@ describe("헤더 패치쌍 select", () => {
 
 // 2026-09-28 이월 R8: 과거 쌍 **아래** 경로(대조표·상세)와 TFT 과거 쌍. 쌍 맥락이 헤더에서 끊기지 않는다 —
 // 내비 링크·select 이동·활성 탭이 지금 보는 쌍 안에 머문다.
-const tftTwoPairs = { ...lolChrome, pairs: [pair("18.2", "18.3"), pair("18.1", "18.2")], currentPair: pair("18.2", "18.3") };
+const tftTwoPairs = { ...lolChrome, pairs: [pair("18.2", "18.3"), pair("18.1", "18.2")], currentPair: pair("18.2", "18.3"), homePair: pair("18.2", "18.3") };
 
 function renderAt(path: string, chrome: Parameters<typeof Header>[0]["chrome"]) {
   pathname = path;

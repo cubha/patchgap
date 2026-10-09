@@ -9,6 +9,7 @@ import "server-only";
 import path from "node:path";
 import type { MatchStatus, ObservationFailure } from "@/pipeline/types";
 import { isObservationStub } from "@/pipeline/shared/observation-stub";
+import { comparePatchId } from "@/pipeline/collect/calendar-overlay";
 import type { PubgPatchAggregate } from "@/pipeline/aggregate/pubg-weapons";
 import type { PubgAccuracyStat } from "@/pipeline/aggregate/pubg-accuracy";
 import type { PubgMapAggregate, PubgMapDeltaRow } from "@/pipeline/aggregate/pubg-maps";
@@ -110,27 +111,75 @@ export function loadPubg(): PubgBundle | null {
   };
 }
 
-/** 선언 축만 있는 최신 쌍(C13·C14) — 수기 노트와 관측이 없는 사유. */
+/** 선언 축만 있는 쌍(C13·C14) — 수기 노트와 관측이 없는 사유. */
 export interface PubgDeclaration {
   from: string;
   to: string;
   generatedAt: string;
   notes: PubgNoteItem[];
   failure: ObservationFailure;
+  /** 패치노트 원문(노트 파일 `meta.source`) — PUBG는 과거 쌍 라우트가 없어 홈 배너가 여기로 보낸다. */
+  sourceUrl: string | null;
+}
+
+interface StubMeta {
+  from: string;
+  to: string;
+  generatedAt: string;
+  observationFailed?: ObservationFailure | null;
 }
 
 /**
- * `deltas.json`이 관측 stub이면 그 쌍의 선언 축을 준다. 관측 쌍이거나 노트가 없으면 null. 화면은
- * `loadPubg()`가 null일 때 이것을 본다 — 수기로 넣은 노트가 비교 구간을 기다리느라 숨지 않게(결정 8).
+ * 어느 stub이 「선언만 쌍」인가(PLAN-home-observed-pair ST-9, 2026-10-09) — 순수 규칙.
+ *  - 관측(`deltas.json`)이 있으면 그보다 **새**(to가 더 큰) stub만. 관측이 따라잡은 stub은 낡은 파일이라 무시한다.
+ *  - 관측이 없으면 stub이 곧 선언 축(홈이 선언 뷰). `deltas.json` 자체가 stub인 옛 배치도 그대로 받는다.
+ */
+export function pickPubgDeclaration(deltasMeta: StubMeta | null, declarationMeta: StubMeta | null): StubMeta | null {
+  const observed = deltasMeta && !isObservationStub(deltasMeta) ? deltasMeta : null;
+  const candidates = [declarationMeta, deltasMeta].filter((m): m is StubMeta => m !== null && isObservationStub(m));
+  const stub = candidates[0] ?? null;
+  if (!stub) return null;
+  if (observed && comparePatchId(stub.to, observed.to) <= 0) return null;
+  return stub;
+}
+
+/**
+ * 선언만 쌍의 선언 축(노트 + 사유). stub은 `declaration.json`에 살고(2026-10-09부터 — 관측 `deltas.json`을 덮지 않는다), 옛 배치처럼
+ * `deltas.json` 자체가 stub이어도 받는다. 관측이 그 쌍을 따라잡았으면 null(`pickPubgDeclaration`). 노트가 없어도 null.
+ *
+ * 화면은 두 경우에 본다 — `loadPubg()`가 null이면 이것이 홈(선언 뷰), 관측 홈이 있으면 배너(`newerPubgDeclaration`)로.
  */
 export function loadPubgDeclaration(): PubgDeclaration | null {
-  const stub = readJson<{ meta: { from: string; to: string; generatedAt: string; observationFailed?: ObservationFailure } }>(
-    "deltas.json"
-  );
-  if (!stub || !stub.meta.observationFailed) return null;
-  const notesFile = readJson<{ items: PubgNoteItem[] }>(`notes-${stub.meta.to}.json`);
+  const deltas = readJson<{ meta: StubMeta }>("deltas.json");
+  const declaration = readJson<{ meta: StubMeta }>("declaration.json");
+  const stub = pickPubgDeclaration(deltas?.meta ?? null, declaration?.meta ?? null);
+  if (!stub || !stub.observationFailed) return null;
+  const notesFile = readJson<{ meta?: { source?: string }; items: PubgNoteItem[] }>(`notes-${stub.to}.json`);
   if (!notesFile) return null;
-  return { from: stub.meta.from, to: stub.meta.to, generatedAt: stub.meta.generatedAt, notes: notesFile.items, failure: stub.meta.observationFailed };
+  return {
+    from: stub.from,
+    to: stub.to,
+    generatedAt: stub.generatedAt,
+    notes: notesFile.items,
+    failure: stub.observationFailed,
+    // 외부 링크로 그려지므로 http(s)만 통과시킨다 — 수기 노트 파일이지만 스킴을 화면에서 믿지 않는다(security-auditor QUICK 2026-10-09).
+    sourceUrl: httpUrlOrNull(notesFile.meta?.source),
+  };
+}
+
+export function httpUrlOrNull(value: string | undefined): string | null {
+  if (!value) return null;
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
+/** 관측 홈이 있을 때 그보다 새 선언만 쌍 — 홈 배너가 말한다(PLAN-home-observed-pair ST-9). 홈이 없으면 null(그땐 선언 뷰가 홈). */
+export function newerPubgDeclaration(): PubgDeclaration | null {
+  return loadPubg() ? loadPubgDeclaration() : null;
 }
 
 export interface PubgMapDeltasFile {

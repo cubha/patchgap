@@ -23,10 +23,12 @@ export interface ObservationPendingNoticeProps {
   observed?: ObservedPairLink | null;
   /** 방법론처럼 **아래 내용이 다른 쌍 기준**일 때 그 사실을 덧붙인다. */
   basis?: string | null;
+  /** 「10/10(토) 06:00 KST」 — 첫 관측 실행 예정(`awaiting-observation`일 때만 의미). 없으면 날짜 없이. */
+  eta?: string | null;
   className?: string;
 }
 
-export default function ObservationPendingNotice({ failure, observed = null, basis = null, className = "" }: ObservationPendingNoticeProps) {
+export default function ObservationPendingNotice({ failure, observed = null, basis = null, eta = null, className = "" }: ObservationPendingNoticeProps) {
   return (
     <p
       role="status"
@@ -34,6 +36,7 @@ export default function ObservationPendingNotice({ failure, observed = null, bas
       className={`rounded-md border border-border-soft bg-surface px-4 py-3 text-sm leading-relaxed text-muted ${className}`}
     >
       {observationReasonLabel(failure.reason)}
+      {eta && failure.reason === "awaiting-observation" ? <> 첫 관측은 {eta} 예정입니다.</> : null}
       {basis ? <> {basis}</> : null}
       {observed ? (
         <>

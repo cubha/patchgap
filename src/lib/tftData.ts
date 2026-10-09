@@ -104,20 +104,45 @@ function deltasFileName(pair: TftPair): string {
   return `deltas-${pair.from}-${pair.to}.json`;
 }
 
-/** 가장 최근 쌍의 판정 파일 이름. 없으면 null. */
+/** 목록 첫 칸(가장 최근 쌍 — stub 포함)의 판정 파일 이름. 없으면 null. 선언 축 폴백(`loadTftDeclaration`)만 쓴다. */
+function newestDeltasFileName(): string | null {
+  const newest = listTftPairs()[0];
+  return newest ? deltasFileName(newest) : null;
+}
+
+let homePairCache: TftPair | null | undefined;
+
+/**
+ * **홈 쌍** — 관측 번들이 실재하는 가장 최근 쌍(PLAN-home-observed-pair, 2026-10-09 사용자 정정).
+ *
+ * 평소 주소(`/tft/`·`/tft/compare/`·상세·방법론)는 이 쌍을 그린다. 전에는 목록 첫 칸(stub 포함)이 홈이라 18.4 직후 3일 동안
+ * 타일 「—」·노트 73줄 평문의 선언 뷰가 홈으로 노출됐다 — 9/24 결정 8("패치노트는 최신화되어야")을 "노트만이라도 홈에"로
+ * 확대 해석한 결함. 기본 화면은 언제나 **완성된 분석**이고, 더 새 stub 쌍은 선언만 쌍으로 배너·select·과거 쌍 라우트에서
+ * 닿는다(`newerTftDeclarations`). 관측 쌍이 하나도 없으면 null — 그때만 선언 뷰가 홈이다(빈 화면보다 낫다).
+ *
+ * 빌드 한 번에 수십 번 불리는데 관측 번들 읽기가 무겁다(판정 768KB + 보드 2장) — 프로세스당 한 번만 판정한다(정적 export라
+ * 빌드 중 데이터가 바뀌지 않는다).
+ */
+export function tftHomePair(): TftPair | null {
+  if (homePairCache === undefined) homePairCache = listTftPairs().find((pair) => loadTft(pair) !== null) ?? null;
+  return homePairCache;
+}
+
+/** 홈 쌍의 판정 파일 이름. 없으면 null. */
 function latestDeltasFileName(): string | null {
-  const latest = listTftPairs()[0];
-  return latest ? deltasFileName(latest) : null;
+  const home = tftHomePair();
+  return home ? deltasFileName(home) : null;
 }
 
 /**
- * 가장 최근 쌍(또는 지정한 쌍)의 **관측** 번들. 없으면 null(빈 데이터 빌드 보장).
+ * 홈 쌍(또는 지정한 쌍)의 **관측** 번들. 없으면 null(빈 데이터 빌드 보장).
  *
- * 가장 최근 쌍이 관측 stub(`meta.observationFailed`, C14)이면 **null**이다 — 관측이 없는데 관측 화면을
- * 그리면 보드·판정이 0으로 읽힌다. 그 쌍의 선언 축은 `loadTftDeclaration()`이 준다.
+ * 지정한 쌍이 관측 stub(`meta.observationFailed`, C14)이면 **null**이다 — 관측이 없는데 관측 화면을
+ * 그리면 보드·판정이 0으로 읽힌다. 그 쌍의 선언 축은 `loadTftDeclaration(pair)`가 준다. 인자 없는 호출이 null이면 관측
+ * 쌍이 하나도 없다는 뜻이다(2026-10-09부터 — 전에는 "최신 쌍이 stub"이라는 뜻이었다).
  */
 export function loadTft(pair?: TftPair): TftBundle | null {
-  // `pair`(2026-09-28, 이월 R8) — 과거 쌍 라우트가 그 쌍을 지정한다. 없으면 최신 쌍.
+  // `pair`(2026-09-28, 이월 R8) — 과거 쌍 라우트가 그 쌍을 지정한다. 없으면 홈 쌍.
   const latest = pair ? deltasFileName(pair) : latestDeltasFileName();
   if (!latest) return null;
 
@@ -138,9 +163,25 @@ export function loadTft(pair?: TftPair): TftBundle | null {
  * 화면은 "TFT 홈에서 볼 수 있습니다"라는 링크 아닌 문장으로 끝났다(site-review tft-S6). 관측 쌍이 하나도 없으면 null.
  */
 export function latestObservedTftPair(): { pair: TftPair; isLatest: boolean } | null {
+  // 2026-10-09: 관측이 있는 최신 쌍이 곧 홈 쌍이므로 `isLatest`(= 평소 주소가 주인인가)는 항상 true다. 필드를 남기는 이유는
+  // 호출부(`pairSectionLink`)의 "평소 주소 vs 과거 쌍 라우트" 분기 계약을 바꾸지 않기 위해서다.
+  const home = tftHomePair();
+  return home ? { pair: home, isLatest: true } : null;
+}
+
+/**
+ * 홈보다 **새** 쌍들의 선언 축(= 관측 stub이면서 노트가 있는 쌍), 최신순(PLAN-home-observed-pair ST-1). 보통 0~1개.
+ * 홈 배너·헤더 select 「선언만」이 쓴다. 홈 쌍이 없으면(관측 0) 빈 배열 — 그 경우 선언 뷰 자체가 홈이다.
+ */
+export function newerTftDeclarations(): TftDeclaration[] {
+  const home = tftHomePair();
+  if (!home) return [];
   const pairs = listTftPairs();
-  const index = pairs.findIndex((pair) => loadTft(pair) !== null);
-  return index === -1 ? null : { pair: pairs[index], isLatest: index === 0 };
+  const index = pairs.findIndex((pair) => pair.from === home.from && pair.to === home.to);
+  return pairs
+    .slice(0, index)
+    .map((pair) => loadTftDeclaration(pair))
+    .filter((d): d is TftDeclaration => d !== null);
 }
 
 /** 선언 축만 있는 최신 쌍(C13·C14) — 노트와 관측이 없는 사유. */
@@ -153,11 +194,12 @@ export interface TftDeclaration {
 }
 
 /**
- * 가장 최근 쌍이 관측 stub이면 그 선언 축(노트 + 사유)을 준다. 관측 쌍이거나 노트가 없으면 null.
- * 화면은 `loadTft()`가 null일 때 이것을 본다 — 새 패치노트가 관측을 기다리느라 숨지 않게(결정 8).
+ * 지정한 쌍(없으면 **목록 첫 칸** — 가장 최근 쌍)이 관측 stub이면 그 선언 축(노트 + 사유)을 준다. 관측 쌍이거나 노트가
+ * 없으면 null. 인자 없는 호출은 관측 쌍이 하나도 없을 때의 폴백(`loadTft()`가 null)에서만 쓴다 — 홈 쌍이 있을 때 더 새
+ * 선언만 쌍은 `newerTftDeclarations()`가 준다.
  */
 export function loadTftDeclaration(pair?: TftPair): TftDeclaration | null {
-  const latest = pair ? deltasFileName(pair) : latestDeltasFileName();
+  const latest = pair ? deltasFileName(pair) : newestDeltasFileName();
   if (!latest) return null;
   const stub = readJson<{ meta: { from: string; to: string; generatedAt: string; observationFailed?: ObservationFailure } }>(
     path.join(TFT_DIR, latest)

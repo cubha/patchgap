@@ -32,6 +32,7 @@ import {
   spellIconsFile,
 } from "@/pipeline/shared/paths";
 import { readJsonIfExists } from "@/pipeline/shared/json-file";
+import { isObservationStub } from "@/pipeline/shared/observation-stub";
 
 /** run-aggregate.ts가 각 산출 파일에 공통으로 얹는 메타 블록 — `src/pipeline/types.ts`의
  * `AggregateMeta`를 그대로 재export한다(2026-09-05 리팩토링 — 원래 이 파일 로컬 정의였다). */
@@ -125,9 +126,17 @@ export function listPatchPairs(dataRoot: string = DATA_ROOT): PatchPair[] {
   return pairs.sort((a, b) => comparePatchDesc(a.to, b.to) || comparePatchDesc(a.from, b.from));
 }
 
-/** 가장 최신 패치 쌍. 쌍이 하나도 없으면(ST-08 미착수·빈 빌드 등) null. */
+/**
+ * **홈 쌍** — 관측이 있는 가장 최신 패치 쌍(PLAN-home-observed-pair, 2026-10-09). 관측 stub(`meta.observationFailed`)만 있는
+ * 쌍은 건너뛴다 — 기본 화면은 완성된 분석이어야 한다(TFT `tftHomePair`와 같은 규칙). 쌍이 하나도 없으면 null.
+ */
 export function getDefaultPair(dataRoot: string = DATA_ROOT): PatchPair | null {
-  return listPatchPairs(dataRoot)[0] ?? null;
+  return (
+    listPatchPairs(dataRoot).find((pair) => {
+      const raw = readJsonFile<DeltasFile>(deltasFile(pair.from, pair.to, dataRoot));
+      return raw !== null && !isObservationStub(raw.meta);
+    }) ?? null
+  );
 }
 
 export function loadSummary(patch: PatchId, dataRoot: string = DATA_ROOT): DataFile<PatchSummary> | null {

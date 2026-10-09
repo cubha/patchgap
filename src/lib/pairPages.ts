@@ -8,36 +8,44 @@
 // output:'export'라 generateStaticParams가 빈 배열이면 빌드가 죽는다 — 만들 페이지가 없으면 `_placeholder` 한 장을
 // 남긴다(`/lol/item/[id]`와 같은 규약). 라우트는 `_placeholder`를 받으면 「기록 없음」을 그린다.
 import "server-only";
-import { listPatchPairs, loadDeltas } from "@/lib/data";
+import { getDefaultPair, listPatchPairs, loadDeltas } from "@/lib/data";
 import { detailEntityKeys } from "@/lib/detailRoutes";
 import { itemSlug } from "@/lib/format";
 import { loadGameDataDiff } from "@/lib/gamedata";
-import { pairFromSlug, pairSlug, type PairLike, type PairRouteGame } from "@/lib/pairRoutes";
+import { isSamePair, pairFromSlug, pairSlug, type PairLike, type PairRouteGame } from "@/lib/pairRoutes";
 import { entitySlug } from "@/lib/tftRoutes";
-import { listTftPairs, loadTft, type TftBundle } from "@/lib/tftData";
+import { listTftPairs, loadTft, tftHomePair, type TftBundle } from "@/lib/tftData";
 import { tftEntityRows, type TftEntityRow } from "@/lib/tftEntityRows";
 
 export const PLACEHOLDER = "_placeholder";
 
-/** 게임의 쌍 목록(최신 우선). 첫 칸은 평소 주소가 그리고, 나머지가 과거 쌍 라우트다. */
+/** 게임의 쌍 목록(최신 우선, 관측 stub 포함). 홈 쌍은 평소 주소가 그리고, 나머지가 과거 쌍 라우트다. */
 export function pairsOf(game: PairRouteGame): PairLike[] {
   return game === "lol" ? listPatchPairs() : listTftPairs();
 }
 
-/** 과거 쌍 = 최신을 뺀 나머지. */
+/**
+ * **홈 쌍** — 관측이 있는 최신 쌍(PLAN-home-observed-pair, 2026-10-09). 평소 주소의 주인. 관측 쌍이 없으면 null(그때는
+ * 모든 쌍이 과거 쌍 라우트고 평소 주소는 선언 뷰 폴백).
+ */
+export function homePairOf(game: PairRouteGame): PairLike | null {
+  return game === "lol" ? getDefaultPair() : tftHomePair();
+}
+
+/** 과거 쌍 라우트가 그릴 쌍 = 홈을 뺀 나머지 — 홈보다 **새** 선언만 쌍도 여기다(그 노트는 숨지 않는다). */
 export function pastPairsOf(game: PairRouteGame): PairLike[] {
-  return pairsOf(game).slice(1);
+  const home = homePairOf(game);
+  return pairsOf(game).filter((pair) => !home || !isSamePair(home, pair));
 }
 
 /**
- * 라우트 슬러그 → 그 라우트가 그릴 **과거** 쌍. 형식이 틀리거나, 목록에 없거나, **최신 쌍**이면 null —
- * 최신 쌍은 평소 주소가 주인이다(같은 화면이 두 주소를 갖지 않게).
+ * 라우트 슬러그 → 그 라우트가 그릴 쌍. 형식이 틀리거나, 목록에 없거나, **홈 쌍**이면 null —
+ * 홈 쌍은 평소 주소가 주인이다(같은 화면이 두 주소를 갖지 않게).
  */
 export function resolvePastPair(game: PairRouteGame, slug: string): PairLike | null {
-  const pairs = pairsOf(game);
-  const found = pairFromSlug(slug, pairs);
-  const latest = pairs[0];
-  if (!found || (latest && found.from === latest.from && found.to === latest.to)) return null;
+  const found = pairFromSlug(slug, pairsOf(game));
+  const home = homePairOf(game);
+  if (!found || (home && isSamePair(home, found))) return null;
   return found;
 }
 

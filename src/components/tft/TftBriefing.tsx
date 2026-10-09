@@ -24,7 +24,9 @@ import { entityTypeLabel, metricLabel } from "@/lib/format";
 import { tftGapTotal, tftMetricGapRows } from "@/lib/gapTotals";
 import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
 import { DeclarationHero, DeclarationNotesCard, declarationEntityCount } from "@/components/DeclarationOnly";
-import { pairSectionLink } from "@/lib/pairRoutes";
+import NewerPatchNotice from "@/components/NewerPatchNotice";
+import { etaLabelKst, tftObservationEta } from "@/lib/observationEta";
+import { pairBasePath, pairSectionHref, pairSectionLink } from "@/lib/pairRoutes";
 import { latestObservedTftPair } from "@/lib/tftData";
 import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
 import { displayStatus } from "@/pipeline/shared/display-status";
@@ -51,6 +53,8 @@ export interface TftBriefingProps {
   declaration: TftDeclaration | null;
   /** 과거 쌍 화면이면 그 기준 경로(`/tft/history/{쌍}`). */
   pairBase?: string | null;
+  /** 홈보다 새 선언만 쌍들(최신순) — 홈 화면만 받는다. 배너가 그 노트로 보낸다(PLAN-home-observed-pair ST-6). */
+  newer?: readonly TftDeclaration[];
 }
 
 /** 자산이 실재하는 키 집합 — 매니페스트가 없으면 전부 폴백으로 떨어진다(요청을 만들지 않는다). */
@@ -135,7 +139,7 @@ function briefingGroups(rows: DeltaRecord[], qAlpha?: number): BriefingGroup[] {
   );
 }
 
-export default function TftBriefing({ bundle, declaration, pairBase = null }: TftBriefingProps) {
+export default function TftBriefing({ bundle, declaration, pairBase = null, newer = [] }: TftBriefingProps) {
   if (!bundle) {
     // 그 쌍이 관측 stub이면 선언 축(노트 + 수치 축)만 그린다(C13·C14) — 새 노트가 관측을 기다리며 숨지 않게.
     if (declaration) return <TftDeclarationView declaration={declaration} />;
@@ -238,6 +242,19 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
               <strong className="text-fg">{after.units.length + after.traits.length + after.items.length}</strong>종
             </p>
           </div>
+
+          {/* 홈보다 새 패치노트(관측 stub)가 있으면 여기서 말한다 — 홈은 완성된 분석(관측 쌍)을 그리고, 새 노트는 한 클릭
+              거리에 둔다(PLAN-home-observed-pair, 사용자 정정 2026-10-09). 보통 0~1장. */}
+          {newer.map((d) => (
+            <NewerPatchNotice
+              key={`${d.from}-${d.to}`}
+              patch={d.to}
+              reason={d.failure.reason}
+              entityCount={declarationEntityCount(d.notes.items.map((n) => ({ id: n.id, group: n.entity, summary: n.summary, anchorUrl: n.anchorUrl })))}
+              eta={etaOf(d)}
+              href={pairSectionHref("tft", "", pairBasePath("tft", { from: d.from, to: d.to }))}
+            />
+          ))}
 
           {/* 3타일은 세 게임 공통 컴포넌트가 그린다(UX-BRIEF §8-1) — 라벨·부제·클릭 대상이
               게임마다 달랐다. TFT 대조표는 아직 상태 칩이 없어 앵커 없이 보낸다. */}
@@ -358,6 +375,15 @@ export default function TftBriefing({ bundle, declaration, pairBase = null }: Tf
  * 선언 축만 있는 쌍(C13·C14)의 홈 — 노트와 수치 축(F9)만, 관측 영역은 회색 사유. 기본 내보내기 **아래**에
  * 두는 이유: 화면 동등성 테스트가 첫 `return (`부터의 JSX 순서를 본다(본 브리핑의 블록 순서 계약).
  */
+/** 첫 관측 예정 — 대기(`awaiting-observation`)일 때만 날짜가 뜻이 있다(키 만료·크래시는 날짜가 아니라 조치가 답이다). */
+function etaOf(declaration: TftDeclaration): string | null {
+  if (declaration.failure.reason !== "awaiting-observation") return null;
+  const iso = tftObservationEta(declaration.to);
+  // 빌드 시각이 예정을 지났는데 아직 stub이면(실행 지연·실패) 지난 날짜를 "부터"라고 말하지 않는다(scope-critic ST-4).
+  if (!iso || Date.parse(iso) <= Date.now()) return null;
+  return etaLabelKst(iso);
+}
+
 function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
   const submarine = summarizeGameData(loadGameDataDiff("tft", declaration.from, declaration.to));
   const notes = declaration.notes.items.map((n) => ({ id: n.id, group: n.entity, summary: n.summary, anchorUrl: n.anchorUrl }));
@@ -372,7 +398,14 @@ function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
         {/* 관측 전에도 **골격은 같다**(ST-16, §8-1 · site-review parity-S2): 히어로 → 3타일(관측 칸은 「—」) → 탭(패치 내용 /
             미공지 Gap) + 디스코드 사이드 → 푸터. 전에는 1컬럼에 노트 목록만 있어 게임을 바꿔 들어온 사람이 다른 사이트처럼 읽었다. */}
         <div className="flex flex-col gap-6 pt-40 pb-8">
-          <DeclarationHero from={declaration.from} to={declaration.to} notes={notes} failure={declaration.failure} observed={observedLink} />
+          <DeclarationHero
+            from={declaration.from}
+            to={declaration.to}
+            notes={notes}
+            failure={declaration.failure}
+            observed={observedLink}
+            eta={etaOf(declaration)}
+          />
           <StatTiles
             announcedCount={declarationEntityCount(notes)}
             patch={declaration.to}
