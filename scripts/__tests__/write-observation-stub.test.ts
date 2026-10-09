@@ -27,11 +27,21 @@ describe("writeObservationStub", () => {
     expect(writeObservationStub("tft", root, "18.3", "18.4", "crashed", "")).toBe(false);
     expect(get("tft/deltas-18.3-18.4.json").rows).toHaveLength(1);
   });
-  it("PUBG는 이전 쌍의 deltas.json을 새 쌍 stub으로 바꾼다(한 파일)", () => {
+  it("PUBG는 이전 쌍의 관측 deltas.json을 **보존**하고 새 쌍 stub을 declaration.json에 쓴다", () => {
+    // 2026-10-09(PLAN-home-observed-pair ST-9): 전에는 한 파일(deltas.json)을 stub으로 바꿔 홈이 관측을 잃고 선언 뷰로
+    // 떨어졌다 — TFT 18.4에서 사용자가 지적한 결함이 PUBG 43.2에서 그대로 재현될 자리였다.
     put("pubg/notes-43.2.json", { items: [1] });
     put("pubg/deltas.json", { meta: { from: "42.3", to: "43.1" }, rows: [{ id: "x" }] });
     expect(writeObservationStub("pubg", root, "43.1", "43.2", "awaiting-observation", "")).toBe(true);
-    expect(get("pubg/deltas.json").meta).toMatchObject({ from: "43.1", to: "43.2" });
+    expect(get("pubg/deltas.json").meta).toMatchObject({ from: "42.3", to: "43.1" });
+    expect(get("pubg/deltas.json").rows).toHaveLength(1);
+    expect(get("pubg/declaration.json").meta).toMatchObject({ from: "43.1", to: "43.2", noteCount: 1, observationFailed: { reason: "awaiting-observation" } });
+  });
+  it("PUBG도 같은 쌍의 실제 관측(deltas.json)이 있으면 stub을 쓰지 않는다", () => {
+    put("pubg/notes-43.2.json", { items: [1] });
+    put("pubg/deltas.json", { meta: { from: "43.1", to: "43.2" }, rows: [{ id: "x" }] });
+    expect(writeObservationStub("pubg", root, "43.1", "43.2", "crashed", "")).toBe(false);
+    expect(fs.existsSync(path.join(root, "aggregated", "pubg", "declaration.json"))).toBe(false);
   });
   it("노트가 없으면 던진다 — 선언 축 없는 stub은 결함이다", () => {
     expect(() => writeObservationStub("tft", root, "18.3", "18.4", "crashed", "")).toThrow(/선언 축/);
