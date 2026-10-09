@@ -6,7 +6,7 @@ import { describe, expect, it, vi } from "vitest";
 import { latestPatchId } from "@/pipeline/collect/staleness";
 
 vi.mock("server-only", () => ({}));
-import { latestObservedTftPair, listTftPairs, loadTft } from "@/lib/tftData";
+import { latestObservedTftPair, listTftPairs, loadTft, loadTftDeclaration, newerTftDeclarations, tftHomePair } from "@/lib/tftData";
 import { isObservationStub } from "@/pipeline/shared/observation-stub";
 
 // ST-14(2026-10-08 site-review tft-S6·S7·parity-S1): 최신 쌍이 관측 stub일 때 화면이 「관측이 있는 최신 쌍」으로 안내하려면
@@ -27,16 +27,60 @@ describe("latestObservedTftPair — 관측이 있는 가장 최근 쌍", () => {
     for (const earlier of pairs.slice(0, index)) expect(loadTft(earlier)).toBeNull();
   });
 
-  it("커밋된 데이터 실측: 최신 쌍이 stub이면 isLatest가 false이고 직전 관측 쌍을 가리킨다", () => {
+  it("커밋된 데이터 실측: 최신 쌍이 stub이어도 홈(관측 쌍)을 가리키고 isLatest는 true — 홈이 평소 주소다", () => {
+    // 2026-10-09(PLAN-home-observed-pair): 전에는 isLatest = 목록 첫 칸 여부라 최신이 stub이면 false였고, 그래서
+    // 관측 쌍으로 보내는 링크가 /tft/history/…를 가리켰다. 지금은 홈 = 관측이 있는 최신 쌍이므로 홈이면 true다.
     const pairs = listTftPairs();
-    const latestIsStub = pairs.length > 0 && loadTft(pairs[0]) === null;
     const found = latestObservedTftPair();
-    if (latestIsStub) {
-      expect(found?.isLatest).toBe(false);
-      expect(isObservationStub({ observationFailed: null })).toBe(false);
-    } else if (found) {
+    expect(isObservationStub({ observationFailed: null })).toBe(false);
+    if (found) {
       expect(found.isLatest).toBe(true);
+      expect(loadTft(found.pair)).not.toBeNull();
+    } else {
+      expect(pairs.every((p) => loadTft(p) === null)).toBe(true);
     }
+  });
+});
+
+describe("tftHomePair — 홈 쌍은 관측이 있는 최신 쌍 (PLAN-home-observed-pair ST-1)", () => {
+  const same = (a: { from: string; to: string }, b: { from: string; to: string }) => a.from === b.from && a.to === b.to;
+
+  it("loadTft() 기본이 홈 쌍이고 홈 쌍은 관측 번들이 실재한다", () => {
+    const home = tftHomePair();
+    const bundle = loadTft();
+    if (!home) {
+      expect(bundle).toBeNull();
+      return;
+    }
+    expect(bundle).not.toBeNull();
+    expect({ from: bundle!.deltas.meta.from, to: bundle!.deltas.meta.to }).toEqual(home);
+    expect(latestObservedTftPair()).toEqual({ pair: home, isLatest: true });
+  });
+
+  it("홈보다 새 쌍은 전부 stub이고, newerTftDeclarations가 그중 노트가 있는 것을 최신순으로 준다", () => {
+    const home = tftHomePair();
+    const pairs = listTftPairs();
+    const newer = newerTftDeclarations();
+    if (!home) {
+      expect(newer).toEqual([]);
+      return;
+    }
+    const index = pairs.findIndex((p) => same(p, home));
+    const ahead = pairs.slice(0, index);
+    for (const pair of ahead) expect(loadTft(pair), `${pair.from}-${pair.to}`).toBeNull();
+    const expected = ahead.filter((p) => loadTftDeclaration(p) !== null).map((p) => `${p.from}-${p.to}`);
+    expect(newer.map((d) => `${d.from}-${d.to}`)).toEqual(expected);
+    for (const d of newer) expect(d.notes.items.length).toBeGreaterThan(0);
+  });
+
+  it("커밋된 데이터 실측(2026-10-09): 18.4가 stub이면 홈은 18.2→18.3이고 18.4는 선언만 쌍이다", () => {
+    const pairs = listTftPairs();
+    const latest = pairs[0];
+    if (!latest || loadTft(latest) !== null) return; // 최신이 관측 쌍이면 이 실측은 성립하지 않는다 — 위 두 검사가 규칙을 본다
+    const home = tftHomePair();
+    expect(home).not.toBeNull();
+    expect(same(home!, latest)).toBe(false);
+    expect(newerTftDeclarations().some((d) => d.to === latest.to)).toBe(true);
   });
 });
 

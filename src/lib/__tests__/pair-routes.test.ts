@@ -32,8 +32,8 @@ const tftPairs = [
 
 describe("LoL 패치쌍 라우트", () => {
   it("최신 쌍은 브리핑 홈, 과거 쌍은 /lol/history/{from}-{to}/", () => {
-    expect(pairHref("lol", pairs[0], pairs)).toBe("/lol/");
-    expect(pairHref("lol", pairs[1], pairs)).toBe("/lol/history/26_17-26_18/");
+    expect(pairHref("lol", pairs[0], pairs[0])).toBe("/lol/");
+    expect(pairHref("lol", pairs[1], pairs[0])).toBe("/lol/history/26_17-26_18/");
   });
   it("슬러그 왕복", () => {
     expect(pairSlug(pairs[2])).toBe("26_16-26_17");
@@ -54,12 +54,22 @@ describe("패치쌍 라우트 — 게임별(LoL·TFT)", () => {
     expect(hasPairRoutes("tft")).toBe(true);
     expect(hasPairRoutes("pubg")).toBe(false);
   });
+  it("홈이 목록 첫 칸이 아니어도(최신이 선언만 stub) 홈이 평소 주소고, 더 새 쌍은 과거 쌍 라우트다", () => {
+    // 2026-10-09(PLAN-home-observed-pair ST-2): 「평소 주소」의 주인은 목록 첫 칸이 아니라 **홈 쌍**(관측이 있는 최신 쌍).
+    const newer = { from: "18.3", to: "18.4" };
+    expect(pairHref("tft", tftPairs[0], tftPairs[0])).toBe("/tft/");
+    expect(pairHref("tft", newer, tftPairs[0])).toBe("/tft/history/18_3-18_4/");
+    expect(pairHref("tft", newer, tftPairs[0], "compare")).toBe("/tft/history/18_3-18_4/compare/");
+    expect(pairSelectHref("tft", newer, tftPairs[0], "")).toBe("/tft/history/18_3-18_4/");
+    expect(pairHref("tft", newer, null)).toBe("/tft/history/18_3-18_4/");
+  });
+
   it("최신 쌍은 평소 주소, 과거 쌍은 /{game}/history/{쌍}/ — 섹션을 유지한다", () => {
-    expect(pairHref("tft", tftPairs[0], tftPairs)).toBe("/tft/");
-    expect(pairHref("tft", tftPairs[1], tftPairs)).toBe("/tft/history/18_1-18_2/");
+    expect(pairHref("tft", tftPairs[0], tftPairs[0])).toBe("/tft/");
+    expect(pairHref("tft", tftPairs[1], tftPairs[0])).toBe("/tft/history/18_1-18_2/");
     expect(pairHref("tft", tftPairs[0], tftPairs, "compare")).toBe("/tft/compare/");
     expect(pairHref("tft", tftPairs[1], tftPairs, "compare")).toBe("/tft/history/18_1-18_2/compare/");
-    expect(pairHref("lol", pairs[2], pairs, "compare")).toBe("/lol/history/26_16-26_17/compare/");
+    expect(pairHref("lol", pairs[2], pairs[0], "compare")).toBe("/lol/history/26_16-26_17/compare/");
   });
   it("기준 경로와 섹션 링크 — 기준이 없으면 평소 섹션", () => {
     const base = pairBasePath("lol", pairs[2]);
@@ -88,12 +98,12 @@ describe("패치쌍 라우트 — 게임별(LoL·TFT)", () => {
     expect(historySectionOf("/lol/compare/")).toBeNull();
   });
   it("select 이동 — 같은 섹션의 그 쌍, 상세에서는 그 쌍의 브리핑(없는 상세 페이지로 보내지 않는다)", () => {
-    expect(pairSelectHref("lol", pairs[1], pairs, "compare")).toBe("/lol/history/26_17-26_18/compare/");
-    expect(pairSelectHref("lol", pairs[0], pairs, "compare")).toBe("/lol/compare/");
-    expect(pairSelectHref("lol", pairs[1], pairs, "")).toBe("/lol/history/26_17-26_18/");
-    expect(pairSelectHref("lol", pairs[1], pairs, "item")).toBe("/lol/history/26_17-26_18/");
-    expect(pairSelectHref("lol", pairs[0], pairs, "item")).toBe("/lol/");
-    expect(pairSelectHref("tft", tftPairs[1], tftPairs, "unit")).toBe("/tft/history/18_1-18_2/");
+    expect(pairSelectHref("lol", pairs[1], pairs[0], "compare")).toBe("/lol/history/26_17-26_18/compare/");
+    expect(pairSelectHref("lol", pairs[0], pairs[0], "compare")).toBe("/lol/compare/");
+    expect(pairSelectHref("lol", pairs[1], pairs[0], "")).toBe("/lol/history/26_17-26_18/");
+    expect(pairSelectHref("lol", pairs[1], pairs[0], "item")).toBe("/lol/history/26_17-26_18/");
+    expect(pairSelectHref("lol", pairs[0], pairs[0], "item")).toBe("/lol/");
+    expect(pairSelectHref("tft", tftPairs[1], tftPairs[0], "unit")).toBe("/tft/history/18_1-18_2/");
   });
 });
 

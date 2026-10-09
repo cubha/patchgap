@@ -16,7 +16,7 @@ window.matchMedia ??= ((query: string) => ({ matches: false, media: query, oncha
 globalThis.ResizeObserver ??= class { observe() {} unobserve() {} disconnect() {} } as unknown as typeof ResizeObserver;
 
 import { AmbientProvider } from "@/components/AmbientContext";
-import { listTftPairs } from "@/lib/tftData";
+import { listTftPairs, newerTftDeclarations, tftHomePair } from "@/lib/tftData";
 import { pairSlug } from "@/lib/pairRoutes";
 import TftHistoryPage, { generateStaticParams as briefingParams } from "../page";
 import TftHistoryComparePage, { generateStaticParams as compareParams } from "../compare/page";
@@ -88,10 +88,21 @@ describe("TFT 과거 쌍 — 화면의 링크가 그 쌍 안에 머문다", () =
     }, 60_000);
   }
 
-  it("최신 쌍 슬러그는 과거 쌍 라우트가 그리지 않는다(평소 주소가 주인이다)", async () => {
-    const latest = listTftPairs()[0];
-    const page = TftHistoryPage({ params: Promise.resolve({ pair: pairSlug(latest) }) });
+  it("홈 쌍 슬러그는 과거 쌍 라우트가 그리지 않는다(평소 주소가 주인이다)", async () => {
+    // 2026-10-09(PLAN-home-observed-pair ST-2): 주인은 목록 첫 칸이 아니라 홈 쌍(관측이 있는 최신 쌍).
+    const home = tftHomePair() ?? listTftPairs()[0];
+    const page = TftHistoryPage({ params: Promise.resolve({ pair: pairSlug(home) }) });
     const { container } = render(<AmbientProvider>{await page}</AmbientProvider>);
     expect(container.textContent).toContain("이 패치쌍의 기록이 없습니다.");
+  });
+
+  it("홈보다 새 선언만 쌍(관측 stub)은 과거 쌍 라우트가 선언 뷰로 그린다 — 노트는 숨지 않는다", async () => {
+    const newer = newerTftDeclarations()[0];
+    if (!newer) return; // 커밋 데이터에 선언만 쌍이 없으면 성립하지 않는다 — tftLatestPair.test가 규칙을 본다
+    const page = TftHistoryPage({ params: Promise.resolve({ pair: pairSlug({ from: newer.from, to: newer.to }) }) });
+    const { container } = render(<AmbientProvider>{await page}</AmbientProvider>);
+    expect(container.querySelector("[data-observation]")).not.toBeNull();
+    expect(container.textContent).toContain(`${newer.to} 패치노트`);
+    expect(container.textContent).not.toContain("이 패치쌍의 기록이 없습니다.");
   });
 });
