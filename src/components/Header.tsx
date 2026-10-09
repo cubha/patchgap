@@ -75,6 +75,8 @@ const PAIR_SCOPED_SECTIONS = ["", "compare", "history"] as const;
 export interface PatchPairOption {
   from: string;
   to: string;
+  /** false면 관측 stub(선언만 쌍) — select 라벨에 「· 선언만」을 붙인다. 생략은 관측 쌍. */
+  observed?: boolean;
 }
 
 /** 한 게임의 헤더 크롬 데이터 묶음. 게임마다 표본 성격이 달라 **칩까지 게임 소유**다 —
@@ -83,6 +85,9 @@ export interface PatchPairOption {
 export interface GameChrome {
   pairs: PatchPairOption[];
   currentPair: PatchPairOption | null;
+  /** 홈 쌍(관측이 있는 최신 쌍) — 평소 주소의 주인. select 이동이 "평소 주소 vs 과거 쌍 라우트"를 이것으로 가른다
+   * (PLAN-home-observed-pair, 2026-10-09). 관측 쌍이 없으면 null. */
+  homePair: PatchPairOption | null;
   nBefore: number | null;
   nAfter: number | null;
   /** ISO 8601 — 집계 시각(요약 파일 meta.generatedAt). */
@@ -142,7 +147,8 @@ function useChromeHeight() {
 }
 
 function pairLabel(pair: PatchPairOption): string {
-  return `${pair.from} → ${pair.to}`;
+  // 선언만 쌍(관측 stub)은 라벨로 구별한다 — 고르면 선언 뷰(과거 쌍 라우트)로 간다.
+  return `${pair.from} → ${pair.to}${pair.observed === false ? " · 선언만" : ""}`;
 }
 
 export default function Header({ chrome }: HeaderProps) {
@@ -159,6 +165,7 @@ export default function Header({ chrome }: HeaderProps) {
   const current = game === null ? null : chrome[game];
 
   const pairs = current?.pairs ?? [];
+  const homePair = current?.homePair ?? null;
   // 과거 쌍 라우트(`/{game}/history/[pair]/` 그리고 그 아래 대조표·상세)에 있으면 그 쌍이 지금 보는 쌍이다
   // (2026-09-28, B3 → 이월 R8에서 하위 경로·TFT까지). 게임을 먼저 거른다 — 다른 게임의 쌍 목록으로 읽지 않게.
   const routable = game !== null && hasPairRoutes(game) ? game : null;
@@ -286,7 +293,7 @@ export default function Header({ chrome }: HeaderProps) {
                 onChange={(event) => {
                   const next = pairs[Number(event.target.value)];
                   // 같은 섹션의 그 쌍으로 — 상세에서 골랐다면 그 쌍의 브리핑(`pairSelectHref` 주석).
-                  if (routable !== null && pairRoutable && next) router.push(pairSelectHref(routable, next, pairs, navSection));
+                  if (routable !== null && pairRoutable && next) router.push(pairSelectHref(routable, next, homePair, navSection));
                 }}
               >
                 {pairs.length > 0 ? (

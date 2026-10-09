@@ -16,13 +16,18 @@ window.matchMedia ??= ((query: string) => ({ matches: false, media: query, oncha
 globalThis.ResizeObserver ??= class { observe() {} unobserve() {} disconnect() {} } as unknown as typeof ResizeObserver;
 
 import { AmbientProvider } from "@/components/AmbientContext";
-import { listTftPairs, newerTftDeclarations, tftHomePair } from "@/lib/tftData";
+import { listTftPairs, loadTft, newerTftDeclarations, tftHomePair } from "@/lib/tftData";
 import { pairSlug } from "@/lib/pairRoutes";
 import TftHistoryPage, { generateStaticParams as briefingParams } from "../page";
 import TftHistoryComparePage, { generateStaticParams as compareParams } from "../compare/page";
 import TftHistoryUnitPage, { generateStaticParams as unitParams } from "../unit/[key]/page";
 
-const past = listTftPairs().slice(1);
+// 과거 쌍 라우트 = 홈(관측이 있는 최신 쌍)을 뺀 나머지 — 홈보다 새 선언만 쌍(18.3→18.4 stub)도 여기 든다
+// (PLAN-home-observed-pair ST-2, 2026-10-09). 전에는 `.slice(1)`(목록 첫 칸 = 홈)이었다.
+const home = tftHomePair();
+const past = listTftPairs().filter((p) => !home || p.from !== home.from || p.to !== home.to);
+/** 관측이 있는 과거 쌍만 — 상세·대조표 링크 검사는 관측 화면에만 성립한다(선언만 쌍은 상세가 없다). */
+const observedPast = past.filter((p) => loadTft(p) !== null);
 const detailSlugsOf = (slug: string) => new Set(unitParams().filter((p) => p.pair === slug).map((p) => p.key));
 
 async function hrefsOf(page: Promise<ReactElement>): Promise<string[]> {
@@ -53,14 +58,14 @@ describe("TFT 과거 쌍 — 정적 파라미터", () => {
     expect(compareParams()).toEqual(briefingParams());
     expect(briefingParams().map((p) => p.pair)).toEqual(past.map(pairSlug));
   });
-  it("상세는 과거 쌍마다 그 쌍의 대상만 만든다", () => {
-    expect(new Set(unitParams().map((p) => p.pair))).toEqual(new Set(past.map(pairSlug)));
-    for (const pair of past) expect(detailSlugsOf(pairSlug(pair)).size, pairSlug(pair)).toBeGreaterThan(0);
+  it("상세는 관측이 있는 과거 쌍마다 그 쌍의 대상만 만든다(선언만 쌍은 상세 0)", () => {
+    expect(new Set(unitParams().map((p) => p.pair))).toEqual(new Set(observedPast.map(pairSlug)));
+    for (const pair of observedPast) expect(detailSlugsOf(pairSlug(pair)).size, pairSlug(pair)).toBeGreaterThan(0);
   });
 });
 
 describe("TFT 과거 쌍 — 화면의 링크가 그 쌍 안에 머문다", () => {
-  for (const pair of past) {
+  for (const pair of observedPast) {
     const slug = pairSlug(pair);
 
     it(`${slug} 브리핑: 대상 링크가 그 쌍의 상세이고 전부 생성된다, 미공지 타일은 그 쌍의 대조표`, async () => {
@@ -104,5 +109,10 @@ describe("TFT 과거 쌍 — 화면의 링크가 그 쌍 안에 머문다", () =
     expect(container.querySelector("[data-observation]")).not.toBeNull();
     expect(container.textContent).toContain(`${newer.to} 패치노트`);
     expect(container.textContent).not.toContain("이 패치쌍의 기록이 없습니다.");
+    // 선언 뷰의 링크도 쌍 규칙을 지킨다(acceptance V5): 상세는 없으니 평소 상세로 새는 링크 0, 다른 쌍의 과거 라우트 0.
+    // 관측 쌍으로 보내는 안내 링크(홈 = 평소 주소)만 허용.
+    const hrefs = Array.from(container.querySelectorAll("a[href]")).map((a) => (a.getAttribute("href") ?? "").replace(/\/(?=$|#)/, ""));
+    expect(hrefs.filter((h) => h.startsWith("/tft/unit/") || h.startsWith("/tft/history/"))).toEqual([]);
+    expect(hrefs).toContain("/tft");
   });
 });

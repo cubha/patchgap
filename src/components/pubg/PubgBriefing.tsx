@@ -22,6 +22,7 @@ import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { pubgGapTotal, pubgMetricGapRows } from "@/lib/gapTotals";
 import DeclarationOnly from "@/components/DeclarationOnly";
+import NewerPatchNotice from "@/components/NewerPatchNotice";
 import PubgWeaponGrid from "@/components/pubg/PubgWeaponGrid";
 import { loadPubgAssets, loadPubgMaps, isReportable, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
 import { mapHref, weaponHref } from "@/lib/pubgRoutes";
@@ -42,7 +43,16 @@ import { groupBriefingItems } from "@/components/briefingRows";
 import { pubgNotesAsPatchNotes } from "@/pipeline/match/pubg-delta";
 import { pubgVerdictCount } from "@/pipeline/shared/headline";
 
-export default function PubgBriefing({ bundle, declaration }: { bundle: PubgBundle | null; declaration: PubgDeclaration | null }) {
+export default function PubgBriefing({
+  bundle,
+  declaration,
+  newer = null,
+}: {
+  bundle: PubgBundle | null;
+  declaration: PubgDeclaration | null;
+  /** 관측 홈보다 새 선언만 쌍 — 배너가 패치노트 원문으로 보낸다(PLAN-home-observed-pair ST-9). */
+  newer?: PubgDeclaration | null;
+}) {
   if (!bundle) {
     // `deltas.json`이 관측 stub이면 수기 노트만 그린다(C13·C14) — 비교 구간을 기다리며 노트가 숨지 않게.
     if (declaration) return <PubgDeclarationView declaration={declaration} />;
@@ -147,6 +157,10 @@ export default function PubgBriefing({ bundle, declaration }: { bundle: PubgBund
               <strong className="text-fg">{deltas.meta.n}</strong>종
             </p>
           </div>
+
+          {/* 홈보다 새 패치노트(관측 stub = declaration.json)가 있으면 여기서 말한다 — 홈은 완성된 분석을 그리고, 새 노트는 원문으로
+              한 클릭(PUBG는 과거 쌍 라우트가 없다). 날짜는 두지 않는다 — PUBG 관측은 N일차가 아니라 수확 창 규칙이다. */}
+          {newer ? <NewerPatchNotice patch={newer.to} reason={newer.failure.reason} entityCount={newer.notes.length} eta={null} href={newer.sourceUrl} /> : null}
 
           {/* 3타일은 세 게임 공통 컴포넌트가 그린다(UX-BRIEF §8-1). PUBG 대조표는 상태 칩이
               있어 `#unannounced` 앵커가 실제로 걸린다. */}

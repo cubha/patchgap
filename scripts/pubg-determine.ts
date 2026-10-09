@@ -46,14 +46,23 @@ export function main(): void {
   const notesExist = probe.to !== null && fs.existsSync(path.join(dir, `notes-${probe.to}.json`));
   // PUBG는 산출물이 `deltas.json` **하나**라 파일 존재만으로는 "이번 쌍을 돌았나"를 알 수 없다 —
   // meta 쌍을 보고, stub이면 산출물이 아니다(`deltasStateOf`).
-  const deltasFile = path.join(dir, "deltas.json");
-  let parsed: unknown = null;
-  try {
-    parsed = fs.existsSync(deltasFile) ? (JSON.parse(fs.readFileSync(deltasFile, "utf8")) as unknown) : null;
-  } catch {
-    parsed = null;
-  }
-  const deltas = probe.from !== null && probe.to !== null ? deltasStateOf(parsed, probe.from, probe.to) : { kind: "none" as const };
+  // 관측은 `deltas.json`, 선언 stub은 `declaration.json`(2026-10-09, PLAN-home-observed-pair ST-9 — stub이 관측을 덮지 않게
+  // 파일을 갈랐다). 이번 쌍의 상태는 관측 파일이 먼저 답하고, 거기 없으면 stub 파일이 답한다.
+  const readJsonOrNull = (file: string): unknown => {
+    try {
+      return fs.existsSync(file) ? (JSON.parse(fs.readFileSync(file, "utf8")) as unknown) : null;
+    } catch {
+      return null;
+    }
+  };
+  const observedState =
+    probe.from !== null && probe.to !== null
+      ? deltasStateOf(readJsonOrNull(path.join(dir, "deltas.json")), probe.from, probe.to)
+      : { kind: "none" as const };
+  const deltas =
+    observedState.kind !== "none" || probe.from === null || probe.to === null
+      ? observedState
+      : deltasStateOf(readJsonOrNull(path.join(dir, "declaration.json")), probe.from, probe.to);
   let plan = planPubgRun({ nowMs, notesExist, deltas, force }, windows);
   console.log(`[pubg-determine] ${plan.reason}`);
 

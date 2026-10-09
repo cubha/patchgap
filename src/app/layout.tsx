@@ -8,7 +8,8 @@ import Header, { type GameChrome } from "@/components/Header";
 import type { GameId } from "@/lib/game";
 import { loadPubg, loadPubgDeclaration } from "@/lib/pubgData";
 import { listTftPairs, loadTft, loadTftDeclaration } from "@/lib/tftData";
-import { getDefaultPair, listPatchPairs, listPatches, loadSummary } from "@/lib/data";
+import { getDefaultPair, listPatchPairs, listPatches, loadDeltas, loadSummary } from "@/lib/data";
+import { isObservationStub } from "@/pipeline/shared/observation-stub";
 import { fmtKst } from "@/lib/format";
 import "./globals.css";
 
@@ -53,13 +54,18 @@ function getSnapshotCaption(): string | null {
  * 상수로 들고 있었는데, 게임 스위처가 붙으면 그 하드코딩이 PUBG 화면에서 **LoL 표본을 주장**
  * 하게 된다. 표본 성격은 집계 산출물의 속성이므로 그것을 읽는 이 서버 레이아웃이 소유한다. */
 function getLolChrome(): GameChrome {
-  const pairs = listPatchPairs();
   const pair = getDefaultPair();
+  // 홈보다 새 쌍은 관측 stub(선언만) — select 라벨이 그것을 말한다(PLAN-home-observed-pair).
+  const pairs = listPatchPairs().map((p) => {
+    const deltas = loadDeltas(p.from, p.to);
+    return { ...p, observed: deltas !== null && !isObservationStub(deltas.meta) };
+  });
   const summaryFrom = pair ? loadSummary(pair.from) : null;
   const summaryTo = pair ? loadSummary(pair.to) : null;
   return {
     pairs,
     currentPair: pair,
+    homePair: pair,
     nBefore: summaryFrom?.data.matches ?? null,
     nAfter: summaryTo?.data.matches ?? null,
     aggregatedAt: summaryTo?.meta.generatedAt ?? null,
@@ -87,6 +93,7 @@ function getPubgChrome(): GameChrome | null {
   return {
     pairs: [pair],
     currentPair: pair,
+    homePair: pair,
     nBefore: bundle.before.nMatches,
     nAfter: bundle.after.nMatches,
     aggregatedAt: bundle.deltas.meta.generatedAt,
@@ -106,10 +113,12 @@ function declarationChrome(
   sampleChips: string[]
 ): GameChrome | null {
   if (!declaration) return null;
-  const pair = { from: declaration.from, to: declaration.to };
+  const pair = { from: declaration.from, to: declaration.to, observed: false };
   return {
     pairs: [pair],
     currentPair: pair,
+    // 관측 쌍이 없다 — 평소 주소는 선언 뷰 폴백이고 select 이동은 전부 과거 쌍 라우트다.
+    homePair: null,
     nBefore: null,
     nAfter: null,
     aggregatedAt: declaration.generatedAt,
@@ -127,9 +136,9 @@ function declarationChrome(
  */
 function getTftChrome(): GameChrome | null {
   const bundle = loadTft();
-  // 쌍 목록은 판정 파일이 있는 쌍 전부(최신 우선) — 과거 쌍 라우트(`/tft/history/[pair]/`)가 생겨 select가 열린다
-  // (2026-09-28, 이월 R8). 전에는 최신 쌍 하나만 올려 18.1→18.2를 볼 길이 없었다.
-  const pairs = listTftPairs();
+  // 쌍 목록은 판정 파일이 있는 쌍 전부(최신 우선, stub 포함) — 과거 쌍 라우트(`/tft/history/[pair]/`)가 생겨 select가 열린다
+  // (2026-09-28, 이월 R8). 홈보다 새 선언만 쌍은 `observed: false`로 라벨이 갈린다(PLAN-home-observed-pair, 2026-10-09).
+  const pairs = listTftPairs().map((p) => ({ ...p, observed: loadTft(p) !== null }));
   if (!bundle) {
     const chrome = declarationChrome(loadTftDeclaration(), ["KR", "Master+", "랭크"]);
     return chrome && pairs.length > 0 ? { ...chrome, pairs } : chrome;
@@ -138,6 +147,7 @@ function getTftChrome(): GameChrome | null {
   return {
     pairs: pairs.length > 0 ? pairs : [pair],
     currentPair: pair,
+    homePair: pair,
     nBefore: bundle.before.matches,
     nAfter: bundle.after.matches,
     aggregatedAt: bundle.deltas.meta.generatedAt,

@@ -8,14 +8,15 @@ vi.mock("server-only", () => ({}));
 import { pickPubgDeclaration } from "@/lib/pubgData";
 
 const stub = (from: string, to: string) => ({ from, to, generatedAt: "2026-10-09T00:00:00Z", observationFailed: { reason: "awaiting-observation" as const, detail: "", at: "2026-10-09T00:00:00Z" } });
+const observed = (from: string, to: string) => ({ from, to, generatedAt: "2026-10-08T00:00:00Z" });
 
 describe("pickPubgDeclaration — 어느 stub이 「선언만 쌍」인가", () => {
   it("관측 쌍보다 새 stub만 선언만 쌍이다", () => {
-    expect(pickPubgDeclaration({ from: "42.3", to: "43.1" }, stub("43.1", "43.2"))?.to).toBe("43.2");
+    expect(pickPubgDeclaration(observed("42.3", "43.1"), stub("43.1", "43.2"))?.to).toBe("43.2");
   });
   it("관측이 그 쌍을 따라잡았으면(같거나 더 새 to) stub은 낡았다 — null", () => {
-    expect(pickPubgDeclaration({ from: "43.1", to: "43.2" }, stub("43.1", "43.2"))).toBeNull();
-    expect(pickPubgDeclaration({ from: "43.2", to: "43.3" }, stub("43.1", "43.2"))).toBeNull();
+    expect(pickPubgDeclaration(observed("43.1", "43.2"), stub("43.1", "43.2"))).toBeNull();
+    expect(pickPubgDeclaration(observed("43.2", "43.3"), stub("43.1", "43.2"))).toBeNull();
   });
   it("관측이 없으면 stub이 곧 선언 축(홈이 선언 뷰)", () => {
     expect(pickPubgDeclaration(null, stub("43.1", "43.2"))?.to).toBe("43.2");
@@ -25,5 +26,17 @@ describe("pickPubgDeclaration — 어느 stub이 「선언만 쌍」인가", () 
   });
   it("둘 다 없으면 null", () => {
     expect(pickPubgDeclaration(null, null)).toBeNull();
+  });
+});
+
+describe("httpUrlOrNull — sourceUrl은 http(s)만(배너가 외부 링크로 그리므로 스킴을 믿지 않는다, security-auditor 2026-10-09)", () => {
+  it("http(s)는 통과, javascript:·상대경로·빈 값은 null", async () => {
+    const { httpUrlOrNull } = await import("@/lib/pubgData");
+    expect(httpUrlOrNull("https://www.pubg.com/en/news/11057")).toBe("https://www.pubg.com/en/news/11057");
+    expect(httpUrlOrNull("http://example.com/a")).toBe("http://example.com/a");
+    expect(httpUrlOrNull("javascript:alert(1)")).toBeNull();
+    expect(httpUrlOrNull("/relative/path")).toBeNull();
+    expect(httpUrlOrNull("")).toBeNull();
+    expect(httpUrlOrNull(undefined)).toBeNull();
   });
 });

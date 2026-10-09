@@ -23,7 +23,8 @@ describe("latestObservedTftPair — 관측이 있는 가장 최근 쌍", () => {
     expect(loadTft(found!.pair)).not.toBeNull();
     const index = pairs.findIndex((p) => p.from === found!.pair.from && p.to === found!.pair.to);
     expect(index).toBeGreaterThanOrEqual(0);
-    expect(found!.isLatest).toBe(index === 0);
+    // 2026-10-09: 관측이 있는 최신 쌍 = 홈 쌍이므로 isLatest(평소 주소 주인)는 항상 true. 그보다 최근 쌍은 전부 stub.
+    expect(found!.isLatest).toBe(true);
     for (const earlier of pairs.slice(0, index)) expect(loadTft(earlier)).toBeNull();
   });
 

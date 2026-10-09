@@ -132,6 +132,14 @@ describe("§8-1 골격 — 세 게임이 같은 컴포넌트를 쓴다", () => {
       expect(read(home)).toContain("MobileActionBar");
     });
 
+    it(`${id} 홈이 더 새 패치노트(관측 stub)를 공용 배너(NewerPatchNotice)로 말한다 — 홈 쌍은 관측이 있는 최신 쌍이다`, () => {
+      // 2026-10-09(PLAN-home-observed-pair, 사용자 정정 "최신 데이터 = 최신 상태의 분석"): 홈은 완성된 분석(관측 쌍)을 그리고,
+      // 그보다 새 패치노트는 이 배너가 말한다. 파일 게이트 — 관측 stub을 쓰는 게임(`write-observation-stub` 대상 tft·pubg)만
+      // 대상이다. LoL 파이프라인은 stub을 쓰지 않아(관측이 즉시다) 배너를 둘 상태가 없다.
+      if (id === "lol") return;
+      expect(read(home)).toContain("NewerPatchNotice");
+    });
+
     it(`${id} 홈이 공용 탭(BriefingTabs/BriefingTabBar)을 쓴다`, () => {
       const src = read(home);
       // LoL은 ReleaseNoteStream 안에서 탭 바를 쓴다 — 그 경유를 인정한다.

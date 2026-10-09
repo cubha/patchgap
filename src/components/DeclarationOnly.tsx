@@ -48,10 +48,12 @@ export interface DeclarationHeroProps {
   failure: ObservationFailure;
   /** 관측이 있는 최신 쌍으로 가는 링크 — 배너가 단다. 없으면 문장만. */
   observed?: ObservedPairLink | null;
+  /** 첫 관측 실행 예정 「10/10(토) 06:00 KST」 — 배너가 날짜를 말한다(PLAN-home-observed-pair ST-4). */
+  eta?: string | null;
 }
 
 /** 문장 1줄 + 캡션 + 관측 전 배너 — 관측 브리핑의 히어로와 같은 자리·같은 크기. */
-export function DeclarationHero({ from, to, notes, failure, observed = null }: DeclarationHeroProps) {
+export function DeclarationHero({ from, to, notes, failure, observed = null, eta = null }: DeclarationHeroProps) {
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -62,12 +64,14 @@ export function DeclarationHero({ from, to, notes, failure, observed = null }: D
           {to} 패치노트는 <span className="text-accent">{declarationEntityCount(notes)}개 항목</span>을 말했고,
           통계는 아직 관측 전입니다
         </h1>
+        {/* 캡션에 조항 수를 두지 않는다(2026-10-09) — 머리의 「N개 항목」(대상 수) 바로 아래 「공지 73건」이 붙어 한 화면에
+            두 단위가 같은 말로 섰다(결정 7). 조항 수는 타일 부제 한 곳이 든다. */}
         <p className="max-w-3xl text-sm leading-relaxed text-fg-2 wrap-anywhere">
-          {from} → {to} · 공지 {notes.length}건
+          {from} → {to} · 관측 전
         </p>
       </div>
 
-      <ObservationPendingNotice failure={failure} observed={observed} />
+      <ObservationPendingNotice failure={failure} observed={observed} eta={eta} />
     </>
   );
 }
@@ -110,10 +114,10 @@ export interface DeclarationOnlyProps extends DeclarationHeroProps {
 }
 
 /** 머리 + 노트 카드 + 보충 — 골격 없이 세로로 쌓는 기본 조합(PUBG 홈). TFT 홈은 조각을 따로 받아 골격 안에 둔다. */
-export default function DeclarationOnly({ from, to, notes, failure, observed = null, extra }: DeclarationOnlyProps) {
+export default function DeclarationOnly({ from, to, notes, failure, observed = null, eta = null, extra }: DeclarationOnlyProps) {
   return (
     <div className="flex flex-col gap-6 pt-40 pb-8">
-      <DeclarationHero from={from} to={to} notes={notes} failure={failure} observed={observed} />
+      <DeclarationHero from={from} to={to} notes={notes} failure={failure} observed={observed} eta={eta} />
       <DeclarationNotesCard to={to} notes={notes} />
       {extra}
     </div>

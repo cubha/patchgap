@@ -67,8 +67,8 @@ describe("패치쌍 라우트 — 게임별(LoL·TFT)", () => {
   it("최신 쌍은 평소 주소, 과거 쌍은 /{game}/history/{쌍}/ — 섹션을 유지한다", () => {
     expect(pairHref("tft", tftPairs[0], tftPairs[0])).toBe("/tft/");
     expect(pairHref("tft", tftPairs[1], tftPairs[0])).toBe("/tft/history/18_1-18_2/");
-    expect(pairHref("tft", tftPairs[0], tftPairs, "compare")).toBe("/tft/compare/");
-    expect(pairHref("tft", tftPairs[1], tftPairs, "compare")).toBe("/tft/history/18_1-18_2/compare/");
+    expect(pairHref("tft", tftPairs[0], tftPairs[0], "compare")).toBe("/tft/compare/");
+    expect(pairHref("tft", tftPairs[1], tftPairs[0], "compare")).toBe("/tft/history/18_1-18_2/compare/");
     expect(pairHref("lol", pairs[2], pairs[0], "compare")).toBe("/lol/history/26_16-26_17/compare/");
   });
   it("기준 경로와 섹션 링크 — 기준이 없으면 평소 섹션", () => {

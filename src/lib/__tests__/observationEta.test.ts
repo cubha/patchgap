@@ -49,3 +49,11 @@ describe("cron 시각 상수는 워크플로가 정본이다 — 산문·상수�
     expect(TFT_COLLECT_CRON_HOUR_UTC).toBe(Number(m![2]));
   });
 });
+
+describe("웹 창 합성은 파이프라인 창 합성과 같다 — 복제 드리프트 게이트", () => {
+  it("loadTftWindowsForWeb() deep-equal scripts/shared/calendar#loadTftWindows()", async () => {
+    const { loadTftWindowsForWeb } = await import("@/lib/observationEta");
+    const { loadTftWindows } = await import("../../../scripts/shared/calendar");
+    expect(loadTftWindowsForWeb()).toEqual(loadTftWindows("data"));
+  });
+});
