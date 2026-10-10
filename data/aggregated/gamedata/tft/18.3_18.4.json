@@ -8,8 +8,8 @@
       "from": "16.19",
       "to": "16.20"
     },
-    "generatedAt": "2026-10-08T08:13:28.344Z",
-    "changeCount": 8,
+    "generatedAt": "2026-10-10T15:05:10.385Z",
+    "changeCount": 11,
     "submarineCount": 1
   },
   "changes": [
@@ -129,6 +129,70 @@
         "noteBefore": "0.7%",
         "noteAfter": "0.75%",
         "unapplied": true
+      }
+    },
+    {
+      "id": "gdc:tft:18.4:DA_18_Varus:stats.initialMana",
+      "entityKey": "DA_18_Varus",
+      "entityName": "바루스",
+      "entityType": "unit",
+      "field": "시작 마나",
+      "fieldPath": "stats.initialMana",
+      "before": 30,
+      "after": 30,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:tft:18.4:champion:바루스:b59566e9"
+      ],
+      "noteMismatch": {
+        "noteId": "note:tft:18.4:champion:바루스:b59566e9",
+        "noteBefore": "30",
+        "noteAfter": "20",
+        "unapplied": true,
+        "midpatch": true
+      }
+    },
+    {
+      "id": "gdc:tft:18.4:DA_18_Varus:stats.mana",
+      "entityKey": "DA_18_Varus",
+      "entityName": "바루스",
+      "entityType": "unit",
+      "field": "최대 마나",
+      "fieldPath": "stats.mana",
+      "before": 120,
+      "after": 120,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:tft:18.4:champion:바루스:b59566e9"
+      ],
+      "noteMismatch": {
+        "noteId": "note:tft:18.4:champion:바루스:b59566e9",
+        "noteBefore": "120",
+        "noteAfter": "110",
+        "unapplied": true,
+        "midpatch": true
+      }
+    },
+    {
+      "id": "gdc:tft:18.4:DA_CrimsonRaptor18:stats.damage",
+      "entityKey": "DA_CrimsonRaptor18",
+      "entityName": "어미 부리",
+      "entityType": "unit",
+      "field": "공격력",
+      "fieldPath": "stats.damage",
+      "before": 55,
+      "after": 55,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:tft:18.4:champion:어미-부리:2860392f",
+        "note:tft:18.4:champion:어미-부리:0a947e70"
+      ],
+      "noteMismatch": {
+        "noteId": "note:tft:18.4:champion:어미-부리:2860392f",
+        "noteBefore": "55",
+        "noteAfter": "60",
+        "unapplied": true,
+        "midpatch": true
       }
     },
     {

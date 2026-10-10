@@ -3,12 +3,12 @@
     "game": "tft",
     "from": "18.3",
     "to": "18.4",
-    "generatedAt": "2026-10-07T12:46:26.676Z",
-    "noteCount": 73,
+    "generatedAt": "2026-10-10T15:05:10.901Z",
+    "noteCount": 97,
     "observationFailed": {
       "reason": "awaiting-observation",
       "detail": "",
-      "at": "2026-10-07T12:46:26.676Z"
+      "at": "2026-10-10T15:05:10.901Z"
     }
   },
   "rows": []
