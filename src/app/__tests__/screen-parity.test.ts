@@ -439,6 +439,32 @@ describe("§8-1 푸터 — 모든 화면이 같은 컴포넌트를 쓴다", () =
     expect(offenders).toEqual([]);
   });
 
+  it("자기 Container를 갖는 TFT 푸터 래퍼를 Container 안에 두지 않는다(트랙 B ST-27, parity-S33 재발 방지)", () => {
+    // 2026-10-08 실측: TFT 선언 뷰 푸터만 Container 안에 있어 x≈72(다른 화면 36)였다(#80에서 고침). 위 게이트는 `<SiteFooter`만
+    // 봐서 래퍼(`TftFooter` — 기본 contained)가 같은 결함을 다시 내도 못 잡았다. 파일 안에서 그 위치의 Container 깊이를 센다
+    // (주석 제거 후, 자기 닫힘 `<Container …/>`는 깊이를 바꾸지 않는다).
+    const offenders: string[] = [];
+    const walk = (dir: string) => {
+      for (const e of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
+        const rel = `${dir}/${e.name}`;
+        if (e.isDirectory()) {
+          if (e.name !== "__tests__") walk(rel);
+          continue;
+        }
+        if (!/\.tsx$/.test(e.name)) continue;
+        const src = read(rel).replace(/\{\/\*[\s\S]*?\*\/\}/g, "").replace(/^\s*\/\/.*$/gm, "");
+        for (const m of src.matchAll(/<TftFooter\b/g)) {
+          const before = src.slice(0, m.index);
+          const opens = (before.match(/<Container\b(?:[^>]*[^/>])?>/g) ?? []).length;
+          const closes = (before.match(/<\/Container>/g) ?? []).length;
+          if (opens > closes) offenders.push(rel);
+        }
+      }
+    };
+    walk("src");
+    expect(offenders).toEqual([]);
+  });
+
   it("게임별 푸터 래퍼는 SiteFooter로 위임한다 — 문구를 두 벌 쓰지 않는다", () => {
     for (const f of ["src/components/tft/shared.tsx", "src/components/pubg/shared.tsx"]) {
       expect(read(f)).toContain("SiteFooter");
