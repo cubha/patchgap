@@ -14,6 +14,8 @@
 //
 // 이 게임은 판정 축이 하나뿐이다(무기 획득 점유율). 43.1 밸런스 항목 중 텔레메트리로 분리되는 축이
 // 그것뿐이었고, 명중률 축은 반증됐다(PLAN-pubg-gate-2026-09-16 §8) — 그 사실은 방법론이 말한다.
+import GapPreview from "@/components/GapPreview";
+import { pickGapPreview } from "@/components/gapPreviewPick";
 import Link from "next/link";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
@@ -33,7 +35,6 @@ import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
 import { publicMapPath } from "@/pipeline/pubg/asset-path";
 import { pubgDisplayStatus } from "@/pipeline/shared/pubg-status";
 import { SIGNED_POINT, formatSignedPercent } from "@/pipeline/shared/percent";
-import ExternalLink from "@/components/ExternalLink";
 import BriefingListPanel from "@/components/BriefingListPanel";
 import StatTiles from "@/components/StatTiles";
 import DiscordPanel from "@/components/home/DiscordPanel";
@@ -176,6 +177,19 @@ export default function PubgBriefing({
             significantCount={reportable.length}
             gapCount={gapTotal}
             game="pubg"
+          />
+          {/* 첫 화면 미공지 상위(트랙 B ST-22, pubg-S8) — 세 게임 같은 자리. 주 행동 바인딩(디스코드)은 그대로다. */}
+          <GapPreview
+            items={pickGapPreview(
+              unannounced.map((r) => ({
+                key: r.weaponKey,
+                name: r.weaponName,
+                text: `획득 점유율 ${signedPct(r.relChange ?? 0)}`,
+                href: weaponHref(r.weaponKey),
+                score: Math.abs(r.relChange ?? 0),
+              })),
+              3
+            )}
           />
 
           {/* 공지 대조가 기본 탭, 미공지가 두 번째 탭(2026-09-17 사용자 지시 — 홈과 같은 순서). */}

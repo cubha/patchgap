@@ -136,3 +136,12 @@ describe("상세 골격(트랙 B ST-17 — parity-S22·S23·S24·pubg-S10·S15·
     expect(read("components/observation/ObservationSection.tsx")).toMatch(/showCounts=\{!descriptive\}/);
   });
 });
+
+describe("첫 화면 미공지 상위 — 세 브리핑(트랙 B ST-22, lol-S23·pubg-S8)", () => {
+  it.each(["components/home/LolBriefing.tsx", "components/tft/TftBriefing.tsx", "components/pubg/PubgBriefing.tsx"])("%s", (rel) => {
+    expect(read(rel)).toMatch(/<GapPreview\b/);
+  });
+  it("채움 버튼이 아니다 — 주 행동(디스코드) 바인딩을 둘로 만들지 않는다", () => {
+    expect(read("components/GapPreview.tsx")).not.toMatch(/bg-accent/);
+  });
+});

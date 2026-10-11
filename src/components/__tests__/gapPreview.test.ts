@@ -3,7 +3,7 @@
 // 미공지 사례가 0건이었다 — 기본 탭이 「패치 내용」이고 미공지는 두 번째 탭 뒤였다. 탭 순서를 뒤집는 안은 두 번 기각됐으므로(재제안 금지)
 // 타일 바로 아래 한 줄로 상위 사례를 보인다. 고르는 규칙: 대상당 1건(가장 큰 것), 크기순, 상위 N.
 import { describe, expect, it } from "vitest";
-import { pickGapPreview, type GapPreviewItem } from "../gapPreview";
+import { pickGapPreview, type GapPreviewItem } from "../gapPreviewPick";
 
 const item = (key: string, score: number, text = `${key} 변화`): GapPreviewItem => ({ key, name: key, text, href: `/x/${key}/`, score });
 

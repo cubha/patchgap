@@ -8,6 +8,11 @@
 // 데이터 로드는 이 서버 컴포넌트에서만 한다(src/lib/data.ts, 빌드 타임 fs) — 하위 home/*
 // 컴포넌트는 전부 props만 받는 순수 렌더(상태 없음, 서버/클라이언트 경계 없음).
 
+import GapPreview from "@/components/GapPreview";
+import { pickGapPreview } from "@/components/gapPreviewPick";
+import { isReportableRecord } from "@/pipeline/shared/reportable";
+import { parseLaneAxis } from "@/lib/lane";
+import { displayMetricKind, fmtDisplayDelta, metricLabel as fmtMetricLabel, positionLabel } from "@/lib/format";
 import type { DeltaRecord } from "@/pipeline/types";
 import type { PatchPair } from "@/lib/data";
 import { loadDdragonSafe } from "@/pipeline/match/ddragon";
@@ -103,6 +108,22 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
   const headline = computeHeadline(deltas, notesTo, deltas?.meta.qAlpha);
   // 「미공지 Gap」 타일·탭·랜딩 카드는 같은 수 — `lib/gapTotals`가 소유한다(2026-09-28, D2).
   const gapTotal = lolGapTotal(deltas?.rows ?? [], submarine);
+  // 첫 화면 미공지 상위 3(트랙 B ST-22) — 보고 자격이 있는 미공지·간접 행, 대상당 가장 큰 변화.
+  const gapPreview = pickGapPreview(
+    (deltas?.rows ?? [])
+      .filter((r) => isGapStatus(r.status) && isReportableRecord(r, deltas?.meta.qAlpha))
+      .map((r) => {
+        const lane = parseLaneAxis(r.id);
+        return {
+          key: `${r.entityType}:${r.entityKey}`,
+          name: r.entityName,
+          text: `${lane && lane !== "all" ? `${positionLabel(lane)} ` : ""}${fmtMetricLabel(r.metric)} ${fmtDisplayDelta(r.before, r.after, displayMetricKind(r.metric))}`,
+          href: lolEntityHref(r, pairBase),
+          score: Math.abs(r.delta ?? 0),
+        };
+      }),
+    3
+  );
 
   // 상세 바로가기(§8-1) — 이 패치 집계에 등장한 챔피언·아이템 중 **상세가 있는 것**(buildEntityIndex가 거른다). 이름은 Data Dragon이 주고,
   // 상세가 실재하는 대상만 링크한다(없는 경로는 정적 export에서 곧 404다).
@@ -232,6 +253,8 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
               pairBase={pairBase}
               caption={heroCaption}
             />
+            {/* 첫 화면 미공지 상위(트랙 B ST-22, lol-S23) — 타일 바로 아래, 텍스트 링크. */}
+            <GapPreview items={gapPreview} />
             <StreamColumnLayout
               leftHeader={<StreamLaneFilter />}
               left={

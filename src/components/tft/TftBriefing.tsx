@@ -6,6 +6,9 @@
 //   2. 미공지가 강조 색(accent), 나머지는 중립
 //   3. 표에 올릴 자격은 `isReportableRecord` 하나가 정한다 — 표본부족·바닥 미달은 안 올라간다
 //   4. 모든 판정문은 원천 링크를 갖는다. 없으면 회색으로 떨어뜨리고 링크를 걸지 않는다
+import GapPreview from "@/components/GapPreview";
+import { pickGapPreview } from "@/components/gapPreviewPick";
+import { effectStrength } from "@/lib/tftEntityRows";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
@@ -260,6 +263,19 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
             gapCount={gapTotal}
             game="tft"
             pairBase={pairBase}
+          />
+          {/* 첫 화면 미공지 상위(트랙 B ST-22) — 세 게임 같은 자리. */}
+          <GapPreview
+            items={pickGapPreview(
+              unannounced.map((r) => ({
+                key: `${r.entityType}:${r.entityKey}`,
+                name: tftDisplayName(r.entityKey, r.entityName),
+                text: `${metricLabel(r.metric)} ${deltaDisplay(r.metric, r.delta ?? 0).text}`,
+                href: tftEntityHref(`${r.entityType}:${r.entityKey}`, pairBase),
+                score: effectStrength(r),
+              })),
+              3
+            )}
           />
 
           {/* 「패치 내용 / 미공지 Gap」 탭(2026-09-21 신설) — LoL·PUBG에 이미 있던 것을 TFT에도.
