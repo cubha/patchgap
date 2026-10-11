@@ -239,7 +239,8 @@ describe("CompareExplorer — 통합", () => {
     const { container } = render(<CompareExplorer pair={null} notes={[]} rows={[]} coverage={coverage} />);
     // 2026-09-18 라운드6(사용자 C5·C1): 칩 10종 → 4종(전체/공지/공지 · 이상 관측/미공지). 노이즈·세분 칩은
     // 표에 올리지 않는 상태의 칩이라 함께 없앴다(배지 1종 = 칩 1종 불변식 유지).
-    expect(container.querySelectorAll("[aria-pressed]")).toHaveLength(10);
+    // 2026-10-11 명세 변경(트랙 B ST-24, tft-S10·tft-S9): 상태 칩 6(+잠수함 패치·공지값 불일치) + 묶음 「미공지 Gap」 1 + 라인 6 = 13.
+    expect(container.querySelectorAll("[aria-pressed]")).toHaveLength(13);
     expect(container.querySelector('[aria-label="라인 필터"]')).not.toBeNull();
     // 2026-10-11 명세 변경(트랙 B ST-5, lol-S22·parity-S16): 개발 용어 「델타」·「엔티티」 → 사용자 말 「변화」·「대상」.
     expect(container.textContent).toContain("표시할 변화가 없습니다");

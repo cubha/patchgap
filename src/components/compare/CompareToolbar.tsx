@@ -14,9 +14,11 @@
 import type { ReactNode } from "react";
 
 import FilterPill from "@/components/FilterPill";
+import { TILE_LABELS } from "@/components/StatTiles";
 import {
   COMPARE_FILTERS,
   COMPARE_SORTS,
+  GAP_FILTER,
   type CompareFilterKey,
   type CompareSortKey,
 } from "./toolbarRules";
@@ -55,6 +57,12 @@ export default function CompareToolbar({
             {f.label} {counts[f.key] ?? 0}
           </FilterPill>
         ))}
+      </div>
+      {/* 묶음 필터 — 브리핑 「미공지 Gap」 타일과 같은 수(미공지 ∪ 잠수함 ∪ 공지값 불일치). 상태 칩과 줄을 나눠 칩 합에 섞이지 않게 한다. */}
+      <div className="flex items-center gap-2 border-l border-border-soft pl-3" role="group" aria-label="묶음 필터">
+        <FilterPill selected={filter === GAP_FILTER} onClick={() => onFilterChange(GAP_FILTER)}>
+          {TILE_LABELS.gap} {counts[GAP_FILTER] ?? 0}
+        </FilterPill>
       </div>
       {extra}
       <div className="ml-auto flex flex-wrap items-center gap-3">

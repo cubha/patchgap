@@ -10,12 +10,13 @@
 
 import { useEffect } from "react";
 
-import { COMPARE_FILTERS, type CompareFilterKey } from "./toolbarRules";
+import { COMPARE_FILTERS, GAP_FILTER, type CompareFilterKey } from "./toolbarRules";
 
 export function useFilterHash(onMatch: (key: CompareFilterKey) => void): void {
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
-    if (COMPARE_FILTERS.some((f) => f.key === hash)) {
+    // `#gap`(미공지 Gap 묶음, 트랙 B ST-24)은 칩이 아니라 칩 묶음이지만 같은 규약으로 착지한다.
+    if (hash === GAP_FILTER || COMPARE_FILTERS.some((f) => f.key === hash)) {
       onMatch(hash as CompareFilterKey);
     }
     // 마운트 1회 — URL 해시는 외부 시스템이고 이후 변화는 이 화면이 소유한다.

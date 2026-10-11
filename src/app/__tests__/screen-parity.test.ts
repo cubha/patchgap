@@ -12,7 +12,7 @@ import path from "node:path";
 
 import { GAMES } from "@/lib/game";
 import { gapHrefOf } from "@/components/StatTiles";
-import { COMPARE_FILTERS } from "@/components/compare/toolbarRules";
+import { COMPARE_FILTERS, GAP_FILTER } from "@/components/compare/toolbarRules";
 import { METHODOLOGY_SLOTS } from "@/components/methodology/slots";
 import { ENTITY_INDEX_TITLE } from "@/components/EntityIndexSection";
 
@@ -335,9 +335,10 @@ describe("§8-3 대조표 — 세 게임이 같은 도구와 골격을 쓴다", 
     // 실측: TFT 타일만 앵커 없이 `/tft/compare/`로 갔다(그 대조표에 칩이 없었다). 이제 착지점은
     // `gapHrefOf`가 계산하므로 호출부가 틀릴 자리가 없다 — 그래도 **칩 키가 해시와 같다**는
     // 전제는 여기서 잰다(칩 키를 바꾸면 세 타일이 동시에 죽는다).
-    expect(COMPARE_FILTER_KEYS).toContain("unannounced");
+    // 2026-10-11 명세 변경(트랙 B ST-24, tft-S10·tft-S9): 타일은 미공지 ∪ 수치 축을 세므로 착지도 그 묶음(`#gap`) — 「미공지」 칩이면 TFT에서 35 vs 30이었다.
+    expect(GAP_FILTER).toBe("gap");
     for (const id of GAME_IDS) {
-      expect(gapHrefOf(id)).toBe(`/${id}/compare/#unannounced`);
+      expect(gapHrefOf(id)).toBe(`/${id}/compare/#gap`);
     }
   });
 

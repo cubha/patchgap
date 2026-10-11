@@ -51,7 +51,8 @@ export interface StatTilesProps {
  * 과거 쌍 화면에서는 그 쌍의 대조표다 — 최신 쌍 대조표로 보내면 타일 숫자와 착지 화면의 숫자가 갈린다.
  */
 export function gapHrefOf(game: GameId, pairBase: string | null = null): string {
-  return `${pairSectionHref(game, "compare", pairBase)}#unannounced`;
+  // `#gap` — 타일이 세는 것(지표 축 미공지 ∪ 수치 축)과 착지 결과가 같은 수가 되는 묶음 필터(트랙 B ST-24, tft-S9).
+  return `${pairSectionHref(game, "compare", pairBase)}#gap`;
 }
 
 export default function StatTiles({
