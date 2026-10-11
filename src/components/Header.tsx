@@ -288,31 +288,42 @@ export default function Header({ chrome }: HeaderProps) {
                 시각 라벨을 뺐던 것을 2026-09-12 /verify-impl 화면 대조로 잡아 보완했다.
                 `<label>`로 감싸 클릭 시 select에 포커스가 가게 하고, 시각 라벨이 생겼으므로
                 select의 중복 aria-label은 뺀다(라벨이 접근성 이름을 제공한다). */}
-            <label className="flex min-h-8 items-center gap-2">
-              <span className="text-xs font-bold text-muted">패치</span>
-              <select
-                className="min-h-8 rounded-sm border border-border bg-surface px-2 text-xs font-bold text-fg disabled:cursor-not-allowed disabled:opacity-70"
-                disabled={pairDisabled}
-                aria-describedby="pair-select-hint"
-                title={pairHint}
-                value={currentIndex >= 0 ? currentIndex : 0}
-                onChange={(event) => {
-                  const next = pairs[Number(event.target.value)];
-                  // 같은 섹션의 그 쌍으로 — 상세에서 골랐다면 그 쌍의 브리핑(`pairSelectHref` 주석).
-                  if (routable !== null && pairRoutable && next) router.push(pairSelectHref(routable, next, homePair, navSection));
-                }}
-              >
-                {pairs.length > 0 ? (
-                  pairs.map((pair, i) => (
-                    <option key={pairLabel(pair)} value={i}>
-                      {pairLabel(pair)}
-                    </option>
-                  ))
-                ) : (
-                  <option>데이터 없음</option>
-                )}
-              </select>
-            </label>
+            {pairs.length === 1 ? (
+              // 쌍이 하나뿐이면 고를 것이 없다 — 드롭다운 모양(화살표·select)을 두지 않고 정적 라벨(트랙 B ST-21, pubg-S19). 이유 문구는
+              // 아래 힌트가 그대로 말한다.
+              <span className="flex min-h-8 items-center gap-2">
+                <span className="text-xs font-bold text-muted">패치</span>
+                <span data-pair-static aria-describedby="pair-select-hint" className="px-2 text-xs font-bold text-fg">
+                  {pairLabel(pairs[0])}
+                </span>
+              </span>
+            ) : (
+              <label className="flex min-h-8 items-center gap-2">
+                <span className="text-xs font-bold text-muted">패치</span>
+                <select
+                  className="min-h-8 rounded-sm border border-border bg-surface px-2 text-xs font-bold text-fg disabled:cursor-not-allowed disabled:opacity-70"
+                  disabled={pairDisabled}
+                  aria-describedby="pair-select-hint"
+                  title={pairHint}
+                  value={currentIndex >= 0 ? currentIndex : 0}
+                  onChange={(event) => {
+                    const next = pairs[Number(event.target.value)];
+                    // 같은 섹션의 그 쌍으로 — 상세에서 골랐다면 그 쌍의 브리핑(`pairSelectHref` 주석).
+                    if (routable !== null && pairRoutable && next) router.push(pairSelectHref(routable, next, homePair, navSection));
+                  }}
+                >
+                  {pairs.length > 0 ? (
+                    pairs.map((pair, i) => (
+                      <option key={pairLabel(pair)} value={i}>
+                        {pairLabel(pair)}
+                      </option>
+                    ))
+                  ) : (
+                    <option>데이터 없음</option>
+                  )}
+                </select>
+              </label>
+            )}
             {/* 닫힌 select의 이유는 hover(title)로만 보이면 터치 화면에서 사라진다(2026-09-28, 이월 R16) —
                 모바일에선 select 옆에 글로 보이고, md 이상은 title·스크린리더로 둔다(헤더 한 줄 유지). 라벨 밖에 두는 이유:
                 안에 두면 이 글이 select의 접근성 이름에 섞인다(설명은 aria-describedby로만). */}

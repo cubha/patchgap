@@ -78,12 +78,15 @@ describe("헤더 패치쌍 select", () => {
     fireEvent.change(select2, { target: { value: "1" } });
     expect(push).toHaveBeenCalledWith("/tft/");
   });
-  it("쌍이 하나뿐인 게임은 닫혀 있고 이유를 설명과 연결한다", () => {
+  // 2026-10-11 명세 변경(트랙 B ST-21, pubg-S19): 쌍이 하나뿐이면 닫힌 select 대신 **정적 라벨** — 고를 수 없는데 드롭다운처럼
+  // 보였다. 이유 문구 연결(aria-describedby)은 그대로다.
+  it("쌍이 하나뿐인 게임은 select가 아니라 정적 라벨이고 이유를 설명과 연결한다", () => {
     pathname = "/tft/";
     const { container } = render(<Header chrome={{ lol: lolChrome, tft: tftChrome, pubg: null }} />);
-    const select = container.querySelector("select[aria-describedby=\"pair-select-hint\"]") as HTMLSelectElement;
-    expect(select.disabled).toBe(true);
-    const describedBy = select.getAttribute("aria-describedby");
+    expect(container.querySelector("select[aria-describedby=\"pair-select-hint\"]")).toBeNull();
+    const label = container.querySelector("[data-pair-static]") as HTMLElement;
+    expect(label).not.toBeNull();
+    const describedBy = label.getAttribute("aria-describedby");
     expect(container.querySelector(`#${describedBy}`)?.textContent).toMatch(/하나뿐/);
   });
   // 2026-09-28 이월 R16: 닫힌 이유가 title(hover)뿐이면 터치 화면에서 안 보인다.
