@@ -5,7 +5,7 @@
 
 import { describe, expect, it } from "vitest";
 import type { DeltaRecord } from "@/pipeline/types";
-import { computeLaneDistribution } from "../laneDistribution";
+import { computeLaneDistribution, laneDistributionScope } from "../laneDistribution";
 
 function delta(overrides: Partial<DeltaRecord>): DeltaRecord {
   return {
@@ -90,5 +90,28 @@ describe("computeLaneDistribution", () => {
     const total = rows.reduce((sum, r) => sum + r.count, 0);
     // A(TOP, 중복제거로 1) + B(JUNGLE) + C(all) = 3
     expect(total).toBe(3);
+  });
+});
+
+describe("분포 범위 표기(트랙 B ST-6, lol-S4)", () => {
+  // 리뷰 실측: 사이드 「미공지 분포 … 전체 15」 vs 같은 화면 「미공지 Gap 36」 — 「전체」가 총계처럼 읽혔는데 실제로는 라인 축이
+  // 없는(챔피언 전체 단위) 행의 대상 수였고, 라인 값이 없는 밴률 미공지·아이템·수치 축은 분포 어디에도 없었다.
+  it("라인 축 없는 행의 라벨은 「라인 무관」이다(「전체」가 아니다)", () => {
+    const rows = computeLaneDistribution([delta({ id: "champion:F:pickRate", entityKey: "F" })]);
+    expect(rows.find((r) => r.lane === "all")?.label).toBe("라인 무관");
+  });
+
+  it("분포가 다룬 대상과 그 밖을 Gap 총계로 나눈다 — 대상 기준(라인이 여럿인 대상은 한 번)", () => {
+    const records = [
+      delta({ id: "champion:A:TOP:pickRate", entityKey: "A" }),
+      delta({ id: "champion:A:MIDDLE:winRate", entityKey: "A" }),
+      delta({ id: "champion:B:pickRate", entityKey: "B" }),
+      delta({ id: "champion:C:banRate", entityKey: "C", metric: "banRate" }),
+    ];
+    expect(laneDistributionScope(records, 6)).toEqual({ gapTotal: 6, covered: 2, other: 4 });
+  });
+
+  it("Gap 총계보다 많이 셀 수 없다(음수 「그 밖」 금지)", () => {
+    expect(laneDistributionScope([delta({ id: "champion:A:TOP:pickRate", entityKey: "A" })], 0)).toEqual({ gapTotal: 0, covered: 1, other: 0 });
   });
 });

@@ -55,3 +55,9 @@ export function computeLaneDistribution(records: readonly DeltaRecord[]): LaneDi
     count: counts.get(lane) ?? 0,
   }));
 }
+
+export function laneDistributionScope(records: readonly DeltaRecord[], gapTotal: number): { gapTotal: number; covered: number; other: number } {
+  void records;
+  void gapTotal;
+  throw new Error("TODO(laneDistribution): laneDistributionScope");
+}
