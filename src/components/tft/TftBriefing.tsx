@@ -309,6 +309,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
                   noteTargets={noteEntities}
                   /* 세 게임이 같은 함수로 센다(ST-06) — 전에는 표시 상태로 걸러 간접 영향 행까지 공지로 셌다. */
                   observed={announcedObserved}
+                  sourceUrl={notes.sourceUrl ?? null}
                 />
                 </SectionCard>
               }

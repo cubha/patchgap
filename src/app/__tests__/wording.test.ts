@@ -77,3 +77,14 @@ describe("수치 축 행 이름 링크 — 세 브리핑이 hrefOf를 넘긴다(
     expect(uses.some((u) => /hrefOf=\{\(change\) => weaponHref/.test(u))).toBe(true);
   });
 });
+
+describe("패치노트 원문 링크 — 세 브리핑 같은 자리(트랙 B ST-15, parity-S13)", () => {
+  it("공용 커버리지 줄이 원문 링크를 소유하고 세 브리핑이 주소를 넘긴다", () => {
+    expect(read("components/home/AnnouncedCoverageLine.tsx")).toMatch(/패치노트 원문 보기 ↗/);
+    expect(read("components/home/ReleaseNoteStream.tsx")).toMatch(/sourceUrl=\{announcedCoverage\.sourceUrl/);
+    expect(read("components/home/LolBriefing.tsx")).toMatch(/sourceUrl: notesTo\?\.meta\.sourceUrl/);
+    expect(read("components/tft/TftBriefing.tsx")).toMatch(/sourceUrl=\{notes\.sourceUrl/);
+    expect(read("components/pubg/PubgBriefing.tsx")).toMatch(/sourceUrl=\{noteSource\}/);
+    expect(read("components/pubg/PubgBriefing.tsx")).not.toMatch(/패치노트 원문 보기 ↗/);
+  });
+});

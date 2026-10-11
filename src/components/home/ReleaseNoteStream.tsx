@@ -123,7 +123,7 @@ export interface ReleaseNoteStreamProps {
    * 무관하게 항상 실린다(줄에 라인 정보가 없다). */
   miscSections?: MiscSection[];
   /** 「패치 내용」 탭 맨 아래 한 줄(§8-1) — 세 게임 공통. 없으면 그리지 않는다. */
-  announcedCoverage?: { noteTargets: number; observed: number };
+  announcedCoverage?: { noteTargets: number; observed: number; sourceUrl?: string | null };
   /**
    * 「미공지 Gap」 탭의 **위쪽 갈래**(2026-09-21). 미공지는 두 갈래다 — 수치 축(게임사가 무엇을
    * 바꿨나, 증거 A)과 지표 축(패치노트에 없는데 움직였나, 증거 B). 위계의 근거는 중요도가
@@ -335,6 +335,7 @@ export default function ReleaseNoteStream({
         <AnnouncedCoverageLine
           noteTargets={announcedCoverage.noteTargets}
           observed={announcedCoverage.observed}
+          sourceUrl={announcedCoverage.sourceUrl ?? null}
         />
       ) : null}
     </section>

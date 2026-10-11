@@ -253,6 +253,7 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
                     noteTargets: headline.noteEntityCount,
                     // 분자는 **공지 대상 중** 관측이 선 대상 수다(ST-06) — `statCount`는 전체 유의 행이라 분모를 넘는다.
                     observed: headline.announcedObservedCount,
+                    sourceUrl: notesTo?.meta.sourceUrl ?? null,
                   }}
                   /* 수치 축(2026-09-21) — 미공지 Gap 탭의 **위쪽 갈래**. 세 번째 탭이 아닌
                      이유는 잠수함도 미공지이기 때문이다(잠수함 > 미공지 위계를 같은 탭 안에서
