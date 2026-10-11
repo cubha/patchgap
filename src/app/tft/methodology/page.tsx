@@ -1,6 +1,7 @@
 // src/app/tft/methodology/page.tsx
 // TFT 방법론 — **한계를 먼저 적는다**. 이 프로젝트가 반복해서 지켜온 규칙이고,
 // 특히 TFT는 수집 첫날이라 밝힐 것이 많다.
+import { BOUNDARY_RULE } from "@/components/BoundaryMark";
 import ExternalLink from "@/components/ExternalLink";
 import MethodologyLayout, { type MethodologySlots } from "@/components/methodology/MethodologyLayout";
 import { computeLlmCauseStats, dominantConfidence } from "@/components/methodology/llmStats";
@@ -172,6 +173,7 @@ export default function TftMethodologyPage() {
                         잠수함 패치 → 미공지 → 간접효과 → 공지·불일치 → 공지·일치 → 바닥미달 → 표본부족 → 무변화. 이 순서와 보고 자격 판정은{" "}
                         세 게임 공용의 한 규칙이고, 세 게임이 같은 규칙을 봅니다. TFT 전용 술어는 하나도 만들지 않았습니다.
                       </Row>
+                      <Row label="경계">{BOUNDARY_RULE}</Row>
                       <Row label="근거">
                         짝지어진 노트가 있으면 그 원문 앵커를 링크로 겁니다. 없으면 회색이고 링크를 걸지 않습니다. 원천 매치 ID는
                         LoL과 같은 규칙으로 붙입니다 — 이후 패치에서 그 대상이 등장한 매치를 수집 순서대로 최대 10건입니다.

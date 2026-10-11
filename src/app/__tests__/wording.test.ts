@@ -155,3 +155,24 @@ describe("랜딩 확장성 표는 접혀 있다(트랙 B ST-23, lol-S16)", () =>
     expect(src.indexOf("<AdapterMatrix />")).toBeLessThan(src.indexOf("</details>", details));
   });
 });
+
+describe("경계 표기 — 세 대조표·상세 머리·세 방법론(트랙 B ST-25, pubg-S13)", () => {
+  it.each([
+    "components/compare/DeltaTable.tsx",
+    "components/tft/TftCompareExplorer.tsx",
+    "components/pubg/PubgCompareExplorer.tsx",
+    "components/detail/LolItemDetail.tsx",
+    "components/tft/TftUnitDetail.tsx",
+    "components/pubg/PubgWeaponDetail.tsx",
+  ])("%s — 판정 배지 옆에 경계 표기", (rel) => {
+    expect(read(rel)).toMatch(/<BoundaryMark \/>/);
+  });
+  it("세 방법론이 같은 경계 문장(BOUNDARY_RULE)을 쓴다", () => {
+    expect(read("components/methodology/StatusDefinitionTable.tsx")).toMatch(/\{BOUNDARY_RULE\}/);
+    expect(read("app/tft/methodology/page.tsx")).toMatch(/\{BOUNDARY_RULE\}/);
+    expect(read("app/pubg/methodology/page.tsx")).toMatch(/\{BOUNDARY_RULE\}/);
+  });
+  it("렌더 문장에 「홈 카드」가 없다(ST-10 보완)", () => {
+    expect(read("components/methodology/StatusDefinitionTable.tsx").replace(/\{\/\*[\s\S]*?\*\/\}/g, "")).not.toMatch(/홈 카드/);
+  });
+});

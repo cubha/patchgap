@@ -12,6 +12,8 @@
 // **판정이 서지 않은 무기는 관측을 그리지 않는다** — 9/18 라운드6 C1(「직접 연 상세에서는 관측값과 판정 보류 사유를
 // 말한다」)은 사용자 재확인(2026-10-06 「표본부족, 바닥미달은 분명히 보여주지 말라고 했는데?」)으로 대체됐다.
 // 머리 문장도 사유(표본 부족·바닥 미달)를 꺼내지 않고, 스플래시는 렌더 이미지만 든다(수치는 관측 섹션의 몫이다).
+import BoundaryMark from "@/components/BoundaryMark";
+import { isBoundaryPubgRow } from "@/pipeline/shared/boundary";
 import { buildPubgEvidenceProse } from "@/components/pubg/evidenceProse";
 import Link from "next/link";
 import Container from "@/components/Container";
@@ -31,7 +33,7 @@ import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { delayedChangesFor, loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { isReportable, loadPubgAssets, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
-import { displayStatusOf } from "@/pipeline/shared/display-status";
+import { displayStatusOf, METRIC_VERDICTS } from "@/pipeline/shared/display-status";
 import { weaponKeyFromSlug } from "@/lib/pubgRoutes";
 import { publicWeaponPath } from "@/pipeline/pubg/asset-path";
 import { weaponCategoryLabel } from "@/pipeline/aggregate/pubg-weapon-key";
@@ -226,6 +228,7 @@ export default function PubgWeaponDetail({
             <span className="flex items-center gap-2">
               {`무기 · ${weaponCategoryLabel(weaponKey)}`}
               {row && judged ? <StatusBadge status={displayStatusOf(row.status)} /> : null}
+              {row && judged && METRIC_VERDICTS.has(displayStatusOf(row.status)) && isBoundaryPubgRow(row, deltas.meta.effectFloor) ? <BoundaryMark /> : null}
             </span>
           }
           lead={

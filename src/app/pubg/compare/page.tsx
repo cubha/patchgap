@@ -94,6 +94,7 @@ export default function PubgComparePage() {
             submarineChanges={submarine?.submarines ?? []}
             mismatchChanges={(submarine?.mismatches ?? []).flatMap((e) => e.changes)}
             coverage={coverage}
+            effectFloor={deltas.meta.effectFloor}
           />
 
           {/* 수치 축의 **전수 목록은 브리핑 「미공지 Gap」 탭**이 소유한다(§8-3) — LoL·TFT와 같은

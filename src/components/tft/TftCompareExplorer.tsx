@@ -7,6 +7,8 @@
 // 표까지 공용화하면 없는 열을 지어내야 한다(§8-0).
 "use client";
 
+import BoundaryMark, { rowIsBoundary } from "@/components/BoundaryMark";
+import { METRIC_VERDICTS } from "@/pipeline/shared/display-status";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
@@ -294,6 +296,7 @@ export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, a
                   ) : null}
                   <td className="px-2 py-3">
                     <StatusBadge status={row.status} />
+                    {METRIC_VERDICTS.has(row.status) && rowIsBoundary(Object.values(row.cells)) ? <BoundaryMark /> : null}
                   </td>
                   {/* 고정 열 — 배경이 있어야 스크롤하는 가운데 열이 밑으로 지나간다. */}
                   <td className={`${pinnedCell} px-4 py-3`}>

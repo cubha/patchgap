@@ -10,6 +10,7 @@
 // 순방률·평균 등수) → 패널 하나, 원인은 그 지표 패널 안. 보드는 위치를 갖지 않아 구간 선택은 없다. 자격 없는 지표는
 // 탭을 만들지 않는다(전에는 「보고 자격을 얻은 관측 없음」 회색 칸으로 자리를 채웠다).
 
+import BoundaryMark, { rowIsBoundary } from "@/components/BoundaryMark";
 import Container from "@/components/Container";
 import type { ObservedPairLink } from "@/components/ObservationPendingNotice";
 import PageHeader from "@/components/PageHeader";
@@ -34,7 +35,7 @@ import { entityTypeLabel, fmtInt, fmtQ, isLowerBetter, metricLabel, statusLabel 
 import { delayedChangesFor, loadGameDataDiff } from "@/lib/gamedata";
 import { loadTftAssets, tftDeclarationSchedule, type TftBundle, type TftDeclaration } from "@/lib/tftData";
 import { tftDetailRows } from "@/lib/pairPages";
-import { displayStatus } from "@/pipeline/shared/display-status";
+import { displayStatus, METRIC_VERDICTS } from "@/pipeline/shared/display-status";
 import type { DeltaRecord } from "@/pipeline/types";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import { entityKeyFromSlug as unslug } from "@/lib/tftRoutes";
@@ -211,6 +212,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
               <span className="flex items-center gap-2">
                 {entityTypeLabel(row.entityType)}
                 <StatusBadge status={row.status} />
+                {METRIC_VERDICTS.has(row.status) && rowIsBoundary(Object.values(row.cells)) ? <BoundaryMark /> : null}
               </span>
             }
             lead={

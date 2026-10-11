@@ -17,6 +17,8 @@
 // 동일값)로 감쌌다 — 이전엔 rows(최대 200행)가 전부 펼쳐져 페이지 전체가 13,000px 넘게 길어졌다.
 "use client";
 
+import BoundaryMark, { rowIsBoundary } from "@/components/BoundaryMark";
+import { METRIC_VERDICTS } from "@/pipeline/shared/display-status";
 import Link from "next/link";
 import { useRowFocus } from "./useRowFocus";
 import type { DeltaRecord } from "@/pipeline/types";
@@ -215,6 +217,8 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                   {/* 고정 열 — 배경이 있어야 스크롤하는 가운데 열이 밑으로 지나간다(행 강조는 이 칸엔 안 보인다). */}
                   <td className={`${pinnedCell} px-4 py-3 font-body`}>
                     <StatusBadge status={row.status} />
+                    {/* 경계(트랙 B ST-25) — 지표 축 판정 행에서, 그린 셀이 전부 CI가 바닥을 가로지를 때. */}
+                    {METRIC_VERDICTS.has(row.status) && rowIsBoundary(Object.values(row.cells).map((c) => c.representative)) ? <BoundaryMark /> : null}
                   </td>
                 </tr>
               );

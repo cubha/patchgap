@@ -33,6 +33,8 @@
 //   ② 대상 단위 「추정 원인」 카드를 없애고 원인을 **그 지표·구간 패널 안**으로 옮겼다(원인은 델타 단위로 물었다).
 //   ③ 패치노트 대조가 좌우 2분할에서 **전체 폭**이 됐다(TFT·PUBG와 같은 한 줄).
 
+import BoundaryMark from "@/components/BoundaryMark";
+import { isBoundaryRecord } from "@/pipeline/shared/boundary";
 import Link from "next/link";
 import Container from "@/components/Container";
 import DeltaValue from "@/components/DeltaValue";
@@ -41,7 +43,7 @@ import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { delayedChangesFor, loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
-import { DISPLAY_SORT_PRIORITY, displayStatus, isNoiseStatus } from "@/pipeline/shared/display-status";
+import { DISPLAY_SORT_PRIORITY, displayStatus, isNoiseStatus, METRIC_VERDICTS } from "@/pipeline/shared/display-status";
 import { loadChampions, loadDeltas, loadDeltasRaw, loadItems, loadNotes, type PatchPair } from "@/lib/data";
 import { entityTypeLabel, fmtInt, fmtQ, itemIdFromSlug, itemSlug } from "@/lib/format";
 import { pairBasePath } from "@/lib/pairRoutes";
@@ -354,6 +356,8 @@ export default function LolItemDetail({ id, pairs, pairBase = null, otherPairs =
                 {/* 대상의 행이 전부 노이즈인 쌍(과거 쌍 상세는 그 쌍 하나만 본다)이면 뱃지를 그리지 않는다 — 노이즈 상태를
                     뱃지로 올리지 않는다. */}
                 {isNoiseStatus(head.status) ? null : <StatusBadge status={displayStatus(head, qAlpha)} />}
+                {/* 경계(트랙 B ST-25) — 대조표 행과 같은 규칙. */}
+                {!isNoiseStatus(head.status) && METRIC_VERDICTS.has(displayStatus(head, qAlpha)) && isBoundaryRecord(head) ? <BoundaryMark /> : null}
               </span>
             }
             lead={

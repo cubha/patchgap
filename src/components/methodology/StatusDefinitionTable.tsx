@@ -6,6 +6,7 @@
 // 임계값은 EFFECT_SIZE_FLOORS 전수를 주입받아 표시한다 — 화면이 코드보다 오래된 숫자를 말하는 드리프트를
 // 구조적으로 차단한다. 뱃지는 공용 StatusBadge를 재사용해 색 문법이 한 곳에서만 정의되도록 한다.
 
+import { BOUNDARY_RULE } from "@/components/BoundaryMark";
 import StatusBadge from "@/components/StatusBadge";
 import type { EffectFloor } from "@/pipeline/aggregate/stats";
 import type { DeltaMetric } from "@/pipeline/types";
@@ -127,10 +128,12 @@ export default function StatusDefinitionTable({ minN, alpha, floors }: StatusDef
           통과한 행만 쓴다. 그 규칙이 화면 어디에도 없으면 상세("공지")와 홈("유의한 관측 없음")이 서로를 반박하는
           것처럼 읽힌다. */}
       <p className="border-t border-border-soft px-5 py-4 text-xs leading-relaxed text-muted">
-        홈 카드·대조표 셀·내비 배지는 위 판정에 더해 <strong className="text-fg-2">유의성(q&lt;α)과 효과크기 바닥</strong>을 한 번
+        브리핑 카드·대조표 셀·내비 배지는 위 판정에 더해 <strong className="text-fg-2">유의성(q&lt;α)과 효과크기 바닥</strong>을 한 번
         더 통과한 행만 씁니다 — 그래서 &ldquo;공지&rdquo;로 판정된 항목도 브리핑에서는 &ldquo;유의한 관측 없음&rdquo;으로 보일 수
         있습니다. 유의성과 규모는 서로 다른 질문이고, 이 사이트는 둘을 따로 묻습니다.
       </p>
+      {/* 「경계」 표기(트랙 B ST-25) — 판정 배지 옆 보조 표기의 뜻. 세 게임 방법론이 같은 문장을 쓴다(`BOUNDARY_RULE`). */}
+      <p className="border-t border-border-soft px-5 py-4 text-xs leading-relaxed text-muted">{BOUNDARY_RULE}</p>
     </div>
   );
 }

@@ -9,6 +9,7 @@
 // 변화 분포 90번째 백분위수), 공지 일치는 비율 밴드 [0.5, 1.5], 표본 게이트는 획득 300회, q(BH-FDR)는
 // 계산하지 않는다(Wilson CI + 바닥). LLM 원인 추정은 이 게임에 없다 — 43.1 노트가 5항목이라 짝지을
 // 후보 조항 자체가 없다.
+import { BOUNDARY_RULE } from "@/components/BoundaryMark";
 import type { Metadata } from "next";
 import MethodologyLayout, { type MethodologySlots } from "@/components/methodology/MethodologyLayout";
 import ObservationPendingNotice from "@/components/ObservationPendingNotice";
@@ -237,6 +238,9 @@ export default function PubgMethodologyPage() {
             무기 전부에 있고, 판정이 서지 않은 무기는 관측 섹션이 비어 있습니다. 아래 세 상태는 판정 파일에 남되 목록·표에는
             올리지 않습니다. 예외는 수치 축의 잠수함 패치입니다 — 지표 판정이 아래 어느
             상태여도 전부 보여 주고, 배지는 <StatusBadge status="submarine" className="align-middle" />로 지표 판정을 덮습니다.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
+            {BOUNDARY_RULE}
           </p>
           <ul className="mt-3 flex flex-col gap-2 text-sm">
             <li className="flex flex-wrap items-baseline gap-2">

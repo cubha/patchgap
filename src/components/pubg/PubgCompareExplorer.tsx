@@ -10,6 +10,9 @@
 // Wilson CI 방식이라 q를 계산하지 않기 때문이다.
 "use client";
 
+import BoundaryMark from "@/components/BoundaryMark";
+import { METRIC_VERDICTS } from "@/pipeline/shared/display-status";
+import { isBoundaryPubgRow } from "@/pipeline/shared/boundary";
 import { useMemo, useState, type ReactNode } from "react";
 
 import CompareSplit from "@/components/compare/CompareSplit";
@@ -49,6 +52,8 @@ export interface PubgCompareExplorerProps {
   rows: PubgDeltaRow[];
   notes: PubgNoteItem[];
   /** 표 아래 커버리지 블록(ST-18) — 서버가 만들어 넘긴다(세 게임 공용 `CoverageSection`). */
+  /** 효과크기 바닥(쌍) — 「경계」 표기(트랙 B ST-25)가 상대 변화 CI의 보수적 끝을 여기에 견준다. 없으면 표기하지 않는다. */
+  effectFloor?: number | null;
   coverage?: ReactNode;
   fromLabel: string;
   toLabel: string;
@@ -85,6 +90,7 @@ export default function PubgCompareExplorer({
   assetKeys = [],
   submarineChanges = [],
   mismatchChanges = [],
+  effectFloor = null,
 }: PubgCompareExplorerProps) {
   const [filter, setFilter] = useState<CompareFilterKey>("all");
   const [query, setQuery] = useState("");
@@ -267,6 +273,7 @@ export default function PubgCompareExplorer({
                   ) : null}
                   <td className="sticky right-0 bg-surface py-2.5 pr-4 shadow-[inset_1px_0_0_var(--border-soft)]">
                     <StatusBadge status={statusOf(row)} />
+                    {METRIC_VERDICTS.has(statusOf(row)) && effectFloor !== null && isBoundaryPubgRow(row, effectFloor) ? <BoundaryMark /> : null}
                   </td>
                 </tr>
               ))}
