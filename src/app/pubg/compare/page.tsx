@@ -64,10 +64,10 @@ export default function PubgComparePage() {
   return (
     <main>
       <Container>
-        <div className="flex flex-col gap-6 py-8">
+        {/* 머리 틀은 LoL·TFT 대조표와 같다(트랙 B ST-16, parity-S18) — 전에는 이 화면만 eyebrow가 있고 히어로가 128px 위였다. */}
+        <div className="flex flex-col gap-6 pt-40 pb-8">
           <PageHeader
             crumbs={compareCrumbs("pubg")}
-            eyebrow="PUBG: BATTLEGROUNDS"
             title={
               <>
                 <span className="text-accent">

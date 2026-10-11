@@ -88,3 +88,20 @@ describe("패치노트 원문 링크 — 세 브리핑 같은 자리(트랙 B ST
     expect(read("components/pubg/PubgBriefing.tsx")).not.toMatch(/패치노트 원문 보기 ↗/);
   });
 });
+
+describe("대조표·방법론 머리 틀 — 세 게임 같다(트랙 B ST-16, parity-S18·parity-S29)", () => {
+  it("PUBG 대조표·방법론 머리에 eyebrow가 없고 대조표는 pt-40이다", () => {
+    const compare = read("app/pubg/compare/page.tsx");
+    expect(compare).not.toMatch(/eyebrow="PUBG: BATTLEGROUNDS"/);
+    expect(compare).toMatch(/flex flex-col gap-6 pt-40 pb-8/);
+    expect(read("app/pubg/methodology/page.tsx")).not.toMatch(/eyebrow="PUBG: BATTLEGROUNDS"/);
+  });
+  it("방법론 H1은 「{게임} — 어떻게 판정하나」", () => {
+    expect(read("app/lol/methodology/page.tsx")).toMatch(/리그 오브 레전드 — 어떻게 판정하나/);
+    expect(read("app/tft/methodology/page.tsx")).toMatch(/전략적 팀 전투 — 어떻게 판정하나/);
+    expect(read("app/pubg/methodology/page.tsx")).toMatch(/\$\{gameLabel\("pubg"\)\} — 어떻게 판정하나/);
+  });
+  it("PUBG 방법론 표본 고지는 슬롯 안 한 곳(notice 콜아웃 없음)", () => {
+    expect(read("app/pubg/methodology/page.tsx")).not.toMatch(/PubgSampleNotice/);
+  });
+});

@@ -15,7 +15,8 @@ import ObservationPendingNotice from "@/components/ObservationPendingNotice";
 import { allUnusedSlots } from "@/components/methodology/slots";
 import StatusBadge from "@/components/StatusBadge";
 import { pageMeta } from "@/lib/meta";
-import { PubgSampleNotice, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
+import { PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
+import { gameLabel } from "@/lib/game";
 import { loadPubg, loadPubgDeclaration } from "@/lib/pubgData";
 import {
   ANNOUNCED_RATIO_BAND,
@@ -24,6 +25,9 @@ import {
   redistributionExpectation,
 } from "@/pipeline/match/pubg-delta";
 import { pubgVerdictCount } from "@/pipeline/shared/headline";
+
+// 방법론 H1 틀은 세 게임이 같다 — 「{게임} — 어떻게 판정하나」(트랙 B ST-16, parity-S18). 게임명은 `gameLabel` 하나에서.
+const PUBG_TITLE = `${gameLabel("pubg")} — 어떻게 판정하나`;
 
 export const metadata: Metadata = pageMeta({ game: "pubg", screen: "methodology", path: "/pubg/methodology/" });
 
@@ -44,8 +48,7 @@ export default function PubgMethodologyPage() {
     return (
       <MethodologyLayout
         game="pubg"
-        eyebrow="PUBG: BATTLEGROUNDS"
-        title="어떻게 판정했고, 무엇을 못 했나"
+        title={PUBG_TITLE}
         lead={<>패치노트의 무기 변경을 매치 텔레메트리의 <strong className="text-fg">획득 점유율</strong> 한 축으로 대조합니다.</>}
         notice={declaration ? <ObservationPendingNotice failure={declaration.failure} /> : <PubgUnavailable />}
         slots={allUnusedSlots("관측이 있는 쌍이 아직 없어 표본·판정을 말할 수 없습니다. 판정 규칙은 LoL·TFT와 같은 엔진입니다.")}
@@ -96,6 +99,12 @@ export default function PubgMethodologyPage() {
   const slots: MethodologySlots = {
     sample: (
       <div className="flex flex-col gap-5 p-5">
+        {/* 표본 성격 고지 — 전에는 슬롯 밖 콜아웃(`notice`)으로 한 번 더 「표본」이라 말해 이 화면만 표본 라벨이 둘이었다(트랙 B ST-16,
+            parity-S29). 슬롯 안 첫 문단으로 흡수한다 — `notice`는 관측 전 고지 전용. */}
+        <p className="text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
+          {deltas.meta.sampleScope}. 지역·티어를 고정할 수 없는 API라 <strong className="text-fg">전 지역·전 티어 무작위</strong>{" "}
+          표본이며 봇이 포함됩니다(비율 병기).
+        </p>
         <div>
           <div className="p-5">
             <dl className="flex flex-col gap-2 text-sm">
@@ -403,8 +412,7 @@ export default function PubgMethodologyPage() {
   return (
     <MethodologyLayout
       game="pubg"
-      eyebrow="PUBG: BATTLEGROUNDS"
-      title="어떻게 판정했고, 무엇을 못 했나"
+      title={PUBG_TITLE}
       lead={
         <>
           {deltas.meta.to} 패치노트의 무기 변경을 매치 텔레메트리의{" "}
@@ -412,7 +420,6 @@ export default function PubgMethodologyPage() {
           데이터에서 유도하고, 판정이 서지 않는 관측은 화면에 올리지 않습니다.
         </>
       }
-      notice={<PubgSampleNotice sampleScope={deltas.meta.sampleScope} />}
       slots={slots}
       generatedAt={deltas.meta.generatedAt}
       nVerdicts={pubgVerdictCount(deltas.rows)}
