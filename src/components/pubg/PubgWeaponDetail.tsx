@@ -17,6 +17,7 @@ import { isBoundaryPubgRow } from "@/pipeline/shared/boundary";
 import { buildPubgEvidenceProse } from "@/components/pubg/evidenceProse";
 import Link from "next/link";
 import Container from "@/components/Container";
+import SiteFooter from "@/components/SiteFooter";
 import PageHeader from "@/components/PageHeader";
 import { detailCrumbs } from "@/lib/breadcrumbs";
 import SectionCard from "@/components/SectionCard";
@@ -31,7 +32,7 @@ import { ANNOUNCED_RATIO_BAND, PICKUP_MIN_N, pubgNotesAsPatchNotes, type PubgDel
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { delayedChangesFor, loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
-import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
+import { PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { isReportable, loadPubgAssets, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
 import { displayStatusOf, METRIC_VERDICTS } from "@/pipeline/shared/display-status";
 import { weaponKeyFromSlug } from "@/lib/pubgRoutes";
@@ -316,9 +317,10 @@ export default function PubgWeaponDetail({
           emptyText="보고할 관측이 없습니다."
         />
 
-        <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={pubgVerdictCount(deltas.rows)} />
       </div>
     </Container>
+    {/* 푸터는 좁은 본문 밖, 기본 폭 — LoL·TFT 상세와 같은 자리(2026-10-12 verify-impl 레이아웃 게이트: PUBG 상세만 푸터가 좁은 칸 안이었다). */}
+    <SiteFooter game="pubg" generatedAt={deltas.meta.generatedAt} nVerdicts={pubgVerdictCount(deltas.rows)} />
     </main>
   );
 }

@@ -200,6 +200,15 @@ export function landingTotals(cards: readonly GameLandingCard[]): LandingTotals 
  * 히어로 「분석한 매치」의 구성(트랙 B ST-7, lol-S14) — 합은 각 게임이 **수집한** 매치(LoL은 수집한 전 패치 합)라 카드의 쌍 전후
  * 합과 다르다. 정의를 바꾸지 않고(이미 쌓은 표본을 작게 말하지 않는다) 히어로 아래에 게임별 구성을 적는다. 관측 전 게임은 0이라 뺀다.
  */
-export function landingMatchBreakdown(cards: readonly GameLandingCard[]): { label: string; matches: number }[] {
-  return cards.filter((c) => c.matches > 0).map((c) => ({ label: c.label, matches: c.matches }));
+export function landingMatchBreakdown(
+  cards: readonly GameLandingCard[]
+): { label: string; matches: number; scope: "allPatches" | "pair" }[] {
+  // `scope` — 그 수가 카드의 쌍 전후 합과 같은가. 다르면(LoL: 수집한 전 패치) 구성 줄이 그 사실을 말해야 카드 값과 어긋나 보이지
+  // 않는다(2026-10-12 verify-impl 축B S5: 「리그 오브 레전드 35,714」 vs 카드 「5,714매치」가 설명 없이 한 화면에 있었다).
+  return cards
+    .filter((c) => c.matches > 0)
+    .map((c) => ({ label: c.label, matches: c.matches, scope: c.matches === c.pairMatches ? "pair" : "allPatches" }));
 }
+
+/** 구성 줄의 범위 꼬리표 — 카드의 쌍과 같으면 「현재 쌍」, 아니면 「수집한 전 패치」. */
+export const BREAKDOWN_SCOPE_LABEL = { pair: "현재 쌍", allPatches: "수집한 전 패치" } as const;

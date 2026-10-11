@@ -139,4 +139,11 @@ describe("매치 수 정의(트랙 B ST-7, lol-S14)", () => {
     expect(parts.reduce((s, p) => s + p.matches, 0)).toBe(landingTotals(cards).matches);
     expect(parts.map((p) => p.label)).toEqual(cards.filter((c) => c.matches > 0).map((c) => c.label));
   });
+
+  it("구성 줄이 카드 값과 다른 수에는 범위를 밝힌다 — 「현재 쌍」은 카드 값과 같을 때만(verify-impl 축B S5)", () => {
+    for (const p of landingMatchBreakdown(cards)) {
+      const card = cards.find((c) => c.label === p.label)!;
+      expect(p.scope, p.label).toBe(p.matches === card.pairMatches ? "pair" : "allPatches");
+    }
+  });
 });

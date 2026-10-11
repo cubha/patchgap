@@ -14,6 +14,7 @@
 // 스플래시는 지형도만 들고(수치는 섹션의 몫), 「많이 줍는 총」 표는 섹션 아래에 그대로 둔다.
 import Link from "next/link";
 import Container from "@/components/Container";
+import SiteFooter from "@/components/SiteFooter";
 import PageHeader from "@/components/PageHeader";
 import { detailCrumbs } from "@/lib/breadcrumbs";
 import SectionCard from "@/components/SectionCard";
@@ -24,7 +25,7 @@ import ObservationSection from "@/components/observation/ObservationSection";
 import { ALL_SEGMENT } from "@/components/observation/observationModel";
 import PubgDetailSplash from "@/components/pubg/PubgDetailSplash";
 import { mapRotationSentence } from "@/components/pubg/mapRotation";
-import { PubgFooter, PubgUnavailable, pct } from "@/components/pubg/shared";
+import { PubgUnavailable, pct } from "@/components/pubg/shared";
 import { loadPubgAssets, loadPubgMaps, pubgMapKeys, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
 import { mapKeyFromSlug, weaponHref } from "@/lib/pubgRoutes";
 import { mapIdentity, type PubgMapDeltaRow } from "@/pipeline/aggregate/pubg-maps";
@@ -294,9 +295,10 @@ export default function PubgMapDetail({
           <p className="px-5 pt-3 pb-5 text-xs text-muted">이 맵 안의 총 무기 획득 대비 점유율</p>
         </SectionCard>
 
-        <PubgFooter generatedAt={maps.deltas.meta.generatedAt} nVerdicts={pubgVerdictCount(bundle.deltas.rows)} />
       </div>
     </Container>
+    {/* 푸터는 좁은 본문 밖, 기본 폭 — LoL·TFT 상세와 같은 자리(2026-10-12 verify-impl 레이아웃 게이트: PUBG 상세만 푸터가 좁은 칸 안이었다). */}
+    <SiteFooter game="pubg" generatedAt={maps.deltas.meta.generatedAt} nVerdicts={pubgVerdictCount(bundle.deltas.rows)} />
     </main>
   );
 }

@@ -51,7 +51,7 @@ export default function CompareToolbar({
 }: CompareToolbarProps) {
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <div className="flex flex-wrap gap-2" role="group" aria-label="판정 필터">
+      <div className="flex flex-wrap gap-3" role="group" aria-label="판정 필터">
         {COMPARE_FILTERS.map((f) => (
           <FilterPill key={f.key} selected={f.key === filter} onClick={() => onFilterChange(f.key)}>
             {f.label} {counts[f.key] ?? 0}
@@ -59,7 +59,7 @@ export default function CompareToolbar({
         ))}
       </div>
       {/* 묶음 필터 — 브리핑 「미공지 Gap」 타일과 같은 수(미공지 ∪ 잠수함 ∪ 공지값 불일치). 상태 칩과 줄을 나눠 칩 합에 섞이지 않게 한다. */}
-      <div className="flex items-center gap-2 border-l border-border-soft pl-3" role="group" aria-label="묶음 필터">
+      <div className="flex items-center gap-2 sm:border-l sm:border-border-soft sm:pl-3" role="group" aria-label="묶음 필터">
         <FilterPill selected={filter === GAP_FILTER} onClick={() => onFilterChange(GAP_FILTER)}>
           {TILE_LABELS.gap} {counts[GAP_FILTER] ?? 0}
         </FilterPill>

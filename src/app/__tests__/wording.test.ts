@@ -178,16 +178,15 @@ describe("경계 표기 — 세 대조표·상세 머리·세 방법론(트랙 B
 });
 
 describe("대조표 마지막 고정 열 = 판정 — 세 게임(트랙 B ST-26, tft-S14·parity-S15)", () => {
-  it("TFT 헤더 순서가 근거 → 판정이고 판정이 고정 열", () => {
+  it("TFT 마지막 고정 열은 「판정 · 근거」 하나 — 별도 근거 열이 없다(tft-S13·tft-S14, 2026-10-12 verify-impl S1)", () => {
+    // 근거 열을 따로 두면 1280에서 표가 66–136px 넘쳐, 무엇을 고정하든 다른 열이 고정 열 밑에 깔렸다(판정만 고정 → 근거,
+    // 근거까지 고정 → 「바뀐 것」). 근거는 고정 판정 칸 안에 있어 375·1280 모두 보인다. 기하 자체는 렌더 실측으로 확인했다.
     const src = read("components/tft/TftCompareExplorer.tsx");
-    expect(src).toMatch(/\["바뀐 것", "근거", "판정"\] : \["근거", "판정"\]/);
-    expect(src).toMatch(/h === "판정" \? `\$\{pinnedCol\} \$\{verdictWidth\} px-4`/);
-  });
-  it("TFT 1280에서 근거 열이 판정 열 밑에 깔리지 않는다 — lg에서 근거도 판정 왼쪽에 고정(tft-S13 회귀, 1280 실측)", () => {
-    const src = read("components/tft/TftCompareExplorer.tsx");
-    expect(src).toMatch(/const verdictWidth = "w-40 min-w-40"/);
-    expect(src).toMatch(/const evidencePinnedLg = "lg:sticky lg:right-40 lg:bg-surface"/);
-    expect(src).toMatch(/h === "근거" \? `\$\{evidencePinnedLg\} px-2`/);
+    expect(src).toMatch(/<th className=\{`\$\{thBase\} \$\{pinnedCol\} px-4`\}>판정 · 근거<\/th>/);
+    expect(src).not.toMatch(/"근거", "판정"/);
+    expect(src).not.toMatch(/evidencePinnedLg|verdictWidth/);
+    // 근거 링크가 고정 칸 안에 있다 — 고정 칸(pinnedCell) 뒤에 원문 링크가 온다.
+    expect(src).toMatch(/<td className=\{`\$\{pinnedCell\} px-4 py-3`\}>[\s\S]*?원문 ↗[\s\S]*?<\/td>/);
   });
   it("PUBG 이름 칸 아이콘은 375폭에서 숨는다(무기명 잘림 원인, pubg-S11)", () => {
     expect(read("components/pubg/PubgCompareExplorer.tsx")).toMatch(/hideIconOnMobile/);
@@ -209,6 +208,34 @@ describe("「엔티티」→「대상」 치환 잔재 — 받침 조사(accepta
   it("노트 미해소 줄은 탭 라벨과 같은 어휘 「시스템」으로 부른다(parity-S17)", () => {
     for (const rel of ["components/tft/TftCompareView.tsx", "app/tft/methodology/page.tsx"]) {
       expect(read(rel), rel).not.toMatch(/대상이 없는 체계 변경/);
+    }
+  });
+});
+
+describe("내부 용어 「델타」를 렌더 문장에 쓰지 않는다(parity-S16·lol-S22 잔재, 2026-10-12 verify-impl S13)", () => {
+  it.each(["components/methodology/GateGrid.tsx", "components/methodology/adapterMatrixData.ts", "app/tft/methodology/page.tsx", "app/lol/methodology/page.tsx", "app/pubg/methodology/page.tsx"])("%s", (rel) => {
+    // 주석(// · {/* */} · * 줄)은 빼고 본다 — 렌더되는 문자열만.
+    const rendered = read(rel)
+      .split("\n")
+      .filter((l) => !/^\s*(\/\/|\*|\/\*|\{\/\*)/.test(l))
+      .map((l) => l.replace(/\/\/.*$/, "").replace(/\{\/\*.*?\*\/\}/g, ""))
+      .join("\n");
+    expect(rendered).not.toMatch(/델타/);
+  });
+});
+
+describe("세 게임 같은 자리 같은 규칙(2026-10-12 verify-impl 축B S2·S7)", () => {
+  it("브리핑 히어로 h1 — 어절 단위 줄바꿈(break-keep)과 같은 클래스", () => {
+    const cls = "ambient-hero-headline max-w-3xl break-keep";
+    for (const rel of ["components/home/HeroSummary.tsx", "components/tft/TftBriefing.tsx", "components/pubg/PubgBriefing.tsx", "components/DeclarationOnly.tsx"]) {
+      expect(read(rel), rel).toContain(`<h1 className="${cls}`);
+    }
+  });
+  it("상세 머리 시작 여백 — 네 상세 모두 pt-12", () => {
+    for (const rel of ["components/detail/LolItemDetail.tsx", "components/tft/TftUnitDetail.tsx", "components/pubg/PubgWeaponDetail.tsx", "components/pubg/PubgMapDetail.tsx"]) {
+      const src = read(rel);
+      expect(src, rel).toMatch(/flex flex-col gap-6 pt-12 pb-8/);
+      expect(src, rel).not.toMatch(/flex flex-col gap-[36] (pt-40|py-8)/);
     }
   });
 });

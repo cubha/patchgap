@@ -98,7 +98,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
     byGame: {
       lol: "골드@10/14 · 첫 오브젝트 시각",
       pubg: "(설계) 첫 교전 시각 · 자기장 단계별 생존",
-      tft: "(설계) 탈락 라운드 · 탈락 시각 — 수집은 되고 있으나 델타로는 아직 내지 않습니다",
+      tft: "(설계) 탈락 라운드 · 탈락 시각 — 수집은 되고 있으나 판정으로는 아직 내지 않습니다",
     },
     iface: "DeltaMetric (LoL·TFT)",
   },

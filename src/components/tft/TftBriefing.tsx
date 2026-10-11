@@ -167,17 +167,19 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
   const gapTotal = tftGapTotal(deltas.rows, deltas.meta.qAlpha, submarine);
 
   // 상세 바로가기(§8-1) — 이 패치 보드 집계에 등장한 유닛·특성·아이템 중 **상세가 있는 것**(buildEntityIndex가 거른다).
-  // 이름은 판정 산출물이 이미 들고 있다(실측 233종 중 232종). 못 찾는 1종은 키를 그대로 쓴다.
+  // 이름 출처는 아래 `nameByKey` — 둘 다에 없으면 키를 그대로 쓴다(지어낸 이름을 만들지 않는다).
   const haveAssets = assetKeySet(loadTftAssets());
   const rowIcon = tftRowIcon(haveAssets);
-  const nameByKey = new Map(deltas.rows.map((row) => [`${row.entityType}:${row.entityKey}`, tftDisplayName(row.entityKey, row.entityName)]));
   // 상세 자격은 **라우트가 실제로 만드는 집합**과 같아야 한다 — 대조표 행 생성기(`tftEntityRows`)가
   // 그 단일 소스다(2026-09-21에 이 둘이 갈려 링크 21건이 404였다).
-  const detailKeys = new Set(
-    tftEntityRows(deltas, loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to)?.changes ?? []).map(
-      (row) => row.key
-    )
-  );
+  const entityRows = tftEntityRows(deltas, loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to)?.changes ?? []);
+  const detailKeys = new Set(entityRows.map((row) => row.key));
+  // 이름은 판정 산출물 → 대조표 행(수치 축만 있는 대상 포함) 순으로 찾는다. 판정 행이 없는 대상(럭스 (나무정령) 등)이 원시 키
+  // `DA_18_Lux_Elderwood`로 보이던 것을 대조표와 같은 이름으로 맞춘다(2026-10-12 verify-impl 축B S3).
+  const nameByKey = new Map([
+    ...entityRows.map((row) => [row.key, row.name] as const),
+    ...deltas.rows.map((row) => [`${row.entityType}:${row.entityKey}`, tftDisplayName(row.entityKey, row.entityName)] as const),
+  ]);
   const indexOf = (type: string, stats: readonly { key: string }[]) =>
     buildEntityIndex(
       stats.map((stat) => ({
@@ -227,7 +229,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
             <span className="font-mono text-xs font-bold tracking-wide text-accent uppercase">
               패치노트가 말한 것 vs 통계가 말하는 것
             </span>
-            <h1 className="max-w-3xl font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
+            <h1 className="ambient-hero-headline max-w-3xl break-keep font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
               패치노트는 <span className="text-accent">{noteEntities}개 대상</span>을 말했고, 통계는{" "}
               <span className="text-accent">{reportable.length}개 변화</span>를 말합니다
             </h1>

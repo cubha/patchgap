@@ -63,7 +63,7 @@ export function DeclarationHero({ from, to, notes, failure, observed = null, sch
         <span className="font-mono text-xs font-bold tracking-wide text-accent uppercase">
           패치노트가 말한 것 vs 통계가 말하는 것
         </span>
-        <h1 className="max-w-3xl font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
+        <h1 className="ambient-hero-headline max-w-3xl break-keep font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
           {to} 패치노트는 <span className="text-accent">{entityCount ?? declarationEntityCount(notes)}개 대상</span>을 말했고,
           통계는 아직 관측 전입니다
         </h1>

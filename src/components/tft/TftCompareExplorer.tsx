@@ -199,11 +199,9 @@ export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, a
     "sticky top-0 z-10 whitespace-nowrap bg-surface py-3 text-left shadow-[inset_0_-1px_0_var(--border-soft)] font-body text-xs font-bold text-muted";
   const pinnedCol = "sticky right-0 bg-surface";
   const pinnedCell = `${pinnedCol} shadow-[inset_1px_0_0_var(--border-soft)]`;
-  // 판정 열 폭을 고정해야 lg에서 근거 열을 그 바로 왼쪽(`right-40`)에 함께 고정할 수 있다(트랙 B ST-26 회귀 수정, 1280 실측:
-  // 판정만 고정하니 표 자연폭 961px > 가용 862px에서 근거 열 1103–1184px가 판정 열 1085–1243px 밑에 깔렸다 = tft-S13 회귀).
-  // 375에서는 근거를 고정하지 않는다 — 두 열을 고정하면 이름 칸이 남지 않는다.
-  const verdictWidth = "w-40 min-w-40";
-  const evidencePinnedLg = "lg:sticky lg:right-40 lg:bg-surface";
+  // 근거(원문·추정 원인)는 **고정 판정 칸 안**에 둔다(2026-10-12 verify-impl 축B S1). 따로 열을 두면 1280에서 표 자연폭이 가용
+  // 862px를 66–136px(쌍마다 다름 — 이름 길이) 넘어, 판정만 고정하면 근거가(tft-S13), 근거까지 고정하면 「바뀐 것」이 고정 열
+  // 밑에 깔렸다. LoL·PUBG 대조표에도 별도 근거 열은 없다. 이 칸은 375·1280 모두 항상 보인다.
 
   return (
     <div className="flex flex-col gap-6">
@@ -249,21 +247,15 @@ export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, a
                 {TFT_METRICS.map((m) => (
                   <th key={m} className={`${thBase} px-2`}>
                     {metricLabel(m)}
-                    {isLowerBetter(m) ? <span className="ml-1 font-normal">(낮을수록 좋음)</span> : null}
+                    {/* 두 줄 — 한 줄이면 이 머리글이 열 폭(144px)을 정한다. */}
+                    {isLowerBetter(m) ? <span className="block font-normal">(낮을수록 좋음)</span> : null}
                   </th>
                 ))}
                 {/* 「바뀐 것」 — 수치 축(F9). 지표 열이 "지표가 어떻게 움직였나"를 말하면
                     이 열은 "게임사가 무엇을 바꿨나"를 말한다. */}
-                {/* 마지막 고정 열 = **판정**(트랙 B ST-26, tft-S14) — LoL·PUBG 대조표와 같다. 전에는 근거 열이 고정이라 375폭에서
-                    판정 배지가 가로 스크롤 뒤(x=703)에 있었다. */}
-                {(showSubmarine ? ["바뀐 것", "근거", "판정"] : ["근거", "판정"]).map((h) => (
-                  <th
-                    key={h}
-                    className={`${thBase} ${h === "판정" ? `${pinnedCol} ${verdictWidth} px-4` : h === "근거" ? `${evidencePinnedLg} px-2` : "px-2"}`}
-                  >
-                    {h}
-                  </th>
-                ))}
+                {showSubmarine ? <th className={`${thBase} px-2`}>바뀐 것</th> : null}
+                {/* 마지막 고정 열 = **판정 · 근거**(트랙 B ST-26, tft-S14·tft-S13) — 판정 고정은 LoL·PUBG 대조표와 같다. */}
+                <th className={`${thBase} ${pinnedCol} px-4`}>판정 · 근거</th>
               </tr>
             </thead>
             <tbody>
@@ -304,9 +296,15 @@ export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, a
                       <SubmarineCell changes={row.submarineChanges} mismatchChanges={row.mismatchChanges} />
                     </td>
                   ) : null}
-                  <td className={`${evidencePinnedLg} px-2 py-3`}>
-                    {/* 탭 타깃 둘(원문·추정 원인)이 세로로 붙는다 — 간격 8px 미만은 Fitts 게이트(D-UX-10) 오류. */}
-                    <div className="flex flex-col gap-2">
+                  {/* 고정 열 = 판정 · 근거 — 배경이 있어야 스크롤하는 가운데 열이 밑으로 지나간다. */}
+                  <td className={`${pinnedCell} px-4 py-3`}>
+                    {/* 경계 표시는 배지 아래로 내려갈 수 있다 — 한 줄로 묶으면 고정 칸이 200px가 되어 1280에서 표가 넘쳤다. */}
+                    <div className="flex flex-wrap items-center gap-y-1">
+                      <StatusBadge status={row.status} />
+                      {METRIC_VERDICTS.has(row.status) && rowIsBoundary(Object.values(row.cells)) ? <BoundaryMark /> : null}
+                    </div>
+                    {/* 탭 타깃 둘(원문·추정 원인)이 세로로 붙는다 — 간격 8px 미만은 Fitts 게이트(D-UX-10) 오류. gap-2(8px)는 행 높이 반올림으로 7px로 측정돼(2026-10-12 UI 게이트) gap-3. */}
+                    <div className="mt-2 flex flex-col gap-3">
                       {row.noteAnchor ? (
                         <ExternalLink href={row.noteAnchor} className="font-mono text-xs text-accent hover:underline">
                           원문 ↗
@@ -323,11 +321,6 @@ export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, a
                         </Link>
                       ) : null}
                     </div>
-                  </td>
-                  {/* 고정 열 = 판정 — 배경이 있어야 스크롤하는 가운데 열이 밑으로 지나간다. */}
-                  <td className={`${pinnedCell} ${verdictWidth} px-4 py-3`}>
-                    <StatusBadge status={row.status} />
-                    {METRIC_VERDICTS.has(row.status) && rowIsBoundary(Object.values(row.cells)) ? <BoundaryMark /> : null}
                   </td>
                 </tr>
               ))}

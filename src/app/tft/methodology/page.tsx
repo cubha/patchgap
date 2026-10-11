@@ -153,7 +153,7 @@ export default function TftMethodologyPage() {
       <dl className="px-5 pb-4">
         <Row label="유의성">
                         비율은 Newcombe 신뢰구간 + 두 비율 z검정, 평균은 정규근사. 다중비교는 Benjamini-Hochberg FDR(q&lt;0.10)로
-                        전체 델타에 <strong className="text-fg">한 번</strong> 겁니다 — 버킷별로 따로 걸면 보정이 약해집니다.
+                        전체 관측에 <strong className="text-fg">한 번</strong> 겁니다 — 버킷별로 따로 걸면 보정이 약해집니다.
                       </Row>
                       <Row label="효과크기 바닥">
                         유의하기만 하면 미공지로 올리지 않습니다. 순방률은 절대 2%p(승률과 같은 값 — 둘 다 기저 50% 이항),

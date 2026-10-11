@@ -88,7 +88,7 @@ export function EntityIndexGrid({
           <a href={item.href} className="flex h-full flex-col gap-1 p-3 transition-colors hover:bg-accent/10">
             {iconOf ? iconOf(item) : null}
             <span className="truncate font-display text-sm font-bold text-fg">{item.name}</span>
-            {item.meta ? <span className="font-mono text-xs tabular-nums text-muted">{item.meta}</span> : null}
+            {item.meta ? <span className="truncate font-mono text-xs tabular-nums text-muted">{item.meta}</span> : null}
           </a>
         </li>
       ))}

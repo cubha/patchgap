@@ -334,7 +334,7 @@ export default function LolItemDetail({ id, pairs, pairBase = null, otherPairs =
       <main>
         {/* width="narrow"(1040px) — 전역 Container(1320px)는 그대로 두고 이 페이지만 좁힌다.
             1440px에서 우측 여백이 넓어져 .ambient-duo(상세 스플래시) 가시 면적이 실제로 늘어난다. */}
-        <Container width="narrow" className="flex flex-col gap-6 py-8">
+        <Container width="narrow" className="flex flex-col gap-6 pt-12 pb-8">
           {/* 제목은 **대상 이름**이다 — 지표를 붙이지 않는다(§8-5). 지표는 아래 관측 섹션의 탭이 말한다. */}
           <PageHeader
             crumbs={detailCrumbs("lol", head.entityName, pairBase)}

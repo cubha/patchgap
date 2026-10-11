@@ -291,14 +291,16 @@ export default function Header({ chrome }: HeaderProps) {
             {pairs.length === 1 ? (
               // 쌍이 하나뿐이면 고를 것이 없다 — 드롭다운 모양(화살표·select)을 두지 않고 정적 라벨(트랙 B ST-21, pubg-S19). 이유 문구는
               // 아래 힌트가 그대로 말한다.
-              <span className="flex min-h-8 items-center gap-2">
+              <span className="flex min-h-8 items-center gap-2 max-md:ml-auto">
                 <span className="text-xs font-bold text-muted">패치</span>
                 <span data-pair-static aria-describedby="pair-select-hint" className="px-2 text-xs font-bold text-fg">
                   {pairLabel(pairs[0])}
                 </span>
               </span>
             ) : (
-              <label className="flex min-h-8 items-center gap-2">
+              // max-md:ml-auto — 모바일 둘째 줄에서 패치 선택을 오른쪽 여백선에 붙인다. 쌍 라벨 길이에 따라 끝이 여백선 20px 안쪽에
+              // 떠 「거의 맞춘」 선이 됐다(2026-10-12 레이아웃 게이트 D-ALIGN-01 /lol/@375, 트랙 B 이전부터).
+              <label className="flex min-h-8 items-center gap-2 max-md:ml-auto">
                 <span className="text-xs font-bold text-muted">패치</span>
                 <select
                   className="min-h-8 rounded-sm border border-border bg-surface px-2 text-xs font-bold text-fg disabled:cursor-not-allowed disabled:opacity-70"

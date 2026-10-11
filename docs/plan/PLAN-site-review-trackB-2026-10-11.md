@@ -75,6 +75,7 @@
 - ST-24(tft-S10·tft-S9) 칩 2종 + 타일 착지 `#gap`: `toolbarRules.test.ts` 칩 세트 4→6·`#gap` 케이스 추가, `render.test.tsx` aria-pressed 10→13, `screen-parity.test.ts`·`pair-routes.test.ts`·history-links 2종의 타일 착지 기대값 `#unannounced`→`#gap`(타일이 세는 묶음과 착지 결과 수를 같게).
 - 인수 판정 후속(acceptance-critic): `wording.test.ts` 받침 조사 가드 + 「시스템」 어휘 가드 추가(신규, 기존 단언 변경 없음). `announcedCount.test.ts` `require` → `import`(eslint, 단언 변경 없음).
 - 렌더 실측 후속(tft-S13 회귀): ST-26이 판정만 고정해 1280에서 근거 열(1103–1184px)이 판정 열(1085–1243px) 밑에 깔렸다. `wording.test.ts` ST-26 가드의 고정 열 단언을 `${verdictWidth}` 포함 형태로 바꾸고, lg 근거 고정 단언을 추가했다(판정 고정이라는 의도는 그대로).
+- verify-impl 축B S1(2026-10-12): lg 근거 고정도 「바뀐 것」 열을 판정·근거 밑에 깔았다(표 자연폭 1280에서 쌍마다 66–136px 초과). TFT 근거를 **고정 판정 칸 안**으로 옮겨 열 하나를 없앴다(LoL·PUBG에도 별도 근거 열 없음). `wording.test.ts` ST-26 가드 두 개를 「마지막 고정 열 = 판정 · 근거 하나, 별도 근거 열 없음」 하나로 교체(이전 단언 = 폐기된 구조).
 
 ## ⑦ 사용자 결정 대기 (인수 판정에서 드러난 충돌 — 구현자가 임의로 정하지 않음)
 

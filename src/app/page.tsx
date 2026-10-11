@@ -14,7 +14,7 @@ import Container from "@/components/Container";
 import AdapterMatrix from "@/components/methodology/AdapterMatrix";
 import { panelSurfaceClass } from "@/lib/panelSurface";
 import { fmtInt } from "@/lib/format";
-import { landingCards, landingMatchBreakdown, landingTotals } from "@/lib/landing";
+import { BREAKDOWN_SCOPE_LABEL, landingCards, landingMatchBreakdown, landingTotals } from "@/lib/landing";
 import SiteFooter from "@/components/SiteFooter";
 import { TILE_LABELS } from "@/components/StatTiles";
 
@@ -98,11 +98,11 @@ export default function LandingPage() {
             </div>
           </div>
           {/* 「분석한 매치」 구성(트랙 B ST-7, lol-S14) — 카드의 쌍 전후 합과 다른 수(수집한 전 패치)라 무엇의 합인지 밝힌다. */}
-          <p data-landing-breakdown className="mx-auto mt-3 max-w-xl text-xs text-muted">
-            분석한 매치 = 각 게임이 수집한 매치 ·{" "}
+          <p data-landing-breakdown className="ambient-hero-sub mx-auto mt-3 max-w-xl text-xs text-fg-2">
+            분석한 매치 ={" "}
             {landingMatchBreakdown(cards)
-              .map((p) => `${p.label} ${fmtInt(p.matches)}`)
-              .join(" · ")}
+              .map((p) => `${p.label} ${fmtInt(p.matches)}(${BREAKDOWN_SCOPE_LABEL[p.scope]})`)
+              .join(" + ")}
           </p>
         </Container>
 
@@ -134,8 +134,14 @@ export default function LandingPage() {
                       {card.tag}
                     </span>
                     <span className="mt-1.5 font-display text-xl font-bold text-fg">{card.label}</span>
-                    <span className="mt-1 font-mono text-xs text-fg-2">
-                      {card.pair.from} → {card.pair.to} · {card.sample}
+                    {/* 구분점 단위로 끊는다 — 줄 끝에 「·」가 매달리거나 숫자와 「매치」가 갈라지지 않게(2026-10-12 verify-impl 축B S11). */}
+                    <span className="mt-1 flex flex-wrap gap-x-1.5 font-mono text-xs text-fg-2">
+                      {[`${card.pair.from} → ${card.pair.to}`, ...card.sample.split(" · ")].map((seg, i) => (
+                        <span key={seg} className="whitespace-nowrap">
+                          {i > 0 ? "· " : ""}
+                          {seg}
+                        </span>
+                      ))}
                     </span>
                     <span className="mt-3.5 flex gap-4">
                       <span>

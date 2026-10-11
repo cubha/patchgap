@@ -301,7 +301,9 @@ export default function ReleaseNoteStream({
         // <ul>이 아니라 부모 <section>에 있다 — 탭 행도 같은 레일 아래 들어오게 하려는 것.
         // wrap-anywhere(상속) — 대상 이름·관측 문장·원인 문장에 끊김 없는 긴 토큰이 와도 그 자리에서 끊는다. 없으면 그 토큰의
         // 최소 폭이 스트림 칸 전체를 밀어 페이지가 가로로 2,700px까지 늘었다(2026-10-07 레이아웃 게이트 D-STRESS-01).
-        <ul className="min-h-0 flex-1 overflow-y-auto wrap-anywhere">
+        // flex-1 없음(2026-10-12 verify-impl 축B S4) — 늘어나면 목록이 짧을 때 마지막 행과 커버리지 문단 사이가 192px 비었다. min-h-0과
+        // 기본 flex-shrink로 칸이 좁을 때는 여전히 줄어들어 스크롤한다. 남는 높이는 패널 맨 아래로 간다.
+        <ul className="min-h-0 overflow-y-auto wrap-anywhere">
           {/* 2026-09-19: 라인 필터 결과가 0건인데 "기타 변경"이 있으면, 이전엔 위 빈 상태 분기가
               걸리지 않아 **안내 없이 무관한 블록만** 남았다(사용자가 고른 라인에 대해 아무 말도
               하지 않는 화면). 목록 머리에 한 줄로 말한다 — 기타 변경 줄에는 라인 축이 원리적으로

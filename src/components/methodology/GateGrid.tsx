@@ -26,7 +26,7 @@ export default function GateGrid({ minN, alpha }: GateGridProps) {
     },
     {
       title: "2차축",
-      body: `승률. n≥${minN} 게이트를 통과해야 델타를 제시하며, 미달 시 "표본 부족"으로 표기.`,
+      body: `승률. n≥${minN} 게이트를 통과해야 변화를 제시하며, 미달 시 "표본 부족"으로 표기.`,
     },
     {
       title: "신뢰구간",
