@@ -70,7 +70,7 @@ function buildHiddenRows(minN: number, alpha: number, floors: Record<DeltaMetric
     },
     {
       status: "insufficient-sample",
-      definition: `최소 표본(n≥${minN}) 미달 — 승률 델타를 제시하지 않는다`,
+      definition: `최소 표본(n≥${minN}) 미달 — 승률 변화를 제시하지 않습니다`,
       condition: `n<${minN}`,
     },
     {
@@ -117,18 +117,18 @@ export default function StatusDefinitionTable({ minN, alpha, floors }: StatusDef
           <Rows rows={shown} />
           <tr>
             <th colSpan={3} className="border-b border-border-soft bg-surface-warm/40 px-5 py-2 text-left text-xs font-bold text-muted">
-              표시하지 않는 관측 — 판정 파일에는 남고 홈·대조표·상세에는 올리지 않는다
+              표시하지 않는 관측 — 판정 파일에는 남고 브리핑·대조표·상세에는 올리지 않습니다
             </th>
           </tr>
           <Rows rows={hidden} />
         </tbody>
       </table>
-      {/* 표시 게이트 고지(S7) — 홈 카드·대조표 셀·내비 배지는 위 판정에 더해 유의성·효과크기 바닥을 한 번 더
+      {/* 표시 게이트 고지(S7) — 브리핑 카드·대조표 셀·내비 배지는 위 판정에 더해 유의성·효과크기 바닥을 한 번 더
           통과한 행만 쓴다. 그 규칙이 화면 어디에도 없으면 상세("공지")와 홈("유의한 관측 없음")이 서로를 반박하는
           것처럼 읽힌다. */}
       <p className="border-t border-border-soft px-5 py-4 text-xs leading-relaxed text-muted">
         홈 카드·대조표 셀·내비 배지는 위 판정에 더해 <strong className="text-fg-2">유의성(q&lt;α)과 효과크기 바닥</strong>을 한 번
-        더 통과한 행만 씁니다 — 그래서 &ldquo;공지&rdquo;로 판정된 항목도 홈에서는 &ldquo;유의한 관측 없음&rdquo;으로 보일 수
+        더 통과한 행만 씁니다 — 그래서 &ldquo;공지&rdquo;로 판정된 항목도 브리핑에서는 &ldquo;유의한 관측 없음&rdquo;으로 보일 수
         있습니다. 유의성과 규모는 서로 다른 질문이고, 이 사이트는 둘을 따로 묻습니다.
       </p>
     </div>

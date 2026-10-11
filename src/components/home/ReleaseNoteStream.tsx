@@ -46,7 +46,7 @@ import { segmentStream } from "./streamSegments";
 import AnnouncedCoverageLine from "./AnnouncedCoverageLine";
 import MiscChangesSection from "./MiscChangesSection";
 import type { MiscSection } from "./miscSections";
-import { BriefingTabBar, DEFAULT_BRIEFING_TAB } from "@/components/BriefingTabs";
+import { BriefingTabBar, DEFAULT_BRIEFING_TAB, GAP_METRIC_AXIS_TITLE } from "@/components/BriefingTabs";
 
 type StreamTab = "content" | "gap";
 
@@ -250,7 +250,7 @@ export default function ReleaseNoteStream({
               대신 문구로 갈래를 가르기로 한 이상, 문구가 양쪽에 다 있어야 그 판단이 성립한다. */}
           <div className="flex items-baseline gap-2 border-b border-border-soft px-5 py-3">
             <span className="text-xs font-bold text-muted">발견 · 지표 축</span>
-            <h3 className="font-display text-sm font-bold text-fg">패치노트에 없는데 움직인 것</h3>
+            <h3 className="font-display text-sm font-bold text-fg">{GAP_METRIC_AXIS_TITLE}</h3>
             <span className="ml-auto font-mono text-xs text-muted">{metricGapCount}건</span>
           </div>
         </>

@@ -37,7 +37,7 @@ import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import StatTiles from "@/components/StatTiles";
 import DiscordPanel from "@/components/home/DiscordPanel";
 import MobileActionBar from "@/components/home/MobileActionBar";
-import BriefingTabs from "@/components/BriefingTabs";
+import BriefingTabs, { GAP_METRIC_AXIS_TITLE } from "@/components/BriefingTabs";
 import BriefingRowList from "@/components/BriefingRowList";
 import AnnouncedCoverageLine from "@/components/home/AnnouncedCoverageLine";
 import EntityIndexSection, { ENTITY_INDEX_CELL, ENTITY_INDEX_GRID } from "@/components/EntityIndexSection";
@@ -240,7 +240,7 @@ export default function PubgBriefing({
                 ) : null}
                 <SectionCard
                   eyebrow="발견 · 지표 축"
-                  title="공지에 없는데 움직였습니다"
+                  title={GAP_METRIC_AXIS_TITLE}
                   variant="embedded"
                   action={<span className="font-mono text-xs text-muted">대상 {unannounced.length}종</span>}
                 >

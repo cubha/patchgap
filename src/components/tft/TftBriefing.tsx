@@ -38,7 +38,7 @@ import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import StatTiles from "@/components/StatTiles";
 import DiscordPanel from "@/components/home/DiscordPanel";
 import MobileActionBar from "@/components/home/MobileActionBar";
-import BriefingTabs from "@/components/BriefingTabs";
+import BriefingTabs, { GAP_METRIC_AXIS_TITLE } from "@/components/BriefingTabs";
 import BriefingRowList from "@/components/BriefingRowList";
 import AnnouncedCoverageLine from "@/components/home/AnnouncedCoverageLine";
 import EntityIcon from "@/components/EntityIcon";
@@ -326,7 +326,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
 
                   <SectionCard
                     eyebrow="발견 · 지표 축"
-                    title="패치노트에 없는데 움직인 것"
+                    title={GAP_METRIC_AXIS_TITLE}
                     variant="embedded"
                     action={<span className="font-mono text-xs text-muted">대상 {unannouncedEntities}종</span>}
                   >
@@ -427,7 +427,7 @@ function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
                     <SubmarineSection summary={submarine} hrefOf={() => null} />
                   </div>
                 ) : null}
-                <SectionCard eyebrow="발견 · 지표 축" title="패치노트에 없는데 움직인 것" variant="embedded">
+                <SectionCard eyebrow="발견 · 지표 축" title={GAP_METRIC_AXIS_TITLE} variant="embedded">
                   <p role="status" data-observation={declaration.failure.reason} className="p-5 text-sm leading-relaxed text-muted">
                     {observationReasonLabel(declaration.failure.reason)}
                   </p>
