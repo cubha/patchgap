@@ -48,3 +48,16 @@ describe("렌더 문구", () => {
     expect(bad.map((f) => path.relative(SRC, f))).toEqual([]);
   });
 });
+
+describe("브리핑 탭 머리 — 세 게임 같은 상수(트랙 B ST-10·ST-13, parity-S25·parity-S9)", () => {
+  const files = ["components/home/ReleaseNoteStream.tsx", "components/tft/TftBriefing.tsx", "components/pubg/PubgBriefing.tsx"];
+  it.each(files)("%s — 패치 내용 머리·Gap 지표 축 제목을 상수로", (rel) => {
+    const src = read(rel);
+    expect(src).toMatch(/\{CONTENT_TAB_TITLE\}/);
+    expect(src).toMatch(/\{GAP_METRIC_AXIS_TITLE\}/);
+    expect(src).not.toMatch(/공지에 없는데 움직였습니다/);
+  });
+  it("LoL 접힌 행에 유형 줄이 있다(parity-S9 — TFT·PUBG 행과 같은 구성)", () => {
+    expect(read("components/home/ReleaseNoteRow.tsx")).toMatch(/data-row-type/);
+  });
+});

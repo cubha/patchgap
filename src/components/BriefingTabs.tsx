@@ -29,6 +29,8 @@ export const BRIEFING_TAB_ORDER: readonly BriefingTabKey[] = ["content", "gap"];
 export const DEFAULT_BRIEFING_TAB: BriefingTabKey = "content";
 /** 미공지 Gap 탭의 지표 축 섹션 제목 — 세 게임이 이 하나를 쓴다(트랙 B ST-10, parity-S25: PUBG만 「공지에 없는데 움직였습니다」였다). */
 export const GAP_METRIC_AXIS_TITLE = "패치노트에 없는데 움직인 것";
+/** 패치 내용 탭의 머리 — 세 게임이 이 하나를 쓴다(트랙 B ST-13, parity-S9: LoL만 머리가 없었다). */
+export const CONTENT_TAB_TITLE = "공지된 변경은 실제로 그렇게 됐나";
 
 export interface BriefingTabsProps {
   /** 공지 대조 — 첫 탭·기본 선택(`BRIEFING_TAB_ORDER`). */

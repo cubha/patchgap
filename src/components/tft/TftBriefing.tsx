@@ -38,7 +38,7 @@ import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import StatTiles from "@/components/StatTiles";
 import DiscordPanel from "@/components/home/DiscordPanel";
 import MobileActionBar from "@/components/home/MobileActionBar";
-import BriefingTabs, { GAP_METRIC_AXIS_TITLE } from "@/components/BriefingTabs";
+import BriefingTabs, { CONTENT_TAB_TITLE, GAP_METRIC_AXIS_TITLE } from "@/components/BriefingTabs";
 import BriefingRowList from "@/components/BriefingRowList";
 import AnnouncedCoverageLine from "@/components/home/AnnouncedCoverageLine";
 import EntityIcon from "@/components/EntityIcon";
@@ -290,7 +290,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
               content={
                 <SectionCard
                   eyebrow="대조"
-                  title="공지된 변경은 실제로 그렇게 됐나"
+                  title={CONTENT_TAB_TITLE}
                   variant="embedded"
                   action={<span className="font-mono text-xs text-muted">대상 {announcedObserved}종</span>}
                 >

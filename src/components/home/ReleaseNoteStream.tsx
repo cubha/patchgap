@@ -46,7 +46,7 @@ import { segmentStream } from "./streamSegments";
 import AnnouncedCoverageLine from "./AnnouncedCoverageLine";
 import MiscChangesSection from "./MiscChangesSection";
 import type { MiscSection } from "./miscSections";
-import { BriefingTabBar, DEFAULT_BRIEFING_TAB, GAP_METRIC_AXIS_TITLE } from "@/components/BriefingTabs";
+import { BriefingTabBar, CONTENT_TAB_TITLE, DEFAULT_BRIEFING_TAB, GAP_METRIC_AXIS_TITLE } from "@/components/BriefingTabs";
 
 type StreamTab = "content" | "gap";
 
@@ -238,6 +238,14 @@ export default function ReleaseNoteStream({
         gapCount={gapCount}
         className="flex gap-2 border-b border-border-soft px-5 pt-4"
       />
+
+      {/* 패치 내용 탭 머리(트랙 B ST-13, parity-S9) — TFT·PUBG 카드의 「대조 · 공지된 변경은 실제로 그렇게 됐나」와 같은 자리·같은 말. */}
+      {tab === "content" ? (
+        <div className="flex items-baseline gap-2 border-b border-border-soft px-5 py-3">
+          <span className="text-xs font-bold text-muted">대조</span>
+          <h3 className="font-display text-sm font-bold text-fg">{CONTENT_TAB_TITLE}</h3>
+        </div>
+      ) : null}
 
       {/* 수치 축 — Gap 탭의 위쪽 갈래. 목록이 0건이어도(아래 빈 상태 분기) 사라지면 안 되므로
           분기 **바깥**에 둔다. 라인 필터의 영향을 받지 않는다 — 원본 수치에는 라인 축이 없다. */}
