@@ -337,6 +337,7 @@ describe("§8-3 대조표 — 세 게임이 같은 도구와 골격을 쓴다", 
     // 전제는 여기서 잰다(칩 키를 바꾸면 세 타일이 동시에 죽는다).
     // 2026-10-11 명세 변경(트랙 B ST-24, tft-S10·tft-S9): 타일은 미공지 ∪ 수치 축을 세므로 착지도 그 묶음(`#gap`) — 「미공지」 칩이면 TFT에서 35 vs 30이었다.
     expect(GAP_FILTER).toBe("gap");
+    expect(COMPARE_FILTER_KEYS).not.toContain(GAP_FILTER); // 묶음은 상태 칩이 아니다 — 칩 합 불변식 밖
     for (const id of GAME_IDS) {
       expect(gapHrefOf(id)).toBe(`/${id}/compare/#gap`);
     }
