@@ -10,21 +10,15 @@
 import { countAnnouncedObservedEntities } from "@/pipeline/shared/headline";
 import { isGapStatus } from "@/pipeline/shared/status-order";
 import { isDisplayExcludedNote } from "@/pipeline/shared/excluded-notes";
-import type { DeltaRecord, PatchNoteItem, PatchNoteSection } from "@/pipeline/types";
+import type { DeltaRecord, PatchNoteItem } from "@/pipeline/types";
 import type { NotesFile } from "@/lib/data";
 import { countRelevantNoteEntities } from "@/components/home/logic";
 import { DISPLAY_SORT_PRIORITY, displayStatus, type DisplayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "./entityRows";
 import type { StreamEntityIcon } from "@/components/home/releaseStreamEntity";
-import type { NoteNavItem } from "./noteNav";
+import { noteSectionLabel, type NoteNavItem } from "./noteNav";
 
 
-/** 좌 내비게이터 섹션 라벨 — 프로토타입은 챔피언/아이템/시스템 3종만 두고 "기타"는 없다. */
-export const NAV_SECTION_LABEL: Partial<Record<PatchNoteSection, string>> = {
-  champion: "챔피언",
-  item: "아이템",
-  system: "시스템",
-};
 
 
 /**
@@ -44,7 +38,7 @@ export function lolNoteNavItems(
       id: n.id,
       entity: n.entity,
       section: n.section,
-      sectionLabel: NAV_SECTION_LABEL[n.section] ?? n.section,
+      sectionLabel: noteSectionLabel("lol", n.section),
       summary: n.summary,
       detail: n.skill ?? n.stat,
       icon: icons[n.id] ?? null,

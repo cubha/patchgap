@@ -56,7 +56,8 @@ function note(overrides: Partial<PatchNoteItem>): PatchNoteItem {
 describe("DeltaTable — 빈 상태(rows=[])", () => {
   it("델타가 없다는 문구를 렌더하고 헤더는 엔티티·지표 4·상태 = 6열이다(2026-09-18 라운드6: 지표·버전 열 제거)", () => {
     const { container } = render(<DeltaTable pair={null} rows={[]} focusKey={null} />);
-    expect(container.textContent).toContain("표시할 델타가 없습니다");
+    // 2026-10-11 명세 변경(트랙 B ST-5, lol-S22·parity-S16): 개발 용어 「델타」·「엔티티」 → 사용자 말 「변화」·「대상」.
+    expect(container.textContent).toContain("표시할 변화가 없습니다");
     expect(container.querySelectorAll("th")).toHaveLength(6);
   });
 });
@@ -240,7 +241,8 @@ describe("CompareExplorer — 통합", () => {
     // 표에 올리지 않는 상태의 칩이라 함께 없앴다(배지 1종 = 칩 1종 불변식 유지).
     expect(container.querySelectorAll("[aria-pressed]")).toHaveLength(10);
     expect(container.querySelector('[aria-label="라인 필터"]')).not.toBeNull();
-    expect(container.textContent).toContain("표시할 델타가 없습니다");
+    // 2026-10-11 명세 변경(트랙 B ST-5, lol-S22·parity-S16): 개발 용어 「델타」·「엔티티」 → 사용자 말 「변화」·「대상」.
+    expect(container.textContent).toContain("표시할 변화가 없습니다");
     expect(container.textContent).toContain("노트 0대상(0항목)");
   });
 

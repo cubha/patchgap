@@ -142,7 +142,7 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
           <tr>
             <th scope="col" className={`${thBase} px-4`}>
               {/* 버전 이동은 여기 한 번만 — 열마다 "26.17"·"26.18"을 두지 않는다(L3). */}
-              엔티티 <span className="ml-1 font-mono font-normal">{fromLabel} → {toLabel}</span>
+              대상 <span className="ml-1 font-mono font-normal">{fromLabel} → {toLabel}</span>
             </th>
             {ENTITY_METRICS.map((metric) => (
               <th key={metric} scope="col" className={`${thBase} px-2`}>
@@ -169,7 +169,7 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                 colSpan={ENTITY_METRICS.length + (showSubmarine ? 3 : 2)}
                 className="px-4 py-8 text-center font-body text-sm text-muted"
               >
-                표시할 델타가 없습니다
+                표시할 변화가 없습니다
               </td>
             </tr>
           ) : (

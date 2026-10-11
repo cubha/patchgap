@@ -65,3 +65,4 @@
 - `src/components/compare/__tests__/logic.test.ts` `computeCoverage` — 「관측 짝」이 공지 행 수에서 공지 대상 중 관측이 선 대상 수로(ST-3, 실측 「17대상 중 94」). 픽스처 행에 노트 짝 부여.
 - `src/components/home/__tests__/render.test.tsx` — 히어로 「0개 항목」→「0개 대상」(ST-3, tft-S5).
 - `src/app/pubg/__tests__/page-order.test.tsx` — 타일 부제 「(43.1 패치노트)」→「(43.1 패치노트 · N개 항목)」(ST-3, parity-S6).
+- `src/components/compare/__tests__/render.test.tsx` 2곳 — 빈 상태 「표시할 델타가 없습니다」→「표시할 변화가 없습니다」(ST-5, lol-S22·parity-S16 사용자 어휘).

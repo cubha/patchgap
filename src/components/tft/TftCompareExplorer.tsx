@@ -27,6 +27,7 @@ import {
   filterNoteNavGroups,
   groupNoteNavItems,
   noteNavSections,
+  noteSectionLabel,
   type NoteNavGroup,
   type NoteNavItem,
 } from "@/components/compare/noteNav";
@@ -44,12 +45,6 @@ import { DISPLAY_SORT_PRIORITY, type DisplayStatus } from "@/pipeline/shared/dis
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import type { DeltaMetric, PatchNoteItem } from "@/pipeline/types";
 
-/** TFT 노트 섹션 → 화면 라벨. 「챔피언」이 아니라 「유닛」이다 — 이 게임의 어휘를 쓴다. */
-const SECTION_LABEL: Record<string, string> = {
-  champion: "유닛",
-  item: "아이템",
-  system: "체계",
-};
 
 export interface TftCompareExplorerProps {
   rows: TftEntityRow[];
@@ -131,7 +126,7 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
       id: n.id,
       entity: n.entity,
       section: n.section,
-      sectionLabel: SECTION_LABEL[n.section] ?? n.section,
+      sectionLabel: noteSectionLabel("tft", n.section),
       summary: n.summary,
       detail: n.skill ?? n.stat,
     }));
