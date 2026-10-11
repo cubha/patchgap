@@ -1,0 +1,27 @@
+{
+  "deltaId": "unit:DA_18_Morgana:playRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "87e726e47bb93ef199f42e24007575f0317f28ddf876e08a6c01006c4d68985b",
+  "generatedAt": "2026-10-11T02:40:48.777Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.4:system:달빛:b2df7696",
+        "text": "모르가나가 달빛 소속이라면 주문력 7/10/14/18%→7/12/16/20% 상향이 채용을 늘렸을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "모르가나 등장률은 9.6%→14.4%로 4.8%p 올랐고(CI 4.1~5.4%p), 달빛 주문력 상향이 간접 원인일 수 있습니다.",
+    "summaryCites": [
+      "note:tft:18.4:system:달빛:b2df7696"
+    ]
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 10928,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 537
+  },
+  "proseRepairAttempts": 0
+}

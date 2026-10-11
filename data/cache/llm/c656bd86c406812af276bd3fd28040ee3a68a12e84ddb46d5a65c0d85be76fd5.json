@@ -1,0 +1,19 @@
+{
+  "deltaId": "trait:DA_18_Coven:playRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "87e726e47bb93ef199f42e24007575f0317f28ddf876e08a6c01006c4d68985b",
+  "generatedAt": "2026-10-11T02:42:02.776Z",
+  "parsed": {
+    "causes": [],
+    "summary": "패치노트에서 이 변화를 설명할 조항을 찾지 못했습니다",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 10928,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 362
+  },
+  "proseRepairAttempts": 0
+}

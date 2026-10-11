@@ -1,0 +1,37 @@
+{
+  "deltaId": "item:DA_GuinsoosRagebladeRadiant:playRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "87e726e47bb93ef199f42e24007575f0317f28ddf876e08a6c01006c4d68985b",
+  "generatedAt": "2026-10-11T02:42:33.740Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.4:champion:바루스:7d8e7f60",
+        "text": "바루스 공격 속도가 0.7%에서 0.75%로 올라 격노검 수요가 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.4:champion:심술두꺼비:f2584cbc",
+        "text": "심술두꺼비 공격력 형태의 공격 속도 상향이 격노검 채용을 늘렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.4:champion:자야:c2290459",
+        "text": "자야 스킬 피해량 상향으로 공속 캐리 기용이 늘어 격노검 등장이 오른 것으로 보입니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "찬란한 구인수의 격노검 등장률이 0.7%→1.1%(+0.4%p)로 올랐고, 바루스 공격 속도 상향이 원인일 수 있습니다.",
+    "summaryCites": [
+      "note:tft:18.4:champion:바루스:7d8e7f60"
+    ]
+  },
+  "usage": {
+    "inputTokens": 140,
+    "cacheReadInputTokens": 10928,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 832
+  },
+  "proseRepairAttempts": 0
+}

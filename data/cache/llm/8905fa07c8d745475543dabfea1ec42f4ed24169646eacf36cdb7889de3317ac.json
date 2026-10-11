@@ -1,0 +1,33 @@
+{
+  "deltaId": "unit:DA_18_Sivir:playRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "87e726e47bb93ef199f42e24007575f0317f28ddf876e08a6c01006c4d68985b",
+  "generatedAt": "2026-10-11T02:42:47.705Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.4:champion:트리스타나:a6dc87dc",
+        "text": "트리스타나 스킬 피해량 강화로 공격력 아이템 수요가 옮겨가 시비르 채용이 줄었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.4:champion:드레이븐:526526e2",
+        "text": "드레이븐 출혈 피해량 강화로 공격력 캐리 자리를 빼앗겼을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "시비르는 강화됐지만 등장률이 14.7%에서 9.0%로 -5.7%p 줄었고, 트리스타나·드레이븐 강화로 캐리 수요가 분산된 영향이 의심됩니다.",
+    "summaryCites": [
+      "note:tft:18.4:champion:트리스타나:a6dc87dc",
+      "note:tft:18.4:champion:드레이븐:526526e2"
+    ]
+  },
+  "usage": {
+    "inputTokens": 133,
+    "cacheReadInputTokens": 10928,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 644
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,25 @@
+{
+  "deltaId": "trait:DA_18_Fae:playRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "87e726e47bb93ef199f42e24007575f0317f28ddf876e08a6c01006c4d68985b",
+  "generatedAt": "2026-10-11T02:43:02.846Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.4:system:나무정령:781be380",
+        "text": "나무정령 (9) 식물 체력 계수가 155%에서 140%로 하향되어 일부 수요가 요정으로 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요정은 하향에도 등장률이 6.6%에서 9.7%로 3.1%p 올랐으며, 이 변화를 설명할 근거는 약합니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 10928,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 614
+  },
+  "proseRepairAttempts": 0
+}

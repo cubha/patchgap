@@ -1,0 +1,30 @@
+{
+  "deltaId": "unit:DA_18_Rengar:top4Rate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "87e726e47bb93ef199f42e24007575f0317f28ddf876e08a6c01006c4d68985b",
+  "generatedAt": "2026-10-11T02:42:40.559Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.4:champion:트리스타나:a6dc87dc",
+        "text": "트리스타나 등 공격력 딜러 상향으로 경쟁 덱이 강해져 렝가의 순방률이 밀렸을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:tft:18.4:champion:드레이븐:526526e2",
+        "text": "드레이븐 출혈 피해 상향도 공격력 딜러 간 경쟁을 키운 요인으로 짐작됩니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "렝가는 3성 피해 상향에도 표본이 620→905로 늘며 순방률이 55.8%→49.8%로 6.0%p 하락했습니다.",
+    "summaryCites": []
+  },
+  "usage": {
+    "inputTokens": 131,
+    "cacheReadInputTokens": 10928,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 589
+  },
+  "proseRepairAttempts": 0
+}

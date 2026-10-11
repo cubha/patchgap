@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-30T15:13:07.538Z",
+  "generatedAt": "2026-10-11T02:38:22.023Z",
   "source": "Data Dragon (tft-champion · tft-trait · tft-item)",
-  "version": "16.19.1",
+  "version": "16.20.1",
   "assets": {
     "unit": [
       "DA_18_Ahri",
@@ -27,6 +27,9 @@
       "DA_18_LeBlanc",
       "DA_18_Leona",
       "DA_18_Lillia",
+      "DA_18_Lux_Elderwood",
+      "DA_18_Lux_Moonbeam",
+      "DA_18_Lux_Primal",
       "DA_18_Malphite",
       "DA_18_Maokai",
       "DA_18_MasterYi_AD",
@@ -56,7 +59,7 @@
       "DA_Karma18",
       "DA_KogMaw18_AD",
       "DA_Lux18_Base",
-      "DA_Lux18_Blackthorn",
+      "DA_Lux18_Blossom",
       "DA_Nidalee18_AP",
       "DA_Taric18",
       "DA_Vi18"
@@ -206,6 +209,7 @@
       "DA_LastWhisper",
       "DA_LastWhisperRadiant",
       "DA_ManaPotion18",
+      "DA_ManaPotion18_Radiant",
       "DA_Morellonomicon",
       "DA_MorellonomiconRadiant",
       "DA_NashorsTooth",

@@ -1,0 +1,27 @@
+{
+  "deltaId": "unit:DA_Vi18:playRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "87e726e47bb93ef199f42e24007575f0317f28ddf876e08a6c01006c4d68985b",
+  "generatedAt": "2026-10-11T02:39:26.130Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:tft:18.4:system:전쟁기계:f79e5ef4",
+        "text": "바이가 전쟁기계 소속이라면 내구력 하향(45%→42%)이 채용을 줄였을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "바이 등장률이 33.8%에서 22.7%로 11.1%p 급감했으며, 전쟁기계 내구력 하향과 연관이 있는지는 불확실합니다.",
+    "summaryCites": [
+      "note:tft:18.4:system:전쟁기계:f79e5ef4"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 10928,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 508
+  },
+  "proseRepairAttempts": 0
+}
