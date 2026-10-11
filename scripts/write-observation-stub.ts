@@ -1,6 +1,7 @@
 // scripts/write-observation-stub.ts
 // 관측 stub 판정 파일 쓰기(2026-09-28, C13·C14 — 사용자 결정 D5·D6).
 // 실행: npx tsx scripts/write-observation-stub.ts --game tft --from 18.3 --to 18.4 --reason awaiting-observation [--detail "…"]
+//       부분 수집: --reason collecting --progress '[{"patch":"18.4","stored":813,"target":2500}]'
 //
 // 수집 워크플로의 선언 경로(패치 직후·키 없음)와 관측 실패 경로(`if: failure()`)가 부른다. 규칙은
 // `src/pipeline/shared/observation-stub.ts`에 있고 여기는 I/O뿐이다.
@@ -10,8 +11,8 @@
 // 화면에 빈 쌍만 올린다(그건 stub이 아니라 결함이다).
 import fs from "node:fs";
 import path from "node:path";
-import { buildObservationStub, deltasStateOf } from "../src/pipeline/shared/observation-stub";
-import type { ObservationFailReason } from "../src/pipeline/types";
+import { buildObservationStub, deltasStateOf, parseObservationProgress } from "../src/pipeline/shared/observation-stub";
+import type { ObservationFailReason, ObservationProgress } from "../src/pipeline/types";
 import { isMainModule, parseCliArgs } from "./shared/cli";
 
 const REASONS: readonly ObservationFailReason[] = [
@@ -21,6 +22,7 @@ const REASONS: readonly ObservationFailReason[] = [
   "key-missing",
   "crashed",
   "window-lost",
+  "collecting",
 ];
 
 function isReason(value: string): value is ObservationFailReason {
@@ -58,7 +60,8 @@ export function writeObservationStub(
   from: string,
   to: string,
   reason: ObservationFailReason,
-  detail: string
+  detail: string,
+  progress?: readonly ObservationProgress[]
 ): boolean {
   const target = stubTarget(game, dataRoot, from, to);
   if (!fs.existsSync(target.notesFile)) {
@@ -67,7 +70,8 @@ export function writeObservationStub(
   const existing = fs.existsSync(target.observedFile) ? (JSON.parse(fs.readFileSync(target.observedFile, "utf8")) as unknown) : null;
   if (deltasStateOf(existing, from, to).kind === "observed") return false;
   const notes = JSON.parse(fs.readFileSync(target.notesFile, "utf8")) as { items?: unknown[] };
-  const stub = buildObservationStub(game, from, to, { reason, detail, at: new Date().toISOString() }, notes.items?.length ?? 0);
+  const failure = { reason, detail, at: new Date().toISOString(), ...(progress && progress.length > 0 ? { progress: [...progress] } : {}) };
+  const stub = buildObservationStub(game, from, to, failure, notes.items?.length ?? 0);
   fs.mkdirSync(path.dirname(target.deltasFile), { recursive: true });
   fs.writeFileSync(target.deltasFile, `${JSON.stringify(stub, null, 2)}\n`, "utf8");
   return true;
@@ -80,13 +84,16 @@ function main(): void {
     { name: "to", type: "patch", required: true },
     { name: "reason", type: "string", required: true },
     { name: "detail", type: "string", default: "" },
+    { name: "progress", type: "string" },
     { name: "dataRoot", type: "string", default: "data" },
   ]);
   const game = String(raw.game);
   const reason = String(raw.reason);
   if (game !== "tft" && game !== "pubg") throw new Error(`write-observation-stub: --game은 tft|pubg: ${game}`);
   if (!isReason(reason)) throw new Error(`write-observation-stub: 모르는 사유: ${reason}`);
-  const wrote = writeObservationStub(game, String(raw.dataRoot), String(raw.from), String(raw.to), reason, String(raw.detail));
+  // 빈 문자열은 "진행 없음"(부분 수집이 아닌 선언 경로에서 워크플로가 빈 출력을 넘긴다).
+  const progress = typeof raw.progress === "string" && raw.progress.trim() !== "" ? parseObservationProgress(raw.progress) : undefined;
+  const wrote = writeObservationStub(game, String(raw.dataRoot), String(raw.from), String(raw.to), reason, String(raw.detail), progress);
   console.log(
     wrote
       ? `[observation-stub] ${game} ${String(raw.from)} → ${String(raw.to)} stub 기록(${reason})`

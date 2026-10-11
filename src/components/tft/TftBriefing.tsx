@@ -25,7 +25,7 @@ import { tftGapTotal, tftMetricGapRows } from "@/lib/gapTotals";
 import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
 import { DeclarationHero, DeclarationNotesCard, declarationEntityCount } from "@/components/DeclarationOnly";
 import NewerPatchNotice from "@/components/NewerPatchNotice";
-import { etaLabelKst, tftObservationEta } from "@/lib/observationEta";
+import { tftObservationSchedule, type ObservationSchedule } from "@/lib/observationEta";
 import { pairBasePath, pairSectionHref, pairSectionLink } from "@/lib/pairRoutes";
 import { latestObservedTftPair } from "@/lib/tftData";
 import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
@@ -250,8 +250,9 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
               key={`${d.from}-${d.to}`}
               patch={d.to}
               reason={d.failure.reason}
+              progress={d.failure.progress}
               entityCount={declarationEntityCount(d.notes.items.map((n) => ({ id: n.id, group: n.entity, summary: n.summary, anchorUrl: n.anchorUrl })))}
-              eta={etaOf(d)}
+              schedule={scheduleOf(d)}
               href={pairSectionHref("tft", "", pairBasePath("tft", { from: d.from, to: d.to }))}
             />
           ))}
@@ -375,13 +376,12 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
  * 선언 축만 있는 쌍(C13·C14)의 홈 — 노트와 수치 축(F9)만, 관측 영역은 회색 사유. 기본 내보내기 **아래**에
  * 두는 이유: 화면 동등성 테스트가 첫 `return (`부터의 JSX 순서를 본다(본 브리핑의 블록 순서 계약).
  */
-/** 첫 관측 예정 — 대기(`awaiting-observation`)일 때만 날짜가 뜻이 있다(키 만료·크래시는 날짜가 아니라 조치가 답이다). */
-function etaOf(declaration: TftDeclaration): string | null {
-  if (declaration.failure.reason !== "awaiting-observation") return null;
-  const iso = tftObservationEta(declaration.to);
-  // 빌드 시각이 예정을 지났는데 아직 stub이면(실행 지연·실패) 지난 날짜를 "부터"라고 말하지 않는다(scope-critic ST-4).
-  if (!iso || Date.parse(iso) <= Date.now()) return null;
-  return etaLabelKst(iso);
+/**
+ * 관측 일정 — 대기·수집 중일 때만 날짜가 뜻이 있다(키 만료·크래시는 날짜가 아니라 조치가 답이다). 지난 예정은 "부터"라고 말하지
+ * 않고(scope-critic ST-4) 다음 수집 시각으로 바꿔 말한다 — 전에는 null로 떨어져 「표본이 쌓이면」만 남았다(2026-10-11).
+ */
+function scheduleOf(declaration: TftDeclaration): ObservationSchedule | null {
+  return tftObservationSchedule(declaration.failure, declaration.to);
 }
 
 function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
@@ -404,7 +404,7 @@ function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
             notes={notes}
             failure={declaration.failure}
             observed={observedLink}
-            eta={etaOf(declaration)}
+            schedule={scheduleOf(declaration)}
           />
           <StatTiles
             announcedCount={declarationEntityCount(notes)}

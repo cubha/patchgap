@@ -160,7 +160,7 @@ export default function PubgBriefing({
 
           {/* 홈보다 새 패치노트(관측 stub = declaration.json)가 있으면 여기서 말한다 — 홈은 완성된 분석을 그리고, 새 노트는 원문으로
               한 클릭(PUBG는 과거 쌍 라우트가 없다). 날짜는 두지 않는다 — PUBG 관측은 N일차가 아니라 수확 창 규칙이다. */}
-          {newer ? <NewerPatchNotice patch={newer.to} reason={newer.failure.reason} entityCount={newer.notes.length} eta={null} href={newer.sourceUrl} /> : null}
+          {newer ? <NewerPatchNotice patch={newer.to} reason={newer.failure.reason} entityCount={newer.notes.length} schedule={null} href={newer.sourceUrl} /> : null}
 
           {/* 3타일은 세 게임 공통 컴포넌트가 그린다(UX-BRIEF §8-1). PUBG 대조표는 상태 칩이
               있어 `#unannounced` 앵커가 실제로 걸린다. */}

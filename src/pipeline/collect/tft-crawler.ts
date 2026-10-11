@@ -98,6 +98,31 @@ export function spanOf(windows: readonly TftPatchWindow[]): { startMs: number; e
   return { startMs: Number.isFinite(start) ? start : 0, endMs: end };
 }
 
+/**
+ * 이번 실행이 돌 창 — `patches`가 있으면 그 패치만(캘린더 순서 유지), 없으면 전부(로컬 수동 수집).
+ * 2026-10-11 실측: 전 창을 돌면 raw 캐시가 휘발된 날 지난 세트(18.1·18.2)까지 2,500매치씩 다시 채우느라 이번 쌍의
+ * `to` 패치가 실행당 수백 건밖에 안 늘었다(10회 실행). 워크플로는 관측 쌍 `from,to`만 넘긴다.
+ * 캘린더에 없는 패치를 지정하면 던진다 — 0개 창을 조용히 돌면 "수집했다"는 초록불만 남는다.
+ */
+export function selectTftWindows(windows: readonly TftPatchWindow[], patches: readonly string[] | undefined): TftPatchWindow[] {
+  if (patches === undefined) return [...windows];
+  const missing = patches.filter((p) => !windows.some((w) => w.patch === p));
+  if (missing.length > 0) throw new Error(`selectTftWindows: 캘린더에 없는 패치 ${missing.join(", ")}`);
+  return windows.filter((w) => patches.includes(w.patch));
+}
+
+/** 창 하나의 수집 진행 — 부분 수집 stub(`ObservationFailure.progress`)과 같은 모양. */
+export interface TftCrawlProgressEntry {
+  patch: string;
+  stored: number;
+  target: number;
+}
+
+/** 적재 수를 목표로 잘라(목표 초과분은 진행에 의미가 없다) 창마다 돌려준다. */
+export function crawlProgress(storedByPatch: Record<string, number>, target: number): TftCrawlProgressEntry[] {
+  return Object.entries(storedByPatch).map(([patch, n]) => ({ patch, stored: Math.min(n, target), target }));
+}
+
 export function rawTftFile(patch: string, outDir: string): string {
   return path.join(outDir, `matches-${patch.replace(/\./g, "-")}.jsonl`);
 }
@@ -186,13 +211,16 @@ export async function crawlTft(options: TftCrawlOptions): Promise<TftCrawlResult
       onProgress?.({ phase: "seed", stored: 0, skipped: 0, detail: `${tier} → 누적 ${seeds}명` });
     }
 
-    const span = spanOf(windows);
     const done = () => windows.every((w) => (storedByPatch[w.patch] ?? 0) >= targetPerPatch);
+    // 조회 범위는 **아직 목표에 못 미친 창**만 덮는다(2026-10-11 실측 — 이미 찬 `from` 창까지 덮으면 ID 대부분이 그 창
+    // 매치라 `getMatch`를 받아 놓고 버린다. 리밋이 병목이라 그건 그대로 시간 누수다). 다 찼으면 조회하지 않는다.
+    const pending = windows.filter((w) => (storedByPatch[w.patch] ?? 0) < targetPerPatch);
+    const span = spanOf(pending);
 
     // ── 2. 매치 ID ───────────────────────────────────────────────────────
     const ids: string[] = [];
-    for (const puuid of puuids) {
-      if (ids.length >= targetPerPatch * windows.length * 2) break;
+    for (const puuid of pending.length === 0 ? [] : puuids) {
+      if (ids.length >= targetPerPatch * pending.length * 2) break;
       if (pastDeadline()) break;
       const page = await client.getMatchIdsByPuuid(puuid, {
         startTime: span.startMs,

@@ -538,6 +538,8 @@ export interface DeltasFile {
  *  - `key-expired`·`product-unapproved`·`key-missing`: 관측할 차례인데 키가 없다(사람 조치 필요 여부가 다르다).
  *  - `crashed`: 관측 단계가 죽었다(빨간 X는 유지되고, 선언 축만 커밋된다).
  *  - `window-lost`: 원천 보존창을 넘겨 관측이 영영 불가능하다(PUBG 336시간).
+ *  - `collecting`: 관측할 차례라 수집을 돌았지만 실행 마감 전에 표본 목표를 못 채웠다 — 다음 실행이 이어 받는다(2026-10-11,
+ *    TFT 75분 마감). `awaiting-observation`과 가른 이유: 예정일이 지난 뒤 「대기」로 남으면 수집 중과 고장을 구별할 수 없다.
  */
 export type ObservationFailReason =
   | "awaiting-observation"
@@ -545,13 +547,23 @@ export type ObservationFailReason =
   | "product-unapproved"
   | "key-missing"
   | "crashed"
-  | "window-lost";
+  | "window-lost"
+  | "collecting";
+
+/** 부분 수집 진행 한 칸 — 패치 창 하나의 적재/목표(`collecting`일 때). */
+export interface ObservationProgress {
+  patch: string;
+  stored: number;
+  target: number;
+}
 
 /** 판정 파일 `meta.observationFailed` — 이 값이 있으면 rows는 비어 있고 관측 영역은 회색 사유로 그린다. */
 export interface ObservationFailure {
   reason: ObservationFailReason;
   detail: string;
   at: string;
+  /** `collecting`일 때 창별 진행 — 화면이 「18.4 813/2,500매치」로 말한다. */
+  progress?: ObservationProgress[];
 }
 
 /**

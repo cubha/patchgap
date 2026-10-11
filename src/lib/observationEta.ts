@@ -11,6 +11,7 @@ import { mergeTftWindows } from "@/pipeline/collect/calendar-overlay";
 import type { TftPatchWindow } from "@/pipeline/collect/tft-crawler";
 import { TFT_PATCH_WINDOWS, observationDayOf } from "@/pipeline/collect/tft-patch-calendar";
 import { readJsonIfExists } from "@/pipeline/shared/json-file";
+import type { ObservationFailure } from "@/pipeline/types";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -55,4 +56,35 @@ export function etaLabelKst(iso: string): string {
   const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
   const hour = get("hour") === "24" ? "00" : get("hour");
   return `${get("month")}/${get("day")}(${get("weekday")}) ${hour}:${get("minute")} KST`;
+}
+
+/** 화면이 말하는 관측 일정 — `first`: 「첫 관측은 X 예정」, `next`: 「다음 수집은 X 예정」. */
+export interface ObservationSchedule {
+  kind: "first" | "next";
+  /** 「10/10(토) 06:00 KST」 */
+  label: string;
+}
+
+/**
+ * 관측 stub의 일정(2026-10-11). 대기(`awaiting-observation`)·수집 중(`collecting`)이면 **늘** 다음 실행 시각을 말한다 — 전에는 예정이
+ * 지나면 null이 되어 화면이 「표본이 쌓이면」만 말했고(75분 마감 부분 수집, 10/10~11), 사람은 수집 중과 고장을 가를 수 없었다.
+ *  - 대기 + 예정이 빌드 시각 이후 → `first`(예정 시각). 예정이 지났으면 → `next`(빌드 이후 첫 cron — 그 실행이 관측을 다시 시도한다).
+ *  - 수집 중 → `next`(다음 cron이 `ids-seen`으로 이어 받는다).
+ *  - 키 만료·크래시 등 → null(날짜가 아니라 조치가 답이다). 캘린더에 없는 패치의 대기도 null(날짜를 지어내지 않는다).
+ */
+export function tftObservationSchedule(
+  failure: ObservationFailure,
+  patch: string,
+  nowMs: number = Date.now(),
+  windows: readonly TftPatchWindow[] = loadTftWindowsForWeb()
+): ObservationSchedule | null {
+  const next = (): ObservationSchedule => ({
+    kind: "next",
+    label: etaLabelKst(new Date(nextCronAfter(nowMs, TFT_COLLECT_CRON_HOUR_UTC)).toISOString()),
+  });
+  if (failure.reason === "collecting") return next();
+  if (failure.reason !== "awaiting-observation") return null;
+  const planned = tftObservationEta(patch, windows);
+  if (planned === null) return null;
+  return Date.parse(planned) > nowMs ? { kind: "first", label: etaLabelKst(planned) } : next();
 }

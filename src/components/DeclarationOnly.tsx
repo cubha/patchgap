@@ -13,6 +13,7 @@
 // 링크를 단다(전에는 "TFT 홈에서 볼 수 있습니다"라는 링크 아닌 문장뿐이었다).
 import type { ReactNode } from "react";
 import ExternalLink from "@/components/ExternalLink";
+import type { ObservationSchedule } from "@/lib/observationEta";
 import ObservationPendingNotice, { type ObservedPairLink } from "@/components/ObservationPendingNotice";
 import SectionCard from "@/components/SectionCard";
 import type { ObservationFailure } from "@/pipeline/types";
@@ -48,12 +49,12 @@ export interface DeclarationHeroProps {
   failure: ObservationFailure;
   /** 관측이 있는 최신 쌍으로 가는 링크 — 배너가 단다. 없으면 문장만. */
   observed?: ObservedPairLink | null;
-  /** 첫 관측 실행 예정 「10/10(토) 06:00 KST」 — 배너가 날짜를 말한다(PLAN-home-observed-pair ST-4). */
-  eta?: string | null;
+  /** 관측 일정 — 배너가 「첫 관측」·「다음 수집」 날짜를 말한다(PLAN-home-observed-pair ST-4, 2026-10-11 수집 중 확장). */
+  schedule?: ObservationSchedule | null;
 }
 
 /** 문장 1줄 + 캡션 + 관측 전 배너 — 관측 브리핑의 히어로와 같은 자리·같은 크기. */
-export function DeclarationHero({ from, to, notes, failure, observed = null, eta = null }: DeclarationHeroProps) {
+export function DeclarationHero({ from, to, notes, failure, observed = null, schedule = null }: DeclarationHeroProps) {
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -71,7 +72,7 @@ export function DeclarationHero({ from, to, notes, failure, observed = null, eta
         </p>
       </div>
 
-      <ObservationPendingNotice failure={failure} observed={observed} eta={eta} />
+      <ObservationPendingNotice failure={failure} observed={observed} schedule={schedule} />
     </>
   );
 }
@@ -114,10 +115,10 @@ export interface DeclarationOnlyProps extends DeclarationHeroProps {
 }
 
 /** 머리 + 노트 카드 + 보충 — 골격 없이 세로로 쌓는 기본 조합(PUBG 홈). TFT 홈은 조각을 따로 받아 골격 안에 둔다. */
-export default function DeclarationOnly({ from, to, notes, failure, observed = null, eta = null, extra }: DeclarationOnlyProps) {
+export default function DeclarationOnly({ from, to, notes, failure, observed = null, schedule = null, extra }: DeclarationOnlyProps) {
   return (
     <div className="flex flex-col gap-6 pt-40 pb-8">
-      <DeclarationHero from={from} to={to} notes={notes} failure={failure} observed={observed} eta={eta} />
+      <DeclarationHero from={from} to={to} notes={notes} failure={failure} observed={observed} schedule={schedule} />
       <DeclarationNotesCard to={to} notes={notes} />
       {extra}
     </div>
