@@ -14,7 +14,7 @@ import Container from "@/components/Container";
 import AdapterMatrix from "@/components/methodology/AdapterMatrix";
 import { panelSurfaceClass } from "@/lib/panelSurface";
 import { fmtInt } from "@/lib/format";
-import { landingCards, landingTotals } from "@/lib/landing";
+import { landingCards, landingMatchBreakdown, landingTotals } from "@/lib/landing";
 import SiteFooter from "@/components/SiteFooter";
 import { TILE_LABELS } from "@/components/StatTiles";
 
@@ -97,6 +97,13 @@ export default function LandingPage() {
               <span className="text-xs text-muted">{TILE_LABELS.gap}</span>
             </div>
           </div>
+          {/* 「분석한 매치」 구성(트랙 B ST-7, lol-S14) — 카드의 쌍 전후 합과 다른 수(수집한 전 패치)라 무엇의 합인지 밝힌다. */}
+          <p data-landing-breakdown className="mx-auto mt-3 max-w-xl text-xs text-muted">
+            분석한 매치 = 각 게임이 수집한 매치 ·{" "}
+            {landingMatchBreakdown(cards)
+              .map((p) => `${p.label} ${fmtInt(p.matches)}`)
+              .join(" · ")}
+          </p>
         </Container>
 
         <Container className="landing-hero-content pb-14">

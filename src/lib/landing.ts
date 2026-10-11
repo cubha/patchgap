@@ -79,15 +79,17 @@ function lolSummary(): LandingSummary | null {
   // 분석한 매치는 **수집한 모든 패치**의 합이다 — 현재 쌍(2개)만 세면 이미 쌓아 둔 표본을
   // 작게 말하게 된다. summary가 없는 패치는 0으로 흡수한다(빈 데이터 빌드 보장).
   const matches = listPatches().reduce((sum, patch) => sum + (loadSummary(patch)?.data.matches ?? 0), 0);
-  const nAfter = loadSummary(pair.to)?.data.matches ?? 0;
+  // 카드 표본 줄은 **그 쌍의 전후 합**(트랙 B ST-7, lol-S14) — 전에는 사후만이라 전후 합을 쓰는 PUBG·TFT 카드와 정의가 달랐다.
+  const pairMatches = (loadSummary(pair.from)?.data.matches ?? 0) + (loadSummary(pair.to)?.data.matches ?? 0);
 
   return {
     pair,
-    sample: `KR · Master+ · ${fmtInt(nAfter)}매치`,
+    sample: `KR · Master+ · ${fmtInt(pairMatches)}매치`,
     announced: headline.noteEntityCount,
     significant: headline.statCount,
     unannounced: lolGapTotal(deltas.rows, summarizeGameData(loadGameDataDiff("lol", pair.from, pair.to))),
     matches,
+    pairMatches,
   };
 }
 
@@ -109,6 +111,7 @@ function pubgSummary(): LandingSummary | null {
     // 게임 홈 「미공지 Gap」 타일과 **같은 함수**(2026-09-28, D2) — 통계 Gap 무기 ∪ 수치 축 무기.
     unannounced: pubgGapTotal(deltas.rows, summarizeGameData(loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to))),
     matches,
+    pairMatches: matches,
   };
 }
 
@@ -121,7 +124,7 @@ function pubgSummary(): LandingSummary | null {
  * 단위가 달랐다). 셈은 각 게임 브리핑과 **같은 식**이다: TFT = `TftBriefing` noteEntities, PUBG = `PubgBriefing` noteTargets.
  */
 function declarationSummary(declaration: { from: string; to: string }, announced: number): LandingSummary {
-  return { pair: { from: declaration.from, to: declaration.to }, sample: "관측 전", announced, significant: null, unannounced: null, matches: 0 };
+  return { pair: { from: declaration.from, to: declaration.to }, sample: "관측 전", announced, significant: null, unannounced: null, matches: 0, pairMatches: 0 };
 }
 
 function tftSummary(): LandingSummary | null {
@@ -146,6 +149,7 @@ function tftSummary(): LandingSummary | null {
     // ∪ 수치 축 대상. 전에는 원시 status 행 수라 홈 타일(대상 수·합집합)과 달랐다.
     unannounced: tftGapTotal(deltas.rows, deltas.meta.qAlpha, summarizeGameData(loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to))),
     matches,
+    pairMatches: matches,
   };
 }
 
@@ -189,7 +193,10 @@ export function landingTotals(cards: readonly GameLandingCard[]): LandingTotals 
   );
 }
 
+/**
+ * 히어로 「분석한 매치」의 구성(트랙 B ST-7, lol-S14) — 합은 각 게임이 **수집한** 매치(LoL은 수집한 전 패치 합)라 카드의 쌍 전후
+ * 합과 다르다. 정의를 바꾸지 않고(이미 쌓은 표본을 작게 말하지 않는다) 히어로 아래에 게임별 구성을 적는다. 관측 전 게임은 0이라 뺀다.
+ */
 export function landingMatchBreakdown(cards: readonly GameLandingCard[]): { label: string; matches: number }[] {
-  void cards;
-  throw new Error("TODO(landing): landingMatchBreakdown");
+  return cards.filter((c) => c.matches > 0).map((c) => ({ label: c.label, matches: c.matches }));
 }

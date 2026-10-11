@@ -9,6 +9,7 @@
 
 import LaneGlyph from "@/components/LaneGlyph";
 import SectionCard from "@/components/SectionCard";
+import { TILE_LABELS } from "@/components/StatTiles";
 import { fmtInt } from "@/lib/format";
 import type { LaneDistributionRow } from "./laneDistribution";
 
@@ -43,7 +44,7 @@ export default function LaneGapPanel({ rows, scope = null }: LaneGapPanelProps) 
       )}
       {scope ? (
         <p data-lane-scope className="border-t border-border-soft px-5 py-3 text-xs leading-relaxed text-muted">
-          미공지 Gap <strong className="text-fg-2">{fmtInt(scope.gapTotal)}</strong> 중 라인 구분{" "}
+          {TILE_LABELS.gap} <strong className="text-fg-2">{fmtInt(scope.gapTotal)}</strong> 중 라인 구분{" "}
           <strong className="text-fg-2">{fmtInt(scope.covered)}</strong>대상 · 그 밖(밴률·아이템·수치 축){" "}
           <strong className="text-fg-2">{fmtInt(scope.other)}</strong>대상
         </p>
