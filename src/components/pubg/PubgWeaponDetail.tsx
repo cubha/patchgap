@@ -29,7 +29,6 @@ import { ANNOUNCED_RATIO_BAND, PICKUP_MIN_N, pubgNotesAsPatchNotes, type PubgDel
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { delayedChangesFor, loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
-import PubgDetailSplash from "@/components/pubg/PubgDetailSplash";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { isReportable, loadPubgAssets, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
 import { displayStatusOf } from "@/pipeline/shared/display-status";
@@ -68,7 +67,7 @@ export default function PubgWeaponDetail({
   if (!bundle) {
     return (
       <main>
-      <Container>
+      <Container width="narrow">
         <PubgUnavailable failure={declaration?.failure} />
       </Container>
     </main>
@@ -86,7 +85,7 @@ export default function PubgWeaponDetail({
   if (!weaponKey || !statAfter) {
     return (
       <main>
-      <Container>
+      <Container width="narrow">
         <div className="py-12">
           <h1 className="font-display text-2xl font-bold text-fg">알 수 없는 무기</h1>
           <p className="mt-3 text-sm text-muted">
@@ -199,7 +198,7 @@ export default function PubgWeaponDetail({
 
   return (
     <main>
-      <Container>
+      <Container width="narrow">
       <div className="flex flex-col gap-6 pt-12 pb-8">
 
         {/* 이동 경로 + h1은 `PageHeader`가 소유한다(§8-7 #1·#8): 전에는 이 화면에 h1이 없고
@@ -246,14 +245,9 @@ export default function PubgWeaponDetail({
           // 액션 줄 없음(2026-10-08 사용자 결정, LolItemDetail 주석 참고) — §7-1 바인딩 상세 = 없음(열람).
         />
 
-        {/* 유형·이름·판정은 위 머리가 소유한다(§8-1) — 여기 다시 그리면 한 화면에서
-            이름이 세 번 반복된다. 이 카드는 렌더 이미지와 수치만 든다. */}
-        <PubgDetailSplash
-          imageSrc={hasRender ? publicWeaponPath(weaponKey) : null}
-          fit="contain"
-          fallbackMark={statAfter.weaponName}
-          stats={[]}
-        />
+        {/* 렌더 카드(스플래시)는 뺐다(트랙 B ST-17, pubg-S10·parity-S23) — 머리 아래 약 260px을 무기 그림 하나가 차지해 판정 근거
+            (CI·게이트)가 첫 화면 밖으로 밀렸고, §8-3-1 골격(머리 → 패치노트 대조)에서 이 상세만 사이에 카드가 하나 더 있었다.
+            무기 그림은 머리 아이콘이 이미 그린다. */}
 
         {/* B안(2026-09-21 사용자 확정) — 세 게임이 같은 자리에 같은 제목을 쓴다. PUBG 상세에는
             선언 카드가 없었고 노트가 판정 줄에만 있었다 — 두 구획을 가지려면 카드가 필요하다.

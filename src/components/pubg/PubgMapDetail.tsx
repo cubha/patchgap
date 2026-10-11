@@ -117,7 +117,7 @@ export default function PubgMapDetail({
   if (!bundle || !maps) {
     return (
       <main>
-      <Container>
+      <Container width="narrow">
         <PubgUnavailable failure={declaration?.failure} />
       </Container>
     </main>
@@ -132,7 +132,7 @@ export default function PubgMapDetail({
   if (!mapKey || !shown) {
     return (
       <main>
-      <Container>
+      <Container width="narrow">
         <div className="py-12">
           <h1 className="font-display text-2xl font-bold text-fg">알 수 없는 맵</h1>
           <p className="mt-3 text-sm text-muted">
@@ -190,7 +190,7 @@ export default function PubgMapDetail({
                   { label: "n(후) 매치", value: delta.n.after.toLocaleString() },
                   { label: "판정", value: `없음 — ${to} 패치노트에 맵 항목 없음` },
                 ]}
-                gateLink={{ href: "/pubg/methodology/", label: "방법론 보기 →" }}
+                gateLink={{ href: "/pubg/methodology/", label: "판정 규칙 보기 →" }}
                 source={null}
                 causes={
                   <p className="pt-3 text-sm text-muted">판정이 없어 원인을 추정하지 않습니다 — {rotation}</p>
@@ -204,7 +204,7 @@ export default function PubgMapDetail({
 
   return (
     <main>
-      <Container>
+      <Container width="narrow">
       <div className="flex flex-col gap-6 pt-12 pb-8">
 
         {/* 이동 경로 + h1은 `PageHeader`가 소유한다(§8-7 #1·#8): 전에는 이 화면에 h1이 없고
@@ -221,20 +221,14 @@ export default function PubgMapDetail({
           }
           lead={
             // 맵에는 통계 판정 행이 없다 — 없는 판정을 있는 것처럼 쓰지 않고 관측값만 말한다.
+            // 머리 문장 첫머리에 쌍(트랙 B ST-17, parity-S24) — 다른 세 상세와 같다.
             oneSided
-              ? "한쪽 구간에만 표본이 잡혀 두 패치를 비교하지 않았습니다."
-              : `${bundle.deltas.meta.to} 패치노트에 맵 항목이 없어 판정 없이 관측값만 표시합니다.`
+              ? `${bundle.deltas.meta.from} → ${bundle.deltas.meta.to} · 한쪽 구간에만 표본이 잡혀 두 패치를 비교하지 않았습니다.`
+              : `${bundle.deltas.meta.from} → ${bundle.deltas.meta.to} · 패치노트에 맵 항목이 없어 판정 없이 관측값만 표시합니다.`
           }
           // 액션 줄 없음(2026-10-08 사용자 결정, LolItemDetail 주석 참고) — §7-1 바인딩 상세 = 없음(열람).
         />
 
-        {/* 유형·이름·판정은 위 머리가 소유한다(§8-1). 이 카드는 지형도와 수치만 든다. */}
-        <PubgDetailSplash
-          imageSrc={hasRender ? publicMapPath(identity.assetName) : null}
-          fit="cover"
-          fallbackMark={identity.koName}
-          stats={[]}
-        />
 
         {/* 선언 대조 — 네 상세가 같은 골격이다(머리 → 패치노트 대조 → 관측, 2026-10-07 화면 대조 V6). 맵은 노트가 말한
             항목이 0건이라 그 사실을 같은 자리에서 말한다 — 머리 문장으로만 흡수하면 이 상세만 섹션이 하나 빈다. */}
@@ -245,16 +239,27 @@ export default function PubgMapDetail({
           action={<span className="font-mono text-xs text-muted">말한 것 0</span>}
         >
           <p className="px-5 py-4 text-sm text-muted">
-            {to} 패치노트에 이 맵을 언급한 항목이 없습니다. 그래서 아래 관측은 판정 없이 값만 보입니다.
+            {to} 패치노트에 이 맵을 언급한 항목이 없습니다.
+            {/* 「값만 보입니다」는 볼 값이 있을 때만(트랙 B ST-17, pubg-S15 — 미라마는 지표 0개인데 관측을 약속했다). */}
+            {oneSided ? "" : " 그래서 아래 관측은 판정 없이 값만 보입니다."}
           </p>
         </SectionCard>
+
+        {/* 지형도는 패치노트 대조 **뒤**(트랙 B ST-17, parity-S23) — §8-3-1 골격은 머리 → 패치노트 대조 → 관측이다. */}
+        <PubgDetailSplash
+          imageSrc={hasRender ? publicMapPath(identity.assetName) : null}
+          fit="cover"
+          fallbackMark={identity.koName}
+          stats={[]}
+        />
+
 
         <ObservationSection
           mode="descriptive"
           metrics={metrics}
           initial={metrics.length > 0 ? { metric: metrics[0].key, segment: ALL_SEGMENT } : null}
           segmentLabel={null}
-          noSegmentNote={`판정 없음 — ${to} 패치노트에 맵 항목이 없어 관측값만 보입니다`}
+          noSegmentNote={oneSided ? `판정 없음 — 두 패치를 비교하지 않았습니다` : `판정 없음 — ${to} 패치노트에 맵 항목이 없어 관측값만 보입니다`}
           emptyText={`이 맵은 한쪽 구간에만 표본이 잡혀 두 패치를 비교하지 않았습니다(${shown.nMatches.toLocaleString()}매치). ${rotation}`}
         />
 

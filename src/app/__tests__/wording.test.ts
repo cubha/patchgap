@@ -105,3 +105,34 @@ describe("대조표·방법론 머리 틀 — 세 게임 같다(트랙 B ST-16, 
     expect(read("app/pubg/methodology/page.tsx")).not.toMatch(/PubgSampleNotice/);
   });
 });
+
+describe("상세 골격(트랙 B ST-17 — parity-S22·S23·S24·pubg-S10·S15·S16·tft-S28)", () => {
+  const details = ["components/detail/LolItemDetail.tsx", "components/tft/TftUnitDetail.tsx", "components/pubg/PubgWeaponDetail.tsx", "components/pubg/PubgMapDetail.tsx"];
+  it.each(details)("%s — 상세 폭은 좁은 폭(9/12 LoL 기준, 사용자 결정 2026-10-11)", (rel) => {
+    const src = read(rel);
+    expect(src).toMatch(/<Container width="narrow"/);
+    expect(src).not.toMatch(/<Container>/);
+  });
+  it("LoL 상세 패치노트 대조에 「말한 것 N · 말하지 않은 것 N」과 「패치노트가 말한 것」", () => {
+    const src = read("components/detail/LolItemDetail.tsx");
+    expect(src).toMatch(/말한 것 \{saidCount\} · 말하지 않은 것/);
+    expect(src).toMatch(/패치노트가 말한 것/);
+  });
+  it("PUBG 무기 상세에 렌더 카드가 없다 — 머리 다음이 패치노트 대조", () => {
+    expect(read("components/pubg/PubgWeaponDetail.tsx")).not.toMatch(/PubgDetailSplash/);
+  });
+  it("PUBG 맵 상세 — 지형도는 패치노트 대조 뒤, 판정 규칙 링크 라벨은 세 상세와 같다", () => {
+    const src = read("components/pubg/PubgMapDetail.tsx");
+    expect(src.indexOf("<PubgDetailSplash")).toBeGreaterThan(src.indexOf('title="패치노트 대조"'));
+    expect(src).not.toMatch(/방법론 보기 →/);
+    expect(src).toMatch(/판정 규칙 보기 →/);
+  });
+  it("관측 패널 — 막대 앞 문단 1개, 캡션은 375폭에서 줄바꿈", () => {
+    const src = read("components/observation/ObservationPanel.tsx");
+    expect(src).toMatch(/\{prose\[0\]\}/);
+    expect(src).toMatch(/whitespace-normal text-muted lg:truncate/);
+  });
+  it("기술통계 화면은 탭 배지를 그리지 않는다", () => {
+    expect(read("components/observation/ObservationSection.tsx")).toMatch(/showCounts=\{!descriptive\}/);
+  });
+});

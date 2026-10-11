@@ -85,7 +85,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
     // 관측 전에도 골격(이동 경로·푸터)과 관측이 있는 쌍으로 가는 링크를 유지한다(ST-16).
     return (
       <main>
-        <Container>
+        <Container width="narrow">
           <TftUnavailable failure={declaration?.failure} schedule={tftDeclarationSchedule(declaration ?? null)} crumbs={detailCrumbs("tft", "관측 전", pairBase)} observed={observed} />
         </Container>
         {declaration ? <TftFooter generatedAt={declaration.generatedAt} nVerdicts={0} /> : null}
@@ -102,7 +102,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
   if (!row) {
     return (
       <main>
-        <Container>
+        <Container width="narrow">
           {/* 빈 상태에도 **같은 머리**를 쓴다 — 이동 경로가 여기서만 다른 형식이 되면 §8-5가 깨진다. */}
           <div className="flex flex-col gap-3 pt-40 pb-8">
             <PageHeader
@@ -184,7 +184,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
 
   return (
     <main>
-      <Container>
+      <Container width="narrow">
         <div className="flex flex-col gap-6 pt-40 pb-8">
           {/* 제목은 **대상 이름**이고 유형은 옆 라벨이다(§8-5). 이동 경로·액션 줄의 자리는
               `PageHeader`가 소유한다 — 세 게임이 같은 위치에 둔다(§8-7 #1·#8·#18). */}

@@ -266,6 +266,8 @@ export default function LolItemDetail({ id, pairs, pairBase = null, otherPairs =
     pair.to
   );
 
+  const saidCount = noteContrast.status === "matched" ? noteContrast.matched.length : 0;
+
   // 수치 축(F9) — 이 대상에서 **게임사가 바꿨는데 말하지 않은 것**. 지표 축(위 판정)과 직교한다.
   const gameData = loadGameDataDiff("lol", pair.from, pair.to);
   const submarineChanges = submarineChangesFor(gameData, head.entityType, head.entityKey);
@@ -373,7 +375,24 @@ export default function LolItemDetail({ id, pairs, pairBase = null, otherPairs =
           />
 
           {/* 선언 대조 — 전체 폭(2026-10-06). 「추정 원인」 카드가 있던 오른쪽 칸은 관측 패널 안으로 옮겼다. */}
-          <SectionCard eyebrow="선언 대조" title="패치노트 대조" variant="glass">
+          {/* 카운터·소제목(트랙 B ST-17, parity-S22) — TFT·PUBG 상세의 「말한 것 N · 말하지 않은 것 N」과 「패치노트가 말한 것」 구획을
+              LoL도 같은 자리에 둔다(§8-3-1 상세 골격, 기준은 TFT·PUBG). */}
+          <SectionCard
+            eyebrow="선언 대조"
+            title="패치노트 대조"
+            variant="glass"
+            action={
+              <span className="font-mono text-xs text-muted">
+                말한 것 {saidCount} · 말하지 않은 것 {submarineChanges.length}
+                {mismatchChanges.length > 0 ? ` · 값이 다른 것 ${mismatchChanges.length}` : ""}
+              </span>
+            }
+          >
+            <div className="flex items-center gap-2 px-5 pt-4 pb-2">
+              <span className="h-1.5 w-1.5 rounded-pill bg-muted" aria-hidden="true" />
+              <h3 className="font-body text-xs font-bold tracking-wide text-muted">패치노트가 말한 것</h3>
+              <span className="ml-auto font-mono text-xs text-muted">{saidCount}건</span>
+            </div>
             <NoteContrastPanel result={noteContrast} />
             <div className="border-t border-border-soft" />
             <SubmarineDetailBlock

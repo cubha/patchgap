@@ -61,6 +61,7 @@ export default function ObservationSection({
             segmentLabel={segmentLabel}
             noSegmentNote={noSegmentNote}
             initial={initial}
+            showCounts={!descriptive}
           />
         )}
         {footnote ? <p className="border-t border-border-soft px-5 py-3 text-xs leading-relaxed text-muted">{footnote}</p> : null}

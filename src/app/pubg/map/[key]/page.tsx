@@ -9,7 +9,7 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/meta";
 import PubgMapDetail from "@/components/pubg/PubgMapDetail";
-import { loadPubg, loadPubgDeclaration, pubgMapKeys, pubgPair } from "@/lib/pubgData";
+import { loadPubg, loadPubgDeclaration, pubgMapKeys, pubgPair, loadPubgMaps } from "@/lib/pubgData";
 import { mapKeyFromSlug, mapSlug } from "@/lib/pubgRoutes";
 import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
 
@@ -27,7 +27,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { key } = await params;
   const mapKey = mapKeyFromSlug(key, pubgMapKeys());
   const name = mapKey ? mapIdentity(mapKey).koName : "맵";
-  return pageMeta({ game: "pubg", screen: "detail", entity: name, pair: pubgPair(), path: `/pubg/map/${key}/` });
+  // 비교 행이 없는(한쪽 구간에만 표본) 맵은 없는 변화를 약속하지 않는다(트랙 B ST-17, pubg-S15 — 미라마 description이 「…무기 구성 변화」였다).
+  const comparable = mapKey ? (loadPubgMaps()?.deltas.rows.some((r) => r.mapKey === mapKey) ?? false) : false;
+  const pair = pubgPair();
+  return pageMeta({
+    game: "pubg",
+    screen: "detail",
+    entity: name,
+    pair,
+    path: `/pubg/map/${key}/`,
+    description: comparable
+      ? `${name}의 ${pair ? `${pair.from} → ${pair.to} ` : ""}매치 점유율·평균 매치 시간·봇 비율·매치당 획득(판정 없음 — 관측값).`
+      : `${name} — 한쪽 패치 구간에만 표본이 잡혀 두 패치를 비교하지 않았습니다.`,
+  });
 }
 
 export default async function PubgMapPage({ params }: PageProps) {
