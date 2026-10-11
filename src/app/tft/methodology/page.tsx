@@ -84,7 +84,7 @@ export default function TftMethodologyPage() {
             유닛이 두 칸 있어도 한 번만 셉니다.
           </Row>
           <Row label="특성">
-            <span className="font-mono text-xs">style</span>이 0인 특성은 세지 않습니다 — 보드에 그 유닛이 있었다는
+            발동 단계가 0인 특성은 세지 않습니다 — 보드에 그 유닛이 있었다는
             것과 특성이 <strong className="text-fg">발동했다</strong>는 것은 다릅니다.
           </Row>
           <Row label="지표">
@@ -125,7 +125,7 @@ export default function TftMethodologyPage() {
               step: 4,
               title: "판정",
               detail: "노트 짝짓기 → 유의성·효과크기 게이트 → 상태 부여",
-              meta: "src/pipeline/shared/ 공용",
+              meta: "세 게임 공용 규칙",
             },
             {
               step: 5,
@@ -157,11 +157,11 @@ export default function TftMethodologyPage() {
                       <Row label="효과크기 바닥">
                         유의하기만 하면 미공지로 올리지 않습니다. 순방률은 절대 2%p(승률과 같은 값 — 둘 다 기저 50% 이항),
                         등장률은 상대 25% + 저기저 차단, 평균 등수는 절대 0.15등입니다. 바닥 미달은{" "}
-                        <span className="font-mono text-xs">below-threshold</span>로 따로 셉니다.
+                        「바닥 미달」로 따로 셉니다.
                       </Row>
         <Row label="표본">
           등장 보드 200 미만인 대상의 순방률·평균 등수는 다중검정 보정에 넣지 않고{" "}
-          <span className="font-mono text-xs">insufficient-sample</span>(표본 부족)로 판정합니다 — 좁은 표본으로
+          <strong className="text-fg">표본 부족</strong>으로 판정합니다 — 좁은 표본으로
           유의한 것처럼 보이게 하지 않기 위해서이고, 화면에는 올리지 않습니다. 등장률은 분모가 전체 보드라 그대로 남습니다.
         </Row>
       </dl>
@@ -170,8 +170,7 @@ export default function TftMethodologyPage() {
       <dl className="px-5 pb-4">
         <Row label="정렬·표시">
                         잠수함 패치 → 미공지 → 간접효과 → 공지·불일치 → 공지·일치 → 바닥미달 → 표본부족 → 무변화. 이 순서와 보고 자격 판정은{" "}
-                        <span className="font-mono text-xs">src/pipeline/shared/</span>의 단일 소스이고, 세 게임이 같은 파일을
-                        봅니다. TFT 전용 술어는 하나도 만들지 않았습니다.
+                        세 게임 공용의 한 규칙이고, 세 게임이 같은 규칙을 봅니다. TFT 전용 술어는 하나도 만들지 않았습니다.
                       </Row>
                       <Row label="근거">
                         짝지어진 노트가 있으면 그 원문 앵커를 링크로 겁니다. 없으면 회색이고 링크를 걸지 않습니다. 원천 매치 ID는
@@ -199,8 +198,7 @@ export default function TftMethodologyPage() {
           <dt className="font-display font-bold text-fg">대조표</dt>
           <dd className="mt-1 leading-relaxed text-fg-2">
             행은 대상 1개, 열은 지표(등장률·순방률·평균 등수)입니다. 보고 자격을 얻지 못한 지표는
-            빈 칸(<span className="font-mono">—</span>)이고, 그 건수는 표 아래에서 밝힙니다. 왼쪽
-            패치노트 항목을 고르면 오른쪽 그 행으로 이동합니다.
+            빈 칸(<span className="font-mono">—</span>)입니다. 패치노트 항목을 고르면 표의 그 행으로 이동합니다.
           </dd>
         </div>
         <div>
@@ -316,8 +314,8 @@ export default function TftMethodologyPage() {
             18.2 = 9/9 18:00Z). 버전 문자열은 교차 확인용으로만 기록합니다.
           </Row>
           <Row label="패치노트 해소율">
-            파서가 변경 줄 {notes.stats.lines}건 중 {notes.items.length}건({resolveRate.toFixed(1)}%)에서 엔티티를
-            특정했습니다. 나머지 {notes.stats.unresolved}건은 엔티티가 없는 체계 변경(레벨 요구 경험치 등)이거나 DDragon
+            파서가 변경 줄 {notes.stats.lines}건 중 {notes.items.length}건({resolveRate.toFixed(1)}%)에서 대상를
+            특정했습니다. 나머지 {notes.stats.unresolved}건은 대상가 없는 체계 변경(레벨 요구 경험치 등)이거나 DDragon
             카탈로그에 없는 소환수(덩굴정령·어미 부리)입니다. 짝지을 수 없는 이름을 지어내 채우지 않습니다.
           </Row>
           <Row label="계획 대비 확장">
@@ -330,7 +328,7 @@ export default function TftMethodologyPage() {
             <span className="font-mono text-xs">docs/plan/PLAN-tft-adapter-2026-09-20.md §8-2</span>.
           </Row>
           <Row label="방향이 섞인 노트">
-            한 엔티티에 상향·하향 노트가 <strong className="text-fg">같은 수</strong>로 붙으면 방향 다수결이 서지
+            한 대상에 상향·하향 노트가 <strong className="text-fg">같은 수</strong>로 붙으면 방향 다수결이 서지
             않습니다. 판정 엔진은 그 경우를 불일치 값에 접어 넣지만, 화면은 「공지 · 이상 관측」이 아니라{" "}
             <strong className="text-fg">「공지」</strong>로 표시합니다 — 이상 관측은 노트와 <em>반대로</em> 움직인
             것이고, 방향이 없으면 반대라고 말할 근거가 없기 때문입니다. 원인 추정(LLM) 대상에서도 뺍니다. 18.2에서는
@@ -338,8 +336,8 @@ export default function TftMethodologyPage() {
             시간순으로 이어 붙이면 순변화를 낼 수 있지만, 그 체이닝은 아직 구현하지 않았습니다.
           </Row>
           <Row label="표본부족 표기">
-            등장 보드 200 미만인 엔티티의 순방률·평균 등수는 LoL 승률과 <strong className="text-fg">같은 경로</strong>로{" "}
-            <span className="font-mono text-xs">insufficient-sample</span>이 됩니다 — 판정 엔진의 개체 표본 게이트가
+            등장 보드 200 미만인 대상의 순방률·평균 등수는 LoL 승률과 <strong className="text-fg">같은 경로</strong>로{" "}
+            「표본 부족」이 됩니다 — 판정 엔진의 개체 표본 게이트가
             분모가 「그 대상이 등장한 표본」인 지표 셋(승률·순방률·평균 등수)에 함께 걸립니다.
           </Row>
         </dl>

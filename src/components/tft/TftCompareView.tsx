@@ -77,9 +77,8 @@ export default function TftCompareView({ bundle, declaration, pairBase = null, o
             }
             lead={
               <>
-                대상 <strong className="text-fg">{rows.length}</strong>종 · 보고 자격을 얻은 관측{" "}
-                <strong className="text-fg">{shownDeltas}</strong>건.
-                왼쪽에서 패치노트 항목을 고르면 오른쪽 표의 그 대상으로 이동합니다.
+                {/* 대상 수만 — 값(관측) 수를 나란히 쓰지 않는다(결정 7 「세는 단위는 대상」, 트랙 B ST-12 감사에서 발견). */}
+                대상 <strong className="text-fg">{rows.length}</strong>종. 패치노트 항목을 고르면 표의 그 대상으로 이동합니다.
               </>
             }
           />

@@ -79,8 +79,8 @@ export default function PubgComparePage() {
             lead={
               <>
                 {deltas.meta.n}개 무기 중 판정 <strong className="text-fg">{judged}개</strong> ·{" "}
-                {before.nMatches.toLocaleString()} → {after.nMatches.toLocaleString()}매치. 왼쪽에서
-                패치노트 항목을 고르면 오른쪽 표의 그 무기로 이동합니다.
+                {before.nMatches.toLocaleString()} → {after.nMatches.toLocaleString()}매치. 패치노트 항목을 고르면 표의 그
+                무기로 이동합니다.
               </>
             }
           />

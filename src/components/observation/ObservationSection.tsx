@@ -9,6 +9,7 @@
 //
 // **자격 없는 조합은 여기 들어오지 않는다**(9/18 확정 규칙 — 표본 부족·바닥 미달·변화 없음은 탭도 선택지도 만들지
 // 않는다). 그래서 조합이 0이면 숨긴 상태의 이름을 꺼내지 않고 `emptyText` 한 줄만 말한다.
+import { observationFootnote } from "./footnote";
 import SectionCard from "@/components/SectionCard";
 import ObservationTabs, { type ObservationTabMetric } from "./ObservationTabs";
 
@@ -38,9 +39,7 @@ export default function ObservationSection({
 }: ObservationSectionProps) {
   const count = metrics.reduce((sum, m) => sum + m.segments.length, 0);
   const descriptive = mode === "descriptive";
-  const footnote = descriptive
-    ? "판정을 만들지 않는 축이라 관측값만 보입니다 — 신뢰구간·통계 게이트·원천 매치·추정 원인은 판정이 있는 대상에만 있습니다."
-    : `통계 게이트와 효과크기 바닥을 통과한 관측만 지표 탭${segmentLabel ? `과 ${segmentLabel} 선택지` : ""}로 나타납니다. 탭·선택지에 없는 조합은 보고할 변화가 없다는 뜻입니다.`;
+  const footnote = observationFootnote({ mode, segmentLabel, count });
 
   return (
     <SectionCard
@@ -64,7 +63,7 @@ export default function ObservationSection({
             initial={initial}
           />
         )}
-        <p className="border-t border-border-soft px-5 py-3 text-xs leading-relaxed text-muted">{footnote}</p>
+        {footnote ? <p className="border-t border-border-soft px-5 py-3 text-xs leading-relaxed text-muted">{footnote}</p> : null}
       </div>
     </SectionCard>
   );

@@ -21,7 +21,7 @@ describe("buildPipelineSteps", () => {
     expect(steps[0].meta[0]).toBe("n=10,240 / 10,118");
     // 코디네이터 정정(2026-09-05): 홈 헤드라인 규칙(N=고유 엔티티 수)과 일치해야 한다 — 항목
     // 수(19)를 그대로 노출하지 않고 엔티티 수(14)를 기준으로, 항목 수는 참고로만 병기한다.
-    expect(steps[2].meta[0]).toBe("노트 14 엔티티 · 19항목");
+    expect(steps[2].meta[0]).toBe("노트 14대상 · 19항목");
     expect(steps[3].meta[0]).toBe("유의 변화 37");
     expect(steps[3].detail).toContain(String(FDR_ALPHA));
   });
@@ -65,7 +65,7 @@ describe("buildPipelineSteps", () => {
     expect(steps[0].meta[0]).toBe("n=6,283 / 6,283");
     // 실측(26.17 자기쌍): 항목 215건 · 고유 엔티티 35개(coordinator 실측치) — 홈 헤드라인과
     // 동일한 수를 표시해야 한다.
-    expect(steps[2].meta[0]).toBe("노트 35 엔티티 · 215항목");
+    expect(steps[2].meta[0]).toBe("노트 35대상 · 215항목");
     expect(steps[3].meta[0]).toBe("유의 변화 0");
   });
 
@@ -83,6 +83,6 @@ describe("buildPipelineSteps", () => {
       significantCount: 0,
       judgedAt: "2026-09-05T10:04:00.000Z",
     });
-    expect(steps[2].meta[0]).toBe("노트 35 엔티티");
+    expect(steps[2].meta[0]).toBe("노트 35대상");
   });
 });

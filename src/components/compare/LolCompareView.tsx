@@ -61,7 +61,7 @@ export default function LolCompareView({ pair, pairBase = null }: LolCompareView
                 "대조표"
               )
             }
-            lead="패치노트가 말한 항목과 실제로 움직인 지표를 대상 1개 = 행 1개로 견줍니다. 왼쪽에서 패치노트 항목을 고르면 오른쪽 표의 그 대상으로 이동합니다."
+            lead="패치노트가 말한 항목과 실제로 움직인 지표를 대상 1개 = 행 1개로 견줍니다. 패치노트 항목을 고르면 표의 그 대상으로 이동합니다."
           />
         </Container>
         {/* 표의 대상 링크는 클라이언트 셀(`DeltaTable`)이 만든다 — 과거 쌍이면 컨텍스트로 기준 경로를 건넨다. */}

@@ -28,11 +28,11 @@ import { pubgVerdictCount } from "@/pipeline/shared/headline";
 export const metadata: Metadata = pageMeta({ game: "pubg", screen: "methodology", path: "/pubg/methodology/" });
 
 const PIPELINE = [
-  { step: 1, title: "수집", detail: "PUBG /samples → /matches → telemetry", meta: "official 매치만" },
+  { step: 1, title: "수집", detail: "PUBG 공개 표본 → 매치 → 텔레메트리", meta: "일반 매치만" },
   { step: 2, title: "리듀스", detail: "텔레메트리 → 무기별 획득·공격·명중·처치 카운트", meta: "ingest 시점 축약" },
-  { step: 3, title: "정규화", detail: "Item_Weapon_* ⇄ Weap* 정준키 결합 · 스킨 접기 · 비무기 제외", meta: "pubg-weapon-key.ts" },
+  { step: 3, title: "정규화", detail: "획득·피해 기록의 무기 이름 결합 · 스킨 접기 · 비무기 제외", meta: "무기 이름 정규화" },
   { step: 4, title: "집계", detail: "총 획득 대비 점유율 + Wilson 95% CI", meta: "기저 이동 분리" },
-  { step: 5, title: "판정", detail: "패치노트 짝짓기 → 효과크기 바닥 대비 → 상태 부여", meta: "pubg-delta.ts" },
+  { step: 5, title: "판정", detail: "패치노트 짝짓기 → 효과크기 바닥 대비 → 상태 부여", meta: "판정 규칙" },
 ] as const;
 
 export default function PubgMethodologyPage() {
@@ -152,8 +152,8 @@ export default function PubgMethodologyPage() {
         ))}
       </ol>
       <p className="px-5 pt-1 pb-5 text-xs leading-relaxed text-muted" style={{ maxWidth: "var(--measure-wide)" }}>
-        `/samples`는 official 외에 airoyale·competitive·tutorialatoz·trainingroom을 함께 돌려줍니다 — 실측에서
-          표본의 약 절반이 비경쟁 매치였습니다. 2단계에서 `matchType`을 저장해 official만 씁니다.
+        공개 표본에는 일반 매치 외에 캐주얼·랭크·튜토리얼·훈련장 매치가 함께 섞여 옵니다 — 실측에서 표본의 약 절반이
+          일반 매치가 아니었습니다. 2단계에서 매치 종류를 저장해 일반 매치만 씁니다.
         </p>
       </>
     ),
@@ -224,8 +224,9 @@ export default function PubgMethodologyPage() {
     display: (
       <div className="p-5">
           <p className="text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
-            브리핑·대조표·무기 상세는 <strong className="text-fg">판정이 선 무기</strong>만 보여줍니다. 아래 세 상태는 판정
-            파일에 남되 화면에는 올리지 않습니다. 예외는 수치 축의 잠수함 패치입니다 — 지표 판정이 아래 어느
+            브리핑의 대조 목록과 대조표는 <strong className="text-fg">판정이 선 무기</strong>만 올립니다. 무기 상세는 집계된
+            무기 전부에 있고, 판정이 서지 않은 무기는 관측 섹션이 비어 있습니다. 아래 세 상태는 판정 파일에 남되 목록·표에는
+            올리지 않습니다. 예외는 수치 축의 잠수함 패치입니다 — 지표 판정이 아래 어느
             상태여도 전부 보여 주고, 배지는 <StatusBadge status="submarine" className="align-middle" />로 지표 판정을 덮습니다.
           </p>
           <ul className="mt-3 flex flex-col gap-2 text-sm">

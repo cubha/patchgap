@@ -43,7 +43,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
     byGame: {
       lol: "공식 패치노트 HTML — {스킬키} {스탯}: A ⇒ B",
       pubg: "공식 패치노트 — 동일한 A ⇒ B 구조",
-      tft: "공식 패치노트 — 같은 CMS·같은 ⇒ 구조이나 엔티티 앵커(h3.change-title)가 0건이라 DDragon 카탈로그 대조로 대상을 판별합니다",
+      tft: "공식 패치노트 — 같은 CMS·같은 ⇒ 구조이나 대상 제목 앵커가 0건이라 DDragon 카탈로그 대조로 대상을 판별합니다",
     },
     iface: "PatchNoteItem",
   },
@@ -57,7 +57,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
     iface: "(게임별) collect/*",
   },
   {
-    layer: "주 엔티티",
+    layer: "주 대상",
     byGame: {
       lol: "챔피언 (173)",
       pubg: "무기 47종 · 맵 관측 7종(자산 9종) · 차량·소모품 미수집",
@@ -103,7 +103,7 @@ export const ADAPTER_MATRIX: readonly AdapterMatrixRow[] = [
     iface: "DeltaMetric (LoL·TFT)",
   },
   {
-    layer: "엔티티 자산",
+    layer: "대상 자산",
     byGame: {
       lol: "Data Dragon 아이콘·스펠·스플래시(챔피언 186)",
       pubg: "pubg/api-assets 공식 렌더(무기 38/47 · 맵 9/9)",

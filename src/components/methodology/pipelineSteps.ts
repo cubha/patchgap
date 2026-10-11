@@ -55,7 +55,7 @@ function timeCaption(iso: string | null): string {
  * 홈("35개 엔티티")과 방법론("215항목")이 다른 숫자를 보여줬다). */
 function noteCaption(entityCount: number | null, itemCount: number | null): string {
   if (entityCount === null) return DASH;
-  const base = `노트 ${fmtInt(entityCount)} 엔티티`;
+  const base = `노트 ${fmtInt(entityCount)}대상`;
   return itemCount === null ? base : `${base} · ${fmtInt(itemCount)}항목`;
 }
 
