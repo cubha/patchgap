@@ -47,3 +47,19 @@ export function weaponKeyFromSlug(slug: string, candidates: readonly string[]): 
 export function mapKeyFromSlug(slug: string, candidates: readonly string[]): string | null {
   return candidates.find((key) => mapSlug(key) === slug) ?? null;
 }
+
+export function legacyWeaponSlug(weaponKey: string): string {
+  void weaponKey;
+  throw new Error("TODO(pubgRoutes): legacyWeaponSlug");
+}
+
+export function legacyMapSlug(mapKey: string): string {
+  void mapKey;
+  throw new Error("TODO(pubgRoutes): legacyMapSlug");
+}
+
+export function pubgLegacyRedirects(weaponKeys: readonly string[], mapKeys: readonly string[]): { source: string; destination: string }[] {
+  void weaponKeys;
+  void mapKeys;
+  throw new Error("TODO(pubgRoutes): pubgLegacyRedirects");
+}
