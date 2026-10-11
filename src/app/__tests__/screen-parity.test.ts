@@ -762,7 +762,7 @@ describe("§8-6 모바일 — 390px에서 칸이 무너지지 않는다", () => 
     }
     const tft = read("src/components/tft/TftCompareExplorer.tsx");
     expect(tft).toMatch(/추정 원인/);
-    expect(tft.match(/whitespace-nowrap/g)?.length ?? 0).toBeGreaterThanOrEqual(2);
+    expect(tft.match(/whitespace-nowrap/g)?.length ?? 0).toBeGreaterThanOrEqual(3);
 
     const pubg = read("src/components/pubg/PubgCompareExplorer.tsx");
     // 숫자 5열 전부 — 하나라도 빠지면 그 열만 다시 무너진다.
