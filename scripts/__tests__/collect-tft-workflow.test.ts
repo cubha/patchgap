@@ -48,5 +48,7 @@ describe("collect-tft.yml — 이번 쌍만 수집하고 부분 수집은 진행
     expect(stub).toContain("steps.collect.outputs.partial == 'true' && 'collecting'");
     expect(stub).toContain("steps.collect.outputs.progress");
     expect(stub).toMatch(/--progress "\$STUB_PROGRESS"/);
+    // 출력을 내는 스텝 id가 `collect`여야 `steps.collect.outputs.*`가 비지 않는다.
+    expect(step("Collect matches (F1)")).toMatch(/^\s+id: collect$/m);
   });
 });

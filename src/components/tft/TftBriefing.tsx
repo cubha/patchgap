@@ -22,10 +22,10 @@ import { tftEntityHref } from "@/lib/tftRoutes";
 import { tftEntityRows } from "@/lib/tftEntityRows";
 import { entityTypeLabel, metricLabel } from "@/lib/format";
 import { tftGapTotal, tftMetricGapRows } from "@/lib/gapTotals";
-import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
+import { loadTftAssets, type TftBundle, type TftDeclaration, tftDeclarationSchedule } from "@/lib/tftData";
 import { DeclarationHero, DeclarationNotesCard, declarationEntityCount } from "@/components/DeclarationOnly";
 import NewerPatchNotice from "@/components/NewerPatchNotice";
-import { tftObservationSchedule, type ObservationSchedule } from "@/lib/observationEta";
+import type { ObservationSchedule } from "@/lib/observationEta";
 import { pairBasePath, pairSectionHref, pairSectionLink } from "@/lib/pairRoutes";
 import { latestObservedTftPair } from "@/lib/tftData";
 import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
@@ -381,7 +381,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
  * 않고(scope-critic ST-4) 다음 수집 시각으로 바꿔 말한다 — 전에는 null로 떨어져 「표본이 쌓이면」만 남았다(2026-10-11).
  */
 function scheduleOf(declaration: TftDeclaration): ObservationSchedule | null {
-  return tftObservationSchedule(declaration.failure, declaration.to);
+  return tftDeclarationSchedule(declaration);
 }
 
 function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {

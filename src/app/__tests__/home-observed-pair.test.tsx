@@ -10,7 +10,7 @@ import { render } from "@testing-library/react";
 vi.mock("server-only", () => ({}));
 
 import { AmbientProvider } from "@/components/AmbientContext";
-import { newerTftDeclarations, tftHomePair } from "@/lib/tftData";
+import { newerTftDeclarations, tftDeclarationSchedule, tftHomePair } from "@/lib/tftData";
 import { pairSlug } from "@/lib/pairRoutes";
 import TftPage from "../tft/page";
 import TftHistoryPage from "../tft/history/[pair]/page";
@@ -54,7 +54,10 @@ describe("TFT 홈 — 관측이 있는 최신 쌍이 홈이고, 더 새 패치�
     const status = container.querySelector("[data-observation]");
     expect(status).not.toBeNull();
     if (d.failure.reason === "awaiting-observation" || d.failure.reason === "collecting") {
-      expect(status?.textContent).toMatch(/(첫 관측|다음 수집)은 .* KST 예정/);
+      // 종류까지 본다 — 예정 전 대기는 「첫 관측」, 지난 대기·수집 중은 「다음 수집」(scope-critic: 정규식만이면 종류가 틀려도 통과).
+      const schedule = tftDeclarationSchedule(d);
+      expect(schedule).not.toBeNull();
+      expect(status?.textContent).toContain(`${schedule?.kind === "first" ? "첫 관측" : "다음 수집"}은 ${schedule?.label} 예정`);
     }
     expect(container.textContent).toContain(`${d.to} 패치노트`);
     // 캡션에 조항 수를 두지 않는다(결정 7) — 머리 「N개 항목」 바로 아래 「공지 N건」이 또 서지 않는다.

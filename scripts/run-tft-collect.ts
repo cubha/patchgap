@@ -14,7 +14,7 @@ import fs from "node:fs";
 import "dotenv/config";
 
 import { createTftClient, type TftTier } from "../src/pipeline/collect/tft-client";
-import { crawlProgress, crawlTft, selectTftWindows } from "../src/pipeline/collect/tft-crawler";
+import { crawlProgress, crawlTft, selectTftWindows, type TftCrawlResult } from "../src/pipeline/collect/tft-crawler";
 import { loadTftWindows } from "./shared/calendar";
 import { isMainModule, parseCliArgs, PATCH_ID_PATTERN } from "./shared/cli";
 
@@ -118,6 +118,15 @@ export function resolveApiKey(source: Partial<NodeJS.ProcessEnv> = process.env):
   return key;
 }
 
+/**
+ * 워크플로 출력 — `partial`(관측을 미룰지)과 `progress`(창별 적재/목표 JSON). 진행은 부분 수집 stub이 화면에 「18.4 813/2,500매치」로
+ * 싣는다 — 사유만으로는 대기와 고장을 못 가른다(2026-10-11). 키 이름은 `collect-tft.yml`이 `steps.collect.outputs.*`로 읽는다.
+ */
+export function writeCollectOutputs(githubOutput: string, result: Pick<TftCrawlResult, "stoppedAtDeadline" | "storedByPatch">, target: number): void {
+  fs.appendFileSync(githubOutput, `partial=${result.stoppedAtDeadline ? "true" : "false"}\n`);
+  fs.appendFileSync(githubOutput, `progress=${JSON.stringify(crawlProgress(result.storedByPatch, target))}\n`);
+}
+
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
   const apiKey = resolveApiKey();
@@ -152,11 +161,7 @@ async function main(): Promise<void> {
     console.log(`\n[tft-collect] ${result.stoppedAtDeadline ? `마감(${args.deadlineMinutes}분)에 멈춤 — 부분 수집` : "완료"} (${elapsed}s)`);
     // 워크플로가 관측(집계·판정)을 미루고 raw 캐시만 저장하게 한다 — 다음 실행이 ids-seen으로 이어 받는다.
     const githubOutput = process.env.GITHUB_OUTPUT;
-    // 진행(`progress=`)은 부분 수집 stub이 화면에 「18.4 813/2,500매치」로 싣는다 — 사유만으로는 대기와 고장을 못 가른다.
-    if (githubOutput) {
-      fs.appendFileSync(githubOutput, `partial=${result.stoppedAtDeadline ? "true" : "false"}\n`);
-      fs.appendFileSync(githubOutput, `progress=${JSON.stringify(crawlProgress(result.storedByPatch, target))}\n`);
-    }
+    if (githubOutput) writeCollectOutputs(githubOutput, result, target);
     console.log(`  시드 ${result.seeds}명 · 조회 ${result.requested}건 · 창 밖 ${result.skipped}건`);
     for (const [patch, n] of Object.entries(result.storedByPatch)) {
       console.log(`  ${patch}: ${n}매치`);

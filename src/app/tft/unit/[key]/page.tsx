@@ -15,7 +15,7 @@ import TftObservedRedirect from "@/components/tft/TftObservedRedirect";
 import TftUnitDetail from "@/components/tft/TftUnitDetail";
 import { tftDetailRows } from "@/lib/pairPages";
 import { pairBasePath, pairSectionLink } from "@/lib/pairRoutes";
-import { latestObservedTftPair, loadTft, loadTftDeclaration, type TftBundle } from "@/lib/tftData";
+import { latestObservedTftPair, loadTft, loadTftDeclaration, tftDeclarationSchedule, type TftBundle } from "@/lib/tftData";
 import { entityKeyFromSlug as unslug, entitySlug, tftEntityHref } from "@/lib/tftRoutes";
 
 /** 경로의 재료가 되는 번들 — 최신 쌍, 그것이 관측 전이면 관측이 있는 최신 쌍. */
@@ -59,6 +59,7 @@ export default async function TftUnitPage({ params }: { params: Promise<{ key: s
           href={tftEntityHref(row.key, pairBasePath("tft", pair))}
           pairLabel={`${pair.from} → ${pair.to}`}
           failure={declaration.failure}
+          schedule={tftDeclarationSchedule(declaration)}
           generatedAt={declaration.generatedAt}
         />
       );

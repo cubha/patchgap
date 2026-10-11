@@ -55,3 +55,29 @@ describe("부분 수집 안내 — 진척과 다음 수집을 말한다", () => 
     expect(container.textContent).toContain("멈춰 있습니다");
   });
 });
+
+// TFT의 관측 전 안내는 브리핑·선언 뷰·대조표·상세·방법론이 같은 문장을 말한다(ST-16). 2026-10-11 검증에서 세 곳이 일정을 안 넘겨
+// 날짜 없이 남았다 — TFT 쪽 호출은 전부 `schedule`을 넘겨야 한다(PUBG는 부분 수집 경로가 없어 대상 아님).
+describe("TFT 관측 전 안내는 전부 일정을 넘긴다", () => {
+  it("TFT 소스의 <ObservationPendingNotice …>·<TftUnavailable failure…>·<TftObservedRedirect …>에 schedule=", async () => {
+    const fs = await import("node:fs");
+    const path = await import("node:path");
+    const roots = ["src/components/tft", "src/app/tft"];
+    const files: string[] = [];
+    const walk = (d: string) => {
+      for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+        const p = path.join(d, e.name);
+        if (e.isDirectory() && e.name !== "__tests__") walk(p);
+        else if (e.isFile() && p.endsWith(".tsx")) files.push(p);
+      }
+    };
+    roots.forEach(walk);
+    const offenders: string[] = [];
+    for (const f of files) {
+      const src = fs.readFileSync(f, "utf8");
+      const tags = src.match(/<(ObservationPendingNotice|TftObservedRedirect)\b[\s\S]*?\/>|<TftUnavailable\s+failure[\s\S]*?\/>/g) ?? [];
+      for (const t of tags) if (!t.includes("schedule=")) offenders.push(`${f}: ${t.slice(0, 60)}`);
+    }
+    expect(offenders).toEqual([]);
+  });
+});

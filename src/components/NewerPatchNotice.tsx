@@ -17,7 +17,7 @@ export interface NewerPatchNoticeProps {
   patch: string;
   /** 머리와 같은 단위 — 대상 수(`declarationEntityCount`). */
   entityCount: number;
-  /** 관측이 비어 있는 사유 — 날짜는 **대기(`awaiting-observation`)일 때만** 말한다. 키 만료·크래시는 날짜가 아니라 조치가 답이고,
+  /** 관측이 비어 있는 사유 — 날짜는 **대기·수집 중(`awaiting-observation`·`collecting`)일 때만** 말한다. 키 만료·크래시는 날짜가 아니라 조치가 답이고,
    * 그걸 "표본이 쌓이면"으로 덮으면 고장을 대기로 읽게 한다(scope-critic ST-4). */
   reason: ObservationFailReason;
   /** 관측 일정(`tftObservationSchedule`). 계산 불가면 null(날짜를 지어내지 않는다) — 대기·수집 중이면 지난 예정 대신 다음 수집을 말한다. */
