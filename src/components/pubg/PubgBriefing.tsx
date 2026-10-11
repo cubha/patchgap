@@ -24,6 +24,7 @@ import { pubgGapTotal, pubgMetricGapRows } from "@/lib/gapTotals";
 import DeclarationOnly from "@/components/DeclarationOnly";
 import NewerPatchNotice from "@/components/NewerPatchNotice";
 import PubgWeaponGrid from "@/components/pubg/PubgWeaponGrid";
+import PubgNoteClauses from "@/components/pubg/PubgNoteClauses";
 import { loadPubgAssets, loadPubgMaps, isReportable, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
 import { mapHref, weaponHref } from "@/lib/pubgRoutes";
 import { pubgNoteTargetCount } from "@/lib/announcedCount";
@@ -216,6 +217,8 @@ export default function PubgBriefing({
                     observed={new Set(announced.map((r) => r.weaponKey)).size}
                     alsoUnmeasured="이 데이터로 측정할 수 없는 조항(조준 전환·반동·차량 피해)"
                   />
+                  {/* 탭 배지의 「조항 N」이 무엇인지 탭 안에서 보인다(ST-4, pubg-S6). */}
+                  <PubgNoteClauses notes={notes} />
                   {noteSource ? (
                     <div className="border-t border-border-soft px-5 py-3">
                       <ExternalLink className="text-sm font-bold text-accent hover:underline" href={noteSource}>
