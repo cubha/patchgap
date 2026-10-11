@@ -66,8 +66,10 @@ export default function SiteFooter({
   const legal = game ? LEGAL[game] : null;
   // 집계 줄은 **조각을 모아** 만든다 — 없는 값은 문장에서 빠지지, "—"로 자리만 채우지 않는다.
   const meta: string[] = [];
-  if (generatedAt) meta.push(`집계 ${fmtKst(generatedAt)}`);
+  // 시각은 판정 파일(deltas) 시각이라 「판정 N건」의 기준 시각으로 붙인다(트랙 B ST-8, lol-S17) — 전에는 「집계」라 불러 LoL 헤더의
+  // 표본 집계 시각과 한 화면에서 이름이 겹쳤다.
   if (nVerdicts !== null) meta.push(`판정 ${nVerdicts}건`);
+  if (generatedAt) meta.push(`${fmtKst(generatedAt)} 기준`);
   if (legal) meta.push(`데이터 ${legal.source}`);
 
   const body = (

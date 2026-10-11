@@ -25,6 +25,7 @@ const lolChrome = {
   nBefore: 1,
   nAfter: 2,
   aggregatedAt: "2026-09-24T00:00:00Z",
+  timeLabel: "표본 집계" as const,
   sampleChips: [],
   snapshotCaption: null,
 };

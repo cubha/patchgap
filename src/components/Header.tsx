@@ -90,8 +90,14 @@ export interface GameChrome {
   homePair: PatchPairOption | null;
   nBefore: number | null;
   nAfter: number | null;
-  /** ISO 8601 — 집계 시각(요약 파일 meta.generatedAt). */
+  /** ISO 8601 — 캡션 시각. 무엇의 시각인지는 `timeLabel`이 말한다. */
   aggregatedAt: string | null;
+  /**
+   * 캡션 시각의 이름(트랙 B ST-8, lol-S17·parity-S32) — 전에는 전부 「집계」였는데 LoL 헤더는 **표본 집계** 시각(summary), 같은
+   * 화면 푸터·디스코드 패널은 **판정** 시각(deltas)이라 한 화면에 「집계」가 두 시각을 가리켰다. 값의 출처가 이름을 정한다:
+   * LoL 「표본 집계」, TFT·PUBG(헤더도 판정 파일 시각) 「판정」, 선언만 쌍 「노트 반영」.
+   */
+  timeLabel: "표본 집계" | "판정" | "노트 반영";
   /** 읽기전용 표본 칩(고정 조건). 비면 칩 그룹 자체를 렌더하지 않는다. */
   sampleChips: string[];
   /**
@@ -196,7 +202,7 @@ export default function Header({ chrome }: HeaderProps) {
     pairCaptionParts.push(`n=${fmtInt(current.nBefore)} / ${fmtInt(current.nAfter)} 매치`);
   }
   if (historyPair === null && current?.aggregatedAt) {
-    pairCaptionParts.push(`집계 ${fmtKst(current.aggregatedAt)}`);
+    pairCaptionParts.push(`${current.timeLabel} ${fmtKst(current.aggregatedAt)}`);
   }
   const pairCaption = pairCaptionParts.length > 0 ? pairCaptionParts.join(" · ") : null;
   const sampleChips = current?.sampleChips ?? [];

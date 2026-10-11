@@ -313,7 +313,7 @@ export default function MethodologyPage() {
             <dd className="mt-1">패치 수집이 끝난 뒤 판정 파이프라인 마지막 단계에서 1회. 실패해도 재전송하지 않습니다.</dd>
           </div>
           <div>
-            <dt className="font-display font-bold text-fg">홈의 &ldquo;마지막 집계&rdquo;</dt>
+            <dt className="font-display font-bold text-fg">브리핑의 &ldquo;마지막 판정&rdquo;</dt>
             <dd className="mt-1">전송 시각이 아니라 이 판정 파일이 마지막으로 생성된 시각입니다.</dd>
           </div>
         </dl>

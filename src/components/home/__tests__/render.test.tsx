@@ -161,7 +161,7 @@ describe("DiscordPanel — generatedAt 없음", () => {
 
   it("generatedAt이 있으면 KST로 포맷한 캡션을 렌더한다", () => {
     const { container } = render(<DiscordPanel game="lol" generatedAt="2026-09-05T05:00:00.000Z" />);
-    expect(container.textContent).toContain("마지막 집계 2026-09-05 14:00 KST");
+    expect(container.textContent).toContain("마지막 판정 2026-09-05 14:00 KST") // 2026-10-11 명세 변경(트랙 B ST-8, lol-S17): 판정 파일 시각은 「판정」;
   });
 
   it("보내지 않는 것을 보낸다고 말하지 않는다 — '공지'는 방송 대상이 아니다", () => {

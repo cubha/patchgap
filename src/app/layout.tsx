@@ -75,6 +75,7 @@ function getLolChrome(): GameChrome {
     nBefore: summaryFrom?.data.matches ?? null,
     nAfter: summaryTo?.data.matches ?? null,
     aggregatedAt: summaryTo?.meta.generatedAt ?? null,
+    timeLabel: "표본 집계",
     sampleChips: ["KR", "Master+", "솔로/듀오"],
     snapshotCaption: getSnapshotCaption(),
   };
@@ -103,6 +104,7 @@ function getPubgChrome(): GameChrome | null {
     nBefore: bundle.before.nMatches,
     nAfter: bundle.after.nMatches,
     aggregatedAt: bundle.deltas.meta.generatedAt,
+    timeLabel: "판정",
     sampleChips: ["Steam", "전 지역·전 티어", "봇 포함"],
     // PUBG의 스냅샷 시각은 PUBG 집계 산출물에서 온다 — LoL의 listPatches()를 쓰면
     // `/pubg/methodology/`가 LoL 집계 시각을 자기 것처럼 표시한다(축A 지적).
@@ -128,6 +130,7 @@ function declarationChrome(
     nBefore: null,
     nAfter: null,
     aggregatedAt: declaration.generatedAt,
+    timeLabel: "노트 반영",
     sampleChips,
     snapshotCaption: fmtKst(declaration.generatedAt),
   };
@@ -157,6 +160,7 @@ function getTftChrome(): GameChrome | null {
     nBefore: bundle.before.matches,
     nAfter: bundle.after.matches,
     aggregatedAt: bundle.deltas.meta.generatedAt,
+    timeLabel: "판정",
     sampleChips: ["KR", "Master+", "랭크"],
     snapshotCaption: fmtKst(bundle.deltas.meta.generatedAt),
   };
