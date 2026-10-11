@@ -35,7 +35,7 @@ import { displayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
 import { sortBriefingRows } from "@/components/tft/briefingOrder";
 import type { DeltaRecord } from "@/pipeline/types";
-import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
+import BriefingListPanel from "@/components/BriefingListPanel";
 import StatTiles from "@/components/StatTiles";
 import DiscordPanel from "@/components/home/DiscordPanel";
 import MobileActionBar from "@/components/home/MobileActionBar";
@@ -285,7 +285,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
                   variant="embedded"
                   action={<span className="font-mono text-xs text-muted">대상 {announcedObserved}종</span>}
                 >
-                  <div className={PANEL_SCROLL_BODY}>
+                  <BriefingListPanel total={announcedObserved} compareHref={`${pairSectionHref("tft", "compare", pairBase)}#announced`}>
                   <BriefingRowList
                     groups={briefingGroups(sortBriefingRows(announced), deltas.meta.qAlpha)}
                     hrefOf={(g) => tftEntityHref(`${g.entityType}:${g.entityKey}`, pairBase)}
@@ -293,7 +293,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
                     causeOf={causeLine}
                     emptyText="공지와 짝지어진 유의한 관측이 없습니다."
                   />
-                </div>
+                </BriefingListPanel>
                 {/* 세 게임이 같은 자리에서 같은 말을 한다(§8-1, 2026-09-23 화면 대조 V5). */}
                 <AnnouncedCoverageLine
                   noteTargets={noteEntities}
@@ -323,7 +323,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
                     variant="embedded"
                     action={<span className="font-mono text-xs text-muted">대상 {unannouncedEntities}종</span>}
                   >
-                    <div className={PANEL_SCROLL_BODY}>
+                    <BriefingListPanel total={unannouncedEntities} compareHref={`${pairSectionHref("tft", "compare", pairBase)}#unannounced`}>
                     <BriefingRowList
                       groups={briefingGroups(sortBriefingRows(unannounced), deltas.meta.qAlpha)}
                       hrefOf={(g) => tftEntityHref(`${g.entityType}:${g.entityKey}`, pairBase)}
@@ -331,7 +331,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
                       causeOf={causeLine}
                       emptyText="미공지 변화가 없습니다."
                     />
-                  </div>
+                  </BriefingListPanel>
                   </SectionCard>
                 </div>
               }

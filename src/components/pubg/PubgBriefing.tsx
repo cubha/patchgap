@@ -25,6 +25,7 @@ import DeclarationOnly from "@/components/DeclarationOnly";
 import NewerPatchNotice from "@/components/NewerPatchNotice";
 import PubgWeaponGrid from "@/components/pubg/PubgWeaponGrid";
 import PubgNoteClauses from "@/components/pubg/PubgNoteClauses";
+import PanelExpand from "@/components/PanelExpand";
 import { loadPubgAssets, loadPubgMaps, isReportable, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
 import { mapHref, weaponHref } from "@/lib/pubgRoutes";
 import { pubgNoteTargetCount } from "@/lib/announcedCount";
@@ -33,7 +34,7 @@ import { publicMapPath } from "@/pipeline/pubg/asset-path";
 import { pubgDisplayStatus } from "@/pipeline/shared/pubg-status";
 import { SIGNED_POINT, formatSignedPercent } from "@/pipeline/shared/percent";
 import ExternalLink from "@/components/ExternalLink";
-import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
+import BriefingListPanel from "@/components/BriefingListPanel";
 import StatTiles from "@/components/StatTiles";
 import DiscordPanel from "@/components/home/DiscordPanel";
 import MobileActionBar from "@/components/home/MobileActionBar";
@@ -203,14 +204,14 @@ export default function PubgBriefing({
                   {/* 본문 행은 **대상 단위**다(UX-BRIEF §8-2) — 전에는 무기 1개가 지표마다
                       흩어졌고 판정 뱃지가 맨 뒤 열이었다. 공용 행이 뱃지를 맨 앞에 두고
                       이름을 링크로 만든다. 높이 상한은 `@/lib/panelScroll`이 소유한다. */}
-                  <div className={PANEL_SCROLL_BODY}>
+                  <BriefingListPanel total={new Set(announced.map((r) => r.weaponKey)).size} compareHref={"/pubg/compare/#announced"}>
                     <BriefingRowList
                       groups={weaponGroups(announced)}
                       hrefOf={(g) => weaponHref(g.entityKey)}
                       causeOf={causeLine}
                       emptyText="공지와 짝지어진 유의한 관측이 없습니다."
                     />
-                  </div>
+                  </BriefingListPanel>
                   {/* 세 게임이 같은 자리에서 같은 말을 한다(§8-1, 2026-09-23 화면 대조 V5). */}
                   <AnnouncedCoverageLine
                     noteTargets={noteTargets}
@@ -242,14 +243,14 @@ export default function PubgBriefing({
                   variant="embedded"
                   action={<span className="font-mono text-xs text-muted">대상 {unannounced.length}종</span>}
                 >
-                  <div className={PANEL_SCROLL_BODY}>
+                  <BriefingListPanel total={unannounced.length} compareHref={"/pubg/compare/#unannounced"}>
                     <BriefingRowList
                       groups={weaponGroups(unannounced)}
                       hrefOf={(g) => weaponHref(g.entityKey)}
                       causeOf={causeLine}
                       emptyText="바닥을 넘는 미공지 변화가 없습니다."
                     />
-                  </div>
+                  </BriefingListPanel>
                 </SectionCard>
                 </div>
               }
@@ -275,7 +276,7 @@ export default function PubgBriefing({
                       label: "맵",
                       total: maps.after.maps.length,
                       body: (
-                    <ul className={`${ENTITY_INDEX_GRID} sm:grid-cols-2 lg:grid-cols-4 ${PANEL_SCROLL_BODY}`}>
+                    <PanelExpand as="ul" total={maps.after.maps.length} className={`${ENTITY_INDEX_GRID} sm:grid-cols-2 lg:grid-cols-4`}>
                       {maps.after.maps.map((map) => {
                         const identity = mapIdentity(map.mapKey);
                         const delta = maps.deltas.rows.find((r) => r.mapKey === map.mapKey) ?? null;
@@ -318,7 +319,7 @@ export default function PubgBriefing({
                           </li>
                         );
                       })}
-                    </ul>
+                    </PanelExpand>
                       ),
                     },
                   ]

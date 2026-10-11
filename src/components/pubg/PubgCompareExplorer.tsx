@@ -172,6 +172,7 @@ export default function PubgCompareExplorer({
       <CompareSplit
         title="선언 ↔ 관측"
         meta={`${visible.length}개 대상`}
+        total={visible.length}
         coverage={coverage}
         nav={
           <NoteNavPanel

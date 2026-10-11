@@ -166,6 +166,7 @@ export default function CompareExplorer({
       <CompareSplit
         title="선언 ↔ 관측"
         meta={`${entityRows.length}개 대상`}
+        total={entityRows.length}
         nav={
           <NoteNavPanel
             groups={visibleNav}

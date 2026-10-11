@@ -8,6 +8,7 @@
 // 카드 = 공식 렌더(없으면 텍스트 마크 — 실측 47종 중 9종은 `pubg/api-assets`에 없다) · 이름 · 43.1 점유율 ·
 // 상대 변화(판정이 선 무기만 색으로, 노이즈 상태는 표시하지 않는다 — 사용자 C1). 컨테이너는 고정 높이
 // 내부 스크롤(h-80)이라 47장이 페이지를 늘리지 않는다. 서버 컴포넌트(상태 없음).
+import PanelExpand from "@/components/PanelExpand";
 import Link from "next/link";
 import { ENTITY_INDEX_CELL, ENTITY_INDEX_GRID } from "@/components/EntityIndexSection";
 import type { PubgWeaponStat } from "@/pipeline/aggregate/pubg-weapons";
@@ -29,7 +30,8 @@ export default function PubgWeaponGrid({ weapons, rows, assetKeys }: PubgWeaponG
   const byKey = new Map(rows.map((row) => [row.weaponKey, row] as const));
   const ordered = [...weapons].sort((a, b) => b.share - a.share);
   return (
-    <ul className={`${ENTITY_INDEX_GRID} h-80 grid-cols-2 overflow-y-auto sm:grid-cols-3 lg:grid-cols-6`}>
+    // 고정 `h-80` 사본 대신 공용 상한 + 명시적 펼치기(트랙 B ST-20, pubg-S12 — 47개 대부분이 페이지 스크롤로 안 보였다).
+    <PanelExpand as="ul" total={ordered.length} className={`${ENTITY_INDEX_GRID} grid-cols-2 sm:grid-cols-3 lg:grid-cols-6`}>
       {ordered.map((weapon) => {
         const row = byKey.get(weapon.weaponKey) ?? null;
         const judged = row !== null && isReportable(row.status);
@@ -67,6 +69,6 @@ export default function PubgWeaponGrid({ weapons, rows, assetKeys }: PubgWeaponG
           </li>
         );
       })}
-    </ul>
+    </PanelExpand>
   );
 }

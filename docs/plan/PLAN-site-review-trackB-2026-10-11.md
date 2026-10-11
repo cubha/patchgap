@@ -70,3 +70,4 @@
 - `src/pipeline/shared/__tests__/percent.test.ts` 오라클 — 하이픈 음수를 `−`로 읽음 · `src/components/tft/__tests__/shared.test.ts` 3곳 · `src/pipeline/discord/__tests__/pubg-briefing.test.ts` 1곳 — 음수 기호 `−` 1종(ST-9, parity-S21; 디스코드 임베드 출력도 바뀐다).
 - `src/components/methodology/__tests__/pipelineSteps.test.ts` — 파이프라인 단계 「노트 N 엔티티」→「노트 N대상」(ST-12, 사용자 어휘).
 - `src/app/__tests__/screen-parity.test.ts` §8-6 nowrap 게이트 — 이름 칸 nowrap 단언을 `TftCompareExplorer`에서 공용 `CompareNameCell`로 옮기고 세 표의 `<CompareNameCell` 사용을 단언 추가. TFT 파일 nowrap 개수 하한 3은 유지(ST-11, parity-S19).
+- `src/lib/__tests__/panelScroll.test.ts` 구조적 상한 게이트 — 상한 소유자에 `PanelExpand`·`BriefingListPanel`을 인정하고, `PanelExpand`가 기본 상태에 `PANEL_SCROLL_BODY`를 거는지 단언 추가(ST-20, 「패널 유지 + 더 보기」). `src/app/__tests__/link-fragments.test.ts` 추출기 — `pairSectionHref("tft", …)`의 게임 리터럴을 경로로 읽도록(검사기 결함 수정, 약화 아님).

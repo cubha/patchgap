@@ -213,6 +213,7 @@ export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, a
       <CompareSplit
         title="선언 ↔ 관측"
         meta={`${visible.length}개 대상`}
+        total={visible.length}
         nav={
           <NoteNavPanel
             groups={visibleNav}

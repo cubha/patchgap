@@ -222,6 +222,10 @@ export default function ReleaseNoteStream({
   );
 
   const miscTotal = tab === "content" ? miscSections.reduce((sum, s) => sum + s.notes.length, 0) : 0;
+  const segments = segmentStream(filtered);
+  const foldSegments = segments.filter((s) => s.kind !== "rows");
+  const firstFold = foldSegments[0] ?? null;
+  const quietCount = foldSegments.reduce((sum, s) => sum + s.entries.length, 0);
 
   return (
     // NoteNavigator.tsx(/lol/compare/)와 동일 골격 — <section>이 panel-surface-glass(레일+채움)를
@@ -238,6 +242,24 @@ export default function ReleaseNoteStream({
         gapCount={gapCount}
         className="flex gap-2 border-b border-border-soft px-5 pt-4"
       />
+
+      {/* 목록 아래 블록 바로가기(트랙 B ST-20, lol-S13 — 사용자 결정 「패널 유지 + 더 보기」). 「유의한 관측 없음」·「기타 변경」은
+          스크롤 패널 맨 아래라 페이지 스크롤로는 보이지 않고 잘려 있다는 단서도 없었다. 건수와 함께 그 자리로 가는 링크를 머리에 둔다. */}
+      {tab === "content" && (quietCount > 0 || miscTotal > 0) ? (
+        <p data-stream-jump className="flex flex-wrap gap-x-3 gap-y-1 border-b border-border-soft px-5 py-2 text-xs text-muted">
+          <span>목록 아래</span>
+          {quietCount > 0 ? (
+            <a href="#stream-quiet" className="font-bold text-accent hover:underline">
+              유의한 관측 없음 {quietCount}건 ↓
+            </a>
+          ) : null}
+          {miscTotal > 0 ? (
+            <a href="#stream-misc" className="font-bold text-accent hover:underline">
+              기타 변경 {miscTotal}건 ↓
+            </a>
+          ) : null}
+        </p>
+      ) : null}
 
       {/* 패치 내용 탭 머리(트랙 B ST-13, parity-S9) — TFT·PUBG 카드의 「대조 · 공지된 변경은 실제로 그렇게 됐나」와 같은 자리·같은 말. */}
       {tab === "content" ? (
@@ -297,7 +319,7 @@ export default function ReleaseNoteStream({
               아이템은 라인별로 집계하지 않아 라인을 고르면 이 목록에서 빠집니다.
             </li>
           ) : null}
-          {segmentStream(filtered).map((segment) =>
+          {segments.map((segment) =>
             segment.kind === "rows" ? (
               segment.entries.map((entry) => renderRow(entry))
             ) : (
@@ -310,7 +332,11 @@ export default function ReleaseNoteStream({
               // 만들 수 있으므로(scope-critic ST3) 상수 key를 쓰면 React key가 중복된다.
               // `group/fold`: 카드(ReleaseNoteRow)도 `<details className="group">`이라 이름 없는
               // group을 쓰면 이 요약행이 열릴 때 **안쪽 카드의 화살표까지** `group-open:`에 반응한다.
-              <li key={`fold:${segment.entries[0]?.group.entity ?? ""}`} className="border-b border-border-soft last:border-b-0">
+              <li
+                key={`fold:${segment.entries[0]?.group.entity ?? ""}`}
+                id={segment === firstFold ? "stream-quiet" : undefined}
+                className="border-b border-border-soft last:border-b-0"
+              >
                 <details className="group/fold">
                   <summary className="flex cursor-pointer list-none items-center gap-4 px-5 py-3 text-xs text-muted [&::-webkit-details-marker]:hidden">
                     <span className="font-bold text-fg-2">유의한 관측 없음</span>

@@ -6,7 +6,8 @@
 import type { ReactNode } from "react";
 
 import { panelSurfaceClass } from "@/lib/panelSurface";
-import { PANEL_SPLIT_COLUMN, PANEL_SPLIT_HEIGHT } from "@/lib/panelScroll";
+import { PANEL_SPLIT_COLUMN, PANEL_SPLIT_GROUP, PANEL_SPLIT_HEIGHT, PANEL_SPLIT_HEIGHT_EXPANDED } from "@/lib/panelScroll";
+import SplitExpand from "./SplitExpand";
 
 export interface CompareSplitProps {
   nav: ReactNode;
@@ -19,26 +20,34 @@ export interface CompareSplitProps {
   coverage?: ReactNode;
   /** 표 위 한 줄 고지(라인 필터 안내 등). */
   notice?: ReactNode;
+  /** 표의 대상 수 — 「표 전체 펼치기」 문구(트랙 B ST-20). 없으면 펼치기 없이 기존대로. */
+  total?: number;
 }
 
-export default function CompareSplit({ nav, title, meta, children, coverage, notice }: CompareSplitProps) {
-  return (
-    // `minmax(0,1fr)` — `1fr`은 `minmax(auto,1fr)`이라 표의 최소 너비만큼 트랙이 늘어나고 section의 overflow-hidden이
-    // 판정 열을 잘랐다(ST-25, site-review parity-S15·lol-S8: 1280px 기본 상태에서 판정 열이 화면 밖). `StreamColumnLayout`이
-    // 같은 이유로 이미 쓰는 값이다.
-    <div className={`grid grid-cols-1 gap-6 lg:grid-cols-[320px_minmax(0,1fr)] ${PANEL_SPLIT_HEIGHT}`}>
+export default function CompareSplit({ nav, title, meta, children, coverage, notice, total }: CompareSplitProps) {
+  const body = (
+    <>
       {nav}
       <section className={`${panelSurfaceClass("glass")} ${PANEL_SPLIT_COLUMN} overflow-hidden rounded-lg`}>
         <div className="panel-head-wash flex items-center justify-between gap-4 border-b border-border-soft px-5 py-5">
           <h2 className="font-display text-lg font-bold text-fg">{title}</h2>
           {meta ? <span className="font-mono text-xs tabular-nums text-muted">{meta}</span> : null}
         </div>
-        {notice ? (
-          <p className="border-b border-border-soft px-5 py-2 text-xs text-muted">{notice}</p>
-        ) : null}
+        {notice ? <p className="border-b border-border-soft px-5 py-2 text-xs text-muted">{notice}</p> : null}
         {children}
         {coverage}
       </section>
-    </div>
+    </>
+  );
+  // `minmax(0,1fr)` — `1fr`은 `minmax(auto,1fr)`이라 표의 최소 너비만큼 트랙이 늘어나고 section의 overflow-hidden이
+  // 판정 열을 잘랐다(ST-25, site-review parity-S15·lol-S8: 1280px 기본 상태에서 판정 열이 화면 밖). `StreamColumnLayout`이
+  // 같은 이유로 이미 쓰는 값이다.
+  const grid = `grid grid-cols-1 gap-6 lg:grid-cols-[320px_minmax(0,1fr)] ${PANEL_SPLIT_HEIGHT}`;
+  if (total === undefined) return <div className={grid}>{body}</div>;
+  // 「패널 유지 + 더 보기」(트랙 B ST-20) — 기본은 같은 고정 높이, 사람이 고르면 표 전체를 펼친다.
+  return (
+    <SplitExpand total={total} className={`${PANEL_SPLIT_GROUP} ${grid} ${PANEL_SPLIT_HEIGHT_EXPANDED}`}>
+      {body}
+    </SplitExpand>
   );
 }
