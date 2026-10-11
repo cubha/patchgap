@@ -753,10 +753,16 @@ describe("§8-6 모바일 — 390px에서 칸이 무너지지 않는다", () => 
   it("대조표의 짧은 라벨·숫자 칸은 nowrap이다 — 표가 넓어져 가로로 스크롤한다", () => {
     // 표는 이미 `overflow-auto`(PANEL_SCROLL_BODY) 안에 있다. min-content가 뷰포트를 넘으면
     // 눌리는 대신 스크롤된다. `min-width` 하한만으로는 못 막는다 — 640÷열수가 내용보다 작다.
+    // 2026-10-11 명세 이동(트랙 B ST-11, parity-S19): 이름 칸은 세 대조표 공용 `CompareNameCell`이 그린다 — nowrap 처방도 거기 있고,
+    // 세 표가 그것을 쓰는지 본다(한 표만 사본으로 돌아가면 그 표만 다시 무너진다).
+    const cell = read("src/components/compare/CompareNameCell.tsx");
+    expect(cell).toMatch(/font-bold whitespace-nowrap text-fg group-hover:text-accent/);
+    for (const f of ["src/components/tft/TftCompareExplorer.tsx", "src/components/pubg/PubgCompareExplorer.tsx", "src/components/compare/DeltaTable.tsx"]) {
+      expect(read(f), f).toMatch(/<CompareNameCell\b/);
+    }
     const tft = read("src/components/tft/TftCompareExplorer.tsx");
-    expect(tft).toMatch(/font-bold whitespace-nowrap text-fg group-hover:text-accent/);
     expect(tft).toMatch(/추정 원인/);
-    expect(tft.match(/whitespace-nowrap/g)?.length ?? 0).toBeGreaterThanOrEqual(3);
+    expect(tft.match(/whitespace-nowrap/g)?.length ?? 0).toBeGreaterThanOrEqual(2);
 
     const pubg = read("src/components/pubg/PubgCompareExplorer.tsx");
     // 숫자 5열 전부 — 하나라도 빠지면 그 열만 다시 무너진다.

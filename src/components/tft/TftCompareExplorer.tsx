@@ -14,6 +14,7 @@ import CompareSplit from "@/components/compare/CompareSplit";
 import CompareToolbar from "@/components/compare/CompareToolbar";
 import { useFilterHash } from "@/components/compare/useFilterHash";
 import NoteNavPanel from "@/components/compare/NoteNavPanel";
+import CompareNameCell from "@/components/compare/CompareNameCell";
 import { useRowFocus } from "@/components/compare/useRowFocus";
 import {
   countByFilter,
@@ -43,12 +44,17 @@ import { tftEntityHref } from "@/lib/tftRoutes";
 import { usePairBase } from "@/components/PairBaseContext";
 import { DISPLAY_SORT_PRIORITY, type DisplayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
-import type { DeltaMetric, PatchNoteItem } from "@/pipeline/types";
+import type { DeltaEntityType, DeltaMetric, PatchNoteItem } from "@/pipeline/types";
 
 
 export interface TftCompareExplorerProps {
   rows: TftEntityRow[];
   notes: PatchNoteItem[];
+  /**
+   * 노트 대상 이름 → 대상 키(`unit:DA_18_Rakan`) — 좌측 내비 아이콘의 재료(트랙 B ST-11, parity-S20). 판정 산출물의 이름 표에서
+   * 서버가 만든다(노트는 이름만 갖는다). 이름이 둘 이상의 대상에 걸리면 첫 대상 — 없으면 이니셜.
+   */
+  noteEntityKeys?: Readonly<Record<string, string>>;
   /**
    * 자산이 실재하는 대상 키(`unit:DA_18_Rakan`). 배열로 받는다 — `Set`은 서버→클라이언트
    * 직렬화가 안 된다. 없는 자산은 요청조차 하지 않는다(404는 설계된 상태가 아니다).
@@ -96,7 +102,7 @@ function matchedNoteIdsOf(row: TftEntityRow): string[] {
   return [...out];
 }
 
-export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftCompareExplorerProps) {
+export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, assetKeys = [] }: TftCompareExplorerProps) {
   const haveAssets = useMemo(() => new Set(assetKeys), [assetKeys]);
   // 과거 쌍 대조표면 상세 링크가 그 쌍의 상세로 간다(2026-09-28, 이월 R8 — LoL `DeltaTable`과 같은 컨텍스트).
   const pairBase = usePairBase();
@@ -129,9 +135,16 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
       sectionLabel: noteSectionLabel("tft", n.section),
       summary: n.summary,
       detail: n.skill ?? n.stat,
+      icon: iconOfNote(n.entity),
     }));
     return groupNoteNavItems(items);
-  }, [notes]);
+    function iconOfNote(entity: string) {
+      const full = noteEntityKeys[entity];
+      if (!full) return null;
+      const [type, key] = [full.slice(0, full.indexOf(":")), full.slice(full.indexOf(":") + 1)];
+      return { entityType: type as DeltaEntityType, entityKey: key, assetMissing: !haveAssets.has(full) };
+    }
+  }, [notes, noteEntityKeys, haveAssets]);
 
   const sections = useMemo(() => noteNavSections(navGroups), [navGroups]);
   const visibleNav = useMemo(
@@ -211,6 +224,7 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
             selectedId={selected?.id ?? null}
             onSelect={setSelected}
             statusOf={navStatusOf}
+            game="tft"
           />
         }
         notice={
@@ -249,28 +263,23 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
                   }`}
                 >
                   <td className="px-4 py-3">
-                    {/* 아이콘은 LoL 대조표(`DeltaTable`)와 같은 자리다 — TFT만 비어 있었다. */}
-                    <Link href={tftEntityHref(row.key, pairBase)} className="flex items-center gap-3 group">
-                      <EntityIcon
-                        game="tft"
-                        entityType={row.entityType}
-                        entityKey={row.key.slice(row.key.indexOf(":") + 1)}
-                        name={row.name}
-                        size={40}
-                        assetMissing={!haveAssets.has(row.key)}
-                      />
-                      {/* `whitespace-nowrap`이 표를 넓히는 장치다 — 표는 이미
-                          `overflow-auto` 안에 있으므로 min-content가 뷰포트를 넘으면 **가로로
-                          스크롤**된다. 없으면 390px에서 칸이 16px로 눌려 이름이 세로로 한 글자씩
-                          쌓였다(2026-09-23 렌더 실측). `min-width` 하한만으로는 못 막는다 —
-                          640px÷열수가 이름 길이보다 작아 같은 증상이 남는다. */}
-                      <span className="flex flex-col gap-0.5">
-                        <span className="font-bold whitespace-nowrap text-fg group-hover:text-accent">{row.name}</span>
-                        <span className="font-mono text-xs tracking-wider whitespace-nowrap text-muted uppercase">
-                          {entityTypeLabel(row.entityType)}
-                        </span>
-                      </span>
-                    </Link>
+                    {/* 이름 칸은 세 게임 공용(ST-11, parity-S19) — 아이콘 자리·이름 →·유형 줄. */}
+                    <CompareNameCell
+                      name={row.name}
+                      typeLabel={entityTypeLabel(row.entityType)}
+                      href={tftEntityHref(row.key, pairBase)}
+                      icon={
+                        <EntityIcon
+                          game="tft"
+                          entityType={row.entityType}
+                          entityKey={row.key.slice(row.key.indexOf(":") + 1)}
+                          name={row.name}
+                          size={40}
+                          assetMissing={!haveAssets.has(row.key)}
+                        />
+                      }
+                      iconSlotClass="h-10 w-10"
+                    />
                   </td>
                   {TFT_METRICS.map((m) => (
                     <td key={m} className="px-2 py-3">

@@ -54,7 +54,9 @@ export default function TftCompareView({ bundle, declaration, pairBase = null, o
         manifest.assets[kind].map((key) => `${kind}:${key}`)
       )
     : [];
-  const shownDeltas = rows.reduce((sum, r) => sum + Object.keys(r.cells).length, 0);
+  // 노트 대상 이름 → 대상 키(좌측 내비 아이콘, ST-11 parity-S20). 판정 산출물 전 행의 이름 표 — 표에 오르지 않은 대상도 아이콘은 있다.
+  const noteEntityKeys: Record<string, string> = {};
+  for (const r of deltas.rows) noteEntityKeys[r.entityName] ??= `${r.entityType}:${r.entityKey}`;
   // 커버리지 단위는 **엔티티**다 — 표의 행 수와 같은 수가 나와야 화면이 스스로를 반박하지 않는다.
   const noteEntities = new Set(notes.items.map((n) => n.entity)).size;
   // 「관측 짝」 = 브리핑 결론 문장·카드 머리와 **같은 함수**(tft-S8) — 전에는 표 행 기준이라 네 화면이 네 숫자를 말했다.
@@ -88,6 +90,7 @@ export default function TftCompareView({ bundle, declaration, pairBase = null, o
             <TftCompareExplorer
               rows={rows}
               notes={notes.items}
+              noteEntityKeys={noteEntityKeys}
               assetKeys={assetKeys}
             />
           </PairBaseProvider>

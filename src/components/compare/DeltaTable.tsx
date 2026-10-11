@@ -22,10 +22,11 @@ import { useRowFocus } from "./useRowFocus";
 import type { DeltaRecord } from "@/pipeline/types";
 import { PANEL_SPLIT_BODY } from "@/lib/panelScroll";
 import type { LaneAxis } from "@/lib/lane";
-import { fmtDisplayDelta, metricLabel, positionLabel } from "@/lib/format";
+import { entityTypeLabel, fmtDisplayDelta, metricLabel, positionLabel } from "@/lib/format";
 import { lolEntityHref } from "@/lib/detailRoutes";
 import { usePairBase } from "@/components/PairBaseContext";
 import EntityIcon from "@/components/EntityIcon";
+import CompareNameCell from "./CompareNameCell";
 import LaneGlyph from "@/components/LaneGlyph";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineCell from "@/components/gamedata/SubmarineCell";
@@ -182,24 +183,14 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                   className={`border-b border-border-soft ${highlighted ? "row-highlight" : ""}`}
                 >
                   <td className="px-4 py-3 font-body">
-                    <div className="flex items-center gap-3">
-                      <EntityIcon entityType={row.entityType} entityKey={row.entityKey} name={row.entityName} size={40} />
-                      {/* 잠수함 전용 행은 관측이 하나도 없어 상세로 갈 자리가 없다 —
-                          없는 링크를 만들지 않고 이름만 그린다(2026-09-21). */}
-                      {row.representative ? (
-                        // 이름은 한 줄이다(max-w-48 truncate + title) — 줄이 늘면 행 높이가 따라 늘어 표 전체가 출렁인다(2026-10-07 레이아웃
-                        // 게이트 D-STRESS-02, /lol/compare/). 표는 가로 스크롤 영역 안이라 폭은 여기서 묶는다.
-                        <Link
-                          href={lolEntityHref(row.representative, pairBase)}
-                          title={row.entityName}
-                          className="block max-w-48 truncate font-bold text-fg hover:text-accent hover:underline"
-                        >
-                          {row.entityName}
-                        </Link>
-                      ) : (
-                        <span title={row.entityName} className="block max-w-48 truncate font-bold text-fg">{row.entityName}</span>
-                      )}
-                    </div>
+                    {/* 이름 칸은 세 게임 공용(ST-11, parity-S19). 잠수함 전용 행은 관측이 없어 상세로 갈 자리가 없다 — 링크 없이 이름만. */}
+                    <CompareNameCell
+                      name={row.entityName}
+                      typeLabel={entityTypeLabel(row.entityType)}
+                      href={row.representative ? lolEntityHref(row.representative, pairBase) : null}
+                      icon={<EntityIcon entityType={row.entityType} entityKey={row.entityKey} name={row.entityName} size={40} />}
+                      iconSlotClass="h-10 w-10"
+                    />
                   </td>
                   {ENTITY_METRICS.map((metric: EntityMetric) => {
                     const cell = row.cells[metric];
