@@ -199,6 +199,11 @@ export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, a
     "sticky top-0 z-10 whitespace-nowrap bg-surface py-3 text-left shadow-[inset_0_-1px_0_var(--border-soft)] font-body text-xs font-bold text-muted";
   const pinnedCol = "sticky right-0 bg-surface";
   const pinnedCell = `${pinnedCol} shadow-[inset_1px_0_0_var(--border-soft)]`;
+  // 판정 열 폭을 고정해야 lg에서 근거 열을 그 바로 왼쪽(`right-40`)에 함께 고정할 수 있다(트랙 B ST-26 회귀 수정, 1280 실측:
+  // 판정만 고정하니 표 자연폭 961px > 가용 862px에서 근거 열 1103–1184px가 판정 열 1085–1243px 밑에 깔렸다 = tft-S13 회귀).
+  // 375에서는 근거를 고정하지 않는다 — 두 열을 고정하면 이름 칸이 남지 않는다.
+  const verdictWidth = "w-40 min-w-40";
+  const evidencePinnedLg = "lg:sticky lg:right-40 lg:bg-surface";
 
   return (
     <div className="flex flex-col gap-6">
@@ -252,7 +257,10 @@ export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, a
                 {/* 마지막 고정 열 = **판정**(트랙 B ST-26, tft-S14) — LoL·PUBG 대조표와 같다. 전에는 근거 열이 고정이라 375폭에서
                     판정 배지가 가로 스크롤 뒤(x=703)에 있었다. */}
                 {(showSubmarine ? ["바뀐 것", "근거", "판정"] : ["근거", "판정"]).map((h) => (
-                  <th key={h} className={`${thBase} ${h === "판정" ? `${pinnedCol} px-4` : "px-2"}`}>
+                  <th
+                    key={h}
+                    className={`${thBase} ${h === "판정" ? `${pinnedCol} ${verdictWidth} px-4` : h === "근거" ? `${evidencePinnedLg} px-2` : "px-2"}`}
+                  >
                     {h}
                   </th>
                 ))}
@@ -296,7 +304,7 @@ export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, a
                       <SubmarineCell changes={row.submarineChanges} mismatchChanges={row.mismatchChanges} />
                     </td>
                   ) : null}
-                  <td className="px-2 py-3">
+                  <td className={`${evidencePinnedLg} px-2 py-3`}>
                     {/* 탭 타깃 둘(원문·추정 원인)이 세로로 붙는다 — 간격 8px 미만은 Fitts 게이트(D-UX-10) 오류. */}
                     <div className="flex flex-col gap-2">
                       {row.noteAnchor ? (
@@ -317,7 +325,7 @@ export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, a
                     </div>
                   </td>
                   {/* 고정 열 = 판정 — 배경이 있어야 스크롤하는 가운데 열이 밑으로 지나간다. */}
-                  <td className={`${pinnedCell} px-4 py-3`}>
+                  <td className={`${pinnedCell} ${verdictWidth} px-4 py-3`}>
                     <StatusBadge status={row.status} />
                     {METRIC_VERDICTS.has(row.status) && rowIsBoundary(Object.values(row.cells)) ? <BoundaryMark /> : null}
                   </td>

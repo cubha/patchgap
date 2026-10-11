@@ -74,6 +74,7 @@
 - `src/components/__tests__/header-pair-select.test.tsx` 「쌍이 하나뿐」 케이스 — 닫힌 select → 정적 라벨(`data-pair-static`) + 이유 연결 유지(ST-21, pubg-S19).
 - ST-24(tft-S10·tft-S9) 칩 2종 + 타일 착지 `#gap`: `toolbarRules.test.ts` 칩 세트 4→6·`#gap` 케이스 추가, `render.test.tsx` aria-pressed 10→13, `screen-parity.test.ts`·`pair-routes.test.ts`·history-links 2종의 타일 착지 기대값 `#unannounced`→`#gap`(타일이 세는 묶음과 착지 결과 수를 같게).
 - 인수 판정 후속(acceptance-critic): `wording.test.ts` 받침 조사 가드 + 「시스템」 어휘 가드 추가(신규, 기존 단언 변경 없음). `announcedCount.test.ts` `require` → `import`(eslint, 단언 변경 없음).
+- 렌더 실측 후속(tft-S13 회귀): ST-26이 판정만 고정해 1280에서 근거 열(1103–1184px)이 판정 열(1085–1243px) 밑에 깔렸다. `wording.test.ts` ST-26 가드의 고정 열 단언을 `${verdictWidth}` 포함 형태로 바꾸고, lg 근거 고정 단언을 추가했다(판정 고정이라는 의도는 그대로).
 
 ## ⑦ 사용자 결정 대기 (인수 판정에서 드러난 충돌 — 구현자가 임의로 정하지 않음)
 

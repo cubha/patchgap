@@ -181,7 +181,13 @@ describe("대조표 마지막 고정 열 = 판정 — 세 게임(트랙 B ST-26,
   it("TFT 헤더 순서가 근거 → 판정이고 판정이 고정 열", () => {
     const src = read("components/tft/TftCompareExplorer.tsx");
     expect(src).toMatch(/\["바뀐 것", "근거", "판정"\] : \["근거", "판정"\]/);
-    expect(src).toMatch(/h === "판정" \? `\$\{pinnedCol\} px-4`/);
+    expect(src).toMatch(/h === "판정" \? `\$\{pinnedCol\} \$\{verdictWidth\} px-4`/);
+  });
+  it("TFT 1280에서 근거 열이 판정 열 밑에 깔리지 않는다 — lg에서 근거도 판정 왼쪽에 고정(tft-S13 회귀, 1280 실측)", () => {
+    const src = read("components/tft/TftCompareExplorer.tsx");
+    expect(src).toMatch(/const verdictWidth = "w-40 min-w-40"/);
+    expect(src).toMatch(/const evidencePinnedLg = "lg:sticky lg:right-40 lg:bg-surface"/);
+    expect(src).toMatch(/h === "근거" \? `\$\{evidencePinnedLg\} px-2`/);
   });
   it("PUBG 이름 칸 아이콘은 375폭에서 숨는다(무기명 잘림 원인, pubg-S11)", () => {
     expect(read("components/pubg/PubgCompareExplorer.tsx")).toMatch(/hideIconOnMobile/);

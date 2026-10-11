@@ -237,7 +237,8 @@ export default function PubgWeaponDetail({
                 {deltas.meta.from} → {deltas.meta.to} 획득 점유율{" "}
                 <strong className="text-fg">{pct(row.before ?? 0, 2)}</strong> →{" "}
                 <strong className="text-fg">{pct(row.after ?? 0, 2)}</strong> (
-                {signedPct(row.relChange ?? 0)})
+                {signedPct(row.relChange ?? 0)}, 95% CI [{signedPct(row.relCi[0])}, {signedPct(row.relCi[1])}])
+                {/* CI를 머리에 둔다(트랙 B pubg-S10 — 1280×800 실측: 관측 패널 캡션의 CI는 y=1046으로 첫 화면 밖이었다). */}
                 {note ? ` · 공지 “${note.summary}” 대조` : ` · ${deltas.meta.to} 패치노트에 이 무기 항목 없음`}
               </>
             ) : (
