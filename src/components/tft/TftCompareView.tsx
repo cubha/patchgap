@@ -106,7 +106,7 @@ export default function TftCompareView({ bundle, declaration, pairBase = null, o
               <>
                 패치노트 변경 줄 {notes.stats.lines}건 중 {notes.items.length}건(
                 {((notes.items.length / Math.max(1, notes.stats.lines)) * 100).toFixed(1)}%)에서 대상을 특정했고, 나머지{" "}
-                {notes.stats.unresolved}건은 대상이 없는 체계 변경이거나 사전에 없는 소환수입니다.
+                {notes.stats.unresolved}건은 대상이 없는 시스템 변경이거나 사전에 없는 소환수입니다.
               </>
             }
           />

@@ -2,6 +2,8 @@
 // 「공지된 변화」 수의 단위 = 대상(트랙 B ST-3, 2026-10-11 site-review tft-S5·parity-S5·parity-S6·lol-S15).
 // 리뷰 실측: PUBG 히어로·타일 5(조항 수) vs 본문 「공지된 대상 3개」 vs 랜딩 3 — 같은 라벨이 화면마다 조항·대상을 섞었다.
 // 히어로·타일·배너·랜딩이 **같은 함수**를 보게 하고, LoL 대조표 커버리지 「관측 짝」도 같은 단위(대상)로 센다.
+import fs from "node:fs";
+import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
@@ -42,8 +44,6 @@ describe("LoL 대조표 커버리지 「관측 짝」 = 공지 대상 중 관측
 describe("히어로 단위어 — 「N개 대상」(tft-S5)", () => {
   // 히어로의 수는 대상인데 「항목」이라 불러, 바로 아래 타일 부제 「· 97개 항목」(줄 수)과 같은 단어가 두 수를 가리켰다.
   // 리터럴이라 함수로 고정할 수 없어 소스에서 막는다: 「…개 항목」을 히어로·배너 문장에 다시 쓰면 실패한다.
-  const fs = require("node:fs") as typeof import("node:fs");
-  const path = require("node:path") as typeof import("node:path");
   const FILES = [
     "components/home/HeroSummary.tsx",
     "components/tft/TftBriefing.tsx",

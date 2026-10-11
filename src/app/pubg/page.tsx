@@ -3,10 +3,7 @@
 import type { Metadata } from "next";
 import PubgBriefing from "@/components/pubg/PubgBriefing";
 import { pageMeta } from "@/lib/meta";
-import { loadPubg, loadPubgDeclaration, newerPubgDeclaration, pubgPair } from "@/lib/pubgData";
-
-// 패치 번호는 산출물에서 읽는다(`pubgPair`) — 하드코딩하면 다음 패치에서 설명문만 옛 패치를 말한다.
-const PAIR = pubgPair();
+import { loadPubg, loadPubgDeclaration, newerPubgDeclaration } from "@/lib/pubgData";
 
 export const metadata: Metadata = pageMeta({ game: "pubg", screen: "briefing", path: "/pubg/" });
 

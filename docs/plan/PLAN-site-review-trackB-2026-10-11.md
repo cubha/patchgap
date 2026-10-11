@@ -41,7 +41,7 @@
 | ST-11 | — | parity-S19 · parity-S20 · pubg-S22 | 공용 `CompareNameCell`(이름 → + 유형 줄) 세 대조표 · 아이콘 없는 칸 같은 폭 자리표시 · TFT 노트 내비 아이콘(`game` prop) | `compare/*` · `TftCompareExplorer` · `PubgCompareExplorer` · `NoteNavPanel` |
 | ST-12 | [TDD] | lol-S30 · pubg-S23 · parity-S26 · parity-S27 · lol-S19 · pubg-S14 · parity-S12 · lol-S18(문구) | 「탭로」 → 순수 문구 함수 · LoL 방법론 존댓말 · PUBG 방법론 파일명·필드명 → 사용자 말 · 픽률/승률 분모 · PUBG 「무기 상세는 판정이 선 무기만」 정정 · 대조표·방법론 「왼쪽/오른쪽」 방향어 제거(세 게임) | `ObservationSection.tsx` · `StatusDefinitionTable.tsx` · 방법론 3종 · compare 리드 3종 |
 | ST-13 | — | parity-S9 | LoL 접힌 행에 유형 라벨 + 패치 내용 탭 머리 「공지된 변경은 실제로 그렇게 됐나」(공용 상수) | `ReleaseNoteRow.tsx` · `ReleaseNoteStream.tsx` |
-| ST-14 | — | parity-S11 · tft-S11 | 세 브리핑 `SubmarineSection hrefOf` 전달(LoL 상세 있는 대상만) · TFT 선언 뷰 수치 행 링크 | `LolBriefing.tsx` · `TftBriefing.tsx` |
+| ST-14 | — | parity-S11 · tft-S11 | 세 브리핑 `SubmarineSection hrefOf` 전달(LoL 상세 있는 대상만) · TFT 선언 뷰 수치 행 링크. tft-S11 「잠수함 요약을 fold로」는 제외 — UX-BRIEF §8-3(9/23 확정: 수치 축 전수 목록 = 브리핑 「미공지 Gap」 탭 최상단)과 충돌, fold 노출은 ST-22 GapPreview가 맡는다 | `LolBriefing.tsx` · `TftBriefing.tsx` |
 | ST-15 | — | parity-S13 | 「패치노트 원문 보기 ↗」 세 브리핑 같은 자리(`AnnouncedCoverageLine` `sourceUrl`) | `AnnouncedCoverageLine.tsx` · 브리핑 3종 |
 | ST-16 | — | parity-S18 · parity-S29 | PUBG 대조표·방법론 머리를 LoL·TFT 틀로(eyebrow 제거·`pt-40`·방법론 H1 `{게임} — 어떻게 판정하나`) · PUBG 표본 콜아웃을 표본 슬롯으로 흡수 | `app/pubg/{compare,methodology}/page.tsx` · `pubg/shared.tsx` |
 | ST-17 | — | parity-S22 · parity-S23 · pubg-S10 · parity-S24 · pubg-S16 · pubg-S15 · tft-S28 | 상세 폭 narrow 통일 + LoL 대조 카운터·소제목 · PUBG 상세 스플래시 제거 + 패널 막대 앞 문단 ≤1 · PUBG 맵 머리 쌍·「판정 규칙 보기 →」 · 기술통계 탭 배지 없음 · 비교 불가 맵 문구·description · CI 캡션 375 줄바꿈 | 상세 4종 · `ObservationTabs` · `ObservationSection` · `ObservationPanel` · `app/pubg/map/[key]/page.tsx` |
@@ -73,3 +73,10 @@
 - `src/lib/__tests__/panelScroll.test.ts` 구조적 상한 게이트 — 상한 소유자에 `PanelExpand`·`BriefingListPanel`을 인정하고, `PanelExpand`가 기본 상태에 `PANEL_SCROLL_BODY`를 거는지 단언 추가(ST-20, 「패널 유지 + 더 보기」). `src/app/__tests__/link-fragments.test.ts` 추출기 — `pairSectionHref("tft", …)`의 게임 리터럴을 경로로 읽도록(검사기 결함 수정, 약화 아님).
 - `src/components/__tests__/header-pair-select.test.tsx` 「쌍이 하나뿐」 케이스 — 닫힌 select → 정적 라벨(`data-pair-static`) + 이유 연결 유지(ST-21, pubg-S19).
 - ST-24(tft-S10·tft-S9) 칩 2종 + 타일 착지 `#gap`: `toolbarRules.test.ts` 칩 세트 4→6·`#gap` 케이스 추가, `render.test.tsx` aria-pressed 10→13, `screen-parity.test.ts`·`pair-routes.test.ts`·history-links 2종의 타일 착지 기대값 `#unannounced`→`#gap`(타일이 세는 묶음과 착지 결과 수를 같게).
+- 인수 판정 후속(acceptance-critic): `wording.test.ts` 받침 조사 가드 + 「시스템」 어휘 가드 추가(신규, 기존 단언 변경 없음). `announcedCount.test.ts` `require` → `import`(eslint, 단언 변경 없음).
+
+## ⑦ 사용자 결정 대기 (인수 판정에서 드러난 충돌 — 구현자가 임의로 정하지 않음)
+
+- **parity-S9 접힌 행 요소 집합**: LoL 공지 탭 접힌 행은 시안(`docs/design/prototype` `.rn-obs`)대로 대표 관측 1줄(지표·전/후·Δ·CI)을 보이고, TFT·PUBG 접힌 행과 UX-BRIEF §8-2 접힘 정의(`[뱃지] 이름 → · 유형 · N개 항목`)에는 값이 없다. ST-13은 유형 줄과 탭 머리만 맞췄다. 맞추는 방향(LoL에서 값 제거 = 시안 이탈 / TFT·PUBG에 대표 관측 추가 = §8-2 개정)은 시안과 계약 중 어느 쪽을 기준으로 할지의 결정이다.
+- **TFT 증강 이름 「(증강)」 접미**(ST-1 부수): title 중복 해소용으로 넣은 `tftDisplayName`이 대조표·브리핑 행 이름에도 보인다. 같은 이름의 유닛·증강을 화면에서도 구분하므로 유지했다 — 되돌리려면 title 전용으로 좁힌다.
+

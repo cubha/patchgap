@@ -13,14 +13,11 @@ import { pubgNoteTargetCount } from "@/lib/announcedCount";
 import PubgCompareExplorer from "@/components/pubg/PubgCompareExplorer";
 import { PubgFooter, PubgUnavailable } from "@/components/pubg/shared";
 import { compareCrumbs } from "@/lib/breadcrumbs";
-import { isReportable, loadPubg, loadPubgAssets, pubgPair, loadPubgDeclaration } from "@/lib/pubgData";
+import { isReportable, loadPubg, loadPubgAssets, loadPubgDeclaration } from "@/lib/pubgData";
 import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import CoverageSection from "@/components/compare/CoverageSection";
 import { pubgGapTotal } from "@/lib/gapTotals";
 import { pubgVerdictCount } from "@/pipeline/shared/headline";
-
-// 쌍은 산출물에서 읽는다(`pubgPair`) — 하드코딩하면 다음 패치에서 설명문만 옛 쌍을 말한다.
-const PAIR = pubgPair();
 
 export const metadata: Metadata = pageMeta({ game: "pubg", screen: "compare", path: "/pubg/compare/" });
 

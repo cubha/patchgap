@@ -187,3 +187,22 @@ describe("대조표 마지막 고정 열 = 판정 — 세 게임(트랙 B ST-26,
     expect(read("components/pubg/PubgCompareExplorer.tsx")).toMatch(/hideIconOnMobile/);
   });
 });
+
+describe("「엔티티」→「대상」 치환 잔재 — 받침 조사(acceptance-critic 발견)", () => {
+  // 「엔티티」는 받침이 없고 「대상」은 받침이 있다. 일괄 치환이 「대상를」「대상가」를 남겼다(TFT 방법론 실측).
+  const walk = (dir: string): string[] =>
+    fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) return e.name === "__tests__" ? [] : walk(p);
+      return /\.tsx?$/.test(e.name) ? [p] : [];
+    });
+  it("src 전역에 「대상를·대상가·대상는·대상와·대상로」가 없다", () => {
+    const hits = walk(SRC).filter((f) => /대상(를|가|는|와|로)(?![가-힣])|대상(를|가|는|와)\s/.test(fs.readFileSync(f, "utf8")));
+    expect(hits).toEqual([]);
+  });
+  it("노트 미해소 줄은 탭 라벨과 같은 어휘 「시스템」으로 부른다(parity-S17)", () => {
+    for (const rel of ["components/tft/TftCompareView.tsx", "app/tft/methodology/page.tsx"]) {
+      expect(read(rel), rel).not.toMatch(/대상이 없는 체계 변경/);
+    }
+  });
+});

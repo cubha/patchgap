@@ -316,8 +316,8 @@ export default function TftMethodologyPage() {
             18.2 = 9/9 18:00Z). 버전 문자열은 교차 확인용으로만 기록합니다.
           </Row>
           <Row label="패치노트 해소율">
-            파서가 변경 줄 {notes.stats.lines}건 중 {notes.items.length}건({resolveRate.toFixed(1)}%)에서 대상를
-            특정했습니다. 나머지 {notes.stats.unresolved}건은 대상가 없는 체계 변경(레벨 요구 경험치 등)이거나 DDragon
+            파서가 변경 줄 {notes.stats.lines}건 중 {notes.items.length}건({resolveRate.toFixed(1)}%)에서 대상을
+            특정했습니다. 나머지 {notes.stats.unresolved}건은 대상이 없는 시스템 변경(레벨 요구 경험치 등)이거나 DDragon
             카탈로그에 없는 소환수(덩굴정령·어미 부리)입니다. 짝지을 수 없는 이름을 지어내 채우지 않습니다.
           </Row>
           <Row label="계획 대비 확장">
