@@ -257,9 +257,20 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
                   /* 수치 축(2026-09-21) — 미공지 Gap 탭의 **위쪽 갈래**. 세 번째 탭이 아닌
                      이유는 잠수함도 미공지이기 때문이다(잠수함 > 미공지 위계를 같은 탭 안에서
                      위아래로 표현한다). 산출물이 없는 쌍에서는 통째로 빠진다.
-                     상세 링크를 걸지 않는 이유: LoL 잠수함 전용 엔티티(폭풍갈퀴)는 델타가
-                     0건이라 `/lol/item/[id]` 라우트가 없다 — 없는 링크를 만들지 않는다. */
-                  gapLead={submarine ? <SubmarineSection summary={submarine} /> : undefined}
+                     상세 링크는 **이 쌍에 상세 라우트가 있는 대상에만** 건다(트랙 B ST-14, parity-S11 — TFT·PUBG 수치 행은 이름이
+                     상세로 가는데 LoL만 없었다). 잠수함 전용 대상(폭풍갈퀴 등)은 델타가 0건이라 라우트가 없다 — 없는 링크를 만들지 않는다. */
+                  gapLead={
+                    submarine ? (
+                      <SubmarineSection
+                        summary={submarine}
+                        hrefOf={(change) =>
+                          detailKeys.has(`${change.entityType}:${change.entityKey}`)
+                            ? lolEntityHref({ entityType: change.entityType as DeltaRecord["entityType"], entityKey: change.entityKey }, pairBase)
+                            : null
+                        }
+                      />
+                    ) : undefined
+                  }
                   metricGapCount={headline.unannouncedCount}
                 />
               }

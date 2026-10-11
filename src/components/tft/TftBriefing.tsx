@@ -28,7 +28,8 @@ import { DeclarationHero, DeclarationNotesCard, declarationEntityCount } from "@
 import NewerPatchNotice from "@/components/NewerPatchNotice";
 import type { ObservationSchedule } from "@/lib/observationEta";
 import { pairBasePath, pairSectionHref, pairSectionLink } from "@/lib/pairRoutes";
-import { latestObservedTftPair } from "@/lib/tftData";
+import { latestObservedTftPair, loadTft } from "@/lib/tftData";
+import { tftDetailRows } from "@/lib/pairPages";
 import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
@@ -393,6 +394,11 @@ function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
   const observedLink = observed ? pairSectionLink("tft", observed.pair, observed.isLatest, "", "브리핑") : null;
   // 수치 축은 관측과 무관하게 실재한다(게임 파일 대조) — Gap 탭 배지는 그 대상 수.
   const numericGap = tftGapTotal([], 0, submarine);
+  // 수치 행 → 관측이 있는 최신 쌍의 같은 대상 상세(그 쌍에 상세가 있을 때만 — 링크가 404를 가리키지 않게, 2026-09-21 교훈).
+  const observedBundle = observed ? loadTft(observed.pair) : null;
+  const observedKeys = new Set(observedBundle ? tftDetailRows(observedBundle).map((r) => r.key) : []);
+  const observedBase = observed && !observed.isLatest ? pairBasePath("tft", observed.pair) : null;
+  const observedDetailHref = (key: string) => (observedKeys.has(key) ? tftEntityHref(key, observedBase) : null);
   return (
     <main>
       <Container>
@@ -421,10 +427,11 @@ function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
             content={<DeclarationNotesCard to={declaration.to} notes={notes} variant="embedded" />}
             gap={
               <div>
-                {/* 관측 없는 쌍엔 상세 라우트가 없다 — 링크 없이 이름만 그린다. */}
+                {/* 관측 없는 쌍엔 상세 라우트가 없다 — 그 대상이 **관측이 있는 최신 쌍**에 상세를 가지면 그리로 보낸다(트랙 B ST-14,
+                    tft-S11: 선언 뷰 수치 행에 링크가 0이었다). 없으면 이름만. */}
                 {submarine ? (
                   <div className="border-b border-border-soft p-5">
-                    <SubmarineSection summary={submarine} hrefOf={() => null} />
+                    <SubmarineSection summary={submarine} hrefOf={(change) => observedDetailHref(`${change.entityType}:${change.entityKey}`)} />
                   </div>
                 ) : null}
                 <SectionCard eyebrow="발견 · 지표 축" title={GAP_METRIC_AXIS_TITLE} variant="embedded">

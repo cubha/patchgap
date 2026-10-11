@@ -61,3 +61,19 @@ describe("브리핑 탭 머리 — 세 게임 같은 상수(트랙 B ST-10·ST-1
     expect(read("components/home/ReleaseNoteRow.tsx")).toMatch(/data-row-type/);
   });
 });
+
+describe("수치 축 행 이름 링크 — 세 브리핑이 hrefOf를 넘긴다(트랙 B ST-14, parity-S11·tft-S11)", () => {
+  const usesOf = (rel: string) => read(rel).match(/<SubmarineSection\b[\s\S]*?\/>/g) ?? [];
+  it.each(["components/home/LolBriefing.tsx", "components/tft/TftBriefing.tsx"])("%s — 모든 사용처가 링크 함수를 넘긴다", (rel) => {
+    const uses = usesOf(rel);
+    expect(uses.length).toBeGreaterThan(0);
+    for (const u of uses) {
+      expect(u).toMatch(/hrefOf=/);
+      expect(u).not.toMatch(/hrefOf=\{\(\) => null\}/);
+    }
+  });
+  it("PUBG — 관측 브리핑은 링크를 넘긴다(선언만 쌍은 무기 상세 라우트 자체가 없어 null이 정직하다)", () => {
+    const uses = usesOf("components/pubg/PubgBriefing.tsx");
+    expect(uses.some((u) => /hrefOf=\{\(change\) => weaponHref/.test(u))).toBe(true);
+  });
+});
