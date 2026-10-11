@@ -6,7 +6,8 @@
 // 링크는 호출부가 만든다(쌍별 라우트는 `lib/pairRoutes`가 소유) — 이 컴포넌트는 게임을 모른다.
 import Link from "next/link";
 
-import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
+import type { ObservationSchedule } from "@/lib/observationEta";
+import { observationProgressText, observationReasonLabel } from "@/pipeline/shared/observation-stub";
 import type { ObservationFailure } from "@/pipeline/types";
 
 /** 관측이 있는 최신 쌍으로 가는 링크. 없으면(그 게임에 관측 쌍이 하나도 없음) 문장만 남는다. */
@@ -23,12 +24,14 @@ export interface ObservationPendingNoticeProps {
   observed?: ObservedPairLink | null;
   /** 방법론처럼 **아래 내용이 다른 쌍 기준**일 때 그 사실을 덧붙인다. */
   basis?: string | null;
-  /** 「10/10(토) 06:00 KST」 — 첫 관측 실행 예정(`awaiting-observation`일 때만 의미). 없으면 날짜 없이. */
-  eta?: string | null;
+  /** 관측 일정(`tftObservationSchedule`) — 대기면 「첫 관측」 또는 「다음 수집」, 수집 중이면 「다음 수집」. 없으면 날짜 없이. */
+  schedule?: ObservationSchedule | null;
   className?: string;
 }
 
-export default function ObservationPendingNotice({ failure, observed = null, basis = null, eta = null, className = "" }: ObservationPendingNoticeProps) {
+export default function ObservationPendingNotice({ failure, observed = null, basis = null, schedule = null, className = "" }: ObservationPendingNoticeProps) {
+  // 부분 수집(`collecting`)은 무엇이 남았는지를 숫자로 말한다 — 사유 문장만으로는 진척을 모른다(2026-10-11).
+  const progress = failure.reason === "collecting" ? observationProgressText(failure.progress) : null;
   return (
     <p
       role="status"
@@ -36,7 +39,8 @@ export default function ObservationPendingNotice({ failure, observed = null, bas
       className={`rounded-md border border-border-soft bg-surface px-4 py-3 text-sm leading-relaxed text-muted ${className}`}
     >
       {observationReasonLabel(failure.reason)}
-      {eta && failure.reason === "awaiting-observation" ? <> 첫 관측은 {eta} 예정입니다.</> : null}
+      {progress ? <> 지금까지 {progress}.</> : null}
+      {schedule ? <> {schedule.kind === "first" ? "첫 관측은" : "다음 수집은"} {schedule.label} 예정입니다.</> : null}
       {basis ? <> {basis}</> : null}
       {observed ? (
         <>

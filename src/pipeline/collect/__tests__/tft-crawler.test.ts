@@ -3,7 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-import { crawlTft, rawTftFile, spanOf, windowOf, type TftPatchWindow } from "../tft-crawler";
+import { crawlProgress, crawlTft, rawTftFile, selectTftWindows, spanOf, windowOf, type TftPatchWindow } from "../tft-crawler";
 import type { TftClient, TftMatchEnvelope } from "../tft-client";
 
 const D = (iso: string) => Date.parse(iso);
@@ -167,5 +167,72 @@ describe("crawlTft", () => {
     const r = await crawlTft({ client: fakeClient(MATCHES), windows: WINDOWS, targetPerPatch: 10, outDir: dir, deadlineAt: Number.MAX_SAFE_INTEGER });
     expect(r.stoppedAtDeadline).toBe(false);
     expect(r.storedByPatch["18.1"]).toBe(2);
+  });
+});
+
+// 2026-10-11 실측(run 38062267855): raw 캐시가 휘발된 뒤 18.3→18.4 관측을 모으는데 ID 조회가 18.1 시작부터라
+// 조회 3,571건 중 18.4 적재는 423건뿐이었다(18.1·18.2 1,200여 건 + 창 밖 1,270건). 조회 범위는 **아직 목표에 못 미친 창**만 덮는다.
+describe("crawlTft — 조회 범위는 목표 미달 창만", () => {
+  let dir: string;
+  beforeEach(() => {
+    dir = fs.mkdtempSync(path.join(os.tmpdir(), "tftcrawl-span-"));
+  });
+  afterEach(() => {
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+
+  function capturingClient(calls: { startTime?: number; endTime?: number }[]): TftClient {
+    const base = fakeClient({ KR_C: { at: D("2026-09-12T00:00:00Z") } });
+    return {
+      ...base,
+      async getMatchIdsByPuuid(puuid, opts) {
+        calls.push({ startTime: opts?.startTime, endTime: opts?.endTime });
+        return base.getMatchIdsByPuuid(puuid, opts);
+      },
+    };
+  }
+
+  it("이미 목표를 채운 창(재개된 raw)은 ID 조회 범위에서 빠진다 — startTime이 미달 창의 시작이다", async () => {
+    fs.writeFileSync(rawTftFile("18.1", dir), `${JSON.stringify({ matchId: "KR_OLD1" })}\n`);
+    const calls: { startTime?: number; endTime?: number }[] = [];
+    const r = await crawlTft({ client: capturingClient(calls), windows: WINDOWS, targetPerPatch: 1, outDir: dir });
+    expect(calls.length).toBeGreaterThan(0);
+    for (const c of calls) expect(c.startTime).toBe(D("2026-09-09T18:00:00Z"));
+    expect(r.storedByPatch).toEqual({ "18.1": 1, "18.2": 1 });
+  });
+
+  it("모든 창이 이미 목표를 채웠으면 ID 조회를 아예 하지 않는다", async () => {
+    fs.writeFileSync(rawTftFile("18.1", dir), `${JSON.stringify({ matchId: "KR_X1" })}\n`);
+    fs.writeFileSync(rawTftFile("18.2", dir), `${JSON.stringify({ matchId: "KR_X2" })}\n`);
+    const calls: { startTime?: number; endTime?: number }[] = [];
+    const r = await crawlTft({ client: capturingClient(calls), windows: WINDOWS, targetPerPatch: 1, outDir: dir });
+    expect(calls).toHaveLength(0);
+    expect(r.requested).toBe(0);
+  });
+});
+
+describe("selectTftWindows — 이번 쌍의 창만", () => {
+  const THREE: TftPatchWindow[] = [
+    { patch: "18.2", startMs: 1, endMs: 2 },
+    { patch: "18.3", startMs: 2, endMs: 3 },
+    { patch: "18.4", startMs: 3, endMs: null },
+  ];
+  it("지정한 패치만 남긴다(순서는 캘린더 순)", () => {
+    expect(selectTftWindows(THREE, ["18.4", "18.3"]).map((w) => w.patch)).toEqual(["18.3", "18.4"]);
+  });
+  it("지정이 없으면 전부 — 로컬 수동 수집은 그대로", () => {
+    expect(selectTftWindows(THREE, undefined)).toHaveLength(3);
+  });
+  it("캘린더에 없는 패치를 지정하면 던진다 — 조용히 0개 창을 돌지 않는다", () => {
+    expect(() => selectTftWindows(THREE, ["18.9"])).toThrow(/18\.9/);
+  });
+});
+
+describe("crawlProgress — 부분 수집 진행", () => {
+  it("창마다 적재·목표를 돌려준다(목표 초과는 목표로 자른다)", () => {
+    expect(crawlProgress({ "18.3": 2600, "18.4": 813 }, 2500)).toEqual([
+      { patch: "18.3", stored: 2500, target: 2500 },
+      { patch: "18.4", stored: 813, target: 2500 },
+    ]);
   });
 });

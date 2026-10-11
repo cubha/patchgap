@@ -10,7 +10,7 @@ import { render } from "@testing-library/react";
 vi.mock("server-only", () => ({}));
 
 import { AmbientProvider } from "@/components/AmbientContext";
-import { newerTftDeclarations, tftHomePair } from "@/lib/tftData";
+import { newerTftDeclarations, tftDeclarationSchedule, tftHomePair } from "@/lib/tftData";
 import { pairSlug } from "@/lib/pairRoutes";
 import TftPage from "../tft/page";
 import TftHistoryPage from "../tft/history/[pair]/page";
@@ -36,8 +36,11 @@ describe("TFT 홈 — 관측이 있는 최신 쌍이 홈이고, 더 새 패치�
       expect(banner, d.to).not.toBeNull();
       expect(banner?.textContent).toContain(`${d.to} 패치노트`);
       expect(banner?.textContent).toMatch(/\d+개 항목/);
-      // 대기 사유면 날짜가 있어야 한다 — "관측 대기"만으로는 고장과 구별되지 않는다.
-      if (d.failure.reason === "awaiting-observation") expect(banner?.textContent).toMatch(/\d+\/\d+\([월화수목금토일]\) \d{2}:\d{2} KST/);
+      // 대기·수집 중 사유면 날짜가 있어야 한다 — "관측 대기"만으로는 고장과 구별되지 않는다. 예정이 지나도 다음 수집 시각을 말한다
+      // (2026-10-11 — 75분 마감 부분 수집 뒤 날짜가 사라져 이 단언이 매 실행 실패했다).
+      if (d.failure.reason === "awaiting-observation" || d.failure.reason === "collecting") {
+        expect(banner?.textContent).toMatch(/\d+\/\d+\([월화수목금토일]\) \d{2}:\d{2} KST/);
+      }
       const link = banner?.querySelector("a[data-newer-patch-link]");
       expect(link?.getAttribute("href")?.replace(/\/$/, "")).toBe(`/tft/history/${pairSlug({ from: d.from, to: d.to })}`);
     }
@@ -50,7 +53,12 @@ describe("TFT 홈 — 관측이 있는 최신 쌍이 홈이고, 더 새 패치�
     const { container } = render(<AmbientProvider>{await page}</AmbientProvider>);
     const status = container.querySelector("[data-observation]");
     expect(status).not.toBeNull();
-    if (d.failure.reason === "awaiting-observation") expect(status?.textContent).toMatch(/첫 관측은 .* KST 예정/);
+    if (d.failure.reason === "awaiting-observation" || d.failure.reason === "collecting") {
+      // 종류까지 본다 — 예정 전 대기는 「첫 관측」, 지난 대기·수집 중은 「다음 수집」(scope-critic: 정규식만이면 종류가 틀려도 통과).
+      const schedule = tftDeclarationSchedule(d);
+      expect(schedule).not.toBeNull();
+      expect(status?.textContent).toContain(`${schedule?.kind === "first" ? "첫 관측" : "다음 수집"}은 ${schedule?.label} 예정`);
+    }
     expect(container.textContent).toContain(`${d.to} 패치노트`);
     // 캡션에 조항 수를 두지 않는다(결정 7) — 머리 「N개 항목」 바로 아래 「공지 N건」이 또 서지 않는다.
     expect(container.textContent).not.toMatch(/공지 \d+건/);

@@ -9,7 +9,7 @@ import { allUnusedSlots } from "@/components/methodology/slots";
 import { TftUnavailable } from "@/components/tft/shared";
 import { fmtKst } from "@/lib/format";
 import { pairSectionLink } from "@/lib/pairRoutes";
-import { latestObservedTftPair, loadTft, loadTftDeclaration } from "@/lib/tftData";
+import { latestObservedTftPair, loadTft, loadTftDeclaration, tftDeclarationSchedule } from "@/lib/tftData";
 import { verdictCount } from "@/pipeline/shared/headline";
 
 export const metadata = { title: "TFT 방법론 — patchgap" };
@@ -45,7 +45,7 @@ export default function TftMethodologyPage() {
         game="tft"
         title={TFT_TITLE}
         lead={TFT_LEAD}
-        notice={declaration ? <ObservationPendingNotice failure={declaration.failure} /> : <TftUnavailable />}
+        notice={declaration ? <ObservationPendingNotice failure={declaration.failure} schedule={tftDeclarationSchedule(declaration)} /> : <TftUnavailable />}
         slots={allUnusedSlots("관측이 있는 쌍이 아직 없어 표본·판정을 말할 수 없습니다. 판정 규칙은 LoL·배틀그라운드와 같습니다.")}
         generatedAt={declaration?.generatedAt ?? null}
         nVerdicts={null}
@@ -56,6 +56,7 @@ export default function TftMethodologyPage() {
     declaration && observed ? (
       <ObservationPendingNotice
         failure={declaration.failure}
+        schedule={tftDeclarationSchedule(declaration)}
         basis={`아래 표본·판정 수치는 관측이 있는 최신 쌍 ${observed.pair.from} → ${observed.pair.to} 기준입니다.`}
         observed={pairSectionLink("tft", observed.pair, observed.isLatest, "", "브리핑")}
       />

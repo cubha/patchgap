@@ -15,7 +15,7 @@ import CoverageSection from "@/components/compare/CoverageSection";
 import type { ObservedPairLink } from "@/components/ObservationPendingNotice";
 import { TftFooter, TftSampleNotice, TftUnavailable } from "@/components/tft/shared";
 import { compareCrumbs } from "@/lib/breadcrumbs";
-import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
+import { loadTftAssets, tftDeclarationSchedule, type TftBundle, type TftDeclaration } from "@/lib/tftData";
 import { tftDetailRows } from "@/lib/pairPages";
 import { PairBaseProvider } from "@/components/PairBaseContext";
 import { countAnnouncedObservedEntities, verdictCount } from "@/pipeline/shared/headline";
@@ -36,7 +36,7 @@ export default function TftCompareView({ bundle, declaration, pairBase = null, o
     return (
       <main>
         <Container>
-          <TftUnavailable failure={declaration?.failure} crumbs={compareCrumbs("tft", pairBase)} observed={observed} />
+          <TftUnavailable failure={declaration?.failure} schedule={tftDeclarationSchedule(declaration ?? null)} crumbs={compareCrumbs("tft", pairBase)} observed={observed} />
         </Container>
         {declaration ? <TftFooter generatedAt={declaration.generatedAt} nVerdicts={0} /> : null}
       </main>

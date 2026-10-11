@@ -32,7 +32,7 @@ import { TFT_METRICS, effectStrength } from "@/lib/tftEntityRows";
 import { TftFooter, TftUnavailable, deltaDisplay, formatMetricValue } from "@/components/tft/shared";
 import { entityTypeLabel, fmtInt, fmtQ, isLowerBetter, metricLabel, statusLabel } from "@/lib/format";
 import { delayedChangesFor, loadGameDataDiff } from "@/lib/gamedata";
-import { loadTftAssets, type TftBundle, type TftDeclaration } from "@/lib/tftData";
+import { loadTftAssets, tftDeclarationSchedule, type TftBundle, type TftDeclaration } from "@/lib/tftData";
 import { tftDetailRows } from "@/lib/pairPages";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import type { DeltaRecord } from "@/pipeline/types";
@@ -86,7 +86,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
     return (
       <main>
         <Container>
-          <TftUnavailable failure={declaration?.failure} crumbs={detailCrumbs("tft", "관측 전", pairBase)} observed={observed} />
+          <TftUnavailable failure={declaration?.failure} schedule={tftDeclarationSchedule(declaration ?? null)} crumbs={detailCrumbs("tft", "관측 전", pairBase)} observed={observed} />
         </Container>
         {declaration ? <TftFooter generatedAt={declaration.generatedAt} nVerdicts={0} /> : null}
       </main>

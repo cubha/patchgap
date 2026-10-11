@@ -14,6 +14,7 @@ import { isObservationStub } from "@/pipeline/shared/observation-stub";
 import type { NamedStat } from "@/pipeline/match/tft-delta";
 import { comparePatchId } from "@/pipeline/collect/calendar-overlay";
 import { readJsonOrNull } from "@/pipeline/shared/json-file";
+import { tftObservationSchedule, type ObservationSchedule } from "@/lib/observationEta";
 
 const TFT_DIR = path.join(process.cwd(), "data", "aggregated", "tft");
 
@@ -216,4 +217,12 @@ export function loadTftDeclaration(pair?: TftPair): TftDeclaration | null {
  */
 export function loadTftAssets(): TftAssetManifest | null {
   return readJson<TftAssetManifest>(path.join(TFT_DIR, "assets.json"));
+}
+
+/**
+ * 선언만 쌍의 관측 일정 — 「첫 관측」/「다음 수집」(2026-10-11). TFT의 관측 전 안내는 브리핑·선언 뷰·대조표·상세·방법론이
+ * **같은 문장**을 말해야 한다(ST-16) — 일정을 한 곳에서만 계산해 다섯 화면이 갈리지 않게 한다.
+ */
+export function tftDeclarationSchedule(declaration: TftDeclaration | null): ObservationSchedule | null {
+  return declaration ? tftObservationSchedule(declaration.failure, declaration.to) : null;
 }

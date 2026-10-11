@@ -14,9 +14,9 @@ import fs from "node:fs";
 import "dotenv/config";
 
 import { createTftClient, type TftTier } from "../src/pipeline/collect/tft-client";
-import { crawlTft } from "../src/pipeline/collect/tft-crawler";
+import { crawlProgress, crawlTft, selectTftWindows, type TftCrawlResult } from "../src/pipeline/collect/tft-crawler";
 import { loadTftWindows } from "./shared/calendar";
-import { isMainModule, parseCliArgs } from "./shared/cli";
+import { isMainModule, parseCliArgs, PATCH_ID_PATTERN } from "./shared/cli";
 
 const VALID_TIERS: readonly TftTier[] = ["challenger", "grandmaster", "master"];
 
@@ -39,6 +39,8 @@ interface CliArgs {
   region: string;
   /** 수집 시간 상한(분). 넘으면 정상 종료하고 `partial=true`를 GITHUB_OUTPUT에 남긴다(R3). 없으면 끝까지. */
   deadlineMinutes?: number;
+  /** 이번 실행이 돌 패치(관측 쌍 `from,to`). 없으면 캘린더 전 창 — 워크플로는 항상 넘긴다(2026-10-11). */
+  patches?: string[];
 }
 
 function parseTiers(raw: string): TftTier[] {
@@ -64,6 +66,7 @@ export function parseArgs(argv: string[]): CliArgs {
     { name: "platform", type: "string", default: "kr" },
     { name: "region", type: "string", default: "asia" },
     { name: "deadlineMinutes", type: "number" },
+    { name: "patches", type: "string" },
   ]);
 
   const target = Number(raw.target);
@@ -84,7 +87,16 @@ export function parseArgs(argv: string[]): CliArgs {
     throw new Error(`run-tft-collect: --deadline-minutes는 양의 정수여야 한다 (받은 값: ${String(raw.deadlineMinutes)})`);
   }
 
+  let patches: string[] | undefined;
+  if (raw.patches !== undefined) {
+    patches = String(raw.patches).split(",").map((p) => p.trim());
+    if (patches.length === 0 || patches.some((p) => !PATCH_ID_PATTERN.test(p))) {
+      throw new Error(`run-tft-collect: --patches는 쉼표로 구분한 패치 ID여야 한다 (받은 값: ${String(raw.patches)})`);
+    }
+  }
+
   return {
+    patches,
     deadlineMinutes,
     target,
     tiers: typeof raw.tiers === "string" ? parseTiers(raw.tiers) : undefined,
@@ -106,6 +118,15 @@ export function resolveApiKey(source: Partial<NodeJS.ProcessEnv> = process.env):
   return key;
 }
 
+/**
+ * 워크플로 출력 — `partial`(관측을 미룰지)과 `progress`(창별 적재/목표 JSON). 진행은 부분 수집 stub이 화면에 「18.4 813/2,500매치」로
+ * 싣는다 — 사유만으로는 대기와 고장을 못 가른다(2026-10-11). 키 이름은 `collect-tft.yml`이 `steps.collect.outputs.*`로 읽는다.
+ */
+export function writeCollectOutputs(githubOutput: string, result: Pick<TftCrawlResult, "stoppedAtDeadline" | "storedByPatch">, target: number): void {
+  fs.appendFileSync(githubOutput, `partial=${result.stoppedAtDeadline ? "true" : "false"}\n`);
+  fs.appendFileSync(githubOutput, `progress=${JSON.stringify(crawlProgress(result.storedByPatch, target))}\n`);
+}
+
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
   const apiKey = resolveApiKey();
@@ -123,7 +144,7 @@ async function main(): Promise<void> {
   try {
     const result = await crawlTft({
       client,
-      windows: PATCH_WINDOWS,
+      windows: selectTftWindows(PATCH_WINDOWS, args.patches),
       targetPerPatch: target,
       tiers: args.tiers,
       seedLimit,
@@ -140,7 +161,7 @@ async function main(): Promise<void> {
     console.log(`\n[tft-collect] ${result.stoppedAtDeadline ? `마감(${args.deadlineMinutes}분)에 멈춤 — 부분 수집` : "완료"} (${elapsed}s)`);
     // 워크플로가 관측(집계·판정)을 미루고 raw 캐시만 저장하게 한다 — 다음 실행이 ids-seen으로 이어 받는다.
     const githubOutput = process.env.GITHUB_OUTPUT;
-    if (githubOutput) fs.appendFileSync(githubOutput, `partial=${result.stoppedAtDeadline ? "true" : "false"}\n`);
+    if (githubOutput) writeCollectOutputs(githubOutput, result, target);
     console.log(`  시드 ${result.seeds}명 · 조회 ${result.requested}건 · 창 밖 ${result.skipped}건`);
     for (const [patch, n] of Object.entries(result.storedByPatch)) {
       console.log(`  ${patch}: ${n}매치`);

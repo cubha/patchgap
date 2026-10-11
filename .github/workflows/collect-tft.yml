@@ -94,6 +94,10 @@ jobs:
         with:
           # 토큰을 .git/config에 남기지 않는다 — push 스텝이 그때만 주입한다(아래 Commit + push 참고).
           persist-credentials: false
+          # 이벤트 SHA가 아니라 **잡 시작 시점의 브랜치 끝**을 받는다(2026-10-11, run 38097140647). 수집 워크플로 넷은 같은
+          # 동시 실행 그룹이라 줄을 서는데, 기본값(이벤트 SHA)이면 앞 실행이 줄 서는 동안 커밋한 데이터를 못 보고 낡은 트리에서
+          # 판정·재작성해 push 직전 rebase가 충돌했다. scripts/__tests__/workflow-fresh-checkout.test.ts가 강제한다.
+          ref: ${{ github.ref_name }}
 
       - name: Setup Node 22
         uses: actions/setup-node@v4
@@ -139,13 +143,16 @@ jobs:
         id: collect
         if: steps.determine.outputs.should_run == 'true'
         env:
-          # 크롤러는 TFT_PATCH_WINDOWS 전 구간을 한 번에 돈다(from·to를 따로 받지 않는다) —
-          # `ids-seen.txt`가 이미 본 id를 걸러 재방문 비용을 0으로 만든다.
+          # 크롤러는 **이번 쌍(from,to)의 창만** 돈다(2026-10-11). 전에는 TFT_PATCH_WINDOWS 전 구간을 돌아, raw 캐시가 휘발된 날
+          # 지난 세트(18.1·18.2)까지 채우느라 18.4가 실행당 수백 건밖에 안 늘었다(10회 실행). 창 안에서도 이미 목표를 채운 창은
+          # ID 조회 범위에서 빠진다. `ids-seen.txt`가 이미 본 id를 걸러 재방문 비용을 0으로 만든다.
           RIOT_API_KEY: ${{ secrets.RIOT_TFT_API_KEY }}
           TARGET: ${{ github.event.inputs.target || '2500' }}
+          PATCH_FROM: ${{ steps.determine.outputs.from }}
+          PATCH_TO: ${{ steps.determine.outputs.to }}
         # 마감 75분 — 잡 제한 120분 안에서 뒤 스텝(집계·LLM 판정·커밋)이 돌 시간을 남긴다(R3). 마감에 걸리면
-        # `partial=true` — 관측은 미루고 raw만 저장한다. 다음 날 실행이 `ids-seen.txt`로 이어 받는다.
-        run: npx tsx scripts/run-tft-collect.ts --target "$TARGET" --deadline-minutes 75
+        # `partial=true` — 관측은 미루고 raw만 저장한다. 다음 날 실행이 `ids-seen.txt`로 이어 받는다. 진행은 `progress=`(JSON).
+        run: npx tsx scripts/run-tft-collect.ts --target "$TARGET" --deadline-minutes 75 --patches "$PATCH_FROM,$PATCH_TO"
 
       - name: Save data/raw/tft (부분 수집도 남긴다)
         if: always() && steps.determine.outputs.should_run == 'true'
@@ -314,9 +321,11 @@ jobs:
         env:
           PATCH_FROM: ${{ steps.determine.outputs.from }}
           PATCH_TO: ${{ steps.determine.outputs.to }}
-          # 부분 수집이면 determine은 관측 계획이라 사유가 비어 있다 — 「표본이 쌓이는 중」이 사실이다.
-          STUB_REASON: ${{ steps.determine.outputs.stub_reason || 'awaiting-observation' }}
-        run: npx tsx scripts/write-observation-stub.ts --game tft --from "$PATCH_FROM" --to "$PATCH_TO" --reason "$STUB_REASON"
+          # 부분 수집이면 사유는 `collecting` + 진행(2026-10-11). 전에는 `awaiting-observation`이라 예정일이 지난 뒤 화면이 날짜도
+          # 진척도 없이 「표본이 쌓이면」만 말했다(수집 중과 고장을 못 가름 → 불변식 실패·Discord 경보 반복). 선언 경로는 determine 사유.
+          STUB_REASON: ${{ steps.collect.outputs.partial == 'true' && 'collecting' || steps.determine.outputs.stub_reason || 'awaiting-observation' }}
+          STUB_PROGRESS: ${{ steps.collect.outputs.partial == 'true' && steps.collect.outputs.progress || '' }}
+        run: npx tsx scripts/write-observation-stub.ts --game tft --from "$PATCH_FROM" --to "$PATCH_TO" --reason "$STUB_REASON" --progress "$STUB_PROGRESS"
 
       # 관측이 죽으면(C14): 관측 산출물을 되돌리고 선언 축(노트 + stub)만 다시 만들어 커밋한다. **잡은 빨간 X로
       # 남는다** — 이 스텝이 성공해도 앞 스텝의 실패가 잡 결론을 정한다. 코드 결함은 드러나야 하고, 그 사이

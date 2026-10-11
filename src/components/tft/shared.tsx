@@ -3,6 +3,7 @@
 // TFT는 `DeltaRecord`를 그대로 내므로 `isReportableRecord`·`displayStatus`·
 // `STATUS_SORT_PRIORITY`가 전부 그냥 걸린다. TFT 전용 술어를 만들지 않는다.
 
+import type { ObservationSchedule } from "@/lib/observationEta";
 import ObservationPendingNotice, { type ObservedPairLink } from "@/components/ObservationPendingNotice";
 import PageHeader from "@/components/PageHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -55,8 +56,11 @@ export function TftUnavailable({
   failure,
   crumbs = null,
   observed = null,
+  schedule = null,
 }: {
   failure?: ObservationFailure | null;
+  /** 관측 일정(`tftDeclarationSchedule`) — 대기·수집 중이면 「첫 관측」/「다음 수집」 날짜. */
+  schedule?: ObservationSchedule | null;
   /** 이동 경로(ST-16) — 관측 전 화면도 골격(브리핑 › 대조표)을 잃지 않는다. */
   crumbs?: readonly Crumb[] | null;
   /** 관측이 있는 최신 쌍의 같은 섹션으로 가는 링크(ST-16). */
@@ -74,7 +78,7 @@ export function TftUnavailable({
         ) : (
           <h1 className="font-display text-3xl font-bold text-fg">전략적 팀 전투 — 관측 전</h1>
         )}
-        <ObservationPendingNotice failure={failure} observed={observed} className="max-w-2xl" />
+        <ObservationPendingNotice failure={failure} observed={observed} schedule={schedule} className="max-w-2xl" />
       </div>
     );
   }

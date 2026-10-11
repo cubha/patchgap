@@ -1,0 +1,8 @@
+### VERIFY-SPEC — SubTask ST-2·ST-3·ST-4 (부분 수집 사유 collecting · 일정 · 화면)
+- 기준선 요구사항: "부분 수집(75분 마감, partial=true) stub이 awaiting-observation 사유라 예정일이 지난 뒤 배너·선언 뷰가 날짜 없이 「표본이 쌓이면」만 말함 → 불변식 2건 실패·Discord 경보 반복. 부분 수집을 별도 상태로 기록하고 진행(N/2500매치)·다음 수집 시각을 말하게" (PLAN ST-2~4)
+- 변경 파일: `src/pipeline/types.ts`(`collecting`, `ObservationProgress`, `ObservationFailure.progress?`) · `src/pipeline/shared/observation-stub.ts`(문구·`observationProgressText`·`parseObservationProgress`) · `scripts/write-observation-stub.ts`(`--progress`) · `src/lib/observationEta.ts`(`tftObservationSchedule`) · `src/components/{NewerPatchNotice,ObservationPendingNotice,DeclarationOnly}.tsx` · `src/components/tft/TftBriefing.tsx` · `src/components/pubg/PubgBriefing.tsx`(prop 이름만) · 테스트 `home-observed-pair.test.tsx`(명세 변경) · `observation-notices.test.tsx`(신규)
+- 관찰 가능한 계약: collecting stub → 배너 「관측·판정용 표본을 모으는 중입니다(18.4 813/2,500매치). 다음 수집은 10/11(일) 06:00 KST 예정입니다.」 · 대기 + 예정 지남 → 「다음 수집(…)부터 시작」/「다음 수집은 … 예정」 · 키 만료 등은 날짜 없음.
+- 구현 결정: `eta: string|null` prop을 `schedule: {kind,label}|null`로 교체(첫 관측/다음 수집을 가르려면 종류가 필요). 다음 수집 시각 = 빌드 시각 이후 첫 cron(21:00 UTC) — 정적 사이트라 다음 빌드 전까지 고정. 진행 문구는 목표 미달 패치만(찬 `from`은 말하지 않음). 관측 영역 패널(`TftDeclarationView` 지표 축 카드)은 사유 문구만 — 진척·일정은 같은 화면 히어로 배너가 말한다.
+- 테스트 명세 변경(보고 대상): `home-observed-pair` 두 단언이 「awaiting일 때 날짜」 → 「awaiting 또는 collecting일 때 날짜」, 선언 뷰 정규식 「첫 관측은」 → 「(첫 관측|다음 수집)은」. 사용자 요구(수집 중 상태·다음 수집 시각)가 명세를 바꿨다.
+- 인접 경계: PUBG는 `collecting`을 쓰지 않는다(부분 수집 경로 없음) — `observationReasonLabel` switch 완전성은 tsc가 강제. `planTftRun`은 stub 종류를 사유로 가르지 않아(`deltasStateOf` → stub) collecting도 다음 실행에서 관측 계획.
+- 미확인 사항: 실제 부분 수집 화면은 다음 부분 수집 때까지 렌더로 보지 않았다(합성 사유 단위 테스트만). `TftObservedRedirect`·`tft/shared`·방법론의 안내는 schedule을 안 넘겨 날짜 없이 사유+진척만 말한다(기존과 같은 수준).
