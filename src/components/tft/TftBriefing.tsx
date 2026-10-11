@@ -33,7 +33,7 @@ import { tftDetailRows } from "@/lib/pairPages";
 import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
-import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
+import { sortBriefingRows } from "@/components/tft/briefingOrder";
 import type { DeltaRecord } from "@/pipeline/types";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import StatTiles from "@/components/StatTiles";
@@ -105,16 +105,6 @@ function tftRowIcon(have: ReadonlySet<string>) {
   return render;
 }
 
-/** 상위 N건 — LoL 홈과 같은 정렬(상태 우선순위 → 효과크기). */
-function topRows(rows: DeltaRecord[], limit: number): DeltaRecord[] {
-  return [...rows]
-    .sort(
-      (a, z) =>
-        STATUS_SORT_PRIORITY[a.status] - STATUS_SORT_PRIORITY[z.status] ||
-        Math.abs(z.delta ?? 0) - Math.abs(a.delta ?? 0)
-    )
-    .slice(0, limit);
-}
 
 /**
  * 델타 목록 → **대상 단위 그룹**(UX-BRIEF §8-2). 표를 버리고 공용 행을 쓴다 —
@@ -297,7 +287,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
                 >
                   <div className={PANEL_SCROLL_BODY}>
                   <BriefingRowList
-                    groups={briefingGroups(topRows(announced, 15), deltas.meta.qAlpha)}
+                    groups={briefingGroups(sortBriefingRows(announced), deltas.meta.qAlpha)}
                     hrefOf={(g) => tftEntityHref(`${g.entityType}:${g.entityKey}`, pairBase)}
                     iconOf={rowIcon}
                     causeOf={causeLine}
@@ -334,7 +324,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
                   >
                     <div className={PANEL_SCROLL_BODY}>
                     <BriefingRowList
-                      groups={briefingGroups(topRows(unannounced, 15), deltas.meta.qAlpha)}
+                      groups={briefingGroups(sortBriefingRows(unannounced), deltas.meta.qAlpha)}
                       hrefOf={(g) => tftEntityHref(`${g.entityType}:${g.entityKey}`, pairBase)}
                       iconOf={rowIcon}
                       causeOf={causeLine}
