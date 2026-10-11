@@ -21,7 +21,7 @@ import MobileActionBar from "@/components/home/MobileActionBar";
 import LaneGapPanel from "@/components/home/LaneGapPanel";
 import StreamColumnLayout from "@/components/home/StreamColumnLayout";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { loadGameDataDiff, summarizeGameData, gameDataReverts } from "@/lib/gamedata";
 import { lolGapTotal } from "@/lib/gapTotals";
 import type { CosmeticSkinItem } from "@/components/home/CosmeticSkinPreview";
 import { isGapStatus } from "@/components/home/logic";
@@ -264,6 +264,7 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
                     submarine ? (
                       <SubmarineSection
                         summary={submarine}
+                        reverts={pair ? gameDataReverts("lol", pair.from, pair.to) : {}}
                         hrefOf={(change) =>
                           detailKeys.has(`${change.entityType}:${change.entityKey}`)
                             ? lolEntityHref({ entityType: change.entityType as DeltaRecord["entityType"], entityKey: change.entityKey }, pairBase)

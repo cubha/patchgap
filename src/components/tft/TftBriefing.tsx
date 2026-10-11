@@ -9,7 +9,7 @@
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { loadGameDataDiff, summarizeGameData, gameDataReverts } from "@/lib/gamedata";
 import {
   TftFooter,
   TftSampleNotice,
@@ -311,6 +311,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
                     <div className="border-b border-border-soft p-5">
                       <SubmarineSection
                         summary={submarine}
+                        reverts={gameDataReverts("tft", deltas.meta.from, deltas.meta.to)}
                         hrefOf={(change) => tftEntityHref(`${change.entityType}:${change.entityKey}`, pairBase)}
                       />
                     </div>
@@ -422,7 +423,11 @@ function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
                     tft-S11: 선언 뷰 수치 행에 링크가 0이었다). 없으면 이름만. */}
                 {submarine ? (
                   <div className="border-b border-border-soft p-5">
-                    <SubmarineSection summary={submarine} hrefOf={(change) => observedDetailHref(`${change.entityType}:${change.entityKey}`)} />
+                    <SubmarineSection
+                      summary={submarine}
+                      reverts={gameDataReverts("tft", declaration.from, declaration.to)}
+                      hrefOf={(change) => observedDetailHref(`${change.entityType}:${change.entityKey}`)}
+                    />
                   </div>
                 ) : null}
                 <SectionCard eyebrow="발견 · 지표 축" title={GAP_METRIC_AXIS_TITLE} variant="embedded">

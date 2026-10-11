@@ -8,6 +8,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { DATA_ROOT } from "@/pipeline/shared/paths";
 import type { GameDataChange, GameDataDiffFile } from "@/pipeline/gamedata/types";
+import { findReverts } from "@/pipeline/gamedata/revert";
 import { isDelayedChange, isNoteMismatchChange, isSubmarineChange } from "@/pipeline/gamedata/types";
 import {
   buildDelayedIndexFromChanges,
@@ -18,6 +19,33 @@ import {
 
 export function gameDataDiffFile(game: string, from: string, to: string, dataRoot = DATA_ROOT): string {
   return path.join(dataRoot, "aggregated", "gamedata", game, `${from}_${to}.json`);
+}
+
+/**
+ * 수치 축 원복 표(트랙 B ST-19, tft-S19) — 변경 id → 되돌린 변경의 패치. 이 쌍의 `from`에서 끝나는 쌍부터 거꾸로 이어지는 직전
+ * 쌍들을 디스크에서 찾아 `findReverts`에 넘긴다. 산출물이 없으면 빈 표.
+ */
+export function gameDataReverts(game: string, from: string, to: string, dataRoot = DATA_ROOT): Record<string, string> {
+  const current = loadGameDataDiff(game, from, to, dataRoot);
+  if (!current) return {};
+  const dir = path.join(dataRoot, "aggregated", "gamedata", game);
+  const pairs = fs.existsSync(dir)
+    ? fs
+        .readdirSync(dir)
+        .map((f) => /^(.+)_(.+)\.json$/.exec(f))
+        .filter((m): m is RegExpExecArray => m !== null)
+        .map((m) => ({ from: m[1], to: m[2] }))
+    : [];
+  const chain: { to: string; changes: GameDataDiffFile["changes"] }[] = [];
+  let cursor = from;
+  for (let guard = 0; guard < 50; guard++) {
+    const prev = pairs.find((p) => p.to === cursor);
+    if (!prev) break;
+    const file = loadGameDataDiff(game, prev.from, prev.to, dataRoot);
+    if (file) chain.push({ to: prev.to, changes: file.changes });
+    cursor = prev.from;
+  }
+  return findReverts(current.changes, chain);
 }
 
 /** 없으면 `null` — 그 게임·그 쌍은 화면에서 이 섹션이 통째로 빠진다(PUBG 출하 게이트와 같은 규약). */

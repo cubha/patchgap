@@ -18,7 +18,7 @@ import Link from "next/link";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { loadGameDataDiff, summarizeGameData, gameDataReverts } from "@/lib/gamedata";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { pubgGapTotal, pubgMetricGapRows } from "@/lib/gapTotals";
 import DeclarationOnly from "@/components/DeclarationOnly";
@@ -229,7 +229,11 @@ export default function PubgBriefing({
                 {/* 수치 축 — 탭 카드 안 위쪽 갈래(LoL 스트림과 같은 자리, B2). */}
                 {submarine ? (
                   <div className="border-b border-border-soft p-5">
-                    <SubmarineSection summary={submarine} hrefOf={(change) => weaponHref(change.entityKey)} />
+                    <SubmarineSection
+                      summary={submarine}
+                      reverts={gameDataReverts("pubg", deltas.meta.from, deltas.meta.to)}
+                      hrefOf={(change) => weaponHref(change.entityKey)}
+                    />
                   </div>
                 ) : null}
                 <SectionCard
