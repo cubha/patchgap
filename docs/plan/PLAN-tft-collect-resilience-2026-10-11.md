@@ -51,3 +51,10 @@
 - 부분 수집 stub → 배너·선언 뷰가 「18.4 813/2,500매치」와 「다음 수집 MM/DD(요) 06:00 KST」를 말한다. 예정일 지난 대기도 날짜를 말한다.
 - push하는 모든 워크플로의 checkout이 이벤트 SHA가 아니라 브랜치 끝 — 테스트가 강제.
 - `bash verify.sh` 통과.
+
+## 상태 (2026-10-11 VERIFY 배치 1회)
+
+- 구현 ST-1~5 완료(TDD RED 선커밋 4건). `bash verify.sh --full` 2회 통과(FIX 전·후).
+- scope-critic: ST-1 no · ST-5 no · **ST-2~4 yes** → TFT 관측 전 안내 3곳(방법론 2·대조표/상세 `TftUnavailable`·`TftObservedRedirect`)에도 일정 전달(`tftDeclarationSchedule` 단일 계산) + `home-observed-pair` 선언 뷰 단언을 정규식 → 일정 종류·라벨 정확 일치로 강화 + 소스 가드(`observation-notices.test`).
+- acceptance-critic: V1(=위 범위 확대) 반영 · V2 `progress=` 출력을 `writeCollectOutputs`로 분리해 stub 파서 왕복 테스트 + 워크플로 `id: collect` 단언 · V3(verify) 통과.
+- 남는 한계(의도): 「다음 수집」 시각은 빌드 시각 기준이라 cron이 돌고 커밋이 없으면 다음 빌드 전까지 지난 시각으로 남는다(정적 사이트). 부분 수집이면 그 실행이 stub을 커밋해 재빌드된다.
