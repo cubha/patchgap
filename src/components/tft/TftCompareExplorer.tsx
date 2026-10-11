@@ -249,8 +249,10 @@ export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, a
                 ))}
                 {/* 「바뀐 것」 — 수치 축(F9). 지표 열이 "지표가 어떻게 움직였나"를 말하면
                     이 열은 "게임사가 무엇을 바꿨나"를 말한다. */}
-                {(showSubmarine ? ["바뀐 것", "판정", "근거"] : ["판정", "근거"]).map((h) => (
-                  <th key={h} className={`${thBase} ${h === "근거" ? `${pinnedCol} px-4` : "px-2"}`}>
+                {/* 마지막 고정 열 = **판정**(트랙 B ST-26, tft-S14) — LoL·PUBG 대조표와 같다. 전에는 근거 열이 고정이라 375폭에서
+                    판정 배지가 가로 스크롤 뒤(x=703)에 있었다. */}
+                {(showSubmarine ? ["바뀐 것", "근거", "판정"] : ["근거", "판정"]).map((h) => (
+                  <th key={h} className={`${thBase} ${h === "판정" ? `${pinnedCol} px-4` : "px-2"}`}>
                     {h}
                   </th>
                 ))}
@@ -295,11 +297,6 @@ export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, a
                     </td>
                   ) : null}
                   <td className="px-2 py-3">
-                    <StatusBadge status={row.status} />
-                    {METRIC_VERDICTS.has(row.status) && rowIsBoundary(Object.values(row.cells)) ? <BoundaryMark /> : null}
-                  </td>
-                  {/* 고정 열 — 배경이 있어야 스크롤하는 가운데 열이 밑으로 지나간다. */}
-                  <td className={`${pinnedCell} px-4 py-3`}>
                     {/* 탭 타깃 둘(원문·추정 원인)이 세로로 붙는다 — 간격 8px 미만은 Fitts 게이트(D-UX-10) 오류. */}
                     <div className="flex flex-col gap-2">
                       {row.noteAnchor ? (
@@ -318,6 +315,11 @@ export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, a
                         </Link>
                       ) : null}
                     </div>
+                  </td>
+                  {/* 고정 열 = 판정 — 배경이 있어야 스크롤하는 가운데 열이 밑으로 지나간다. */}
+                  <td className={`${pinnedCell} px-4 py-3`}>
+                    <StatusBadge status={row.status} />
+                    {METRIC_VERDICTS.has(row.status) && rowIsBoundary(Object.values(row.cells)) ? <BoundaryMark /> : null}
                   </td>
                 </tr>
               ))}

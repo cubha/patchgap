@@ -176,3 +176,14 @@ describe("경계 표기 — 세 대조표·상세 머리·세 방법론(트랙 B
     expect(read("components/methodology/StatusDefinitionTable.tsx").replace(/\{\/\*[\s\S]*?\*\/\}/g, "")).not.toMatch(/홈 카드/);
   });
 });
+
+describe("대조표 마지막 고정 열 = 판정 — 세 게임(트랙 B ST-26, tft-S14·parity-S15)", () => {
+  it("TFT 헤더 순서가 근거 → 판정이고 판정이 고정 열", () => {
+    const src = read("components/tft/TftCompareExplorer.tsx");
+    expect(src).toMatch(/\["바뀐 것", "근거", "판정"\] : \["근거", "판정"\]/);
+    expect(src).toMatch(/h === "판정" \? `\$\{pinnedCol\} px-4`/);
+  });
+  it("PUBG 이름 칸 아이콘은 375폭에서 숨는다(무기명 잘림 원인, pubg-S11)", () => {
+    expect(read("components/pubg/PubgCompareExplorer.tsx")).toMatch(/hideIconOnMobile/);
+  });
+});
