@@ -49,6 +49,8 @@ export interface GameLandingCard {
   unannounced: number | null;
   /** 이 게임이 분석한 매치 총수 — 합산 타일의 재료. */
   matches: number;
+  /** 카드가 보여 주는 쌍의 전후 매치 합 — 표본 줄의 수(트랙 B ST-7). 관측 전 0. */
+  pairMatches: number;
 }
 
 export interface LandingTotals {
@@ -60,7 +62,7 @@ export interface LandingTotals {
 /** 게임별 가변부. 불변부(label·tag·art·href)는 GAMES와 `sectionHref`에서 나온다. */
 export type LandingSummary = Pick<
   GameLandingCard,
-  "pair" | "sample" | "announced" | "significant" | "unannounced" | "matches"
+  "pair" | "sample" | "announced" | "significant" | "unannounced" | "matches" | "pairMatches"
 >;
 
 /** 데이터가 없으면 `null` — 그 게임은 랜딩에서 빠진다(PUBG 출하 게이트와 같은 규약). */
@@ -185,4 +187,9 @@ export function landingTotals(cards: readonly GameLandingCard[]): LandingTotals 
     }),
     { matches: 0, significant: 0, unannounced: 0 }
   );
+}
+
+export function landingMatchBreakdown(cards: readonly GameLandingCard[]): { label: string; matches: number }[] {
+  void cards;
+  throw new Error("TODO(landing): landingMatchBreakdown");
 }
