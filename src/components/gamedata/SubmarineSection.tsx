@@ -18,12 +18,13 @@ import {
   submarineCellText,
 } from "./submarineText";
 import type { SubmarineSummary } from "@/lib/gamedata";
+import { SIGNED_PERCENT, formatSignedPercent } from "@/pipeline/shared/percent";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 
 function formatRel(rel: number | null): string | null {
   if (rel === null) return null;
-  const sign = rel > 0 ? "+" : "";
-  return `${sign}${(rel * 100).toFixed(1)}%`;
+  // 부호 규칙은 공용 포매터 하나(트랙 B ST-9 — 음수 기호 `−` 1종).
+  return formatSignedPercent(rel, 1, SIGNED_PERCENT);
 }
 
 export interface SubmarineSectionProps {

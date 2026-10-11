@@ -67,3 +67,4 @@
 - `src/app/pubg/__tests__/page-order.test.tsx` — 타일 부제 「(43.1 패치노트)」→「(43.1 패치노트 · N개 항목)」(ST-3, parity-S6).
 - `src/components/compare/__tests__/render.test.tsx` 2곳 — 빈 상태 「표시할 델타가 없습니다」→「표시할 변화가 없습니다」(ST-5, lol-S22·parity-S16 사용자 어휘).
 - `src/components/home/__tests__/render.test.tsx` — 디스코드 패널 「마지막 집계」→「마지막 판정」(ST-8, lol-S17·parity-S32 — 값이 판정 파일 시각).
+- `src/pipeline/shared/__tests__/percent.test.ts` 오라클 — 하이픈 음수를 `−`로 읽음 · `src/components/tft/__tests__/shared.test.ts` 3곳 · `src/pipeline/discord/__tests__/pubg-briefing.test.ts` 1곳 — 음수 기호 `−` 1종(ST-9, parity-S21; 디스코드 임베드 출력도 바뀐다).

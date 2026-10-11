@@ -14,14 +14,14 @@ export interface SignedPercentStyle {
   unit: "%" | "%p";
   /** 정확히 0일 때 붙일 부호. */
   zeroSign: "+" | "";
-  /** 음수 기호 — 산문은 유니코드 마이너스(`−`)를 쓴다. */
-  minus: "-" | "−";
+  /** 음수 기호 — 전 표면 유니코드 마이너스(`−`) 1종(트랙 B ST-9, parity-S21). 전에는 TFT·PUBG 표가 하이픈이라 LoL·산문과 갈렸다. */
+  minus: "−";
 }
 
 /** TFT 화면 — 확률 차는 `%p`, 0은 `+0.0%p`. */
-export const SIGNED_POINT: SignedPercentStyle = { unit: "%p", zeroSign: "+", minus: "-" };
+export const SIGNED_POINT: SignedPercentStyle = { unit: "%p", zeroSign: "+", minus: "−" };
 /** PUBG 화면·디스코드 — `%`, 0은 무부호. 두 표면이 같은 출력을 내야 해서 같은 상수를 쓴다. */
-export const SIGNED_PERCENT: SignedPercentStyle = { unit: "%", zeroSign: "", minus: "-" };
+export const SIGNED_PERCENT: SignedPercentStyle = { unit: "%", zeroSign: "", minus: "−" };
 /** PUBG 근거 산문 — `%`, 0은 `+`, 음수는 `−`. */
 export const SIGNED_PERCENT_PROSE: SignedPercentStyle = { unit: "%", zeroSign: "+", minus: "−" };
 

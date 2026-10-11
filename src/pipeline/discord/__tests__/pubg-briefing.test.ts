@@ -40,7 +40,7 @@ describe("relChange는 비율이지 %p가 아니다 — 이걸 틀리면 100배 
   it("점유율 자체(before/after)는 부호를 안 붙이고 변화량만 붙인다", () => {
     expect(sharePct(0.00108)).toBe("0.108%");
     expect(signedPct(0.263)).toBe("+26.3%");
-    expect(signedPct(-0.139)).toBe("-13.9%");
+    expect(signedPct(-0.139)).toBe("−13.9%") // 2026-10-11 명세 변경(트랙 B ST-9): 음수 기호 `−` 1종;
   });
 
   it("초 단위 포맷터로 새지 않는다 — `pickupShare`는 DeltaMetric이 아니라 metricKind가 undefined다", () => {

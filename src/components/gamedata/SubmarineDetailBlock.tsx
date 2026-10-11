@@ -12,6 +12,7 @@
 // 상이하니 판정기준만 동일하게하라는말이야". 그래서 **아래 구획만** 공용으로 둔다.
 //
 // 값 포맷은 `submarineText`가 소유한다 — 여기서 `change.before`를 직접 찍지 않는다(float32 잡음).
+import { SIGNED_PERCENT, formatSignedPercent } from "@/pipeline/shared/percent";
 import { gameDataValue, statusLabel } from "@/lib/format";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import {
@@ -28,7 +29,7 @@ import type { GameDataChange, GameDataSource } from "@/pipeline/gamedata/types";
 
 function relText(rel: number | null): string | null {
   if (rel === null) return null;
-  return `${rel > 0 ? "+" : ""}${(rel * 100).toFixed(1)}%`;
+  return formatSignedPercent(rel, 1, SIGNED_PERCENT); // 음수 기호 `−` 1종(트랙 B ST-9)
 }
 
 export interface SubmarineDetailBlockProps {

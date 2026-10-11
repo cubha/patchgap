@@ -20,12 +20,15 @@ const proseOracle = (value: number, digits = 1) => {
 // tft·pubg shared pct / evidenceProse pct(2) / StatusDefinitionTable pct(0)
 const pctOracle = (value: number, digits: number) => `${(value * 100).toFixed(digits)}%`;
 
-describe("formatSignedPercent — 단일화 전 출력 보존", () => {
+// 2026-10-11 명세 변경(트랙 B ST-9, parity-S21): 음수 기호를 전 표면 `−` 1종으로 — 오라클의 하이픈 음수를 `−`로 읽는다.
+const unifyMinus = (s: string) => s.replace(/^-/, "−");
+
+describe("formatSignedPercent — 단일화 전 출력 보존(음수 기호만 통일)", () => {
   for (const digits of [0, 1, 2]) {
     for (const v of SAMPLES) {
       it(`digits=${digits} v=${Object.is(v, -0) ? "-0" : v}`, () => {
-        expect(formatSignedPercent(v, digits, SIGNED_POINT)).toBe(tftOracle(v, digits));
-        expect(formatSignedPercent(v, digits, SIGNED_PERCENT)).toBe(pubgOracle(v, digits));
+        expect(formatSignedPercent(v, digits, SIGNED_POINT)).toBe(unifyMinus(tftOracle(v, digits)));
+        expect(formatSignedPercent(v, digits, SIGNED_PERCENT)).toBe(unifyMinus(pubgOracle(v, digits)));
         expect(formatSignedPercent(v, digits, SIGNED_PERCENT_PROSE)).toBe(proseOracle(v, digits));
         expect(formatPercent(v, digits)).toBe(pctOracle(v, digits));
       });
