@@ -21,6 +21,12 @@ describe("writeObservationStub", () => {
     expect(writeObservationStub("tft", root, "18.3", "18.4", "awaiting-observation", "")).toBe(true);
     expect(get("tft/deltas-18.3-18.4.json").meta).toMatchObject({ noteCount: 3, observationFailed: { reason: "awaiting-observation" } });
   });
+  it("부분 수집이면 사유 collecting과 진행을 싣는다", () => {
+    put("tft/notes-18.4.json", { items: [1] });
+    const progress = [{ patch: "18.4", stored: 813, target: 2500 }];
+    expect(writeObservationStub("tft", root, "18.3", "18.4", "collecting", "", progress)).toBe(true);
+    expect(get("tft/deltas-18.3-18.4.json").meta.observationFailed).toMatchObject({ reason: "collecting", progress });
+  });
   it("같은 쌍의 실제 관측은 덮지 않는다", () => {
     put("tft/notes-18.4.json", { items: [] });
     put("tft/deltas-18.3-18.4.json", { meta: { from: "18.3", to: "18.4" }, rows: [{ id: "x" }] });
