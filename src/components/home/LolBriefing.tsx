@@ -30,7 +30,7 @@ import { verdictCount } from "@/pipeline/shared/headline";
 import { isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
 import { matchSkinsInSummary, skinSplashPath } from "@/pipeline/shared/cosmetic-skin";
 import { indexIndirectCauses } from "@/components/home/indirectEffects";
-import { computeLaneDistribution } from "@/components/home/laneDistribution";
+import { computeLaneDistribution, laneDistributionScope } from "@/components/home/laneDistribution";
 import {
   buildReleaseStream,
   contentTier,
@@ -271,7 +271,7 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
                     objectivesTo={objectivesTo?.data ?? null}
                     objectivesFrom={objectivesFrom?.data ?? null}
                   />
-                  <LaneGapPanel rows={laneDistribution} />
+                  <LaneGapPanel rows={laneDistribution} scope={laneDistributionScope(unannouncedRows, gapTotal)} />
                   <DiscordPanel game="lol" generatedAt={deltas?.meta.generatedAt ?? null} />
                 </>
               }
