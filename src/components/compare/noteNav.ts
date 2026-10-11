@@ -90,6 +90,12 @@ export function noteNavSections(groups: readonly NoteNavGroup[]): NoteNavSection
   return order.map((key) => ({ key, label: counts.get(key)!.label, count: counts.get(key)!.count }));
 }
 
+export function noteSectionLabel(game: "lol" | "tft", section: string): string {
+  void game;
+  void section;
+  throw new Error("TODO(noteNav): noteSectionLabel");
+}
+
 /** 섹션 탭 + 검색. 질의는 대조표 도구모음이 소유하는 **그 질의**다(창이 둘이면 안 된다). */
 export function filterNoteNavGroups(
   groups: readonly NoteNavGroup[],

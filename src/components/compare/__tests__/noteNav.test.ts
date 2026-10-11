@@ -7,6 +7,7 @@ import {
   filterNoteNavGroups,
   groupNoteNavItems,
   noteNavSections,
+  noteSectionLabel,
   type NoteNavItem,
 } from "../noteNav";
 
@@ -81,5 +82,29 @@ describe("거르기", () => {
 
   it("검색은 이름과 보조 문구 둘 다 본다", () => {
     expect(filterNoteNavGroups(groups, null, "e").map((g) => g.id)).toEqual(["n1"]);
+  });
+});
+
+describe("탭 순서·어휘 고정(트랙 B ST-5, tft-S20·parity-S17·parity-S16)", () => {
+  // 리뷰 실측: TFT 세 쌍의 탭 순서가 모두 달랐다(노트 등장 순) — 18.4 유닛·아이템·체계 / 18.3 체계·유닛·아이템 / 18.2
+  // 유닛·체계·아이템. 같은 메뉴를 쌍마다 다시 읽어야 했다. 어휘도 LoL 「시스템」·TFT 「체계」, 미등록 섹션은 영문 「other」.
+  it("등장 순서와 무관하게 대상 → 아이템 → 시스템 → 기타", () => {
+    const mixed = [
+      item({ id: "s", entity: "S", section: "system", sectionLabel: "시스템" }),
+      item({ id: "o", entity: "O", section: "other", sectionLabel: "기타" }),
+      item({ id: "i", entity: "I", section: "item", sectionLabel: "아이템" }),
+      item({ id: "c", entity: "C", section: "champion", sectionLabel: "챔피언" }),
+    ];
+    expect(noteNavSections(groupNoteNavItems(mixed)).map((t) => t.key)).toEqual(["champion", "item", "system", "other"]);
+  });
+
+  it("라벨은 한 곳 — 대상 이름만 게임 어휘(LoL 챔피언·TFT 유닛), 시스템은 「시스템」, 모르는 섹션은 「기타」", () => {
+    expect(noteSectionLabel("lol", "champion")).toBe("챔피언");
+    expect(noteSectionLabel("tft", "champion")).toBe("유닛");
+    expect(noteSectionLabel("tft", "system")).toBe("시스템");
+    expect(noteSectionLabel("lol", "system")).toBe("시스템");
+    expect(noteSectionLabel("lol", "item")).toBe("아이템");
+    expect(noteSectionLabel("lol", "other")).toBe("기타");
+    expect(noteSectionLabel("tft", "skin")).toBe("기타");
   });
 });
