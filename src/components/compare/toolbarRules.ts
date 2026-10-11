@@ -9,7 +9,10 @@
 // 검색은 LoL만, 정렬은 PUBG만이었다. 같은 메뉴인데 쓸 수 있는 도구가 게임마다 달랐다.
 import { DISPLAY_SORT_PRIORITY, type DisplayStatus } from "@/pipeline/shared/display-status";
 
-export type CompareFilterKey = "all" | DisplayStatus;
+export type CompareFilterKey = "all" | DisplayStatus | "gap";
+
+/** 「미공지 Gap」 타일 착지(트랙 B ST-24) — 구현 전 자리. */
+export const GAP_FILTER: CompareFilterKey = "gap";
 
 /**
  * 상태 칩 — **표에 올라가는 판정만** 칩이 된다(배지 1종 = 칩 1종 불변식). 노이즈 3종(표본 부족·
