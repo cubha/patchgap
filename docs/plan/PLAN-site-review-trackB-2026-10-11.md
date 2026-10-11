@@ -61,3 +61,7 @@
 - Ground Truth 존재 → `/frontend-design` 생략. 전부 기존 화면 수정: `docs/design/UX-BRIEF.md` §8 · `DESIGN-TOKENS.md` · `prototype/{01-home,02-comparison-table,03-item-detail}.html`. 색은 기존 토큰만(경계 표기 `--muted` 테두리, 원복 `--fg-2`).
 
 ## ⑥ 명세 변경한 기존 테스트 (구현 중 기록)
+- `src/lib/__tests__/pubgRoutes.test.ts` — `mapSlug("Baltic_Main")` "baltic"→"erangel", `mapHref` 기대값(ST-2, pubg-S18 슬러그 = 화면 이름).
+- `src/components/compare/__tests__/logic.test.ts` `computeCoverage` — 「관측 짝」이 공지 행 수에서 공지 대상 중 관측이 선 대상 수로(ST-3, 실측 「17대상 중 94」). 픽스처 행에 노트 짝 부여.
+- `src/components/home/__tests__/render.test.tsx` — 히어로 「0개 항목」→「0개 대상」(ST-3, tft-S5).
+- `src/app/pubg/__tests__/page-order.test.tsx` — 타일 부제 「(43.1 패치노트)」→「(43.1 패치노트 · N개 항목)」(ST-3, parity-S6).

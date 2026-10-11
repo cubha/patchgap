@@ -119,10 +119,11 @@ describe("구 코드명 주소 보존 — vercel.json 리다이렉트", () => {
     expect(expected().length).toBeGreaterThanOrEqual(10);
   });
 
-  it("바뀐 키마다 슬래시 유무 두 형태가 새 주소로 영구 이동한다", () => {
+  // 영구(301)가 아니다 — `legacy-redirects.test.ts`의 기존 규약(브라우저 영구 캐시로 되돌릴 여지를 잃지 않는다).
+  it("바뀐 키마다 슬래시 유무 두 형태가 새 주소로 이동한다", () => {
     for (const r of expected()) {
       for (const source of [r.source, `${r.source}/`]) {
-        expect(vercel.redirects).toContainEqual({ source, destination: r.destination, permanent: true });
+        expect(vercel.redirects).toContainEqual({ source, destination: r.destination, permanent: false });
       }
     }
   });

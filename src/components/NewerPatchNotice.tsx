@@ -52,7 +52,7 @@ export default function NewerPatchNotice({ patch, entityCount, reason, schedule,
       data-newer-patch={patch}
       className={`rounded-md border border-border-soft bg-surface px-4 py-3 text-sm leading-relaxed text-muted ${className}`}
     >
-      <strong className="text-fg">{patch} 패치노트</strong>가 반영됐습니다({entityCount}개 항목).{" "}
+      <strong className="text-fg">{patch} 패치노트</strong>가 반영됐습니다({entityCount}개 대상).{" "}
       {observationSentence(reason, schedule, progress)}
       {href ? (
         <>

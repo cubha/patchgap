@@ -20,6 +20,7 @@ import {
 import { selectTftCauseRows } from "@/components/tft/causeRows";
 import { tftEntityHref } from "@/lib/tftRoutes";
 import { tftDisplayName, tftEntityRows } from "@/lib/tftEntityRows";
+import { tftNoteEntityCount } from "@/lib/announcedCount";
 import { entityTypeLabel, metricLabel } from "@/lib/format";
 import { tftGapTotal, tftMetricGapRows } from "@/lib/gapTotals";
 import { loadTftAssets, type TftBundle, type TftDeclaration, tftDeclarationSchedule } from "@/lib/tftData";
@@ -167,7 +168,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
   const matches = before.matches + after.matches;
   // 시안 04-applied의 헤드라인 — 이 사이트가 무엇을 하는 곳인지 한 문장으로 말한다.
   // 숫자는 아래 3타일과 **같은 출처**를 쓴다(따로 세면 화면이 스스로를 반박한다).
-  const noteEntities = new Set(notes.items.map((n) => n.entity)).size;
+  const noteEntities = tftNoteEntityCount(notes.items);
   // 「미공지 Gap」은 대상을 센다 — 타일은 통계 Gap 대상, 탭은 거기에 수치 축 대상을 **합집합**으로(C15·D2).
   const gapTotal = tftGapTotal(deltas.rows, deltas.meta.qAlpha, submarine);
 
@@ -233,7 +234,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
               패치노트가 말한 것 vs 통계가 말하는 것
             </span>
             <h1 className="max-w-3xl font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
-              패치노트는 <span className="text-accent">{noteEntities}개 항목</span>을 말했고, 통계는{" "}
+              패치노트는 <span className="text-accent">{noteEntities}개 대상</span>을 말했고, 통계는{" "}
               <span className="text-accent">{reportable.length}개 변화</span>를 말합니다
             </h1>
             <p className="max-w-3xl text-sm leading-relaxed text-fg-2 wrap-anywhere">

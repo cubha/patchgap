@@ -36,7 +36,7 @@ export function groupDeclarationNotes(notes: readonly DeclarationNote[]): Map<st
   return groups;
 }
 
-/** 머리가 말하는 「N개 항목」 — 대상이 있으면 대상 수, 없으면(PUBG) 조항 수. */
+/** 머리가 말하는 「N개 대상」 — 노트를 대상으로 묶은 수. 묶음 키가 없는 게임(PUBG)은 호출부가 `entityCount`로 대상 수를 넘긴다. */
 export function declarationEntityCount(notes: readonly DeclarationNote[]): number {
   const entityCount = [...groupDeclarationNotes(notes).keys()].filter((k) => k !== "").length;
   return entityCount > 0 ? entityCount : notes.length;
@@ -51,10 +51,12 @@ export interface DeclarationHeroProps {
   observed?: ObservedPairLink | null;
   /** 관측 일정 — 배너가 「첫 관측」·「다음 수집」 날짜를 말한다(PLAN-home-observed-pair ST-4, 2026-10-11 수집 중 확장). */
   schedule?: ObservationSchedule | null;
+  /** 공지 대상 수(트랙 B ST-3) — 노트에 대상 묶음이 없는 게임(PUBG: 한 조항이 무기 여럿을 가리킨다)이 넘긴다. 없으면 묶음 수. */
+  entityCount?: number;
 }
 
 /** 문장 1줄 + 캡션 + 관측 전 배너 — 관측 브리핑의 히어로와 같은 자리·같은 크기. */
-export function DeclarationHero({ from, to, notes, failure, observed = null, schedule = null }: DeclarationHeroProps) {
+export function DeclarationHero({ from, to, notes, failure, observed = null, schedule = null, entityCount }: DeclarationHeroProps) {
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -62,10 +64,10 @@ export function DeclarationHero({ from, to, notes, failure, observed = null, sch
           패치노트가 말한 것 vs 통계가 말하는 것
         </span>
         <h1 className="max-w-3xl font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
-          {to} 패치노트는 <span className="text-accent">{declarationEntityCount(notes)}개 항목</span>을 말했고,
+          {to} 패치노트는 <span className="text-accent">{entityCount ?? declarationEntityCount(notes)}개 대상</span>을 말했고,
           통계는 아직 관측 전입니다
         </h1>
-        {/* 캡션에 조항 수를 두지 않는다(2026-10-09) — 머리의 「N개 항목」(대상 수) 바로 아래 「공지 73건」이 붙어 한 화면에
+        {/* 캡션에 조항 수를 두지 않는다(2026-10-09) — 머리의 「N개 대상」 바로 아래 「공지 73건」이 붙어 한 화면에
             두 단위가 같은 말로 섰다(결정 7). 조항 수는 타일 부제 한 곳이 든다. */}
         <p className="max-w-3xl text-sm leading-relaxed text-fg-2 wrap-anywhere">
           {from} → {to} · 관측 전
@@ -115,10 +117,10 @@ export interface DeclarationOnlyProps extends DeclarationHeroProps {
 }
 
 /** 머리 + 노트 카드 + 보충 — 골격 없이 세로로 쌓는 기본 조합(PUBG 홈). TFT 홈은 조각을 따로 받아 골격 안에 둔다. */
-export default function DeclarationOnly({ from, to, notes, failure, observed = null, schedule = null, extra }: DeclarationOnlyProps) {
+export default function DeclarationOnly({ from, to, notes, failure, observed = null, schedule = null, entityCount, extra }: DeclarationOnlyProps) {
   return (
     <div className="flex flex-col gap-6 pt-40 pb-8">
-      <DeclarationHero from={from} to={to} notes={notes} failure={failure} observed={observed} schedule={schedule} />
+      <DeclarationHero from={from} to={to} notes={notes} failure={failure} observed={observed} schedule={schedule} entityCount={entityCount} />
       <DeclarationNotesCard to={to} notes={notes} />
       {extra}
     </div>

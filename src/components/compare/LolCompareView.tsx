@@ -36,7 +36,7 @@ export default function LolCompareView({ pair, pairBase = null }: LolCompareView
   const ddragon = loadDdragonSafe();
 
   const rows = deltas?.rows ?? [];
-  const coverage = computeCoverage(rows, notes);
+  const coverage = computeCoverage(rows, notes, deltas?.meta.qAlpha);
 
   const noteIcons: Record<string, StreamEntityIcon> = {};
   for (const item of notes?.items ?? []) {

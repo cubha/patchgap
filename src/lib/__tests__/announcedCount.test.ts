@@ -38,3 +38,27 @@ describe("LoL 대조표 커버리지 「관측 짝」 = 공지 대상 중 관측
     expect(coverage.matchedCount).toBeLessThanOrEqual(coverage.noteEntityCount);
   });
 });
+
+describe("히어로 단위어 — 「N개 대상」(tft-S5)", () => {
+  // 히어로의 수는 대상인데 「항목」이라 불러, 바로 아래 타일 부제 「· 97개 항목」(줄 수)과 같은 단어가 두 수를 가리켰다.
+  // 리터럴이라 함수로 고정할 수 없어 소스에서 막는다: 「…개 항목」을 히어로·배너 문장에 다시 쓰면 실패한다.
+  const fs = require("node:fs") as typeof import("node:fs");
+  const path = require("node:path") as typeof import("node:path");
+  const FILES = [
+    "components/home/HeroSummary.tsx",
+    "components/tft/TftBriefing.tsx",
+    "components/pubg/PubgBriefing.tsx",
+    "components/DeclarationOnly.tsx",
+    "components/NewerPatchNotice.tsx",
+  ];
+  it.each(FILES)("%s", (rel) => {
+    const src = fs.readFileSync(path.resolve(__dirname, "../..", rel), "utf8");
+    expect(src).not.toMatch(/개 항목<\/span>을 말했고/);
+    expect(src).not.toMatch(/반영됐습니다\(\{entityCount\}개 항목\)/);
+  });
+  it("PUBG 타일 「공지된 변화」는 조항 수가 아니라 대상 수", () => {
+    const src = fs.readFileSync(path.resolve(__dirname, "../..", "components/pubg/PubgBriefing.tsx"), "utf8");
+    expect(src).not.toMatch(/announcedCount=\{notes\.length\}/);
+    expect(src).toMatch(/itemCount=\{notes\.length\}/);
+  });
+});

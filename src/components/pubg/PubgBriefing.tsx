@@ -26,6 +26,7 @@ import NewerPatchNotice from "@/components/NewerPatchNotice";
 import PubgWeaponGrid from "@/components/pubg/PubgWeaponGrid";
 import { loadPubgAssets, loadPubgMaps, isReportable, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
 import { mapHref, weaponHref } from "@/lib/pubgRoutes";
+import { pubgNoteTargetCount } from "@/lib/announcedCount";
 import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
 import { publicMapPath } from "@/pipeline/pubg/asset-path";
 import { pubgDisplayStatus } from "@/pipeline/shared/pubg-status";
@@ -77,6 +78,8 @@ export default function PubgBriefing({
   const weaponAssets = new Set(assets?.weapons ?? []);
   const mapAssets = new Set(assets?.maps ?? []);
   const reportable = deltas.rows.filter((row) => isReportable(row.status));
+  // 공지 대상 수(트랙 B ST-3) — 히어로·타일·「공지된 대상」·랜딩이 같은 함수. 조항 수(`notes.length`)는 타일 부제가 든다.
+  const noteTargets = pubgNoteTargetCount(notes);
   // 수치 축(F9) — 산출물이 없으면 섹션이 통째로 빠진다. 세 게임이 같은 컴포넌트를 쓴다.
   const submarine = summarizeGameData(loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to));
   const submarineKeys = new Set(submarine?.submarines.map((change) => change.entityKey) ?? []);
@@ -148,7 +151,7 @@ export default function PubgBriefing({
               패치노트가 말한 것 vs 통계가 말하는 것
             </span>
             <h1 className="max-w-3xl font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
-              패치노트는 <span className="text-accent">{notes.length}개 항목</span>을 말했고, 통계는{" "}
+              패치노트는 <span className="text-accent">{noteTargets}개 대상</span>을 말했고, 통계는{" "}
               <span className="text-accent">{reportable.length}개 변화</span>를 말합니다
             </h1>
             <p className="max-w-3xl text-sm leading-relaxed text-fg-2 wrap-anywhere">
@@ -160,12 +163,13 @@ export default function PubgBriefing({
 
           {/* 홈보다 새 패치노트(관측 stub = declaration.json)가 있으면 여기서 말한다 — 홈은 완성된 분석을 그리고, 새 노트는 원문으로
               한 클릭(PUBG는 과거 쌍 라우트가 없다). 날짜는 두지 않는다 — PUBG 관측은 N일차가 아니라 수확 창 규칙이다. */}
-          {newer ? <NewerPatchNotice patch={newer.to} reason={newer.failure.reason} entityCount={newer.notes.length} schedule={null} href={newer.sourceUrl} /> : null}
+          {newer ? <NewerPatchNotice patch={newer.to} reason={newer.failure.reason} entityCount={pubgNoteTargetCount(newer.notes)} schedule={null} href={newer.sourceUrl} /> : null}
 
           {/* 3타일은 세 게임 공통 컴포넌트가 그린다(UX-BRIEF §8-1). PUBG 대조표는 상태 칩이
               있어 `#unannounced` 앵커가 실제로 걸린다. */}
           <StatTiles
-            announcedCount={notes.length}
+            announcedCount={noteTargets}
+            itemCount={notes.length}
             patch={deltas.meta.to}
             significantCount={reportable.length}
             gapCount={gapTotal}
@@ -208,7 +212,7 @@ export default function PubgBriefing({
                   </div>
                   {/* 세 게임이 같은 자리에서 같은 말을 한다(§8-1, 2026-09-23 화면 대조 V5). */}
                   <AnnouncedCoverageLine
-                    noteTargets={new Set(notes.flatMap((n) => n.weaponKeys)).size}
+                    noteTargets={noteTargets}
                     observed={new Set(announced.map((r) => r.weaponKey)).size}
                     alsoUnmeasured="이 데이터로 측정할 수 없는 조항(조준 전환·반동·차량 피해)"
                   />
@@ -345,6 +349,7 @@ function PubgDeclarationView({ declaration }: { declaration: PubgDeclaration }) 
           to={declaration.to}
           failure={declaration.failure}
           notes={declaration.notes.map((n) => ({ id: n.id, group: null, summary: n.summary, anchorUrl: n.anchorUrl }))}
+          entityCount={pubgNoteTargetCount(declaration.notes)}
           extra={submarine ? <SubmarineSection summary={submarine} hrefOf={() => null} /> : null}
         />
         <PubgFooter generatedAt={declaration.generatedAt} nVerdicts={0} />

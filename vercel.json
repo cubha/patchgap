@@ -38,162 +38,162 @@
     {
       "source": "/pubg/weapon/hk416",
       "destination": "/pubg/weapon/m416/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/weapon/hk416/",
       "destination": "/pubg/weapon/m416/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/weapon/saiga12",
       "destination": "/pubg/weapon/s12k/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/weapon/saiga12/",
       "destination": "/pubg/weapon/s12k/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/weapon/g18",
       "destination": "/pubg/weapon/p18c/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/weapon/g18/",
       "destination": "/pubg/weapon/p18c/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/weapon/vz61skorpion",
       "destination": "/pubg/weapon/skorpion/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/weapon/vz61skorpion/",
       "destination": "/pubg/weapon/skorpion/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/weapon/fnfal",
       "destination": "/pubg/weapon/slr/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/weapon/fnfal/",
       "destination": "/pubg/weapon/slr/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/baltic",
       "destination": "/pubg/map/erangel/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/baltic/",
       "destination": "/pubg/map/erangel/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/desert",
       "destination": "/pubg/map/miramar/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/desert/",
       "destination": "/pubg/map/miramar/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/tiger",
       "destination": "/pubg/map/taego/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/tiger/",
       "destination": "/pubg/map/taego/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/kiki",
       "destination": "/pubg/map/deston/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/kiki/",
       "destination": "/pubg/map/deston/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/neon",
       "destination": "/pubg/map/rondo/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/neon/",
       "destination": "/pubg/map/rondo/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/dihorotok",
       "destination": "/pubg/map/vikendi/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/dihorotok/",
       "destination": "/pubg/map/vikendi/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/savage",
       "destination": "/pubg/map/sanhok/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/savage/",
       "destination": "/pubg/map/sanhok/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/summerland",
       "destination": "/pubg/map/karakin/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/summerland/",
       "destination": "/pubg/map/karakin/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/chimera",
       "destination": "/pubg/map/paramo/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/chimera/",
       "destination": "/pubg/map/paramo/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/heaven",
       "destination": "/pubg/map/haven/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/heaven/",
       "destination": "/pubg/map/haven/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/range",
       "destination": "/pubg/map/campjackal/",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/pubg/map/range/",
       "destination": "/pubg/map/campjackal/",
-      "permanent": true
+      "permanent": false
     }
   ],
   "headers": [

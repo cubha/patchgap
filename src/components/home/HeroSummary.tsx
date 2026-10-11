@@ -84,7 +84,7 @@ export default function HeroSummary({ stats, patch, action, gapCount, pairBase =
           패치노트가 말한 것 vs 통계가 말하는 것
         </span>
         <h1 className="ambient-hero-headline max-w-3xl break-keep font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
-          패치노트는 <span className="text-accent">{fmtInt(noteEntityCount)}개 항목</span>을 말했고, 통계는{" "}
+          패치노트는 <span className="text-accent">{fmtInt(noteEntityCount)}개 대상</span>을 말했고, 통계는{" "}
           <span className="text-accent">{fmtInt(statCount)}개 변화</span>를 말합니다
         </h1>
         {caption ? <p className="ambient-hero-sub max-w-3xl text-sm leading-relaxed text-fg-2 wrap-anywhere">{caption}</p> : null}

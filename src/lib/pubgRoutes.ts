@@ -41,7 +41,7 @@ export function legacyMapSlug(mapKey: string): string {
 
 /**
  * 슬러그가 바뀐 키의 구 주소 → 새 주소. `vercel.json` `redirects`가 이 목록을 담는다(테스트가 대조). 정적 export라 Next
- * 런타임 리다이렉트가 없고, 목적지가 쌍에 따라 바뀌지 않는 유한한 정적 매핑이라 서버 리다이렉트(영구)가 맞다.
+ * 런타임 리다이렉트가 없고, 목적지가 쌍에 따라 바뀌지 않는 유한한 정적 매핑이라 서버 리다이렉트가 맞다(영구 301은 쓰지 않는다 — `legacy-redirects.test.ts` 규약).
  */
 export function pubgLegacyRedirects(weaponKeys: readonly string[], mapKeys: readonly string[]): { source: string; destination: string }[] {
   // 구 주소가 **다른 대상의 새 주소**와 같으면 넘기지 않는다 — Vercel 리다이렉트는 정적 파일보다 먼저 적용돼 그 화면을 가린다

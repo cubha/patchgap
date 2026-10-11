@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 import Container from "@/components/Container";
 import PageHeader from "@/components/PageHeader";
 import { pageMeta } from "@/lib/meta";
+import { pubgNoteTargetCount } from "@/lib/announcedCount";
 import PubgCompareExplorer from "@/components/pubg/PubgCompareExplorer";
 import { PubgFooter, PubgUnavailable } from "@/components/pubg/shared";
 import { compareCrumbs } from "@/lib/breadcrumbs";
@@ -44,7 +45,7 @@ export default function PubgComparePage() {
   const unmeasurable = notes.filter((note) => note.expectedRelChange === null);
   const coverage = (
     <CoverageSection
-      noteEntities={new Set(notes.flatMap((note) => note.weaponKeys)).size}
+      noteEntities={pubgNoteTargetCount(notes)}
       noteItems={notes.length}
       matched={new Set(deltas.rows.filter((row) => isReportable(row.status) && row.matchedNoteIds.length > 0).map((row) => row.weaponKey)).size}
       gap={pubgGapTotal(deltas.rows, submarine)}

@@ -7,6 +7,7 @@
 // 렌더(CompareExplorer.tsx 등)와 분리해 단위 테스트한다(완료 조건 "상태 필터·정렬 로직(순수
 // 함수)"). UX-BRIEF §3 "02 대조표" 기준.
 
+import { countAnnouncedObservedEntities } from "@/pipeline/shared/headline";
 import { isGapStatus } from "@/pipeline/shared/status-order";
 import { isDisplayExcludedNote } from "@/pipeline/shared/excluded-notes";
 import type { DeltaRecord, PatchNoteItem, PatchNoteSection } from "@/pipeline/types";
@@ -117,16 +118,14 @@ export interface CoverageStats {
   gapEntityCount: number;
 }
 
-export function computeCoverage(rows: DeltaRecord[], notes: NotesFile | null): CoverageStats {
-  let matchedCount = 0;
+export function computeCoverage(rows: DeltaRecord[], notes: NotesFile | null, qAlpha?: number): CoverageStats {
   let unannouncedCount = 0;
   let lowSampleCount = 0;
   let belowThresholdCount = 0;
   let indirectEffectCount = 0;
   const gapEntities = new Set<string>();
   for (const row of rows) {
-    if (row.status === "announced-consistent" || row.status === "announced-inconsistent") matchedCount++;
-    else if (row.status === "unannounced") unannouncedCount++;
+    if (row.status === "unannounced") unannouncedCount++;
     else if (row.status === "insufficient-sample") lowSampleCount++;
     else if (row.status === "below-threshold") belowThresholdCount++;
     else if (row.status === "indirect-effect") indirectEffectCount++;
@@ -135,7 +134,9 @@ export function computeCoverage(rows: DeltaRecord[], notes: NotesFile | null): C
   return {
     noteEntityCount: countRelevantNoteEntities(notes),
     noteItemCount: notes?.meta.itemCount ?? 0,
-    matchedCount,
+    // 「관측 짝」 = 공지 대상 중 관측이 선 **대상**(트랙 B ST-3). 전에는 공지 상태 **행** 수라 26.19→26.20에서 「노트 17대상 중
+    // 관측 짝 94」처럼 부분이 전체보다 컸다. 브리핑 결론 문장·TFT·PUBG 커버리지와 같은 함수다.
+    matchedCount: countAnnouncedObservedEntities(rows, qAlpha),
     unannouncedCount,
     lowSampleCount,
     belowThresholdCount,
