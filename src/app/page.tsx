@@ -208,9 +208,19 @@ export default function LandingPage() {
           <p className="mt-1.5 max-w-[60ch] text-sm text-fg-2">
             게임을 바꿀 때 갈아끼우는 것은 어댑터뿐입니다. 판정 엔진은 그대로입니다.
           </p>
-          <div className={`${panelSurfaceClass("glass")} mt-4 overflow-hidden rounded-lg`}>
-            <AdapterMatrix />
-          </div>
+          {/* 표는 접어 둔다(트랙 B ST-23, lol-S16) — 처음 온 게이머에게 파이프라인 계층·타입 이름 표가 랜딩 하단 절반을 차지했다.
+              자리는 9/20 결정대로 랜딩에 두고(게임 중립 주장), 펼쳐서 보게 한다(네이티브 details — 서버 컴포넌트 그대로). */}
+          <details data-adapter-matrix className="group/matrix mt-4">
+            <summary className="flex w-fit cursor-pointer list-none items-center gap-2 text-sm font-bold text-accent hover:underline [&::-webkit-details-marker]:hidden">
+              게임별 어댑터 매핑표 보기
+              <span aria-hidden="true" className="transition-transform group-open/matrix:rotate-180">
+                ▾
+              </span>
+            </summary>
+            <div className={`${panelSurfaceClass("glass")} mt-4 overflow-hidden rounded-lg`}>
+              <AdapterMatrix />
+            </div>
+          </details>
         </section>
 
         {/* 랜딩은 어느 게임에도 속하지 않는다 — `game={null}`이 그 자리다(lib/game.ts 계약). */}

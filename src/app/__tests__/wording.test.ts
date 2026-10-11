@@ -145,3 +145,13 @@ describe("첫 화면 미공지 상위 — 세 브리핑(트랙 B ST-22, lol-S23�
     expect(read("components/GapPreview.tsx")).not.toMatch(/bg-accent/);
   });
 });
+
+describe("랜딩 확장성 표는 접혀 있다(트랙 B ST-23, lol-S16)", () => {
+  it("AdapterMatrix가 details 안에 있다", () => {
+    const src = read("app/page.tsx");
+    const details = src.indexOf("<details data-adapter-matrix");
+    expect(details).toBeGreaterThan(-1);
+    expect(src.indexOf("<AdapterMatrix />")).toBeGreaterThan(details);
+    expect(src.indexOf("<AdapterMatrix />")).toBeLessThan(src.indexOf("</details>", details));
+  });
+});
