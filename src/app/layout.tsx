@@ -5,7 +5,8 @@ import AmbientBackground from "@/components/AmbientBackground";
 import { AmbientProvider } from "@/components/AmbientContext";
 import GameRoot from "@/components/GameRoot";
 import Header, { type GameChrome } from "@/components/Header";
-import type { GameId } from "@/lib/game";
+import { GAMES, type GameId } from "@/lib/game";
+import { SITE_NAME, SITE_URL, ogImagePath } from "@/lib/meta";
 import { loadPubg, loadPubgDeclaration } from "@/lib/pubgData";
 import { listTftPairs, loadTft, loadTftDeclaration } from "@/lib/tftData";
 import { getDefaultPair, listPatchPairs, listPatches, loadDeltas, loadSummary } from "@/lib/data";
@@ -23,9 +24,14 @@ const robotoMono = Roboto_Mono({
   subsets: ["latin"],
 });
 
+// 루트 메타(ST-1, 트랙 B6): 페이지 title은 `lib/meta.ts` 틀의 앞부분만 넘기고 사이트명은 template이 붙인다. 루트 description은
+// 게임 중립이어야 한다 — 전에는 LoL 시절 문구라, 자기 description이 없는 TFT 7라우트가 「LoL 패치 미공지 변화 브리핑」을 물려받았다.
+// `metadataBase`는 og:image 같은 상대 주소를 절대 주소로 만든다(없으면 빌드가 실패한다).
 export const metadata: Metadata = {
-  title: "patchgap",
-  description: "패치노트가 말한 것 vs 통계가 말하는 것 — LoL 패치 미공지 변화 브리핑",
+  metadataBase: new URL(SITE_URL),
+  title: { template: `%s · ${SITE_NAME}`, default: SITE_NAME },
+  description: `패치노트가 말한 것 vs 통계가 말하는 것 — ${GAMES.map((g) => g.label).join("·")} 패치의 공지되지 않은 변화를 찾습니다.`,
+  openGraph: { siteName: SITE_NAME, locale: "ko_KR", type: "website", images: [{ url: ogImagePath(null), width: 1200, height: 630 }] },
 };
 
 // 실측(2026-09-05): create-next-app 기본 `LayoutProps<"/">`는 `.next/types`가 생성된 뒤에만

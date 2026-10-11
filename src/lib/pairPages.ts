@@ -105,3 +105,23 @@ export function tftPastDetailParams(): Array<{ pair: string; key: string }> {
   const out = pastPairDetails("tft").map(({ pair, slug }) => ({ pair, key: slug }));
   return out.length > 0 ? out : [{ pair: PLACEHOLDER, key: PLACEHOLDER }];
 }
+
+/**
+ * LoL 상세 슬러그(정준·별칭) → 대상 키와 표시 이름(ST-1 메타). 이름은 쌍을 최신부터 훑어 처음 만난 행의 `entityName`이다 —
+ * 상세 본문(`LolItemDetail`)이 그리는 머리와 같은 이름. 어느 쌍에도 없으면(플레이스홀더) 이름 null.
+ */
+export function lolDetailIdentity(slug: string, pairs: readonly PairLike[]): { entityKey: string; name: string | null } {
+  let raw = slug;
+  try {
+    raw = decodeURIComponent(slug);
+  } catch {
+    raw = slug;
+  }
+  const segments = raw.replaceAll("~", ":").split(":");
+  const entityKey = segments.slice(0, 2).join(":");
+  for (const pair of pairs) {
+    const row = loadDeltas(pair.from, pair.to)?.rows.find((r) => `${r.entityType}:${r.entityKey}` === entityKey);
+    if (row) return { entityKey, name: row.entityName };
+  }
+  return { entityKey, name: null };
+}

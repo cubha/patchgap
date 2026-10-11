@@ -19,7 +19,7 @@ import {
 } from "@/components/tft/shared";
 import { selectTftCauseRows } from "@/components/tft/causeRows";
 import { tftEntityHref } from "@/lib/tftRoutes";
-import { tftEntityRows } from "@/lib/tftEntityRows";
+import { tftDisplayName, tftEntityRows } from "@/lib/tftEntityRows";
 import { entityTypeLabel, metricLabel } from "@/lib/format";
 import { tftGapTotal, tftMetricGapRows } from "@/lib/gapTotals";
 import { loadTftAssets, type TftBundle, type TftDeclaration, tftDeclarationSchedule } from "@/lib/tftData";
@@ -126,7 +126,7 @@ function briefingGroups(rows: DeltaRecord[], qAlpha?: number): BriefingGroup[] {
       return {
         id: row.id,
         entityKey: row.entityKey,
-        entityName: row.entityName,
+        entityName: tftDisplayName(row.entityKey, row.entityName),
         entityType: row.entityType,
         typeLabel: entityTypeLabel(row.entityType),
         status: displayStatus(row, qAlpha),
@@ -175,7 +175,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
   // 이름은 판정 산출물이 이미 들고 있다(실측 233종 중 232종). 못 찾는 1종은 키를 그대로 쓴다.
   const haveAssets = assetKeySet(loadTftAssets());
   const rowIcon = tftRowIcon(haveAssets);
-  const nameByKey = new Map(deltas.rows.map((row) => [`${row.entityType}:${row.entityKey}`, row.entityName]));
+  const nameByKey = new Map(deltas.rows.map((row) => [`${row.entityType}:${row.entityKey}`, tftDisplayName(row.entityKey, row.entityName)]));
   // 상세 자격은 **라우트가 실제로 만드는 집합**과 같아야 한다 — 대조표 행 생성기(`tftEntityRows`)가
   // 그 단일 소스다(2026-09-21에 이 둘이 갈려 링크 21건이 404였다).
   const detailKeys = new Set(

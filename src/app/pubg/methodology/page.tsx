@@ -14,6 +14,7 @@ import MethodologyLayout, { type MethodologySlots } from "@/components/methodolo
 import ObservationPendingNotice from "@/components/ObservationPendingNotice";
 import { allUnusedSlots } from "@/components/methodology/slots";
 import StatusBadge from "@/components/StatusBadge";
+import { pageMeta } from "@/lib/meta";
 import { PubgSampleNotice, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { loadPubg, loadPubgDeclaration } from "@/lib/pubgData";
 import {
@@ -24,10 +25,7 @@ import {
 } from "@/pipeline/match/pubg-delta";
 import { pubgVerdictCount } from "@/pipeline/shared/headline";
 
-export const metadata: Metadata = {
-  title: "PUBG 방법론 · patchgap",
-  description: "PUBG 판정표의 규칙 — 표본·기저·효과크기 바닥·상태 정의·표시 규칙·검증하지 못한 축.",
-};
+export const metadata: Metadata = pageMeta({ game: "pubg", screen: "methodology", path: "/pubg/methodology/" });
 
 const PIPELINE = [
   { step: 1, title: "수집", detail: "PUBG /samples → /matches → telemetry", meta: "official 매치만" },

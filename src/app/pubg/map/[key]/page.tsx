@@ -7,6 +7,7 @@
 // 빼낸 것과 같은 판단이다(PLAN-patchgap.md 계약 확장 이력 2026-09-13 2차). 이 화면은 기술
 // 통계만 말하고, 그 사실을 화면에서도 명시한다.
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import PubgMapDetail from "@/components/pubg/PubgMapDetail";
 import { loadPubg, loadPubgDeclaration, pubgMapKeys, pubgPair } from "@/lib/pubgData";
 import { mapKeyFromSlug, mapSlug } from "@/lib/pubgRoutes";
@@ -26,12 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { key } = await params;
   const mapKey = mapKeyFromSlug(key, pubgMapKeys());
   const name = mapKey ? mapIdentity(mapKey).koName : "맵";
-  const pair = pubgPair();
-  const span = pair ? `${pair.from} → ${pair.to}` : "패치 비교";
-  return {
-    title: `${name} · PUBG ${span} · patchgap`,
-    description: `${name}의 ${span} 매치 점유율·평균 소요·무기 구성 변화.`,
-  };
+  return pageMeta({ game: "pubg", screen: "detail", entity: name, pair: pubgPair(), path: `/pubg/map/${key}/` });
 }
 
 export default async function PubgMapPage({ params }: PageProps) {

@@ -31,6 +31,7 @@ import PipelineDiagram from "@/components/methodology/PipelineDiagram";
 import StatusDefinitionTable from "@/components/methodology/StatusDefinitionTable";
 import { buildPipelineSteps } from "@/components/methodology/pipelineSteps";
 import { verdictCount } from "@/pipeline/shared/headline";
+import { pageMeta } from "@/lib/meta";
 
 /** data/ddragon/{version}/ 디렉토리 이름(내림차순 최신)에서 Data Dragon 버전을 읽는다.
  * data.ts 미소유라 같은 "로컬 레이아웃 재구현" 관례(ST-06/ST-10 선례)를 따른다. 디렉토리가
@@ -46,6 +47,8 @@ function latestDdragonVersion(dataRoot: string = path.resolve(process.cwd(), "da
   versions.sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
   return versions[0];
 }
+
+export const metadata = pageMeta({ game: "lol", screen: "methodology", path: "/lol/methodology/" });
 
 export default function MethodologyPage() {
   const pair = getDefaultPair();

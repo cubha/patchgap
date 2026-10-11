@@ -9,6 +9,7 @@
 // 데이터는 빌드 타임에만 읽는다(정적 export, 런타임 외부 호출 0 — 프로젝트 CLAUDE.md).
 import type { Metadata } from "next";
 import Link from "next/link";
+import { absoluteUrl, ogImagePath } from "@/lib/meta";
 import Container from "@/components/Container";
 import AdapterMatrix from "@/components/methodology/AdapterMatrix";
 import { panelSurfaceClass } from "@/lib/panelSurface";
@@ -17,10 +18,20 @@ import { landingCards, landingTotals } from "@/lib/landing";
 import SiteFooter from "@/components/SiteFooter";
 import { TILE_LABELS } from "@/components/StatTiles";
 
+// 랜딩은 어느 게임에도 속하지 않아 `pageMeta` 틀(화면 · 게임) 밖이다 — 사이트명이 앞에 오는 절대 title(ST-1).
+const LANDING_TITLE = "patchgap · 패치노트에 없는 변화를 찾습니다";
+const LANDING_DESCRIPTION =
+  "공식 패치노트와 실제 매치 통계를 자동으로 대조해, 공지되지 않은 변화와 간접 파급을 통계 게이트와 원천 링크로 보여 드립니다.";
 export const metadata: Metadata = {
-  title: "patchgap — 패치노트에 없는 변화를 찾습니다",
-  description:
-    "공식 패치노트와 실제 매치 통계를 자동으로 대조해, 공지되지 않은 변화와 간접 파급을 통계 게이트와 원천 링크로 보여 드립니다.",
+  title: { absolute: LANDING_TITLE },
+  description: LANDING_DESCRIPTION,
+  alternates: { canonical: absoluteUrl("/") },
+  openGraph: {
+    title: LANDING_TITLE,
+    description: LANDING_DESCRIPTION,
+    url: absoluteUrl("/"),
+    images: [{ url: ogImagePath(null), width: 1200, height: 630 }],
+  },
 };
 
 /** 하단 3열 — 파이프라인을 한 문장씩. 게임과 무관한 서술만 둔다. */

@@ -5,11 +5,9 @@ import type { Metadata } from "next";
 
 import LolCompareView from "@/components/compare/LolCompareView";
 import { getDefaultPair } from "@/lib/data";
+import { pageMeta } from "@/lib/meta";
 
-export const metadata: Metadata = {
-  title: "리그 오브 레전드 대조표 · patchgap",
-  description: "패치노트가 말한 것과 실제 관측을 대상 단위로 견줍니다.",
-};
+export const metadata: Metadata = pageMeta({ game: "lol", screen: "compare", path: "/lol/compare/" });
 
 export default function ComparePage() {
   return <LolCompareView pair={getDefaultPair()} />;

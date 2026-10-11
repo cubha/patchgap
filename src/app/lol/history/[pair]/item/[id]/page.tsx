@@ -7,7 +7,8 @@
 import type { Metadata } from "next";
 import LolItemDetail from "@/components/detail/LolItemDetail";
 import PairMissing from "@/components/PairMissing";
-import { lolPastDetailParams, resolvePastPair } from "@/lib/pairPages";
+import { pageMeta } from "@/lib/meta";
+import { lolDetailIdentity, lolPastDetailParams, resolvePastPair } from "@/lib/pairPages";
 import { pairBasePath } from "@/lib/pairRoutes";
 
 interface HistoryItemProps {
@@ -19,9 +20,10 @@ export function generateStaticParams(): Array<{ pair: string; id: string }> {
 }
 
 export async function generateMetadata({ params }: HistoryItemProps): Promise<Metadata> {
-  const { pair } = await params;
+  const { pair, id } = await params;
   const found = resolvePastPair("lol", pair);
-  return { title: found ? `리그 오브 레전드 ${found.from} → ${found.to} 상세 · patchgap` : "리그 오브 레전드 — patchgap" };
+  const name = found ? lolDetailIdentity(id, [found]).name : null;
+  return pageMeta({ game: "lol", screen: "detail", entity: name, pair: found, path: `/lol/history/${pair}/item/${id}/` });
 }
 
 export default async function LolHistoryItemPage({ params }: HistoryItemProps) {

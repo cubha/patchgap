@@ -8,11 +8,12 @@ import ObservationPendingNotice from "@/components/ObservationPendingNotice";
 import { allUnusedSlots } from "@/components/methodology/slots";
 import { TftUnavailable } from "@/components/tft/shared";
 import { fmtKst } from "@/lib/format";
+import { pageMeta } from "@/lib/meta";
 import { pairSectionLink } from "@/lib/pairRoutes";
 import { latestObservedTftPair, loadTft, loadTftDeclaration, tftDeclarationSchedule } from "@/lib/tftData";
 import { verdictCount } from "@/pipeline/shared/headline";
 
-export const metadata = { title: "TFT 방법론 — patchgap" };
+export const metadata = pageMeta({ game: "tft", screen: "methodology", path: "/tft/methodology/" });
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (

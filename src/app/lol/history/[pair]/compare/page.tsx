@@ -3,6 +3,7 @@
 // 고정한다 — 과거 쌍 브리핑에서 헤더 「대조표」를 눌렀을 때 최신 쌍 대조표로 튀던 맥락 이탈을 닫는다.
 // 부모 `[pair]/page.tsx`의 generateStaticParams는 자식 라우트로 이어지지 않는다(레이아웃이 아니다) — 여기서 다시 낸다.
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import LolCompareView from "@/components/compare/LolCompareView";
 import PairMissing from "@/components/PairMissing";
 import { pastPairParams, resolvePastPair } from "@/lib/pairPages";
@@ -19,9 +20,7 @@ export function generateStaticParams(): Array<{ pair: string }> {
 export async function generateMetadata({ params }: HistoryCompareProps): Promise<Metadata> {
   const { pair } = await params;
   const found = resolvePastPair("lol", pair);
-  return {
-    title: found ? `리그 오브 레전드 ${found.from} → ${found.to} 대조표 · patchgap` : "리그 오브 레전드 대조표 · patchgap",
-  };
+  return pageMeta({ game: "lol", screen: "compare", pair: found, path: `/lol/history/${pair}/compare/` });
 }
 
 export default async function LolHistoryComparePage({ params }: HistoryCompareProps) {

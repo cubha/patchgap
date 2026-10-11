@@ -8,6 +8,7 @@
 import type { Metadata } from "next";
 import Container from "@/components/Container";
 import PageHeader from "@/components/PageHeader";
+import { pageMeta } from "@/lib/meta";
 import PubgCompareExplorer from "@/components/pubg/PubgCompareExplorer";
 import { PubgFooter, PubgUnavailable } from "@/components/pubg/shared";
 import { compareCrumbs } from "@/lib/breadcrumbs";
@@ -20,12 +21,7 @@ import { pubgVerdictCount } from "@/pipeline/shared/headline";
 // 쌍은 산출물에서 읽는다(`pubgPair`) — 하드코딩하면 다음 패치에서 설명문만 옛 쌍을 말한다.
 const PAIR = pubgPair();
 
-export const metadata: Metadata = {
-  title: "PUBG 대조표 · patchgap",
-  description: PAIR
-    ? `PUBG ${PAIR.from} → ${PAIR.to} 무기별 획득 점유율 변화와 판정입니다.`
-    : "PUBG 무기별 획득 점유율 변화와 판정입니다.",
-};
+export const metadata: Metadata = pageMeta({ game: "pubg", screen: "compare", path: "/pubg/compare/" });
 
 export default function PubgComparePage() {
   const bundle = loadPubg();

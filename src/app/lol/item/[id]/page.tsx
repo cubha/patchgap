@@ -10,9 +10,13 @@
 // id를 모은다(쌍이 0개면 `_placeholder` 1건 유지 — 실측(2026-09-05): output:'export'에서
 // generateStaticParams가 빈 배열을 반환하면 `next build`가 즉시 실패한다). 경로는 전 쌍 합집합으로 두는 이유가 바로 그
 // 옛 링크다 — 경로를 줄이면 그 링크가 조용히 404가 된다.
+import type { Metadata } from "next";
 import LolItemDetail from "@/components/detail/LolItemDetail";
 import { detailRouteSlugs } from "@/lib/detailRoutes";
 import { listPatchPairs, loadDeltas } from "@/lib/data";
+import { itemSlug } from "@/lib/format";
+import { pageMeta } from "@/lib/meta";
+import { lolDetailIdentity } from "@/lib/pairPages";
 
 interface ItemPageProps {
   params: Promise<{ id: string }>;
@@ -31,6 +35,21 @@ export function generateStaticParams(): Array<{ id: string }> {
   const slugs = detailRouteSlugs(rowsByPair);
   if (slugs.length === 0) return [{ id: "_placeholder" }];
   return slugs.map((id) => ({ id }));
+}
+
+// 메타(ST-1): 별칭(구 지표 경로)은 정준 대상 주소를 canonical로 가리킨다 — 같은 화면이 두 주소에서 색인되지 않게.
+export async function generateMetadata({ params }: ItemPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const pairs = listPatchPairs();
+  const { entityKey, name } = lolDetailIdentity(id, pairs);
+  return pageMeta({
+    game: "lol",
+    screen: "detail",
+    entity: name,
+    pair: pairs[0] ?? null,
+    path: `/lol/item/${id}/`,
+    canonicalPath: `/lol/item/${itemSlug(entityKey)}/`,
+  });
 }
 
 export default async function ItemDetailPage({ params }: ItemPageProps) {

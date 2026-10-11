@@ -6,9 +6,13 @@
 // 읽는데(`gameFromPathname`) 서버는 null, 클라이언트는 실제 주소(`/tft/…`)로 "tft"를 읽어 첫 렌더가 어긋난다. 그래서 이
 // 페이지가 **하이드레이션 전에** 전역 표식을 세우고(`<script>`는 파싱 즉시 실행), 경로에서 게임을 읽는 소비자는 그 표식이
 // 있으면 서버와 같은 null을 쓴다(`gameFromPathname`이 소유).
+import type { Metadata } from "next";
 import Container from "@/components/Container";
 import SiteFooter from "@/components/SiteFooter";
 import { GAMES, NOT_FOUND_FLAG, sectionHref } from "@/lib/game";
+
+// 404 title(ST-1): 전에는 루트 상속 「patchgap」 단독이라 정상 화면과 같은 이름이었다. noindex는 Next가 404에 자동으로 넣는다.
+export const metadata: Metadata = { title: "페이지 없음" };
 
 export default function NotFound() {
   return (

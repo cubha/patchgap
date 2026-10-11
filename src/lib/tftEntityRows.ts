@@ -58,6 +58,14 @@ export function effectStrength(record: DeltaRecord): number {
   return floor.value === 0 ? 0 : relative / floor.value;
 }
 
+/**
+ * 화면 이름(트랙 B ST-1에서 발견, tft-S18 연장). CDragon은 상징 아이템과 그 상징을 주는 **증강판**(`…Augment` 키)에 같은 이름을
+ * 준다 — 「치명적인 꽃 상징」 두 대상이 한 쌍의 상세 바로가기·title에서 구별되지 않았다. 키가 증강판이면 이름에 표시를 붙인다.
+ */
+export function tftDisplayName(entityKey: string, entityName: string): string {
+  return /Augment$/.test(entityKey) && !entityName.includes("증강") ? `${entityName} (증강)` : entityName;
+}
+
 export function buildTftEntityRows(
   rows: readonly DeltaRecord[],
   qAlpha?: number,
@@ -80,7 +88,7 @@ export function buildTftEntityRows(
     if (!existing) {
       byEntity.set(key, {
         key,
-        name: record.entityName,
+        name: tftDisplayName(record.entityKey, record.entityName),
         entityType: record.entityType,
         cells: { [record.metric]: record },
         status: shown,
@@ -107,7 +115,7 @@ export function buildTftEntityRows(
     status: TftEntityRow["status"]
   ): TftEntityRow => ({
     key: `${entityType}:${entityKey}`,
-    name: entityName,
+    name: tftDisplayName(entityKey, entityName),
     entityType: entityType as TftEntityRow["entityType"],
     cells: {},
     status,
