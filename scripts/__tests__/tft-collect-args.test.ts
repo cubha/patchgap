@@ -16,3 +16,17 @@ describe("run-tft-collect --deadline-minutes", () => {
     expect(() => parseArgs(["--deadline-minutes", "1.5"])).toThrow(/deadline-minutes/);
   });
 });
+
+// 2026-10-11: 워크플로가 이번 쌍(from,to)만 넘겨 18.1·18.2 같은 지난 창을 돌지 않게 한다.
+describe("run-tft-collect --patches", () => {
+  it("쉼표로 구분한 패치 목록을 받는다", () => {
+    expect(parseArgs(["--patches", "18.3,18.4"]).patches).toEqual(["18.3", "18.4"]);
+  });
+  it("없으면 undefined — 전 창", () => {
+    expect(parseArgs([]).patches).toBeUndefined();
+  });
+  it("패치 형식이 아니면 던진다(경로·셸 주입 차단)", () => {
+    expect(() => parseArgs(["--patches", "18.3,../x"])).toThrow(/patches/);
+    expect(() => parseArgs(["--patches", ""])).toThrow(/patches/);
+  });
+});
