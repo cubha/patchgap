@@ -47,7 +47,10 @@ export interface GameLandingCard {
    * 수치 축(잠수함)을 포함하므로 `significant`의 부분집합이 **아니다**. `null` = 관측 전.
    */
   unannounced: number | null;
-  /** 이 게임이 분석한 매치 총수 — 합산 타일의 재료. */
+  /**
+   * 이 게임이 분석한 매치 총수 — 히어로 「분석한 매치」 합산의 재료. LoL은 **수집한 전 패치 합**(이미 쌓은 표본을 작게 말하지 않는다),
+   * TFT·PUBG는 수집 단위가 쌍이라 쌍 전후 합이다. 카드 표본 줄은 이 값이 아니라 `pairMatches`(세 게임 같은 정의)를 쓴다(트랙 B ST-7).
+   */
   matches: number;
   /** 카드가 보여 주는 쌍의 전후 매치 합 — 표본 줄의 수(트랙 B ST-7). 관측 전 0. */
   pairMatches: number;

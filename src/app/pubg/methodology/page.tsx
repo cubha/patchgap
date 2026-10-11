@@ -162,6 +162,9 @@ export default function PubgMethodologyPage() {
         ))}
       </ol>
       <p className="px-5 pt-1 pb-5 text-xs leading-relaxed text-muted" style={{ maxWidth: "var(--measure-wide)" }}>
+        {/* 근거(트랙 B ST-12 표기 변경): 원문은 「samples 엔드포인트가 official 외에 airoyale·competitive·tutorialatoz·trainingroom을 함께 돌려준다 —
+            실측에서 표본의 약 절반이 비경쟁 매치였습니다」였다. PUBG API 매치 종류: official = 일반 매치, competitive = 랭크(경쟁전),
+            airoyale = 캐주얼. 수치(약 절반)는 원문의 실측 그대로다. 파이프라인이 official만 남기는 것은 aggregate/pubg-weapons.ts. */}
         공개 표본에는 일반 매치 외에 캐주얼·랭크·튜토리얼·훈련장 매치가 함께 섞여 옵니다 — 실측에서 표본의 약 절반이
           일반 매치가 아니었습니다. 2단계에서 매치 종류를 저장해 일반 매치만 씁니다.
         </p>

@@ -247,7 +247,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
             </div>
             {matchedNotes.length === 0 ? (
               <p className="px-5 pb-4 text-sm text-muted">
-                이 엔티티를 언급한 패치노트 항목이 없습니다. 아래 관측은 <strong className="text-fg">미공지 변화</strong>입니다.
+                이 대상을 언급한 패치노트 항목이 없습니다. 아래 관측은 <strong className="text-fg">미공지 변화</strong>입니다.
               </p>
             ) : (
               <ul className={`flex flex-col ${PANEL_SCROLL_BODY}`}>

@@ -25,7 +25,10 @@ export function weaponSlug(weaponKey: string): string {
   return urlSafe(weaponDisplayName(weaponKey));
 }
 
-/** `Baltic_Main` → `erangel`. 등록되지 않은 맵은 예전 규칙으로 떨어진다(이름을 짓지 않는다). */
+/**
+ * `Baltic_Main` → `erangel`. 등록되지 않은 맵은 예전 규칙(내부명)으로 떨어진다 — throw하지 않는 이유: 무인 수집이 새 맵 하나 때문에
+ * 사이트 전체 빌드를 멈추면 안 된다. 대신 `pubgRoutes.test.ts`가 「집계 산출물의 맵 키 ⊆ PUBG_MAPS」를 게이트로 막는다(scope-critic ST-2).
+ */
 export function mapSlug(mapKey: string): string {
   return mapIdentity(mapKey).slug || legacyMapSlug(mapKey);
 }

@@ -145,6 +145,25 @@ describe("구 코드명 주소 보존 — vercel.json 리다이렉트", () => {
     for (const r of vercel.redirects) expect(live.has(r.source.replace(/\/$/, ""))).toBe(false);
   });
 
+  it("vercel.json의 PUBG 리다이렉트는 생성 함수 출력과 정확히 같다 — 낡은 항목이 남지 않는다(scope-critic ST-2)", () => {
+    const actual = vercel.redirects.filter((r) => r.source.startsWith("/pubg/")).map((r) => `${r.source} → ${r.destination}`).sort();
+    const want = expected()
+      .flatMap((r) => [r.source, `${r.source}/`].map((source) => `${source} → ${r.destination}`))
+      .sort();
+    expect(actual).toEqual(want);
+  });
+
+  it("집계 산출물의 맵 키는 전부 PUBG_MAPS에 등록돼 있다 — 미등록 맵은 내부 코드명 슬러그로 떨어지고 리다이렉트도 없다", () => {
+    const dir = path.resolve(__dirname, "../../../data/aggregated/pubg");
+    const keys = new Set<string>();
+    for (const f of fs.readdirSync(dir).filter((f) => /^maps-.*\.json$/.test(f))) {
+      const d = JSON.parse(fs.readFileSync(path.join(dir, f), "utf8")) as { maps?: { mapKey: string }[] };
+      for (const m of d.maps ?? []) keys.add(m.mapKey);
+    }
+    expect(keys.size).toBeGreaterThan(0);
+    for (const k of keys) expect(Object.keys(PUBG_MAPS), k).toContain(k);
+  });
+
   it("슬러그가 같은 키는 리다이렉트를 만들지 않는다(자기 자신으로 도는 고리 방지)", () => {
     for (const r of expected()) expect(r.source + "/").not.toBe(r.destination);
   });

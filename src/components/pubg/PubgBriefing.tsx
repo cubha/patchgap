@@ -83,6 +83,7 @@ export default function PubgBriefing({
   const reportable = deltas.rows.filter((row) => isReportable(row.status));
   // 공지 대상 수(트랙 B ST-3) — 히어로·타일·「공지된 대상」·랜딩이 같은 함수. 조항 수(`notes.length`)는 타일 부제가 든다.
   const noteTargets = pubgNoteTargetCount(notes);
+  const weaponDetailKeys = new Set(after.weapons.map((w) => w.weaponKey));
   // 수치 축(F9) — 산출물이 없으면 섹션이 통째로 빠진다. 세 게임이 같은 컴포넌트를 쓴다.
   const submarine = summarizeGameData(loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to));
   const submarineKeys = new Set(submarine?.submarines.map((change) => change.entityKey) ?? []);
@@ -247,7 +248,9 @@ export default function PubgBriefing({
                     <SubmarineSection
                       summary={submarine}
                       reverts={gameDataReverts("pubg", deltas.meta.from, deltas.meta.to)}
-                      hrefOf={(change) => weaponHref(change.entityKey)}
+                      // 상세는 집계된 무기에만 있다(`/pubg/weapon/[key]` generateStaticParams = after.weapons) — 수치 축 변경이 집계에
+                      // 없는 무기를 가리키면 링크를 걸지 않는다(404 방지, scope-critic ST-14).
+                      hrefOf={(change) => (weaponDetailKeys.has(change.entityKey) ? weaponHref(change.entityKey) : null)}
                     />
                   </div>
                 ) : null}
@@ -366,7 +369,11 @@ function PubgDeclarationView({ declaration }: { declaration: PubgDeclaration }) 
           failure={declaration.failure}
           notes={declaration.notes.map((n) => ({ id: n.id, group: null, summary: n.summary, anchorUrl: n.anchorUrl }))}
           entityCount={pubgNoteTargetCount(declaration.notes)}
-          extra={submarine ? <SubmarineSection summary={submarine} hrefOf={() => null} /> : null}
+          extra={
+            submarine ? (
+              <SubmarineSection summary={submarine} reverts={gameDataReverts("pubg", declaration.from, declaration.to)} hrefOf={() => null} />
+            ) : null
+          }
         />
         <PubgFooter generatedAt={declaration.generatedAt} nVerdicts={0} />
       </Container>

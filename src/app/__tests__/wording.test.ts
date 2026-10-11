@@ -74,7 +74,7 @@ describe("수치 축 행 이름 링크 — 세 브리핑이 hrefOf를 넘긴다(
   });
   it("PUBG — 관측 브리핑은 링크를 넘긴다(선언만 쌍은 무기 상세 라우트 자체가 없어 null이 정직하다)", () => {
     const uses = usesOf("components/pubg/PubgBriefing.tsx");
-    expect(uses.some((u) => /hrefOf=\{\(change\) => weaponHref/.test(u))).toBe(true);
+    expect(uses.some((u) => /hrefOf=\{\(change\) => \(weaponDetailKeys\.has\(change\.entityKey\) \? weaponHref/.test(u))).toBe(true);
   });
 });
 
