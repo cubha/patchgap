@@ -88,27 +88,30 @@ export interface PubgMapIdentity {
   koName: string;
   /** 부제 — 시안 §4 `.detail-eyebrow`의 "맵 · 8×8" 자리. */
   sizeLabel: string;
+  /** 상세 주소 슬러그 — 화면 이름(영문 공식명)이다(트랙 B ST-2, pubg-S18). `assetName`에서 유도하지 않고 적는 이유:
+   * `Baltic_Main`과 `Erangel_Main`이 같은 자산 이름(Erangel)을 써서 유도하면 충돌한다. */
+  slug: string;
 }
 
 export const PUBG_MAPS: Readonly<Record<string, PubgMapIdentity>> = {
-  Baltic_Main: { assetName: "Erangel", koName: "에란겔", sizeLabel: "8×8" },
-  Desert_Main: { assetName: "Miramar", koName: "미라마", sizeLabel: "8×8" },
-  Tiger_Main: { assetName: "Taego", koName: "태이고", sizeLabel: "8×8" },
-  Kiki_Main: { assetName: "Deston", koName: "데스턴", sizeLabel: "8×8" },
-  Neon_Main: { assetName: "Rondo", koName: "론도", sizeLabel: "8×8" },
-  DihorOtok_Main: { assetName: "Vikendi", koName: "비켄디", sizeLabel: "6×6" },
-  Savage_Main: { assetName: "Sanhok", koName: "사녹", sizeLabel: "4×4" },
-  Summerland_Main: { assetName: "Karakin", koName: "카라킨", sizeLabel: "2×2" },
-  Chimera_Main: { assetName: "Paramo", koName: "파라모", sizeLabel: "3×3" },
-  Erangel_Main: { assetName: "Erangel", koName: "에란겔(구)", sizeLabel: "8×8" },
-  Heaven_Main: { assetName: "Haven", koName: "헤이븐", sizeLabel: "1×1" },
-  Range_Main: { assetName: "Camp_Jackal", koName: "캠프 재칼", sizeLabel: "훈련장" },
+  Baltic_Main: { assetName: "Erangel", koName: "에란겔", sizeLabel: "8×8", slug: "erangel" },
+  Desert_Main: { assetName: "Miramar", koName: "미라마", sizeLabel: "8×8", slug: "miramar" },
+  Tiger_Main: { assetName: "Taego", koName: "태이고", sizeLabel: "8×8", slug: "taego" },
+  Kiki_Main: { assetName: "Deston", koName: "데스턴", sizeLabel: "8×8", slug: "deston" },
+  Neon_Main: { assetName: "Rondo", koName: "론도", sizeLabel: "8×8", slug: "rondo" },
+  DihorOtok_Main: { assetName: "Vikendi", koName: "비켄디", sizeLabel: "6×6", slug: "vikendi" },
+  Savage_Main: { assetName: "Sanhok", koName: "사녹", sizeLabel: "4×4", slug: "sanhok" },
+  Summerland_Main: { assetName: "Karakin", koName: "카라킨", sizeLabel: "2×2", slug: "karakin" },
+  Chimera_Main: { assetName: "Paramo", koName: "파라모", sizeLabel: "3×3", slug: "paramo" },
+  Erangel_Main: { assetName: "Erangel", koName: "에란겔(구)", sizeLabel: "8×8", slug: "erangelclassic" },
+  Heaven_Main: { assetName: "Haven", koName: "헤이븐", sizeLabel: "1×1", slug: "haven" },
+  Range_Main: { assetName: "Camp_Jackal", koName: "캠프 재칼", sizeLabel: "훈련장", slug: "campjackal" },
 } as const;
 
 /** 사전에 없는 맵 키도 화면에서 죽지 않게 한다 — 키 그대로가 정직한 폴백이다(이름을 짓지
  * 않는다). 신규 맵이 추가되면 여기 대신 `PUBG_MAPS`에 한 줄을 넣는 것이 정답이다. */
 export function mapIdentity(mapKey: string): PubgMapIdentity {
-  return PUBG_MAPS[mapKey] ?? { assetName: "", koName: mapKey, sizeLabel: "미등록" };
+  return PUBG_MAPS[mapKey] ?? { assetName: "", koName: mapKey, sizeLabel: "미등록", slug: "" };
 }
 
 /** 이 맵 안에서 무기 픽업을 정준키로 합산해 점유율 상위 `limit`건을 낸다. */

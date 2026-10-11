@@ -134,6 +134,16 @@ describe("구 코드명 주소 보존 — vercel.json 리다이렉트", () => {
     expect(expected()).toContainEqual({ source: "/pubg/map/baltic", destination: "/pubg/map/erangel/" });
   });
 
+  it("구 주소가 다른 대상의 새 주소와 겹치면 리다이렉트하지 않는다 — Vercel 리다이렉트는 정적 파일보다 먼저라 그 화면을 가린다", () => {
+    // 실측(구현 중): 구 맵 `Erangel_Main`의 예전 슬러그 「erangel」 = 에란겔(`Baltic_Main`)의 새 슬러그.
+    const live = new Set([
+      ...Object.keys(PUBG_MAPS).map((k) => `/pubg/map/${mapSlug(k)}`),
+      ...WEAPON_NAME_OVERRIDE_KEYS.map((k) => `/pubg/weapon/${weaponSlug(k)}`),
+    ]);
+    for (const r of expected()) expect(live.has(r.source)).toBe(false);
+    for (const r of vercel.redirects) expect(live.has(r.source.replace(/\/$/, ""))).toBe(false);
+  });
+
   it("슬러그가 같은 키는 리다이렉트를 만들지 않는다(자기 자신으로 도는 고리 방지)", () => {
     for (const r of expected()) expect(r.source + "/").not.toBe(r.destination);
   });
