@@ -122,6 +122,10 @@ jobs:
         with:
           # 토큰을 .git/config에 남기지 않는다 — push 스텝이 그때만 주입한다(아래 Commit + push 참고).
           persist-credentials: false
+          # 이벤트 SHA가 아니라 **잡 시작 시점의 브랜치 끝**을 받는다(2026-10-11, run 38097140647). 수집 워크플로 넷은 같은
+          # 동시 실행 그룹이라 줄을 서는데, 기본값(이벤트 SHA)이면 앞 실행이 줄 서는 동안 커밋한 데이터를 못 보고 낡은 트리에서
+          # 판정·재작성해 push 직전 rebase가 충돌했다. scripts/__tests__/workflow-fresh-checkout.test.ts가 강제한다.
+          ref: ${{ github.ref_name }}
 
       - name: Setup Node 22
         uses: actions/setup-node@v4
