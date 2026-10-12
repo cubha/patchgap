@@ -12,6 +12,7 @@
 // 상이하니 판정기준만 동일하게하라는말이야". 그래서 **아래 구획만** 공용으로 둔다.
 //
 // 값 포맷은 `submarineText`가 소유한다 — 여기서 `change.before`를 직접 찍지 않는다(float32 잡음).
+import { SIGNED_PERCENT, formatSignedPercent } from "@/pipeline/shared/percent";
 import { gameDataValue, statusLabel } from "@/lib/format";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import {
@@ -28,7 +29,7 @@ import type { GameDataChange, GameDataSource } from "@/pipeline/gamedata/types";
 
 function relText(rel: number | null): string | null {
   if (rel === null) return null;
-  return `${rel > 0 ? "+" : ""}${(rel * 100).toFixed(1)}%`;
+  return formatSignedPercent(rel, 1, SIGNED_PERCENT); // 음수 기호 `−` 1종(트랙 B ST-9)
 }
 
 export interface SubmarineDetailBlockProps {
@@ -79,7 +80,7 @@ export default function SubmarineDetailBlock({
         // 0건 **증명**(분모까지 밝히는 문장)은 홈 `SubmarineSection`이 맡는다 — 여기서는
         // 이 엔티티에 없다는 사실만 말하고 같은 말을 두 번 하지 않는다.
         <p className="px-5 pb-4 text-sm text-muted">
-          이 엔티티에는 없습니다 — 원본 수치에서 패치노트가 말하지 않은 값을 찾지 못했습니다.
+          이 대상에는 없습니다 — 원본 수치에서 패치노트가 말하지 않은 값을 찾지 못했습니다.
         </p>
       ) : (
         <ul className="flex flex-col">

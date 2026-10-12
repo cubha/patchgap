@@ -94,7 +94,7 @@ export default function NoteContrastPanel({ result }: NoteContrastPanelProps) {
         <p className="text-sm text-muted">{result.message}</p>
         {result.adjacent.length > 0 ? (
           <div className="flex flex-col gap-2">
-            <span className="text-xs font-bold text-muted">같은 엔티티의 인접 항목</span>
+            <span className="text-xs font-bold text-muted">같은 대상의 인접 항목</span>
             <ul className={`flex flex-col gap-1 border-l-2 border-border pl-4 ${PANEL_SCROLL_BODY}`}>
               {result.adjacent.map((item) => (
                 <li key={item.id} className="text-sm text-muted">

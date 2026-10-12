@@ -48,7 +48,9 @@ export default function PageHeader({
           {title}
         </h1>
         {titleAside ? (
-          <span className="shrink-0 whitespace-nowrap font-mono text-xs tracking-wider text-muted uppercase">{titleAside}</span>
+          // 배경 사진 위에 직접 앉는다 — 제목·부제와 같은 그림자와 한 단계 밝은 글자색(2026-10-12 verify-impl 축B S6: PUBG 상세
+          // 「무기 · 돌격소총」이 하늘 사진 위에서 거의 안 읽혔다).
+          <span className="ambient-hero-sub shrink-0 whitespace-nowrap font-mono text-xs tracking-wider text-fg-2 uppercase">{titleAside}</span>
         ) : null}
       </div>
       {lead ? (

@@ -75,12 +75,12 @@ export default function ObservationPanel({
         {segmentName ? <span className="text-xs text-muted">· {segmentName}</span> : null}
       </div>
 
+      {/* 막대 앞에는 판정 문장 **한 줄**만(트랙 B ST-17, parity-S23 — §8-3-1 「판정 문장은 패널 첫 줄 1문장」). 나머지 근거 문장은
+          막대·게이트 **뒤**로 — 지우지 않는다(근거를 자연어로, 2026-09-19). 전에는 PUBG 상세에서 막대 앞 산문이 4문단이었다. */}
       {prose && prose.length > 0 ? (
-        <div className="flex flex-col gap-2 text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
-          {prose.map((sentence) => (
-            <p key={sentence}>{sentence}</p>
-          ))}
-        </div>
+        <p className="text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
+          {prose[0]}
+        </p>
       ) : null}
 
       {/* items-start — 막대 상자가 옆 칸(게이트·원천) 높이로 늘어나지 않게 한다. 기본 stretch면 게이트 문구가 길어질 때
@@ -90,7 +90,9 @@ export default function ObservationPanel({
           {chart}
           {/* 한 줄로 자른다 — 캡션이 길어지면 막대 상자 전체가 늘어 옆 칸과 높이가 갈린다(2026-10-07 레이아웃 게이트
               D-STRESS-02, 네 상세 공통). 전문은 title로 남긴다. */}
-          <p className="truncate px-2 pt-2 font-mono text-xs text-muted" title={chartCaption}>
+          {/* 375폭에서는 줄바꿈해 전문을 보인다(트랙 B ST-17, tft-S28 — 「오차 막대: …」가 잘렸다). 두 칸이 나란한 lg 이상에서만
+              한 줄로 자른다(나란한 상자 높이 맞춤, D-STRESS-02). */}
+          <p className="px-2 pt-2 font-mono text-xs whitespace-normal text-muted lg:truncate" title={chartCaption}>
             {chartCaption}
           </p>
         </div>
@@ -117,6 +119,14 @@ export default function ObservationPanel({
           </a>
         </div>
       </div>
+
+      {prose && prose.length > 1 ? (
+        <div className="flex flex-col gap-2 text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
+          {prose.slice(1).map((sentence) => (
+            <p key={sentence}>{sentence}</p>
+          ))}
+        </div>
+      ) : null}
 
       <div className="flex flex-col border-t border-border-soft pt-4">
         <p className="text-sm font-bold text-fg">추정 원인(LLM) — 이 지표·구간</p>

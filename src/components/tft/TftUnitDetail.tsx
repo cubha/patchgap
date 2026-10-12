@@ -10,6 +10,7 @@
 // 순방률·평균 등수) → 패널 하나, 원인은 그 지표 패널 안. 보드는 위치를 갖지 않아 구간 선택은 없다. 자격 없는 지표는
 // 탭을 만들지 않는다(전에는 「보고 자격을 얻은 관측 없음」 회색 칸으로 자리를 채웠다).
 
+import BoundaryMark, { rowIsBoundary } from "@/components/BoundaryMark";
 import Container from "@/components/Container";
 import type { ObservedPairLink } from "@/components/ObservationPendingNotice";
 import PageHeader from "@/components/PageHeader";
@@ -34,7 +35,7 @@ import { entityTypeLabel, fmtInt, fmtQ, isLowerBetter, metricLabel, statusLabel 
 import { delayedChangesFor, loadGameDataDiff } from "@/lib/gamedata";
 import { loadTftAssets, tftDeclarationSchedule, type TftBundle, type TftDeclaration } from "@/lib/tftData";
 import { tftDetailRows } from "@/lib/pairPages";
-import { displayStatus } from "@/pipeline/shared/display-status";
+import { displayStatus, METRIC_VERDICTS } from "@/pipeline/shared/display-status";
 import type { DeltaRecord } from "@/pipeline/types";
 import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
 import { entityKeyFromSlug as unslug } from "@/lib/tftRoutes";
@@ -85,7 +86,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
     // 관측 전에도 골격(이동 경로·푸터)과 관측이 있는 쌍으로 가는 링크를 유지한다(ST-16).
     return (
       <main>
-        <Container>
+        <Container width="narrow">
           <TftUnavailable failure={declaration?.failure} schedule={tftDeclarationSchedule(declaration ?? null)} crumbs={detailCrumbs("tft", "관측 전", pairBase)} observed={observed} />
         </Container>
         {declaration ? <TftFooter generatedAt={declaration.generatedAt} nVerdicts={0} /> : null}
@@ -102,9 +103,9 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
   if (!row) {
     return (
       <main>
-        <Container>
+        <Container width="narrow">
           {/* 빈 상태에도 **같은 머리**를 쓴다 — 이동 경로가 여기서만 다른 형식이 되면 §8-5가 깨진다. */}
-          <div className="flex flex-col gap-3 pt-40 pb-8">
+          <div className="flex flex-col gap-3 pt-12 pb-8">
             <PageHeader
               crumbs={detailCrumbs("tft", "보고할 관측 없음", pairBase)}
               title="보고할 관측이 없는 대상입니다"
@@ -184,8 +185,8 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
 
   return (
     <main>
-      <Container>
-        <div className="flex flex-col gap-6 pt-40 pb-8">
+      <Container width="narrow">
+        <div className="flex flex-col gap-6 pt-12 pb-8"> {/* 상세 머리 시작 = 네 상세 공통 pt-12(2026-10-12 verify-impl 축B S7 — TFT만 pt-40이라 머리가 y≈224였다). */}
           {/* 제목은 **대상 이름**이고 유형은 옆 라벨이다(§8-5). 이동 경로·액션 줄의 자리는
               `PageHeader`가 소유한다 — 세 게임이 같은 위치에 둔다(§8-7 #1·#8·#18). */}
           {/* 상세 스플래시 — TFT 화면의 이미지는 **0건**이었다(§8-7 말미). 자산이 실재하는 지금
@@ -211,6 +212,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
               <span className="flex items-center gap-2">
                 {entityTypeLabel(row.entityType)}
                 <StatusBadge status={row.status} />
+                {METRIC_VERDICTS.has(row.status) && rowIsBoundary(Object.values(row.cells)) ? <BoundaryMark /> : null}
               </span>
             }
             lead={
@@ -245,7 +247,7 @@ export default function TftUnitDetail({ slug, bundle, declaration, pairBase = nu
             </div>
             {matchedNotes.length === 0 ? (
               <p className="px-5 pb-4 text-sm text-muted">
-                이 엔티티를 언급한 패치노트 항목이 없습니다. 아래 관측은 <strong className="text-fg">미공지 변화</strong>입니다.
+                이 대상을 언급한 패치노트 항목이 없습니다. 아래 관측은 <strong className="text-fg">미공지 변화</strong>입니다.
               </p>
             ) : (
               <ul className={`flex flex-col ${PANEL_SCROLL_BODY}`}>

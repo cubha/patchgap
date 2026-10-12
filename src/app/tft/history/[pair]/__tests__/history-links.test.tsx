@@ -71,7 +71,7 @@ describe("TFT 과거 쌍 — 화면의 링크가 그 쌍 안에 머문다", () =
     it(`${slug} 브리핑: 대상 링크가 그 쌍의 상세이고 전부 생성된다, 미공지 타일은 그 쌍의 대조표`, async () => {
       const hrefs = await hrefsOf(TftHistoryPage({ params: Promise.resolve({ pair: slug }) }));
       expect(checkPairLinks(hrefs, slug).length).toBeGreaterThan(0);
-      expect(hrefs).toContain(`/tft/history/${slug}/compare#unannounced`);
+      expect(hrefs).toContain(`/tft/history/${slug}/compare#gap`); // 2026-10-11 명세 변경(트랙 B ST-24, tft-S10·tft-S9): 타일 착지 = 묶음
       expect(hrefs.some((h) => h.startsWith("/tft/compare"))).toBe(false);
     }, 60_000);
 

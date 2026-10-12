@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-import { TFT_METRICS, buildTftEntityRows, effectStrength } from "../tftEntityRows";
+import { TFT_METRICS, buildTftEntityRows, effectStrength, tftDisplayName } from "../tftEntityRows";
 import type { DeltaRecord, DeltaMetric, MatchStatus } from "@/pipeline/types";
 
 function rec(
@@ -101,5 +101,15 @@ describe("buildTftEntityRows", () => {
 
   it("열 순서는 채택 → 성과다", () => {
     expect(TFT_METRICS).toEqual(["playRate", "top4Rate", "avgPlacement"]);
+  });
+});
+
+describe("tftDisplayName — 증강판 상징 구별(트랙 B ST-1, tft-S18 연장)", () => {
+  it("…Augment 키는 같은 이름 뒤에 (증강)을 붙인다", () => {
+    expect(tftDisplayName("DA_18_EmblemFloraFatalisAugment", "치명적인 꽃 상징")).toBe("치명적인 꽃 상징 (증강)");
+    expect(tftDisplayName("DA_18_EmblemFloraFatalis", "치명적인 꽃 상징")).toBe("치명적인 꽃 상징");
+  });
+  it("이미 증강을 말하는 이름은 두 번 붙이지 않는다", () => {
+    expect(tftDisplayName("X_Augment", "증강 상징")).toBe("증강 상징");
   });
 });

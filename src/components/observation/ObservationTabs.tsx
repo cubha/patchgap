@@ -33,9 +33,14 @@ export interface ObservationTabsProps {
   /** 구간 축이 없을 때 그 이유 한 줄(「구간 축 없음 — 보드는 위치를 갖지 않습니다」). */
   noSegmentNote?: string;
   initial: { metric: string; segment: string };
+  /**
+   * 탭 배지(「보고할 관측 N건」)를 그린다 — 판정 축이 아닌 기술통계 화면(PUBG 맵)은 끈다(트랙 B ST-17, pubg-S16). 전에는 판정 없는
+   * 맵 탭 4개가 전부 「1」을 달아, 무기 상세에서 「게이트 통과 1건」을 뜻하던 같은 배지가 화면마다 다른 뜻이 됐다.
+   */
+  showCounts?: boolean;
 }
 
-export default function ObservationTabs({ metrics, segmentLabel, noSegmentNote, initial }: ObservationTabsProps) {
+export default function ObservationTabs({ metrics, segmentLabel, noSegmentNote, initial, showCounts = true }: ObservationTabsProps) {
   const baseId = useId();
   const [selection, setSelection] = useState(initial);
 
@@ -95,9 +100,11 @@ export default function ObservationTabs({ metrics, segmentLabel, noSegmentNote, 
                 }`}
               >
                 {m.label}
-                <span className="rounded-pill bg-border-soft px-1.5 font-mono text-xs font-normal text-fg-2">
-                  {m.segments.length}
-                </span>
+                {showCounts ? (
+                  <span className="rounded-pill bg-border-soft px-1.5 font-mono text-xs font-normal text-fg-2">
+                    {m.segments.length}
+                  </span>
+                ) : null}
               </button>
             );
           })}

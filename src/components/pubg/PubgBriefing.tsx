@@ -14,28 +14,32 @@
 //
 // 이 게임은 판정 축이 하나뿐이다(무기 획득 점유율). 43.1 밸런스 항목 중 텔레메트리로 분리되는 축이
 // 그것뿐이었고, 명중률 축은 반증됐다(PLAN-pubg-gate-2026-09-16 §8) — 그 사실은 방법론이 말한다.
+import GapPreview from "@/components/GapPreview";
+import { pickGapPreview } from "@/components/gapPreviewPick";
 import Link from "next/link";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { loadGameDataDiff, summarizeGameData, gameDataReverts } from "@/lib/gamedata";
 import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { pubgGapTotal, pubgMetricGapRows } from "@/lib/gapTotals";
 import DeclarationOnly from "@/components/DeclarationOnly";
 import NewerPatchNotice from "@/components/NewerPatchNotice";
 import PubgWeaponGrid from "@/components/pubg/PubgWeaponGrid";
+import PubgNoteClauses from "@/components/pubg/PubgNoteClauses";
+import PanelExpand from "@/components/PanelExpand";
 import { loadPubgAssets, loadPubgMaps, isReportable, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
 import { mapHref, weaponHref } from "@/lib/pubgRoutes";
+import { pubgNoteTargetCount } from "@/lib/announcedCount";
 import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
 import { publicMapPath } from "@/pipeline/pubg/asset-path";
 import { pubgDisplayStatus } from "@/pipeline/shared/pubg-status";
 import { SIGNED_POINT, formatSignedPercent } from "@/pipeline/shared/percent";
-import ExternalLink from "@/components/ExternalLink";
-import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
+import BriefingListPanel from "@/components/BriefingListPanel";
 import StatTiles from "@/components/StatTiles";
 import DiscordPanel from "@/components/home/DiscordPanel";
 import MobileActionBar from "@/components/home/MobileActionBar";
-import BriefingTabs from "@/components/BriefingTabs";
+import BriefingTabs, { CONTENT_TAB_TITLE, GAP_METRIC_AXIS_TITLE } from "@/components/BriefingTabs";
 import BriefingRowList from "@/components/BriefingRowList";
 import AnnouncedCoverageLine from "@/components/home/AnnouncedCoverageLine";
 import EntityIndexSection, { ENTITY_INDEX_CELL, ENTITY_INDEX_GRID } from "@/components/EntityIndexSection";
@@ -77,6 +81,9 @@ export default function PubgBriefing({
   const weaponAssets = new Set(assets?.weapons ?? []);
   const mapAssets = new Set(assets?.maps ?? []);
   const reportable = deltas.rows.filter((row) => isReportable(row.status));
+  // 공지 대상 수(트랙 B ST-3) — 히어로·타일·「공지된 대상」·랜딩이 같은 함수. 조항 수(`notes.length`)는 타일 부제가 든다.
+  const noteTargets = pubgNoteTargetCount(notes);
+  const weaponDetailKeys = new Set(after.weapons.map((w) => w.weaponKey));
   // 수치 축(F9) — 산출물이 없으면 섹션이 통째로 빠진다. 세 게임이 같은 컴포넌트를 쓴다.
   const submarine = summarizeGameData(loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to));
   const submarineKeys = new Set(submarine?.submarines.map((change) => change.entityKey) ?? []);
@@ -147,8 +154,8 @@ export default function PubgBriefing({
             <span className="font-mono text-xs font-bold tracking-wide text-accent uppercase">
               패치노트가 말한 것 vs 통계가 말하는 것
             </span>
-            <h1 className="max-w-3xl font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
-              패치노트는 <span className="text-accent">{notes.length}개 항목</span>을 말했고, 통계는{" "}
+            <h1 className="ambient-hero-headline max-w-3xl break-keep font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
+              패치노트는 <span className="text-accent">{noteTargets}개 대상</span>을 말했고, 통계는{" "}
               <span className="text-accent">{reportable.length}개 변화</span>를 말합니다
             </h1>
             <p className="max-w-3xl text-sm leading-relaxed text-fg-2 wrap-anywhere">
@@ -160,16 +167,30 @@ export default function PubgBriefing({
 
           {/* 홈보다 새 패치노트(관측 stub = declaration.json)가 있으면 여기서 말한다 — 홈은 완성된 분석을 그리고, 새 노트는 원문으로
               한 클릭(PUBG는 과거 쌍 라우트가 없다). 날짜는 두지 않는다 — PUBG 관측은 N일차가 아니라 수확 창 규칙이다. */}
-          {newer ? <NewerPatchNotice patch={newer.to} reason={newer.failure.reason} entityCount={newer.notes.length} schedule={null} href={newer.sourceUrl} /> : null}
+          {newer ? <NewerPatchNotice patch={newer.to} reason={newer.failure.reason} entityCount={pubgNoteTargetCount(newer.notes)} schedule={null} href={newer.sourceUrl} /> : null}
 
           {/* 3타일은 세 게임 공통 컴포넌트가 그린다(UX-BRIEF §8-1). PUBG 대조표는 상태 칩이
               있어 `#unannounced` 앵커가 실제로 걸린다. */}
           <StatTiles
-            announcedCount={notes.length}
+            announcedCount={noteTargets}
+            itemCount={notes.length}
             patch={deltas.meta.to}
             significantCount={reportable.length}
             gapCount={gapTotal}
             game="pubg"
+          />
+          {/* 첫 화면 미공지 상위(트랙 B ST-22, pubg-S8) — 세 게임 같은 자리. 주 행동 바인딩(디스코드)은 그대로다. */}
+          <GapPreview
+            items={pickGapPreview(
+              unannounced.map((r) => ({
+                key: r.weaponKey,
+                name: r.weaponName,
+                text: `획득 점유율 ${signedPct(r.relChange ?? 0)}`,
+                href: weaponHref(r.weaponKey),
+                score: Math.abs(r.relChange ?? 0),
+              })),
+              3
+            )}
           />
 
           {/* 공지 대조가 기본 탭, 미공지가 두 번째 탭(2026-09-17 사용자 지시 — 홈과 같은 순서). */}
@@ -185,7 +206,7 @@ export default function PubgBriefing({
               content={
                 <SectionCard
                   eyebrow="대조"
-                  title="공지된 변경은 실제로 그렇게 됐나"
+                  title={CONTENT_TAB_TITLE}
                   variant="embedded"
                   action={<span className="font-mono text-xs text-muted">대상 {new Set(announced.map((r) => r.weaponKey)).size}종</span>}
                 >
@@ -198,27 +219,23 @@ export default function PubgBriefing({
                   {/* 본문 행은 **대상 단위**다(UX-BRIEF §8-2) — 전에는 무기 1개가 지표마다
                       흩어졌고 판정 뱃지가 맨 뒤 열이었다. 공용 행이 뱃지를 맨 앞에 두고
                       이름을 링크로 만든다. 높이 상한은 `@/lib/panelScroll`이 소유한다. */}
-                  <div className={PANEL_SCROLL_BODY}>
+                  <BriefingListPanel total={new Set(announced.map((r) => r.weaponKey)).size} compareHref={"/pubg/compare/#announced"}>
                     <BriefingRowList
                       groups={weaponGroups(announced)}
                       hrefOf={(g) => weaponHref(g.entityKey)}
                       causeOf={causeLine}
                       emptyText="공지와 짝지어진 유의한 관측이 없습니다."
                     />
-                  </div>
+                  </BriefingListPanel>
                   {/* 세 게임이 같은 자리에서 같은 말을 한다(§8-1, 2026-09-23 화면 대조 V5). */}
                   <AnnouncedCoverageLine
-                    noteTargets={new Set(notes.flatMap((n) => n.weaponKeys)).size}
+                    noteTargets={noteTargets}
                     observed={new Set(announced.map((r) => r.weaponKey)).size}
                     alsoUnmeasured="이 데이터로 측정할 수 없는 조항(조준 전환·반동·차량 피해)"
+                    sourceUrl={noteSource}
                   />
-                  {noteSource ? (
-                    <div className="border-t border-border-soft px-5 py-3">
-                      <ExternalLink className="text-sm font-bold text-accent hover:underline" href={noteSource}>
-                        패치노트 원문 보기 ↗
-                      </ExternalLink>
-                    </div>
-                  ) : null}
+                  {/* 탭 배지의 「조항 N」이 무엇인지 탭 안에서 보인다(ST-4, pubg-S6). */}
+                  <PubgNoteClauses notes={notes} />
                 </SectionCard>
               }
               gap={
@@ -228,23 +245,29 @@ export default function PubgBriefing({
                 {/* 수치 축 — 탭 카드 안 위쪽 갈래(LoL 스트림과 같은 자리, B2). */}
                 {submarine ? (
                   <div className="border-b border-border-soft p-5">
-                    <SubmarineSection summary={submarine} hrefOf={(change) => weaponHref(change.entityKey)} />
+                    <SubmarineSection
+                      summary={submarine}
+                      reverts={gameDataReverts("pubg", deltas.meta.from, deltas.meta.to)}
+                      // 상세는 집계된 무기에만 있다(`/pubg/weapon/[key]` generateStaticParams = after.weapons) — 수치 축 변경이 집계에
+                      // 없는 무기를 가리키면 링크를 걸지 않는다(404 방지, scope-critic ST-14).
+                      hrefOf={(change) => (weaponDetailKeys.has(change.entityKey) ? weaponHref(change.entityKey) : null)}
+                    />
                   </div>
                 ) : null}
                 <SectionCard
                   eyebrow="발견 · 지표 축"
-                  title="공지에 없는데 움직였습니다"
+                  title={GAP_METRIC_AXIS_TITLE}
                   variant="embedded"
                   action={<span className="font-mono text-xs text-muted">대상 {unannounced.length}종</span>}
                 >
-                  <div className={PANEL_SCROLL_BODY}>
+                  <BriefingListPanel total={unannounced.length} compareHref={"/pubg/compare/#unannounced"}>
                     <BriefingRowList
                       groups={weaponGroups(unannounced)}
                       hrefOf={(g) => weaponHref(g.entityKey)}
                       causeOf={causeLine}
                       emptyText="바닥을 넘는 미공지 변화가 없습니다."
                     />
-                  </div>
+                  </BriefingListPanel>
                 </SectionCard>
                 </div>
               }
@@ -270,7 +293,7 @@ export default function PubgBriefing({
                       label: "맵",
                       total: maps.after.maps.length,
                       body: (
-                    <ul className={`${ENTITY_INDEX_GRID} sm:grid-cols-2 lg:grid-cols-4 ${PANEL_SCROLL_BODY}`}>
+                    <PanelExpand as="ul" total={maps.after.maps.length} className={`${ENTITY_INDEX_GRID} sm:grid-cols-2 lg:grid-cols-4`}>
                       {maps.after.maps.map((map) => {
                         const identity = mapIdentity(map.mapKey);
                         const delta = maps.deltas.rows.find((r) => r.mapKey === map.mapKey) ?? null;
@@ -313,7 +336,7 @@ export default function PubgBriefing({
                           </li>
                         );
                       })}
-                    </ul>
+                    </PanelExpand>
                       ),
                     },
                   ]
@@ -345,7 +368,12 @@ function PubgDeclarationView({ declaration }: { declaration: PubgDeclaration }) 
           to={declaration.to}
           failure={declaration.failure}
           notes={declaration.notes.map((n) => ({ id: n.id, group: null, summary: n.summary, anchorUrl: n.anchorUrl }))}
-          extra={submarine ? <SubmarineSection summary={submarine} hrefOf={() => null} /> : null}
+          entityCount={pubgNoteTargetCount(declaration.notes)}
+          extra={
+            submarine ? (
+              <SubmarineSection summary={submarine} reverts={gameDataReverts("pubg", declaration.from, declaration.to)} hrefOf={() => null} />
+            ) : null
+          }
         />
         <PubgFooter generatedAt={declaration.generatedAt} nVerdicts={0} />
       </Container>

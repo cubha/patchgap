@@ -54,7 +54,7 @@ export default function MiscChangesSection({ sections, skinPreviews = {}, laneFi
   // 아니라 같은 그림이 두 번 뜬다는 사실이다.
   const dedupeSkins = createSkinDeduper();
   return (
-    <li className="border-b border-border-soft last:border-b-0">
+    <li id="stream-misc" className="border-b border-border-soft last:border-b-0">
       {/* `group/misc` — 요약행(group/fold)과 같은 규약으로 이름을 준다. */}
       <details className="group/misc">
         <summary className="flex cursor-pointer list-none items-center gap-4 px-5 py-3 text-xs text-muted [&::-webkit-details-marker]:hidden">

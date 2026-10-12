@@ -12,6 +12,7 @@
 import type { Metadata } from "next";
 
 import TftObservedRedirect from "@/components/tft/TftObservedRedirect";
+import { pageMeta } from "@/lib/meta";
 import TftUnitDetail from "@/components/tft/TftUnitDetail";
 import { tftDetailRows } from "@/lib/pairPages";
 import { pairBasePath, pairSectionLink } from "@/lib/pairRoutes";
@@ -39,7 +40,14 @@ export async function generateMetadata({ params }: { params: Promise<{ key: stri
   const { key } = await params;
   const source = sourceBundle();
   const row = source ? tftDetailRows(source.bundle).find((r) => r.key === unslug(key)) : undefined;
-  return { title: row ? `${row.name} — TFT · patchgap` : "TFT 상세 — patchgap" };
+  const meta = source?.bundle.deltas.meta;
+  return pageMeta({
+    game: "tft",
+    screen: "detail",
+    entity: row?.name ?? null,
+    pair: meta ? { from: meta.from, to: meta.to } : null,
+    path: `/tft/unit/${key}/`,
+  });
 }
 
 export default async function TftUnitPage({ params }: { params: Promise<{ key: string }> }) {

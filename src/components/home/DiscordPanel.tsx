@@ -89,7 +89,7 @@ export default function DiscordPanel({ game, generatedAt }: DiscordPanelProps) {
           </Link>
         ) : null}
         {generatedAt ? (
-          <span className="text-xs text-muted">마지막 집계 {fmtKst(generatedAt)}</span>
+          <span className="text-xs text-muted">마지막 판정 {fmtKst(generatedAt)}</span>
         ) : null}
       </div>
     </SectionCard>

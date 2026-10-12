@@ -19,8 +19,10 @@ export interface LaneDistributionRow {
 
 const LANE_ORDER: readonly LaneAxis[] = ["TOP", "JUNGLE", "MIDDLE", "BOTTOM", "UTILITY", "all"];
 
+/** `all`은 「전체」가 아니라 「라인 무관」이다(트랙 B ST-6, lol-S4) — 라인 축이 없는(챔피언 전체 단위) 행이라, 「전체」라 부르면
+ * 같은 화면 「미공지 Gap」 총계처럼 읽혔다. */
 function laneLabel(lane: LaneAxis): string {
-  return lane === "all" ? "전체" : positionLabel(lane);
+  return lane === "all" ? "라인 무관" : positionLabel(lane);
 }
 
 /**
@@ -54,4 +56,19 @@ export function computeLaneDistribution(records: readonly DeltaRecord[]): LaneDi
     label: laneLabel(lane),
     count: counts.get(lane) ?? 0,
   }));
+}
+
+/**
+ * 분포가 Gap 총계 중 얼마를 다루는가(트랙 B ST-6, lol-S4) — 패널 바닥 「미공지 Gap N 중 라인 구분 n · 그 밖 m」. 분포에 안 오는
+ * 미공지(라인 값이 없는 밴률·아이템·수치 축)가 「정글 0」처럼 「없음」으로 읽히지 않게 범위를 밝힌다. 세는 단위는 **대상**
+ * (라인이 여럿인 대상은 한 번) — Gap 타일과 같은 단위다. 보이는 Gap 대상 수라 #78(숨김 건수)의 대상이 아니다.
+ */
+export function laneDistributionScope(records: readonly DeltaRecord[], gapTotal: number): { gapTotal: number; covered: number; other: number } {
+  const entities = new Set<string>();
+  for (const record of records) {
+    if (record.metric === "banRate") continue;
+    if (parseLaneAxis(record.id) === null) continue;
+    entities.add(`${record.entityType}:${record.entityKey}`);
+  }
+  return { gapTotal, covered: entities.size, other: Math.max(0, gapTotal - entities.size) };
 }

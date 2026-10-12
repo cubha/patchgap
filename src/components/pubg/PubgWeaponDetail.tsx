@@ -12,9 +12,12 @@
 // **판정이 서지 않은 무기는 관측을 그리지 않는다** — 9/18 라운드6 C1(「직접 연 상세에서는 관측값과 판정 보류 사유를
 // 말한다」)은 사용자 재확인(2026-10-06 「표본부족, 바닥미달은 분명히 보여주지 말라고 했는데?」)으로 대체됐다.
 // 머리 문장도 사유(표본 부족·바닥 미달)를 꺼내지 않고, 스플래시는 렌더 이미지만 든다(수치는 관측 섹션의 몫이다).
+import BoundaryMark from "@/components/BoundaryMark";
+import { isBoundaryPubgRow } from "@/pipeline/shared/boundary";
 import { buildPubgEvidenceProse } from "@/components/pubg/evidenceProse";
 import Link from "next/link";
 import Container from "@/components/Container";
+import SiteFooter from "@/components/SiteFooter";
 import PageHeader from "@/components/PageHeader";
 import { detailCrumbs } from "@/lib/breadcrumbs";
 import SectionCard from "@/components/SectionCard";
@@ -29,10 +32,9 @@ import { ANNOUNCED_RATIO_BAND, PICKUP_MIN_N, pubgNotesAsPatchNotes, type PubgDel
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { delayedChangesFor, loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
-import PubgDetailSplash from "@/components/pubg/PubgDetailSplash";
-import { PubgFooter, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
+import { PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
 import { isReportable, loadPubgAssets, type PubgBundle, type PubgDeclaration } from "@/lib/pubgData";
-import { displayStatusOf } from "@/pipeline/shared/display-status";
+import { displayStatusOf, METRIC_VERDICTS } from "@/pipeline/shared/display-status";
 import { weaponKeyFromSlug } from "@/lib/pubgRoutes";
 import { publicWeaponPath } from "@/pipeline/pubg/asset-path";
 import { weaponCategoryLabel } from "@/pipeline/aggregate/pubg-weapon-key";
@@ -68,7 +70,7 @@ export default function PubgWeaponDetail({
   if (!bundle) {
     return (
       <main>
-      <Container>
+      <Container width="narrow">
         <PubgUnavailable failure={declaration?.failure} />
       </Container>
     </main>
@@ -86,7 +88,7 @@ export default function PubgWeaponDetail({
   if (!weaponKey || !statAfter) {
     return (
       <main>
-      <Container>
+      <Container width="narrow">
         <div className="py-12">
           <h1 className="font-display text-2xl font-bold text-fg">알 수 없는 무기</h1>
           <p className="mt-3 text-sm text-muted">
@@ -199,7 +201,7 @@ export default function PubgWeaponDetail({
 
   return (
     <main>
-      <Container>
+      <Container width="narrow">
       <div className="flex flex-col gap-6 pt-12 pb-8">
 
         {/* 이동 경로 + h1은 `PageHeader`가 소유한다(§8-7 #1·#8): 전에는 이 화면에 h1이 없고
@@ -227,6 +229,7 @@ export default function PubgWeaponDetail({
             <span className="flex items-center gap-2">
               {`무기 · ${weaponCategoryLabel(weaponKey)}`}
               {row && judged ? <StatusBadge status={displayStatusOf(row.status)} /> : null}
+              {row && judged && METRIC_VERDICTS.has(displayStatusOf(row.status)) && isBoundaryPubgRow(row, deltas.meta.effectFloor) ? <BoundaryMark /> : null}
             </span>
           }
           lead={
@@ -235,7 +238,8 @@ export default function PubgWeaponDetail({
                 {deltas.meta.from} → {deltas.meta.to} 획득 점유율{" "}
                 <strong className="text-fg">{pct(row.before ?? 0, 2)}</strong> →{" "}
                 <strong className="text-fg">{pct(row.after ?? 0, 2)}</strong> (
-                {signedPct(row.relChange ?? 0)})
+                {signedPct(row.relChange ?? 0)}, 95% CI [{signedPct(row.relCi[0])}, {signedPct(row.relCi[1])}])
+                {/* CI를 머리에 둔다(트랙 B pubg-S10 — 1280×800 실측: 관측 패널 캡션의 CI는 y=1046으로 첫 화면 밖이었다). */}
                 {note ? ` · 공지 “${note.summary}” 대조` : ` · ${deltas.meta.to} 패치노트에 이 무기 항목 없음`}
               </>
             ) : (
@@ -246,14 +250,9 @@ export default function PubgWeaponDetail({
           // 액션 줄 없음(2026-10-08 사용자 결정, LolItemDetail 주석 참고) — §7-1 바인딩 상세 = 없음(열람).
         />
 
-        {/* 유형·이름·판정은 위 머리가 소유한다(§8-1) — 여기 다시 그리면 한 화면에서
-            이름이 세 번 반복된다. 이 카드는 렌더 이미지와 수치만 든다. */}
-        <PubgDetailSplash
-          imageSrc={hasRender ? publicWeaponPath(weaponKey) : null}
-          fit="contain"
-          fallbackMark={statAfter.weaponName}
-          stats={[]}
-        />
+        {/* 렌더 카드(스플래시)는 뺐다(트랙 B ST-17, pubg-S10·parity-S23) — 머리 아래 약 260px을 무기 그림 하나가 차지해 판정 근거
+            (CI·게이트)가 첫 화면 밖으로 밀렸고, §8-3-1 골격(머리 → 패치노트 대조)에서 이 상세만 사이에 카드가 하나 더 있었다.
+            무기 그림은 머리 아이콘이 이미 그린다. */}
 
         {/* B안(2026-09-21 사용자 확정) — 세 게임이 같은 자리에 같은 제목을 쓴다. PUBG 상세에는
             선언 카드가 없었고 노트가 판정 줄에만 있었다 — 두 구획을 가지려면 카드가 필요하다.
@@ -318,9 +317,10 @@ export default function PubgWeaponDetail({
           emptyText="보고할 관측이 없습니다."
         />
 
-        <PubgFooter generatedAt={deltas.meta.generatedAt} nVerdicts={pubgVerdictCount(deltas.rows)} />
       </div>
     </Container>
+    {/* 푸터는 좁은 본문 밖, 기본 폭 — LoL·TFT 상세와 같은 자리(2026-10-12 verify-impl 레이아웃 게이트: PUBG 상세만 푸터가 좁은 칸 안이었다). */}
+    <SiteFooter game="pubg" generatedAt={deltas.meta.generatedAt} nVerdicts={pubgVerdictCount(deltas.rows)} />
     </main>
   );
 }

@@ -10,7 +10,7 @@
 import type { ReactNode } from "react";
 
 import SectionCard from "@/components/SectionCard";
-import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
+import PanelExpand from "@/components/PanelExpand";
 
 export interface EntityIndexGroup {
   /** 「무기」·「챔피언」처럼 그 묶음이 무엇인지. */
@@ -81,16 +81,17 @@ export function EntityIndexGrid({
   iconOf?: (item: { key: string; name: string }) => ReactNode;
 }) {
   return (
-    <ul className={`${ENTITY_INDEX_GRID} grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 ${PANEL_SCROLL_BODY}`}>
+    // 패널 유지 + 명시적 펼치기(트랙 B ST-20, lol-S13·pubg-S12) — 넘칠 때만 「전체 N개 펼치기」.
+    <PanelExpand as="ul" total={items.length} className={`${ENTITY_INDEX_GRID} grid-cols-2 sm:grid-cols-3 lg:grid-cols-5`}>
       {items.map((item) => (
         <li key={item.key} className={ENTITY_INDEX_CELL}>
           <a href={item.href} className="flex h-full flex-col gap-1 p-3 transition-colors hover:bg-accent/10">
             {iconOf ? iconOf(item) : null}
             <span className="truncate font-display text-sm font-bold text-fg">{item.name}</span>
-            {item.meta ? <span className="font-mono text-xs tabular-nums text-muted">{item.meta}</span> : null}
+            {item.meta ? <span className="truncate font-mono text-xs tabular-nums text-muted">{item.meta}</span> : null}
           </a>
         </li>
       ))}
-    </ul>
+    </PanelExpand>
   );
 }

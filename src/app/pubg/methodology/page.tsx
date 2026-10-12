@@ -9,12 +9,15 @@
 // 변화 분포 90번째 백분위수), 공지 일치는 비율 밴드 [0.5, 1.5], 표본 게이트는 획득 300회, q(BH-FDR)는
 // 계산하지 않는다(Wilson CI + 바닥). LLM 원인 추정은 이 게임에 없다 — 43.1 노트가 5항목이라 짝지을
 // 후보 조항 자체가 없다.
+import { BOUNDARY_RULE } from "@/components/BoundaryMark";
 import type { Metadata } from "next";
 import MethodologyLayout, { type MethodologySlots } from "@/components/methodology/MethodologyLayout";
 import ObservationPendingNotice from "@/components/ObservationPendingNotice";
 import { allUnusedSlots } from "@/components/methodology/slots";
 import StatusBadge from "@/components/StatusBadge";
-import { PubgSampleNotice, PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
+import { pageMeta } from "@/lib/meta";
+import { PubgUnavailable, pct, signedPct } from "@/components/pubg/shared";
+import { gameLabel } from "@/lib/game";
 import { loadPubg, loadPubgDeclaration } from "@/lib/pubgData";
 import {
   ANNOUNCED_RATIO_BAND,
@@ -24,17 +27,17 @@ import {
 } from "@/pipeline/match/pubg-delta";
 import { pubgVerdictCount } from "@/pipeline/shared/headline";
 
-export const metadata: Metadata = {
-  title: "PUBG 방법론 · patchgap",
-  description: "PUBG 판정표의 규칙 — 표본·기저·효과크기 바닥·상태 정의·표시 규칙·검증하지 못한 축.",
-};
+// 방법론 H1 틀은 세 게임이 같다 — 「{게임} — 어떻게 판정하나」(트랙 B ST-16, parity-S18). 게임명은 `gameLabel` 하나에서.
+const PUBG_TITLE = `${gameLabel("pubg")} — 어떻게 판정하나`;
+
+export const metadata: Metadata = pageMeta({ game: "pubg", screen: "methodology", path: "/pubg/methodology/" });
 
 const PIPELINE = [
-  { step: 1, title: "수집", detail: "PUBG /samples → /matches → telemetry", meta: "official 매치만" },
+  { step: 1, title: "수집", detail: "PUBG 공개 표본 → 매치 → 텔레메트리", meta: "일반 매치만" },
   { step: 2, title: "리듀스", detail: "텔레메트리 → 무기별 획득·공격·명중·처치 카운트", meta: "ingest 시점 축약" },
-  { step: 3, title: "정규화", detail: "Item_Weapon_* ⇄ Weap* 정준키 결합 · 스킨 접기 · 비무기 제외", meta: "pubg-weapon-key.ts" },
+  { step: 3, title: "정규화", detail: "획득·피해 기록의 무기 이름 결합 · 스킨 접기 · 비무기 제외", meta: "무기 이름 정규화" },
   { step: 4, title: "집계", detail: "총 획득 대비 점유율 + Wilson 95% CI", meta: "기저 이동 분리" },
-  { step: 5, title: "판정", detail: "패치노트 짝짓기 → 효과크기 바닥 대비 → 상태 부여", meta: "pubg-delta.ts" },
+  { step: 5, title: "판정", detail: "패치노트 짝짓기 → 효과크기 바닥 대비 → 상태 부여", meta: "판정 규칙" },
 ] as const;
 
 export default function PubgMethodologyPage() {
@@ -46,8 +49,7 @@ export default function PubgMethodologyPage() {
     return (
       <MethodologyLayout
         game="pubg"
-        eyebrow="PUBG: BATTLEGROUNDS"
-        title="어떻게 판정했고, 무엇을 못 했나"
+        title={PUBG_TITLE}
         lead={<>패치노트의 무기 변경을 매치 텔레메트리의 <strong className="text-fg">획득 점유율</strong> 한 축으로 대조합니다.</>}
         notice={declaration ? <ObservationPendingNotice failure={declaration.failure} /> : <PubgUnavailable />}
         slots={allUnusedSlots("관측이 있는 쌍이 아직 없어 표본·판정을 말할 수 없습니다. 판정 규칙은 LoL·TFT와 같은 엔진입니다.")}
@@ -98,6 +100,12 @@ export default function PubgMethodologyPage() {
   const slots: MethodologySlots = {
     sample: (
       <div className="flex flex-col gap-5 p-5">
+        {/* 표본 성격 고지 — 전에는 슬롯 밖 콜아웃(`notice`)으로 한 번 더 「표본」이라 말해 이 화면만 표본 라벨이 둘이었다(트랙 B ST-16,
+            parity-S29). 슬롯 안 첫 문단으로 흡수한다 — `notice`는 관측 전 고지 전용. */}
+        <p className="text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
+          {deltas.meta.sampleScope}. 지역·티어를 고정할 수 없는 API라 <strong className="text-fg">전 지역·전 티어 무작위</strong>{" "}
+          표본이며 봇이 포함됩니다(비율 병기).
+        </p>
         <div>
           <div className="p-5">
             <dl className="flex flex-col gap-2 text-sm">
@@ -154,8 +162,11 @@ export default function PubgMethodologyPage() {
         ))}
       </ol>
       <p className="px-5 pt-1 pb-5 text-xs leading-relaxed text-muted" style={{ maxWidth: "var(--measure-wide)" }}>
-        `/samples`는 official 외에 airoyale·competitive·tutorialatoz·trainingroom을 함께 돌려줍니다 — 실측에서
-          표본의 약 절반이 비경쟁 매치였습니다. 2단계에서 `matchType`을 저장해 official만 씁니다.
+        {/* 근거(트랙 B ST-12 표기 변경): 원문은 「samples 엔드포인트가 official 외에 airoyale·competitive·tutorialatoz·trainingroom을 함께 돌려준다 —
+            실측에서 표본의 약 절반이 비경쟁 매치였습니다」였다. PUBG API 매치 종류: official = 일반 매치, competitive = 랭크(경쟁전),
+            airoyale = 캐주얼. 수치(약 절반)는 원문의 실측 그대로다. 파이프라인이 official만 남기는 것은 aggregate/pubg-weapons.ts. */}
+        공개 표본에는 일반 매치 외에 캐주얼·랭크·튜토리얼·훈련장 매치가 함께 섞여 옵니다 — 실측에서 표본의 약 절반이
+          일반 매치가 아니었습니다. 2단계에서 매치 종류를 저장해 일반 매치만 씁니다.
         </p>
       </>
     ),
@@ -226,9 +237,13 @@ export default function PubgMethodologyPage() {
     display: (
       <div className="p-5">
           <p className="text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
-            브리핑·대조표·무기 상세는 <strong className="text-fg">판정이 선 무기</strong>만 보여줍니다. 아래 세 상태는 판정
-            파일에 남되 화면에는 올리지 않습니다. 예외는 수치 축의 잠수함 패치입니다 — 지표 판정이 아래 어느
+            브리핑의 대조 목록과 대조표는 <strong className="text-fg">판정이 선 무기</strong>만 올립니다. 무기 상세는 집계된
+            무기 전부에 있고, 판정이 서지 않은 무기는 관측 섹션이 비어 있습니다. 아래 세 상태는 판정 파일에 남되 목록·표에는
+            올리지 않습니다. 예외는 수치 축의 잠수함 패치입니다 — 지표 판정이 아래 어느
             상태여도 전부 보여 주고, 배지는 <StatusBadge status="submarine" className="align-middle" />로 지표 판정을 덮습니다.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
+            {BOUNDARY_RULE}
           </p>
           <ul className="mt-3 flex flex-col gap-2 text-sm">
             <li className="flex flex-wrap items-baseline gap-2">
@@ -381,9 +396,9 @@ export default function PubgMethodologyPage() {
                     <tr key={row.weaponKey} className="border-b border-border-soft">
                       <td className="max-w-40 truncate py-2 pl-4 pr-3 font-display font-bold text-fg" title={row.weaponName}>{row.weaponName}</td>
                       <td className="whitespace-nowrap py-2 pr-3 text-xs text-muted">{row.nerfed ? "반동 너프" : "대조군(무변경)"}</td>
-                      <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">{pct(row.before.accuracy, 2)}</td>
-                      <td className="py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">{pct(row.after.accuracy, 2)}</td>
-                      <td className="py-2 pr-4 text-right font-mono text-xs font-bold tabular-nums text-fg">
+                      <td className="whitespace-nowrap py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">{pct(row.before.accuracy, 2)}</td>
+                      <td className="whitespace-nowrap py-2 pr-3 text-right font-mono text-xs tabular-nums text-fg-2">{pct(row.after.accuracy, 2)}</td>
+                      <td className="whitespace-nowrap py-2 pr-4 text-right font-mono text-xs font-bold tabular-nums text-fg">
                         {row.relChangePct === null ? "—" : signedPct(row.relChangePct / 100)}
                       </td>
                     </tr>
@@ -404,8 +419,7 @@ export default function PubgMethodologyPage() {
   return (
     <MethodologyLayout
       game="pubg"
-      eyebrow="PUBG: BATTLEGROUNDS"
-      title="어떻게 판정했고, 무엇을 못 했나"
+      title={PUBG_TITLE}
       lead={
         <>
           {deltas.meta.to} 패치노트의 무기 변경을 매치 텔레메트리의{" "}
@@ -413,7 +427,6 @@ export default function PubgMethodologyPage() {
           데이터에서 유도하고, 판정이 서지 않는 관측은 화면에 올리지 않습니다.
         </>
       }
-      notice={<PubgSampleNotice sampleScope={deltas.meta.sampleScope} />}
       slots={slots}
       generatedAt={deltas.meta.generatedAt}
       nVerdicts={pubgVerdictCount(deltas.rows)}

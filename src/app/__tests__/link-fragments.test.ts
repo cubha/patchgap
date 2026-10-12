@@ -47,8 +47,11 @@ function collectLinks(): { file: string; route: string; fragment: string }[] {
     for (const match of source.matchAll(/href(?:=\{?|:\s*)["'`](\/[^"'`\s{}]*?)#([^"'`\s{}]+)["'`]/g)) {
       found.push({ file: rel, route: match[1], fragment: match[2] });
     }
-    for (const match of source.matchAll(/`\$\{(?:pair)?[sS]ectionHref\([^)]*?"([a-z]*)"[^)]*\)\}#([^`\s{}]+)`/g)) {
-      found.push({ file: rel, route: match[1].length === 0 ? "/lol/" : `/lol/${match[1]}/`, fragment: match[2] });
+    // 첫 인자가 게임 **리터럴**이면 그 게임 경로로 읽는다(2026-10-11 트랙 B ST-20 — `pairSectionHref("tft", "compare", …)`를 섹션
+    // "tft"로 읽어 없는 `/lol/tft/`를 만들었다). 변수(`game`)면 예전처럼 LoL 경로로 대표한다.
+    for (const match of source.matchAll(/`\$\{(?:pair)?[sS]ectionHref\((?:"(lol|tft|pubg)"|[A-Za-z_.]+),\s*"([a-z]*)"[^)]*\)\}#([^`\s{}]+)`/g)) {
+      const game = match[1] ?? "lol";
+      found.push({ file: rel, route: match[2].length === 0 ? `/${game}/` : `/${game}/${match[2]}/`, fragment: match[3] });
     }
   }
   return found;

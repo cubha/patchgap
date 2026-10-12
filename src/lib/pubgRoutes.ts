@@ -9,22 +9,57 @@
 //
 // 역변환은 **파싱하지 않고 조회**로 한다(`weaponKeyFromSlug`) — 슬러그→키 규칙을 두 번 쓰면
 // 한쪽이 조용히 어긋난다. 후보 목록은 항상 집계 산출물이 준다.
+import { mapIdentity } from "@/pipeline/aggregate/pubg-maps";
+import { weaponDisplayName } from "@/pipeline/aggregate/pubg-weapons";
 
-/** `Item_Weapon_BerylM762_C` → `berylm762`. 소문자 + 비영숫자 제거로 URL 안전을 보장한다. */
-export function weaponSlug(weaponKey: string): string {
-  return weaponKey
-    .replace(/^Item_Weapon_/, "")
-    .replace(/_C$/, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, "");
+/** 내부명 → URL 안전 문자(소문자 영숫자). */
+function urlSafe(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
-/** `Baltic_Main` → `baltic`. */
+/**
+ * `Item_Weapon_HK416_C` → `m416`. 슬러그는 **화면 이름**이다(트랙 B ST-2, 2026-10-11 site-review pubg-S18) — 전에는 내부
+ * 코드명(`hk416`·`saiga12`·`g18`)이라 공유된 주소만 보고 어떤 화면인지 알 수 없었다. 구 주소는 `vercel.json`이 넘긴다.
+ */
+export function weaponSlug(weaponKey: string): string {
+  return urlSafe(weaponDisplayName(weaponKey));
+}
+
+/**
+ * `Baltic_Main` → `erangel`. 등록되지 않은 맵은 예전 규칙(내부명)으로 떨어진다 — throw하지 않는 이유: 무인 수집이 새 맵 하나 때문에
+ * 사이트 전체 빌드를 멈추면 안 된다. 대신 `pubgRoutes.test.ts`가 「집계 산출물의 맵 키 ⊆ PUBG_MAPS」를 게이트로 막는다(scope-critic ST-2).
+ */
 export function mapSlug(mapKey: string): string {
-  return mapKey
-    .replace(/_Main$/, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, "");
+  return mapIdentity(mapKey).slug || legacyMapSlug(mapKey);
+}
+
+/** 2026-10-11 이전 규칙 — 접두·접미를 벗긴 내부명. 리다이렉트 원천을 만들 때만 쓴다. */
+export function legacyWeaponSlug(weaponKey: string): string {
+  return urlSafe(weaponKey.replace(/^Item_Weapon_/, "").replace(/_C$/, ""));
+}
+
+export function legacyMapSlug(mapKey: string): string {
+  return urlSafe(mapKey.replace(/_Main$/, ""));
+}
+
+/**
+ * 슬러그가 바뀐 키의 구 주소 → 새 주소. `vercel.json` `redirects`가 이 목록을 담는다(테스트가 대조). 정적 export라 Next
+ * 런타임 리다이렉트가 없고, 목적지가 쌍에 따라 바뀌지 않는 유한한 정적 매핑이라 서버 리다이렉트가 맞다(영구 301은 쓰지 않는다 — `legacy-redirects.test.ts` 규약).
+ */
+export function pubgLegacyRedirects(weaponKeys: readonly string[], mapKeys: readonly string[]): { source: string; destination: string }[] {
+  // 구 주소가 **다른 대상의 새 주소**와 같으면 넘기지 않는다 — Vercel 리다이렉트는 정적 파일보다 먼저 적용돼 그 화면을 가린다
+  // (실측: 구 맵 `Erangel_Main`의 예전 슬러그 「erangel」 = `Baltic_Main`의 새 슬러그).
+  const live = new Set([...weaponKeys.map((k) => `/pubg/weapon/${weaponSlug(k)}`), ...mapKeys.map((k) => `/pubg/map/${mapSlug(k)}`)]);
+  const out: { source: string; destination: string }[] = [];
+  for (const key of weaponKeys) {
+    const from = legacyWeaponSlug(key);
+    if (from !== weaponSlug(key)) out.push({ source: `/pubg/weapon/${from}`, destination: weaponHref(key) });
+  }
+  for (const key of mapKeys) {
+    const from = legacyMapSlug(key);
+    if (from !== mapSlug(key)) out.push({ source: `/pubg/map/${from}`, destination: mapHref(key) });
+  }
+  return out.filter((r) => !live.has(r.source));
 }
 
 export function weaponHref(weaponKey: string): string {
@@ -47,3 +82,4 @@ export function weaponKeyFromSlug(slug: string, candidates: readonly string[]): 
 export function mapKeyFromSlug(slug: string, candidates: readonly string[]): string | null {
   return candidates.find((key) => mapSlug(key) === slug) ?? null;
 }
+

@@ -8,24 +8,18 @@
 import type { Metadata } from "next";
 import Container from "@/components/Container";
 import PageHeader from "@/components/PageHeader";
+import { pageMeta } from "@/lib/meta";
+import { pubgNoteTargetCount } from "@/lib/announcedCount";
 import PubgCompareExplorer from "@/components/pubg/PubgCompareExplorer";
 import { PubgFooter, PubgUnavailable } from "@/components/pubg/shared";
 import { compareCrumbs } from "@/lib/breadcrumbs";
-import { isReportable, loadPubg, loadPubgAssets, pubgPair, loadPubgDeclaration } from "@/lib/pubgData";
+import { isReportable, loadPubg, loadPubgAssets, loadPubgDeclaration } from "@/lib/pubgData";
 import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
 import CoverageSection from "@/components/compare/CoverageSection";
 import { pubgGapTotal } from "@/lib/gapTotals";
 import { pubgVerdictCount } from "@/pipeline/shared/headline";
 
-// 쌍은 산출물에서 읽는다(`pubgPair`) — 하드코딩하면 다음 패치에서 설명문만 옛 쌍을 말한다.
-const PAIR = pubgPair();
-
-export const metadata: Metadata = {
-  title: "PUBG 대조표 · patchgap",
-  description: PAIR
-    ? `PUBG ${PAIR.from} → ${PAIR.to} 무기별 획득 점유율 변화와 판정입니다.`
-    : "PUBG 무기별 획득 점유율 변화와 판정입니다.",
-};
+export const metadata: Metadata = pageMeta({ game: "pubg", screen: "compare", path: "/pubg/compare/" });
 
 export default function PubgComparePage() {
   const bundle = loadPubg();
@@ -48,7 +42,7 @@ export default function PubgComparePage() {
   const unmeasurable = notes.filter((note) => note.expectedRelChange === null);
   const coverage = (
     <CoverageSection
-      noteEntities={new Set(notes.flatMap((note) => note.weaponKeys)).size}
+      noteEntities={pubgNoteTargetCount(notes)}
       noteItems={notes.length}
       matched={new Set(deltas.rows.filter((row) => isReportable(row.status) && row.matchedNoteIds.length > 0).map((row) => row.weaponKey)).size}
       gap={pubgGapTotal(deltas.rows, submarine)}
@@ -67,10 +61,10 @@ export default function PubgComparePage() {
   return (
     <main>
       <Container>
-        <div className="flex flex-col gap-6 py-8">
+        {/* 머리 틀은 LoL·TFT 대조표와 같다(트랙 B ST-16, parity-S18) — 전에는 이 화면만 eyebrow가 있고 히어로가 128px 위였다. */}
+        <div className="flex flex-col gap-6 pt-40 pb-8">
           <PageHeader
             crumbs={compareCrumbs("pubg")}
-            eyebrow="PUBG: BATTLEGROUNDS"
             title={
               <>
                 <span className="text-accent">
@@ -82,8 +76,8 @@ export default function PubgComparePage() {
             lead={
               <>
                 {deltas.meta.n}개 무기 중 판정 <strong className="text-fg">{judged}개</strong> ·{" "}
-                {before.nMatches.toLocaleString()} → {after.nMatches.toLocaleString()}매치. 왼쪽에서
-                패치노트 항목을 고르면 오른쪽 표의 그 무기로 이동합니다.
+                {before.nMatches.toLocaleString()} → {after.nMatches.toLocaleString()}매치. 패치노트 항목을 고르면 표의 그
+                무기로 이동합니다.
               </>
             }
           />
@@ -97,6 +91,7 @@ export default function PubgComparePage() {
             submarineChanges={submarine?.submarines ?? []}
             mismatchChanges={(submarine?.mismatches ?? []).flatMap((e) => e.changes)}
             coverage={coverage}
+            effectFloor={deltas.meta.effectFloor}
           />
 
           {/* 수치 축의 **전수 목록은 브리핑 「미공지 Gap」 탭**이 소유한다(§8-3) — LoL·TFT와 같은

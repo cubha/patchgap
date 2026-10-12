@@ -27,13 +27,16 @@ const rows: Row[] = [
 ];
 const statusOf = (r: Row) => r.status;
 
-describe("칩 세트 — 세 게임이 같은 4종을 쓴다", () => {
-  it("전체 · 공지 · 공지 · 이상 관측 · 미공지 순이다", () => {
+// 2026-10-11 명세 변경(트랙 B ST-24, tft-S10·tft-S9): 수치 축 판정 칩 2종 추가 — 칩 합이 전체와 맞고, 간판 판정을 필터로 볼 수 있다.
+describe("칩 세트 — 세 게임이 같은 6종을 쓴다", () => {
+  it("전체 · 공지 · 공지 · 이상 관측 · 미공지 · 잠수함 패치 · 공지값 불일치 순이다", () => {
     expect(COMPARE_FILTERS.map((f) => f.key)).toEqual([
       "all",
       "announced",
       "announced-anomaly",
       "unannounced",
+      "submarine",
+      "note-mismatch",
     ]);
   });
 
@@ -53,7 +56,14 @@ describe("칩 세트 — 세 게임이 같은 4종을 쓴다", () => {
     expect(matchesFilter("announced", "unannounced")).toBe(false);
   });
 
-  it("칩 키는 URL 해시로 쓸 수 있는 형태다 — 타일이 `#unannounced`로 착지한다", () => {
+  it("묶음 「미공지 Gap」은 미공지·잠수함·공지값 불일치를 통과시킨다(타일 착지 `#gap`)", () => {
+    expect(matchesFilter("unannounced", "gap")).toBe(true);
+    expect(matchesFilter("submarine", "gap")).toBe(true);
+    expect(matchesFilter("note-mismatch", "gap")).toBe(true);
+    expect(matchesFilter("announced", "gap")).toBe(false);
+  });
+
+  it("칩 키는 URL 해시로 쓸 수 있는 형태다 — 타일이 `#gap`으로 착지한다", () => {
     for (const f of COMPARE_FILTERS) expect(f.key).toMatch(/^[a-z-]+$/);
   });
 });

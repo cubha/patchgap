@@ -34,7 +34,8 @@ import StatusBadge, { BADGE_SLOT } from "@/components/StatusBadge";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/components/compare/entityRows";
 import DeltaValue from "@/components/DeltaValue";
-import { metricLabel, positionLabel } from "@/lib/format";
+import { entityTypeLabel, metricLabel, positionLabel } from "@/lib/format";
+import { noteSectionLabel } from "@/components/compare/noteNav";
 import { parseLaneAxis } from "@/lib/lane";
 import { lolEntityHref } from "@/lib/detailRoutes";
 import { usePairBase } from "@/components/PairBaseContext";
@@ -285,6 +286,12 @@ export default function ReleaseNoteRow({
       );
   const headerBadge = headerRecord && !cosmeticGroup ? displayStatus(headerRecord, qAlpha) : null;
   const headerHref = headerRecord ? lolEntityHref(headerRecord, pairBase) : null;
+  // 유형 줄(ST-13, parity-S9) — 아이콘 해석이 정한 대상 종류(챔피언·아이템·라인)를 쓰고, 없으면 노트 섹션(시스템·기타)으로.
+  const rowTypeLabel = icon.entityType
+    ? entityTypeLabel(icon.entityType)
+    : !isUnannounced && group.notes[0]
+      ? noteSectionLabel("lol", group.notes[0].section)
+      : null;
 
   // 미공지 행 강조(2026-09-13·6차 연속) — 채움 없이 왼쪽 골드 보더 하나로만 표시한다.
   // 이력: 원래 불투명 `bg-surface-warm`이었고(미공지는 스트림 최상단 정렬이라 스크롤 없이 보이는
@@ -336,6 +343,12 @@ export default function ReleaseNoteRow({
               ) : (
                 <span className="font-display text-base font-bold text-fg">{group.entity}</span>
               )}
+              {/* 유형 줄(트랙 B ST-13, parity-S9) — TFT·PUBG 접힌 행(`BriefingRowList`)은 「이름 → · 유형」인데 LoL만 유형이 없었다. */}
+              {rowTypeLabel ? (
+                <span data-row-type className="font-mono text-xs tracking-wider text-muted uppercase">
+                  {rowTypeLabel}
+                </span>
+              ) : null}
             </div>
             {observation ? (
               <ObservationLine record={observation} />

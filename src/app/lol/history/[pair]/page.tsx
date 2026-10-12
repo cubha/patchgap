@@ -7,6 +7,7 @@
 // output:'export'라 generateStaticParams가 필수이고 빈 배열이면 빌드가 죽는다 — 과거 쌍이 없으면
 // `_placeholder` 한 장을 남긴다(`/lol/item/[id]`와 같은 규약). 목록 규칙은 `lib/pairPages.ts`가 소유한다.
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import LolBriefing from "@/components/home/LolBriefing";
 import PairMissing from "@/components/PairMissing";
 import { pastPairParams, resolvePastPair } from "@/lib/pairPages";
@@ -23,7 +24,7 @@ export function generateStaticParams(): Array<{ pair: string }> {
 export async function generateMetadata({ params }: HistoryPageProps): Promise<Metadata> {
   const { pair } = await params;
   const found = resolvePastPair("lol", pair);
-  return { title: found ? `리그 오브 레전드 ${found.from} → ${found.to} — patchgap` : "리그 오브 레전드 — patchgap" };
+  return pageMeta({ game: "lol", screen: "briefing", pair: found, path: `/lol/history/${pair}/` });
 }
 
 export default async function LolHistoryPage({ params }: HistoryPageProps) {

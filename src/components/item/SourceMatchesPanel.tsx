@@ -54,6 +54,8 @@ export default function SourceMatchesPanel({
             **칩에는 절대 걸지 않는다**: 위 헤더 주석대로 2026-09-05에 `break-all`을 칩에서 걷어낸
             이력이 있다(매치 ID가 칩 내부에서 끊겨 복사 불가). 같은 속성을 컨테이너나 칩에 걸면
             그 수정을 회귀시킨다 — 그래서 span 단위로만 준다. */}
+        {/* 칩 목록이 칸 안에서 잘려 보일 때 몇 건인지 밝힌다(2026-10-12 verify-impl 축B S12 — 둘째 줄이 반쯤 잘린 채 단서가 없었다). */}
+        {matchIds.length > 0 ? <span>원천 매치 {matchIds.length}건</span> : null}
         <span className="break-all">집계 경로: {aggregatePath}</span>
         {snapshotHash ? <span className="break-all">데이터 스냅샷 sha256:{snapshotHash}</span> : null}
       </div>

@@ -14,19 +14,6 @@ export const pct = (value: number, digits = 1): string => formatPercent(value, d
 /** 디스코드(`pipeline/discord/pubg-briefing.ts`)와 같은 스타일 상수를 쓴다 — 두 표면이 같은 출력. */
 export const signedPct = (value: number, digits = 1): string => formatSignedPercent(value, digits, SIGNED_PERCENT);
 
-/** 표본 성격 고지 — 방법론 화면 상단. 판정 숫자를 읽기 전에 알아야 할 표본의 성격만 말한다. */
-export function PubgSampleNotice({ sampleScope }: { sampleScope: string }) {
-  return (
-    <div className="rounded-md border border-warn/40 bg-surface-warm/40 p-4">
-      <p className="font-mono text-xs font-bold text-warn">표본</p>
-      <p className="mt-2 text-sm leading-relaxed text-fg-2" style={{ maxWidth: "var(--measure-wide)" }}>
-        {sampleScope}. 지역·티어를 고정할 수 없는 API라 <strong className="text-fg">전 지역·전 티어 무작위</strong>{" "}
-        표본이며 봇이 포함됩니다(비율 병기).
-      </p>
-    </div>
-  );
-}
-
 /** 집계 캡션 + 크래프톤 권리 고지. 세 라우트 공통 푸터. */
 /**
  * 푸터는 **`SiteFooter`가 소유한다**(UX-BRIEF §8-1). PUBG 호출부는 전부 이미 `Container`

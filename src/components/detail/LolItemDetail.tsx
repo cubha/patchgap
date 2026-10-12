@@ -33,6 +33,8 @@
 //   ② 대상 단위 「추정 원인」 카드를 없애고 원인을 **그 지표·구간 패널 안**으로 옮겼다(원인은 델타 단위로 물었다).
 //   ③ 패치노트 대조가 좌우 2분할에서 **전체 폭**이 됐다(TFT·PUBG와 같은 한 줄).
 
+import BoundaryMark from "@/components/BoundaryMark";
+import { isBoundaryRecord } from "@/pipeline/shared/boundary";
 import Link from "next/link";
 import Container from "@/components/Container";
 import DeltaValue from "@/components/DeltaValue";
@@ -41,7 +43,7 @@ import SectionCard from "@/components/SectionCard";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineDetailBlock from "@/components/gamedata/SubmarineDetailBlock";
 import { delayedChangesFor, loadGameDataDiff, noteMismatchChangesFor, submarineChangesFor } from "@/lib/gamedata";
-import { DISPLAY_SORT_PRIORITY, displayStatus, isNoiseStatus } from "@/pipeline/shared/display-status";
+import { DISPLAY_SORT_PRIORITY, displayStatus, isNoiseStatus, METRIC_VERDICTS } from "@/pipeline/shared/display-status";
 import { loadChampions, loadDeltas, loadDeltasRaw, loadItems, loadNotes, type PatchPair } from "@/lib/data";
 import { entityTypeLabel, fmtInt, fmtQ, itemIdFromSlug, itemSlug } from "@/lib/format";
 import { pairBasePath } from "@/lib/pairRoutes";
@@ -266,6 +268,8 @@ export default function LolItemDetail({ id, pairs, pairBase = null, otherPairs =
     pair.to
   );
 
+  const saidCount = noteContrast.status === "matched" ? noteContrast.matched.length : 0;
+
   // 수치 축(F9) — 이 대상에서 **게임사가 바꿨는데 말하지 않은 것**. 지표 축(위 판정)과 직교한다.
   const gameData = loadGameDataDiff("lol", pair.from, pair.to);
   const submarineChanges = submarineChangesFor(gameData, head.entityType, head.entityKey);
@@ -330,7 +334,7 @@ export default function LolItemDetail({ id, pairs, pairBase = null, otherPairs =
       <main>
         {/* width="narrow"(1040px) — 전역 Container(1320px)는 그대로 두고 이 페이지만 좁힌다.
             1440px에서 우측 여백이 넓어져 .ambient-duo(상세 스플래시) 가시 면적이 실제로 늘어난다. */}
-        <Container width="narrow" className="flex flex-col gap-6 py-8">
+        <Container width="narrow" className="flex flex-col gap-6 pt-12 pb-8">
           {/* 제목은 **대상 이름**이다 — 지표를 붙이지 않는다(§8-5). 지표는 아래 관측 섹션의 탭이 말한다. */}
           <PageHeader
             crumbs={detailCrumbs("lol", head.entityName, pairBase)}
@@ -352,6 +356,8 @@ export default function LolItemDetail({ id, pairs, pairBase = null, otherPairs =
                 {/* 대상의 행이 전부 노이즈인 쌍(과거 쌍 상세는 그 쌍 하나만 본다)이면 뱃지를 그리지 않는다 — 노이즈 상태를
                     뱃지로 올리지 않는다. */}
                 {isNoiseStatus(head.status) ? null : <StatusBadge status={displayStatus(head, qAlpha)} />}
+                {/* 경계(트랙 B ST-25) — 대조표 행과 같은 규칙. */}
+                {!isNoiseStatus(head.status) && METRIC_VERDICTS.has(displayStatus(head, qAlpha)) && isBoundaryRecord(head) ? <BoundaryMark /> : null}
               </span>
             }
             lead={
@@ -373,7 +379,24 @@ export default function LolItemDetail({ id, pairs, pairBase = null, otherPairs =
           />
 
           {/* 선언 대조 — 전체 폭(2026-10-06). 「추정 원인」 카드가 있던 오른쪽 칸은 관측 패널 안으로 옮겼다. */}
-          <SectionCard eyebrow="선언 대조" title="패치노트 대조" variant="glass">
+          {/* 카운터·소제목(트랙 B ST-17, parity-S22) — TFT·PUBG 상세의 「말한 것 N · 말하지 않은 것 N」과 「패치노트가 말한 것」 구획을
+              LoL도 같은 자리에 둔다(§8-3-1 상세 골격, 기준은 TFT·PUBG). */}
+          <SectionCard
+            eyebrow="선언 대조"
+            title="패치노트 대조"
+            variant="glass"
+            action={
+              <span className="font-mono text-xs text-muted">
+                말한 것 {saidCount} · 말하지 않은 것 {submarineChanges.length}
+                {mismatchChanges.length > 0 ? ` · 값이 다른 것 ${mismatchChanges.length}` : ""}
+              </span>
+            }
+          >
+            <div className="flex items-center gap-2 px-5 pt-4 pb-2">
+              <span className="h-1.5 w-1.5 rounded-pill bg-muted" aria-hidden="true" />
+              <h3 className="font-body text-xs font-bold tracking-wide text-muted">패치노트가 말한 것</h3>
+              <span className="ml-auto font-mono text-xs text-muted">{saidCount}건</span>
+            </div>
             <NoteContrastPanel result={noteContrast} />
             <div className="border-t border-border-soft" />
             <SubmarineDetailBlock

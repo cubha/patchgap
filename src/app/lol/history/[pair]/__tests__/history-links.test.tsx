@@ -75,7 +75,7 @@ describe("LoL 과거 쌍 — 화면의 링크가 그 쌍 안에 머문다", () =
       const hrefs = await hrefsOf(LolHistoryPage({ params: Promise.resolve({ pair: slug }) }));
       // (a) 링크가 실제로 있다 — 0건이면 위 검사들이 공회전한다.
       expect(checkPairLinks(hrefs, slug).length).toBeGreaterThan(0);
-      expect(hrefs).toContain(`/lol/history/${slug}/compare#unannounced`);
+      expect(hrefs).toContain(`/lol/history/${slug}/compare#gap`); // 2026-10-11 명세 변경(트랙 B ST-24, tft-S10·tft-S9): 타일 착지 = 묶음
       expect(hrefs.some((h) => h.startsWith("/lol/compare"))).toBe(false);
     }, 60_000);
 

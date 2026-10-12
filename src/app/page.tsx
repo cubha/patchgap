@@ -9,18 +9,29 @@
 // 데이터는 빌드 타임에만 읽는다(정적 export, 런타임 외부 호출 0 — 프로젝트 CLAUDE.md).
 import type { Metadata } from "next";
 import Link from "next/link";
+import { absoluteUrl, ogImagePath } from "@/lib/meta";
 import Container from "@/components/Container";
 import AdapterMatrix from "@/components/methodology/AdapterMatrix";
 import { panelSurfaceClass } from "@/lib/panelSurface";
 import { fmtInt } from "@/lib/format";
-import { landingCards, landingTotals } from "@/lib/landing";
+import { BREAKDOWN_SCOPE_LABEL, landingCards, landingMatchBreakdown, landingTotals } from "@/lib/landing";
 import SiteFooter from "@/components/SiteFooter";
 import { TILE_LABELS } from "@/components/StatTiles";
 
+// 랜딩은 어느 게임에도 속하지 않아 `pageMeta` 틀(화면 · 게임) 밖이다 — 사이트명이 앞에 오는 절대 title(ST-1).
+const LANDING_TITLE = "patchgap · 패치노트에 없는 변화를 찾습니다";
+const LANDING_DESCRIPTION =
+  "공식 패치노트와 실제 매치 통계를 자동으로 대조해, 공지되지 않은 변화와 간접 파급을 통계 게이트와 원천 링크로 보여 드립니다.";
 export const metadata: Metadata = {
-  title: "patchgap — 패치노트에 없는 변화를 찾습니다",
-  description:
-    "공식 패치노트와 실제 매치 통계를 자동으로 대조해, 공지되지 않은 변화와 간접 파급을 통계 게이트와 원천 링크로 보여 드립니다.",
+  title: { absolute: LANDING_TITLE },
+  description: LANDING_DESCRIPTION,
+  alternates: { canonical: absoluteUrl("/") },
+  openGraph: {
+    title: LANDING_TITLE,
+    description: LANDING_DESCRIPTION,
+    url: absoluteUrl("/"),
+    images: [{ url: ogImagePath(null), width: 1200, height: 630 }],
+  },
 };
 
 /** 하단 3열 — 파이프라인을 한 문장씩. 게임과 무관한 서술만 둔다. */
@@ -86,6 +97,13 @@ export default function LandingPage() {
               <span className="text-xs text-muted">{TILE_LABELS.gap}</span>
             </div>
           </div>
+          {/* 「분석한 매치」 구성(트랙 B ST-7, lol-S14) — 카드의 쌍 전후 합과 다른 수(수집한 전 패치)라 무엇의 합인지 밝힌다. */}
+          <p data-landing-breakdown className="ambient-hero-sub mx-auto mt-3 max-w-xl text-xs text-fg-2">
+            분석한 매치 ={" "}
+            {landingMatchBreakdown(cards)
+              .map((p) => `${p.label} ${fmtInt(p.matches)}(${BREAKDOWN_SCOPE_LABEL[p.scope]})`)
+              .join(" + ")}
+          </p>
         </Container>
 
         <Container className="landing-hero-content pb-14">
@@ -116,8 +134,18 @@ export default function LandingPage() {
                       {card.tag}
                     </span>
                     <span className="mt-1.5 font-display text-xl font-bold text-fg">{card.label}</span>
-                    <span className="mt-1 font-mono text-xs text-fg-2">
-                      {card.pair.from} → {card.pair.to} · {card.sample}
+                    {/* 쌍과 표본을 두 줄로 — 한 줄에 이어 쓰면 카드 폭에서 줄바꿈 자리에 「·」가 줄 끝이나 줄 머리에 남았다(2026-10-12
+                        verify-impl 축B S11). 표본 줄은 구분점 단위로 끊어 숫자와 「매치」가 갈라지지 않게 한다. */}
+                    <span className="mt-1 font-mono text-xs whitespace-nowrap text-fg-2">
+                      {card.pair.from} → {card.pair.to}
+                    </span>
+                    <span className="flex flex-wrap gap-x-1.5 font-mono text-xs text-fg-2">
+                      {card.sample.split(" · ").map((seg, i) => (
+                        <span key={seg} className="whitespace-nowrap">
+                          {i > 0 ? "· " : ""}
+                          {seg}
+                        </span>
+                      ))}
                     </span>
                     <span className="mt-3.5 flex gap-4">
                       <span>
@@ -190,9 +218,19 @@ export default function LandingPage() {
           <p className="mt-1.5 max-w-[60ch] text-sm text-fg-2">
             게임을 바꿀 때 갈아끼우는 것은 어댑터뿐입니다. 판정 엔진은 그대로입니다.
           </p>
-          <div className={`${panelSurfaceClass("glass")} mt-4 overflow-hidden rounded-lg`}>
-            <AdapterMatrix />
-          </div>
+          {/* 표는 접어 둔다(트랙 B ST-23, lol-S16) — 처음 온 게이머에게 파이프라인 계층·타입 이름 표가 랜딩 하단 절반을 차지했다.
+              자리는 9/20 결정대로 랜딩에 두고(게임 중립 주장), 펼쳐서 보게 한다(네이티브 details — 서버 컴포넌트 그대로). */}
+          <details data-adapter-matrix className="group/matrix mt-4">
+            <summary className="flex w-fit cursor-pointer list-none items-center gap-2 text-sm font-bold text-accent hover:underline [&::-webkit-details-marker]:hidden">
+              게임별 어댑터 매핑표 보기
+              <span aria-hidden="true" className="transition-transform group-open/matrix:rotate-180">
+                ▾
+              </span>
+            </summary>
+            <div className={`${panelSurfaceClass("glass")} mt-4 overflow-hidden rounded-lg`}>
+              <AdapterMatrix />
+            </div>
+          </details>
         </section>
 
         {/* 랜딩은 어느 게임에도 속하지 않는다 — `game={null}`이 그 자리다(lib/game.ts 계약). */}

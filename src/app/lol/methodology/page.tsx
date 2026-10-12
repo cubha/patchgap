@@ -31,6 +31,7 @@ import PipelineDiagram from "@/components/methodology/PipelineDiagram";
 import StatusDefinitionTable from "@/components/methodology/StatusDefinitionTable";
 import { buildPipelineSteps } from "@/components/methodology/pipelineSteps";
 import { verdictCount } from "@/pipeline/shared/headline";
+import { pageMeta } from "@/lib/meta";
 
 /** data/ddragon/{version}/ 디렉토리 이름(내림차순 최신)에서 Data Dragon 버전을 읽는다.
  * data.ts 미소유라 같은 "로컬 레이아웃 재구현" 관례(ST-06/ST-10 선례)를 따른다. 디렉토리가
@@ -46,6 +47,8 @@ function latestDdragonVersion(dataRoot: string = path.resolve(process.cwd(), "da
   versions.sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
   return versions[0];
 }
+
+export const metadata = pageMeta({ game: "lol", screen: "methodology", path: "/lol/methodology/" });
 
 export default function MethodologyPage() {
   const pair = getDefaultPair();
@@ -118,7 +121,8 @@ export default function MethodologyPage() {
               // 집계가 없으면 수를 지어내지 않는다.
               <>집계 산출물이 없어 표본 수를 말할 수 없습니다.</>
             )}{" "}
-            승률·픽률의 분모는 매치가 아니라 <strong className="text-fg">그 챔피언이 등장한 판</strong>입니다.
+            픽률·밴률의 분모는 <strong className="text-fg">전체 매치</strong>, 승률의 분모는{" "}
+            <strong className="text-fg">그 챔피언이 등장한 판</strong>입니다.
           </dd>
         </div>
         <div>
@@ -176,7 +180,7 @@ export default function MethodologyPage() {
           <dt className="font-display font-bold text-fg">대조표</dt>
           <dd className="mt-1 leading-relaxed text-fg-2">
             행은 챔피언·아이템 1개씩이고 셀은 밴률·승률·픽률·채택률 중 유의하고 바닥을 넘는 지표만 채웁니다. 유의한
-            관측이 없는 엔티티는 표에 없고, 라인 골드·오브젝트·경기 시간은 홈 사이드 &ldquo;매치 평균&rdquo;에서만
+            관측이 없는 대상은 표에 없고, 라인 골드·오브젝트·경기 시간은 브리핑 사이드 &ldquo;매치 평균&rdquo;에서만
             봅니다. 전체 보기는 챔피언 전체 행을 우선하되 그 지표가 특정 라인에서만 유의하면 그 라인 행이 셀을
             대표하고 라인을 표기합니다. 라인을 고르면 그 라인의 픽률·승률만 봅니다(밴은 라인 무관).
           </dd>
@@ -208,14 +212,14 @@ export default function MethodologyPage() {
           <div>
             <dt className="font-display font-bold text-fg">무엇을 보여주나</dt>
             <dd className="mt-1">
-              그 패치 노트 전체를 항목 id · 엔티티 · 스킬 · 변경 전/후 값 · 방향 · 섹션만 남긴 목록으로 줍니다.
+              그 패치 노트 전체를 항목 id · 대상 · 스킬 · 변경 전/후 값 · 방향 · 섹션만 남긴 목록으로 줍니다.
               본문 산문이 아니라 구조화된 목록이라, 모델이 인용할 수 있는 것은 실재하는 항목뿐입니다.
             </dd>
           </div>
           <div>
             <dt className="font-display font-bold text-fg">기각 규칙(기계가 검사)</dt>
             <dd className="mt-1">
-              인용한 id가 목록에 없으면 기각합니다. 그 관측의 엔티티 자신을 가리키면 기각합니다. 다른 게임
+              인용한 id가 목록에 없으면 기각합니다. 그 관측의 대상 자신을 가리키면 기각합니다. 다른 게임
               모드(LoL 클래식 · 아수라장 · 아레나)의 항목이면 기각합니다 — 우리가 재는 것은 소환사의 협곡이기
               때문입니다. 기각된 문장은 링크 없이 회색으로만 남습니다.
             </dd>
@@ -310,7 +314,7 @@ export default function MethodologyPage() {
             <dd className="mt-1">패치 수집이 끝난 뒤 판정 파이프라인 마지막 단계에서 1회. 실패해도 재전송하지 않습니다.</dd>
           </div>
           <div>
-            <dt className="font-display font-bold text-fg">홈의 &ldquo;마지막 집계&rdquo;</dt>
+            <dt className="font-display font-bold text-fg">브리핑의 &ldquo;마지막 판정&rdquo;</dt>
             <dd className="mt-1">전송 시각이 아니라 이 판정 파일이 마지막으로 생성된 시각입니다.</dd>
           </div>
         </dl>

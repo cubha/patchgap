@@ -9,6 +9,8 @@
 // **목록 범위를 맞추지 않고 사실을 맞춘 이유**: 목록 범위는 파서 해소율에 매인다 — LoL 파서는
 // 노트 181줄을 전부 대상에 붙이지만 TFT는 163줄 중 일부, PUBG는 수기 5줄이다. 없는 대상을
 // 지어내 목록을 채우는 대신, **세는 수를 같은 자리에서 같은 말로** 밝힌다.
+import ExternalLink from "@/components/ExternalLink";
+
 export interface AnnouncedCoverageLineProps {
   /** 패치노트가 말한 대상 수. */
   noteTargets: number;
@@ -19,10 +21,16 @@ export interface AnnouncedCoverageLineProps {
    * 측정할 수 없는 조항(조준 전환·반동·차량 피해)이 있어, 그 말이 없으면 문장이 거짓이 된다. 없는 게임은 생략.
    */
   alsoUnmeasured?: string | null;
+  /**
+   * 패치노트 원문 주소(트랙 B ST-15, parity-S13) — 커버리지 줄 바로 아래 「패치노트 원문 보기 ↗」. 전에는 PUBG 브리핑에만 있었다.
+   * 세 게임이 같은 자리에 같은 링크를 두도록 이 컴포넌트가 소유한다. 없으면(주소 미상) 그리지 않는다.
+   */
+  sourceUrl?: string | null;
 }
 
-export default function AnnouncedCoverageLine({ noteTargets, observed, alsoUnmeasured = null }: AnnouncedCoverageLineProps) {
+export default function AnnouncedCoverageLine({ noteTargets, observed, alsoUnmeasured = null, sourceUrl = null }: AnnouncedCoverageLineProps) {
   return (
+    <>
     <p className="border-t border-border-soft px-5 py-3 text-xs leading-relaxed text-muted">
       공지된 대상 <strong className="text-fg-2">{noteTargets}</strong>개 중 유의한 관측이 선 것은{" "}
       {/* 약속은 실제 표시 범위만(ST-18): 숨김 상태의 건수·사유는 화면이 말하지 않기로 했다(2026-10-07, #78) — 전에는 이
@@ -31,5 +39,13 @@ export default function AnnouncedCoverageLine({ noteTargets, observed, alsoUnmea
       움직이지 않았거나 게이트를 넘지 못한 것{alsoUnmeasured ? `이거나 ${alsoUnmeasured}` : ""}입니다 — 대조표 하단
       「표가 다룬 범위」가 노트 대상 중 관측 짝과 미공지 수를, 방법론이 게이트 규칙을 밝힙니다.
     </p>
+    {sourceUrl ? (
+      <div className="border-t border-border-soft px-5 py-3">
+        <ExternalLink className="text-sm font-bold text-accent hover:underline" href={sourceUrl}>
+          패치노트 원문 보기 ↗
+        </ExternalLink>
+      </div>
+    ) : null}
+    </>
   );
 }

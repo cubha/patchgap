@@ -45,6 +45,9 @@ export type DisplayStatus =
   | "no-change"
   | "unpaired";
 
+/** 지표 축 판정 키 — 신뢰구간이 있는 판정(수치 축 잠수함·공지값 불일치는 원본 수치 대조라 CI가 없다). 「경계」 표기(트랙 B ST-25)의 대상. */
+export const METRIC_VERDICTS: ReadonlySet<DisplayStatus> = new Set<DisplayStatus>(["unannounced", "announced", "announced-anomaly"]);
+
 /** 화면에 **표시하지 않는** 관측 — 표본 부족·바닥 미달·변화 없음(사용자 C1). 판정 파일에는 그대로
  * 남고 방법론이 규칙을 밝힌다. */
 export function isNoiseStatus(status: MatchStatus): boolean {

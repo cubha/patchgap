@@ -34,6 +34,166 @@
       "source": "/item/:slug/",
       "destination": "/lol/item/:slug/",
       "permanent": false
+    },
+    {
+      "source": "/pubg/weapon/hk416",
+      "destination": "/pubg/weapon/m416/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/weapon/hk416/",
+      "destination": "/pubg/weapon/m416/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/weapon/saiga12",
+      "destination": "/pubg/weapon/s12k/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/weapon/saiga12/",
+      "destination": "/pubg/weapon/s12k/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/weapon/g18",
+      "destination": "/pubg/weapon/p18c/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/weapon/g18/",
+      "destination": "/pubg/weapon/p18c/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/weapon/vz61skorpion",
+      "destination": "/pubg/weapon/skorpion/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/weapon/vz61skorpion/",
+      "destination": "/pubg/weapon/skorpion/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/weapon/fnfal",
+      "destination": "/pubg/weapon/slr/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/weapon/fnfal/",
+      "destination": "/pubg/weapon/slr/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/baltic",
+      "destination": "/pubg/map/erangel/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/baltic/",
+      "destination": "/pubg/map/erangel/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/desert",
+      "destination": "/pubg/map/miramar/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/desert/",
+      "destination": "/pubg/map/miramar/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/tiger",
+      "destination": "/pubg/map/taego/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/tiger/",
+      "destination": "/pubg/map/taego/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/kiki",
+      "destination": "/pubg/map/deston/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/kiki/",
+      "destination": "/pubg/map/deston/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/neon",
+      "destination": "/pubg/map/rondo/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/neon/",
+      "destination": "/pubg/map/rondo/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/dihorotok",
+      "destination": "/pubg/map/vikendi/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/dihorotok/",
+      "destination": "/pubg/map/vikendi/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/savage",
+      "destination": "/pubg/map/sanhok/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/savage/",
+      "destination": "/pubg/map/sanhok/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/summerland",
+      "destination": "/pubg/map/karakin/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/summerland/",
+      "destination": "/pubg/map/karakin/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/chimera",
+      "destination": "/pubg/map/paramo/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/chimera/",
+      "destination": "/pubg/map/paramo/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/heaven",
+      "destination": "/pubg/map/haven/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/heaven/",
+      "destination": "/pubg/map/haven/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/range",
+      "destination": "/pubg/map/campjackal/",
+      "permanent": false
+    },
+    {
+      "source": "/pubg/map/range/",
+      "destination": "/pubg/map/campjackal/",
+      "permanent": false
     }
   ],
   "headers": [

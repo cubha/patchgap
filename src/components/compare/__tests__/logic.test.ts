@@ -153,7 +153,9 @@ describe("computeCoverage", () => {
   it("상태별 집계 + 노트 엔티티 수(+원문 항목 수) + 미공지 엔티티 수(라운드6 보완 4)", () => {
     const notes = notesFile([note({ id: "a", entity: "A" }), note({ id: "b", entity: "A" })]);
     const rows = [
-      delta({ id: "1", status: "announced-consistent" }),
+      // 2026-10-11 명세 변경(트랙 B ST-3): 「관측 짝」은 공지 **행** 수가 아니라 공지 대상 중 관측이 선 **대상** 수다
+      // (`countAnnouncedObservedEntities` — 노트 짝이 있고 보고 자격이 있는 행의 대상). 그래서 이 행에 노트 짝을 준다.
+      delta({ id: "1", status: "announced-consistent", matchedNoteIds: ["a"] }),
       delta({ id: "2", status: "unannounced" }),
       delta({ id: "3", status: "insufficient-sample" }),
       delta({ id: "4", status: "no-change" }),

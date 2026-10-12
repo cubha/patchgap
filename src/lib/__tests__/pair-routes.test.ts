@@ -125,8 +125,9 @@ describe("쌍 맥락이 링크에 실린다(이월 R8)", () => {
     expect(detailCrumbs("lol", "아리").map((c) => c.href)).toEqual(["/lol/", "/lol/compare/", undefined]);
   });
   it("미공지 타일 — 과거 쌍 브리핑에서는 그 쌍의 대조표 칩으로", () => {
-    expect(gapHrefOf("lol", base)).toBe(`${base}/compare/#unannounced`);
-    expect(gapHrefOf("lol")).toBe("/lol/compare/#unannounced");
+    // 2026-10-11 명세 변경(트랙 B ST-24, tft-S10·tft-S9): 타일 착지 = 묶음 필터
+    expect(gapHrefOf("lol", base)).toBe(`${base}/compare/#gap`);
+    expect(gapHrefOf("lol")).toBe("/lol/compare/#gap");
   });
   it("과거 쌍 상세도 상세 스플래시 레이어를 켠다", () => {
     expect(isItemDetailPath(`${base}/item/champion~Ahri/`)).toBe(true);

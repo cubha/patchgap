@@ -18,12 +18,13 @@ import {
   submarineCellText,
 } from "./submarineText";
 import type { SubmarineSummary } from "@/lib/gamedata";
+import { SIGNED_PERCENT, formatSignedPercent } from "@/pipeline/shared/percent";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 
 function formatRel(rel: number | null): string | null {
   if (rel === null) return null;
-  const sign = rel > 0 ? "+" : "";
-  return `${sign}${(rel * 100).toFixed(1)}%`;
+  // 부호 규칙은 공용 포매터 하나(트랙 B ST-9 — 음수 기호 `−` 1종).
+  return formatSignedPercent(rel, 1, SIGNED_PERCENT);
 }
 
 export interface SubmarineSectionProps {
@@ -37,9 +38,11 @@ export interface SubmarineSectionProps {
    * 만드는 대신 이름만 그린다.
    */
   hrefOf?: (change: GameDataChange) => string | null;
+  /** 변경 id → 되돌린 변경의 패치(`gameDataReverts`, 트랙 B ST-19). 있으면 행에 「{패치} 변경 원복」. */
+  reverts?: Readonly<Record<string, string>>;
 }
 
-export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionProps) {
+export default function SubmarineSection({ summary, hrefOf, reverts = {} }: SubmarineSectionProps) {
   const { entities, mismatches, delayed, changeCount, source, patch } = summary;
 
   return (
@@ -120,6 +123,11 @@ export default function SubmarineSection({ summary, hrefOf }: SubmarineSectionPr
                 ) : null}
                 {cell.rest > 0 ? (
                   <span className="font-mono text-xs text-muted">외 {cell.rest}건</span>
+                ) : null}
+                {reverts[first.id] ? (
+                  <span data-revert={reverts[first.id]} className="font-mono text-xs text-fg-2">
+                    {reverts[first.id]} 변경 원복
+                  </span>
                 ) : null}
               </li>
             );

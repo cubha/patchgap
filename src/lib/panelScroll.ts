@@ -49,4 +49,12 @@ export const PANEL_SPLIT_COLUMN = "lg:flex lg:h-full lg:flex-col";
  * 줄어들지 않아, 이것이 없으면 `flex-1`을 줘도 스크롤이 생기지 않고 패널이 그냥 늘어난다.
  * 모바일(`lg` 미만)에서는 분할이 아니라 세로 적층이므로 `max-h`로 되돌아간다.
  */
-export const PANEL_SPLIT_BODY = `${PANEL_SCROLL_BODY} lg:max-h-none lg:min-h-0 lg:flex-1`;
+export const PANEL_SPLIT_BODY = `${PANEL_SCROLL_BODY} lg:max-h-none lg:min-h-0 lg:flex-1 group-data-[expanded=true]/split:max-h-none lg:group-data-[expanded=true]/split:flex-none`; // design-lint-ignore: 펼침 상태 변형(트랙 B ST-20), 값 아님
+
+/**
+ * 「표 전체 펼치기」(트랙 B ST-20, 2026-10-11 site-review lol-S13·pubg-S12 — 사용자 결정 「패널 유지 + 더 보기」). 패널 높이 제한은
+ * 기본값으로 유지하고(9/11·9/20 「전체 스크롤 폭발」), 사람이 명시적으로 고를 때만 래퍼(`group/split`)에 `data-expanded`를 세워 행 높이와
+ * 본문 상한을 푼다. 분할 본문(`PANEL_SPLIT_BODY`)이 그 상태를 읽는다.
+ */
+export const PANEL_SPLIT_GROUP = "group/split";
+export const PANEL_SPLIT_HEIGHT_EXPANDED = "lg:data-[expanded=true]:h-auto"; // design-lint-ignore: 펼침 상태 변형(트랙 B ST-20), 값 아님

@@ -6,10 +6,13 @@
 //   2. 미공지가 강조 색(accent), 나머지는 중립
 //   3. 표에 올릴 자격은 `isReportableRecord` 하나가 정한다 — 표본부족·바닥 미달은 안 올라간다
 //   4. 모든 판정문은 원천 링크를 갖는다. 없으면 회색으로 떨어뜨리고 링크를 걸지 않는다
+import GapPreview from "@/components/GapPreview";
+import { pickGapPreview } from "@/components/gapPreviewPick";
+import { effectStrength } from "@/lib/tftEntityRows";
 import Container from "@/components/Container";
 import SectionCard from "@/components/SectionCard";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { loadGameDataDiff, summarizeGameData, gameDataReverts } from "@/lib/gamedata";
 import {
   TftFooter,
   TftSampleNotice,
@@ -19,7 +22,8 @@ import {
 } from "@/components/tft/shared";
 import { selectTftCauseRows } from "@/components/tft/causeRows";
 import { tftEntityHref } from "@/lib/tftRoutes";
-import { tftEntityRows } from "@/lib/tftEntityRows";
+import { tftDisplayName, tftEntityRows } from "@/lib/tftEntityRows";
+import { tftNoteEntityCount } from "@/lib/announcedCount";
 import { entityTypeLabel, metricLabel } from "@/lib/format";
 import { tftGapTotal, tftMetricGapRows } from "@/lib/gapTotals";
 import { loadTftAssets, type TftBundle, type TftDeclaration, tftDeclarationSchedule } from "@/lib/tftData";
@@ -27,17 +31,18 @@ import { DeclarationHero, DeclarationNotesCard, declarationEntityCount } from "@
 import NewerPatchNotice from "@/components/NewerPatchNotice";
 import type { ObservationSchedule } from "@/lib/observationEta";
 import { pairBasePath, pairSectionHref, pairSectionLink } from "@/lib/pairRoutes";
-import { latestObservedTftPair } from "@/lib/tftData";
+import { latestObservedTftPair, loadTft } from "@/lib/tftData";
+import { tftDetailRows } from "@/lib/pairPages";
 import { observationReasonLabel } from "@/pipeline/shared/observation-stub";
 import { displayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
-import { STATUS_SORT_PRIORITY } from "@/pipeline/shared/status-order";
+import { sortBriefingRows } from "@/components/tft/briefingOrder";
 import type { DeltaRecord } from "@/pipeline/types";
-import { PANEL_SCROLL_BODY } from "@/lib/panelScroll";
+import BriefingListPanel from "@/components/BriefingListPanel";
 import StatTiles from "@/components/StatTiles";
 import DiscordPanel from "@/components/home/DiscordPanel";
 import MobileActionBar from "@/components/home/MobileActionBar";
-import BriefingTabs from "@/components/BriefingTabs";
+import BriefingTabs, { CONTENT_TAB_TITLE, GAP_METRIC_AXIS_TITLE } from "@/components/BriefingTabs";
 import BriefingRowList from "@/components/BriefingRowList";
 import AnnouncedCoverageLine from "@/components/home/AnnouncedCoverageLine";
 import EntityIcon from "@/components/EntityIcon";
@@ -103,16 +108,6 @@ function tftRowIcon(have: ReadonlySet<string>) {
   return render;
 }
 
-/** 상위 N건 — LoL 홈과 같은 정렬(상태 우선순위 → 효과크기). */
-function topRows(rows: DeltaRecord[], limit: number): DeltaRecord[] {
-  return [...rows]
-    .sort(
-      (a, z) =>
-        STATUS_SORT_PRIORITY[a.status] - STATUS_SORT_PRIORITY[z.status] ||
-        Math.abs(z.delta ?? 0) - Math.abs(a.delta ?? 0)
-    )
-    .slice(0, limit);
-}
 
 /**
  * 델타 목록 → **대상 단위 그룹**(UX-BRIEF §8-2). 표를 버리고 공용 행을 쓴다 —
@@ -126,7 +121,7 @@ function briefingGroups(rows: DeltaRecord[], qAlpha?: number): BriefingGroup[] {
       return {
         id: row.id,
         entityKey: row.entityKey,
-        entityName: row.entityName,
+        entityName: tftDisplayName(row.entityKey, row.entityName),
         entityType: row.entityType,
         typeLabel: entityTypeLabel(row.entityType),
         status: displayStatus(row, qAlpha),
@@ -167,22 +162,24 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
   const matches = before.matches + after.matches;
   // 시안 04-applied의 헤드라인 — 이 사이트가 무엇을 하는 곳인지 한 문장으로 말한다.
   // 숫자는 아래 3타일과 **같은 출처**를 쓴다(따로 세면 화면이 스스로를 반박한다).
-  const noteEntities = new Set(notes.items.map((n) => n.entity)).size;
+  const noteEntities = tftNoteEntityCount(notes.items);
   // 「미공지 Gap」은 대상을 센다 — 타일은 통계 Gap 대상, 탭은 거기에 수치 축 대상을 **합집합**으로(C15·D2).
   const gapTotal = tftGapTotal(deltas.rows, deltas.meta.qAlpha, submarine);
 
   // 상세 바로가기(§8-1) — 이 패치 보드 집계에 등장한 유닛·특성·아이템 중 **상세가 있는 것**(buildEntityIndex가 거른다).
-  // 이름은 판정 산출물이 이미 들고 있다(실측 233종 중 232종). 못 찾는 1종은 키를 그대로 쓴다.
+  // 이름 출처는 아래 `nameByKey` — 둘 다에 없으면 키를 그대로 쓴다(지어낸 이름을 만들지 않는다).
   const haveAssets = assetKeySet(loadTftAssets());
   const rowIcon = tftRowIcon(haveAssets);
-  const nameByKey = new Map(deltas.rows.map((row) => [`${row.entityType}:${row.entityKey}`, row.entityName]));
   // 상세 자격은 **라우트가 실제로 만드는 집합**과 같아야 한다 — 대조표 행 생성기(`tftEntityRows`)가
   // 그 단일 소스다(2026-09-21에 이 둘이 갈려 링크 21건이 404였다).
-  const detailKeys = new Set(
-    tftEntityRows(deltas, loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to)?.changes ?? []).map(
-      (row) => row.key
-    )
-  );
+  const entityRows = tftEntityRows(deltas, loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to)?.changes ?? []);
+  const detailKeys = new Set(entityRows.map((row) => row.key));
+  // 이름은 판정 산출물 → 대조표 행(수치 축만 있는 대상 포함) 순으로 찾는다. 판정 행이 없는 대상(럭스 (나무정령) 등)이 원시 키
+  // `DA_18_Lux_Elderwood`로 보이던 것을 대조표와 같은 이름으로 맞춘다(2026-10-12 verify-impl 축B S3).
+  const nameByKey = new Map([
+    ...entityRows.map((row) => [row.key, row.name] as const),
+    ...deltas.rows.map((row) => [`${row.entityType}:${row.entityKey}`, tftDisplayName(row.entityKey, row.entityName)] as const),
+  ]);
   const indexOf = (type: string, stats: readonly { key: string }[]) =>
     buildEntityIndex(
       stats.map((stat) => ({
@@ -232,8 +229,8 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
             <span className="font-mono text-xs font-bold tracking-wide text-accent uppercase">
               패치노트가 말한 것 vs 통계가 말하는 것
             </span>
-            <h1 className="max-w-3xl font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
-              패치노트는 <span className="text-accent">{noteEntities}개 항목</span>을 말했고, 통계는{" "}
+            <h1 className="ambient-hero-headline max-w-3xl break-keep font-display text-2xl leading-snug font-bold text-fg sm:text-3xl">
+              패치노트는 <span className="text-accent">{noteEntities}개 대상</span>을 말했고, 통계는{" "}
               <span className="text-accent">{reportable.length}개 변화</span>를 말합니다
             </h1>
             <p className="max-w-3xl text-sm leading-relaxed text-fg-2 wrap-anywhere">
@@ -269,6 +266,19 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
             game="tft"
             pairBase={pairBase}
           />
+          {/* 첫 화면 미공지 상위(트랙 B ST-22) — 세 게임 같은 자리. */}
+          <GapPreview
+            items={pickGapPreview(
+              unannounced.map((r) => ({
+                key: `${r.entityType}:${r.entityKey}`,
+                name: tftDisplayName(r.entityKey, r.entityName),
+                text: `${metricLabel(r.metric)} ${deltaDisplay(r.metric, r.delta ?? 0).text}`,
+                href: tftEntityHref(`${r.entityType}:${r.entityKey}`, pairBase),
+                score: effectStrength(r),
+              })),
+              3
+            )}
+          />
 
           {/* 「패치 내용 / 미공지 Gap」 탭(2026-09-21 신설) — LoL·PUBG에 이미 있던 것을 TFT에도.
               미공지 Gap 안은 **두 갈래**다: 위가 수치 축(게임사가 무엇을 바꿨나 — 증거 A),
@@ -289,24 +299,25 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
               content={
                 <SectionCard
                   eyebrow="대조"
-                  title="공지된 변경은 실제로 그렇게 됐나"
+                  title={CONTENT_TAB_TITLE}
                   variant="embedded"
                   action={<span className="font-mono text-xs text-muted">대상 {announcedObserved}종</span>}
                 >
-                  <div className={PANEL_SCROLL_BODY}>
+                  <BriefingListPanel total={announcedObserved} compareHref={`${pairSectionHref("tft", "compare", pairBase)}#announced`}>
                   <BriefingRowList
-                    groups={briefingGroups(topRows(announced, 15), deltas.meta.qAlpha)}
+                    groups={briefingGroups(sortBriefingRows(announced), deltas.meta.qAlpha)}
                     hrefOf={(g) => tftEntityHref(`${g.entityType}:${g.entityKey}`, pairBase)}
                     iconOf={rowIcon}
                     causeOf={causeLine}
                     emptyText="공지와 짝지어진 유의한 관측이 없습니다."
                   />
-                </div>
+                </BriefingListPanel>
                 {/* 세 게임이 같은 자리에서 같은 말을 한다(§8-1, 2026-09-23 화면 대조 V5). */}
                 <AnnouncedCoverageLine
                   noteTargets={noteEntities}
                   /* 세 게임이 같은 함수로 센다(ST-06) — 전에는 표시 상태로 걸러 간접 영향 행까지 공지로 셌다. */
                   observed={announcedObserved}
+                  sourceUrl={notes.sourceUrl ?? null}
                 />
                 </SectionCard>
               }
@@ -318,6 +329,7 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
                     <div className="border-b border-border-soft p-5">
                       <SubmarineSection
                         summary={submarine}
+                        reverts={gameDataReverts("tft", deltas.meta.from, deltas.meta.to)}
                         hrefOf={(change) => tftEntityHref(`${change.entityType}:${change.entityKey}`, pairBase)}
                       />
                     </div>
@@ -325,19 +337,19 @@ export default function TftBriefing({ bundle, declaration, pairBase = null, newe
 
                   <SectionCard
                     eyebrow="발견 · 지표 축"
-                    title="패치노트에 없는데 움직인 것"
+                    title={GAP_METRIC_AXIS_TITLE}
                     variant="embedded"
                     action={<span className="font-mono text-xs text-muted">대상 {unannouncedEntities}종</span>}
                   >
-                    <div className={PANEL_SCROLL_BODY}>
+                    <BriefingListPanel total={unannouncedEntities} compareHref={`${pairSectionHref("tft", "compare", pairBase)}#unannounced`}>
                     <BriefingRowList
-                      groups={briefingGroups(topRows(unannounced, 15), deltas.meta.qAlpha)}
+                      groups={briefingGroups(sortBriefingRows(unannounced), deltas.meta.qAlpha)}
                       hrefOf={(g) => tftEntityHref(`${g.entityType}:${g.entityKey}`, pairBase)}
                       iconOf={rowIcon}
                       causeOf={causeLine}
                       emptyText="미공지 변화가 없습니다."
                     />
-                  </div>
+                  </BriefingListPanel>
                   </SectionCard>
                 </div>
               }
@@ -392,6 +404,11 @@ function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
   const observedLink = observed ? pairSectionLink("tft", observed.pair, observed.isLatest, "", "브리핑") : null;
   // 수치 축은 관측과 무관하게 실재한다(게임 파일 대조) — Gap 탭 배지는 그 대상 수.
   const numericGap = tftGapTotal([], 0, submarine);
+  // 수치 행 → 관측이 있는 최신 쌍의 같은 대상 상세(그 쌍에 상세가 있을 때만 — 링크가 404를 가리키지 않게, 2026-09-21 교훈).
+  const observedBundle = observed ? loadTft(observed.pair) : null;
+  const observedKeys = new Set(observedBundle ? tftDetailRows(observedBundle).map((r) => r.key) : []);
+  const observedBase = observed && !observed.isLatest ? pairBasePath("tft", observed.pair) : null;
+  const observedDetailHref = (key: string) => (observedKeys.has(key) ? tftEntityHref(key, observedBase) : null);
   return (
     <main>
       <Container>
@@ -420,13 +437,18 @@ function TftDeclarationView({ declaration }: { declaration: TftDeclaration }) {
             content={<DeclarationNotesCard to={declaration.to} notes={notes} variant="embedded" />}
             gap={
               <div>
-                {/* 관측 없는 쌍엔 상세 라우트가 없다 — 링크 없이 이름만 그린다. */}
+                {/* 관측 없는 쌍엔 상세 라우트가 없다 — 그 대상이 **관측이 있는 최신 쌍**에 상세를 가지면 그리로 보낸다(트랙 B ST-14,
+                    tft-S11: 선언 뷰 수치 행에 링크가 0이었다). 없으면 이름만. */}
                 {submarine ? (
                   <div className="border-b border-border-soft p-5">
-                    <SubmarineSection summary={submarine} hrefOf={() => null} />
+                    <SubmarineSection
+                      summary={submarine}
+                      reverts={gameDataReverts("tft", declaration.from, declaration.to)}
+                      hrefOf={(change) => observedDetailHref(`${change.entityType}:${change.entityKey}`)}
+                    />
                   </div>
                 ) : null}
-                <SectionCard eyebrow="발견 · 지표 축" title="패치노트에 없는데 움직인 것" variant="embedded">
+                <SectionCard eyebrow="발견 · 지표 축" title={GAP_METRIC_AXIS_TITLE} variant="embedded">
                   <p role="status" data-observation={declaration.failure.reason} className="p-5 text-sm leading-relaxed text-muted">
                     {observationReasonLabel(declaration.failure.reason)}
                   </p>

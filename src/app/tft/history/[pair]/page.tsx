@@ -3,6 +3,7 @@
 // 그리고 여기는 과거 쌍만, 본문은 최신 쌍과 같은 `TftBriefing`이며 `pairBase`로 링크가 이 쌍 안에 머문다.
 // output:'export'라 과거 쌍이 없으면 `_placeholder` 한 장을 남긴다(목록 규칙은 `lib/pairPages.ts`).
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import PairMissing from "@/components/PairMissing";
 import TftBriefing from "@/components/tft/TftBriefing";
 import { pastPairParams, resolvePastPair } from "@/lib/pairPages";
@@ -20,7 +21,7 @@ export function generateStaticParams(): Array<{ pair: string }> {
 export async function generateMetadata({ params }: HistoryPageProps): Promise<Metadata> {
   const { pair } = await params;
   const found = resolvePastPair("tft", pair);
-  return { title: found ? `전략적 팀 전투 ${found.from} → ${found.to} — patchgap` : "전략적 팀 전투 — patchgap" };
+  return pageMeta({ game: "tft", screen: "briefing", pair: found, path: `/tft/history/${pair}/` });
 }
 
 export default async function TftHistoryPage({ params }: HistoryPageProps) {

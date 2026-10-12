@@ -30,6 +30,8 @@ export interface NoteNavPanelProps {
    * 여기서 다시 판정하지 않는다: 표와 내비가 서로 다른 중요도를 주장하면 화면이 스스로를 반박한다.
    */
   statusOf: (group: NoteNavGroup) => DisplayStatus | null;
+  /** 아이콘 자산의 게임(트랙 B ST-11, parity-S20) — 전에는 넘기지 않아 TFT 내비가 LoL 경로를 찾았다(기본값 lol). */
+  game?: "lol" | "tft";
 }
 
 export default function NoteNavPanel({
@@ -40,6 +42,7 @@ export default function NoteNavPanel({
   selectedId,
   onSelect,
   statusOf,
+  game = "lol",
 }: NoteNavPanelProps) {
   return (
     <section className={`${panelSurfaceClass("glass")} ${PANEL_SPLIT_COLUMN} overflow-hidden rounded-lg`}>
@@ -89,10 +92,12 @@ export default function NoteNavPanel({
                 >
                   {icon?.entityType && icon.entityKey ? (
                     <EntityIcon
+                      game={game}
                       entityType={icon.entityType}
                       entityKey={icon.entityKey}
                       name={group.entity}
                       size={40}
+                      assetMissing={icon.assetMissing ?? false}
                     />
                   ) : (
                     <IconBox size={40} className="font-display text-xs font-bold">

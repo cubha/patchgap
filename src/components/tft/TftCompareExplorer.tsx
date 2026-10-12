@@ -7,6 +7,8 @@
 // 표까지 공용화하면 없는 열을 지어내야 한다(§8-0).
 "use client";
 
+import BoundaryMark, { rowIsBoundary } from "@/components/BoundaryMark";
+import { METRIC_VERDICTS } from "@/pipeline/shared/display-status";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
@@ -14,6 +16,7 @@ import CompareSplit from "@/components/compare/CompareSplit";
 import CompareToolbar from "@/components/compare/CompareToolbar";
 import { useFilterHash } from "@/components/compare/useFilterHash";
 import NoteNavPanel from "@/components/compare/NoteNavPanel";
+import CompareNameCell from "@/components/compare/CompareNameCell";
 import { useRowFocus } from "@/components/compare/useRowFocus";
 import {
   countByFilter,
@@ -27,6 +30,7 @@ import {
   filterNoteNavGroups,
   groupNoteNavItems,
   noteNavSections,
+  noteSectionLabel,
   type NoteNavGroup,
   type NoteNavItem,
 } from "@/components/compare/noteNav";
@@ -42,18 +46,17 @@ import { tftEntityHref } from "@/lib/tftRoutes";
 import { usePairBase } from "@/components/PairBaseContext";
 import { DISPLAY_SORT_PRIORITY, type DisplayStatus } from "@/pipeline/shared/display-status";
 import { isReportableRecord } from "@/pipeline/shared/reportable";
-import type { DeltaMetric, PatchNoteItem } from "@/pipeline/types";
+import type { DeltaEntityType, DeltaMetric, PatchNoteItem } from "@/pipeline/types";
 
-/** TFT 노트 섹션 → 화면 라벨. 「챔피언」이 아니라 「유닛」이다 — 이 게임의 어휘를 쓴다. */
-const SECTION_LABEL: Record<string, string> = {
-  champion: "유닛",
-  item: "아이템",
-  system: "체계",
-};
 
 export interface TftCompareExplorerProps {
   rows: TftEntityRow[];
   notes: PatchNoteItem[];
+  /**
+   * 노트 대상 이름 → 대상 키(`unit:DA_18_Rakan`) — 좌측 내비 아이콘의 재료(트랙 B ST-11, parity-S20). 판정 산출물의 이름 표에서
+   * 서버가 만든다(노트는 이름만 갖는다). 이름이 둘 이상의 대상에 걸리면 첫 대상 — 없으면 이니셜.
+   */
+  noteEntityKeys?: Readonly<Record<string, string>>;
   /**
    * 자산이 실재하는 대상 키(`unit:DA_18_Rakan`). 배열로 받는다 — `Set`은 서버→클라이언트
    * 직렬화가 안 된다. 없는 자산은 요청조차 하지 않는다(404는 설계된 상태가 아니다).
@@ -101,7 +104,7 @@ function matchedNoteIdsOf(row: TftEntityRow): string[] {
   return [...out];
 }
 
-export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftCompareExplorerProps) {
+export default function TftCompareExplorer({ rows, notes, noteEntityKeys = {}, assetKeys = [] }: TftCompareExplorerProps) {
   const haveAssets = useMemo(() => new Set(assetKeys), [assetKeys]);
   // 과거 쌍 대조표면 상세 링크가 그 쌍의 상세로 간다(2026-09-28, 이월 R8 — LoL `DeltaTable`과 같은 컨텍스트).
   const pairBase = usePairBase();
@@ -131,12 +134,19 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
       id: n.id,
       entity: n.entity,
       section: n.section,
-      sectionLabel: SECTION_LABEL[n.section] ?? n.section,
+      sectionLabel: noteSectionLabel("tft", n.section),
       summary: n.summary,
       detail: n.skill ?? n.stat,
+      icon: iconOfNote(n.entity),
     }));
     return groupNoteNavItems(items);
-  }, [notes]);
+    function iconOfNote(entity: string) {
+      const full = noteEntityKeys[entity];
+      if (!full) return null;
+      const [type, key] = [full.slice(0, full.indexOf(":")), full.slice(full.indexOf(":") + 1)];
+      return { entityType: type as DeltaEntityType, entityKey: key, assetMissing: !haveAssets.has(full) };
+    }
+  }, [notes, noteEntityKeys, haveAssets]);
 
   const sections = useMemo(() => noteNavSections(navGroups), [navGroups]);
   const visibleNav = useMemo(
@@ -189,6 +199,9 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
     "sticky top-0 z-10 whitespace-nowrap bg-surface py-3 text-left shadow-[inset_0_-1px_0_var(--border-soft)] font-body text-xs font-bold text-muted";
   const pinnedCol = "sticky right-0 bg-surface";
   const pinnedCell = `${pinnedCol} shadow-[inset_1px_0_0_var(--border-soft)]`;
+  // 근거(원문·추정 원인)는 **고정 판정 칸 안**에 둔다(2026-10-12 verify-impl 축B S1). 따로 열을 두면 1280에서 표 자연폭이 가용
+  // 862px를 66–136px(쌍마다 다름 — 이름 길이) 넘어, 판정만 고정하면 근거가(tft-S13), 근거까지 고정하면 「바뀐 것」이 고정 열
+  // 밑에 깔렸다. LoL·PUBG 대조표에도 별도 근거 열은 없다. 이 칸은 375·1280 모두 항상 보인다.
 
   return (
     <div className="flex flex-col gap-6">
@@ -205,6 +218,7 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
       <CompareSplit
         title="선언 ↔ 관측"
         meta={`${visible.length}개 대상`}
+        total={visible.length}
         nav={
           <NoteNavPanel
             groups={visibleNav}
@@ -216,6 +230,7 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
             selectedId={selected?.id ?? null}
             onSelect={setSelected}
             statusOf={navStatusOf}
+            game="tft"
           />
         }
         notice={
@@ -232,16 +247,15 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
                 {TFT_METRICS.map((m) => (
                   <th key={m} className={`${thBase} px-2`}>
                     {metricLabel(m)}
-                    {isLowerBetter(m) ? <span className="ml-1 font-normal">(낮을수록 좋음)</span> : null}
+                    {/* 두 줄 — 한 줄이면 이 머리글이 열 폭(144px)을 정한다. */}
+                    {isLowerBetter(m) ? <span className="block font-normal">(낮을수록 좋음)</span> : null}
                   </th>
                 ))}
                 {/* 「바뀐 것」 — 수치 축(F9). 지표 열이 "지표가 어떻게 움직였나"를 말하면
                     이 열은 "게임사가 무엇을 바꿨나"를 말한다. */}
-                {(showSubmarine ? ["바뀐 것", "판정", "근거"] : ["판정", "근거"]).map((h) => (
-                  <th key={h} className={`${thBase} ${h === "근거" ? `${pinnedCol} px-4` : "px-2"}`}>
-                    {h}
-                  </th>
-                ))}
+                {showSubmarine ? <th className={`${thBase} px-2`}>바뀐 것</th> : null}
+                {/* 마지막 고정 열 = **판정 · 근거**(트랙 B ST-26, tft-S14·tft-S13) — 판정 고정은 LoL·PUBG 대조표와 같다. */}
+                <th className={`${thBase} ${pinnedCol} px-4`}>판정 · 근거</th>
               </tr>
             </thead>
             <tbody>
@@ -254,28 +268,23 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
                   }`}
                 >
                   <td className="px-4 py-3">
-                    {/* 아이콘은 LoL 대조표(`DeltaTable`)와 같은 자리다 — TFT만 비어 있었다. */}
-                    <Link href={tftEntityHref(row.key, pairBase)} className="flex items-center gap-3 group">
-                      <EntityIcon
-                        game="tft"
-                        entityType={row.entityType}
-                        entityKey={row.key.slice(row.key.indexOf(":") + 1)}
-                        name={row.name}
-                        size={40}
-                        assetMissing={!haveAssets.has(row.key)}
-                      />
-                      {/* `whitespace-nowrap`이 표를 넓히는 장치다 — 표는 이미
-                          `overflow-auto` 안에 있으므로 min-content가 뷰포트를 넘으면 **가로로
-                          스크롤**된다. 없으면 390px에서 칸이 16px로 눌려 이름이 세로로 한 글자씩
-                          쌓였다(2026-09-23 렌더 실측). `min-width` 하한만으로는 못 막는다 —
-                          640px÷열수가 이름 길이보다 작아 같은 증상이 남는다. */}
-                      <span className="flex flex-col gap-0.5">
-                        <span className="font-bold whitespace-nowrap text-fg group-hover:text-accent">{row.name}</span>
-                        <span className="font-mono text-xs tracking-wider whitespace-nowrap text-muted uppercase">
-                          {entityTypeLabel(row.entityType)}
-                        </span>
-                      </span>
-                    </Link>
+                    {/* 이름 칸은 세 게임 공용(ST-11, parity-S19) — 아이콘 자리·이름 →·유형 줄. */}
+                    <CompareNameCell
+                      name={row.name}
+                      typeLabel={entityTypeLabel(row.entityType)}
+                      href={tftEntityHref(row.key, pairBase)}
+                      icon={
+                        <EntityIcon
+                          game="tft"
+                          entityType={row.entityType}
+                          entityKey={row.key.slice(row.key.indexOf(":") + 1)}
+                          name={row.name}
+                          size={40}
+                          assetMissing={!haveAssets.has(row.key)}
+                        />
+                      }
+                      iconSlotClass="h-10 w-10"
+                    />
                   </td>
                   {TFT_METRICS.map((m) => (
                     <td key={m} className="px-2 py-3">
@@ -287,13 +296,15 @@ export default function TftCompareExplorer({ rows, notes, assetKeys = [] }: TftC
                       <SubmarineCell changes={row.submarineChanges} mismatchChanges={row.mismatchChanges} />
                     </td>
                   ) : null}
-                  <td className="px-2 py-3">
-                    <StatusBadge status={row.status} />
-                  </td>
-                  {/* 고정 열 — 배경이 있어야 스크롤하는 가운데 열이 밑으로 지나간다. */}
+                  {/* 고정 열 = 판정 · 근거 — 배경이 있어야 스크롤하는 가운데 열이 밑으로 지나간다. */}
                   <td className={`${pinnedCell} px-4 py-3`}>
-                    {/* 탭 타깃 둘(원문·추정 원인)이 세로로 붙는다 — 간격 8px 미만은 Fitts 게이트(D-UX-10) 오류. */}
-                    <div className="flex flex-col gap-2">
+                    {/* 경계 표시는 배지 아래로 내려갈 수 있다 — 한 줄로 묶으면 고정 칸이 200px가 되어 1280에서 표가 넘쳤다. */}
+                    <div className="flex flex-wrap items-center gap-y-1">
+                      <StatusBadge status={row.status} />
+                      {METRIC_VERDICTS.has(row.status) && rowIsBoundary(Object.values(row.cells)) ? <BoundaryMark /> : null}
+                    </div>
+                    {/* 탭 타깃 둘(원문·추정 원인)이 세로로 붙는다 — 간격 8px 미만은 Fitts 게이트(D-UX-10) 오류. gap-2(8px)는 행 높이 반올림으로 7px로 측정돼(2026-10-12 UI 게이트) gap-3. */}
+                    <div className="mt-2 flex flex-col gap-3">
                       {row.noteAnchor ? (
                         <ExternalLink href={row.noteAnchor} className="font-mono text-xs text-accent hover:underline">
                           원문 ↗

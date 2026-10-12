@@ -17,15 +17,18 @@
 // 동일값)로 감쌌다 — 이전엔 rows(최대 200행)가 전부 펼쳐져 페이지 전체가 13,000px 넘게 길어졌다.
 "use client";
 
+import BoundaryMark, { rowIsBoundary } from "@/components/BoundaryMark";
+import { METRIC_VERDICTS } from "@/pipeline/shared/display-status";
 import Link from "next/link";
 import { useRowFocus } from "./useRowFocus";
 import type { DeltaRecord } from "@/pipeline/types";
 import { PANEL_SPLIT_BODY } from "@/lib/panelScroll";
 import type { LaneAxis } from "@/lib/lane";
-import { fmtDisplayDelta, metricLabel, positionLabel } from "@/lib/format";
+import { entityTypeLabel, fmtDisplayDelta, metricLabel, positionLabel } from "@/lib/format";
 import { lolEntityHref } from "@/lib/detailRoutes";
 import { usePairBase } from "@/components/PairBaseContext";
 import EntityIcon from "@/components/EntityIcon";
+import CompareNameCell from "./CompareNameCell";
 import LaneGlyph from "@/components/LaneGlyph";
 import StatusBadge from "@/components/StatusBadge";
 import SubmarineCell from "@/components/gamedata/SubmarineCell";
@@ -142,7 +145,7 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
           <tr>
             <th scope="col" className={`${thBase} px-4`}>
               {/* 버전 이동은 여기 한 번만 — 열마다 "26.17"·"26.18"을 두지 않는다(L3). */}
-              엔티티 <span className="ml-1 font-mono font-normal">{fromLabel} → {toLabel}</span>
+              대상 <span className="ml-1 font-mono font-normal">{fromLabel} → {toLabel}</span>
             </th>
             {ENTITY_METRICS.map((metric) => (
               <th key={metric} scope="col" className={`${thBase} px-2`}>
@@ -169,7 +172,7 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                 colSpan={ENTITY_METRICS.length + (showSubmarine ? 3 : 2)}
                 className="px-4 py-8 text-center font-body text-sm text-muted"
               >
-                표시할 델타가 없습니다
+                표시할 변화가 없습니다
               </td>
             </tr>
           ) : (
@@ -182,24 +185,14 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                   className={`border-b border-border-soft ${highlighted ? "row-highlight" : ""}`}
                 >
                   <td className="px-4 py-3 font-body">
-                    <div className="flex items-center gap-3">
-                      <EntityIcon entityType={row.entityType} entityKey={row.entityKey} name={row.entityName} size={40} />
-                      {/* 잠수함 전용 행은 관측이 하나도 없어 상세로 갈 자리가 없다 —
-                          없는 링크를 만들지 않고 이름만 그린다(2026-09-21). */}
-                      {row.representative ? (
-                        // 이름은 한 줄이다(max-w-48 truncate + title) — 줄이 늘면 행 높이가 따라 늘어 표 전체가 출렁인다(2026-10-07 레이아웃
-                        // 게이트 D-STRESS-02, /lol/compare/). 표는 가로 스크롤 영역 안이라 폭은 여기서 묶는다.
-                        <Link
-                          href={lolEntityHref(row.representative, pairBase)}
-                          title={row.entityName}
-                          className="block max-w-48 truncate font-bold text-fg hover:text-accent hover:underline"
-                        >
-                          {row.entityName}
-                        </Link>
-                      ) : (
-                        <span title={row.entityName} className="block max-w-48 truncate font-bold text-fg">{row.entityName}</span>
-                      )}
-                    </div>
+                    {/* 이름 칸은 세 게임 공용(ST-11, parity-S19). 잠수함 전용 행은 관측이 없어 상세로 갈 자리가 없다 — 링크 없이 이름만. */}
+                    <CompareNameCell
+                      name={row.entityName}
+                      typeLabel={entityTypeLabel(row.entityType)}
+                      href={row.representative ? lolEntityHref(row.representative, pairBase) : null}
+                      icon={<EntityIcon entityType={row.entityType} entityKey={row.entityKey} name={row.entityName} size={40} />}
+                      iconSlotClass="h-10 w-10"
+                    />
                   </td>
                   {ENTITY_METRICS.map((metric: EntityMetric) => {
                     const cell = row.cells[metric];
@@ -224,6 +217,8 @@ export default function DeltaTable({ pair, rows, focusKey }: DeltaTableProps) {
                   {/* 고정 열 — 배경이 있어야 스크롤하는 가운데 열이 밑으로 지나간다(행 강조는 이 칸엔 안 보인다). */}
                   <td className={`${pinnedCell} px-4 py-3 font-body`}>
                     <StatusBadge status={row.status} />
+                    {/* 경계(트랙 B ST-25) — 지표 축 판정 행에서, 그린 셀이 전부 CI가 바닥을 가로지를 때. */}
+                    {METRIC_VERDICTS.has(row.status) && rowIsBoundary(Object.values(row.cells).map((c) => c.representative)) ? <BoundaryMark /> : null}
                   </td>
                 </tr>
               );

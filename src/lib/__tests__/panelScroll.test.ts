@@ -37,9 +37,18 @@ describe("상한은 데이터량이 아니라 구조로 보장된다", () => {
     it(`${file} — ${why}`, () => {
       // `PANEL_SPLIT_BODY`도 통과시킨다 — 그것이 `PANEL_SCROLL_BODY`를 품은 분할 전용 변형이기
       // 때문이다(panelScroll.ts). 둘 중 무엇을 쓰든 상한은 panelScroll.ts 하나가 정한다.
-      expect(read(file)).toMatch(/PANEL_SCROLL_BODY|PANEL_SPLIT_BODY/);
+      // 2026-10-11 명세 이동(트랙 B ST-20): 「패널 유지 + 더 보기」 — 상한을 붙이고 떼는 소유자가 `PanelExpand`(목록·격자)로 옮겼다.
+      // 그 컴포넌트를 쓰면 상한이 걸린 것이다(아래에서 `PanelExpand`가 `PANEL_SCROLL_BODY`를 쓰는지 따로 잰다).
+      expect(read(file)).toMatch(/PANEL_SCROLL_BODY|PANEL_SPLIT_BODY|<PanelExpand\b|<BriefingListPanel\b/);
     });
   }
+
+  it("펼치기 컴포넌트는 기본 상태에 공용 상한을 건다 — 펼침은 사람이 고를 때만", () => {
+    const src = read("src/components/PanelExpand.tsx");
+    expect(src).toContain("PANEL_SCROLL_BODY");
+    expect(src).toMatch(/useState\(false\)/);
+    expect(read("src/components/BriefingListPanel.tsx")).toMatch(/<PanelExpand\b/);
+  });
 
   // 2026-09-23 §8-3: 좌우 분할 골격이 LoL 전용 `CompareExplorer`에서 **세 게임 공용**
   // `CompareSplit`으로 내려갔다. 그래서 높이 규약을 재는 대상도 그쪽이다 — 한 게임에서만

@@ -4,6 +4,7 @@
 // 화면의 상세 링크가 없는 페이지를 가리키지 않는다(`history/[pair]/__tests__`가 렌더로 잰다).
 import type { Metadata } from "next";
 import PairMissing from "@/components/PairMissing";
+import { pageMeta } from "@/lib/meta";
 import TftUnitDetail from "@/components/tft/TftUnitDetail";
 import { resolvePastPair, tftDetailRows, tftPastDetailParams } from "@/lib/pairPages";
 import { pairBasePath } from "@/lib/pairRoutes";
@@ -23,9 +24,7 @@ export async function generateMetadata({ params }: HistoryUnitProps): Promise<Me
   const found = resolvePastPair("tft", pair);
   const bundle = found ? loadTft(found) : null;
   const row = bundle ? tftDetailRows(bundle).find((r) => r.key === unslug(key)) : undefined;
-  return {
-    title: row && found ? `${row.name} — TFT ${found.from} → ${found.to} · patchgap` : "TFT 상세 — patchgap",
-  };
+  return pageMeta({ game: "tft", screen: "detail", entity: row?.name ?? null, pair: found, path: `/tft/history/${pair}/unit/${key}/` });
 }
 
 export default async function TftHistoryUnitPage({ params }: HistoryUnitProps) {

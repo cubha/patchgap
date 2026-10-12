@@ -8,6 +8,11 @@
 // 데이터 로드는 이 서버 컴포넌트에서만 한다(src/lib/data.ts, 빌드 타임 fs) — 하위 home/*
 // 컴포넌트는 전부 props만 받는 순수 렌더(상태 없음, 서버/클라이언트 경계 없음).
 
+import GapPreview from "@/components/GapPreview";
+import { pickGapPreview } from "@/components/gapPreviewPick";
+import { isReportableRecord } from "@/pipeline/shared/reportable";
+import { parseLaneAxis } from "@/lib/lane";
+import { displayMetricKind, fmtDisplayDelta, metricLabel as fmtMetricLabel, positionLabel } from "@/lib/format";
 import type { DeltaRecord } from "@/pipeline/types";
 import type { PatchPair } from "@/lib/data";
 import { loadDdragonSafe } from "@/pipeline/match/ddragon";
@@ -21,7 +26,7 @@ import MobileActionBar from "@/components/home/MobileActionBar";
 import LaneGapPanel from "@/components/home/LaneGapPanel";
 import StreamColumnLayout from "@/components/home/StreamColumnLayout";
 import SubmarineSection from "@/components/gamedata/SubmarineSection";
-import { loadGameDataDiff, summarizeGameData } from "@/lib/gamedata";
+import { loadGameDataDiff, summarizeGameData, gameDataReverts } from "@/lib/gamedata";
 import { lolGapTotal } from "@/lib/gapTotals";
 import type { CosmeticSkinItem } from "@/components/home/CosmeticSkinPreview";
 import { isGapStatus } from "@/components/home/logic";
@@ -30,7 +35,7 @@ import { verdictCount } from "@/pipeline/shared/headline";
 import { isCosmeticNote } from "@/pipeline/shared/cosmetic-note";
 import { matchSkinsInSummary, skinSplashPath } from "@/pipeline/shared/cosmetic-skin";
 import { indexIndirectCauses } from "@/components/home/indirectEffects";
-import { computeLaneDistribution } from "@/components/home/laneDistribution";
+import { computeLaneDistribution, laneDistributionScope } from "@/components/home/laneDistribution";
 import {
   buildReleaseStream,
   contentTier,
@@ -103,6 +108,22 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
   const headline = computeHeadline(deltas, notesTo, deltas?.meta.qAlpha);
   // 「미공지 Gap」 타일·탭·랜딩 카드는 같은 수 — `lib/gapTotals`가 소유한다(2026-09-28, D2).
   const gapTotal = lolGapTotal(deltas?.rows ?? [], submarine);
+  // 첫 화면 미공지 상위 3(트랙 B ST-22) — 보고 자격이 있는 미공지·간접 행, 대상당 가장 큰 변화.
+  const gapPreview = pickGapPreview(
+    (deltas?.rows ?? [])
+      .filter((r) => isGapStatus(r.status) && isReportableRecord(r, deltas?.meta.qAlpha))
+      .map((r) => {
+        const lane = parseLaneAxis(r.id);
+        return {
+          key: `${r.entityType}:${r.entityKey}`,
+          name: r.entityName,
+          text: `${lane && lane !== "all" ? `${positionLabel(lane)} ` : ""}${fmtMetricLabel(r.metric)} ${fmtDisplayDelta(r.before, r.after, displayMetricKind(r.metric))}`,
+          href: lolEntityHref(r, pairBase),
+          score: Math.abs(r.delta ?? 0),
+        };
+      }),
+    3
+  );
 
   // 상세 바로가기(§8-1) — 이 패치 집계에 등장한 챔피언·아이템 중 **상세가 있는 것**(buildEntityIndex가 거른다). 이름은 Data Dragon이 주고,
   // 상세가 실재하는 대상만 링크한다(없는 경로는 정적 export에서 곧 404다).
@@ -232,6 +253,8 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
               pairBase={pairBase}
               caption={heroCaption}
             />
+            {/* 첫 화면 미공지 상위(트랙 B ST-22, lol-S23) — 타일 바로 아래, 텍스트 링크. */}
+            <GapPreview items={gapPreview} />
             <StreamColumnLayout
               leftHeader={<StreamLaneFilter />}
               left={
@@ -253,13 +276,26 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
                     noteTargets: headline.noteEntityCount,
                     // 분자는 **공지 대상 중** 관측이 선 대상 수다(ST-06) — `statCount`는 전체 유의 행이라 분모를 넘는다.
                     observed: headline.announcedObservedCount,
+                    sourceUrl: notesTo?.meta.sourceUrl ?? null,
                   }}
                   /* 수치 축(2026-09-21) — 미공지 Gap 탭의 **위쪽 갈래**. 세 번째 탭이 아닌
                      이유는 잠수함도 미공지이기 때문이다(잠수함 > 미공지 위계를 같은 탭 안에서
                      위아래로 표현한다). 산출물이 없는 쌍에서는 통째로 빠진다.
-                     상세 링크를 걸지 않는 이유: LoL 잠수함 전용 엔티티(폭풍갈퀴)는 델타가
-                     0건이라 `/lol/item/[id]` 라우트가 없다 — 없는 링크를 만들지 않는다. */
-                  gapLead={submarine ? <SubmarineSection summary={submarine} /> : undefined}
+                     상세 링크는 **이 쌍에 상세 라우트가 있는 대상에만** 건다(트랙 B ST-14, parity-S11 — TFT·PUBG 수치 행은 이름이
+                     상세로 가는데 LoL만 없었다). 잠수함 전용 대상(폭풍갈퀴 등)은 델타가 0건이라 라우트가 없다 — 없는 링크를 만들지 않는다. */
+                  gapLead={
+                    submarine ? (
+                      <SubmarineSection
+                        summary={submarine}
+                        reverts={pair ? gameDataReverts("lol", pair.from, pair.to) : {}}
+                        hrefOf={(change) =>
+                          detailKeys.has(`${change.entityType}:${change.entityKey}`)
+                            ? lolEntityHref({ entityType: change.entityType as DeltaRecord["entityType"], entityKey: change.entityKey }, pairBase)
+                            : null
+                        }
+                      />
+                    ) : undefined
+                  }
                   metricGapCount={headline.unannouncedCount}
                 />
               }
@@ -271,7 +307,7 @@ export default function LolBriefing({ pair, pairBase = null }: { pair: PatchPair
                     objectivesTo={objectivesTo?.data ?? null}
                     objectivesFrom={objectivesFrom?.data ?? null}
                   />
-                  <LaneGapPanel rows={laneDistribution} />
+                  <LaneGapPanel rows={laneDistribution} scope={laneDistributionScope(unannouncedRows, gapTotal)} />
                   <DiscordPanel game="lol" generatedAt={deltas?.meta.generatedAt ?? null} />
                 </>
               }

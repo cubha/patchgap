@@ -14,7 +14,8 @@ import { describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
 
 import { GAMES, sectionHref } from "../game";
-import { LANDING_LOADERS, landingCards, landingTotals, type GameLandingCard } from "../landing";
+import { LANDING_LOADERS, landingCards, landingMatchBreakdown, landingTotals, type GameLandingCard } from "../landing";
+import { fmtInt } from "../format";
 
 function card(over: Partial<GameLandingCard> = {}): GameLandingCard {
   return {
@@ -29,6 +30,7 @@ function card(over: Partial<GameLandingCard> = {}): GameLandingCard {
     significant: 403,
     unannounced: 29,
     matches: 30000,
+    pairMatches: 10000,
     ...over,
   };
 }
@@ -116,6 +118,32 @@ describe("landingCards — 커밋된 산출물 기준", () => {
   it("관측 전 카드는 유의·미공지가 함께 「—」다 — 한쪽만 0으로 말하지 않는다", () => {
     for (const c of cards) {
       expect(c.unannounced === null, c.id).toBe(c.significant === null);
+    }
+  });
+});
+
+describe("매치 수 정의(트랙 B ST-7, lol-S14)", () => {
+  // 리뷰 실측: LoL 카드 「3,871매치」는 쌍의 **사후만**, PUBG·TFT 카드는 **전후 합** — 같은 라벨이 게임마다 다른 것을 셌다.
+  // 히어로 「분석한 매치」(수집한 전 패치 합)는 카드 값의 합으로 재구성되지 않았고 구성도 적혀 있지 않았다.
+  const cards = landingCards();
+  it("관측 카드의 표본 줄 매치 수 = 그 쌍의 전후 합(세 게임 같은 정의)", () => {
+    for (const c of cards) {
+      if (c.significant === null) continue;
+      expect(c.pairMatches, c.id).toBeGreaterThan(0);
+      expect(c.sample, c.id).toContain(`${fmtInt(c.pairMatches)}매치`);
+    }
+  });
+
+  it("히어로 구성 표기 — 게임별 분석 매치가 히어로 합과 같다", () => {
+    const parts = landingMatchBreakdown(cards);
+    expect(parts.reduce((s, p) => s + p.matches, 0)).toBe(landingTotals(cards).matches);
+    expect(parts.map((p) => p.label)).toEqual(cards.filter((c) => c.matches > 0).map((c) => c.label));
+  });
+
+  it("구성 줄이 카드 값과 다른 수에는 범위를 밝힌다 — 「현재 쌍」은 카드 값과 같을 때만(verify-impl 축B S5)", () => {
+    for (const p of landingMatchBreakdown(cards)) {
+      const card = cards.find((c) => c.label === p.label)!;
+      expect(p.scope, p.label).toBe(p.matches === card.pairMatches ? "pair" : "allPatches");
     }
   });
 });

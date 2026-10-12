@@ -72,7 +72,7 @@ export interface NoteNavSection {
 }
 
 /**
- * 탭 목록 — **등장한 섹션만** 만든다. 게임마다 섹션 체계가 달라서(LoL 챔피언·아이템·시스템,
+ * 탭 목록 — **등장한 섹션만** 만들고, 순서는 고정이다(`SECTION_ORDER`). 게임마다 섹션 체계가 달라서(LoL 챔피언·아이템·시스템,
  * PUBG는 무기 하나) 고정 목록을 두면 어떤 게임에서는 항상 0건인 탭이 생긴다.
  * 세는 단위는 **묶음**이다 — 줄 수를 세면 탭 숫자와 목록 길이가 어긋난다.
  */
@@ -87,7 +87,31 @@ export function noteNavSections(groups: readonly NoteNavGroup[]): NoteNavSection
       order.push(g.section);
     }
   }
-  return order.map((key) => ({ key, label: counts.get(key)!.label, count: counts.get(key)!.count }));
+  // 정렬은 안정적이라 「그 밖」 섹션끼리는 등장 순을 지킨다.
+  return [...order]
+    .sort((a, b) => sectionRank(a) - sectionRank(b))
+    .map((key) => ({ key, label: counts.get(key)!.label, count: counts.get(key)!.count }));
+}
+
+/**
+ * 노트 섹션 라벨 **단일 출처**(트랙 B ST-5, 2026-10-11 site-review parity-S17·parity-S16). 전에는 LoL `NAV_SECTION_LABEL`과 TFT
+ * `SECTION_LABEL` 두 사본이 「시스템」·「체계」로 갈렸고, 둘 다 미등록 섹션을 내부값 그대로(`other`) 화면에 냈다. 대상 섹션
+ * (`champion`)만 게임 어휘를 따르고(LoL 챔피언·TFT 유닛 — 결정 6 「표시는 게임마다 달라도 된다」) 나머지는 같은 말이다.
+ * 「시스템」은 사용자 결정(2026-10-11).
+ */
+const SECTION_LABEL_COMMON: Record<string, string> = { item: "아이템", system: "시스템" };
+const CHAMPION_LABEL: Record<"lol" | "tft", string> = { lol: "챔피언", tft: "유닛" };
+
+export function noteSectionLabel(game: "lol" | "tft", section: string): string {
+  if (section === "champion") return CHAMPION_LABEL[game];
+  return SECTION_LABEL_COMMON[section] ?? "기타";
+}
+
+/** 탭 고정 순서 — 대상 → 아이템 → 시스템 → 그 밖(등장 순). 노트 등장 순이면 쌍마다 탭 순서가 바뀐다(tft-S20). */
+const SECTION_ORDER = ["champion", "item", "system"];
+function sectionRank(section: string): number {
+  const i = SECTION_ORDER.indexOf(section);
+  return i === -1 ? SECTION_ORDER.length : i;
 }
 
 /** 섹션 탭 + 검색. 질의는 대조표 도구모음이 소유하는 **그 질의**다(창이 둘이면 안 된다). */

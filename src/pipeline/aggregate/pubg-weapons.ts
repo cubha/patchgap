@@ -91,6 +91,9 @@ const WEAPON_NAME_OVERRIDES: Readonly<Record<string, string>> = {
   Item_Weapon_FNFal_C: "SLR",
 };
 
+/** 표기명 예외가 있는 키 — 슬러그 리다이렉트 게이트가 「이름이 바뀐 무기」 전수로 쓴다(트랙 B ST-2). */
+export const WEAPON_NAME_OVERRIDE_KEYS: readonly string[] = Object.keys(WEAPON_NAME_OVERRIDES);
+
 /** 정준키(`canonicalWeaponKey` 통과 후)만 받는다 — 스킨 변종은 호출부에서 이미 베이스로 접혀 있다. */
 export function weaponDisplayName(weaponKey: string): string {
   const override = WEAPON_NAME_OVERRIDES[weaponKey];

@@ -3,7 +3,10 @@
 // `/lol/history/[pair]/`와 같은 본문을 쓰려고 2026-09-28 PR-C B3에서 옮겼다).
 // 헤더는 ST-10부터 src/app/layout.tsx가 전역 렌더한다(여기서 다시 렌더하면 중복).
 import LolBriefing from "@/components/home/LolBriefing";
+import { pageMeta } from "@/lib/meta";
 import { getDefaultPair } from "@/lib/data";
+
+export const metadata = pageMeta({ game: "lol", screen: "briefing", path: "/lol/" });
 
 export default function Home() {
   return <LolBriefing pair={getDefaultPair()} />;

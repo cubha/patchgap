@@ -12,6 +12,8 @@ import type { ReleaseStreamGroup } from "./releaseStream";
 export interface StreamEntityIcon {
   entityType: DeltaEntityType | null;
   entityKey: string | null;
+  /** 자산 매니페스트에 없는 대상(TFT) — 요청 없이 이니셜로 그린다. 없으면 요청한다(LoL Data Dragon은 전수). */
+  assetMissing?: boolean;
 }
 
 /**

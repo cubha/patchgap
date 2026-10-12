@@ -20,15 +20,31 @@ const proseOracle = (value: number, digits = 1) => {
 // tft·pubg shared pct / evidenceProse pct(2) / StatusDefinitionTable pct(0)
 const pctOracle = (value: number, digits: number) => `${(value * 100).toFixed(digits)}%`;
 
-describe("formatSignedPercent — 단일화 전 출력 보존", () => {
+// 2026-10-11 명세 변경(트랙 B ST-9, parity-S21): 음수 기호를 전 표면 `−` 1종으로 — 오라클의 하이픈 음수를 `−`로 읽는다.
+const unifyMinus = (s: string) => s.replace(/^-/, "−");
+
+describe("formatSignedPercent — 단일화 전 출력 보존(음수 기호만 통일)", () => {
   for (const digits of [0, 1, 2]) {
     for (const v of SAMPLES) {
       it(`digits=${digits} v=${Object.is(v, -0) ? "-0" : v}`, () => {
-        expect(formatSignedPercent(v, digits, SIGNED_POINT)).toBe(tftOracle(v, digits));
-        expect(formatSignedPercent(v, digits, SIGNED_PERCENT)).toBe(pubgOracle(v, digits));
+        expect(formatSignedPercent(v, digits, SIGNED_POINT)).toBe(unifyMinus(tftOracle(v, digits)));
+        expect(formatSignedPercent(v, digits, SIGNED_PERCENT)).toBe(unifyMinus(pubgOracle(v, digits)));
         expect(formatSignedPercent(v, digits, SIGNED_PERCENT_PROSE)).toBe(proseOracle(v, digits));
         expect(formatPercent(v, digits)).toBe(pctOracle(v, digits));
       });
     }
   }
+});
+
+describe("음수 기호 1종(트랙 B ST-9, parity-S21)", () => {
+  // 리뷰 실측: LoL 화면은 유니코드 마이너스(−), TFT·PUBG는 하이픈(-), PUBG 상세는 산문 −와 표 -가 섞였다 — 세 게임이 같은
+  // 판정 엔진을 쓴다면서 같은 지표의 부호가 달랐다. 화면·디스코드의 모든 부호 스타일이 같은 기호를 쓴다.
+  it.each([
+    ["SIGNED_POINT", SIGNED_POINT],
+    ["SIGNED_PERCENT", SIGNED_PERCENT],
+    ["SIGNED_PERCENT_PROSE", SIGNED_PERCENT_PROSE],
+  ] as const)("%s", (_name, style) => {
+    expect(formatSignedPercent(-0.1, 1, style).startsWith("−")).toBe(true);
+    expect(formatSignedPercent(-0.1, 1, style)).not.toContain("-");
+  });
 });

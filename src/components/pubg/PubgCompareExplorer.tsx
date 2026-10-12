@@ -10,7 +10,9 @@
 // Wilson CI 방식이라 q를 계산하지 않기 때문이다.
 "use client";
 
-import Link from "next/link";
+import BoundaryMark from "@/components/BoundaryMark";
+import { METRIC_VERDICTS } from "@/pipeline/shared/display-status";
+import { isBoundaryPubgRow } from "@/pipeline/shared/boundary";
 import { useMemo, useState, type ReactNode } from "react";
 
 import CompareSplit from "@/components/compare/CompareSplit";
@@ -38,6 +40,8 @@ import SubmarineCell from "@/components/gamedata/SubmarineCell";
 import { signedPct } from "@/components/pubg/shared";
 import { isReportable, pubgDisplayStatus } from "@/pipeline/shared/pubg-status";
 import { weaponHref } from "@/lib/pubgRoutes";
+import CompareNameCell from "@/components/compare/CompareNameCell";
+import { weaponCategoryLabel } from "@/pipeline/aggregate/pubg-weapon-key";
 import { publicWeaponPath } from "@/pipeline/pubg/asset-path";
 import type { GameDataChange } from "@/pipeline/gamedata/types";
 import type { PubgDeltaRow, PubgNoteItem } from "@/pipeline/match/pubg-delta";
@@ -48,6 +52,8 @@ export interface PubgCompareExplorerProps {
   rows: PubgDeltaRow[];
   notes: PubgNoteItem[];
   /** 표 아래 커버리지 블록(ST-18) — 서버가 만들어 넘긴다(세 게임 공용 `CoverageSection`). */
+  /** 효과크기 바닥(쌍) — 「경계」 표기(트랙 B ST-25)가 상대 변화 CI의 보수적 끝을 여기에 견준다. 없으면 표기하지 않는다. */
+  effectFloor?: number | null;
   coverage?: ReactNode;
   fromLabel: string;
   toLabel: string;
@@ -84,6 +90,7 @@ export default function PubgCompareExplorer({
   assetKeys = [],
   submarineChanges = [],
   mismatchChanges = [],
+  effectFloor = null,
 }: PubgCompareExplorerProps) {
   const [filter, setFilter] = useState<CompareFilterKey>("all");
   const [query, setQuery] = useState("");
@@ -171,6 +178,7 @@ export default function PubgCompareExplorer({
       <CompareSplit
         title="선언 ↔ 관측"
         meta={`${visible.length}개 대상`}
+        total={visible.length}
         coverage={coverage}
         nav={
           <NoteNavPanel
@@ -218,26 +226,22 @@ export default function PubgCompareExplorer({
                     row.weaponKey === focusKey ? "row-highlight" : ""
                   }`}
                 >
-                  <td className="py-2.5 pr-3 pl-4 font-display font-bold">
-                    <Link
+                  <td className="py-2.5 pr-3 pl-4">
+                    {/* 이름 칸은 세 게임 공용(ST-11, parity-S19·parity-S20·pubg-S22) — 아이콘이 없는 무기(RPD)도 슬롯은 남는다.
+                        375폭에서는 64px 렌더 슬롯을 숨긴다 — 무기명이 잘리던 원인(pubg-S11). */}
+                    <CompareNameCell
+                      name={row.weaponName}
+                      typeLabel={`무기 · ${weaponCategoryLabel(row.weaponKey)}`}
                       href={weaponHref(row.weaponKey)}
-                      className="flex items-center gap-3 text-fg underline-offset-4 hover:text-accent hover:underline"
-                    >
-                      {haveAssets.has(row.weaponKey) ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={publicWeaponPath(row.weaponKey)}
-                          alt=""
-                          aria-hidden="true"
-                          loading="lazy"
-                          className="h-8 w-16 object-contain"
-                        />
-                      ) : null}
-                      {/* 이름은 한 줄(max-w-40 truncate + title) — 줄이 늘면 행 높이가 따라 늘었다(2026-10-07 D-STRESS-02). */}
-                      <span className="block max-w-40 truncate" title={row.weaponName}>
-                        {row.weaponName} →
-                      </span>
-                    </Link>
+                      icon={
+                        haveAssets.has(row.weaponKey) ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={publicWeaponPath(row.weaponKey)} alt="" aria-hidden="true" loading="lazy" className="h-8 w-16 object-contain" />
+                        ) : null
+                      }
+                      iconSlotClass="h-8 w-16"
+                      hideIconOnMobile
+                    />
                   </td>
                   {/* 점유율이 null인 행은 그 패치에 관측 자체가 없었다는 뜻이다 — 0%로 적지 않는다. */}
                   <td className="py-2.5 pr-3 text-right font-mono whitespace-nowrap text-xs tabular-nums text-fg-2">
@@ -269,6 +273,7 @@ export default function PubgCompareExplorer({
                   ) : null}
                   <td className="sticky right-0 bg-surface py-2.5 pr-4 shadow-[inset_1px_0_0_var(--border-soft)]">
                     <StatusBadge status={statusOf(row)} />
+                    {METRIC_VERDICTS.has(statusOf(row)) && effectFloor !== null && isBoundaryPubgRow(row, effectFloor) ? <BoundaryMark /> : null}
                   </td>
                 </tr>
               ))}

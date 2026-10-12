@@ -22,7 +22,8 @@ describe("/pubg/ 정보 위계", () => {
       expect(i, `"${needle}" 미렌더`).toBeGreaterThanOrEqual(0);
       return i;
     };
-    const tiles = at("공지된 변화 (43.1 패치노트)");
+    // 2026-10-11 명세 변경(트랙 B ST-3, parity-S6): PUBG 타일 부제도 세 게임처럼 「· N개 항목」(조항 수)을 든다.
+    const tiles = at("공지된 변화 (43.1 패치노트 · ");
     const tabs = at("패치 내용");
     const table = at("공지된 변경은 실제로 그렇게 됐나");
     const caption = at("총 획득 대비");

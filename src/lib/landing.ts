@@ -13,6 +13,7 @@
 // `computeHeadline`을 그대로 부른다. 여기서 따로 세면 랜딩과 브리핑이 다른 숫자를 주장하게
 // 되고, 그건 이 프로젝트가 반복해서 고쳐온 결함군이다(채점표 B2 "페이지 간 수치 정합").
 import "server-only";
+import { pubgNoteTargetCount, tftNoteEntityCount } from "./announcedCount";
 import { computeHeadline } from "./headline";
 import { isReportable, loadPubg, loadPubgDeclaration } from "./pubgData";
 import { loadTft, loadTftDeclaration } from "./tftData";
@@ -46,8 +47,13 @@ export interface GameLandingCard {
    * 수치 축(잠수함)을 포함하므로 `significant`의 부분집합이 **아니다**. `null` = 관측 전.
    */
   unannounced: number | null;
-  /** 이 게임이 분석한 매치 총수 — 합산 타일의 재료. */
+  /**
+   * 이 게임이 분석한 매치 총수 — 히어로 「분석한 매치」 합산의 재료. LoL은 **수집한 전 패치 합**(이미 쌓은 표본을 작게 말하지 않는다),
+   * TFT·PUBG는 수집 단위가 쌍이라 쌍 전후 합이다. 카드 표본 줄은 이 값이 아니라 `pairMatches`(세 게임 같은 정의)를 쓴다(트랙 B ST-7).
+   */
   matches: number;
+  /** 카드가 보여 주는 쌍의 전후 매치 합 — 표본 줄의 수(트랙 B ST-7). 관측 전 0. */
+  pairMatches: number;
 }
 
 export interface LandingTotals {
@@ -59,7 +65,7 @@ export interface LandingTotals {
 /** 게임별 가변부. 불변부(label·tag·art·href)는 GAMES와 `sectionHref`에서 나온다. */
 export type LandingSummary = Pick<
   GameLandingCard,
-  "pair" | "sample" | "announced" | "significant" | "unannounced" | "matches"
+  "pair" | "sample" | "announced" | "significant" | "unannounced" | "matches" | "pairMatches"
 >;
 
 /** 데이터가 없으면 `null` — 그 게임은 랜딩에서 빠진다(PUBG 출하 게이트와 같은 규약). */
@@ -76,15 +82,17 @@ function lolSummary(): LandingSummary | null {
   // 분석한 매치는 **수집한 모든 패치**의 합이다 — 현재 쌍(2개)만 세면 이미 쌓아 둔 표본을
   // 작게 말하게 된다. summary가 없는 패치는 0으로 흡수한다(빈 데이터 빌드 보장).
   const matches = listPatches().reduce((sum, patch) => sum + (loadSummary(patch)?.data.matches ?? 0), 0);
-  const nAfter = loadSummary(pair.to)?.data.matches ?? 0;
+  // 카드 표본 줄은 **그 쌍의 전후 합**(트랙 B ST-7, lol-S14) — 전에는 사후만이라 전후 합을 쓰는 PUBG·TFT 카드와 정의가 달랐다.
+  const pairMatches = (loadSummary(pair.from)?.data.matches ?? 0) + (loadSummary(pair.to)?.data.matches ?? 0);
 
   return {
     pair,
-    sample: `KR · Master+ · ${fmtInt(nAfter)}매치`,
+    sample: `KR · Master+ · ${fmtInt(pairMatches)}매치`,
     announced: headline.noteEntityCount,
     significant: headline.statCount,
     unannounced: lolGapTotal(deltas.rows, summarizeGameData(loadGameDataDiff("lol", pair.from, pair.to))),
     matches,
+    pairMatches,
   };
 }
 
@@ -92,7 +100,7 @@ function pubgSummary(): LandingSummary | null {
   const bundle = loadPubg();
   if (!bundle) {
     const declaration = loadPubgDeclaration();
-    return declaration ? declarationSummary(declaration, pubgNoteTargets(declaration.notes)) : null;
+    return declaration ? declarationSummary(declaration, pubgNoteTargetCount(declaration.notes)) : null;
   }
   const { deltas, before, after, notes } = bundle;
   const reportable = deltas.rows.filter((row) => isReportable(row.status));
@@ -101,11 +109,12 @@ function pubgSummary(): LandingSummary | null {
   return {
     pair: { from: deltas.meta.from, to: deltas.meta.to },
     sample: `Steam · 전 지역 · ${fmtInt(matches)}매치`,
-    announced: pubgNoteTargets(notes),
+    announced: pubgNoteTargetCount(notes),
     significant: reportable.length,
     // 게임 홈 「미공지 Gap」 타일과 **같은 함수**(2026-09-28, D2) — 통계 Gap 무기 ∪ 수치 축 무기.
     unannounced: pubgGapTotal(deltas.rows, summarizeGameData(loadGameDataDiff("pubg", deltas.meta.from, deltas.meta.to))),
     matches,
+    pairMatches: matches,
   };
 }
 
@@ -117,22 +126,15 @@ function pubgSummary(): LandingSummary | null {
  * 카드의 「공지」는 세 게임 모두 **대상** 단위다(verify-impl V3, 2026-10-08 — 전에는 TFT·PUBG만 조항 수라 LoL 카드·브리핑 타일과
  * 단위가 달랐다). 셈은 각 게임 브리핑과 **같은 식**이다: TFT = `TftBriefing` noteEntities, PUBG = `PubgBriefing` noteTargets.
  */
-function tftNoteEntities(items: readonly { entity: string }[]): number {
-  return new Set(items.map((n) => n.entity)).size;
-}
-function pubgNoteTargets(notes: readonly { weaponKeys: readonly string[] }[]): number {
-  return new Set(notes.flatMap((n) => n.weaponKeys)).size;
-}
-
 function declarationSummary(declaration: { from: string; to: string }, announced: number): LandingSummary {
-  return { pair: { from: declaration.from, to: declaration.to }, sample: "관측 전", announced, significant: null, unannounced: null, matches: 0 };
+  return { pair: { from: declaration.from, to: declaration.to }, sample: "관측 전", announced, significant: null, unannounced: null, matches: 0, pairMatches: 0 };
 }
 
 function tftSummary(): LandingSummary | null {
   const bundle = loadTft();
   if (!bundle) {
     const declaration = loadTftDeclaration();
-    return declaration ? declarationSummary(declaration, tftNoteEntities(declaration.notes.items)) : null;
+    return declaration ? declarationSummary(declaration, tftNoteEntityCount(declaration.notes.items)) : null;
   }
   const { deltas, before, after, notes } = bundle;
   // **LoL과 같은 술어를 쓴다** — PUBG가 상태만 보는 `isReportable`을 쓰는 것은 그쪽
@@ -144,12 +146,13 @@ function tftSummary(): LandingSummary | null {
   return {
     pair: { from: deltas.meta.from, to: deltas.meta.to },
     sample: `KR · Master+ · ${fmtInt(matches)}매치`,
-    announced: tftNoteEntities(notes.items),
+    announced: tftNoteEntityCount(notes.items),
     significant: reportable.length,
     // 게임 홈 「미공지 Gap」 타일과 **같은 함수**(2026-09-28, D2) — 대조표 표시 상태 기준 통계 Gap 대상
     // ∪ 수치 축 대상. 전에는 원시 status 행 수라 홈 타일(대상 수·합집합)과 달랐다.
     unannounced: tftGapTotal(deltas.rows, deltas.meta.qAlpha, summarizeGameData(loadGameDataDiff("tft", deltas.meta.from, deltas.meta.to))),
     matches,
+    pairMatches: matches,
   };
 }
 
@@ -192,3 +195,20 @@ export function landingTotals(cards: readonly GameLandingCard[]): LandingTotals 
     { matches: 0, significant: 0, unannounced: 0 }
   );
 }
+
+/**
+ * 히어로 「분석한 매치」의 구성(트랙 B ST-7, lol-S14) — 합은 각 게임이 **수집한** 매치(LoL은 수집한 전 패치 합)라 카드의 쌍 전후
+ * 합과 다르다. 정의를 바꾸지 않고(이미 쌓은 표본을 작게 말하지 않는다) 히어로 아래에 게임별 구성을 적는다. 관측 전 게임은 0이라 뺀다.
+ */
+export function landingMatchBreakdown(
+  cards: readonly GameLandingCard[]
+): { label: string; matches: number; scope: "allPatches" | "pair" }[] {
+  // `scope` — 그 수가 카드의 쌍 전후 합과 같은가. 다르면(LoL: 수집한 전 패치) 구성 줄이 그 사실을 말해야 카드 값과 어긋나 보이지
+  // 않는다(2026-10-12 verify-impl 축B S5: 「리그 오브 레전드 35,714」 vs 카드 「5,714매치」가 설명 없이 한 화면에 있었다).
+  return cards
+    .filter((c) => c.matches > 0)
+    .map((c) => ({ label: c.label, matches: c.matches, scope: c.matches === c.pairMatches ? "pair" : "allPatches" }));
+}
+
+/** 구성 줄의 범위 꼬리표 — 카드의 쌍과 같으면 「현재 쌍」, 아니면 「수집한 전 패치」. */
+export const BREAKDOWN_SCOPE_LABEL = { pair: "현재 쌍", allPatches: "수집한 전 패치" } as const;

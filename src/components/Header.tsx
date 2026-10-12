@@ -90,8 +90,14 @@ export interface GameChrome {
   homePair: PatchPairOption | null;
   nBefore: number | null;
   nAfter: number | null;
-  /** ISO 8601 — 집계 시각(요약 파일 meta.generatedAt). */
+  /** ISO 8601 — 캡션 시각. 무엇의 시각인지는 `timeLabel`이 말한다. */
   aggregatedAt: string | null;
+  /**
+   * 캡션 시각의 이름(트랙 B ST-8, lol-S17·parity-S32) — 전에는 전부 「집계」였는데 LoL 헤더는 **표본 집계** 시각(summary), 같은
+   * 화면 푸터·디스코드 패널은 **판정** 시각(deltas)이라 한 화면에 「집계」가 두 시각을 가리켰다. 값의 출처가 이름을 정한다:
+   * LoL 「표본 집계」, TFT·PUBG(헤더도 판정 파일 시각) 「판정」, 선언만 쌍 「노트 반영」.
+   */
+  timeLabel: "표본 집계" | "판정" | "노트 반영";
   /** 읽기전용 표본 칩(고정 조건). 비면 칩 그룹 자체를 렌더하지 않는다. */
   sampleChips: string[];
   /**
@@ -196,7 +202,7 @@ export default function Header({ chrome }: HeaderProps) {
     pairCaptionParts.push(`n=${fmtInt(current.nBefore)} / ${fmtInt(current.nAfter)} 매치`);
   }
   if (historyPair === null && current?.aggregatedAt) {
-    pairCaptionParts.push(`집계 ${fmtKst(current.aggregatedAt)}`);
+    pairCaptionParts.push(`${current.timeLabel} ${fmtKst(current.aggregatedAt)}`);
   }
   const pairCaption = pairCaptionParts.length > 0 ? pairCaptionParts.join(" · ") : null;
   const sampleChips = current?.sampleChips ?? [];
@@ -282,31 +288,44 @@ export default function Header({ chrome }: HeaderProps) {
                 시각 라벨을 뺐던 것을 2026-09-12 /verify-impl 화면 대조로 잡아 보완했다.
                 `<label>`로 감싸 클릭 시 select에 포커스가 가게 하고, 시각 라벨이 생겼으므로
                 select의 중복 aria-label은 뺀다(라벨이 접근성 이름을 제공한다). */}
-            <label className="flex min-h-8 items-center gap-2">
-              <span className="text-xs font-bold text-muted">패치</span>
-              <select
-                className="min-h-8 rounded-sm border border-border bg-surface px-2 text-xs font-bold text-fg disabled:cursor-not-allowed disabled:opacity-70"
-                disabled={pairDisabled}
-                aria-describedby="pair-select-hint"
-                title={pairHint}
-                value={currentIndex >= 0 ? currentIndex : 0}
-                onChange={(event) => {
-                  const next = pairs[Number(event.target.value)];
-                  // 같은 섹션의 그 쌍으로 — 상세에서 골랐다면 그 쌍의 브리핑(`pairSelectHref` 주석).
-                  if (routable !== null && pairRoutable && next) router.push(pairSelectHref(routable, next, homePair, navSection));
-                }}
-              >
-                {pairs.length > 0 ? (
-                  pairs.map((pair, i) => (
-                    <option key={pairLabel(pair)} value={i}>
-                      {pairLabel(pair)}
-                    </option>
-                  ))
-                ) : (
-                  <option>데이터 없음</option>
-                )}
-              </select>
-            </label>
+            {pairs.length === 1 ? (
+              // 쌍이 하나뿐이면 고를 것이 없다 — 드롭다운 모양(화살표·select)을 두지 않고 정적 라벨(트랙 B ST-21, pubg-S19). 이유 문구는
+              // 아래 힌트가 그대로 말한다.
+              <span className="flex min-h-8 items-center gap-2 max-md:ml-auto">
+                <span className="text-xs font-bold text-muted">패치</span>
+                <span data-pair-static aria-describedby="pair-select-hint" className="px-2 text-xs font-bold text-fg">
+                  {pairLabel(pairs[0])}
+                </span>
+              </span>
+            ) : (
+              // max-md:ml-auto — 모바일 둘째 줄에서 패치 선택을 오른쪽 여백선에 붙인다. 쌍 라벨 길이에 따라 끝이 여백선 20px 안쪽에
+              // 떠 「거의 맞춘」 선이 됐다(2026-10-12 레이아웃 게이트 D-ALIGN-01 /lol/@375, 트랙 B 이전부터).
+              <label className="flex min-h-8 items-center gap-2 max-md:ml-auto">
+                <span className="text-xs font-bold text-muted">패치</span>
+                <select
+                  className="min-h-8 rounded-sm border border-border bg-surface px-2 text-xs font-bold text-fg disabled:cursor-not-allowed disabled:opacity-70"
+                  disabled={pairDisabled}
+                  aria-describedby="pair-select-hint"
+                  title={pairHint}
+                  value={currentIndex >= 0 ? currentIndex : 0}
+                  onChange={(event) => {
+                    const next = pairs[Number(event.target.value)];
+                    // 같은 섹션의 그 쌍으로 — 상세에서 골랐다면 그 쌍의 브리핑(`pairSelectHref` 주석).
+                    if (routable !== null && pairRoutable && next) router.push(pairSelectHref(routable, next, homePair, navSection));
+                  }}
+                >
+                  {pairs.length > 0 ? (
+                    pairs.map((pair, i) => (
+                      <option key={pairLabel(pair)} value={i}>
+                        {pairLabel(pair)}
+                      </option>
+                    ))
+                  ) : (
+                    <option>데이터 없음</option>
+                  )}
+                </select>
+              </label>
+            )}
             {/* 닫힌 select의 이유는 hover(title)로만 보이면 터치 화면에서 사라진다(2026-09-28, 이월 R16) —
                 모바일에선 select 옆에 글로 보이고, md 이상은 title·스크린리더로 둔다(헤더 한 줄 유지). 라벨 밖에 두는 이유:
                 안에 두면 이 글이 select의 접근성 이름에 섞인다(설명은 aria-describedby로만). */}

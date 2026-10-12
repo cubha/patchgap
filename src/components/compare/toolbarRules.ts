@@ -9,7 +9,15 @@
 // 검색은 LoL만, 정렬은 PUBG만이었다. 같은 메뉴인데 쓸 수 있는 도구가 게임마다 달랐다.
 import { DISPLAY_SORT_PRIORITY, type DisplayStatus } from "@/pipeline/shared/display-status";
 
-export type CompareFilterKey = "all" | DisplayStatus;
+export type CompareFilterKey = "all" | DisplayStatus | "gap";
+
+/**
+ * 「미공지 Gap」 묶음 필터(트랙 B ST-24, tft-S9) — 타일 「미공지 Gap ↗」의 착지. 타일은 **지표 축 미공지 ∪ 수치 축(잠수함·공지값 불일치)**
+ * 대상을 센다(`lib/gapTotals`)인데 착지가 「미공지」 칩이라 TFT에서 타일 35 vs 착지 30이었다. 상태 칩이 아니라 칩 **묶음**이라
+ * 「칩 합 = 전체」 셈에는 들지 않는다.
+ */
+export const GAP_FILTER = "gap" as const;
+const GAP_STATUSES: ReadonlySet<DisplayStatus> = new Set<DisplayStatus>(["unannounced", "submarine", "note-mismatch"]);
 
 /**
  * 상태 칩 — **표에 올라가는 판정만** 칩이 된다(배지 1종 = 칩 1종 불변식). 노이즈 3종(표본 부족·
@@ -24,6 +32,10 @@ export const COMPARE_FILTERS: ReadonlyArray<{ key: CompareFilterKey; label: stri
   { key: "announced", label: "공지" },
   { key: "announced-anomaly", label: "공지 · 이상 관측" },
   { key: "unannounced", label: "미공지" },
+  // 수치 축 판정(트랙 B ST-24, tft-S10) — 전에는 칩이 없어 칩 합이 전체와 맞지 않았고 사이트의 간판 판정을 필터로 볼 수 없었다.
+  // 데이터가 없는 게임·쌍에서는 0으로 보인다(세 게임 같은 칩 세트).
+  { key: "submarine", label: "잠수함 패치" },
+  { key: "note-mismatch", label: "공지값 불일치" },
 ];
 
 export type CompareSortKey = "priority" | "effect" | "name";
@@ -39,6 +51,7 @@ export const COMPARE_SORTS: ReadonlyArray<{ key: CompareSortKey; label: string }
 ];
 
 export function matchesFilter(status: DisplayStatus, key: CompareFilterKey): boolean {
+  if (key === GAP_FILTER) return GAP_STATUSES.has(status);
   return key === "all" || status === key;
 }
 
@@ -47,13 +60,11 @@ export function countByFilter<T>(
   rows: readonly T[],
   statusOf: (row: T) => DisplayStatus
 ): Record<CompareFilterKey, number> {
-  const out = Object.fromEntries(COMPARE_FILTERS.map((f) => [f.key, 0])) as Record<
-    CompareFilterKey,
-    number
-  >;
+  const keys: CompareFilterKey[] = [...COMPARE_FILTERS.map((f) => f.key), GAP_FILTER];
+  const out = Object.fromEntries(keys.map((k) => [k, 0])) as Record<CompareFilterKey, number>;
   for (const row of rows) {
     const status = statusOf(row);
-    for (const f of COMPARE_FILTERS) if (matchesFilter(status, f.key)) out[f.key] += 1;
+    for (const k of keys) if (matchesFilter(status, k)) out[k] += 1;
   }
   return out;
 }

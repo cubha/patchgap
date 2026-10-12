@@ -46,7 +46,7 @@ import { segmentStream } from "./streamSegments";
 import AnnouncedCoverageLine from "./AnnouncedCoverageLine";
 import MiscChangesSection from "./MiscChangesSection";
 import type { MiscSection } from "./miscSections";
-import { BriefingTabBar, DEFAULT_BRIEFING_TAB } from "@/components/BriefingTabs";
+import { BriefingTabBar, CONTENT_TAB_TITLE, DEFAULT_BRIEFING_TAB, GAP_METRIC_AXIS_TITLE } from "@/components/BriefingTabs";
 
 type StreamTab = "content" | "gap";
 
@@ -123,7 +123,7 @@ export interface ReleaseNoteStreamProps {
    * 무관하게 항상 실린다(줄에 라인 정보가 없다). */
   miscSections?: MiscSection[];
   /** 「패치 내용」 탭 맨 아래 한 줄(§8-1) — 세 게임 공통. 없으면 그리지 않는다. */
-  announcedCoverage?: { noteTargets: number; observed: number };
+  announcedCoverage?: { noteTargets: number; observed: number; sourceUrl?: string | null };
   /**
    * 「미공지 Gap」 탭의 **위쪽 갈래**(2026-09-21). 미공지는 두 갈래다 — 수치 축(게임사가 무엇을
    * 바꿨나, 증거 A)과 지표 축(패치노트에 없는데 움직였나, 증거 B). 위계의 근거는 중요도가
@@ -222,13 +222,19 @@ export default function ReleaseNoteStream({
   );
 
   const miscTotal = tab === "content" ? miscSections.reduce((sum, s) => sum + s.notes.length, 0) : 0;
+  const segments = segmentStream(filtered);
+  const foldSegments = segments.filter((s) => s.kind !== "rows");
+  const firstFold = foldSegments[0] ?? null;
+  const quietCount = foldSegments.reduce((sum, s) => sum + s.entries.length, 0);
 
   return (
     // NoteNavigator.tsx(/lol/compare/)와 동일 골격 — <section>이 panel-surface-glass(레일+채움)를
     // 소유하고, 탭 행 아래 <ul>은 순수 스크롤 컨테이너(자체 표면 없음). 탭 행은 목록이 비어도
     // 항상 렌더되므로 빈 탭에서도 다른 탭으로 되돌아올 수 있다(2026-09-14 — 이전 early-return
     // 구조는 filtered.length===0일 때 패널 전체를 문구로 바꿔치기해 탭 자체가 사라졌다).
-    <section className={`${panelSurfaceClass("glass")} flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg`}>
+    // flex-1 없음(2026-10-12 verify-impl 축B S4) — 칸 높이(우측 열에 맞춘 상한)까지 늘어나면 목록이 짧을 때 카드 안 아래가 200px 비었다.
+    // min-h-0 + 기본 flex-shrink라 목록이 길면 여전히 상한에서 멈추고 안쪽 <ul>이 스크롤한다.
+    <section className={`${panelSurfaceClass("glass")} flex min-h-0 flex-col overflow-hidden rounded-lg`}>
       {/* 탭 바는 세 게임 공용이다(UX-BRIEF §8-1, `components/BriefingTabs.tsx`) — 라벨·시맨틱·
           스타일의 소유자가 하나다. 배치(카드 안 · px-5 pt-4)만 여기 남는다. */}
       <BriefingTabBar
@@ -238,6 +244,32 @@ export default function ReleaseNoteStream({
         gapCount={gapCount}
         className="flex gap-2 border-b border-border-soft px-5 pt-4"
       />
+
+      {/* 목록 아래 블록 바로가기(트랙 B ST-20, lol-S13 — 사용자 결정 「패널 유지 + 더 보기」). 「유의한 관측 없음」·「기타 변경」은
+          스크롤 패널 맨 아래라 페이지 스크롤로는 보이지 않고 잘려 있다는 단서도 없었다. 건수와 함께 그 자리로 가는 링크를 머리에 둔다. */}
+      {tab === "content" && (quietCount > 0 || miscTotal > 0) ? (
+        <p data-stream-jump className="flex flex-wrap gap-x-3 gap-y-1 border-b border-border-soft px-5 py-2 text-xs text-muted">
+          <span>목록 아래</span>
+          {quietCount > 0 ? (
+            <a href="#stream-quiet" className="font-bold text-accent hover:underline">
+              유의한 관측 없음 {quietCount}건 ↓
+            </a>
+          ) : null}
+          {miscTotal > 0 ? (
+            <a href="#stream-misc" className="font-bold text-accent hover:underline">
+              기타 변경 {miscTotal}건 ↓
+            </a>
+          ) : null}
+        </p>
+      ) : null}
+
+      {/* 패치 내용 탭 머리(트랙 B ST-13, parity-S9) — TFT·PUBG 카드의 「대조 · 공지된 변경은 실제로 그렇게 됐나」와 같은 자리·같은 말. */}
+      {tab === "content" ? (
+        <div className="flex items-baseline gap-2 border-b border-border-soft px-5 py-3">
+          <span className="text-xs font-bold text-muted">대조</span>
+          <h3 className="font-display text-sm font-bold text-fg">{CONTENT_TAB_TITLE}</h3>
+        </div>
+      ) : null}
 
       {/* 수치 축 — Gap 탭의 위쪽 갈래. 목록이 0건이어도(아래 빈 상태 분기) 사라지면 안 되므로
           분기 **바깥**에 둔다. 라인 필터의 영향을 받지 않는다 — 원본 수치에는 라인 축이 없다. */}
@@ -250,7 +282,7 @@ export default function ReleaseNoteStream({
               대신 문구로 갈래를 가르기로 한 이상, 문구가 양쪽에 다 있어야 그 판단이 성립한다. */}
           <div className="flex items-baseline gap-2 border-b border-border-soft px-5 py-3">
             <span className="text-xs font-bold text-muted">발견 · 지표 축</span>
-            <h3 className="font-display text-sm font-bold text-fg">패치노트에 없는데 움직인 것</h3>
+            <h3 className="font-display text-sm font-bold text-fg">{GAP_METRIC_AXIS_TITLE}</h3>
             <span className="ml-auto font-mono text-xs text-muted">{metricGapCount}건</span>
           </div>
         </>
@@ -271,7 +303,9 @@ export default function ReleaseNoteStream({
         // <ul>이 아니라 부모 <section>에 있다 — 탭 행도 같은 레일 아래 들어오게 하려는 것.
         // wrap-anywhere(상속) — 대상 이름·관측 문장·원인 문장에 끊김 없는 긴 토큰이 와도 그 자리에서 끊는다. 없으면 그 토큰의
         // 최소 폭이 스트림 칸 전체를 밀어 페이지가 가로로 2,700px까지 늘었다(2026-10-07 레이아웃 게이트 D-STRESS-01).
-        <ul className="min-h-0 flex-1 overflow-y-auto wrap-anywhere">
+        // flex-1 없음(2026-10-12 verify-impl 축B S4) — 늘어나면 목록이 짧을 때 마지막 행과 커버리지 문단 사이가 192px 비었다. min-h-0과
+        // 기본 flex-shrink로 칸이 좁을 때는 여전히 줄어들어 스크롤한다. 남는 높이는 패널 맨 아래로 간다.
+        <ul className="min-h-0 overflow-y-auto wrap-anywhere">
           {/* 2026-09-19: 라인 필터 결과가 0건인데 "기타 변경"이 있으면, 이전엔 위 빈 상태 분기가
               걸리지 않아 **안내 없이 무관한 블록만** 남았다(사용자가 고른 라인에 대해 아무 말도
               하지 않는 화면). 목록 머리에 한 줄로 말한다 — 기타 변경 줄에는 라인 축이 원리적으로
@@ -289,7 +323,7 @@ export default function ReleaseNoteStream({
               아이템은 라인별로 집계하지 않아 라인을 고르면 이 목록에서 빠집니다.
             </li>
           ) : null}
-          {segmentStream(filtered).map((segment) =>
+          {segments.map((segment) =>
             segment.kind === "rows" ? (
               segment.entries.map((entry) => renderRow(entry))
             ) : (
@@ -302,7 +336,11 @@ export default function ReleaseNoteStream({
               // 만들 수 있으므로(scope-critic ST3) 상수 key를 쓰면 React key가 중복된다.
               // `group/fold`: 카드(ReleaseNoteRow)도 `<details className="group">`이라 이름 없는
               // group을 쓰면 이 요약행이 열릴 때 **안쪽 카드의 화살표까지** `group-open:`에 반응한다.
-              <li key={`fold:${segment.entries[0]?.group.entity ?? ""}`} className="border-b border-border-soft last:border-b-0">
+              <li
+                key={`fold:${segment.entries[0]?.group.entity ?? ""}`}
+                id={segment === firstFold ? "stream-quiet" : undefined}
+                className="border-b border-border-soft last:border-b-0"
+              >
                 <details className="group/fold">
                   <summary className="flex cursor-pointer list-none items-center gap-4 px-5 py-3 text-xs text-muted [&::-webkit-details-marker]:hidden">
                     <span className="font-bold text-fg-2">유의한 관측 없음</span>
@@ -327,6 +365,7 @@ export default function ReleaseNoteStream({
         <AnnouncedCoverageLine
           noteTargets={announcedCoverage.noteTargets}
           observed={announcedCoverage.observed}
+          sourceUrl={announcedCoverage.sourceUrl ?? null}
         />
       ) : null}
     </section>

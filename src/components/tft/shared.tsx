@@ -32,7 +32,8 @@ export const formatMetricValue = formatTftMetricValue;
  */
 export function deltaDisplay(metric: DeltaMetric, delta: number): { text: string; improved: boolean } {
   const improved = isLowerBetter(metric) ? delta < 0 : delta > 0;
-  const text = metric === "avgPlacement" ? `${delta >= 0 ? "+" : ""}${delta.toFixed(2)}등` : signedPct(delta);
+  // 등수도 음수 기호 `−`(트랙 B ST-9, parity-S21) — 비율 지표(`signedPct`)와 같은 기호.
+  const text = metric === "avgPlacement" ? `${delta >= 0 ? "+" : "−"}${Math.abs(delta).toFixed(2)}등` : signedPct(delta);
   return { text, improved };
 }
 
