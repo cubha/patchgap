@@ -232,7 +232,9 @@ export default function ReleaseNoteStream({
     // 소유하고, 탭 행 아래 <ul>은 순수 스크롤 컨테이너(자체 표면 없음). 탭 행은 목록이 비어도
     // 항상 렌더되므로 빈 탭에서도 다른 탭으로 되돌아올 수 있다(2026-09-14 — 이전 early-return
     // 구조는 filtered.length===0일 때 패널 전체를 문구로 바꿔치기해 탭 자체가 사라졌다).
-    <section className={`${panelSurfaceClass("glass")} flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg`}>
+    // flex-1 없음(2026-10-12 verify-impl 축B S4) — 칸 높이(우측 열에 맞춘 상한)까지 늘어나면 목록이 짧을 때 카드 안 아래가 200px 비었다.
+    // min-h-0 + 기본 flex-shrink라 목록이 길면 여전히 상한에서 멈추고 안쪽 <ul>이 스크롤한다.
+    <section className={`${panelSurfaceClass("glass")} flex min-h-0 flex-col overflow-hidden rounded-lg`}>
       {/* 탭 바는 세 게임 공용이다(UX-BRIEF §8-1, `components/BriefingTabs.tsx`) — 라벨·시맨틱·
           스타일의 소유자가 하나다. 배치(카드 안 · px-5 pt-4)만 여기 남는다. */}
       <BriefingTabBar

@@ -134,9 +134,13 @@ export default function LandingPage() {
                       {card.tag}
                     </span>
                     <span className="mt-1.5 font-display text-xl font-bold text-fg">{card.label}</span>
-                    {/* 구분점 단위로 끊는다 — 줄 끝에 「·」가 매달리거나 숫자와 「매치」가 갈라지지 않게(2026-10-12 verify-impl 축B S11). */}
-                    <span className="mt-1 flex flex-wrap gap-x-1.5 font-mono text-xs text-fg-2">
-                      {[`${card.pair.from} → ${card.pair.to}`, ...card.sample.split(" · ")].map((seg, i) => (
+                    {/* 쌍과 표본을 두 줄로 — 한 줄에 이어 쓰면 카드 폭에서 줄바꿈 자리에 「·」가 줄 끝이나 줄 머리에 남았다(2026-10-12
+                        verify-impl 축B S11). 표본 줄은 구분점 단위로 끊어 숫자와 「매치」가 갈라지지 않게 한다. */}
+                    <span className="mt-1 font-mono text-xs whitespace-nowrap text-fg-2">
+                      {card.pair.from} → {card.pair.to}
+                    </span>
+                    <span className="flex flex-wrap gap-x-1.5 font-mono text-xs text-fg-2">
+                      {card.sample.split(" · ").map((seg, i) => (
                         <span key={seg} className="whitespace-nowrap">
                           {i > 0 ? "· " : ""}
                           {seg}
