@@ -1,0 +1,15 @@
+{
+  "meta": {
+    "game": "tft",
+    "from": "18.4",
+    "to": "18.5",
+    "generatedAt": "2026-10-21T23:52:53.249Z",
+    "noteCount": 55,
+    "observationFailed": {
+      "reason": "awaiting-observation",
+      "detail": "",
+      "at": "2026-10-21T23:52:53.248Z"
+    }
+  },
+  "rows": []
+}

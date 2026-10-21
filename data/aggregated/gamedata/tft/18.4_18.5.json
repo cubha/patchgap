@@ -1,0 +1,394 @@
+{
+  "meta": {
+    "game": "tft",
+    "from": "18.4",
+    "to": "18.5",
+    "source": {
+      "kind": "cdragon",
+      "from": "16.20",
+      "to": "16.21"
+    },
+    "generatedAt": "2026-10-21T23:52:52.698Z",
+    "changeCount": 26,
+    "submarineCount": 8
+  },
+  "changes": [
+    {
+      "id": "gdc:tft:18.5:DA_18_Alune:stats.attackSpeed",
+      "entityKey": "DA_18_Alune",
+      "entityName": "알룬",
+      "entityType": "unit",
+      "field": "공격 속도",
+      "fieldPath": "stats.attackSpeed",
+      "before": 0.800000011920929,
+      "after": 0.8500000238418579,
+      "relChange": 0.06250001396983841,
+      "matchedNoteIds": [
+        "note:tft:18.5:champion:알룬:e4ed253b"
+      ]
+    },
+    {
+      "id": "gdc:tft:18.5:DA_18_Hecarim:stats.initialMana",
+      "entityKey": "DA_18_Hecarim",
+      "entityName": "헤카림",
+      "entityType": "unit",
+      "field": "시작 마나",
+      "fieldPath": "stats.initialMana",
+      "before": 30,
+      "after": 50,
+      "relChange": 0.6666666666666666,
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.4:champion:헤카림:2271f07d",
+        "patch": "18.4"
+      }
+    },
+    {
+      "id": "gdc:tft:18.5:DA_18_MasterYi_AD:stats.damage",
+      "entityKey": "DA_18_MasterYi_AD",
+      "entityName": "마스터 이",
+      "entityType": "unit",
+      "field": "공격력",
+      "fieldPath": "stats.damage",
+      "before": 60,
+      "after": 63,
+      "relChange": 0.05,
+      "matchedNoteIds": [
+        "note:tft:18.5:champion:마스터-이:9e98ef44",
+        "note:tft:18.5:champion:마스터-이:3c4cb4c9"
+      ]
+    },
+    {
+      "id": "gdc:tft:18.5:DA_18_Tristana:stats.mana",
+      "entityKey": "DA_18_Tristana",
+      "entityName": "트리스타나",
+      "entityType": "unit",
+      "field": "최대 마나",
+      "fieldPath": "stats.mana",
+      "before": 60,
+      "after": 50,
+      "relChange": -0.16666666666666666,
+      "matchedNoteIds": [
+        "note:tft:18.5:champion:트리스타나:2fe522ca"
+      ]
+    },
+    {
+      "id": "gdc:tft:18.5:DA_18_Varus:stats.attackSpeed",
+      "entityKey": "DA_18_Varus",
+      "entityName": "바루스",
+      "entityType": "unit",
+      "field": "공격 속도",
+      "fieldPath": "stats.attackSpeed",
+      "before": 0.699999988079071,
+      "after": 0.75,
+      "relChange": 0.07142858967489157,
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.4:champion:바루스:7d8e7f60",
+        "patch": "18.4"
+      }
+    },
+    {
+      "id": "gdc:tft:18.5:DA_18_Varus:stats.initialMana",
+      "entityKey": "DA_18_Varus",
+      "entityName": "바루스",
+      "entityType": "unit",
+      "field": "시작 마나",
+      "fieldPath": "stats.initialMana",
+      "before": 30,
+      "after": 20,
+      "relChange": -0.3333333333333333,
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.4:champion:바루스:b59566e9",
+        "patch": "18.4"
+      }
+    },
+    {
+      "id": "gdc:tft:18.5:DA_18_Varus:stats.mana",
+      "entityKey": "DA_18_Varus",
+      "entityName": "바루스",
+      "entityType": "unit",
+      "field": "최대 마나",
+      "fieldPath": "stats.mana",
+      "before": 120,
+      "after": 110,
+      "relChange": -0.08333333333333333,
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.4:champion:바루스:b59566e9",
+        "patch": "18.4"
+      }
+    },
+    {
+      "id": "gdc:tft:18.5:DA_CrimsonRaptor18:stats.damage",
+      "entityKey": "DA_CrimsonRaptor18",
+      "entityName": "어미 부리",
+      "entityType": "unit",
+      "field": "공격력",
+      "fieldPath": "stats.damage",
+      "before": 55,
+      "after": 60,
+      "relChange": 0.09090909090909091,
+      "matchedNoteIds": [
+        "note:tft:18.5:champion:어미-부리:808b5cf7"
+      ]
+    },
+    {
+      "id": "gdc:tft:18.5:DA_Taric18:stats.armor",
+      "entityKey": "DA_Taric18",
+      "entityName": "타릭",
+      "entityType": "unit",
+      "field": "방어력",
+      "fieldPath": "stats.armor",
+      "before": 65,
+      "after": 65,
+      "relChange": 0,
+      "matchedNoteIds": [
+        "note:tft:18.5:champion:타릭:8b2752ce"
+      ],
+      "noteMismatch": {
+        "noteId": "note:tft:18.5:champion:타릭:8b2752ce",
+        "noteBefore": "65",
+        "noteAfter": "70",
+        "unapplied": true
+      }
+    },
+    {
+      "id": "gdc:tft:18.5:DA_Taric18:stats.magicResist",
+      "entityKey": "DA_Taric18",
+      "entityName": "타릭",
+      "entityType": "unit",
+      "field": "마법 저항력",
+      "fieldPath": "stats.magicResist",
+      "before": 65,
+      "after": 70,
+      "relChange": 0.07692307692307693,
+      "matchedNoteIds": [
+        "note:tft:18.5:champion:타릭:8b2752ce"
+      ]
+    },
+    {
+      "id": "gdc:tft:18.5:DA_Taric18:stats.mana",
+      "entityKey": "DA_Taric18",
+      "entityName": "타릭",
+      "entityType": "unit",
+      "field": "최대 마나",
+      "fieldPath": "stats.mana",
+      "before": 65,
+      "after": 70,
+      "relChange": 0.07692307692307693,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.5:DA_18_BackrowStar:effects.ASMultiplier",
+      "entityKey": "DA_18_BackrowStar",
+      "entityName": "후방의 핵심",
+      "entityType": "item",
+      "field": "효과 공격 속도",
+      "fieldPath": "effects.ASMultiplier",
+      "before": 0.8500000238418579,
+      "after": 1,
+      "relChange": 0.17647055523618374,
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.4:item:후방의-핵심:440ac486",
+        "patch": "18.4"
+      }
+    },
+    {
+      "id": "gdc:tft:18.5:DA_BronzeForLifeII:effects.Armor",
+      "entityKey": "DA_BronzeForLifeII",
+      "entityName": "영원한 브론즈 II",
+      "entityType": "item",
+      "field": "효과 Armor",
+      "fieldPath": "effects.Armor",
+      "before": 4,
+      "after": 3,
+      "relChange": -0.25,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.5:DA_ChallengersGrace:effects.BuffDuration",
+      "entityKey": "DA_ChallengersGrace",
+      "entityName": "도전자의 은총",
+      "entityType": "item",
+      "field": "효과 BuffDuration",
+      "fieldPath": "effects.BuffDuration",
+      "before": 3,
+      "after": 4,
+      "relChange": 0.3333333333333333,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.5:DA_GiantAndMighty:effects.FlatHealth",
+      "entityKey": "DA_GiantAndMighty",
+      "entityName": "거대하고 강력한",
+      "entityType": "item",
+      "field": "효과 체력",
+      "fieldPath": "effects.FlatHealth",
+      "before": 200,
+      "after": 225,
+      "relChange": 0.125,
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.4:system:거대하고-강력한:2c6c7bfc",
+        "patch": "18.4"
+      }
+    },
+    {
+      "id": "gdc:tft:18.5:DA_HeartOfSteel:effects.MaxHealthGain",
+      "entityKey": "DA_HeartOfSteel",
+      "entityName": "강철의 심장",
+      "entityType": "item",
+      "field": "효과 MaxHealthGain",
+      "fieldPath": "effects.MaxHealthGain",
+      "before": 16,
+      "after": 18,
+      "relChange": 0.125,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.5:DA_HeroicGrabBag:effects.Gold",
+      "entityKey": "DA_HeroicGrabBag",
+      "entityName": "영웅 꾸러미",
+      "entityType": "item",
+      "field": "효과 골드",
+      "fieldPath": "effects.Gold",
+      "before": 4,
+      "after": 6,
+      "relChange": 0.5,
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.4:system:영웅-꾸러미:6efe0b2f",
+        "patch": "18.4"
+      }
+    },
+    {
+      "id": "gdc:tft:18.5:DA_InvestmentStrategy:effects.InstantGold",
+      "entityKey": "DA_InvestmentStrategy",
+      "entityName": "투자 전략 II",
+      "entityType": "item",
+      "field": "효과 InstantGold",
+      "fieldPath": "effects.InstantGold",
+      "before": 8,
+      "after": 10,
+      "relChange": 0.25,
+      "matchedNoteIds": [
+        "note:tft:18.5:system:투자-전략-i:8202712c",
+        "note:tft:18.5:system:투자-전략-ii:35d7baf1"
+      ]
+    },
+    {
+      "id": "gdc:tft:18.5:DA_InvestmentStrategyI:effects.InstantGold",
+      "entityKey": "DA_InvestmentStrategyI",
+      "entityName": "투자 전략 I",
+      "entityType": "item",
+      "field": "효과 InstantGold",
+      "fieldPath": "effects.InstantGold",
+      "before": 4,
+      "after": 6,
+      "relChange": 0.5,
+      "matchedNoteIds": [
+        "note:tft:18.5:system:투자-전략-i:8202712c",
+        "note:tft:18.5:system:투자-전략-ii:35d7baf1"
+      ]
+    },
+    {
+      "id": "gdc:tft:18.5:DA_LevelUp:effects.InstantXP",
+      "entityKey": "DA_LevelUp",
+      "entityName": "레벨 업!",
+      "entityType": "item",
+      "field": "효과 InstantXP",
+      "fieldPath": "effects.InstantXP",
+      "before": 6,
+      "after": 10,
+      "relChange": 0.6666666666666666,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.5:DA_LuxurySubscription:effects.Gold",
+      "entityKey": "DA_LuxurySubscription",
+      "entityName": "호화로운 정기 구독",
+      "entityType": "item",
+      "field": "효과 골드",
+      "fieldPath": "effects.Gold",
+      "before": 3,
+      "after": 5,
+      "relChange": 0.6666666666666666,
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.4:system:호화로운-정기-구독:a199418e",
+        "patch": "18.4"
+      }
+    },
+    {
+      "id": "gdc:tft:18.5:DA_Retribution:effects.CriticalStrikeChance",
+      "entityKey": "DA_Retribution",
+      "entityName": "응징",
+      "entityType": "item",
+      "field": "효과 CriticalStrikeChance",
+      "fieldPath": "effects.CriticalStrikeChance",
+      "before": 0.25,
+      "after": 0.15000000596046448,
+      "relChange": -0.3999999761581421,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.5:DA_SpiritOfRedemption:effects.PercentMissingHealth",
+      "entityKey": "DA_SpiritOfRedemption",
+      "entityName": "구원의 영혼",
+      "entityType": "item",
+      "field": "효과 PercentMissingHealth",
+      "fieldPath": "effects.PercentMissingHealth",
+      "before": 0.07500000298023224,
+      "after": 0.09000000357627869,
+      "relChange": 0.2,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.5:DA_Stealthy18:effects.UntargetableDuration",
+      "entityKey": "DA_Stealthy18",
+      "entityName": "은밀함",
+      "entityType": "item",
+      "field": "효과 UntargetableDuration",
+      "fieldPath": "effects.UntargetableDuration",
+      "before": 6,
+      "after": 8,
+      "relChange": 0.3333333333333333,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.5:DA_VerticalityII:effects.ADAP",
+      "entityKey": "DA_VerticalityII",
+      "entityName": "고단수 II",
+      "entityType": "item",
+      "field": "효과 공격력·주문력",
+      "fieldPath": "effects.ADAP",
+      "before": 0.019999999552965164,
+      "after": 0.02500000037252903,
+      "relChange": 0.2500000465661298,
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.4:system:고단수-ii:cbf4b76a",
+        "patch": "18.4"
+      }
+    },
+    {
+      "id": "gdc:tft:18.5:DA_VerticalityIII:effects.ADAP",
+      "entityKey": "DA_VerticalityIII",
+      "entityName": "고단수 III",
+      "entityType": "item",
+      "field": "효과 공격력·주문력",
+      "fieldPath": "effects.ADAP",
+      "before": 0.03500000014901161,
+      "after": 0.03999999910593033,
+      "relChange": 0.14285711244660995,
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.4:system:고단수-iii:dec80420",
+        "patch": "18.4"
+      }
+    }
+  ]
+}
