@@ -1,0 +1,180 @@
+{
+  "meta": {
+    "game": "lol",
+    "from": "26.20",
+    "to": "26.21",
+    "source": {
+      "kind": "ddragon",
+      "from": "16.20.1",
+      "to": "16.21.1"
+    },
+    "generatedAt": "2026-10-22T06:37:28.118Z",
+    "changeCount": 12,
+    "submarineCount": 3
+  },
+  "changes": [
+    {
+      "id": "gdc:lol:26.21:Azir:stats.mpperlevel",
+      "entityKey": "Azir",
+      "entityName": "아지르",
+      "entityType": "champion",
+      "field": "기본 마나 증가량",
+      "fieldPath": "stats.mpperlevel",
+      "before": 40,
+      "after": 50,
+      "relChange": 0.25,
+      "matchedNoteIds": [
+        "note:26.21:champion:azir:bed9b8ef"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.21:Darius:spells.0.cooldownBurn",
+      "entityKey": "Darius",
+      "entityName": "다리우스",
+      "entityType": "champion",
+      "field": "Q 재사용 대기시간",
+      "fieldPath": "spells.0.cooldownBurn",
+      "before": "9/8/7/6/5",
+      "after": "9/7.75/6.5/5.25/4",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.21:champion:darius:df7ba9e5"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.21:Jinx:stats.hp",
+      "entityKey": "Jinx",
+      "entityName": "징크스",
+      "entityType": "champion",
+      "field": "기본 체력",
+      "fieldPath": "stats.hp",
+      "before": 630,
+      "after": 610,
+      "relChange": -0.031746031746031744,
+      "matchedNoteIds": [
+        "note:26.21:champion:jinx:04563e55"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.21:LeeSin:spells.1.cooldownBurn",
+      "entityKey": "LeeSin",
+      "entityName": "리 신",
+      "entityType": "champion",
+      "field": "W 재사용 대기시간",
+      "fieldPath": "spells.1.cooldownBurn",
+      "before": "7",
+      "after": "8",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.21:champion:leesin:9df268f1"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.21:Locke:stats.mpperlevel",
+      "entityKey": "Locke",
+      "entityName": "로크",
+      "entityType": "champion",
+      "field": "기본 마나 증가량",
+      "fieldPath": "stats.mpperlevel",
+      "before": 70,
+      "after": 60,
+      "relChange": -0.14285714285714285,
+      "matchedNoteIds": [
+        "note:26.21:champion:leesin:367f525c",
+        "note:26.21:champion:leesin:21c37d5b"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.21:Locke:spells.1.costBurn",
+      "entityKey": "Locke",
+      "entityName": "로크",
+      "entityType": "champion",
+      "field": "W 소모량",
+      "fieldPath": "spells.1.costBurn",
+      "before": "50/55/60/65/70",
+      "after": "60/65/70/75/80",
+      "relChange": null,
+      "matchedNoteIds": [
+        "note:26.21:champion:leesin:21c37d5b"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.21:MonkeyKing:stats.hpregen",
+      "entityKey": "MonkeyKing",
+      "entityName": "오공",
+      "entityType": "champion",
+      "field": "기본 체력 재생",
+      "fieldPath": "stats.hpregen",
+      "before": 3.5,
+      "after": 5.5,
+      "relChange": 0.5714285714285714,
+      "matchedNoteIds": [
+        "note:26.21:champion:wukong:5e8b20bc"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.21:Sion:stats.hpperlevel",
+      "entityKey": "Sion",
+      "entityName": "사이온",
+      "entityType": "champion",
+      "field": "기본 체력 증가량",
+      "fieldPath": "stats.hpperlevel",
+      "before": 87,
+      "after": 95,
+      "relChange": 0.09195402298850575,
+      "matchedNoteIds": [
+        "note:26.21:champion:sion:9b91fbc9"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.21:Viktor:stats.movespeed",
+      "entityKey": "Viktor",
+      "entityName": "빅토르",
+      "entityType": "champion",
+      "field": "기본 이동 속도",
+      "fieldPath": "stats.movespeed",
+      "before": 335,
+      "after": 330,
+      "relChange": -0.014925373134328358,
+      "matchedNoteIds": [
+        "note:26.21:champion:viktor:9ca192c8"
+      ]
+    },
+    {
+      "id": "gdc:lol:26.21:Yuumi:spells.2.rangeBurn",
+      "entityKey": "Yuumi",
+      "entityName": "유미",
+      "entityType": "champion",
+      "field": "E 사거리",
+      "fieldPath": "spells.2.rangeBurn",
+      "before": "25000",
+      "after": "500",
+      "relChange": null,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:lol:26.21:3008:gold.total",
+      "entityKey": "3008",
+      "entityName": "탐욕의 군화",
+      "entityType": "item",
+      "field": "가격",
+      "fieldPath": "gold.total",
+      "before": 1000,
+      "after": 1100,
+      "relChange": 0.1,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:lol:26.21:3168:gold.total",
+      "entityKey": "3168",
+      "entityName": "불멸의 길",
+      "entityType": "item",
+      "field": "가격",
+      "fieldPath": "gold.total",
+      "before": 1000,
+      "after": 1100,
+      "relChange": 0.1,
+      "matchedNoteIds": []
+    }
+  ]
+}

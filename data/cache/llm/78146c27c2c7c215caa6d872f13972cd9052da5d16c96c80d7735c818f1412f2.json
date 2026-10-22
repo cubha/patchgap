@@ -1,0 +1,33 @@
+{
+  "deltaId": "item:3142:adoptionRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "01b9317812ec81d1710a2be1fbf0853bbad5460bae2e481f61fdaf876577100a",
+  "generatedAt": "2026-10-22T06:36:14.069Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.21:champion:varus:9f6855f4",
+        "text": "바루스 Q 추가 공격력 계수가 최대 136%로 올라 치명형 바루스의 요우무 채택이 늘었을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.21:item:dawncore:4ab05f53",
+        "text": "요새파괴자 물리 관통력 22→18 하향으로 수요 일부가 요우무로 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "요우무의 유령검 채택률이 2.6%에서 3.6%로 1.0%p 올랐고, 바루스 Q 계수 상향과 요새파괴자 관통력 하향이 배경 후보입니다.",
+    "summaryCites": [
+      "note:26.21:champion:varus:9f6855f4",
+      "note:26.21:item:dawncore:4ab05f53"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 10146,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 805
+  },
+  "proseRepairAttempts": 0
+}

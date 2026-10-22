@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:MasterYi:pickRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "01b9317812ec81d1710a2be1fbf0853bbad5460bae2e481f61fdaf876577100a",
+  "generatedAt": "2026-10-22T06:35:50.028Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.21:champion:leesin:6063a63a",
+        "text": "리 신의 R 피해량과 W 재사용 대기시간 너프로 정글 수요가 마스터 이로 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.21:champion:nidalee:b2382620",
+        "text": "니달리 W 피해량과 E 공격 속도 너프로 정글 선택지가 마스터 이로 이동했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.21:champion:rammus:bff8420a",
+        "text": "마스터 이의 카운터인 람머스의 W 방어력 너프가 마스터 이 선택 부담을 줄였을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "마스터 이 픽률이 3.1%에서 5.7%로 2.6%p 올랐으며, 리 신·니달리 정글 너프로 인한 수요 이동이 원인일 수 있습니다.",
+    "summaryCites": [
+      "note:26.21:champion:leesin:6063a63a",
+      "note:26.21:champion:nidalee:b2382620"
+    ]
+  },
+  "usage": {
+    "inputTokens": 126,
+    "cacheReadInputTokens": 10146,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 901
+  },
+  "proseRepairAttempts": 0
+}

@@ -1,0 +1,27 @@
+{
+  "deltaId": "champion:Pantheon:TOP:pickRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "01b9317812ec81d1710a2be1fbf0853bbad5460bae2e481f61fdaf876577100a",
+  "generatedAt": "2026-10-22T06:35:06.305Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.21:item:dawncore:2b4f6f3a",
+        "text": "요새파괴자의 근접 기본 추가 공격력이 12에서 15로 올라 판테온 같은 근접 치명형 탑에 유리했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "판테온 탑 픽률이 4.5%에서 7.5%로 3.0%p 올랐고(CI 1.4~4.5%p), 요새파괴자 근접 공격력 상향과의 연관은 약합니다.",
+    "summaryCites": [
+      "note:26.21:item:dawncore:2b4f6f3a"
+    ]
+  },
+  "usage": {
+    "inputTokens": 129,
+    "cacheReadInputTokens": 10146,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 523
+  },
+  "proseRepairAttempts": 0
+}

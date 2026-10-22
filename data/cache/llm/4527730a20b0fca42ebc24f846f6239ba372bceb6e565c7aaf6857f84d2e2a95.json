@@ -1,0 +1,38 @@
+{
+  "deltaId": "champion:Kalista:BOTTOM:pickRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "01b9317812ec81d1710a2be1fbf0853bbad5460bae2e481f61fdaf876577100a",
+  "generatedAt": "2026-10-22T06:35:15.822Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.21:champion:jinx:2ae7b7e5",
+        "text": "징크스의 레벨당 공격력과 체력이 하향되어 원딜 픽이 칼리스타로 옮겨갔을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.21:champion:tristana:3d1e99fe",
+        "text": "트리스타나 Q 초반 공격 속도가 하향되어 대체 원딜로 칼리스타가 선택됐을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.21:champion:caitlyn:15aec32a",
+        "text": "케이틀린 헤드샷 피해량 하향이 원딜 선택 분산에 영향을 줬을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "칼리스타 픽률이 4.9%→7.7%(+2.8%p)로 올랐으며, 징크스·트리스타나 하향으로 원딜 수요가 옮겨왔을 수 있습니다.",
+    "summaryCites": [
+      "note:26.21:champion:jinx:2ae7b7e5",
+      "note:26.21:champion:tristana:3d1e99fe"
+    ]
+  },
+  "usage": {
+    "inputTokens": 132,
+    "cacheReadInputTokens": 10146,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 821
+  },
+  "proseRepairAttempts": 0
+}

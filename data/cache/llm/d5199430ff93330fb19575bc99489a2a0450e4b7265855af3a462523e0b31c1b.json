@@ -1,0 +1,27 @@
+{
+  "deltaId": "champion:Bard:UTILITY:pickRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "01b9317812ec81d1710a2be1fbf0853bbad5460bae2e481f61fdaf876577100a",
+  "generatedAt": "2026-10-22T06:35:28.347Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.21:champion:taric:486d2e46",
+        "text": "타릭 E·Q·R 변경으로 서포터 수요 일부가 타릭으로 옮겨 갔을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "바드 픽률이 10.6%에서 7.8%로 2.8%p 떨어졌으나(CI 유의), 직접 조항은 없고 타릭 스킬 변경만 약한 간접 요인입니다.",
+    "summaryCites": [
+      "note:26.21:champion:taric:486d2e46"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 10146,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 378
+  },
+  "proseRepairAttempts": 0
+}

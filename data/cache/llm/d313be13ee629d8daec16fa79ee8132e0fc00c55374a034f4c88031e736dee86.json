@@ -1,0 +1,32 @@
+{
+  "deltaId": "item:6610:adoptionRate",
+  "model": "claude-opus-5-5",
+  "promptVersion": "v5",
+  "candidateSetHash": "01b9317812ec81d1710a2be1fbf0853bbad5460bae2e481f61fdaf876577100a",
+  "generatedAt": "2026-10-22T06:36:30.226Z",
+  "parsed": {
+    "causes": [
+      {
+        "candidateNoteId": "note:26.21:champion:leesin:6063a63a",
+        "text": "리 신 궁극기 피해량 하향으로 리 신 선택이 줄어 갈라진 하늘 구매도 감소했을 수 있습니다.",
+        "confidence": "low"
+      },
+      {
+        "candidateNoteId": "note:26.21:item:dawncore:2b4f6f3a",
+        "text": "요새파괴자 근접 공격력 15 상향이 근접 브루저 아이템 수요를 일부 대체했을 수 있습니다.",
+        "confidence": "low"
+      }
+    ],
+    "summary": "갈라진 하늘 채택률이 1.5%에서 1.0%로 0.5%p 하락했으며, 리 신 궁극기 하향 등의 파급일 수 있습니다.",
+    "summaryCites": [
+      "note:26.21:champion:leesin:6063a63a"
+    ]
+  },
+  "usage": {
+    "inputTokens": 130,
+    "cacheReadInputTokens": 10146,
+    "cacheCreationInputTokens": 0,
+    "outputTokens": 736
+  },
+  "proseRepairAttempts": 0
+}
