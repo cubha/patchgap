@@ -3,5 +3,10 @@
     "patch": "43.2",
     "telemetryPatch": "pc-2018-43",
     "liveFrom": "2026-10-13"
+  },
+  {
+    "patch": "44.1",
+    "telemetryPatch": "pc-2018-44",
+    "liveFrom": "2026-11-03"
   }
 ]
