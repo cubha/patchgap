@@ -1,0 +1,221 @@
+{
+  "meta": {
+    "game": "tft",
+    "from": "18.5",
+    "to": "18.6",
+    "source": {
+      "kind": "cdragon",
+      "from": "16.21",
+      "to": "16.22"
+    },
+    "generatedAt": "2026-11-05T01:15:53.334Z",
+    "changeCount": 16,
+    "submarineCount": 13
+  },
+  "changes": [
+    {
+      "id": "gdc:tft:18.6:DA_Taric18:stats.armor",
+      "entityKey": "DA_Taric18",
+      "entityName": "타릭",
+      "entityType": "unit",
+      "field": "방어력",
+      "fieldPath": "stats.armor",
+      "before": 65,
+      "after": 70,
+      "relChange": 0.07692307692307693,
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.5:champion:타릭:8b2752ce",
+        "patch": "18.5"
+      }
+    },
+    {
+      "id": "gdc:tft:18.6:DA_Taric18:stats.mana",
+      "entityKey": "DA_Taric18",
+      "entityName": "타릭",
+      "entityType": "unit",
+      "field": "최대 마나",
+      "fieldPath": "stats.mana",
+      "before": 70,
+      "after": 65,
+      "relChange": -0.07142857142857142,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.6:DA_18_RiftbeastTraitAugment:effects.BonusAS",
+      "entityKey": "DA_18_RiftbeastTraitAugment",
+      "entityName": "종결자 협곡야수",
+      "entityType": "item",
+      "field": "효과 BonusAS",
+      "fieldPath": "effects.BonusAS",
+      "before": 0.12000000476837158,
+      "after": 0.08000004291534424,
+      "relChange": -0.3333330021964311,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.6:DA_18_RiftbeastTraitAugment:effects.BonusHP",
+      "entityKey": "DA_18_RiftbeastTraitAugment",
+      "entityName": "종결자 협곡야수",
+      "entityType": "item",
+      "field": "효과 BonusHP",
+      "fieldPath": "effects.BonusHP",
+      "before": 0.1499999761581421,
+      "after": 0.08000004291534424,
+      "relChange": -0.46666629579326246,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.6:DA_BeggarsWisp18:effects.Gold",
+      "entityKey": "DA_BeggarsWisp18",
+      "entityName": "부랑자의 수호령",
+      "entityType": "item",
+      "field": "효과 골드",
+      "fieldPath": "effects.Gold",
+      "before": 3,
+      "after": 2,
+      "relChange": -0.3333333333333333,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.6:DA_BronzeForLifeII:effects.Armor",
+      "entityKey": "DA_BronzeForLifeII",
+      "entityName": "영원한 브론즈 II",
+      "entityType": "item",
+      "field": "효과 Armor",
+      "fieldPath": "effects.Armor",
+      "before": 3,
+      "after": 2.5,
+      "relChange": -0.16666666666666666,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.6:DA_BuildABud:effects.NumGold",
+      "entityKey": "DA_BuildABud",
+      "entityName": "친구 만들기",
+      "entityType": "item",
+      "field": "효과 NumGold",
+      "fieldPath": "effects.NumGold",
+      "before": 6,
+      "after": 9,
+      "relChange": 0.5,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.6:DA_CookingPot:effects.HealthIncrease",
+      "entityKey": "DA_CookingPot",
+      "entityName": "요리용 냄비",
+      "entityType": "item",
+      "field": "효과 HealthIncrease",
+      "fieldPath": "effects.HealthIncrease",
+      "before": 60,
+      "after": 70,
+      "relChange": 0.16666666666666666,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.6:DA_CryMeARiver:effects.UpgradedRegenBonus",
+      "entityKey": "DA_CryMeARiver",
+      "entityName": "실컷 울어봐라",
+      "entityType": "item",
+      "field": "효과 UpgradedRegenBonus",
+      "fieldPath": "effects.UpgradedRegenBonus",
+      "before": 4,
+      "after": 3,
+      "relChange": -0.25,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.6:DA_InvestmentStrategy:effects.InstantGold",
+      "entityKey": "DA_InvestmentStrategy",
+      "entityName": "투자 전략 II",
+      "entityType": "item",
+      "field": "효과 InstantGold",
+      "fieldPath": "effects.InstantGold",
+      "before": 10,
+      "after": 6,
+      "relChange": -0.4,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.6:DA_InvestmentStrategyI:effects.InstantGold",
+      "entityKey": "DA_InvestmentStrategyI",
+      "entityName": "투자 전략 I",
+      "entityType": "item",
+      "field": "효과 InstantGold",
+      "fieldPath": "effects.InstantGold",
+      "before": 6,
+      "after": 3,
+      "relChange": -0.5,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.6:DA_MaliciousMonetization:effects.InstantGold",
+      "entityKey": "DA_MaliciousMonetization",
+      "entityName": "악의적 수익 창출",
+      "entityType": "item",
+      "field": "효과 InstantGold",
+      "fieldPath": "effects.InstantGold",
+      "before": 4,
+      "after": 6,
+      "relChange": 0.5,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.6:DA_NestingAnvils:effects.Gold",
+      "entityKey": "DA_NestingAnvils",
+      "entityName": "마트료시카 모루",
+      "entityType": "item",
+      "field": "효과 골드",
+      "fieldPath": "effects.Gold",
+      "before": 4,
+      "after": 6,
+      "relChange": 0.5,
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.5:system:마트료시카-모루:5f53ff09",
+        "patch": "18.5"
+      }
+    },
+    {
+      "id": "gdc:tft:18.6:DA_PandorasBench:effects.GoldGain",
+      "entityKey": "DA_PandorasBench",
+      "entityName": "판도라의 대기석",
+      "entityType": "item",
+      "field": "효과 GoldGain",
+      "fieldPath": "effects.GoldGain",
+      "before": 4,
+      "after": 1,
+      "relChange": -0.75,
+      "matchedNoteIds": []
+    },
+    {
+      "id": "gdc:tft:18.6:DA_PrismaticDestiny:effects.Gold",
+      "entityKey": "DA_PrismaticDestiny",
+      "entityName": "프리즘 운명",
+      "entityType": "item",
+      "field": "효과 골드",
+      "fieldPath": "effects.Gold",
+      "before": 4,
+      "after": 2,
+      "relChange": -0.5,
+      "matchedNoteIds": [],
+      "priorNote": {
+        "noteId": "note:tft:18.5:system:프리즘-운명:f6859c3c",
+        "patch": "18.5"
+      }
+    },
+    {
+      "id": "gdc:tft:18.6:DA_SeraphimsStaff:effects.APThreshold",
+      "entityKey": "DA_SeraphimsStaff",
+      "entityName": "고위천사의 지팡이",
+      "entityType": "item",
+      "field": "효과 APThreshold",
+      "fieldPath": "effects.APThreshold",
+      "before": 0.8999999761581421,
+      "after": 1.0999999046325684,
+      "relChange": 0.22222214863623907,
+      "matchedNoteIds": []
+    }
+  ]
+}
